@@ -1,0 +1,102 @@
+@import "@/css/vars.sass"
+
+.v-button-holder
+	&.btn-categories
+		position: static
+
+		.overlay
+			background: $overlay-visible
+			position: fixed
+			top: 101px
+			right: 0
+			bottom: 0
+			left: 0
+			opacity: 0
+			visibility: hidden
+			z-index: -1
+			+transition()
+
+			&.active
+				opacity: 1
+				visibility: visible
+				z-index: 10
+
+		/deep/ .v-button
+			font-size: 1em
+
+			& ~ .v-button-dropdown
+				right: auto
+				left: $offset
+				max-width: 320px
+				z-index: 20
+
+				ul
+					&.children-open
+						> li.dropdown-open
+							margin: 0
+
+							> span.text
+								margin: 0 0 .6em 0
+								position: relative
+
+								&.text-hidden
+									display: none
+
+								&:after
+									background: $background-gray-default
+									content: ""
+									position: absolute
+									bottom: -.6em
+									right: 0
+									left: 0
+									height: 1px
+
+							> span.text:not(.text-hidden) ~ ul
+								padding: .6em 0 0
+						
+						> li:not(.dropdown-open)
+							display: none
+
+					li,
+					li:hover
+						background: unset
+						color: unset
+						display: block
+						padding: 0
+
+						&:not(:last-child):not(.dropdown-open)
+							margin: 0 0 .6em 0
+
+					span.text
+						border-radius: 8px
+						color: $button-color-bulma
+						cursor: pointer
+						display: flex
+						padding: .8em .75em
+						width: 100%
+
+						&:hover
+							background: $background-gray-focus
+							color: $button-primary
+
+						span
+							display: block
+							// overflow: hidden
+							// text-overflow: ellipsis
+							// white-space: nowrap
+							width: 100%
+
+						i.fa
+							text-align: center
+							width: 20px
+
+							&:last-child
+								margin: 0 0 0 auto
+								padding: 0 0 0 $rhythm * 2
+								width: auto
+
+				> ul
+					padding: 0 $rhythm * 2 0 0
+					max-width: calc(320px - 1.5em)
+					max-height: calc(100vh - 100px - 2em)
+					+scrollbar()

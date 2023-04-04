@@ -1,0 +1,109 @@
+[
+  {
+    "used": true,
+    "image": "macbook.svg",
+    "price": 13465,
+    "title": "Macbook Pro 13&quot;",
+    "to": [37910, 162941],
+    "published": "12 Jan 2023",
+    "location": null
+  },
+  {
+    "used": true,
+    "image": "phones.svg",
+    "price": 10999,
+    "title": "Wireless headphones",
+    "to": [162913, 37968, 153913],
+    "published": "12 Mar 2023",
+    "location": null
+  },
+  {
+    "used": true,
+    "image": "camera.svg",
+    "price": 16500,
+    "title": "Wireless headphones",
+    "to": [179911, 177928, 263194],
+    "published": "3 Apr 2023",
+    "location": null
+  },
+  {
+    "used": true,
+    "image": "glasses.svg",
+    "price": 6700,
+    "title": "Brand sunglasses",
+    "to": [3387, 116495, 57275, 179798],
+    "published": "4 Apr 2023",
+    "location": null
+  },
+  {
+    "used": true,
+    "image": "shoe.svg",
+    "price": 9200,
+    "title": "Man\"s brand shoes",
+    "to": [158952, 57273],
+    "published": "20 Feb 2023",
+    "location": null
+  },
+  {
+    "image": "pomade.svg",
+    "price": 1800,
+    "title": "Red pomade with bright red tint",
+    "to": [184527, 21137, 88886],
+    "published": "2 Mar 2023",
+    "location": null
+  },
+  {
+    "used": true,
+    "image": "sneakers.svg",
+    "price": 21000,
+    "title": "Red nike sneakers",
+    "to": [139861, 177796, 73980, 73989],
+    "published": "4 Mar 2023",
+    "location": null
+  },
+  {
+    "used": true,
+    "image": "camera-nikon.svg",
+    "price": 48000,
+    "title": "Nikon camera",
+    "to": [27265, 184535],
+    "published": "5 Mar 2023",
+    "location": null
+  },
+  {
+    "used": true,
+    "image": "glasses-2.svg",
+    "price": 12000,
+    "title": "Brand elite glasses",
+    "to": [260125],
+    "published": "6 Mar 2023",
+    "location": null
+  },
+  {
+    "used": true,
+    "image": "backpack.svg",
+    "price": 40000,
+    "title": "Vinta backpack",
+    "to": [260988, 260971, 156790],
+    "published": "7 Mar 2023",
+    "location": null
+  },
+  {
+    "used": true,
+    "image": "joypad.svg",
+    "price": 60000,
+    "title": "Gamepad Xbox Series S Microsoft",
+    "to": [185116],
+    "published": "8 Mar 2023",
+    "location": null
+  },
+  {
+    "used": true,
+    "image": "bicycle.svg",
+    "price": 120000,
+    "title": "Sport bicycle",
+    "to": [97033],
+    "published": "10 Mar 2023",
+    "location": null
+  }
+]

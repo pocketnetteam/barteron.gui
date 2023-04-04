@@ -1,0 +1,58 @@
+@import "@/css/vars.sass"
+
+.barter-carousel
+	position: relative
+
+	.barter-carousel-holder
+		overflow: hidden
+		width: 100%
+
+		ul
+			display: grid
+			grid-template-columns: repeat(auto-fill, 274px)
+			grid-template-rows: 1fr
+			grid-auto-flow: column
+			grid-gap: $rhythm * 5
+			+resetList()
+
+	.barter-carousel-controls
+		display: flex
+		align-items: center
+		justify-content: space-between
+		position: absolute
+		top: 35%
+		width: 100%
+
+		> div
+			background: $background-white
+			border: 1px solid $border-beerus
+			border-radius: 8px
+			color: $color-bulma
+			cursor: pointer
+			font-size: 1.4em
+			text-align: center
+			padding: 8px
+			opacity: .8
+			height: 36px
+			width: 36px
+			+transition()
+
+			&:hover
+				color: $color-blue
+				opacity: 1
+			
+			.fa
+				display: block
+				margin-top: -1px
+
+		.barter-carousel-prev
+			margin-left: -18px
+
+			.fa
+				margin-left: -1px
+
+		.barter-carousel-next
+			margin-right: -18px
+
+			.fa
+				margin-right: -1px

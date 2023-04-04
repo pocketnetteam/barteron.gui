@@ -1,0 +1,37 @@
+@import "@/css/vars.sass"
+
+#header
+	background: rgba(255, 255, 255, 1)
+	margin: 0 $offset * -1 $rhythm * 2
+	position: relative
+	z-index: 10
+	
+	.top
+		display: flex
+		justify-content: space-between
+		align-items: center
+		padding: $rhythm $offset
+
+	.bar
+		border: 1px solid rgba(235, 235, 235, 1)
+		border-width: 1px 0
+		display: flex
+		align-items: center
+		justify-content: space-between
+		padding: $rhythm * 1.5 $offset
+
+		& > *:not(:first-child)
+			margin: 0 0 0 $rhythm * 4
+
+		.logo
+			display: flex
+			align-items: center
+			margin: 0
+
+			a
+				background: url(@/assets/images/logo.svg) no-repeat 50% 50%
+				background-size: contain
+				display: block
+				text-indent: -9999px
+				height: 20px
+				width: 113px

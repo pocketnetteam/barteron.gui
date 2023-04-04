@@ -1,0 +1,94 @@
+/* Main */
+$offset: 120px
+$rhythm: .5em
+
+/* LIGHT THEME */
+
+/* Colors */
+$color-black: rgba(0, 0, 0, 1)
+$color-gray: rgba(142, 144, 166, 1)
+$color-trunks: rgba(153, 156, 160, 1)
+$color-lightgray: rgba(199, 200, 217, 1)
+$color-darkgray: rgba(0, 0, 0, 0.08)
+$color-bulma: rgba(3, 71, 120, 1)
+$color-blue: rgba(0, 164, 255, 1)
+$color-lightblue: rgba(0, 133, 207, 1)
+$color-primary: rgba(255, 255, 255, 1)
+$color-goku: rgba(245, 245, 245, 1)
+
+/* Backgrounds */
+$background-gray-default: linear-gradient(0deg, #EBEBEB, #EBEBEB), linear-gradient(0deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08))
+$background-gray-focus: linear-gradient(0deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04)), linear-gradient(0deg, #FFFFFF, #FFFFFF)
+$background-goku: $color-goku
+$background-lightblue: $color-lightblue
+$background-white: $color-primary
+
+/* Overlay */
+$overlay-hidden: rgba(0, 0, 0, 0)
+$overlay-visible: rgba(0, 0, 0, 0.25)
+
+/* Scrollbar */
+$scrollbar-track: $background-gray-default
+$scrollbar-humb: rgba(153, 156, 160, 1)
+
+/* Borders */
+$border-beerus: rgba(235, 235, 235, 1)
+$border-white: $color-primary
+
+/* Buttons */
+$button-color-black: $color-black
+$button-color-gray: $color-gray
+$button-color-bulma: $color-bulma
+$button-color-primary: $color-primary
+$button-color-ghost: $button-color-black
+
+$button-primary: $color-blue
+$button-primary-hover: $color-lightblue
+
+$button-ghost-hover: $color-darkgray
+
+$button-stroke: $color-lightgray
+$button-stroke-hover: $button-ghost-hover
+
+/* Links */
+$link-color-primary: $button-color-bulma
+$link-color-primary-hover: $button-primary-hover
+
+/* Lightbox */
+$lightbox-primary: $button-color-primary
+$lightbox-text-primary: $button-color-black
+$lightbox-link-primary-color: $button-color-bulma
+$lightbox-link-primary-hover: $button-ghost-hover
+
+/* Mixins */
+@mixin resetList()
+	list-style: none
+	margin: 0
+	padding: 0
+	
+@mixin transition($props: all, $timing: .3s)
+	transition: $props $timing ease-in-out
+
+@mixin scrollbar($size: 4px, $direction: y)
+	@if $direction == y
+		overflow-x: hidden
+		overflow-y: overlay
+	@else if $direction == x
+		overflow-y: hidden
+		overflow-x: overlay
+	@else
+		overflow: overlay
+	
+	scrollbar-gutter: stable
+
+	&::-webkit-scrollbar
+		height: $size
+		width: $size
+
+	&::-webkit-scrollbar-track,
+	&::-webkit-scrollbar-thumb
+		background: $scrollbar-track
+		border-radius: 10px
+
+	&::-webkit-scrollbar-thumb
+		background: $scrollbar-humb

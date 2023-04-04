@@ -1,0 +1,104 @@
+@import "@/css/vars.sass"
+
+.barter-item
+	cursor: default
+	display: inline-flex
+	flex-direction: column
+	font-size: 1em
+	position: relative
+	max-width: 274px
+
+	picture
+		cursor: pointer
+		border-radius: 11px
+		display: block
+		margin: 0 0 .9em
+
+		img
+			vertical-align: top
+			width: 100%
+
+	.state
+		background: $background-goku
+		border: 1px solid $border-white
+		border-radius: 6px
+		color: $color-trunks
+		padding: 2px 4px
+		position: absolute
+		top: $rhythm
+		right: $rhythm
+
+	.row:not(:last-child)
+		margin: 0 0 .6em
+
+	.pricing
+		color: $color-black
+		display: flex
+		align-items: center
+		justify-content: space-between
+
+		.price
+			display: flex
+			align-items: center
+
+			.currency
+				background-color: $background-lightblue
+				border-radius: 4px
+				display: block
+				margin: 0 $rhythm 0 0
+				padding: 2px
+				overflow: hidden
+				height: 1.15em
+				width: 1.65em
+
+				&.pkoin::after
+					background: url("@/assets/images/pkoin.svg") no-repeat 50% 50%
+					background-size: contain
+					content: ""
+					display: block
+					height: 100%
+					width: 100%
+
+			font-weight: 700
+
+		.favorite
+			color: $color-gray
+			cursor: pointer
+			font-size: 1.2em
+			padding: 0 4px 0 0
+			+transition(color)
+
+			&:hover
+				color: $color-bulma
+
+	.title
+		color: $color-black
+		font-weight: 700
+
+	.to,
+	.info
+		font-size: .86em
+		line-height: 1.2
+
+	.to
+		color: $color-bulma
+		overflow: hidden
+		text-overflow: ellipsis
+		white-space: nowrap
+		width: 100%
+
+	.info
+		ul
+			display: flex
+			+resetList()
+
+			li
+				color: $color-trunks
+
+				&:not(:first-child)
+					margin: 0 0 0 $rhythm
+
+					&:before
+						display: inline-block
+						content: "\2022"
+						margin: 0 $rhythm 0 0

@@ -1,0 +1,16 @@
+# Ignore artifacts:
+build
+coverage
+
+# Ignore some specific file extensions
+**/*.min.*
+**/*.md
+**/*.png
+**/*.svg
+**/*.png
+
+# Ignore other files
+
+# Ignore some folders
+**/node_modules
+public

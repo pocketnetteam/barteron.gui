@@ -1,0 +1,29 @@
+@import "@/css/vars.sass"
+
+.location-switcher
+	border: 1px solid $border-beerus
+	border-radius: 12px
+	color: $color-trunks
+	cursor: pointer
+	display: flex
+	align-items: center
+
+	&.v-button-holder /deep/
+		.v-button
+			font-size: .9em
+			padding: .25em .75em
+
+			.fa
+				font-size: 1.3em
+
+			.info,
+			.fa
+				color: $color-trunks
+				text-align: left
+
+				& > *
+					display: block
+
+					&.location
+						color: $color-black
+						margin: 0 0 2px
