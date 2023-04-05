@@ -19,6 +19,7 @@ $color-goku: rgba(245, 245, 245, 1)
 /* Backgrounds */
 $background-gray-default: linear-gradient(0deg, #EBEBEB, #EBEBEB), linear-gradient(0deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08))
 $background-gray-focus: linear-gradient(0deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04)), linear-gradient(0deg, #FFFFFF, #FFFFFF)
+$background-gray-ghost: rgba(235, 235, 235, 0.18)
 $background-goku: $color-goku
 $background-lightblue: $color-lightblue
 $background-white: $color-primary
@@ -26,6 +27,7 @@ $background-white: $color-primary
 /* Overlay */
 $overlay-hidden: rgba(0, 0, 0, 0)
 $overlay-visible: rgba(0, 0, 0, 0.25)
+$overlay-half: rgba(0, 0, 0, 0.5)
 
 /* Scrollbar */
 $scrollbar-track: $background-gray-default
@@ -65,7 +67,15 @@ $lightbox-link-primary-hover: $button-ghost-hover
 	list-style: none
 	margin: 0
 	padding: 0
-	
+
+@mixin unselectable()
+	-webkit-touch-callout: none
+	-webkit-user-select: none
+	-khtml-user-select: none
+	-moz-user-select: none
+	-ms-user-select: none
+	user-select: none
+
 @mixin transition($props: all, $timing: .3s)
 	transition: $props $timing ease-in-out
 

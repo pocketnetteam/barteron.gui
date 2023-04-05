@@ -1,4 +1,4 @@
-import TreeList from "./tree-list/tree-list.vue";
+import TreeList from "./tree-list/index.vue";
 
 export default {
 	name: "Categories",

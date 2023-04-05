@@ -4,7 +4,10 @@
 
 		<section class="goods">
 			<h1>New from goods</h1>
-			<BarterCarousel :items="barters" />
+			<BarterCarousel
+				:items="barters"
+				:carousel="true"
+			/>
 		</section>
 	</div>
 </template>

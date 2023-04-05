@@ -1,13 +1,41 @@
 <template>
-	<div
-		:class="{
-			'barter-item': true
-		}"
-	>
+	<div :class="{ 'barter-item': true }">
 		<span class="state">{{ item.used ? 'I/U' : 'New' }}</span>
 
 		<picture v-if="item.image">
-			<img :src="imageUrl(item.image)" :alt="item.title">
+			<img
+				v-if="!Array.isArray(item.image)"
+				:src="imageUrl(item.image)"
+				:alt="item.title"
+			>
+			<template v-else>
+				<ul class="slide">
+					<li
+						v-for="(image, index) in item.image"
+						:key="index"
+						:class="{ 'hover': hover === index }"
+						@mouseenter="hoverize(index)"
+						@mouseleave="hoverize(0)"
+					>
+						<img
+							:src="imageUrl(image)"
+							:alt="`${ item.title }#${ index+1 }`"
+						>
+					</li>
+				</ul>
+				<ul
+					class="bullets"
+					v-if="item.image.length > 1"
+				>
+					<li
+						v-for="(image, index) in item.image"
+						:key="index"
+						:class="{ 'hover': hover === index }"
+						@mouseenter="hoverize(index)"
+						@mouseleave="hoverize(0)"
+					>{{ index }}</li>
+				</ul>
+			</template>
 		</picture>
 
 		<div class="row pricing" v-if="item.price">
@@ -20,8 +48,8 @@
 			</span>
 		</div>
 
-		<div class="row title" v-if="item.title">
-			<span>{{ item.title }}</span>
+		<div class="row title" v-if="item.name">
+			<span>{{ decodeString(item.name) }}</span>
 		</div>
 
 		<div class="row to" v-if="item.to">

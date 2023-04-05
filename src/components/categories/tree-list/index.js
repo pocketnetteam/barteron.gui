@@ -1,4 +1,4 @@
-import TreeList from "./tree-list.vue";
+import TreeList from "./index.vue";
 
 export default {
 	name: "TreeList",

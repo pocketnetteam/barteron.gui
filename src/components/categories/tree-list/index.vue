@@ -16,7 +16,10 @@
 					'text-hidden': item.active && item.children.filter(f => f.active).length
 				}"
 			>
-				<i :class="`fa ${ !item.active ? (item.icon ?? 'fa-tv') : ('fa-angle-left') }`"></i>
+				<i
+					:class="`fa ${ !item.active ? (item.icon ? `${ item.icon } category-icon` : '') : ('fa-angle-left') }`"
+					v-if="item.active || item.icon"
+				></i>
 				<span>
 					<template v-if="item.active && item.children.length">
 						{{
@@ -41,4 +44,4 @@
 	</ul>
 </template>
 
-<script src="./tree-list.js"></script>
+<script src="./index.js"></script>

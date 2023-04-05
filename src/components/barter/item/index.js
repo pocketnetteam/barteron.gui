@@ -7,19 +7,37 @@ export default {
 		item: Object
 	},
 
+	data() {
+		return {
+			hover: 0
+		}
+	},
+
 	methods: {
 		/**
-		 * Get image from assets
+		 * Get absolute path from relative
 		 * 
-		 * @param {String} image 
-		 * @returns {URL}
+		 * @param {String} relative 
+		 * @returns {String}
 		 */
-		imageUrl(image) {
+		imageUrl(relative) {
 			try {
-				return require(`../../../assets/images/barter/${ image }`)
+				return require(`../../../assets/images/barter/${ relative }`)
 			} catch {
 				return false;
 			}
+		},
+
+		/**
+		 * Decode text special chars
+		 * 
+		 * @param {String} html
+		 * @return {String}
+		 */
+		decodeString(html) {
+			const text = document.createElement("textarea");
+			text.innerHTML = html;
+			return text.value;
 		},
 
 		/**
@@ -41,7 +59,8 @@ export default {
 		 * @return {String}
 		 */
 		getCategories(ids) {
-			return ids.map(id => this.categoriesMap[id]).join(", ");
+			return ids.map(id => this.categoriesMap[id])
+				.filter(m => m).join(", ");
 		},
 
 		/**
@@ -49,6 +68,15 @@ export default {
 		 */
 		calcDistance() {
 
+		},
+
+		/**
+		 * Make bullet and their image at hover state
+		 * 
+		 * @param {Number} index 
+		 */
+		hoverize(index) {
+			this.hover = index;
 		}
 	}
 }

@@ -17,5 +17,5 @@
 	</ul>
 </template>
 
-<style lang="sass" src="./assoc-list.sass"></style>
-<script src="./assoc-list.js"></script>
+<style lang="sass" src="./index.sass"></style>
+<script src="./index.js"></script>

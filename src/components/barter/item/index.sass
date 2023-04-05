@@ -13,10 +13,62 @@
 		border-radius: 11px
 		display: block
 		margin: 0 0 .9em
+		position: relative
+		overflow: hidden
+		height: 180px
+		width: 274px
+		+unselectable()
 
 		img
+			object-fit: cover
 			vertical-align: top
+			height: 100%
 			width: 100%
+
+		ul.slide
+			display: flex
+			justify-content: stretch
+			height: 100%
+			+resetList()
+
+			li
+				width: 100%
+
+				&.hover
+					img
+						opacity: 1
+
+				img
+					position: absolute
+					top: 0
+					right: 0
+					bottom: 0
+					left: 0
+					opacity: 0
+					z-index: -1
+					+transition(opacity)
+
+		.bullets
+			background: $overlay-half
+			border-radius: 12px
+			display: flex
+			+resetList()
+			padding: 2px 4px
+			position: absolute
+			right: 8px
+			bottom: 8px
+
+			li
+				background: $background-gray-ghost
+				border-radius: 50%
+				margin: 2px
+				overflow: hidden
+				text-indent: -9999px
+				height: 4px
+				width: 4px
+
+				&.hover
+					background: $background-white
 
 	.state
 		background: $background-goku
@@ -27,6 +79,8 @@
 		position: absolute
 		top: $rhythm
 		right: $rhythm
+		z-index: 1
+		+unselectable()
 
 	.row:not(:last-child)
 		margin: 0 0 .6em
