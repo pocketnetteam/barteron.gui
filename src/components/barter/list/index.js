@@ -66,7 +66,7 @@ export default {
 
 			/* Enable/Disable controls */
 			this.prevDisabled = this.index < 1;
-			this.nextDisabled = this.index > this.items.length - visible;
+			this.nextDisabled = this.index >= this.items.length - visible;
 
 			if (!next) {
 				/* Logic for prev action */
