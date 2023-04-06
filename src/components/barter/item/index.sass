@@ -74,11 +74,11 @@
 		background: $background-goku
 		border: 1px solid $border-white
 		border-radius: 6px
-		color: $color-trunks
+		color: $trunks
 		padding: 2px 4px
 		position: absolute
-		top: $rhythm
-		right: $rhythm
+		top: $r
+		right: $r
 		z-index: 1
 		+unselectable()
 
@@ -86,7 +86,7 @@
 		margin: 0 0 .6em
 
 	.pricing
-		color: $color-black
+		color: $black
 		display: flex
 		align-items: center
 		justify-content: space-between
@@ -99,7 +99,7 @@
 				background-color: $background-lightblue
 				border-radius: 4px
 				display: block
-				margin: 0 $rhythm 0 0
+				margin: 0 $r 0 0
 				padding: 2px
 				overflow: hidden
 				height: 1.15em
@@ -116,17 +116,17 @@
 			font-weight: 700
 
 		.favorite
-			color: $color-gray
+			color: $gray
 			cursor: pointer
 			font-size: 1.2em
 			padding: 0 4px 0 0
 			+transition(color)
 
 			&:hover
-				color: $color-bulma
+				color: $bulma
 
 	.title
-		color: $color-black
+		color: $black
 		font-weight: 700
 
 	.to,
@@ -135,7 +135,7 @@
 		line-height: 1.2
 
 	.to
-		color: $color-bulma
+		color: $bulma
 		overflow: hidden
 		text-overflow: ellipsis
 		white-space: nowrap
@@ -147,12 +147,12 @@
 			+resetList()
 
 			li
-				color: $color-trunks
+				color: $trunks
 
 				&:not(:first-child)
-					margin: 0 0 0 $rhythm
+					margin: 0 0 0 $r
 
 					&:before
 						display: inline-block
 						content: "\2022"
-						margin: 0 $rhythm 0 0
+						margin: 0 $r 0 0

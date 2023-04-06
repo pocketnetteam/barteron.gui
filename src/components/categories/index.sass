@@ -26,8 +26,8 @@
 
 			& ~ .v-button-dropdown
 				right: auto
-				left: $offset
-				max-width: 320px
+				left: 0
+				width: 320px
 				z-index: 20
 
 				ul
@@ -88,15 +88,16 @@
 
 						i.fa
 							text-align: center
+							flex-shrink: 0
 							width: 20px
 
 							&:last-child
 								margin: 0 0 0 auto
-								padding: 0 0 0 $rhythm * 2
+								padding: 0 0 0 $r * 2
 								width: auto
 
 				> ul
-					padding: 0 $rhythm * 2 0 0
+					padding: 0 $r * 2 0 0
 					max-width: calc(320px - 1.5em)
 					max-height: calc(100vh - 100px - 2em)
 					+scrollbar()

@@ -2,26 +2,31 @@
 
 #header
 	background: rgba(255, 255, 255, 1)
-	margin: 0 $offset * -1 $rhythm * 2
-	position: relative
+	margin: 0 auto $r * 2
+	position: sticky
+	top: 0
+	right: 0
+	left: 0
+	max-width: $width
+	width: 100%
 	z-index: 10
 	
-	.top
+	.top,
+	.bar
+		background: $background-white
 		display: flex
-		justify-content: space-between
 		align-items: center
-		padding: $rhythm $offset
+		justify-content: space-between
+		margin: 0 -9999px
+		padding: $r 9999px
 
 	.bar
 		border: 1px solid rgba(235, 235, 235, 1)
 		border-width: 1px 0
-		display: flex
-		align-items: center
-		justify-content: space-between
-		padding: $rhythm * 1.5 $offset
+		padding: $r * 1.5 9999px
 
 		& > *:not(:first-child)
-			margin: 0 0 0 $rhythm * 4
+			margin: 0 0 0 $r * 4
 
 		.logo
 			display: flex

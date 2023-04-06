@@ -6,12 +6,12 @@
 	grid-template-rows: 1fr
 	@if $carousel
 		grid-auto-flow: column
-	grid-gap: $rhythm * 5
+	grid-gap: $r * 5
 	+resetList()
 
 .barter-list
 	.barter-list-holder
-		ul
+		ul.barter-track
 			+grid()
 
 .barter-carousel
@@ -31,7 +31,7 @@
 		background: $background-white
 		border: 1px solid $border-beerus
 		border-radius: 8px
-		color: $color-bulma
+		color: $bulma
 		cursor: pointer
 		font-size: 1.4em
 		text-align: center
@@ -44,7 +44,7 @@
 		+transition()
 
 		&:hover
-			color: $color-blue
+			color: $blue
 			opacity: 1
 		
 		.fa
