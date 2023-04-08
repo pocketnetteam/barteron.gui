@@ -1,5 +1,7 @@
 @import "@/css/vars.sass"
 
+$dropdown-width: 320px
+
 .v-button-holder
 	&.btn-categories
 		position: static
@@ -25,9 +27,10 @@
 			font-size: 1em
 
 			& ~ .v-button-dropdown
+				padding: 1em .75em
 				right: auto
 				left: 0
-				width: 320px
+				width: $dropdown-width
 				z-index: 20
 
 				ul
@@ -62,16 +65,18 @@
 						background: unset
 						color: unset
 						display: block
+						margin: 0
 						padding: 0
 
 						&:not(:last-child):not(.dropdown-open)
-							margin: 0 0 .6em 0
+							margin-bottom: .6em
 
 					span.text
 						border-radius: 8px
 						color: $button-color-bulma
 						cursor: pointer
 						display: flex
+						align-items: center
 						padding: .8em .75em
 						width: 100%
 
@@ -89,6 +94,7 @@
 						i.fa
 							text-align: center
 							flex-shrink: 0
+							margin: 0 1em 0 0
 							width: 20px
 
 							&:last-child
@@ -97,7 +103,8 @@
 								width: auto
 
 				> ul
-					padding: 0 $r * 2 0 0
-					max-width: calc(320px - 1.5em)
+					margin: 0 -5px 0 0
+					padding: 0 10px 0 5px
+					max-width: $dropdown-width
 					max-height: calc(100vh - 100px - 2em)
-					+scrollbar()
+					+scrollbar(4px, y)
