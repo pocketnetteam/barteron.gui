@@ -16,12 +16,16 @@
 <style src="@/assets/font-awesome/css/all.css"></style>
 <script>
 import categories from "@/data/categories.json";
-import Header from "@/components/header/index.vue";
-import Footer from "@/components/footer/index.vue";
-import item from "./components/barter/item";
+import Header from "@/components/layout/header/index.vue";
+import Footer from "@/components/layout/footer/index.vue";
 
 export default {
 	name: "Barteron",
+
+	components: {
+		Header,
+		Footer
+	},
 
 	provide() {
 		return {
@@ -56,11 +60,6 @@ export default {
 
 			return map;
 		}
-	},
-
-	components: {
-		Header,
-		Footer
 	}
 }
 </script>

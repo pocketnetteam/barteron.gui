@@ -18,6 +18,5 @@
 	</div>
 </template>
 
-<style lang="sass" src="@/css/vars.sass"></style>
 <style lang="sass" src="./index.sass"></style>
 <script src="./index.js"></script>

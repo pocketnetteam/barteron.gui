@@ -1,0 +1,95 @@
+@import "@/css/vars.sass"
+
+#footer
+	background: $background-beerus
+
+	.footer-holder
+		color: $dark
+		margin: 0 auto
+		padding: $r * 7 0
+		max-width: $width
+		width: 100%
+
+		.links
+			display: flex
+			justify-content: space-between
+			margin: 0 0 $r * 3.5 0
+			padding: 0 0 $r * 3.5 0
+			position: relative
+
+			&:after
+				background: $background-darkblue
+				content: ""
+				display: block
+				opacity: .1
+				position: absolute
+				right: 0
+				bottom: 0
+				left: 0
+				height: 1px
+
+			.title
+				display: block
+				font-size: 1.15em
+				margin: 0 0 $r * 1.8 0
+
+			ul
+				+resetList()
+
+				li
+					margin: 0 0 $r * 2.3 0
+
+					a
+						color: $dark
+						text-decoration: none
+						opacity: .7
+						+transition(opacity)
+
+						&:hover
+							opacity: 1
+
+		.bottom
+			display: flex
+			align-items: center
+
+			.logo
+				display: block
+				height: 14px
+				width: 85px
+
+				a
+					background: url(@/assets/images/logo-small.svg) no-repeat 50% 50%
+					display: block
+					text-indent: -9999px
+					overflow: hidden
+					height: 100%
+					width: 100%
+
+			.copyright
+				color: $black
+				font-size: .85em
+				margin: 0 0 0 $r * 4
+
+			nav
+				margin: 0 0 0 auto
+
+			nav,
+			nav ul
+				display: flex
+				align-items: center
+
+				ul
+					+resetList()
+
+					li
+						margin: 0
+
+						a
+							display: block
+							padding: $r
+
+							&.twitter
+								background: url("@/assets/images/social.svg#twitter") no-repeat 50% 50%
+
+				.scroll-top
+					margin: 0 0 0 $r * 4
