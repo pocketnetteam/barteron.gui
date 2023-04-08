@@ -1,5 +1,7 @@
 import AssocList from "@/components/categories/assoc-list/index.vue";
-import BarterCarousel from "@/components/barter/list/index.vue";
+import BarterList from "@/components/barter/list/index.vue";
+import Banner from "@/components/banner/index.vue";
+
 import barters from "@/data/barters.json";
 
 export default {
@@ -7,7 +9,8 @@ export default {
 
 	components: {
 		AssocList,
-		BarterCarousel
+		BarterList,
+		Banner
 	},
 
 	data() {
