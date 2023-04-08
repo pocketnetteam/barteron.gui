@@ -17,7 +17,7 @@ export default {
 		 */
 		imageUrl(image) {
 			try {
-				return require(`../../../assets/images/${ image }`)
+				return require(`@/assets/images/${ image }`)
 			} catch {
 				return false;
 			}
