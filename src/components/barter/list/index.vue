@@ -48,5 +48,5 @@
 	</div>
 </template>
 
-<style lang="sass" src="./index.sass"></style>
+<style scoped lang="sass" src="./index.sass"></style>
 <script src="./index.js"></script>

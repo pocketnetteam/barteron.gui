@@ -1,23 +1,29 @@
 @import "@/css/vars.sass"
 
+$item-width: 294px
+
 @mixin grid($carousel: false)
 	display: grid
-	grid-template-columns: repeat(auto-fill, 274px)
+	grid-template-columns: repeat(auto-fill, $item-width)
 	grid-template-rows: 1fr
 	@if $carousel
 		grid-auto-flow: column
-	grid-gap: $r * 5
+	grid-gap: 24px
 	+resetList()
+	
+.barter-list,
+.barter-carousel
+	ul.barter-track
+		+grid()
 
-.barter-list
-	.barter-list-holder
-		ul.barter-track
-			+grid()
+		/deep/ .barter-item
+			width: $item-width
 
 .barter-carousel
 	position: relative
 
 	.barter-carousel-holder
+		border-radius: 11px
 		overflow: hidden
 		position: relative
 		width: 100%

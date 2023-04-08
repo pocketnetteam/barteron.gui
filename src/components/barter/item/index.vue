@@ -1,8 +1,8 @@
 <template>
 	<div :class="{ 'barter-item': true }">
-		<span class="state">{{ item.used ? 'I/U' : 'New' }}</span>
-
 		<picture v-if="item.image">
+			<span class="state">{{ item.used ? 'I/U' : 'New' }}</span>
+			
 			<img
 				v-if="!Array.isArray(item.image)"
 				:src="imageUrl(item.image)"
