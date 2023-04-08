@@ -1,19 +1,21 @@
 /* Main */
-$width: 1328px
+$width: 1248px
 $r: .5em
 
 /* LIGHT THEME */
 
 /* Colors */
 $black: rgba(0, 0, 0, 1)
+$dark: rgba(10, 20, 47, 1)
 $beerus: rgba(235, 235, 235, 1)
 $gray: rgba(142, 144, 166, 1)
 $trunks: rgba(153, 156, 160, 1)
 $lightgray: rgba(199, 200, 217, 1)
 $darkgray: rgba(0, 0, 0, 0.08)
-$bulma: rgba(3, 71, 120, 1)
-$blue: rgba(0, 164, 255, 1)
 $lightblue: rgba(0, 133, 207, 1)
+$blue: rgba(0, 164, 255, 1)
+$darkblue: rgba(15, 82, 139, 1)
+$bulma: rgba(3, 71, 120, 1)
 $primary: rgba(255, 255, 255, 1)
 $goku: rgba(245, 245, 245, 1)
 
@@ -24,6 +26,7 @@ $background-gray-focus: linear-gradient(0deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0,
 $background-gray-ghost: rgba(235, 235, 235, 0.18)
 $background-goku: $goku
 $background-lightblue: $lightblue
+$background-darkblue: $darkblue
 $background-white: $primary
 
 /* Overlay */
@@ -81,17 +84,17 @@ $lightbox-link-primary-hover: $button-ghost-hover
 @mixin transition($props: all, $timing: .3s)
 	transition: $props $timing ease-in-out
 
-@mixin scrollbar($size: 4px, $direction: y)
+@mixin scrollbar($size: 4px, $direction: y, $prop: overlay)
 	@if $direction == y
 		overflow-x: hidden
-		overflow-y: overlay
+		overflow-y: $prop
 	@else if $direction == x
 		overflow-y: hidden
-		overflow-x: overlay
+		overflow-x: $prop
 	@else
-		overflow: overlay
+		overflow: $prop
 	
-	scrollbar-gutter: stable
+	/* scrollbar-gutter: stable */
 
 	&::-webkit-scrollbar
 		height: $size
