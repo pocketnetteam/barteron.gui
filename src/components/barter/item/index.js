@@ -22,7 +22,7 @@ export default {
 		 */
 		imageUrl(relative) {
 			try {
-				return require(`../../../assets/images/barter/${ relative }`)
+				return require(`@/assets/images/barter/${ relative }`)
 			} catch {
 				return false;
 			}
