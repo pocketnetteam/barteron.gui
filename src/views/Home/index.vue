@@ -4,16 +4,29 @@
 
 		<section>
 			<h1>New from goods</h1>
-			<BarterCarousel
+			<BarterList
 				:items="barters"
 				:carousel="true"
 			/>
 		</section>
 
+		<Banner>
+			<picture>
+				<img :src="require('@/assets/images/banner.jpeg')" alt="banner">
+			</picture>
+		</Banner>
+
 		<section>
 			<h1>Services</h1>
-			<BarterCarousel
-				:items="barters"
+			<BarterList
+				:items="barters.slice(0, 8)"
+			/>
+		</section>
+
+		<section>
+			<h1>Viewed</h1>
+			<BarterList
+				:items="barters.slice(0, 4)"
 			/>
 		</section>
 	</div>
