@@ -47,9 +47,21 @@
 
 				<nav>
 					<ul>
-						<li><a href="#" class="twitter">Twitter</a></li>
-						<li><a href="#" class="linkedin">Linkedin</a></li>
-						<li><a href="#" class="facebook">Facebook</a></li>
+						<li>
+							<a href="#" class="twitter">
+								<svg><use href="@/assets/images/social.svg#twitter" /></svg>
+							</a>
+						</li>
+						<li>
+							<a href="#" class="linkedin">
+								<svg><use href="@/assets/images/social.svg#linkedin" /></svg>
+							</a>
+						</li>
+						<li>
+							<a href="#" class="facebook">
+								<svg><use href="@/assets/images/social.svg#facebook" /></svg>
+							</a>
+						</li>
 					</ul>
 
 					<a href="#" class="scroll-top">

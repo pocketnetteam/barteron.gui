@@ -50,7 +50,7 @@
 
 		.bottom
 			display: flex
-			align-items: center
+			align-items: baseline
 
 			.logo
 				display: block
@@ -73,23 +73,34 @@
 			nav
 				margin: 0 0 0 auto
 
-			nav,
-			nav ul
-				display: flex
-				align-items: center
-
 				ul
 					+resetList()
 
 					li
 						margin: 0
 
+						&:not(:first-child)
+							margin-left: $r * 3.5
+
 						a
 							display: block
-							padding: $r
 
-							&.twitter
-								background: url("@/assets/images/social.svg#twitter") no-repeat 50% 50%
+						svg
+							height: 20px
+							width: 21px
 
 				.scroll-top
-					margin: 0 0 0 $r * 4
+					color: $darker
+					display: flex
+					align-items: center
+					justify-content: center
+					font-size: 1.15em
+					margin: 0 0 0 $r * 7
+					text-decoration: none
+					height: 20px
+					width: 21px
+
+			nav,
+			nav ul
+				display: flex
+				align-items: center
