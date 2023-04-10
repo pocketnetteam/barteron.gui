@@ -12,7 +12,7 @@
 		</template>
 
 		<i class="fa fa-caret-down"></i>
-		<span>Categories</span>
+		<span>{{ $t("buttonLabels.categories") }}</span>
 
 		<template v-slot:dropdown>
 			<TreeList

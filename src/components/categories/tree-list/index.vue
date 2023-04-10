@@ -23,10 +23,10 @@
 				<span>
 					<template v-if="item.active && item.children.length">
 						{{
-							`${ parents.map(p => p.name).join(": ") }${ parents.length ? ": " : "" }`
+							`${ parents.map(p => $t(p.name)).join(": ") }${ parents.length ? ": " : "" }`
 						}}
 					</template>
-					{{ item.name }}
+					{{ $t(item.name) }}
 				</span>
 				<i
 					class="fa fa-angle-right"
