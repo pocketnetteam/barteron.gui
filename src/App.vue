@@ -58,7 +58,7 @@ export default {
 				}
 
 			iterate(categories ?? []);
-
+			
 			return map;
 		}
 	}

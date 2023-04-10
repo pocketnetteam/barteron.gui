@@ -4,12 +4,21 @@ import VueRouter from 'vue-router';
 const routes = [
 	{
 		path: "/",
-		name: "Home",
+		name: "home",
 		component: () => import("@/views/Home/index.vue")
 	},
 	{
+		path: "/category/:slug",
+		name: "category",
+		components: {
+			default: () => import("@/views/Category/index.vue"),
+			aside: () => import("@/views/Category/aside/index.vue"),
+			content: () => import("@/views/Category/content/index.vue")
+		}
+	},
+	{
 		path: "/about",
-		name: "About",
+		name: "about",
 		component: () => import("@/views/About/index.vue"),
 	},
 ];
