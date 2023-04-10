@@ -3,9 +3,12 @@
 		<Header />
 
 		<div id="main">
-			<router-view name="aside" />
 			<router-view />
-			<router-view name="sidebar" />
+			<div id="container">
+				<router-view name="aside" />
+				<router-view name="content" />
+				<router-view name="sidebar" />
+			</div>
 		</div>
 
 		<Footer />
@@ -44,19 +47,17 @@ export default {
 		categoriesMap() {
 			const
 				map = {},
-				iterate = (items) => {
+				iterate = (items, parentId) => {
 					items.forEach(item => {
-						map[item.id] = item.name;
+						map[item.id] = { name: item.name, parent: parentId ?? null, children: item.children.map(children => children.id) };
 
 						if (item.children?.length) {
-							iterate(item.children);
+							iterate(item.children, item.id);
 						}
 					});
 				}
 
-			if (categories?.length) {
-				iterate(categories);
-			}
+			iterate(categories ?? []);
 
 			return map;
 		}
