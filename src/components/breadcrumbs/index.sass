@@ -1,0 +1,26 @@
+@import "@/css/vars.sass"
+
+.breadcrumbs
+	ul
+		color: $trunks
+		display: flex
+		+resetList()
+		padding: $r * 2 0
+
+		li:not(:first-child)
+			margin: 0 0 0 $r * 2
+			padding: 0 0 0 $r * 2
+			position: relative
+
+		.fa
+			position: absolute
+			top: 50%
+			left: -3px
+			transform: translateY(-50%)
+
+		a
+			color: $blue
+			text-decoration: none
+
+			&:hover
+				text-decoration: underline

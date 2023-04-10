@@ -1,0 +1,24 @@
+<template>
+	<nav class="breadcrumbs">
+		<ul>
+			<li
+				v-for="(match, index) in matches"
+				:key="index"
+			>
+				<template v-if="index < matches.length - 1">
+					<router-link :to="{ name: match.name }">
+						{{ $t(`${ $te(match.name) ? '' : 'pageLabels.' }${ match.name }`) }}
+					</router-link>
+				</template>
+				<template v-else>{{ $t(match.name) }}</template>
+
+				<template v-if="index > 0">
+					<i class="fa fa-angle-right"></i>
+				</template>
+			</li>
+		</ul>
+	</nav>
+</template>
+
+<style scoped lang="sass" src="./index.sass"></style>
+<script src="./index.js"></script>
