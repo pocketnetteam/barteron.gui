@@ -1,7 +1,7 @@
 <template>
 	<nav class="breadcrumbs">
-		<ul>
-			<li
+		<menu>
+			<menuitem
 				v-for="(match, index) in matches"
 				:key="index"
 			>
@@ -15,8 +15,8 @@
 				<template v-if="index > 0">
 					<i class="fa fa-angle-right"></i>
 				</template>
-			</li>
-		</ul>
+			</menuitem>
+		</menu>
 	</nav>
 </template>
 
