@@ -1,5 +1,5 @@
 <template>
-	<section id="title">
+	<section id="page-header">
 		<slot></slot>
 	</section>
 </template>
