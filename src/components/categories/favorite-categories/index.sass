@@ -1,0 +1,24 @@
+@import "@/css/vars.sass"
+
+.favorite-categories
+	ul
+		display: flex
+		flex-wrap: wrap
+		gap: $r * 1.2
+		overflow: hidden
+		+resetList()
+
+		a
+			background: $background-goku
+			border-radius: 12px
+			color: $bulma
+			display: flex
+			padding: 1em
+			align-items: center
+			text-align: center
+			text-decoration: none
+			height: 100%
+			+transition(color)
+
+			&:hover
+				color: $blue
