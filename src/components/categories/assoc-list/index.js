@@ -1,10 +1,12 @@
+import { Object } from "core-js";
+
 export default {
 	name: "AssocList",
 
 	props: {
 		items: {
-			type: Array,
-			default: () => []
+			type: Object,
+			default: () => {}
 		}
 	},
 

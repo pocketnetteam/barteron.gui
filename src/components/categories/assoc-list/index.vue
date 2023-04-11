@@ -1,8 +1,8 @@
 <template>
 	<ul class="categories-assoc-list">
 		<li
-			v-for="(item, i) in items"
-			:key="i"
+			v-for="(item, id) in items"
+			:key="id"
 			:class="{
 				'assoc-item': true,
 			}"

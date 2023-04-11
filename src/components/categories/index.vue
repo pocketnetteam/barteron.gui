@@ -16,7 +16,7 @@
 
 		<template v-slot:dropdown>
 			<TreeList
-				v-if="categories.length"
+				v-if="items.length"
 				:items="items"
 				@itemSelected="categorySelected"
 			/>

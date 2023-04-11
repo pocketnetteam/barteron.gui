@@ -1,7 +1,7 @@
 export default {
 	name: "BarterItem",
 
-	inject: ["categoriesMap"],
+	inject: ["categories"],
 
 	props: {
 		item: Object
@@ -59,7 +59,7 @@ export default {
 		 * @return {String}
 		 */
 		getCategories(ids) {
-			return ids.map(id => this.categoriesMap[id])
+			return ids.map(id => this.$t(this.categories.items[id]?.name))
 				.filter(m => m).join(", ");
 		},
 

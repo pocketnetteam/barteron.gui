@@ -3,6 +3,8 @@ import TreeList from "./index.vue";
 export default {
 	name: "TreeList",
 
+	inject: ["categories"],
+
 	components: {
 		TreeList
 	},
@@ -54,6 +56,10 @@ export default {
 			
 			/* Make clicked item active */
 			if (this.items[index]?.id === item?.id && item.children?.length) {
+				/* Load sub-categories on demand */
+				item.children = item.children.map(id => this.categories.findById(id));
+
+				/* Set parent to active state (opened) */
 				this.$set(this.items[index], "active", !this.items[index].active ?? true);
 			}
 

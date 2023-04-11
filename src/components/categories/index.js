@@ -1,3 +1,4 @@
+import { Object } from "core-js";
 import TreeList from "./tree-list/index.vue";
 
 export default {
@@ -9,7 +10,7 @@ export default {
 
 	props: {
 		categories: {
-			type: Array,
+			type: Object,
 			default: () => []
 		}
 	},
@@ -17,7 +18,11 @@ export default {
 	data() {
 		return {
 			overlay: false,
-			items: this.categories
+			items: (() => {
+				return Object.keys(this.categories).filter(f => !this.categories[f].parent).map(id => {
+					return Object.assign({ id: id }, this.categories[id]);
+				});
+			})()
 		}
 	},
 

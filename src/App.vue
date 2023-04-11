@@ -32,8 +32,7 @@ export default {
 
 	provide() {
 		return {
-			categories,
-			categoriesMap: this.categoriesMap
+			categories: this.categories
 		}
 	},
 
@@ -44,23 +43,72 @@ export default {
 	},
 
 	computed: {
-		categoriesMap() {
-			const
-				map = {},
-				iterate = (items, parentId) => {
-					items.forEach(item => {
-						map[item.id] = { name: item.name, parent: parentId ?? null, children: item.children.map(children => children.id) };
-
-						if (item.children?.length) {
-							iterate(item.children, item.id);
-						}
-					});
+		categories() {
+			const $ = this;
+			/**
+			 * @class Categories
+			 */
+			class Categories {
+				/**
+				 * @param {Object} data
+				 */
+				constructor(data) {
+					this.items = data;
+					return this;
 				}
 
-			iterate(categories ?? []);
-			
-			return map;
+				/**
+				 * Get category as Object
+				 * 
+				 * @param {Number} id
+				 * @return {Object}
+				 */
+				get(id) {
+					return Object.assign({ id: id }, this.items[id]);
+				}
+
+				/**
+				 * Search through items
+				 * 
+				 * @param {String} param
+				 * @param {Number, String} value
+				 * @return {Object}
+				 */
+				find(param, value) {
+					for (let id in this.items) {
+						if (items[id][param] === value) {
+							return this.get(id);
+						}
+					}
+				}
+
+				/**
+				 * Search by id
+				 * 
+				 * @param {Number} id
+				 * @return {Object}
+				 */
+				findById(id) {
+					return this.get(id);
+				}
+
+				/**
+				 * Search by name
+				 * 
+				 * @param {String} name
+				 * @return {Object}
+				 */
+				findByName(name) {
+					return this.find("name", name);
+				}
+			};
+
+			return new Categories(categories);
 		}
+	},
+
+	mounted() {
+		// console.log(this.categories.findByName("office_furniture"))
 	}
 }
 </script>

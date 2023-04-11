@@ -1,7 +1,7 @@
 <template>
 	<form action="#" class="search-bar">
 		<Categories
-			:categories="categories"
+			:categories="categories.items"
 			@categorySelected="categorySelected"
 		/>
 		

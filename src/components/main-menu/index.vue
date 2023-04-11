@@ -1,7 +1,10 @@
 <template>
 	<nav class="main-menu">
 		<ul>
-			<li v-for="item in items">
+			<li
+				v-for="(item, name) in items"
+				:key="name"
+			>
 					<router-link :to="item.path">{{ item.name }}</router-link>
 			</li>
 		</ul>
