@@ -85,21 +85,21 @@ export default {
 				/**
 				 * Search by id
 				 * 
-				 * @param {Number} id
+				 * @param {Number, Array[Number]} id
 				 * @return {Object}
 				 */
 				findById(id) {
-					return this.get(id);
+					return Array.isArray(id) ? id.map(n => this.get(n)) : this.get(id);
 				}
 
 				/**
 				 * Search by name
 				 * 
-				 * @param {String} name
+				 * @param {String, Array[String]} name
 				 * @return {Object}
 				 */
 				findByName(name) {
-					return this.find("name", name);
+					return Array.isArray(name) ? name.map(n => this.find("name", n)) : this.find("name", name);
 				}
 			};
 
