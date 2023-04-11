@@ -1,6 +1,7 @@
 {
 	"pageLabels": {
-		"home": "Home"
+		"home": "Home",
+		"category": "Category"
 	},
 
 	"buttonLabels": {

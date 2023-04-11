@@ -4,7 +4,7 @@ import SubCategories from "@/components/categories/sub-categories/index.vue";
 export default {
 	name: "Title",
 
-	inject: ["categoriesMap"],
+	inject: ["categories"],
 
 	components: {
 		Breadcrumbs,
@@ -19,6 +19,12 @@ export default {
 		 */
 		title() {
 			return this.$route.params?.slug ?? this.$route.name;
+		},
+
+		subCategories() {
+			const category = this.categories.findByName(this.title);
+
+			return this.categories.findById(category.children.slice(0, 10));
 		}
 	}
 }

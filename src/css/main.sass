@@ -22,6 +22,7 @@ body
 	width: 100%
 
 	#title
+		margin: 0 0 $r * 7
 	
 	#container
 		display: flex
@@ -32,4 +33,9 @@ body
 
 		#aside,
 		#sidebar
+			flex-shrink: 0
+			margin: 0 $r * 2 0 0
 			width: $sidebar-width
+
+		#sidebar
+			margin: 0 0 0 $r * 2

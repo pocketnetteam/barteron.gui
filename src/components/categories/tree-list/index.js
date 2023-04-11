@@ -57,7 +57,7 @@ export default {
 			/* Make clicked item active */
 			if (this.items[index]?.id === item?.id && item.children?.length) {
 				/* Load sub-categories on demand */
-				item.children = this.categories.findById(item.children);
+				if (Number.isInteger(item.children[0])) item.children = this.categories.findById(item.children);
 
 				/* Set parent to active state (opened) */
 				this.$set(this.items[index], "active", !this.items[index].active ?? true);

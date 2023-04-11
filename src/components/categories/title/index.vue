@@ -1,13 +1,13 @@
 <template>
 	<div>
-		<Breadcrumbs />
+		<Breadcrumbs parent="home" />
 
 		<h1>
 			{{ $t(`${ $te(title) ? '' : 'pageLabels.' }${ title }`) }}
 			<span class="count">207 ads</span>
 		</h1>
 
-		<SubCategories />
+		<SubCategories :items="subCategories" />
 	</div>
 </template>
 
