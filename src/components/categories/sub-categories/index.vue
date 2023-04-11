@@ -5,8 +5,8 @@
 				v-for="(item, index) in items"
 				:key="index"
 			>
-				<router-link :to="{ name: 'category', params: { slug: item.slug } }">
-					{{ $t(item.name) }}
+				<router-link :to="{ name: 'category', params: { slug: item.name } }">
+					{{ text(item.name) }}
 				</router-link>
 			</li>
 		</ul>
