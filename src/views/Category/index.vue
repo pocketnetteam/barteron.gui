@@ -1,7 +1,7 @@
 <template>
-	<section id="title">
-		<Title />
-	</section>
+	<PageHeader>
+		<CategoryHeader />
+	</PageHeader>
 </template>
 
 <style scoped lang="sass" src="./index.sass"></style>

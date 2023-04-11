@@ -1,7 +1,7 @@
 <template>
-	<section id="content">
+	<ContentLayout>
 		Content
-	</section>
+	</ContentLayout>
 </template>
 
 <style scoped lang="sass" src="./index.sass"></style>

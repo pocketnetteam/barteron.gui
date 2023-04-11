@@ -1,0 +1,8 @@
+<template>
+	<section id="title">
+		<slot></slot>
+	</section>
+</template>
+
+<style lang="sass" src="./index.sass"></style>
+<script src="./index.js"></script>

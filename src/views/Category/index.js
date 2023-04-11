@@ -1,10 +1,12 @@
-import Title from "@/components/categories/title/index.vue";
+import PageHeader from "@/components/layout/page-header/index.vue";
+import CategoryHeader from "@/components/layout/page-header/category/index.vue";
 
 export default {
 	name: "Category",
 
 	components: {
-		Title
+		PageHeader,
+		CategoryHeader
 	},
 
 	created() {

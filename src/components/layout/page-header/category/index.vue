@@ -7,7 +7,7 @@
 			<span class="count">207 ads</span>
 		</h1>
 
-		<SubCategories :items="subCategories" />
+		<FavoriteCategories :items="favoriteCategories" />
 	</div>
 </template>
 

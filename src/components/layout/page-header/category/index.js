@@ -1,14 +1,14 @@
 import Breadcrumbs from "@/components/breadcrumbs/index.vue";
-import SubCategories from "@/components/categories/sub-categories/index.vue";
+import FavoriteCategories from "@/components/categories/favorite-categories/index.vue";
 
 export default {
-	name: "Title",
+	name: "PageHeader",
 
 	inject: ["categories"],
 
 	components: {
 		Breadcrumbs,
-		SubCategories
+		FavoriteCategories
 	},
 
 	computed: {
@@ -21,7 +21,7 @@ export default {
 			return this.$route.params?.slug ?? this.$route.name;
 		},
 
-		subCategories() {
+		favoriteCategories() {
 			const category = this.categories.findByName(this.title);
 
 			return this.categories.findById(category.children.slice(0, 10));
