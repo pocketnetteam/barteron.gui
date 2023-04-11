@@ -1,5 +1,5 @@
 export default {
-	name: "CategoryTitle",
+	name: "PageHeader",
 
 	data() {
 		return {}

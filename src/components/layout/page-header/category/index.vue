@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="category-header">
 		<Breadcrumbs parent="home" />
 
 		<h1>

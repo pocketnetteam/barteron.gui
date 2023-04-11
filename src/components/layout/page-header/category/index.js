@@ -2,7 +2,7 @@ import Breadcrumbs from "@/components/breadcrumbs/index.vue";
 import FavoriteCategories from "@/components/categories/favorite-categories/index.vue";
 
 export default {
-	name: "PageHeader",
+	name: "CategoryHeader",
 
 	inject: ["categories"],
 
