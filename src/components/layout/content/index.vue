@@ -1,7 +1,7 @@
 <template>
-	<div id="content">
+	<section id="content">
 		<slot></slot>
-	</div>
+	</section>
 </template>
 
 <style lang="sass" src="./index.sass"></style>

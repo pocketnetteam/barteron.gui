@@ -1,5 +1,5 @@
 <template>
-	<div id="header">
+	<header id="header">
 		<div class="top">
 			<LanguageSwitcher />
 			<MainMenu />
@@ -15,7 +15,7 @@
 				<UserBar />
 			</div>
 		</div>
-	</div>
+	</header>
 </template>
 
 <style lang="sass" src="./index.sass"></style>

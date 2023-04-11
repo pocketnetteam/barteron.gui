@@ -1,10 +1,11 @@
 <template>
-	<div
+	<dialog
 		:class="{
 			'v-lightbox': true,
 			'v-lightbox-open': active,
 			[`v-lightbox-${ size ?? 'md' }`]: true
 		}"
+		:open="active"
 		@click="overlayClick"
 	>
 		<slot name="before"></slot>
@@ -35,7 +36,7 @@
 			</footer>
 		</section>
 		<slot name="after"></slot>
-	</div>
+	</dialog>
 </template>
 
 <style scoped lang="sass" src="./index.sass"></style>

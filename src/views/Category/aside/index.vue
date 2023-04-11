@@ -1,8 +1,11 @@
 <template>
 	<AsideLayout>
-		<section>
-			<h1>{{ $t("category") }}</h1>
-		</section>
+		<details open>
+			<div class="row">
+				<summary>{{ $t("category") }}</summary>
+				<i class="fa fa-angle-up toggle"></i>
+			</div>
+		</details>
 	</AsideLayout>
 </template>
 

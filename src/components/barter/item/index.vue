@@ -58,8 +58,12 @@
 
 		<div class="row info" v-if="item.published || item.location">
 			<ul>
-				<li v-if="item.published">{{ item.published }}</li>
-				<li v-if="item.location">{{ calcDistance(item.location) }}</li>
+				<li v-if="item.published">
+					<time>{{ item.published }}</time>
+				</li>
+				<li v-if="item.location">
+					<address>{{ calcDistance(item.location) }}</address>
+				</li>
 			</ul>
 		</div>
 	</div>

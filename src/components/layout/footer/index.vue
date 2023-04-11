@@ -1,5 +1,5 @@
 <template>
-	<div id="footer">
+	<footer id="footer">
 		<div class="footer-holder">
 			<div class="links">
 				<nav>
@@ -70,7 +70,7 @@
 				</nav>
 			</div>
 		</div>
-	</div>
+	</footer>
 </template>
 
 <style lang="sass" src="./index.sass"></style>

@@ -1,7 +1,7 @@
 <template>
-	<section id="page-header">
+	<header id="page-header">
 		<slot></slot>
-	</section>
+	</header>
 </template>
 
 <style lang="sass" src="./index.sass"></style>

@@ -1,20 +1,20 @@
+@import "@/css/vars.sass"
+	
 .main-menu
-  display: inline-flex
-  font-size: 0.9em
+	display: inline-flex
+	font-size: 0.9em
 
-  ul
-    display: flex
-    margin: 0
-    padding: 0
-    list-style: none
+	menu
+		display: flex
+		+resetList()
 
-    li
-      a
-        color: rgba(153, 156, 160, 1)
-        text-decoration: none
+		menuitem
+			a
+				color: rgba(153, 156, 160, 1)
+				text-decoration: none
 
-        &:hover
-          text-decoration: underline
+				&:hover
+					text-decoration: underline
 
-      &:not(:last-child)
-        margin: 0 16px 0 0
+			&:not(:last-child)
+				margin: 0 16px 0 0

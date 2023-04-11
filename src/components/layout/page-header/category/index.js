@@ -24,7 +24,7 @@ export default {
 		favoriteCategories() {
 			const category = this.categories.findByName(this.title);
 
-			return this.categories.findById(category.children.slice(0, 10));
+			return this.categories.findById(category.children.slice(0, 14));
 		}
 	}
 }
