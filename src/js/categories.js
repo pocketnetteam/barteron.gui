@@ -23,7 +23,6 @@ export default class Categories {
 	 * @return {Object}
 	 */
 	get(id) {
-		console.log(this.items[id], id)
 		return this.items[id] ? Object.assign({ id: Number(id) }, this.items[id]) : {};
 	}
 

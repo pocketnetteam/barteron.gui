@@ -83,16 +83,6 @@ export default {
 			return Object.assign({
 				to: `${ path }/${ page.name }`
 			}, page);
-		},
-	
-		/**
-		 * Get localization text
-		 * 
-		 * @param {String} text 
-		 * @return {String}
-		 */
-		text(text) {
-			return this.$t(`${ this.$te(text) ? '' : 'pageLabels.' }${ text }`);
 		}
 	}
 }

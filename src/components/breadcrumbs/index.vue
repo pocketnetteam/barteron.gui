@@ -7,10 +7,10 @@
 			>
 				<template v-if="index < matches.length - 1">
 					<router-link :to="match.to || { name: match.name }">
-						{{ text(match.name) }}
+						{{ $t(`${ $te(match.name) ? '' : 'pageLabels.' }${ match.name }`) }}
 					</router-link>
 				</template>
-				<template v-else>{{ text(match.name) }}</template>
+				<template v-else>{{ $t(`${ $te(match.name) ? '' : 'pageLabels.' }${ match.name }`) }}</template>
 
 				<template v-if="index > 0">
 					<i class="fa fa-angle-right"></i>

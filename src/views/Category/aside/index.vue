@@ -1,11 +1,11 @@
 <template>
 	<AsideLayout>
-		<details open>
-			<div class="row">
-				<summary>{{ $t("category") }}</summary>
-				<i class="fa fa-angle-up toggle"></i>
-			</div>
-		</details>
+		<v-details
+			:title="$t('category')"
+			:open="true"
+		>
+			<SubCategories :items="subCategories" />
+		</v-details>
 	</AsideLayout>
 </template>
 

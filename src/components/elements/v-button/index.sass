@@ -87,27 +87,26 @@
 		position: absolute
 		top: 100%
 
-		/deep/
-			ul
-				+resetList()
+		ul
+			+resetList()
 
-				li
-					border-radius: 8px
-					color: $button-color-bulma
-					cursor: pointer
-					display: flex
-					padding: .8em .75em
+			li
+				border-radius: 8px
+				color: $button-color-bulma
+				cursor: pointer
+				display: flex
+				padding: .8em .75em
 
-					&:hover
-						background: linear-gradient(0deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04)), linear-gradient(0deg, #FFFFFF, #FFFFFF)
-						color: $button-primary
+				&:hover
+					background: linear-gradient(0deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04)), linear-gradient(0deg, #FFFFFF, #FFFFFF)
+					color: $button-primary
 
-				i.fa
-					display: block
-					margin: 0 $r * 2 0 0
+			i.fa
+				display: block
+				margin: 0 $r * 2 0 0
 
-				&:not(:last-child)
-					margin: 0 0 .6em 0
+			&:not(:last-child)
+				margin: 0 0 .6em 0
 
 	&.active
 		& ~ .v-button-dropdown

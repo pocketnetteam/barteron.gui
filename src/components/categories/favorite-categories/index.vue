@@ -6,7 +6,7 @@
 				:key="index"
 			>
 				<router-link :to="{ name: 'category', params: { slug: item.name } }">
-					{{ text(item.name) }}
+					{{ $t(item.name) }}
 				</router-link>
 			</li>
 		</ul>

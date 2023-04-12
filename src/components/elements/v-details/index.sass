@@ -1,0 +1,27 @@
+@import "@/css/vars.sass"
+	
+.v-details
+	+resetList()
+
+	summary
+		cursor: default
+		display: flex
+		align-items: center
+		justify-content: space-between
+		font-size: 1.15em
+		font-weight: 600
+		list-style: none
+		text-align: center
+		margin: 0 0 $r * 2
+		
+		&::after
+			+fontAwesome("\f107")
+			+transition(transform)
+			color: $bulma
+			width: $r * 2
+
+			@at-root #aside .v-details[open] summary::after
+				transform: rotate(-180deg)
+
+		&::-webkit-details-marker
+			display: none

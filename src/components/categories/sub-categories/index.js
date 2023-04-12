@@ -1,5 +1,5 @@
 export default {
-	name: "FavoriteCategories",
+	name: "SubCategories",
 
 	props: {
 		items: {

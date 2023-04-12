@@ -1,15 +1,15 @@
 <template>
-	<nav class="categories-slide-list">
-		<ul>
-			<li
+	<nav class="sub-categories-list">
+		<menu>
+			<menuitem
 				v-for="(item, index) in items"
 				:key="index"
 			>
 				<router-link :to="{ name: 'category', params: { slug: item.name } }">
-					{{ text(item.name) }}
+					{{ $t(item.name) }}
 				</router-link>
-			</li>
-		</ul>
+			</menuitem>
+		</menu>
 	</nav>
 </template>
 
