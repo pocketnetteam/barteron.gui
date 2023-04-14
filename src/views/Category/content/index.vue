@@ -1,8 +1,10 @@
 <template>
 	<ContentLayout>
-		Content
+		<BarterList
+			:items="barters.slice(0, 8)"
+		/>
 	</ContentLayout>
 </template>
 
-<style scoped lang="sass" src="./index.sass"></style>
+<style lang="sass" src="./index.sass"></style>
 <script src="./index.js"></script>

@@ -1,15 +1,26 @@
 <template>
 	<nav class="sub-categories-list">
 		<menu>
-			<menuitem
+			<template
 				v-for="(item, index) in items"
-				:key="index"
 			>
-				<router-link :to="{ name: 'category', params: { slug: item.name } }">
-					{{ $t(item.name) }}
-				</router-link>
-			</menuitem>
+				<menuitem
+					v-if="!expanded && index < visible || expanded"
+					:key="index"
+				>
+					<router-link :to="{ name: 'category', params: { slug: item.name } }">
+						{{ $t(item.name) }}
+					</router-link>
+				</menuitem>
+			</template>
 		</menu>
+
+		<span
+			class="toggle"
+			@click="toggle"
+		>
+			{{ `${ $t(expanded ? 'hide' : 'showAll') } (${ count })` }}
+		</span>
 	</nav>
 </template>
 

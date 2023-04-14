@@ -4,5 +4,5 @@
 	</PageHeader>
 </template>
 
-<style scoped lang="sass" src="./index.sass"></style>
+<style lang="sass" src="./index.sass"></style>
 <script src="./index.js"></script>

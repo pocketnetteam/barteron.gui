@@ -1,5 +1,9 @@
 {
 	"category": "Category",
+	"show": "Show",
+	"hide": "Hide",
+	"showAll": "Show all",
+	"hideAll": "Hide all",
 
 	"pageLabels": {
 		"home": "Home"

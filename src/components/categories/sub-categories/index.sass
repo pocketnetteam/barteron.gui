@@ -4,10 +4,25 @@
 	menu
 		+resetList()
 
-		a
-			color: $bulma
-			text-decoration: none
-			+transition(color)
+		menuitem
+			display: block
+			padding: $r * 1.15
 
-			&:hover
-				color: $blue
+			a
+				color: $bulma
+				text-decoration: none
+				+transition(color)
+
+				&:hover
+					color: $blue
+
+	.toggle
+		+transition(color)
+		color: $blue
+		cursor: pointer
+		display: block
+		text-decoration: none
+		padding: $r * 1.15
+
+		&:hover
+			color: $lightblue

@@ -19,9 +19,5 @@ export default {
 		subCategories() {
 			return this.categories.findById(this.category.children);
 		}
-	},
-
-	mounted() {
-		console.log(this.$to)
-	},
+	}
 }
