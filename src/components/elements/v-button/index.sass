@@ -23,7 +23,7 @@
 	&:hover
 		background: $button-primary-hover
 
-	/* Button types */
+	/* Types */
 	&.v-button-ghost
 		background: none
 		color: $button-color-ghost
@@ -64,21 +64,27 @@
 	&.v-button-xl
 		padding: 1.1em 1.6em
 
-	/* Button align */
+	/* Align */
 	&.v-button-right
 		flex-direction: row-reverse
 
-		i[class^="fa"]:not(:last-child)
+		span ~ *[class^="fa"]
+			margin: 0 $r * 2 0 0
+
+		*[class^="fa"]:not(:last-child)
 			margin: 0 0 0 $r * 2
 
 		& ~ .v-button-dropdown
 			right: 0
 
-	/* Inner content */
-	i[class^="fa"]:not(:last-child)
+	/* Content */
+	*[class^="fa"]:not(:last-child)
 		display: block
 		margin: 0 $r * 2 0 0
 		line-height: 100%
+
+	span ~ *[class^="fa"]
+		margin: 0 0 0 $r * 2
 
 	& ~ .v-button-dropdown
 		background: rgba(255, 255, 255, 1)

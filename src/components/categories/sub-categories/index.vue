@@ -16,6 +16,7 @@
 		</menu>
 
 		<span
+			v-if="count"
 			class="toggle"
 			@click="toggle"
 		>

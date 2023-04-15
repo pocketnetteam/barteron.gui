@@ -7,13 +7,15 @@
 		}"
 	>
 		<slot name="before"></slot>
+
 		<select
-			v-show="false"
+			class="v-hidden"
 			:id="id"
 			:name="name"
 		>
 
 		</select>
+
 		<button
 			:class="{
 				'v-select': true,
@@ -26,6 +28,7 @@
 		>
 			<slot></slot>
 		</button>
+
 		<div
 			class="v-select-dropdown"
 			v-if="$slots.dropdown || dropdown"
@@ -35,6 +38,7 @@
 				v-if="$slots.dropdown"
 			></slot>
 		</div>
+		
 		<slot name="after"></slot>
 	</div>
 </template>

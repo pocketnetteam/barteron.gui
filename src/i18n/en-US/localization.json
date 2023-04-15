@@ -5,6 +5,10 @@
 	"showAll": "Show all",
 	"hideAll": "Hide all",
 
+	"filterLabels": {
+		"new": "New first"
+	},
+
 	"pageLabels": {
 		"home": "Home"
 	},
