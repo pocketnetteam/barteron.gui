@@ -1,10 +1,12 @@
 <template>
 	<ContentLayout>
-		<v-select type="stroke">
-			<i class="fa fa-sort-amount-up icon"></i>
-			<span>{{ $t('filterLabels.new') }}</span>
-			<div class="fa fa-angle-down"></div>
-		</v-select>
+		<div class="row">
+			<v-select type="stroke">
+				<i class="fa fa-sort-amount-up icon"></i>
+				<span>{{ $t('filterLabels.new') }}</span>
+				<div class="fa fa-angle-down"></div>
+			</v-select>
+		</div>
 
 		<BarterList
 			:items="barters.slice(0, 8)"
