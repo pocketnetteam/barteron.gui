@@ -2,6 +2,12 @@
 	
 .v-select-holder
 	position: relative
+
+	.v-hidden
+		position: absolute
+		top: -9999px
+		left: -9999px
+		visibility: hidden
 	
 .v-select
 	background: $button-primary
@@ -78,9 +84,6 @@
 			right: 0
 
 	/* Content */
-	.v-hidden
-		visibility: hidden
-
 	*[class^="fa"]:not(:last-child)
 		display: block
 		margin: 0 $r * 2 0 0

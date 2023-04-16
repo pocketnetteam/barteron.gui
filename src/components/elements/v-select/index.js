@@ -65,7 +65,7 @@ export default {
 
 	mounted() {
 		document.addEventListener("click", () => {
-			if (this.active) this.clickButton(null, false);
+			if (this.active) this.clickSelect(null, false);
 		});
 	}
 }
