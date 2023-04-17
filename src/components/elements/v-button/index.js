@@ -62,6 +62,7 @@ export default {
 	},
 
 	mounted() {
+		/* Bind click to close dropdown */
 		document.addEventListener("click", () => {
 			if (this.active) this.clickButton(null, false);
 		});

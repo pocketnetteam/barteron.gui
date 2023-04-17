@@ -1,7 +1,9 @@
 @import "@/css/vars.sass"
 	
 .v-select-holder
+	display: inline-flex
 	position: relative
+	z-index: 10
 
 	.v-hidden
 		position: absolute
@@ -52,20 +54,32 @@
 		font-size: 0.9em
 		padding: 0.4em 0.7em
 
+		& ~ .v-select-dropdown
+			border-radius: 0 0 .25rem .25rem
+
 	&.v-select-sm,
 	&.v-select-md
 		border-radius: .5rem
 		font-size: 1em
 
+		& ~ .v-select-dropdown
+			border-radius: 0 0 .5rem .5rem
+
 	&.v-select-md
 		border-radius: .75rem
 		padding: 0.75em 1em
+
+		& ~ .v-select-dropdown
+			border-radius: 0 0 .75rem .75rem
 
 	&.v-select-lg,
 	&.v-select-xl
 		border-radius: 1rem
 		font-size: 1.2em
 		padding: 0.85em 1.2em
+
+		& ~ .v-select-dropdown
+			border-radius: 0 0 1rem 1rem
 
 	&.v-select-xl
 		padding: 1.1em 1.6em
@@ -94,10 +108,12 @@
 
 	& ~ .v-select-dropdown
 		background: rgba(255, 255, 255, 1)
+		border-radius: 0 0 .75rem
 		display: none
 		padding: $r * 2 .75em
 		position: absolute
 		top: 100%
+		width: 100%
 
 		ul
 			+resetList()

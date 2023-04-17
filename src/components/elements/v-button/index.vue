@@ -8,6 +8,7 @@
 		ref="holder"
 	>
 		<slot name="before"></slot>
+
 		<button
 			:class="{
 				'v-button': true,
@@ -20,6 +21,7 @@
 		>
 			<slot></slot>
 		</button>
+
 		<div
 			class="v-button-dropdown"
 			v-if="$slots.dropdown || dropdown"
@@ -28,6 +30,7 @@
 				name="dropdown"
 				v-if="$slots.dropdown"
 			></slot>
+			
 			<ul v-else>
 				<li
 					v-for="(item, index) in dropdown"
@@ -38,6 +41,7 @@
 				</li>
 			</ul>
 		</div>
+
 		<slot name="after"></slot>
 	</div>
 </template>

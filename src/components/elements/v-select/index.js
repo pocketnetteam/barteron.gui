@@ -1,6 +1,11 @@
 export default {
 	name: "Vselect",
 
+	/**
+	 * @param dropdown [{ text: "One", value: "1", default: true }, ...]
+	 * In case of slot:dropdown
+	 * <option value="1" selected>One</option>
+	 */
 	props: {
 		id: String,
 		name: String,
@@ -13,7 +18,8 @@ export default {
 
 	data() {
 		return {
-			active: false
+			active: false,
+			items: this.dropdown ?? []
 		}
 	},
 
@@ -64,6 +70,22 @@ export default {
 	},
 
 	mounted() {
+		/* Build options in select or dropdown list from select */
+		if (!this.$slots.dropdown && this.dropdown) {
+			this.$refs.select.innerHTML = this.dropdown
+				.map(o => `
+				<option value="${ o.value }"${ o.default ? 'selected' : '' }>
+					${ o[this.dropdownValueKey] || o.text || o }
+				</option>`
+				)
+				.join("\n");
+		} else if(this.$slots.dropdown) {
+			this.gDropdown = this.this.$refs.select.children().map(o => {
+				return { text: o.innerHTML, value: o.value, default: o.selected };
+			});
+		}
+
+		/* Bind click to close dropdown */
 		document.addEventListener("click", () => {
 			if (this.active) this.clickSelect(null, false);
 		});

@@ -1,7 +1,10 @@
 <template>
 	<ContentLayout>
 		<div class="row">
-			<v-select type="stroke">
+			<v-select
+				type="stroke"
+				:dropdown="[{ text: 'XUJ', value: 'xuj' }]"
+			>
 				<i class="fa fa-sort-amount-up icon"></i>
 				<span>{{ $t('filterLabels.new') }}</span>
 				<div class="fa fa-angle-down"></div>

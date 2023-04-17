@@ -12,8 +12,12 @@
 			class="v-hidden"
 			:id="id"
 			:name="name"
+			ref="select"
 		>
-
+			<slot
+				name="dropdown"
+				v-if="$slots.dropdown"
+			></slot>
 		</select>
 
 		<button
@@ -31,12 +35,17 @@
 
 		<div
 			class="v-select-dropdown"
-			v-if="$slots.dropdown || dropdown"
+			v-if="dropdown"
 		>
-			<slot
-				name="dropdown"
-				v-if="$slots.dropdown"
-			></slot>
+			<ul v-if="!$slots.dropdown">
+				<li
+					v-for="(item, index) in items"
+					:key="index"
+					@click="$event => clickItem($event, item, index)"
+				>
+					<span>{{ item[dropdownValueKey] || item.text || item }}</span>
+				</li>
+			</ul>
 		</div>
 		
 		<slot name="after"></slot>
