@@ -3,7 +3,7 @@
 		<div class="row">
 			<v-select
 				type="stroke"
-				:dropdown="[{ text: 'XUJ', value: 'xuj' }]"
+				:dropdown="[{ text: $t('filterLabels.new'), value: 'new', default: true }]"
 			>
 				<i class="fa fa-sort-amount-up icon"></i>
 				<span>{{ $t('filterLabels.new') }}</span>
