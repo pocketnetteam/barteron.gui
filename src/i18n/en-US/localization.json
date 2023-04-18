@@ -6,7 +6,10 @@
 	"hideAll": "Hide all",
 
 	"filterLabels": {
-		"new": "New first"
+		"new": "New first",
+		"old": "Old first",
+		"price_asc": "Cheap first",
+		"price_desc": "Expensive first"
 	},
 
 	"pageLabels": {
