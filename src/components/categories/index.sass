@@ -19,10 +19,13 @@
 			&.active
 				opacity: 1
 				visibility: visible
-				z-index: 10
+				z-index: 100
 
 		/deep/ .v-button
 			font-size: 1em
+
+			.v-dropdown-arrow
+				display: none
 
 			& ~ .v-button-dropdown
 				border-radius: 0
@@ -30,7 +33,7 @@
 				right: auto
 				left: 0
 				width: $dropdown-width
-				z-index: 20
+				z-index: 200
 
 				ul
 					&.children-open
