@@ -12,8 +12,19 @@ export default {
 		align: String,
 		type: String,
 		size: String,
-		dropdown: [Array, Object],
-		dropdownValueKey: String
+
+		dropdown: {
+			type: Array,
+			default: () => []
+		},
+		valueSelector: {
+			type: String,
+			default: ".value"
+		},
+		dropdownItemKey: {
+			type: String,
+			default: "text"
+		}
 	},
 
 	data() {
@@ -23,7 +34,32 @@ export default {
 		}
 	},
 
+	computed: {
+		value() {
+			return this.$slots?.default[0]?.elm?.parentNode?.querySelector(this.valueSelector);
+		},
+
+		hasDropdown() {
+			return this.items.length;
+		}
+	},
+
 	methods: {
+		/**
+		 * Set value in select
+		 * 
+		 * @param {Object, String}
+		 */
+		setValue(item) {
+			if (item) {
+				/* Set value in select */
+				this.$refs.select.value = item.value;
+
+				/* Set value in valueSelector */
+				this.value.innerHTML = item[this.dropdownItemKey] || item.text || item;
+			}
+		},
+
 		/**
 		 * Select click handler
 		 * 
@@ -45,7 +81,7 @@ export default {
 				}
 			}
 			
-			if (this.dropdown || this.$slots.dropdown) {
+			if (this.hasDropdown) {
 				this.active = active;
 			}
 
@@ -53,7 +89,7 @@ export default {
 		},
 
 		/**
-		 * Drop-down click handler
+		 * Drop-down item click handler
 		 * 
 		 * @param {MouseEvent} e
 		 * @param {Object, String} item
@@ -64,14 +100,20 @@ export default {
 			e.preventDefault();
 			e.stopPropagation();
 
+			/* Deactivate dropdown */
 			this.active = false;
+
+			/* Set text to value */
+			this.setValue(item);
+
+			/* Emit item clicked */
 			this.$emit("selected", item, index, this);
 		}
 	},
 
 	mounted() {
-		/* Build options in select or dropdown list from select */
-		if (!this.$slots.dropdown && this.dropdown) {
+		if (!this.$slots.dropdown && this.dropdown.length) {
+			/* Build options in select */
 			this.$refs.select.innerHTML = this.dropdown
 				.map(o => `
 				<option value="${ o.value }"${ o.default ? 'selected' : '' }>
@@ -80,10 +122,14 @@ export default {
 				)
 				.join("\n");
 		} else if(this.$slots.dropdown) {
-			this.gDropdown = this.this.$refs.select.children().map(o => {
+			/* Build dropdown list from select */
+			this.items = [...this.$refs.select.querySelectorAll(":scope > *")].map(o => {
 				return { text: o.innerHTML, value: o.value, default: o.selected };
 			});
 		}
+
+		/* Set text to value */
+		this.setValue(this.items.filter(f => f.default)[0] ?? this.items[0]);
 
 		/* Bind click to close dropdown */
 		document.addEventListener("click", () => {

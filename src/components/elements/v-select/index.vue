@@ -9,15 +9,12 @@
 		<slot name="before"></slot>
 
 		<select
-			class="v-hidden"
 			:id="id"
 			:name="name"
 			ref="select"
+			class="v-hidden"
 		>
-			<slot
-				name="dropdown"
-				v-if="$slots.dropdown"
-			></slot>
+			<slot name="dropdown" v-if="$slots.dropdown"></slot>
 		</select>
 
 		<button
@@ -31,20 +28,17 @@
 			@click="clickSelect"
 		>
 			<slot></slot>
+			<i class="fa fa-angle-down v-dropdown-arrow" v-if="items.length"></i>
 		</button>
 
-		<div
-			class="v-select-dropdown"
-			v-if="dropdown"
-		>
-			<ul v-if="!$slots.dropdown">
+		<div class="v-select-dropdown" v-if="items.length">
+			<ul>
 				<li
 					v-for="(item, index) in items"
 					:key="index"
+					v-html="item[dropdownItemKey] || item.text || item"
 					@click="$event => clickItem($event, item, index)"
-				>
-					<span>{{ item[dropdownValueKey] || item.text || item }}</span>
-				</li>
+				></li>
 			</ul>
 		</div>
 		

@@ -3,13 +3,16 @@
 .v-select-holder
 	display: inline-flex
 	position: relative
-	z-index: 10
+
+	&.dropdown-open
+		z-index: 10
 
 	.v-hidden
-		position: absolute
-		top: -9999px
-		left: -9999px
-		visibility: hidden
+		// border: 0
+		// position: absolute
+		// top: -9999px
+		// left: -9999px
+		// visibility: hidden
 	
 .v-select
 	background: $button-primary
@@ -21,9 +24,11 @@
 	align-items: center
 	justify-content: center
 	padding: 0.45em 0.8em
+	position: relative
 	text-decoration: none
 	white-space: nowrap
 	height: 100%
+	z-index: 1
 	+transition()
 
 	/* Primary hover state */
@@ -54,6 +59,9 @@
 		font-size: 0.9em
 		padding: 0.4em 0.7em
 
+		@at-root select
+			font-size: 0.9em
+
 		& ~ .v-select-dropdown
 			border-radius: 0 0 .25rem .25rem
 
@@ -61,6 +69,9 @@
 	&.v-select-md
 		border-radius: .5rem
 		font-size: 1em
+
+		@at-root select#{&}
+			font-size: 1em
 
 		& ~ .v-select-dropdown
 			border-radius: 0 0 .5rem .5rem
@@ -91,14 +102,14 @@
 		span ~ *[class^="fa"]
 			margin: 0 $r * 2 0 0
 
-		*[class^="fa"]:not(:last-child)
+		*[class^="fa"]:not(.v-dropdown-arrow)
 			margin: 0 0 0 $r * 2
 
 		& ~ .v-select-dropdown
 			right: 0
 
 	/* Content */
-	*[class^="fa"]:not(:last-child)
+	*[class^="fa"]:not(.v-dropdown-arrow)
 		display: block
 		margin: 0 $r * 2 0 0
 		line-height: 100%
@@ -106,11 +117,17 @@
 	span ~ *[class^="fa"]
 		margin: 0 0 0 $r * 2
 
+	.value
+		display: flex
+		align-items: center
+		justify-content: flex-start
+
 	& ~ .v-select-dropdown
 		background: rgba(255, 255, 255, 1)
 		border-radius: 0 0 .75rem
 		display: none
-		padding: $r * 2 .75em
+		margin: -.75rem 0
+		padding: calc(1em + .75rem) .75em 1em
 		position: absolute
 		top: 100%
 		width: 100%
@@ -123,6 +140,8 @@
 				color: $button-color-bulma
 				cursor: pointer
 				display: flex
+				align-items: center
+				justify-content: flex-start
 				padding: .8em .75em
 
 				&:hover
