@@ -1,6 +1,7 @@
 <template>
 	<v-button
 		class="location-switcher"
+		:class="{ 'lightbox-open': lightbox }"
 		type="ghost"
 		@click="showLightbox"
 	>
