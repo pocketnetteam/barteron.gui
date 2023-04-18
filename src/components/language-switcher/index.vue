@@ -4,17 +4,16 @@
 		type="ghost"
 		size="xs"
 		:dropdown="[
-			{ name: 'EN', value: 'en-US' },
-			{ name: 'DE', value: 'de-DE' },
-			{ name: 'IT', value: 'it-IT' },
-			{ name: 'RU', value: 'ru-RU' }
+			{ text: 'EN', value: 'en-US', default: true },
+			{ text: 'DE', value: 'de-DE' },
+			{ text: 'IT', value: 'it-IT' },
+			{ text: 'RU', value: 'ru-RU' }
 		]"
-		dropdownValueKey="name"
 		@selected="selectLanguage"
 	>
-		<span ref="value">EN</span>
+		<span class="value"></span>
 	</v-button>
 </template>
 
-<style lang="sass" src="./index.sass"></style>
+<style scoped lang="sass" src="./index.sass"></style>
 <script src="./index.js"></script>
