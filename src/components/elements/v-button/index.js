@@ -5,8 +5,19 @@ export default {
 		align: String,
 		type: String,
 		size: String,
-		dropdown: [Array, Object],
-		dropdownValueKey: String
+
+		dropdown: {
+			type: Array,
+			default: () => []
+		},
+		valueSelector: {
+			type: String,
+			default: ".value"
+		},
+		dropdownItemKey: {
+			type: String,
+			default: "text"
+		}
 	},
 
 	data() {
@@ -15,7 +26,29 @@ export default {
 		}
 	},
 
+	computed: {
+		value() {
+			return this.$slots?.default[0]?.elm?.parentNode?.querySelector(this.valueSelector);
+		},
+
+		hasDropdown() {
+			return this.dropdown.length || this.$slots.dropdown;
+		}
+	},
+
 	methods: {
+		/**
+		 * Set value in button
+		 * 
+		 * @param {Object, String}
+		 */
+		setValue(item) {
+			if (item) {
+				/* Set value in valueSelector */
+				this.value.innerHTML = item[this.dropdownItemKey] || item.text || item;
+			}
+		},
+
 		/**
 		 * Button click handler
 		 * 
@@ -37,7 +70,7 @@ export default {
 				}
 			}
 			
-			if (this.dropdown || this.$slots.dropdown) {
+			if (this.hasDropdown) {
 				this.active = active;
 			}
 
@@ -45,7 +78,7 @@ export default {
 		},
 
 		/**
-		 * Drop-down click handler
+		 * Drop-down item click handler
 		 * 
 		 * @param {MouseEvent} e
 		 * @param {Object, String} item
@@ -56,12 +89,21 @@ export default {
 			e.preventDefault();
 			e.stopPropagation();
 
+			/* Deactivate dropdown */
 			this.active = false;
+
+			/* Set text to value */
+			this.setValue(item);
+
+			/* Emit item clicked */
 			this.$emit("selected", item, index, this);
 		}
 	},
 
 	mounted() {
+		/* Set text to value */
+		this.setValue(this.dropdown.filter(f => f.default)[0] ?? this.dropdown[0]);
+
 		/* Bind click to close dropdown */
 		document.addEventListener("click", () => {
 			if (this.active) this.clickButton(null, false);

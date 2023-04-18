@@ -2,10 +2,9 @@
 	<div
 		:class="{
 			'v-button-holder': true,
-			'has-dropdown': $slots.dropdown || dropdown,
+			'has-dropdown': hasDropdown,
 			'dropdown-open': active
 		}"
-		ref="holder"
 	>
 		<slot name="before"></slot>
 
@@ -17,19 +16,15 @@
 				[`v-button-${ size ?? 'md' }`]: true,
 				active
 			}"
+			ref="button"
 			@click="clickButton"
 		>
 			<slot></slot>
+			<i class="fa fa-angle-down v-dropdown-arrow" v-if="hasDropdown"></i>
 		</button>
 
-		<div
-			class="v-button-dropdown"
-			v-if="$slots.dropdown || dropdown"
-		>
-			<slot
-				name="dropdown"
-				v-if="$slots.dropdown"
-			></slot>
+		<div class="v-button-dropdown" v-if="hasDropdown">
+			<slot name="dropdown" v-if="$slots.dropdown"></slot>
 			
 			<ul v-else>
 				<li
@@ -37,7 +32,7 @@
 					:key="index"
 					@click="$event => clickItem($event, item, index)"
 				>
-					<span>{{ item[dropdownValueKey] || item.text || item }}</span>
+					<span>{{ item[dropdownItemKey] || item.text || item }}</span>
 				</li>
 			</ul>
 		</div>

@@ -3,6 +3,9 @@
 .v-button-holder
 	position: relative
 	
+	&.dropdown-open
+		z-index: 10
+	
 .v-button
 	background: $button-primary
 	border: 0
@@ -83,20 +86,28 @@
 		span ~ *[class^="fa"]
 			margin: 0 $r * 2 0 0
 
-		*[class^="fa"]:not(:last-child)
+		*[class^="fa"]:not(.v-dropdown-arrow)
 			margin: 0 0 0 $r * 2
 
 		& ~ .v-button-dropdown
 			right: 0
 
 	/* Content */
-	*[class^="fa"]:not(:last-child)
+	*[class^="fa"]:not(.v-dropdown-arrow)
 		display: block
 		margin: 0 $r * 2 0 0
 		line-height: 100%
 
 	span ~ *[class^="fa"]
 		margin: 0 0 0 $r * 2
+
+	*[class^="fa"]:first-child:last-child
+		margin: 0
+
+	.value
+		display: flex
+		align-items: center
+		justify-content: flex-start
 
 	& ~ .v-button-dropdown
 		background: rgba(255, 255, 255, 1)
@@ -114,6 +125,8 @@
 				color: $button-color-bulma
 				cursor: pointer
 				display: flex
+				align-items: center
+				justify-content: flex-start
 				padding: .8em .75em
 
 				&:hover
