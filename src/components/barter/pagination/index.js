@@ -40,7 +40,7 @@ export default {
 		 * @returns {Array}
 		 */
 		slides() {
-			return Array.from(this.$refs.track.children);
+			return [...this.$refs.track.children];
 		}
 	},
 
