@@ -6,140 +6,140 @@
 	&.dropdown-open
 		z-index: 10
 	
-.v-button
-	background: $button-primary
-	border: 0
-	border-radius: 10px
-	color: $button-color-primary
-	cursor: pointer
-	display: inline-flex
-	align-items: center
-	justify-content: center
-	padding: 0.45em 0.8em
-	text-decoration: none
-	white-space: nowrap
-	height: 100%
-	+transition()
-
-	/* Primary hover state */
-	@at-root .dropdown-open #{&},
-	&:hover
-		background: $button-primary-hover
-
-	/* Types */
-	&.v-button-ghost
-		background: none
-		color: $button-color-ghost
-
-		&:hover
-			background: $button-ghost-hover
-
-	&.v-button-stroke
-		background: transparent
-		border: 1px solid #C7C8D9
-		border-radius: 8px
-		color: $button-color-black
-
-		&:hover
-			background: $button-stroke-hover
-
-	/* Size */
-	&.v-button-xs
-		border-radius: .25rem
-		font-size: 0.9em
-		padding: 0.4em 0.7em
-
-		& ~ .v-button-dropdown
-			border-radius: 0 0 .25rem .25rem
-
-	&.v-button-sm,
-	&.v-button-md
-		border-radius: .5rem
-		font-size: 1em
-
-		& ~ .v-button-dropdown
-			border-radius: 0 0 .5rem .5rem
-
-	&.v-button-md
-		border-radius: .75rem
-		padding: 0.75em 1em
-
-		& ~ .v-button-dropdown
-			border-radius: 0 0 .75rem .75rem
-
-	&.v-button-lg,
-	&.v-button-xl
-		border-radius: 1rem
-		font-size: 1.2em
-		padding: 0.85em 1.2em
-
-		& ~ .v-button-dropdown
-			border-radius: 0 0 1rem 1rem
-
-	&.v-button-xl
-		padding: 1.1em 1.6em
-
-	/* Align */
-	&.v-button-right
-		flex-direction: row-reverse
-
-		span ~ *[class^="fa"]
-			margin: 0 $r * 2 0 0
-
-		*[class^="fa"]:not(.v-dropdown-arrow)
-			margin: 0 0 0 $r * 2
-
-		& ~ .v-button-dropdown
-			right: 0
-
-	/* Content */
-	*[class^="fa"]:not(.v-dropdown-arrow)
-		display: block
-		margin: 0 $r * 2 0 0
-		line-height: 100%
-
-	span ~ *[class^="fa"]
-		margin: 0 0 0 $r * 2
-
-	*[class^="fa"]:first-child:last-child
-		margin: 0
-
-	.value
-		display: flex
+	.v-button
+		background: $button-primary
+		border: 0
+		border-radius: 10px
+		color: $button-color-primary
+		cursor: pointer
+		display: inline-flex
 		align-items: center
-		justify-content: flex-start
+		justify-content: center
+		padding: 0.45em 0.8em
+		text-decoration: none
+		white-space: nowrap
+		height: 100%
+		+transition()
 
-	& ~ .v-button-dropdown
-		background: rgba(255, 255, 255, 1)
-		border-radius: 0 0 .75rem .75rem
-		display: none
-		padding: $r * 2 .75em
-		position: absolute
-		top: 100%
+		/* Primary hover state */
+		@at-root .dropdown-open #{&},
+		&:hover
+			background: $button-primary-hover
 
-		ul
-			+resetList()
+		/* Types */
+		&.v-button-ghost
+			background: none
+			color: $button-color-ghost
 
-			li
-				border-radius: 8px
-				color: $button-color-bulma
-				cursor: pointer
-				display: flex
-				align-items: center
-				justify-content: flex-start
-				padding: .8em .75em
+			&:hover
+				background: $button-ghost-hover
 
-				&:hover
-					background: linear-gradient(0deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04)), linear-gradient(0deg, #FFFFFF, #FFFFFF)
-					color: $button-primary
+		&.v-button-stroke
+			background: transparent
+			border: 1px solid #C7C8D9
+			border-radius: 8px
+			color: $button-color-black
 
-			i.fa
-				display: block
+			&:hover
+				background: $button-stroke-hover
+
+		/* Size */
+		&.v-button-xs
+			border-radius: .25rem
+			font-size: .9em
+			padding: .4em .7em
+
+			& ~ .v-button-dropdown
+				border-radius: 0 0 .25rem .25rem
+
+		&.v-button-sm,
+		&.v-button-md
+			border-radius: .5rem
+			font-size: 1em
+
+			& ~ .v-button-dropdown
+				border-radius: 0 0 .5rem .5rem
+
+		&.v-button-md
+			border-radius: .75rem
+			padding: .75em 1em
+
+			& ~ .v-button-dropdown
+				border-radius: 0 0 .75rem .75rem
+
+		&.v-button-lg,
+		&.v-button-xl
+			border-radius: 1rem
+			font-size: 1.2em
+			padding: .85em 1.2em
+
+			& ~ .v-button-dropdown
+				border-radius: 0 0 1rem 1rem
+
+		&.v-button-xl
+			padding: 1.1em 1.6em
+
+		/* Align */
+		&.v-button-right
+			flex-direction: row-reverse
+
+			span ~ *[class^="fa"]
 				margin: 0 $r * 2 0 0
 
-			&:not(:last-child)
-				margin: 0 0 .6em 0
+			*[class^="fa"]:not(.v-dropdown-arrow)
+				margin: 0 0 0 $r * 2
 
-	&.active
-		& ~ .v-button-dropdown
+			& ~ .v-button-dropdown
+				right: 0
+
+		/* Content */
+		*[class^="fa"]:not(.v-dropdown-arrow)
 			display: block
+			margin: 0 $r * 2 0 0
+			line-height: 100%
+
+		span ~ *[class^="fa"]
+			margin: 0 0 0 $r * 2
+
+		*[class^="fa"]:first-child:last-child
+			margin: 0
+
+		.value
+			display: flex
+			align-items: center
+			justify-content: flex-start
+
+		& ~ .v-button-dropdown
+			background: rgba(255, 255, 255, 1)
+			border-radius: 0 0 .75rem .75rem
+			display: none
+			padding: $r * 2 .75em
+			position: absolute
+			top: 100%
+
+			ul
+				+resetList()
+
+				li
+					border-radius: 8px
+					color: $button-color-bulma
+					cursor: pointer
+					display: flex
+					align-items: center
+					justify-content: flex-start
+					padding: .8em .75em
+
+					&:hover
+						background: linear-gradient(0deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04)), linear-gradient(0deg, #FFFFFF, #FFFFFF)
+						color: $button-primary
+
+				i.fa
+					display: block
+					margin: 0 $r * 2 0 0
+
+				&:not(:last-child)
+					margin: 0 0 .6em 0
+
+		&.active
+			& ~ .v-button-dropdown
+				display: block

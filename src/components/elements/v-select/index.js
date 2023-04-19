@@ -131,6 +131,25 @@ export default {
 		/* Set text to value */
 		this.setValue(this.items.filter(f => f.default)[0] ?? this.items[0]);
 
+		/* Create innerWidth method of select computed styles */
+		const computed = Object.defineProperties(
+			getComputedStyle(this.$refs.select),
+			{
+				innerWidth: {
+					get() {
+						const exclude = ["paddingLeft", "paddingRight", "borderLeftWidth", "borderRightWidth"];
+
+						return exclude.reduce((w, p) => {
+							w -= parseInt(this[p]);
+							return w;
+						}, parseInt(this.width));
+					}
+				}
+			}
+		);
+
+		this.$refs.button.style.setProperty('--min-width', `${ computed.innerWidth }px`);
+
 		/* Bind click to close dropdown */
 		document.addEventListener("click", () => {
 			if (this.active) this.clickSelect(null, false);
