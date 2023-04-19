@@ -12,7 +12,22 @@ export default {
 
 	data() {
 		return {
-			barters: barters
+			barters: barters,
+			value: this.$refs.value
+		}
+	},
+
+	computed: {
+		filters() {
+			return Object.keys(this.$t("filterLabels")).map((value, index) => {
+				return { text: this.$t(`filterLabels.${ value }`), value, default: index === 0 };
+			});
+		}
+	},
+
+	methods: {
+		selectFilter(item) {
+			console.log(item)
 		}
 	}
 }

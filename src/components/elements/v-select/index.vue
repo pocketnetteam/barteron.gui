@@ -2,8 +2,7 @@
 	<div
 		:class="{
 			'v-select-holder': true,
-			'dropdown-open': active,
-			[`v-select-${ size ?? 'md' }`]: true
+			'dropdown-open': active
 		}"
 	>
 		<slot name="before"></slot>
@@ -11,8 +10,11 @@
 		<select
 			:id="id"
 			:name="name"
+			:class="{
+				'v-hidden': true,
+				[`v-select-${ size ?? 'md' }`]: true
+			}"
 			ref="select"
-			class="v-hidden"
 		>
 			<slot name="dropdown" v-if="$slots.dropdown"></slot>
 		</select>
@@ -25,6 +27,7 @@
 				[`v-select-${ size ?? 'md' }`]: true,
 				active
 			}"
+			ref="button"
 			@click="clickSelect"
 		>
 			<slot></slot>
