@@ -19,7 +19,7 @@ export default class Categories {
 	/**
 	 * Get category with id
 	 * 
-	 * @param {Number} id
+	 * @param {String|Number} id
 	 * @return {Object}
 	 */
 	get(id) {
@@ -30,7 +30,7 @@ export default class Categories {
 	 * Search through items
 	 * 
 	 * @param {String} param
-	 * @param {Number, String} value
+	 * @param {String|Number} value
 	 * @return {Object}
 	 */
 	find(param, value) {
@@ -44,8 +44,8 @@ export default class Categories {
 	/**
 	 * Search by id
 	 * 
-	 * @param {Number, Array[Number]} id
-	 * @return {Object, Array}
+	 * @param {String|Number[]} id
+	 * @return {Object|Array}
 	 */
 	findById(id) {
 		return Array.isArray(id) ? id.map(n => this.get(n)) : this.get(id);
@@ -54,8 +54,8 @@ export default class Categories {
 	/**
 	 * Search by name
 	 * 
-	 * @param {String, Array[String]} name
-	 * @return {Object, Array}
+	 * @param {String|Number[]} name
+	 * @return {Object|Array}
 	 */
 	findByName(name) {
 		return Array.isArray(name) ? name.map(n => this.find("name", n)) : this.find("name", name);
