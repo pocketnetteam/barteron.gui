@@ -10,13 +10,13 @@ Import components dynamically from
 @/components/elements/*
 */
 require.context(
-	"@/components/elements",
+	"@/components/v-form",
 	true,
 	/index\.vue$/
 ).keys().forEach(path => {
 	Vue.component(
 		path.split("/").splice(1).shift(),
-		() => import(`@/components/elements/${ path.replace("./", "") }`)
+		() => import(`@/components/v-form/${ path.replace("./", "") }`)
 	);
 });
 
