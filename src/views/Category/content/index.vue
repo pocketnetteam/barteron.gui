@@ -44,10 +44,8 @@
 							<i
 								:class="{
 									'fa': true,
-									'fa-sort-amount-up': view.value === 'new',
-									'fa-sort-amount-up-alt': view.value === 'old',
-									'fa-sort-numeric-down': view.value === 'price_asc',
-									'fa-sort-numeric-down-alt': view.value === 'price_desc',
+									'fa-th-large': view.value === 'tails',
+									'fa-list': view.value === 'list',
 									'icon': true
 								}"
 							></i>
