@@ -48,7 +48,7 @@ export default {
 		/**
 		 * Set value in select
 		 * 
-		 * @param {Object, String}
+		 * @param {Object|String}
 		 */
 		setValue(item) {
 			if (item) {
@@ -92,8 +92,8 @@ export default {
 		 * Drop-down item click handler
 		 * 
 		 * @param {MouseEvent} e
-		 * @param {Object, String} item
-		 * @param {Number, String} index
+		 * @param {Object|String} item
+		 * @param {Number|String} index
 		 * @emits @selected
 		 */
 		clickItem(e, item, index) {
