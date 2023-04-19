@@ -102,10 +102,19 @@
 					align-items: center
 					justify-content: flex-start
 					padding: .8em .75em
+					+transition(color)
+
+					& > *
+						color: $button-color-bulma
+						+transition(color)
 
 					&:hover
 						background: linear-gradient(0deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04)), linear-gradient(0deg, #FFFFFF, #FFFFFF)
 						color: $button-primary
+
+						& > *
+							color: $button-primary
+							+transition(color)
 
 				i.fa
 					display: block
