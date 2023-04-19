@@ -12,6 +12,11 @@
 		"price_desc": "Expensive first"
 	},
 
+	"viewLabels": {
+		"tails": "Tails",
+		"rows": "Rows"
+	},
+
 	"pageLabels": {
 		"home": "Home"
 	},
