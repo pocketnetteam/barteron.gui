@@ -1,7 +1,7 @@
 <template>
-	<PageHeader>
-		<CategoryHeader />
-	</PageHeader>
+	<v-page-header>
+		<v-page-header-category />
+	</v-page-header>
 </template>
 
 <style lang="sass" src="./index.sass"></style>

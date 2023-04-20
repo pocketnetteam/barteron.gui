@@ -1,6 +1,6 @@
 <template>
 	<div id="app">
-		<Header />
+		<v-header />
 
 		<section id="main">
 			<router-view />
@@ -11,7 +11,7 @@
 			</div>
 		</section>
 
-		<Footer />
+		<v-footer />
 	</div>
 </template>
 
@@ -19,19 +19,11 @@
 <style src="@/assets/font-awesome/css/all.css"></style>
 <script>
 import Categories from "@/js/categories.js"
-import Header from "@/components/layout/header/index.vue";
-import Footer from "@/components/layout/footer/index.vue";
-
 import categoriesData from "@/data/categories.json";
 import favoritesData from "@/data/favorites.json";
 
 export default {
 	name: "Barteron",
-
-	components: {
-		Header,
-		Footer
-	},
 
 	provide() {
 		return {

@@ -1,12 +1,12 @@
 <template>
-	<AsideLayout>
+	<v-aside>
 		<v-details
 			:title="$t('category')"
 			:open="true"
 		>
 			<SubCategories :items="subCategories" />
 		</v-details>
-	</AsideLayout>
+	</v-aside>
 </template>
 
 <style lang="sass" src="./index.sass"></style>

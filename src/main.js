@@ -5,20 +5,31 @@ import i18n from "./i18n/index.js";
 
 Vue.config.productionTip = false;
 
-/*
-Import components dynamically from
-@/components/elements/*
-*/
-require.context(
-	"@/components/v-form",
-	true,
-	/index\.vue$/
-).keys().forEach(path => {
-	Vue.component(
-		path.split("/").splice(1).shift(),
-		() => import(`@/components/v-form/${ path.replace("./", "") }`)
-	);
-});
+/**
+ * Require components from subfolders
+ * 
+ * @param {require.context[]} context 
+ */
+const vRequire = (context) => {
+	context.forEach(src => {
+		src.keys().forEach(path => {
+			const
+				chunks = path.split("/"),
+				componentName = chunks.slice(1, chunks.length - 1).join("-"),
+				componentPath = src.resolve(path).replace("./src/", "");
+			
+			Vue.component(
+				componentName,
+				() => import(`@/${ componentPath }`)
+			);
+		});
+	});
+}
+
+vRequire([
+	require.context("@/components/v-layout", true, /index\.vue$/),
+	require.context("@/components/v-form", true, /index\.vue$/)
+]);
 
 new Vue({
 	router,

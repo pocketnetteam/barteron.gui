@@ -57,22 +57,26 @@
 		&.v-select-right
 			flex-direction: row-reverse
 
-			span ~ *[class^="fa"]
+			span ~ i.fa
 				margin: 0 $r * 2 0 0
 
-			*[class^="fa"]:not(.v-dropdown-arrow)
+			i.fa:not(.v-dropdown-arrow)
 				margin: 0 0 0 $r * 2
 
 			& ~ .v-select-dropdown
 				right: 0
 
 		/* Content */
-		*[class^="fa"]:not(.v-dropdown-arrow)
-			display: block
+		i.fa:not(.v-dropdown-arrow),
+		& ~ .v-select-dropdown i.fa
+			display: flex
+			align-items: center
+			justify-content: center
 			margin: 0 $r * 2 0 0
 			line-height: 100%
+			width: 1em
 
-		span ~ *[class^="fa"]
+		span ~ i.fa
 			margin: 0 0 0 $r * 2
 
 		.value
@@ -117,7 +121,6 @@
 							+transition(color)
 
 				i.fa
-					display: block
 					margin: 0 $r * 2 0 0
 
 				&:not(:last-child)

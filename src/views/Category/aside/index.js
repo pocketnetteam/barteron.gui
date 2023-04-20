@@ -1,4 +1,3 @@
-import AsideLayout from "@/components/layout/aside/index.vue";
 import SubCategories from "@/components/categories/sub-categories/index.vue";
 
 export default {
@@ -7,7 +6,6 @@ export default {
 	inject: ["categories"],
 
 	components: {
-		AsideLayout,
 		SubCategories
 	},
 

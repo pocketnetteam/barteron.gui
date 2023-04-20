@@ -1,5 +1,5 @@
 <template>
-	<ContentLayout>
+	<v-content>
 		<div class="row">
 			<div class="col">
 				<v-select type="stroke" @selected="selectFilter">
@@ -45,7 +45,7 @@
 								:class="{
 									'fa': true,
 									'fa-th-large': view.value === 'tails',
-									'fa-list': view.value === 'list',
+									'fa-align-justify': view.value === 'rows',
 									'icon': true
 								}"
 							></i>
@@ -59,7 +59,7 @@
 		<BarterList
 			:items="barters.slice(0, 8)"
 		/>
-	</ContentLayout>
+	</v-content>
 </template>
 
 <style lang="sass" src="./index.sass"></style>
