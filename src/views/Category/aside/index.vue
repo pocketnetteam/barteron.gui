@@ -6,6 +6,13 @@
 		>
 			<SubCategories :items="subCategories" />
 		</v-details>
+
+		<v-details
+			:title="$t('price')"
+			:open="true"
+		>
+			
+		</v-details>
 	</v-aside>
 </template>
 
