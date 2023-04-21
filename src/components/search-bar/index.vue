@@ -11,7 +11,7 @@
 		
 		<v-button
 			class="btn-search"
-			size="md"
+			vSize="md"
 		>
 			<i class="fa fa-search"></i>
 		</v-button>

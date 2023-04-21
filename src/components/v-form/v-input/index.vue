@@ -5,7 +5,10 @@
 		<div
 			v-for="(input, index) in inputs"
 			:key="index"
-			class="v-input"
+			:class="{
+				'v-input': true,
+				[`v-input-${ vSize ?? 'md' }`]: true
+			}"
 		>
 			<input
 				:id="input.id"

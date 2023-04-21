@@ -1,7 +1,7 @@
 <template>
 	<v-button
 		class="btn-categories"
-		align="right"
+		vAlign="right"
 		@click="categoriesToggle"
 	>
 		<template v-slot:before>

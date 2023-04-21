@@ -11,9 +11,9 @@
 		<button
 			:class="{
 				'v-button': true,
-				'v-button-right': align === 'right',
-				[`v-button-${ type ?? 'primary' }`]: true,
-				[`v-button-${ size ?? 'md' }`]: true,
+				'v-button-right': vAlign === 'right',
+				[`v-button-${ vType ?? 'primary' }`]: true,
+				[`v-button-${ vSize ?? 'md' }`]: true,
 				active
 			}"
 			ref="button"

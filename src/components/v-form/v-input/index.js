@@ -8,7 +8,9 @@ export default {
 		min: { type: [Number, String, Array], default: () => [] },
 		max: { type: [Number, String, Array], default: () => [] },
 		placeholder: { type: [String, Array], default: () => [] },
-		value: { type: [String, Array], default: () => [] }
+		value: { type: [String, Array], default: () => [] },
+
+		vSize: String,
 	},
 
 	data() {
@@ -74,6 +76,6 @@ export default {
 	},
 
 	mounted() {
-		console.log(this.inputs)
+		console.log(this.vSize)
 	},
 }

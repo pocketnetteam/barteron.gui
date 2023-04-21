@@ -12,7 +12,7 @@
 			:name="name"
 			:class="{
 				'v-hidden': true,
-				[`v-select-${ size ?? 'md' }`]: true
+				[`v-select-${ vSize ?? 'md' }`]: true
 			}"
 			ref="select"
 		>
@@ -22,9 +22,9 @@
 		<button
 			:class="{
 				'v-select': true,
-				'v-select-right': align === 'right',
-				[`v-select-${ type ?? 'primary' }`]: true,
-				[`v-select-${ size ?? 'md' }`]: true,
+				'v-select-right': aVlign === 'right',
+				[`v-select-${ vType ?? 'primary' }`]: true,
+				[`v-select-${ vSize ?? 'md' }`]: true,
 				active
 			}"
 			ref="button"

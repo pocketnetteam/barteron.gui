@@ -17,6 +17,7 @@
 				:placeholder="[$t('from'), $t('to')]"
 				min="0"
 				type="minmax"
+				vSize="lg"
 			/>
 		</v-details>
 

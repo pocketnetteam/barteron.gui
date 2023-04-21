@@ -2,9 +2,9 @@ export default {
 	name: "Vbutton",
 
 	props: {
-		align: String,
-		type: String,
-		size: String,
+		vAlign: String,
+		vType: String,
+		vSize: String,
 
 		dropdown: {
 			type: Array,

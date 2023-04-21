@@ -1,8 +1,10 @@
 <template>
 	<v-button
-		class="location-switcher"
-		:class="{ 'lightbox-open': lightbox }"
-		type="ghost"
+		:class="{
+			'location-switcher': true,
+			'lightbox-open': lightbox
+		}"
+		vType="ghost"
 		@click="showLightbox"
 	>
 		<i class="fa fa-map-marker-alt"></i>
