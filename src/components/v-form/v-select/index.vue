@@ -22,7 +22,7 @@
 		<button
 			:class="{
 				'v-select': true,
-				'v-select-right': aVlign === 'right',
+				'v-select-right': vAlign === 'right',
 				[`v-select-${ vType ?? 'primary' }`]: true,
 				[`v-select-${ vSize ?? 'md' }`]: true,
 				active
