@@ -43,42 +43,6 @@
 			&:hover
 				background: $button-stroke-hover
 
-		/* Size */
-		&.v-button-xs
-			border-radius: .25rem
-			font-size: .9em
-			padding: .4em .7em
-
-			& ~ .v-button-dropdown
-				border-radius: 0 0 .25rem .25rem
-
-		&.v-button-sm,
-		&.v-button-md
-			border-radius: .5rem
-			font-size: 1em
-
-			& ~ .v-button-dropdown
-				border-radius: 0 0 .5rem .5rem
-
-		&.v-button-md
-			border-radius: .75rem
-			padding: .75em 1em
-
-			& ~ .v-button-dropdown
-				border-radius: 0 0 .75rem .75rem
-
-		&.v-button-lg,
-		&.v-button-xl
-			border-radius: 1rem
-			font-size: 1.2em
-			padding: .85em 1.2em
-
-			& ~ .v-button-dropdown
-				border-radius: 0 0 1rem 1rem
-
-		&.v-button-xl
-			padding: 1.1em 1.6em
-
 		/* Align */
 		&.v-button-right
 			flex-direction: row-reverse
@@ -100,7 +64,6 @@
 			justify-content: center
 			margin: 0 $r * 2 0 0
 			line-height: 100%
-			width: 1em
 
 		span ~ i.fa
 			margin: 0 0 0 $r * 2
@@ -115,27 +78,41 @@
 
 		& ~ .v-button-dropdown
 			background: rgba(255, 255, 255, 1)
-			border-radius: 0 0 .75rem .75rem
+			border-radius: 12px
+			box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.16), 0 0 1px rgba(0, 0, 0, 0.4)
 			display: none
-			padding: $r * 2 .75em
+			margin: 4px 0 0
+			padding: 4px
 			position: absolute
 			top: 100%
 
 			ul
+				border-radius: 12px
 				+resetList()
+				overflow: hidden
+				width: 100%
 
 				li
-					border-radius: 8px
+					border-radius: 4px
 					color: $button-color-bulma
 					cursor: pointer
 					display: flex
 					align-items: center
 					justify-content: flex-start
 					padding: .8em .75em
+					+transition(color)
+
+					& > *
+						color: $button-color-bulma
+						+transition(color)
 
 					&:hover
-						background: linear-gradient(0deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04)), linear-gradient(0deg, #FFFFFF, #FFFFFF)
+						background: $background-gray-focus
 						color: $button-primary
+
+						& > *
+							color: $button-primary
+							+transition(color)
 
 				i.fa
 					margin: 0 $r * 2 0 0
@@ -146,3 +123,46 @@
 		&.active
 			& ~ .v-button-dropdown
 				display: block
+
+	/* Size */
+	.v-button-xs
+		border-radius: .25rem
+		font-size: .9em
+		padding: .4em .7em
+
+		& ~ .v-button-dropdown,
+		& ~ .v-button-dropdown ul
+			border-radius: .25rem
+			font-size: .9em
+
+	.v-button-sm,
+	.v-button-md
+		border-radius: .5rem
+		font-size: 1em
+
+		& ~ .v-button-dropdown,
+		& ~ .v-button-dropdown ul
+			border-radius: .5rem
+			font-size: 1em
+
+	.v-button-md
+		border-radius: .75rem
+		padding: 0.75em 1em
+
+		& ~ .v-button-dropdown,
+		& ~ .v-button-dropdown ul
+			border-radius: .75rem
+
+	.v-button-lg,
+	.v-button-xl
+		border-radius: 1rem
+		font-size: 1.2em
+		padding: .85em 1.2em
+
+		& ~ .v-button-dropdown,
+		& ~ .v-button-dropdown ul
+			border-radius: 1rem
+			font-size: 1.2em
+
+	.v-button-xl
+		padding: 1.1em 1.6em

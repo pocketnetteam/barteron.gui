@@ -63,7 +63,7 @@ export default {
 
 			/* Disable dropdowns of other buttons */
 			if (e) {
-				const dropdowns = document.querySelectorAll('.v-button-holder.dropdown-open');
+				const dropdowns = document.querySelectorAll('.dropdown-open');
 
 				if (dropdowns.length) {
 					document.body.click();
