@@ -73,9 +73,5 @@ export default {
 				default: return type;
 			}
 		}
-	},
-
-	mounted() {
-		console.log(this.vSize)
-	},
+	}
 }
