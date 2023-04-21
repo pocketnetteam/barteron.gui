@@ -1,6 +1,7 @@
 <template>
 	<v-aside>
 		<v-details
+			v-if="subCategories.length"
 			:title="$t('category')"
 			:open="true"
 		>
@@ -9,6 +10,18 @@
 
 		<v-details
 			:title="$t('price')"
+			:open="true"
+		>
+			<v-input
+				:id="['price_min', 'price_max']"
+				:placeholder="[$t('from'), $t('to')]"
+				min="0"
+				type="minmax"
+			/>
+		</v-details>
+
+		<v-details
+			:title="$t('condition')"
 			:open="true"
 		>
 			
