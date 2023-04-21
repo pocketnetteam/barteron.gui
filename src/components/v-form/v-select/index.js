@@ -2,7 +2,7 @@ export default {
 	name: "Vselect",
 
 	/**
-	 * @param dropdown [{ text: "One", value: "1", default: true }, ...]
+	 * @param dropdown [{ text: "One", value: "1", selected: true }, ...]
 	 * In case of slot:dropdown
 	 * <option value="1" selected>One</option>
 	 */
@@ -30,7 +30,8 @@ export default {
 	data() {
 		return {
 			active: false,
-			items: this.dropdown ?? []
+			items: this.dropdown ?? [],
+			selected: null
 		}
 	},
 
@@ -57,6 +58,9 @@ export default {
 
 				/* Set value in valueSelector */
 				this.value.innerHTML = item[this.dropdownItemKey] || item.text || item;
+
+				/* Select given item */
+				this.selected = item;
 			}
 		},
 
@@ -74,7 +78,7 @@ export default {
 
 			/* Disable dropdowns of other buttons */
 			if (e) {
-				const dropdowns = document.querySelectorAll('.v-select-holder.dropdown-open');
+				const dropdowns = document.querySelectorAll('.dropdown-open');
 
 				if (dropdowns.length) {
 					document.body.click();
@@ -116,7 +120,7 @@ export default {
 			/* Build options in select */
 			this.$refs.select.innerHTML = this.dropdown
 				.map(o => `
-				<option value="${ o.value }"${ o.default ? 'selected' : '' }>
+				<option value="${ o.value }"${ o.selected ? 'selected' : '' }>
 					${ o[this.dropdownValueKey] || o.text || o }
 				</option>`
 				)
@@ -124,12 +128,12 @@ export default {
 		} else if(this.$slots.dropdown) {
 			/* Build dropdown list from select */
 			this.items = [...this.$refs.select.querySelectorAll(":scope > *")].map(o => {
-				return { text: o.innerHTML, value: o.value, default: o.selected };
+				return { text: o.innerHTML, value: o.value, selected: o.selected };
 			});
 		}
 
 		/* Set text to value */
-		this.setValue(this.items.filter(f => f.default)[0] ?? this.items[0]);
+		this.setValue(this.items.filter(f => f.selected)[0] ?? this.items[0]);
 
 		/* Create innerWidth method of select computed styles */
 		const computed = Object.defineProperties(
