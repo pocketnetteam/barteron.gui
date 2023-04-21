@@ -6,6 +6,10 @@
 	"hideAll": "Hide all",
 
 	"price": "Price",
+	"from": "From",
+	"to": "To",
+
+	"condition": "Condition",
 
 	"filterLabels": {
 		"new": "New first",
