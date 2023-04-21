@@ -39,6 +39,7 @@
 				<li
 					v-for="(item, index) in items"
 					:key="index"
+					:class="{ 'selected': selected === item }"
 					v-html="item[dropdownItemKey] || item.text || item"
 					@click="$event => clickItem($event, item, index)"
 				></li>
