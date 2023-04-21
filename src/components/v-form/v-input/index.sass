@@ -1,4 +1,35 @@
 @import "@/css/vars.sass"
 	
 .v-input-holder
-	
+	border: 1px solid $border-beerus
+	border-radius: 12px
+	font-size: 1.15em
+	display: flex
+	gap: 1px
+
+	.v-input
+		padding: 3px
+
+		~ .v-input
+			position: relative
+
+			&:before
+				background: $background-beerus
+				content: ""
+				position: absolute
+				top: 0
+				left: -1px
+				height: 100%
+				width: 1px
+
+		&:first-child input
+			border-radius: 6px 0 0 6px
+
+		&:last-child input
+			border-radius: 0 6px 6px 0
+
+		input
+			border: 0
+			font-size: 100%
+			padding: 10px
+			width: 100%
