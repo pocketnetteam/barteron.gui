@@ -44,6 +44,8 @@ $scrollbar-humb: rgba(153, 156, 160, 1)
 /* Borders */
 $border-beerus: $beerus
 $border-white: $primary
+$border-blue: $blue
+$border-lightblue: $lightblue
 
 /* Buttons */
 $button-color-black: $black
@@ -84,8 +86,8 @@ $lightbox-link-primary-hover: $button-ghost-hover
 	-ms-user-select: none
 	user-select: none
 
-@mixin transition($props: all, $timing: .3s)
-	transition: $props $timing ease-in-out
+@mixin transition($props: all, $duration: .3s, $timing: ease-in-out)
+	transition: $props $duration $timing
 
 @mixin scrollbar($size: 4px, $direction: y, $prop: overlay)
 	@if $direction == y
