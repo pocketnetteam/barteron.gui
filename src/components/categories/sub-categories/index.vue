@@ -15,13 +15,13 @@
 			</template>
 		</menu>
 
-		<span
-			v-if="count"
+		<button
+			v-if="count > 0"
 			class="toggle"
 			@click="toggle"
 		>
 			{{ `${ $t(expanded ? 'hide' : 'showAll') } (${ count })` }}
-		</span>
+		</button>
 	</nav>
 </template>
 
