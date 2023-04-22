@@ -2,13 +2,13 @@
 	<div class="user-bar">
 		<ul>
 			<li>
-				<router-link to="/" class="link">
+				<router-link :to="{ name: 'home' }" class="link">
 					<i class="fa fa-heart"></i>
 				</router-link>
 			</li>
 
 			<li>
-				<router-link to="/" class="link">
+				<router-link :to="{ name: 'home' }" class="link">
 					<i class="fa fa-comment"></i>
 				</router-link>
 			</li>
@@ -18,7 +18,7 @@
 			</li>
 
 			<li>
-				<v-button>
+				<v-button :to="{ name: 'createBarter' }">
 					<i class="fa fa-plus"></i>
 					<span>Create barter</span>
 				</v-button>
