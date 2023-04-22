@@ -10,6 +10,8 @@
 	"to": "To",
 
 	"condition": "Condition",
+	"new": "New",
+	"used": "Used",
 
 	"filterLabels": {
 		"new": "New first",
