@@ -1,7 +1,7 @@
 <template>
-	<v-page-header>
-		<v-page-header-title />
-	</v-page-header>
+	<v-content>
+		Create
+	</v-content>
 </template>
 
 <style lang="sass" src="./index.sass"></style>
