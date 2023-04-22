@@ -17,34 +17,28 @@ const routes = [
 		}
 	},
 	{
-		path: "/barter",
-		name: "barter",
-		children: [
-			{
-				path: "/:id",
-				name: "barterItem",
-				components: {
-					default: () => import("@/views/Barter/Item/index.vue"),
-					aside: () => import("@/views/Barter/Item/aside/index.vue"),
-					content: () => import("@/views/Barter/Item/content/index.vue")
-				}
-			},
-			{
-				path: "/create",
-				name: "createBarter",
-				components: {
-					default: () => import("@/views/Barter/Create/index.vue"),
-					aside: () => import("@/views/Barter/Create/aside/index.vue"),
-					content: () => import("@/views/Barter/Create/content/index.vue")
-				}
-			}
-		]
+		path: "/barter/create",
+		name: "createBarter",
+		components: {
+			default: () => import("@/views/Barter/Create/index.vue"),
+			aside: () => import("@/views/Barter/Create/aside/index.vue"),
+			content: () => import("@/views/Barter/Create/content/index.vue")
+		}
+	},
+	{
+		path: "/barter/:id",
+		name: "barterItem",
+		components: {
+			default: () => import("@/views/Barter/Item/index.vue"),
+			aside: () => import("@/views/Barter/Item/aside/index.vue"),
+			content: () => import("@/views/Barter/Item/content/index.vue")
+		}
 	},
 	{
 		path: "/about",
 		name: "about",
 		component: () => import("@/views/About/index.vue"),
-	},
+	}
 ];
 
 Vue.use(VueRouter);
