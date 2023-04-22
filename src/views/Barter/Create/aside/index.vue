@@ -1,12 +1,13 @@
 <template>
 	<v-aside>
-		<ul>
-			<li><a href="#propose">What you propose</a></li>
-			<li><a href="#photos">Add photos</a></li>
-			<li><a href="#get">What you want to get</a></li>
-			<li><a href="#description">Description</a></li>
-			<li><a href="#location">Localtion</a></li>
-		</ul>
+		<menu class="steps">
+			<menuitem
+				v-for="(item, key) in $t('steps')"
+				:key="key"
+			>
+				<a :href="`#${ key }`">{{ item }}</a>
+			</menuitem>
+		</menu>
 	</v-aside>
 </template>
 

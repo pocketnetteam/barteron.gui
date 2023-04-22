@@ -1,6 +1,6 @@
 <template>
 	<v-content>
-		Create
+		<strong class="title">{{ $t('steps.propose') }}</strong>
 	</v-content>
 </template>
 

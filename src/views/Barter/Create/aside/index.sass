@@ -2,3 +2,32 @@
 	
 #aside
 	
+	.steps
+		+resetList()
+		border: 1px solid $beerus
+		border-radius: 12px
+		display: flex
+		flex-direction: column
+		align-items: flex-starth
+		padding: 8px 16px
+
+		> *
+			display: flex
+			align-items: center
+			gap: 8px
+
+			&::before
+				background: $beerus
+				border-radius: 50%
+				content: ""
+				height: 8px
+				width: 8px
+
+			a
+				color: $bulma
+				display: flex
+				padding: 8px
+				text-decoration: none
+
+				&:hover
+					text-decoration: underline
