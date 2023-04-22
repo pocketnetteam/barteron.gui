@@ -3,8 +3,6 @@ import Categories from "@/components/categories/index.vue";
 export default {
 	name: "SearchBar",
 
-	inject: ["categories"],
-
 	components: {
 		Categories
 	},

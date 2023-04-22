@@ -3,6 +3,9 @@ import App from "./App.vue";
 import router from "./router.js";
 import i18n from "./i18n/index.js";
 
+import Categories from "@/js/categories.js"
+import categoriesData from "@/data/categories.json";
+
 Vue.config.productionTip = false;
 
 /**
@@ -30,6 +33,8 @@ vRequire([
 	require.context("@/components/v-layout", true, /index\.vue$/),
 	require.context("@/components/v-form", true, /index\.vue$/)
 ]);
+
+Vue.prototype.categories = new Categories(categoriesData);
 
 new Vue({
 	router,

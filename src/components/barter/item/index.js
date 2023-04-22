@@ -1,8 +1,6 @@
 export default {
 	name: "BarterItem",
 
-	inject: ["categories"],
-
 	props: {
 		item: Object
 	},

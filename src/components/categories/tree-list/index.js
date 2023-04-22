@@ -3,8 +3,6 @@ import TreeList from "./index.vue";
 export default {
 	name: "TreeList",
 
-	inject: ["categories"],
-
 	components: {
 		TreeList
 	},

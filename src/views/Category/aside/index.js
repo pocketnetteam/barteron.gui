@@ -3,8 +3,6 @@ import SubCategories from "@/components/categories/sub-categories/index.vue";
 export default {
 	name: "Aside",
 
-	inject: ["categories"],
-
 	components: {
 		SubCategories
 	},

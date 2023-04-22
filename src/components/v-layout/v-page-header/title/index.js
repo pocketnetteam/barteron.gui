@@ -4,8 +4,6 @@ import FavoriteCategories from "@/components/categories/favorite-categories/inde
 export default {
 	name: "PageTitle",
 
-	inject: ["categories"],
-
 	props: {
 		breadcrumbs: {
 			type: Boolean,

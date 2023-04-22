@@ -1,8 +1,6 @@
 export default {
 	name: "Breadcrumbs",
 
-	inject: ["categories"],
-
 	props: {
 		parent: [String, Array]
 	},
