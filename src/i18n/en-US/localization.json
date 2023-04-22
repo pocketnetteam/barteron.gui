@@ -13,6 +13,8 @@
 	"new": "New",
 	"used": "Used",
 
+	"type": "Type",
+
 	"filterLabels": {
 		"new": "New first",
 		"old": "Old first",
