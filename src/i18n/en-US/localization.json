@@ -28,7 +28,8 @@
 	},
 
 	"pageLabels": {
-		"home": "Home"
+		"home": "Home",
+		"createBarter": "Create barter"
 	},
 
 	"buttonLabels": {
