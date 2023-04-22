@@ -19,7 +19,16 @@
 			ref="button"
 			@click="clickButton"
 		>
-			<slot></slot>
+			<router-link
+				v-if="to"
+				class="link"
+				:to="to"
+			>
+				<slot></slot>
+			</router-link>
+			
+			<slot v-else></slot>
+
 			<i class="fa fa-angle-down v-dropdown-arrow" v-if="hasDropdown"></i>
 		</button>
 

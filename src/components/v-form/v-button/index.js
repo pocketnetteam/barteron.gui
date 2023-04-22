@@ -5,6 +5,7 @@ export default {
 		vAlign: String,
 		vType: String,
 		vSize: String,
+		to: [String, Object],
 
 		dropdown: {
 			type: Array,

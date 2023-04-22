@@ -36,7 +36,7 @@
 
 		&.v-button-stroke
 			background: transparent
-			border: 1px solid #C7C8D9
+			border: 1px solid $beerus
 			border-radius: 8px
 			color: $button-color-black
 
@@ -57,6 +57,11 @@
 				right: 0
 
 		/* Content */
+		& > .link
+			color: inherit
+			display: flex
+			text-decoration: none
+
 		i.fa:not(.v-dropdown-arrow),
 		& ~ .v-select-dropdown i.fa
 			display: flex
