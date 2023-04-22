@@ -17,6 +17,24 @@ const routes = [
 		}
 	},
 	{
+		path: "/barter/:id",
+		name: "barter",
+		components: {
+			default: () => import("@/views/Barter/index.vue"),
+			aside: () => import("@/views/Barter/aside/index.vue"),
+			content: () => import("@/views/Barter/content/index.vue")
+		},
+		children: [{
+			path: "/create",
+			name: "createBarter",
+			components: {
+				default: () => import("@/views/Barter/Create/index.vue"),
+				aside: () => import("@/views/Barter/Create/aside/index.vue"),
+				content: () => import("@/views/Barter/Create/content/index.vue")
+			}
+		}]
+	},
+	{
 		path: "/about",
 		name: "about",
 		component: () => import("@/views/About/index.vue"),
