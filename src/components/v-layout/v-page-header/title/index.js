@@ -2,9 +2,26 @@ import Breadcrumbs from "@/components/breadcrumbs/index.vue";
 import FavoriteCategories from "@/components/categories/favorite-categories/index.vue";
 
 export default {
-	name: "CategoryHeader",
+	name: "PageTitle",
 
 	inject: ["categories"],
+
+	props: {
+		breadcrumbs: {
+			type: Boolean,
+			default: true
+		},
+
+		favorite: {
+			type: Boolean,
+			default: true
+		},
+
+		count: {
+			type: Boolean,
+			default: true
+		}
+	},
 
 	components: {
 		Breadcrumbs,
@@ -24,7 +41,7 @@ export default {
 		favoriteCategories() {
 			const category = this.categories.findByName(this.title);
 
-			return this.categories.findById(category.children.slice(0, 14));
+			return this.categories.findById((category?.children ?? []).slice(0, 14));
 		}
 	}
 }
