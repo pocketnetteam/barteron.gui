@@ -2,19 +2,19 @@
 	<v-aside>
 		<v-details
 			v-if="subCategories.length"
-			:title="$t('category')"
+			:title="$t('category.label')"
 			:open="true"
 		>
 			<SubCategories :items="subCategories" />
 		</v-details>
 
 		<v-details
-			:title="$t('price')"
+			:title="$t('price.label')"
 			:open="true"
 		>
 			<v-input
 				:id="['price_min', 'price_max']"
-				:placeholder="[$t('from'), $t('to')]"
+				:placeholder="[$t('price.from'), $t('price.to')]"
 				min="0"
 				type="minmax"
 				vSize="lg"
@@ -22,14 +22,14 @@
 		</v-details>
 
 		<v-details
-			:title="$t('condition')"
+			:title="$t('condition.label')"
 			:open="true"
 		>
 			<div class="row">
 				<v-switch
 					id="condition_new"
 					type="checkbox"
-					:label="$t('new')"
+					:label="$t('condition.new')"
 				/>
 			</div>
 
@@ -43,14 +43,14 @@
 		</v-details>
 
 		<v-details
-			:title="$t('type')"
+			:title="$t('type.label')"
 			:open="true"
 		>
 			<div class="row">
 				<v-switch
 					id="gaming_notebook"
 					type="checkbox"
-					:label="$t('gaming_notebook')"
+					:label="$t('type.gaming_notebook')"
 				/>
 			</div>
 
@@ -58,7 +58,7 @@
 				<v-switch
 					id="notebook"
 					type="checkbox"
-					:label="$t('notebook')"
+					:label="$t('type.notebook')"
 				/>
 			</div>
 
@@ -66,7 +66,15 @@
 				<v-switch
 					id="notebook_tablet"
 					type="checkbox"
-					:label="$t('notebook_tablet')"
+					:label="$t('type.notebook_tablet')"
+				/>
+			</div>
+
+			<div class="row">
+				<v-switch
+					id="transformer"
+					type="checkbox"
+					:label="$t('type.transformer')"
 				/>
 			</div>
 		</v-details>

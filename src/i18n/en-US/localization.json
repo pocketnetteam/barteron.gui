@@ -1,19 +1,39 @@
 {
-	"category": "Category",
-	"show": "Show",
-	"hide": "Hide",
-	"showAll": "Show all",
-	"hideAll": "Hide all",
+	"category": {
+		"label": "Category",
+		"show": "Show",
+		"hide": "Hide",
+		"showAll": "Show all",
+		"hideAll": "Hide all"
+	},
 
-	"price": "Price",
-	"from": "From",
-	"to": "To",
+	"price": {
+		"label": "Price",
+		"from": "From",
+		"to": "To"
+	},
 
-	"condition": "Condition",
-	"new": "New",
-	"used": "Used",
+	"condition": {
+		"label": "Condition",
+		"new": "New",
+		"used": "Used"
+	},
 
-	"type": "Type",
+	"type": {
+		"label": "Type",
+		"gaming_notebook": "Gaming notebook",
+		"notebook": "Notebook",
+		"notebook_tablet": "Notebook tablet",
+		"transformer": "Transformer"
+	},
+
+	"steps": {
+		"#propose": "What you propose",
+		"#photos": "Add photos",
+		"#get": "What you want to get",
+		"#description": "Description",
+		"#location": "Localtion"
+	},
 
 	"filterLabels": {
 		"new": "New first",
