@@ -17,22 +17,28 @@ const routes = [
 		}
 	},
 	{
-		path: "/barter/:id",
+		path: "/barter",
 		name: "barter",
-		components: {
-			default: () => import("@/views/Barter/index.vue"),
-			aside: () => import("@/views/Barter/aside/index.vue"),
-			content: () => import("@/views/Barter/content/index.vue")
-		},
-		children: [{
-			path: "/create",
-			name: "createBarter",
-			components: {
-				default: () => import("@/views/Barter/Create/index.vue"),
-				aside: () => import("@/views/Barter/Create/aside/index.vue"),
-				content: () => import("@/views/Barter/Create/content/index.vue")
+		children: [
+			{
+				path: "/:id",
+				name: "barterItem",
+				components: {
+					default: () => import("@/views/Barter/Item/index.vue"),
+					aside: () => import("@/views/Barter/Item/aside/index.vue"),
+					content: () => import("@/views/Barter/Item/content/index.vue")
+				}
+			},
+			{
+				path: "/create",
+				name: "createBarter",
+				components: {
+					default: () => import("@/views/Barter/Create/index.vue"),
+					aside: () => import("@/views/Barter/Create/aside/index.vue"),
+					content: () => import("@/views/Barter/Create/content/index.vue")
+				}
 			}
-		}]
+		]
 	},
 	{
 		path: "/about",
