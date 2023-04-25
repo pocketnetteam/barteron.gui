@@ -37,7 +37,7 @@ export default {
 
 	computed: {
 		value() {
-			return this.$slots?.default[0]?.elm?.parentNode?.querySelector(this.valueSelector);
+			return this.$slots?.default ? this.$slots?.default[0]?.elm?.parentNode?.querySelector(this.valueSelector) : this.$refs.value
 		},
 
 		hasDropdown() {

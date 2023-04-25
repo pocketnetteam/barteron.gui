@@ -4,6 +4,15 @@
 	display: inline-flex
 	position: relative
 
+	&.full-width
+		display: flex
+		width: 100%
+
+		.v-select
+			display: flex
+			justify-content: space-between
+			width: 100%
+
 	&.dropdown-open
 		z-index: 10
 
@@ -15,10 +24,10 @@
 		visibility: hidden
 
 	.v-select
-		background: $button-primary
-		border: 0
+		background: $primary
+		border: 1px solid $beerus
 		border-radius: 10px
-		color: $button-color-primary
+		color: $backfrop
 		cursor: pointer
 		display: inline-flex
 		align-items: center
@@ -31,13 +40,9 @@
 		z-index: 1
 		+transition()
 
-		&:focus
-			border-color: $border-lightblue
-
 		/* Primary hover state */
 		@at-root .dropdown-open #{&},
 		&:hover
-			background: $button-primary-hover
 
 		/* Types */
 		&.v-select-ghost
@@ -87,6 +92,9 @@
 			align-items: center
 			justify-content: flex-start
 			min-width: calc(var(--min-width, 1em) + 1em)
+
+			@at-root .full-width#{&}
+				min-width: unset
 
 		& ~ .v-select-dropdown
 			background: rgba(255, 255, 255, 1)

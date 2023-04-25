@@ -30,7 +30,12 @@
 			ref="button"
 			@click="clickSelect"
 		>
-			<slot></slot>
+			<slot v-if="$slots.default"></slot>
+			<span
+				class="value"
+				ref="value"
+				v-else
+			></span>
 			<i class="fa fa-angle-down v-dropdown-arrow" v-if="items.length"></i>
 		</button>
 
