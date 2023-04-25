@@ -29,7 +29,12 @@ body
 	.row
 		display: flex
 		align-items: center
-		margin: 0 0 $r * 2 0
+		
+		&:not(:last-child)
+			margin: 0 0 $r * 2 0
+
+		&.block
+			display: block
 
 		.col
 			display: flex
@@ -47,6 +52,12 @@ body
 		display: flex
 		font-size: 1.6em
 		margin: 0 0 $r
+
+	.v-label
+		color: $trunks
+		display: block
+		font-size: 1.15em
+		margin: 0 0 8px
 
 .fa.icon
 	color: $bulma
