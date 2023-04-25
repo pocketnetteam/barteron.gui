@@ -10,6 +10,7 @@
 			:key="index"
 			class="v-input"
 		>
+			<slot :name="`input${ index }Before`"></slot>
 			<input
 				:id="input.id"
 				:name="input.name"
@@ -19,6 +20,7 @@
 				:placeholder="input.placeholder"
 				:value="input.value"
 			/>
+			<slot :name="`input${ index }After`"></slot>
 		</div>
 
 		<slot name="after"></slot>
