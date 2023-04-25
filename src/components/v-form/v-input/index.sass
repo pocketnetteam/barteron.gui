@@ -22,15 +22,6 @@
 				height: 100%
 				width: 1px
 
-		&:first-child input
-			border-radius: 6px 0 0 6px
-
-		&:last-child input
-			border-radius: 0 6px 6px 0
-
-		&:first-child:last-child input
-			border-radius: 6px
-
 		input
 			border: 0
 			font-size: 100%
@@ -38,22 +29,78 @@
 			width: 100%
 
 	/* Size */
-	.v-input-xs input
-		font-size: .9em
-		padding: .3em .3em
+	&.v-input-xs
+		border-radius: .25rem
 
-	.v-input-sm input,
-	.v-input-md input
-		font-size: 1em
-		padding: .45em
+		input
+			font-size: .9em
+			padding: .3em .3em
 
-	.v-input-md input
-		padding: .55em
+	&.v-input-sm,
+	&.v-input-md
+		border-radius: .5rem
 
-	.v-input-lg input,
-	.v-input-xl input
-		font-size: 1.2em
-		padding: .7em
+		input
+			font-size: 1em
+			padding: .45em
 
-	.v-input-xl input
-		padding: 1em .7em
+	&.v-input-md
+		border-radius: .75rem
+
+		input
+			padding: .55em
+
+	&.v-input-lg,
+	&.v-input-xl
+		border-radius: 1rem
+
+		input
+			font-size: 1.2em
+			padding: .7em
+
+	&.v-input-xl
+		input
+			padding: 1em .7em
+
+	.v-input
+		&:first-child input
+			border-radius: 6px 0 0 6px
+
+			@at-root
+				.v-input-sm#{&}
+					border-radius: .45rem 0 0 .45rem
+
+				.v-input-md#{&}
+					border-radius: .7rem 0 0 .7rem
+
+				.v-input-lg#{&},
+				.v-input-xl#{&}
+					border-radius: .9rem 0 0 .9rem
+
+		&:last-child input
+			border-radius: 0 6px 6px 0
+
+			@at-root
+				.v-input-sm#{&}
+					border-radius: 0 .45rem .45rem 0
+
+				.v-input-md#{&}
+					border-radius: 0 .7rem .7rem 0
+
+				.v-input-lg#{&},
+				.v-input-xl#{&}
+					border-radius: 0 .9rem .9rem 0
+
+		&:first-child:last-child input
+			border-radius: 6px
+
+			@at-root
+				.v-input-sm#{&}
+					border-radius: .45rem
+
+				.v-input-md#{&}
+					border-radius: .7rem
+
+				.v-input-lg#{&},
+				.v-input-xl#{&}
+					border-radius: .9rem

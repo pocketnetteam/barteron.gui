@@ -1,14 +1,14 @@
 <template>
-	<div class="v-input-holder">
+	<div :class="{
+		'v-input-holder': true,
+		[`v-input-${ vSize ?? 'md' }`]: true
+	}">
 		<slot name="before"></slot>
 
 		<div
 			v-for="(input, index) in inputs"
 			:key="index"
-			:class="{
-				'v-input': true,
-				[`v-input-${ vSize ?? 'md' }`]: true
-			}"
+			class="v-input"
 		>
 			<input
 				:id="input.id"
