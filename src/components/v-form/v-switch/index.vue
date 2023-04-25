@@ -1,21 +1,22 @@
 <template>
-	<div class="v-switch-holder">
+	<div :class="{
+		'v-switch-holder': true,
+		[`v-switch-${ vType }`]: vType,
+		[`v-switch-${ vSize ?? 'md' }`]: vSize
+	}">
 		<slot name="before"></slot>
 
-		<div
-			:class="{
-				'v-switch': true,
-				[`v-switch-${ vSize ?? 'md' }`]: true
-			}"
-		>
-			<input
-				:id="id"
-				:name="name"
-				:type="type"
-				:value="value"
-			/>
+		<input
+			ref="input"
+			:id="id"
+			:name="name || id"
+			:type="type"
+			:value="value"
+			:checked="checked"
+		/>
+		<div class="v-switch">
 			<span class="v-control"></span>
-			<label v-if="label" :for="id">{{ label }}</label>
+			<label v-if="label" :for="id || name">{{ label }}</label>
 		</div>
 
 		<slot name="after"></slot>

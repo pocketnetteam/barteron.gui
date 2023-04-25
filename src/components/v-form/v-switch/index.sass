@@ -2,28 +2,33 @@
 	
 .v-switch-holder
 	display: flex
+	position: relative
 
 	.v-switch
 		cursor: pointer
 		display: flex
 		align-items: center
-		position: relative
 
-		input
-			margin: 0
-			position: absolute
-			top: -9999px
-			left: -9999px
-			visibility: hidden
+	input
+		margin: 0
+		position: absolute
+		top: 0
+		right: 0
+		bottom: 0
+		left: 0
+		opacity: 0
 
-			/* Checkbox */
-			&[type="checkbox"]
-				~ .v-control
-					border-radius: 4px
+		&:checked ~ .v-control
+			border-color: $blue
 
-				&:checked ~ .v-control
-					border-color: $blue
+		/* Checkbox */
+		&[type="checkbox"]
+			~ .v-switch
+					.v-control
+						border-radius: 4px
 
+			&:checked ~ .v-switch
+				.v-control
 					&::after
 						border: 2px solid $blue
 						border-width: 0 3px 3px 0
@@ -34,35 +39,93 @@
 						height: 7px
 						width: 3px
 
-			/* Radio */
-			&[type="radio"]
-				~ .v-control
-					border-radius: 50%
+		/* Radio */
+		&[type="radio"]
+			~ .v-switch
+					.v-control
+						border-radius: 50%
 
-				&:checked ~ .v-control
-					border-color: $blue
-					
+			&:checked ~ .v-switch
+				.v-control
 					&::after
 						background: $blue
 						border-radius: 50%
 						display: block
 
-			/* Control default */
-			~ .v-control
-				border: 1px solid #999CA0
-				display: flex
-				align-items: center
-				justify-content: center
-				width: 16px
-				height: 16px
+		/* Control default */
+		~ .v-switch
+				.v-control
+					border: 1px solid $trunks
+					display: flex
+					align-items: center
+					justify-content: center
+					width: 16px
+					height: 16px
+
+					&::after
+						content: ""
+						display: none
+						height: 8px
+						width: 8px
+
+				label
+					cursor: pointer
+					display: inline-flex
+					padding: 0 0 0 $r * 1.5
+
+	&.v-switch-button .v-switch
+		border-radius: 1rem
+
+	&.v-switch-button input
+		~ .v-switch
+			border: 1px solid $beerus
+			color: $bulma
+		
+			.v-control
+				border-color: $bulma
+
+	&.v-switch-button input:checked
+		~ .v-switch
+			background: $blue
+			border-color: $blue
+			color: $primary
+
+			.v-control
+				border-color: $primary
 
 				&::after
-					content: ""
-					display: none
-					height: 8px
-					width: 8px
+					background: $primary
 
-			~ label
-				cursor: pointer
-				display: inline-flex
-				padding: 0 0 0 $r * 2
+
+	/* Size */
+	&.v-switch-xs
+		border-radius: .25rem
+
+		.v-switch
+			font-size: .9em
+			padding: .4em .7em
+
+	&.v-switch-sm,
+	&.v-switch-md
+		border-radius: .5rem
+
+		.v-switch
+			font-size: 1em
+
+	&.v-switch-md
+		border-radius: .75rem
+
+		.v-switch
+			padding: .75em 1em
+
+	&.v-switch-lg,
+	&.v-switch-xl
+		border-radius: 1rem
+
+		.v-switch
+			font-size: 1.2em
+			padding: .85em 1.2em
+
+	&.v-switch-xl
+		.v-switch
+			padding: 1.1em 1.6em
