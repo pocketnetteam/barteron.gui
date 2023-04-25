@@ -135,6 +135,9 @@
 							color: $button-primary
 							+transition(color)
 
+					&.hidden
+						display: none
+
 				i.fa
 					margin: 0 $r * 2 0 0
 
@@ -151,7 +154,6 @@
 		font-size: .9em
 		padding: .4em .7em
 
-		& ~ .v-select-dropdown,
 		& ~ .v-select-dropdown ul
 			border-radius: .25rem
 			font-size: .9em
@@ -161,7 +163,6 @@
 		border-radius: .5rem
 		font-size: 1em
 
-		& ~ .v-select-dropdown,
 		& ~ .v-select-dropdown ul
 			border-radius: .5rem
 			font-size: 1em
@@ -170,7 +171,6 @@
 		border-radius: .75rem
 		padding: .75em 1em
 
-		& ~ .v-select-dropdown,
 		& ~ .v-select-dropdown ul
 			border-radius: .75rem
 
@@ -180,7 +180,6 @@
 		font-size: 1.2em
 		padding: .85em 1.2em
 
-		& ~ .v-select-dropdown,
 		& ~ .v-select-dropdown ul
 			border-radius: 1rem
 			font-size: 1.2em
