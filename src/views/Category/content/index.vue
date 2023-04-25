@@ -2,7 +2,7 @@
 	<v-content>
 		<div class="row">
 			<div class="col">
-				<v-select vType="stroke" @selected="selectFilter">
+				<v-select @selected="selectFilter">
 					<template>
 						<span class="value"></span>
 					</template>
@@ -30,7 +30,7 @@
 			</div>
 
 			<div class="col right">
-				<v-select vType="stroke" @selected="selectView">
+				<v-select @selected="selectView">
 					<template>
 						<span class="value"></span>
 					</template>
