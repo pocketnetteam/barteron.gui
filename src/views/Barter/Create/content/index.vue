@@ -3,16 +3,14 @@
 		<strong class="title">{{ $t('steps.propose') }}</strong>
 
 		<div class="row block">
-			<label for="title" class="v-label">{{ $t('title') }}</label>
-			<v-input id="title" vSize="lg" />
+			<v-input id="title" :placeholder="$t('title')" vSize="lg" />
 		</div>
 		
 		<div class="row block sep">
-			<label for="category" class="v-label">{{ $t('category.label') }}</label>
 			<v-select
 				id="category"
 				class="full-width"
-				:dropdown="[{ text: 'Category', value: 'category' }]"
+				:dropdown="[{ text: $t('choose_category') }, { text: 'Category', value: 'category' }]"
 				vSize="lg"
 			/>
 		</div>
@@ -67,9 +65,9 @@
 
 		<div class="row block">
 			<v-select
-				id="category"
+				id="category-1"
 				class="full-width"
-				:dropdown="[{ text: $t('choose_category'), value: '' }, { text: 1, value: 1 }]"
+				:dropdown="[{ text: $t('choose_category') }, { text: 'Category', value: 'category' }]"
 				vSize="lg"
 			/>
 		</div>
