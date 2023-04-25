@@ -51,7 +51,7 @@ export default {
 						Object.keys(input).reduce((o, k) => {
 							if (k === "type") o[k] = this.getType(input[k][i] ?? input[k][input[k].length - 1]);
 							else if (["min", "max"].includes(k)) o[k] = input[k][i] ?? input[k][input[k].length - 1];
-							else o[k] = input.placeholder[i] ?? null
+							else o[k] = input[k][i] ?? null
 	
 							return o;
 						}, {})
