@@ -29,9 +29,13 @@ body
 	.row
 		display: flex
 		align-items: center
+
+		&.sep
+			border-bottom: 1px solid $border-beerus
+			padding: 0 0 $r * 4
 		
 		&:not(:last-child)
-			margin: 0 0 $r * 2 0
+			margin: 0 0 $r * 3 0
 
 		&.block
 			display: block
@@ -51,13 +55,20 @@ body
 	strong.title
 		display: flex
 		font-size: 1.6em
-		margin: 0 0 $r
+		margin: 0 0 $r * 3
 
 	.v-label
 		color: $trunks
 		display: block
 		font-size: 1.15em
 		margin: 0 0 8px
+
+	p
+		color: $trunks
+		margin: 0
+		
+		&:not(:last-child)
+			margin: 0 0 $r * 2
 
 .fa.icon
 	color: $bulma
