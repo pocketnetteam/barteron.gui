@@ -89,7 +89,7 @@
 				</template>
 
 				<template v-slot:input1After>
-					<span class="icon">PKOIN</span>
+					<span class="icon pkoin">PKOIN</span>
 				</template>
 			</v-input>
 		</div>
