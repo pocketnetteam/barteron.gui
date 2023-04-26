@@ -3,12 +3,11 @@
 		<strong class="title">{{ $t('steps.propose') }}</strong>
 
 		<div class="row block">
-			<v-input id="title" :placeholder="$t('title')" vSize="lg" />
+			<v-input :placeholder="$t('title')" vSize="lg" />
 		</div>
 		
 		<div class="row block sep">
 			<v-select
-				id="category"
 				class="full-width"
 				:dropdown="[{ text: $t('choose_category') }, { text: 'Category', value: 'category' }]"
 				vSize="lg"
@@ -41,7 +40,6 @@
 
 		<div class="row block">
 			<v-select
-				id="category-1"
 				class="full-width"
 				:dropdown="[{ text: $t('choose_category') }, { text: 'Category', value: 'category' }]"
 				vSize="lg"
@@ -49,13 +47,12 @@
 		</div>
 
 		<div class="row block">
-			<v-input id="exchange_to" :placeholder="$t('steps.get')" vSize="lg" />
+			<v-input :placeholder="$t('steps.get')" vSize="lg" />
 		</div>
 
 		<div class="row block">
 			<label for="currency" class="v-label">{{ $t('choose_currency_text') }}</label>
 			<v-input
-				:id="['currency', 'pkoin']"
 				:type="['number', 'number']"
 				:readonly="[null, true]"
 				:value="['0', '0']"
@@ -85,6 +82,35 @@
 		<div class="row block sep">
 			<strong class="title">{{ $t('steps.description') }}</strong>
 			<v-textarea length="9000" />
+		</div>
+
+		<div class="row block">
+			<strong class="title">{{ $t('steps.location') }}</strong>
+			<v-switch
+				class="full-width"
+				type="radio"
+				checked="location"
+				:value="['location', 'address']"
+				:label="[$t('steps.location'), $t('exact_address')]"
+				vType="slide"
+			/>
+		</div>
+
+		<div class="row block">
+			<v-input :placeholder="$t('city_name')" vSize="lg" />
+		</div>
+
+		<div class="row block sep">
+			MAP
+		</div>
+
+		<div class="row full-width">
+			<v-button vType="stroke-bulma">{{ $t('buttonLabels.cancel') }}</v-button>
+
+			<div class="buttons-holder h-w">
+				<v-button vType="stroke-bulma">{{ $t('buttonLabels.preview') }}</v-button>
+				<v-button>{{ $t('buttonLabels.publish') }}</v-button>
+			</div>
 		</div>
 	</v-content>
 </template>
