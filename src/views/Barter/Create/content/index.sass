@@ -47,6 +47,7 @@
 	.v-input
 		display: flex
 		align-items: center
+		gap: 1px
 
 		.v-select-holder
 			font-size: 1.15em
@@ -58,19 +59,28 @@
 
 		~ .v-input
 			background: rgba(0, 164, 255, 0.06)
+			border-radius: 0 .75rem .75rem 0
 
 			input
 				background: transparent
+				border-radius: 2px !important
 
 		.icon
 			color: $blue
+			cursor: default
+			display: inline-flex
+			align-items: center
+			gap: 8px
 			font-size: 1.15em
-			padding: 0 $r * 2
+			margin: 0 $r * 2
 
 			&.pkoin
 				&::before
-					background: url(@/assets/images/pkoin.svg) no-repeat 50% 50%
-					background-size: contain
+					background-color: $blue
+					mask-image: url(@/assets/images/pkoin.svg)
+					mask-size: contain
+					mask-repeat: no-repeat
 					content: ""
+					display: block
 					height: 16px
 					width: 16px
