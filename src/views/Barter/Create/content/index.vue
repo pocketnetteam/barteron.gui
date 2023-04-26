@@ -72,7 +72,7 @@
 			</v-input>
 		</div>
 
-		<div class="row block">
+		<div class="row block sep">
 			<v-switch
 				type="radio"
 				checked="used"
@@ -80,6 +80,11 @@
 				:label="[$t('condition.used'), $t('condition.new')]"
 				vType="slide"
 			/>
+		</div>
+
+		<div class="row block sep">
+			<strong class="title">{{ $t('steps.description') }}</strong>
+			<v-textarea length="9000" />
 		</div>
 	</v-content>
 </template>
