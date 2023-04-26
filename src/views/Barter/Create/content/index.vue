@@ -101,7 +101,7 @@
 		</div>
 
 		<div class="row block sep">
-			MAP
+			<v-map />
 		</div>
 
 		<div class="row full-width">
