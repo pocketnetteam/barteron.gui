@@ -27,21 +27,28 @@
 			background: $button-primary-hover
 
 		/* Types */
-		&.v-button-ghost
+		&[class*="v-button-ghost"]
 			background: none
 			color: $button-color-ghost
 
 			&:hover
 				background: $button-ghost-hover
 
-		&.v-button-stroke
+		&[class*="v-button-stroke"]
 			background: transparent
-			border: 1px solid $beerus
+			border: 1px solid $lightgray
 			border-radius: 8px
 			color: $button-color-black
 
 			&:hover
 				background: $button-stroke-hover
+
+		/* Colors */
+		&[class*="bulma"]
+			color: $bulma
+
+		&[class*="gray"]
+			color: $gray
 
 		/* Align */
 		&.v-button-right
