@@ -81,6 +81,7 @@
 			<v-input
 				:id="['currency', 'pkoin']"
 				:type="['number', 'number']"
+				:readonly="[null, true]"
 				:value="['0', '0']"
 				vSize="lg"
 			>

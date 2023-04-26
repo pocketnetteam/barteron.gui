@@ -5,6 +5,7 @@ export default {
 		id: { type: [String, Array], default: () => [] },
 		name: { type: [String, Array], default: () => [] },
 		type: { type: [String, Array], default: () => [] },
+		readonly: { type: [String, Array], default: () => [] },
 		min: { type: [Number, String, Array], default: () => [] },
 		max: { type: [Number, String, Array], default: () => [] },
 		placeholder: { type: [String, Array], default: () => [] },

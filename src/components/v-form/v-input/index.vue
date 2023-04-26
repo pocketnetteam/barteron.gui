@@ -15,6 +15,7 @@
 				:id="input.id"
 				:name="input.name"
 				:type="input.type"
+				:readonly="input.readonly"
 				:min="input.min"
 				:max="input.max"
 				:placeholder="input.placeholder"
