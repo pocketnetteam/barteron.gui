@@ -13,6 +13,7 @@
 
 	input
 		border: 0
+		cursor: pointer
 		margin: 0
 		padding: 0
 		position: absolute
@@ -73,10 +74,12 @@
 						width: 8px
 
 				label
+					color: $black
 					cursor: pointer
 					display: inline-flex
 					padding: 0 0 0 $r * 1.5
 
+	/* Type: Button */
 	&.v-switch-button
 		display: flex
 		align-items: center
@@ -86,29 +89,59 @@
 		.v-switch-input
 			width: 100%
 
+			input
+				~ .v-switch
+					border: 1px solid $beerus
+					color: $bulma
+
+					label
+						color: $bulma
+		
+					.v-control
+						border-color: $bulma
+
+			input:checked
+				~ .v-switch
+					background: $blue
+					border-color: $blue
+					color: $primary
+
+					.v-control
+						border-color: $primary
+
+						&::after
+							background: $primary
+
+					label
+						color: $primary
+
 		.v-switch
 			border-radius: 1rem
 
-	&.v-switch-button input
-		~ .v-switch
-			border: 1px solid $beerus
-			color: $bulma
-		
-			.v-control
-				border-color: $bulma
+	/* Type: Slide */
+	&.v-switch-slide
+		background: $beerus
+		display: inline-flex
+		padding: 4px
+		position: relative
+		overflow: hidden
 
-	&.v-switch-button input:checked
-		~ .v-switch
-			background: $blue
-			border-color: $blue
-			color: $primary
+		.v-switch-input
+			border-radius: inherit
 
 			.v-control
-				border-color: $primary
+				display: none
 
-				&::after
-					background: $primary
+			label
+				padding: 0
 
+			input:checked
+				~ .v-switch
+					background: $blue
+					border-radius: inherit
+
+					label
+						color: $primary
 
 	/* Size */
 	&.v-switch-xs
