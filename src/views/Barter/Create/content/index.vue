@@ -29,38 +29,14 @@
 
 		<div class="row block">
 			<strong class="title">{{ $t('steps.get') }}</strong>
-			<ul class="radio-list">
-				<li>
-					<v-switch
-						type="radio"
-						name="want_get"
-						:label="$t('my_list')"
-						vType="button"
-						vSize="lg"
-					/>
-				</li>
-
-				<li>
-					<v-switch
-						type="radio"
-						name="want_get"
-						checked="checked"
-						:label="$t('something')"
-						vType="button"
-						vSize="lg"
-					/>
-				</li>
-
-				<li>
-					<v-switch
-						type="radio"
-						name="want_get"
-						:label="$t('for_nothing')"
-						vType="button"
-						vSize="lg"
-					/>
-				</li>
-			</ul>
+			<v-switch
+				type="radio"
+				checked="something"
+				:value="['my_list', 'something', 'for_nothing']"
+				:label="[$t('my_list'), $t('something'), $t('for_nothing')]"
+				vType="button"
+				vSize="lg"
+			/>
 		</div>
 
 		<div class="row block">
@@ -83,6 +59,7 @@
 				:type="['number', 'number']"
 				:readonly="[null, true]"
 				:value="['0', '0']"
+				class="currency-input"
 				vSize="lg"
 			>
 				<template v-slot:input0After>
@@ -93,6 +70,16 @@
 					<span class="icon pkoin">PKOIN</span>
 				</template>
 			</v-input>
+		</div>
+
+		<div class="row block">
+			<v-switch
+				type="radio"
+				checked="used"
+				:value="['used', 'new']"
+				:label="[$t('condition.used'), $t('condition.new')]"
+				vType="slide"
+			/>
 		</div>
 	</v-content>
 </template>
