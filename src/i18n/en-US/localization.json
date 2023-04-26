@@ -35,15 +35,6 @@
 		"location": "Location"
 	},
 
-	"title": "Title",
-	"upload_image": "Upload image",
-	"upload_image_text": "The first photo will be displayed in the search results, select the best one. You can upload up to 10 photos in JPG or PNG format. The maximum photo size is 25MB.",
-	"my_list": "My list",
-	"something": "Something",
-	"for_nothing": "For nothing",
-	"choose_category": "Choose a category",
-	"choose_currency_text": "Barteron uses its own cryptocurrency (PKOIN) as the main assessment, you can evaluate your item in any currency convenient for you and find out how much it will be in PKOIN",
-
 	"filterLabels": {
 		"new": "New first",
 		"old": "Old first",
@@ -62,6 +53,20 @@
 	},
 
 	"buttonLabels": {
-		"categories": "Categories"
-	}
+		"categories": "Categories",
+		"cancel": "Cancel",
+		"preview": "Preview",
+		"publish": "Publish"
+	},
+
+	"title": "Title",
+	"upload_image": "Upload image",
+	"upload_image_text": "The first photo will be displayed in the search results, select the best one. You can upload up to 10 photos in JPG or PNG format. The maximum photo size is 25MB.",
+	"my_list": "My list",
+	"something": "Something",
+	"for_nothing": "For nothing",
+	"choose_category": "Choose a category",
+	"choose_currency_text": "Barteron uses its own cryptocurrency (PKOIN) as the main assessment, you can evaluate your item in any currency convenient for you and find out how much it will be in PKOIN",
+	"exact_address": "Exact address",
+	"city_name": "City name"
 }
