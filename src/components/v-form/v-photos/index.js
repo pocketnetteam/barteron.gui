@@ -7,7 +7,8 @@ export default {
 
 	data() {
 		return {
-			formData: new FormData()
+			files: new FormData(),
+			count: 0
 		}
 	},
 
@@ -25,14 +26,26 @@ export default {
 		/**
 		 * Upload image preprocessor
 		 */
-		async uploadImage() {
-			[...this.$refs.file.files].forEach((item, index) => {
-				this.formData.append(`image-${ this.hash(index) }`, item);
-			});
+		async uploadImage(e) {
+			[...e.target.files].forEach((file, index) => {
+				const reader = new FileReader();
 
-			for (const key of this.formData.keys()) {
-				console.log(key, this.formData.get(key));
-			}
+				reader.onload = (e) => {
+					file.base64 = e.target.result;
+					this.files.append(`image-${ this.hash(index) }`, file);
+					this.count++;
+				}
+
+				reader.readAsDataURL(file);
+			});
+		},
+
+		/**
+		 * Remove image handler
+		 */
+		remove(e, key) {
+			this.files.delete(key);
+			if (this.count > 0) this.count--;
 		}
 	}
 }

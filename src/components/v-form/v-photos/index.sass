@@ -2,14 +2,11 @@
 	
 .photo-uploader
 	+transition(color)
-	background: none
-	border: 1px dashed $trunks
-	border-radius: 12px
-	color: $backfrop
-	cursor: pointer
 	display: flex
 	align-items: center
-	justify-content: center
+	justify-content: flex-start
+	flex-wrap: wrap
+	gap: 10px
 	margin: 0 0 $r * 3
 	padding: 0
 	position: relative
@@ -28,11 +25,56 @@
 		left: 0
 		opacity: 0
 
-	.text
+	picture,
+	.add
+		display: flex
+		flex-direction: column
+		align-items: center
+		justify-content: center
+		position: relative
+		height: 111px
+		width: 178px
+
+	picture .fa
+		+transition(background-color)
+		background-color: $dodoria
+		border-radius: 50%
+		color: $primary
+		cursor: pointer
+		font-size: 1em
+		display: flex
+		align-items: center
+		justify-content: center
+		padding: $r
+		position: absolute
+		top: 0
+		right: 0
+		height: 2em
+		width: 2em
+
+		&:hover
+			background-color: $dodoria60
+
+	img
+		display: block
+		object-fit: contain
+		height: 100%
+		width: 100%
+
+	.add
+		border: 1px dashed $trunks
+		border-radius: 12px
+		color: $backfrop
+		cursor: pointer
+
+		@at-root .no-files#{&}
+			position: absolute
+			height: 100%
+			width: 100%
+
 		.fa
+			color: inherit
 			display: block
 			font-size: 1.5em
+			text-align: center
 			margin: 0 0 8px
-
-		*
-			display: block
