@@ -3,5 +3,11 @@
 #content
 	width: 100%
 
-	&.shrink
-		margin-right: calc(290px + 2em)
+	&[class*="shrink"]
+		margin: 0 calc(290px + 2em)
+
+	&.shrink-left
+		margin-right: 0
+
+	&.shrink-right
+		margin-left: 0
