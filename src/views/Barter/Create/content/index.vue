@@ -22,10 +22,10 @@
 			<strong class="title">{{ $t('steps.photos') }}</strong>
 
 			<!-- Component: Photo uploader -->
-			<v-photos />
+			<v-photos multiple="multiple" accept="jpeg, png" />
 
 			<!-- Paragraph: Image upload text -->
-			<p>{{ $t('upload_image_text') }}</p>
+			<p>{{ $t('upload_image_text').replace('%s', 'JPEG, PNG') }}</p>
 		</div>
 
 		<div class="row block">

@@ -9,11 +9,16 @@
 			:id="file[0]"
 		>
 			<img :src="file[1].base64" :alt="file[1].name">
-			<i class="fa fa-times" @click="$event => remove($event, file[0])"></i>
+			<i class="fa fa-times remove" @click="$event => remove($event, file[0])"></i>
 		</picture>
 		<div class="add">
 			<!-- Hidden input -->
-			<input type="file" @change="uploadImage" />
+			<input
+				:multiple="multiple"
+				:accept="mimeTypes"
+				type="file"
+				@change="uploadImage"
+			/>
 			<i class="fa fa-plus"></i>
 			<span>{{ $t('upload_image') }}</span>
 		</div>

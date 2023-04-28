@@ -27,6 +27,8 @@
 
 	picture,
 	.add
+		border: 1px dashed $trunks
+		border-radius: 12px
 		display: flex
 		flex-direction: column
 		align-items: center
@@ -35,22 +37,22 @@
 		height: 111px
 		width: 178px
 
-	picture .fa
+	.remove
 		+transition(background-color)
 		background-color: $dodoria
 		border-radius: 50%
 		color: $primary
 		cursor: pointer
-		font-size: 1em
+		font-size: 17px
 		display: flex
 		align-items: center
 		justify-content: center
 		padding: $r
 		position: absolute
-		top: 0
-		right: 0
-		height: 2em
-		width: 2em
+		top: -$r
+		right: -$r
+		height: 28px
+		width: 28px
 
 		&:hover
 			background-color: $dodoria60
@@ -62,7 +64,6 @@
 		width: 100%
 
 	.add
-		border: 1px dashed $trunks
 		border-radius: 12px
 		color: $backfrop
 		cursor: pointer
