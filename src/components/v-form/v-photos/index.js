@@ -2,13 +2,16 @@ export default {
 	name: "Vphotos",
 
 	props: {
-		multiple: String,
-		accept: String /* File extensions with comma - gif, jpeg, png */
+		multiple: String, /* Allow upload multiple files at once */
+		accept: String, /* File extensions with comma - gif, jpeg, png */
+		maxLen: String /* Count of maximum photos */
 	},
 
 	data() {
 		return {
-			files: []
+			files: [],
+			max: parseInt(this.maxLen) || 0,
+			drag: false
 		}
 	},
 
@@ -51,21 +54,28 @@ export default {
 			return (+new Date + slug).toString(16);
 		},
 
+		dragtoggle(e) {
+			this.drag = e?.type === "dragover";
+		},
+
 		/**
 		 * Upload image preprocessor
 		 * 
 		 * @param {Event} e
 		 */
-		uploadImage(e) {
+		upload(e) {
 			[...e.target.files].forEach((file, index) => {
 				const reader = new FileReader();
 
 				reader.onload = (e) => {
-					this.files.push({
-						id: `image-${ this.hash(index) }`,
-						image: e.target.result,
-						file: file
-					});
+					/* Check if maxLen disabled or files count less than maxLen */
+					if (!this.max || this.files.length < this.max) {
+						this.files.push({
+							id: `image-${ this.hash(index) }`,
+							image: e.target.result,
+							file: file
+						});
+					}
 				}
 
 				reader.readAsDataURL(file);
@@ -77,10 +87,23 @@ export default {
 		/**
 		 * Remove image handler
 		 * 
+		 * @param {Event} e
 		 * @param {Number} index
 		 */
-		remove(index) {
+		remove(e, index) {
+			e?.preventDefault();
 			this.files.splice(index, 1);
+		},
+
+		/**
+		 * Make image first
+		 * 
+		 * @param {Number} index 
+		 */
+		makeFirst(index) {
+			const item = this.files[index];
+			this.remove(null, index);
+			this.files = [item].concat(this.files);
 		},
 
 		/**
@@ -97,5 +120,11 @@ export default {
 
 			return formData;
 		}
-	}
+	},
+
+	created() {
+		document.addEventListener("dragover", e => this.dragtoggle(e));
+		document.addEventListener("dragleave", e => this.dragtoggle(e));
+		document.addEventListener("drop", e => this.dragtoggle(e));
+	},
 }
