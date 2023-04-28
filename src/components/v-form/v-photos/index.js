@@ -8,12 +8,16 @@ export default {
 
 	data() {
 		return {
-			files: new FormData(),
-			count: 0
+			files: []
 		}
 	},
 
 	computed: {
+		/**
+		 * Convert given extensions to mime types
+		 * 
+		 * @return {String}
+		 */
 		mimeTypes() {
 			return (this.accept?.replace(" ", "").split(",") || []).reduce((a, t) => {
 				switch(t) {
@@ -41,8 +45,7 @@ export default {
 		/**
 		 * Make hash based on timestamp
 		 * 
-		 * @param {Number} slug 
-		 * @returns 
+		 * @param {Number} slug
 		 */
 		hash(slug) {
 			return (+new Date + slug).toString(16);
@@ -50,27 +53,49 @@ export default {
 
 		/**
 		 * Upload image preprocessor
+		 * 
+		 * @param {Event} e
 		 */
 		uploadImage(e) {
 			[...e.target.files].forEach((file, index) => {
 				const reader = new FileReader();
 
 				reader.onload = (e) => {
-					file.base64 = e.target.result;
-					this.files.append(`image-${ this.hash(index) }`, file);
-					this.count++;
+					this.files.push({
+						id: `image-${ this.hash(index) }`,
+						image: e.target.result,
+						file: file
+					});
 				}
 
 				reader.readAsDataURL(file);
 			});
+
+			e.target.value = "";
 		},
 
 		/**
 		 * Remove image handler
+		 * 
+		 * @param {Number} index
 		 */
-		remove(e, key) {
-			this.files.delete(key);
-			if (this.count > 0) this.count--;
+		remove(index) {
+			this.files.splice(index, 1);
+		},
+
+		/**
+		 * Serialize files for form
+		 * 
+		 * @return {FormData}
+		 */
+		serialize() {
+			const formData = new FormData();
+
+			for (const index in this.files) {
+				formData.append(index[index].id, this.files[index].file);
+			}
+
+			return formData;
 		}
 	}
 }

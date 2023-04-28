@@ -1,15 +1,15 @@
 <template>
 	<div :class="{
 		'photo-uploader': true,
-		'no-files': !count
+		'no-files': !files.length
 		}">
 		<picture
-			v-for="file in files.entries()"
-			:key="file[0]"
-			:id="file[0]"
+			v-for="(item, index) in files"
+			:key="index"
+			:id="item.id"
 		>
-			<img :src="file[1].base64" :alt="file[1].name">
-			<i class="fa fa-times remove" @click="$event => remove($event, file[0])"></i>
+			<img :src="item.image" :alt="item.file.name">
+			<i class="fa fa-times remove" @click="() => remove(index)"></i>
 		</picture>
 		<div class="add">
 			<!-- Hidden input -->
