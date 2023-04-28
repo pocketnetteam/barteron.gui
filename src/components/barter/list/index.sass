@@ -16,19 +16,27 @@ div[class^="barter-list"],
 	ul.barter-track
 		+grid()
 
-		/deep/ .barter-item
+		.barter-item
 			width: $item-width
 
 .barter-list-row
 	width: 100%
 
-	.barter-list-holder,
-	.barter-list-track
+	li:first-child
+		div[class^="barter-item"]
+			border-top: 0
+			padding: 0
+
+	div[class^="barter-item"]
 		width: 100%
 
-	.barter-list-track
-		display: flex
-		flex-direction: column
+	.barter-list-holder
+		width: 100%
+
+		ul.barter-track
+			display: flex
+			flex-direction: column
+			width: 100%
 
 .barter-carousel
 	position: relative

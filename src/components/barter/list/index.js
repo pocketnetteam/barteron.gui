@@ -15,7 +15,7 @@ export default {
 		carousel: Boolean,
 		vType: {
 			type: String,
-			default: "tiles"
+			default: "tile"
 		}
 	},
 

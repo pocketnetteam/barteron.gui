@@ -1,6 +1,6 @@
 <template>
 	<v-content class="shrink">
-		<div class="row block center">
+		<div class="row center">
 			<div class="my-barter">
 				<router-link :to="{ name: 'barterItem', params: { id: 123 } }">
 					<img src="@/assets/images/barter/macbook-2.jpeg" alt="barter-name">
@@ -8,7 +8,7 @@
 			</div>
 		</div>
 
-		<div class="row block center">
+		<div class="row dir-column center">
 			<strong class="title">{{ $t('exchange_options') }}</strong>
 			<p>{{ $t('echange_options_text') }}</p>
 		</div>

@@ -8,6 +8,7 @@ div[class^="barter-item-"]
 	position: relative
 	width: 100%
 
+	/* View: Tile */
 	picture
 		cursor: pointer
 		border-radius: 11px
@@ -115,15 +116,15 @@ div[class^="barter-item-"]
 
 			font-weight: 700
 
-		.favorite
-			color: $gray
-			cursor: pointer
-			font-size: 1.2em
-			padding: 0 4px 0 0
-			+transition(color)
+	.favorite
+		color: $gray
+		cursor: pointer
+		font-size: 1.2em
+		padding: 0 4px 0 0
+		+transition(color)
 
-			&:hover
-				color: $bulma
+		&:hover
+			color: $bulma
 
 	.title
 		color: $black
@@ -135,11 +136,27 @@ div[class^="barter-item-"]
 		line-height: 1.2
 
 	.to
-		color: $bulma
-		overflow: hidden
-		text-overflow: ellipsis
-		white-space: nowrap
-		width: 100%
+		ul
+			+resetList()
+			color: $bulma
+			overflow: hidden
+			text-overflow: ellipsis
+			width: 100%
+
+			li
+				display: inline
+				white-space: nowrap
+
+				&:not(:first-child):not(:last-child)
+					&:after
+						content: ", "
+
+			a
+				color: inherit
+				text-decoration: none
+
+				&:hover
+					text-decoration: underline
 
 	.info
 		ul
@@ -156,3 +173,47 @@ div[class^="barter-item-"]
 						display: inline-block
 						content: "\2022"
 						margin: 0 $r 0 0
+
+	/* View: Row */
+	&.barter-item-row
+		border-top: 1px solid $beerus
+		display: flex
+		flex-direction: row
+		gap: 16px
+		padding: 24px 0 0
+
+		picture
+			margin: 0
+			flex-shrink: 0
+			height: 137px
+			width: 203px
+
+		.row
+			flex-direction: column
+			align-items: flex-start
+			justify-content: space-between
+			margin: 0
+			width: 100%
+
+			&:last-child
+				width: auto
+
+		.title
+			display: block
+			margin: 0 0 .85em
+
+		.to
+			ul
+				display: flex
+				flex-wrap: wrap
+
+				li
+					white-space: pre
+
+		.info
+			white-space: nowrap
+
+		.favorite
+			text-align: right
+			padding: 0
+			width: 100%

@@ -62,8 +62,10 @@ export default {
 		 * @return {String}
 		 */
 		getCategories(ids) {
-			return ids.map(id => this.$t(this.categories.items[id]?.name))
-				.filter(m => m).join(", ");
+			return ids.map(id => Object.assign(
+				this.categories.items[id],
+				{ title: this.$t(this.categories.items[id]?.name) }
+			));
 		},
 
 		/**

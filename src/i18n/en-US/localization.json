@@ -43,8 +43,8 @@
 	},
 
 	"viewLabels": {
-		"tails": "Tails",
-		"rows": "Rows"
+		"tail": "Tails",
+		"row": "Rows"
 	},
 
 	"pageLabels": {
@@ -56,7 +56,12 @@
 		"categories": "Categories",
 		"cancel": "Cancel",
 		"preview": "Preview",
-		"publish": "Publish"
+		"publish": "Publish",
+		"prepose_exchange": "Propose exchange"
+	},
+
+	"barterLabels": {
+		"to": "Exchange to"
 	},
 
 	"title": "Title",

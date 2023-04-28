@@ -44,8 +44,8 @@
 							<i
 								:class="{
 									'fa': true,
-									'fa-th-large': view.value === 'tails',
-									'fa-align-justify': view.value === 'rows',
+									'fa-th-large': view.value === 'tail',
+									'fa-align-justify': view.value === 'row',
 									'icon': true
 								}"
 							></i>
@@ -58,6 +58,7 @@
 
 		<BarterList
 			:items="barters.slice(0, 8)"
+			:vType="bartersView"
 		/>
 	</v-content>
 </template>

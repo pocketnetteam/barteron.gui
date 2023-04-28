@@ -11,7 +11,7 @@ export default {
 	data() {
 		return {
 			barters: barters,
-			value: this.$refs.value
+			bartersView: "tail"
 		}
 	},
 
@@ -63,7 +63,7 @@ export default {
 		 * @param {Object} view 
 		 */
 		selectView(view) {
-			console.log(view)
+			this.bartersView = view?.value;
 		}
 	}
 }
