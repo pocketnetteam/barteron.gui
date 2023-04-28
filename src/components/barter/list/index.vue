@@ -2,7 +2,7 @@
 	<div
 		:class="{
 			'barter-carousel': carousel,
-			'barter-list': !carousel
+			[`barter-list-${ vType }`]: !carousel
 		}"
 	>
 		<div
@@ -17,7 +17,7 @@
 					v-for="(item, index) in items"
 					:key="index"
 				>
-					<BarterItem :item="item" />
+					<BarterItem :item="item" :vType="vType" />
 				</li>
 			</ul>
 		</div>

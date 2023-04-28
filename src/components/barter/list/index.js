@@ -12,7 +12,11 @@ export default {
 			type: Array,
 			default: () => []
 		},
-		carousel: Boolean
+		carousel: Boolean,
+		vType: {
+			type: String,
+			default: "tiles"
+		}
 	},
 
 	data() {

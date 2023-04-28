@@ -1,5 +1,5 @@
 <template>
-	<div :class="{ 'barter-item': true }">
+	<div :class="{ [`barter-item-${ vType }`]: true }">
 		<picture v-if="item.image">
 			<span class="state">{{ item.used ? 'I/U' : 'New' }}</span>
 			

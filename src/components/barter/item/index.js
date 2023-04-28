@@ -2,7 +2,12 @@ export default {
 	name: "BarterItem",
 
 	props: {
-		item: Object
+		item: Object,
+		vType: {
+			/* row or tile */
+			type: String,
+			default: "tile"
+		}
 	},
 
 	data() {

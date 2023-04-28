@@ -11,13 +11,24 @@ $item-width: 294px
 	grid-gap: 24px
 	+resetList()
 	
-.barter-list,
+div[class^="barter-list"],
 .barter-carousel
 	ul.barter-track
 		+grid()
 
 		/deep/ .barter-item
 			width: $item-width
+
+.barter-list-row
+	width: 100%
+
+	.barter-list-holder,
+	.barter-list-track
+		width: 100%
+
+	.barter-list-track
+		display: flex
+		flex-direction: column
 
 .barter-carousel
 	position: relative

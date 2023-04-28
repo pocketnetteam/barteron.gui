@@ -16,7 +16,7 @@
 		<div class="row block">
 			<BarterList
 				:items="barters.slice(0, 8)"
-				vType="rows"
+				vType="row"
 			/>
 		</div>
 	</v-content>
