@@ -26,6 +26,13 @@ const routes = [
 		}
 	},
 	{
+		path: "/barter/added",
+		name: "addedBarter",
+		components: {
+			content: () => import("@/views/Barter/Added/content/index.vue")
+		}
+	},
+	{
 		path: "/barter/:id",
 		name: "barterItem",
 		components: {

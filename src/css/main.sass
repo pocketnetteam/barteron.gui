@@ -44,7 +44,15 @@ body
 			display: flex
 			align-items: center
 
-		.right
+		&.center,
+		.col.center
+			text-align: center
+
+			> *
+				display: inline-block
+
+		&.right,
+		.col.right
 			margin-left: auto
 
 	.v-details ~ .v-details

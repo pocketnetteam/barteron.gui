@@ -68,5 +68,8 @@
 	"choose_category": "Choose a category",
 	"choose_currency_text": "Barteron uses its own cryptocurrency (PKOIN) as the main assessment, you can evaluate your item in any currency convenient for you and find out how much it will be in PKOIN",
 	"exact_address": "Exact address",
-	"city_name": "City name"
+	"city_name": "City name",
+
+	"exchange_options": "Exchange Options",
+	"echange_options_text": "Offer an exchange if you like the option found. Above are the best options."
 }
