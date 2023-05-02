@@ -2,7 +2,7 @@
 	<div :class="{ [`barter-item-${ vType }`]: true }">
 		<!-- Picture -->
 		<picture v-if="item.image">
-			<span class="state">{{ item.used ? 'I/U' : 'New' }}</span>
+			<span class="state">{{ $t(`condition.${ !item.used ? 'new' : 'used' }`) }}</span>
 			
 			<img
 				v-if="!Array.isArray(item.image)"

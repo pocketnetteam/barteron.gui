@@ -3,8 +3,8 @@
 		"label": "Category",
 		"show": "Show",
 		"hide": "Hide",
-		"showAll": "Show all",
-		"hideAll": "Hide all"
+		"show_all": "Show all",
+		"hide_all": "Hide all"
 	},
 
 	"price": {
