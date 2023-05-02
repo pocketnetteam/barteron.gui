@@ -115,6 +115,8 @@
 					<i class="fa fa-heart"></i>
 				</div>
 
+				<slot name="offer"></slot>
+
 				<div class="info" v-if="item.published || item.location">
 					<ul>
 						<li v-if="item.published">

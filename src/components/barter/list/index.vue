@@ -17,7 +17,11 @@
 					v-for="(item, index) in items"
 					:key="index"
 				>
-					<BarterItem :item="item" :vType="vType" />
+					<BarterItem :item="item" :vType="vType">
+						<template v-slot:offer v-if="$slots.offer">
+							<slot name="offer"></slot>
+						</template>
+					</BarterItem>
 				</li>
 			</ul>
 		</div>

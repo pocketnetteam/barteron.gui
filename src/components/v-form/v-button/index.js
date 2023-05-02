@@ -3,7 +3,7 @@ export default {
 
 	props: {
 		vAlign: String,
-		vType: String,
+		vType: String, /* ghost, stroke, bulma, gray */
 		vSize: String,
 		to: [String, Object],
 
