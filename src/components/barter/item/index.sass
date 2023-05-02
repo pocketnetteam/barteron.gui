@@ -117,14 +117,16 @@ div[class^="barter-item-"]
 			font-weight: 700
 
 	.favorite
-		color: $gray
-		cursor: pointer
 		font-size: 1.2em
 		padding: 0 4px 0 0
-		+transition(color)
+		
+		i
+			+transition(color)
+			color: $gray
+			cursor: pointer
 
-		&:hover
-			color: $bulma
+			&:hover
+				color: $bulma
 
 	.title
 		color: $popo
