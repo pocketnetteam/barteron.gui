@@ -10,6 +10,7 @@ export default {
 
 	data() {
 		return {
+			exchangeOptions: false,
 			barters: barters
 		}
 	}

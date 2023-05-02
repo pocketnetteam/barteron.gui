@@ -57,7 +57,10 @@
 		"cancel": "Cancel",
 		"preview": "Preview",
 		"publish": "Publish",
-		"prepose_exchange": "Propose exchange"
+		"prepose_exchange": "Propose exchange",
+		"my_announcements": "My announcements",
+		"find_exchange_options": "Find exchange options",
+		"offer_an_exchange": "Offer an exchange"
 	},
 
 	"barterLabels": {
@@ -75,6 +78,7 @@
 	"exact_address": "Exact address",
 	"city_name": "City name",
 
+	"find_exchange_options": "We can find exchange options for you",
 	"exchange_options": "Exchange Options",
 	"echange_options_text": "Offer an exchange if you like the option found. Above are the best options."
 }
