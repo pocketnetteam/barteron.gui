@@ -1,12 +1,20 @@
 @import "@/css/vars.sass"
 	
-.my-barter
-	border-radius: 12px
-	display: inline-flex
-	overflow: hidden
+.my-barter-holder
+	padding: $r * 5 0 $r * 14
 
-	img
-		display: block
-		object-fit: cover
-		height: 120px
-		width: 120px
+	.my-barter
+		border-radius: 12px
+		display: inline-flex
+		overflow: hidden
+
+		&.small
+			img
+				height: 120px
+				width: 120px
+
+		img
+			display: block
+			object-fit: cover
+			height: 194px
+			width: 194px

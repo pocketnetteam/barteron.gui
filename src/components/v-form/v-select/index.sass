@@ -27,7 +27,7 @@
 		background: $primary
 		border: 1px solid $beerus
 		border-radius: 10px
-		color: $backfrop
+		color: $backdrop
 		cursor: pointer
 		display: inline-flex
 		align-items: center
@@ -47,19 +47,19 @@
 		/* Types */
 		&.v-select-ghost
 			background: none
-			color: $button-color-ghost
+			color: $popo
 
 			&:hover
-				background: $button-ghost-hover
+				background: $darkgray
 
 		&.v-select-stroke
 			background: transparent
 			border: 1px solid #C7C8D9
 			border-radius: 8px
-			color: $button-color-black
+			color: $popo
 
 			&:hover
-				background: $button-stroke-hover
+				background: $darkgray
 
 		/* Align */
 		&.v-select-right
@@ -115,7 +115,7 @@
 
 				li
 					border-radius: 4px
-					color: $button-color-bulma
+					color: $bulma
 					cursor: pointer
 					display: flex
 					align-items: center
@@ -124,15 +124,15 @@
 					+transition(color)
 
 					& > *
-						color: $button-color-bulma
+						color: $bulma
 						+transition(color)
 
 					&:hover
 						background: $background-gray-focus
-						color: $button-primary
+						color: $blue
 
 						& > *
-							color: $button-primary
+							color: $blue
 							+transition(color)
 
 					&.hidden

@@ -2,7 +2,7 @@
 
 *
 	box-sizing: border-box
-	outline-color: $border-blue
+	outline-color: $blue
 
 html,
 body
@@ -27,7 +27,7 @@ body
 		justify-content: space-between
 
 	.v-details ~ .v-details
-		border-top: 1px solid $border-beerus
+		border-top: 1px solid $beerus
 		margin-top: $r * 2.5
 		padding-top: $r * 2.5
 
@@ -37,7 +37,7 @@ body
 		margin: 0 0 $r * 3
 
 	.v-label
-		color: $backfrop
+		color: $backdrop
 		display: block
 		font-size: 1em
 		margin: 0 0 1.75em
@@ -62,6 +62,12 @@ body
 	gap: 10px
 	justify-content: space-between
 
+	&.center
+		justify-content: center
+
+		.v-button-holder
+			width: auto
+
 	&.f-w
 		width: 100%
 
@@ -80,7 +86,7 @@ body
 	align-items: center
 
 	&.sep
-		border-bottom: 1px solid $border-beerus
+		border-bottom: 1px solid $beerus
 		padding: 0 0 $r * 4
 
 	&:not(:last-child)

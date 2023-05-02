@@ -7,73 +7,73 @@ $r: .5em
 /* LIGHT THEME */
 
 /* Colors */
-$black: rgba(0, 0, 0, 1)
-$darker: rgba(0, 0, 0, 0.56)
-$dark: rgba(10, 20, 47, 1)
-$beerus: rgba(235, 235, 235, 1)
-$gray: rgba(142, 144, 166, 1)
-$trunks: rgba(153, 156, 160, 1)
-$lightgray: rgba(199, 200, 217, 1)
+$piccolo: rgb(0, 164, 255)
+$piccolo-hover: rgb(0, 144, 224)
+$ghost: rgb(224, 244, 255)
+$hit: rgb(242, 135, 5)
+$hit-hover: rgb(223, 124, 5)
+$beerus: rgb(235, 235, 235)
+$beerus-hover: rgb(216, 216, 216)
+$goku: rgb(245, 245, 245)
+$gohan: rgb(255, 255, 255)
+$gray: rgb(142, 144, 166)
+$lightgray: rgb(199, 200, 217)
 $darkgray: rgba(0, 0, 0, 0.08)
-$lightblue: rgba(0, 133, 207, 1)
-$blue: rgba(0, 164, 255, 1)
-$darkblue: rgba(15, 82, 139, 1)
-$bulma: rgba(3, 71, 120, 1)
-$primary: rgba(255, 255, 255, 1)
-$goku: rgba(245, 245, 245, 1)
-$backfrop: rgba(0, 0, 0, 0.56)
-$dodoria: rgba(211, 48, 48, 1)
-$dodoria60: rgba(219, 78, 78, 1)
+$bulma: rgb(3, 71, 120)
+$bulma-hover: rgb(15, 82, 139)
+$blue: rgb(0, 164, 255)
+$blue-hover: rgb(0, 133, 207)
+$trunks: rgb(153, 156, 160)
+$popo: rgb(0, 0, 0)
+$dark: rgb(10, 20, 47)
+$backdrop: rgba(0, 0, 0, 0.56)
+$primary: $gohan
+
+$krillin: rgb(255, 179, 25)
+$krillin-hover: rgb(255, 198, 82)
+$krillin-lighten: rgb(255, 217, 141)
+
+$chi-chi: rgb(255, 78, 100)
+$chi-chi-hover: rgb(255, 118, 135)
+$chi-chi-lighten: rgb(255, 150, 163)
+
+$roshi: rgb(74, 209, 95)
+$roshi-hover: rgb(100, 220, 119)
+$roshi-lighten: rgb(127, 242, 145)
+
+$cell: rgb(149, 241, 213)
+$cell-hover: rgb(162, 250, 223)
+$cell-lighten: rgb(191, 255, 236)
+
+$raditz: rgb(179, 128, 74)
+$raditz-hover: rgb(193, 145, 93)
+$raditz-lighten: rgb(214, 169, 121)
+
+$whis: rgb(52, 72, 240)
+$whis-hover: rgb(103, 118, 248)
+$whis-lighten: rgb(131, 144, 249)
+
+$frieza: rgb(92, 51, 207)
+$frieza-hover: rgb(115, 77, 222)
+$frieza-lighten: rgb(146, 113, 239)
+
+$nappa: rgb(114, 85, 80)
+$nappa-hover: rgb(133, 106, 102)
+$nappa-lighten: rgb(161, 134, 129)
+
+$dodoria: rgb(211, 48, 48)
+$dodoria-hover: rgb(219, 78, 78)
+$dodoria-lighten: rgb(255, 150, 163)
 
 /* Backgrounds */
-$background-beerus: $beerus
 $background-gray-default: linear-gradient(0deg, #EBEBEB, #EBEBEB), linear-gradient(0deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08))
 $background-gray-focus: linear-gradient(0deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04)), linear-gradient(0deg, #FFFFFF, #FFFFFF)
 $background-gray-ghost: rgba(235, 235, 235, 0.18)
-$background-goku: $goku
-$background-lightblue: $lightblue
-$background-darkblue: $darkblue
-$background-white: $primary
 
 /* Overlay */
 $overlay-hidden: rgba(0, 0, 0, 0)
 $overlay-visible: rgba(0, 0, 0, 0.25)
 $overlay-half: rgba(0, 0, 0, 0.5)
-
-/* Scrollbar */
-$scrollbar-track: $background-gray-default
-$scrollbar-humb: rgba(153, 156, 160, 1)
-
-/* Borders */
-$border-beerus: $beerus
-$border-white: $primary
-$border-blue: $blue
-$border-lightblue: $lightblue
-
-/* Buttons */
-$button-color-black: $black
-$button-color-gray: $gray
-$button-color-bulma: $bulma
-$button-color-primary: $primary
-$button-color-ghost: $button-color-black
-
-$button-primary: $blue
-$button-primary-hover: $lightblue
-
-$button-ghost-hover: $darkgray
-
-$button-stroke: $lightgray
-$button-stroke-hover: $button-ghost-hover
-
-/* Links */
-$link-color-primary: $button-color-bulma
-$link-color-primary-hover: $button-primary-hover
-
-/* Lightbox */
-$lightbox-primary: $button-color-primary
-$lightbox-text-primary: $button-color-black
-$lightbox-link-primary-color: $button-color-bulma
-$lightbox-link-primary-hover: $button-ghost-hover
 
 /* Mixins */
 @mixin resetList()
@@ -110,11 +110,11 @@ $lightbox-link-primary-hover: $button-ghost-hover
 
 	&::-webkit-scrollbar-track,
 	&::-webkit-scrollbar-thumb
-		background: $scrollbar-track
+		background: $background-gray-default
 		border-radius: 10px
 
 	&::-webkit-scrollbar-thumb
-		background: $scrollbar-humb
+		background: $trunks
 
 @mixin fontAwesome($icon)
 	font-family: "Font Awesome 5 Free"

@@ -7,10 +7,10 @@
 		z-index: 10
 	
 	.v-button
-		background: $button-primary
+		background: $blue
 		border: 0
 		border-radius: 10px
-		color: $button-color-primary
+		color: $primary
 		cursor: pointer
 		display: inline-flex
 		align-items: center
@@ -24,24 +24,30 @@
 		/* Primary hover state */
 		@at-root .dropdown-open #{&},
 		&:hover
-			background: $button-primary-hover
+			background: $blue-hover
 
 		/* Types */
 		&[class*="v-button-ghost"]
 			background: none
-			color: $button-color-ghost
+			color: $popo
 
 			&:hover
-				background: $button-ghost-hover
+				background: $darkgray
 
 		&[class*="v-button-stroke"]
 			background: transparent
 			border: 1px solid $lightgray
 			border-radius: 8px
-			color: $button-color-black
+			color: $popo
 
 			&:hover
-				background: $button-stroke-hover
+				background: $darkgray
+
+		&[class*="v-button-hit"]
+			background: $hit
+
+			&:hover
+				background: $hit-hover
 
 		/* Colors */
 		&[class*="bulma"]
@@ -106,7 +112,7 @@
 
 				li
 					border-radius: 4px
-					color: $button-color-bulma
+					color: $bulma
 					cursor: pointer
 					display: flex
 					align-items: center
@@ -115,15 +121,15 @@
 					+transition(color)
 
 					& > *
-						color: $button-color-bulma
+						color: $bulma
 						+transition(color)
 
 					&:hover
 						background: $background-gray-focus
-						color: $button-primary
+						color: $blue
 
 						& > *
-							color: $button-primary
+							color: $blue
 							+transition(color)
 
 				i.fa
