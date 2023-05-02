@@ -28,16 +28,22 @@
 			</div>
 		</div>
 
-		<div class="row block" v-if="exchangeOptions">
-			<BarterList
-				:items="barters.slice(0, 8)"
-				vType="row"
-			>
-				<template v-slot:offer>
-					<v-button vType="hit">{{ $t('buttonLabels.offer_an_exchange') }}</v-button>
-				</template>
-			</BarterList>
-		</div>
+		<template v-if="exchangeOptions">
+			<div class="row block">
+				<BarterList
+					:items="barters.slice(0, 8)"
+					vType="row"
+				>
+					<template v-slot:offer>
+						<v-button vType="hit">{{ $t('buttonLabels.offer_an_exchange') }}</v-button>
+					</template>
+				</BarterList>
+			</div>
+
+			<div class="row center">
+				<v-button>{{ $t('buttonLabels.show_more') }}</v-button>
+			</div>
+		</template>
 	</v-content>
 </template>
 
