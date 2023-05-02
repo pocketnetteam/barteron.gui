@@ -37,8 +37,8 @@ const routes = [
 		name: "barterItem",
 		components: {
 			default: () => import("@/views/Barter/Item/index.vue"),
-			aside: () => import("@/views/Barter/Item/aside/index.vue"),
-			content: () => import("@/views/Barter/Item/content/index.vue")
+			content: () => import("@/views/Barter/Item/content/index.vue"),
+			sidebar: () => import("@/views/Barter/Item/sidebar/index.vue")
 		}
 	},
 	{
