@@ -1,33 +1,47 @@
 /* Main */
+$theme: light !default
 $width: 1248px
 $sidebar-width: 290px
 $dropdown-width: 320px
 $r: .5em
 
-/* LIGHT THEME */
+/* Theme */
+@if $theme == light
+	$ghost: rgb(224, 244, 255)					!global
+	$beerus: rgb(235, 235, 235)				!global
+	$beerus-hover: rgb(216, 216, 216)	!global
+	$goku: rgb(245, 245, 245)					!global
+	$gohan: rgb(255, 255, 255)					!global
+	$bulma: rgb(3, 71, 120)						!global
+	$bulma-hover: rgb(15, 82, 139)			!global
+	$trunks: rgb(153, 156, 160)				!global
+@else
+	$ghost: rgb(12, 65, 94)						!global
+	$beerus: rgb(46, 46, 46)						!global
+	$beerus-hover: rgb(65, 65, 65)			!global
+	$goku: rgb(11, 11, 11)							!global
+	$gohan: rgb(31, 31, 31)						!global
+	$bulma: rgb(255, 255, 255)					!global
+	$bulma-hover: rgb(243, 244, 236)		!global
+	$trunks: rgb(153, 156, 160)				!global
 
-/* Colors */
+/* Primary color */
+$primary: $gohan
+
+/* Supportive */
 $piccolo: rgb(0, 164, 255)
 $piccolo-hover: rgb(0, 144, 224)
-$ghost: rgb(224, 244, 255)
 $hit: rgb(242, 135, 5)
 $hit-hover: rgb(223, 124, 5)
-$beerus: rgb(235, 235, 235)
-$beerus-hover: rgb(216, 216, 216)
-$goku: rgb(245, 245, 245)
-$gohan: rgb(255, 255, 255)
+$popo: rgb(0, 0, 0)
+
 $gray: rgb(142, 144, 166)
 $lightgray: rgb(199, 200, 217)
 $darkgray: rgba(0, 0, 0, 0.08)
-$bulma: rgb(3, 71, 120)
-$bulma-hover: rgb(15, 82, 139)
 $blue: rgb(0, 164, 255)
 $blue-hover: rgb(0, 133, 207)
-$trunks: rgb(153, 156, 160)
-$popo: rgb(0, 0, 0)
 $dark: rgb(10, 20, 47)
 $backdrop: rgba(0, 0, 0, 0.56)
-$primary: $gohan
 
 $krillin: rgb(255, 179, 25)
 $krillin-hover: rgb(255, 198, 82)
