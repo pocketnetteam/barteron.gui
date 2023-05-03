@@ -42,6 +42,14 @@ const routes = [
 		}
 	},
 	{
+		path: "/profile/:id",
+		name: "profile",
+		components: {
+			aside: () => import("@/views/Profile/aside/index.vue"),
+			content: () => import("@/views/Profile/content/index.vue")
+		}
+	},
+	{
 		path: "/about",
 		name: "about",
 		component: () => import("@/views/About/index.vue"),
