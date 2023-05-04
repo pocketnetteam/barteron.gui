@@ -1,7 +1,7 @@
 <template>
 	<v-page-header>
 		<v-page-header-title
-			:title="item.name"
+			:title="false"
 			:favorite="false"
 			:count="false"
 		/>

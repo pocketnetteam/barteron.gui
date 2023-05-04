@@ -2,7 +2,7 @@
 	<div class="category-header">
 		<Breadcrumbs parent="home" v-if="breadcrumbs" />
 
-		<h1>
+		<h1 v-if="title">
 			{{ pageTitle }}
 			<span class="count" v-if="count">207 ads</span>
 		</h1>

@@ -6,8 +6,8 @@ export default {
 
 	props: {
 		title: {
-			type: String,
-			default: ""
+			type: [String, Boolean],
+			default: true
 		},
 		breadcrumbs: {
 			type: Boolean,
@@ -35,9 +35,15 @@ export default {
 		 * @return {String}
 		 */
 		pageTitle() {
-			return this.title ?
-				this.decodeString(this.title) :
-				this.$t(this.$te(pageTitle) ? pageTitle : `pageLabels.${ pageTitle }`);
+			const title = this.$route.params?.slug ?? this.$route.name;
+
+			if (typeof this.title === 'string') {
+				return this.decodeString(this.title);
+			} else if (this.title) {
+				return this.$t(this.$te(title) ? title : `pageLabels.${ title }`);
+			}
+
+			return this.title;
 		},
 
 		/**
