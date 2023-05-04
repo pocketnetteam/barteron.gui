@@ -2,7 +2,10 @@ export default {
 	name: "BarterItem",
 
 	props: {
-		item: Object,
+		item: {
+			type: Object,
+			default: () => ({})
+		},
 		vType: {
 			/* row or tile */
 			type: String,
