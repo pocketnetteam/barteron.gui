@@ -97,7 +97,6 @@ class Barters {
 			}
 
 			this.items[id] = barter;
-			console.log('created', barter)
 
 			return barter;
 		});

@@ -36,7 +36,6 @@ vRequire([
 
 Vue.prototype.categories = Categories;
 Vue.prototype.barters = Barters;
-console.log(Barters)
 
 new Vue({
 	router,
