@@ -1,6 +1,6 @@
 <template>
 	<v-content>
-		Barter
+		content
 	</v-content>
 </template>
 

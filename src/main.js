@@ -37,6 +37,14 @@ vRequire([
 Vue.prototype.categories = Categories;
 Vue.prototype.barters = Barters;
 
+Vue.mixin({
+	computed: {
+		routeComponents() {
+			return Object.assign({}, this.$route.matched[0].instances);
+		}
+	}
+});
+
 new Vue({
 	router,
 	i18n,
