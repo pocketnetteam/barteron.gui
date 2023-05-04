@@ -40,6 +40,11 @@ export default {
 				this.$t(this.$te(pageTitle) ? pageTitle : `pageLabels.${ pageTitle }`);
 		},
 
+		/**
+		 * Get list of favorite categories
+		 * 
+		 * @return {Array}
+		 */
 		favoriteCategories() {
 			const category = this.categories.findByName(this.title);
 
