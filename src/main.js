@@ -29,14 +29,17 @@ const vRequire = (context) => {
 	});
 }
 
+/* Require v-components */
 vRequire([
 	require.context("@/components/v-layout", true, /index\.vue$/),
 	require.context("@/components/v-form", true, /index\.vue$/)
 ]);
 
+/* Make categories and barters global */
 Vue.prototype.categories = Categories;
 Vue.prototype.barters = Barters;
 
+/* Add mixin for accessing sibling components in a route */
 Vue.mixin({
 	computed: {
 		routeComponents() {
