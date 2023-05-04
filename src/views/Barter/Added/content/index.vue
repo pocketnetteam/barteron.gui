@@ -31,7 +31,7 @@
 		<template v-if="exchangeOptions">
 			<div class="row block">
 				<BarterList
-					:items="barters.slice(0, 8)"
+					:items="barters.generate(8)"
 					vType="row"
 				>
 					<template v-slot:offer>

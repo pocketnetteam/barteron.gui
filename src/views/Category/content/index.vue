@@ -57,7 +57,7 @@
 		</div>
 
 		<BarterList
-			:items="barters.slice(0, 8)"
+			:items="barters.generate(8)"
 			:vType="bartersView"
 		/>
 	</v-content>

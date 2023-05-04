@@ -18,6 +18,7 @@ const routes = [
 	},
 	{
 		path: "/barter/create",
+		alias: "/barter/edit/:id",
 		name: "createBarter",
 		components: {
 			default: () => import("@/views/Barter/Create/index.vue"),

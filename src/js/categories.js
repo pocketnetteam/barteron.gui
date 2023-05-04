@@ -1,10 +1,13 @@
+/* Load data */
+import categoriesData from "@/data/categories.json";
+
 /**
  * Allow navigate through categories list,
  * get items by id/name
  * 
  * @class Categories
  */
-export default class Categories {
+class Categories {
 	/**
 	 * Initialize class
 	 * 
@@ -61,3 +64,5 @@ export default class Categories {
 		return Array.isArray(name) ? name.map(n => this.find("name", n)) : this.find("name", name);
 	}
 };
+
+export default new Categories(categoriesData);

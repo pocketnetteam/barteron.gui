@@ -1,7 +1,6 @@
 <template>
 	<v-page-header>
 		<v-page-header-title
-			:breadcrumbs="false"
 			:favorite="false"
 			:count="false"
 		/>

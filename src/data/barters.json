@@ -1,109 +1,121 @@
-[
-	{
+{
+	"1": {
 		"used": true,
 		"image": ["macbook.jpeg", "macbook-1.jpeg", "macbook-2.jpeg", "macbook-3.jpeg"],
 		"price": 13465,
 		"name": "Macbook Pro 13&quot;",
+		"parent": 37910,
 		"to": [37910, 162941],
 		"published": "12 Jan 2023",
 		"location": null
 	},
-	{
+	"2": {
 		"used": true,
 		"image": "headphones.jpeg",
 		"price": 10999,
 		"name": "Wireless headphones",
+		"parent": 162913,
 		"to": [162913, 37968, 153913],
 		"published": "12 Mar 2023",
 		"location": null
 	},
-	{
+	"3": {
 		"used": true,
 		"image": "camera.jpeg",
 		"price": 16500,
 		"name": "Old camera",
+		"parent": 177928,
 		"to": [179911, 177928, 263194],
 		"published": "3 Apr 2023",
 		"location": null
 	},
-	{
+	"4": {
 		"used": true,
 		"image": "sunglasses.jpeg",
 		"price": 6700,
 		"name": "Brand sunglasses",
+		"parent": 57275,
 		"to": [3387, 116495, 57275, 179798],
 		"published": "4 Apr 2023",
 		"location": null
 	},
-	{
+	"5": {
 		"used": true,
 		"image": "shoe.jpeg",
 		"price": 9200,
 		"name": "Man's brand shoes",
+		"parent": 57273,
 		"to": [158952, 57273],
 		"published": "20 Feb 2023",
 		"location": null
 	},
-	{
+	"6": {
 		"image": "pomade.jpeg",
 		"price": 1800,
 		"name": "Red pomade with bright red tint",
+		"parent": 21137,
 		"to": [184527, 21137, 88886],
 		"published": "2 Mar 2023",
 		"location": null
 	},
-	{
+	"7": {
 		"used": true,
 		"image": "nike-sneakers.jpeg",
 		"price": 21000,
 		"name": "Red nike sneakers",
+		"parent": 177796,
 		"to": [139861, 177796, 73980, 73989],
 		"published": "4 Mar 2023",
 		"location": null
 	},
-	{
+	"8": {
 		"used": true,
 		"image": "camera-nikon.jpeg",
 		"price": 48000,
 		"name": "Nikon camera",
+		"parent": 184535,
 		"to": [27265, 184535],
 		"published": "5 Mar 2023",
 		"location": null
 	},
-	{
+	"9": {
 		"used": true,
 		"image": "glasses.jpeg",
 		"price": 12000,
 		"name": "Brand elite glasses",
+		"parent": 260125,
 		"to": [260125],
 		"published": "6 Mar 2023",
 		"location": null
 	},
-	{
+	"10": {
 		"used": true,
 		"image": "backpack.jpeg",
 		"price": 40000,
 		"name": "Vinta backpack",
+		"parent": 260971,
 		"to": [260988, 260971, 156790],
 		"published": "7 Mar 2023",
 		"location": null
 	},
-	{
+	"11": {
 		"used": true,
 		"image": "gamepad.jpeg",
 		"price": 60000,
 		"name": "Gamepad Xbox Series S Microsoft",
+		"parent": 185116,
 		"to": [185116],
 		"published": "8 Mar 2023",
 		"location": null
 	},
-	{
+	"12": {
 		"used": true,
 		"image": "bicycle.jpeg",
 		"price": 120000,
 		"name": "Sport bicycle",
+		"parent": 97033,
 		"to": [97033],
 		"published": "10 Mar 2023",
 		"location": null
 	}
-]
+}

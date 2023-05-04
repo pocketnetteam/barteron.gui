@@ -5,7 +5,7 @@
 		<section>
 			<h1>New from goods</h1>
 			<BarterList
-				:items="barters"
+				:items="barters.generate(25)"
 				:carousel="true"
 			/>
 		</section>
@@ -19,14 +19,14 @@
 		<section>
 			<h1>Services</h1>
 			<BarterList
-				:items="barters.slice(0, 8)"
+				:items="barters.generate(8)"
 			/>
 		</section>
 
 		<section>
 			<h1>Viewed</h1>
 			<BarterList
-				:items="barters.slice(0, 4)"
+				:items="barters.generate(4)"
 			/>
 		</section>
 	</div>
