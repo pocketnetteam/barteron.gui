@@ -1,6 +1,6 @@
 <template>
 	<v-content>
-		content
+		<BarterItem :item="item" />
 	</v-content>
 </template>
 

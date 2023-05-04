@@ -9,11 +9,11 @@ export default {
 
 	data() {
 		return {
-			
+			item: null
 		}
 	},
 
 	mounted() {
-		console.log(this.routeComponents)
+		this.item = this.routeComponents?.default?.item;
 	},
 }
