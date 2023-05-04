@@ -15,9 +15,11 @@ export default {
 				/* Add category parents to breadcrumbs */
 				let
 					page = type.indexOf(this.$route.matched[0].name) === 0 ?
+						/* For category */
 						this.categories.findByName(
 							this.$route.params.slug
 						) :
+						/* For barter */
 						this.categories.findById(
 							this.barters.findById(this.$route.params.id).parent
 						),
