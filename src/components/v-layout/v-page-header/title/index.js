@@ -5,16 +5,18 @@ export default {
 	name: "PageTitle",
 
 	props: {
+		title: {
+			type: String,
+			default: ""
+		},
 		breadcrumbs: {
 			type: Boolean,
 			default: true
 		},
-
 		favorite: {
 			type: Boolean,
 			default: true
 		},
-
 		count: {
 			type: Boolean,
 			default: true
@@ -32,14 +34,30 @@ export default {
 		 * 
 		 * @return {String}
 		 */
-		title() {
-			return this.$route.params?.slug ?? this.$route.name;
+		pageTitle() {
+			return this.title ?
+				this.decodeString(this.title) :
+				this.$t(this.$te(pageTitle) ? pageTitle : `pageLabels.${ pageTitle }`);
 		},
 
 		favoriteCategories() {
 			const category = this.categories.findByName(this.title);
 
 			return this.categories.findById((category?.children ?? []).slice(0, 14));
+		}
+	},
+
+	methods: {
+		/**
+		 * Decode text special chars
+		 * 
+		 * @param {String} html
+		 * @return {String}
+		 */
+		decodeString(html) {
+			const text = document.createElement("textarea");
+			text.innerHTML = html;
+			return text.value;
 		}
 	}
 }
