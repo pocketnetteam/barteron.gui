@@ -7,32 +7,36 @@ export default {
 
 	computed: {
 		matches() {
-			const match = [];
+			const
+				match = [],
+				type = ["category", "barterItem"];
 
-			switch(this.$route.matched[0].name) {
-				case "category": {
-					/* Add category parents to breadcrumbs */
-					let
-						page = this.categories.findByName(this.$route.params.slug),
-						cat = page;
-					
-					/* Add parent to breadcrumbs */
-					while (cat.parent) {
-						cat = this.sub(cat.id ? cat : this.$route.params.slug);
-						match.push(
-							this.path(cat, "/category")
-						);
-					}
-
-					/* Add category to breadcrumbs */
-					match.reverse().push(
-						this.path(page, "/category")
+			if (type.includes(this.$route.matched[0].name)) {
+				/* Add category parents to breadcrumbs */
+				let
+					page = type.indexOf(this.$route.matched[0].name) === 0 ?
+						this.categories.findByName(
+							this.$route.params.slug
+						) :
+						this.categories.findById(
+							this.barters.findById(this.$route.params.id).parent
+						),
+					cat = page;
+				
+				/* Add parent to breadcrumbs */
+				while (cat.parent) {
+					cat = this.sub(cat.id ? cat : this.$route.params.slug);
+					match.push(
+						this.path(cat, "/category")
 					);
-
-					page = cat = null;
-
-					break;
 				}
+
+				/* Add category to breadcrumbs */
+				match.reverse().push(
+					this.path(page, "/category")
+				);
+
+				page = cat = null;
 			}
 			
 			if (this.parent) {
