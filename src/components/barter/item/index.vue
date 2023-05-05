@@ -1,14 +1,14 @@
 <template>
 	<div :class="{ [`barter-item-${ vType }`]: true }">
 		<!-- Picture -->
-		<picture v-if="item.image">
+		<picture v-if="item.image && vType !== 'item'">
 			<router-link :to="{ name: 'barterItem', params: { id: item.id } }">
 				<span class="state">{{ $t(`condition.${ !item.used ? 'new' : 'used' }`) }}</span>
 			
 				<img
 					v-if="!Array.isArray(item.image)"
 					:src="imageUrl(item.image)"
-					:alt="item.title"
+					:alt="item.name"
 				>
 				<template v-else>
 					<ul class="slide">
@@ -16,12 +16,12 @@
 							v-for="(image, index) in item.image"
 							:key="index"
 							:class="{ 'hover': hover === index }"
-							@mouseenter="hoverize(index)"
-							@mouseleave="hoverize(0)"
+							@mouseenter="() => hover = index"
+							@mouseleave="() => hover = 0"
 						>
 							<img
 								:src="imageUrl(image)"
-								:alt="`${ item.title }#${ index+1 }`"
+								:alt="`${ item.name }#${ index+1 }`"
 							>
 						</li>
 					</ul>
@@ -33,8 +33,8 @@
 							v-for="(image, index) in item.image"
 							:key="index"
 							:class="{ 'hover': hover === index }"
-							@mouseenter="hoverize(index)"
-							@mouseleave="hoverize(0)"
+							@mouseenter="() => hover = index"
+							@mouseleave="() => hover = 0"
 						>{{ index }}</li>
 					</ul>
 				</template>
@@ -130,6 +130,40 @@
 					</ul>
 				</div>
 			</div>
+		</template>
+
+		<!-- View: Item (On page) -->
+		<template v-if="vType === 'item'">
+			<picture v-if="item.image">
+				<ul class="fade">
+					<li
+						v-for="(image, index) in item.image"
+						:key="index"
+						:class="{ 'active': active === index }"
+					>
+						<img
+							:src="imageUrl(image)"
+							:alt="`${ item.name }#${ index+1 }`"
+						>
+					</li>
+				</ul>
+				<ul
+					class="thumbnails"
+					v-if="item.image.length > 1"
+				>
+					<li
+						v-for="(image, index) in item.image"
+						:key="index"
+						:class="{ 'active': active === index }"
+						@click="() => active = index"
+					>
+						<img
+							:src="imageUrl(image)"
+							:alt="`${ item.name }#${ index+1 }`"
+						>
+					</li>
+				</ul>
+			</picture>
 		</template>
 	</div>
 </template>

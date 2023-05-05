@@ -223,3 +223,60 @@ div[class^="barter-item-"]
 			text-align: right
 			padding: 0
 			width: 100%
+
+	/* View: Item */
+	&.barter-item-item
+		.fade,
+		.thumbnails
+			+resetList()
+
+		.fade
+			border-radius: 11px
+			position: relative
+			overflow: hidden
+			margin: 0 0 1.15em
+			height: 355px
+
+			li
+				+transition(opacity)
+				position: absolute
+				top: 0
+				left: 0
+				opacity: 0
+				height: 100%
+				width: 100%
+
+				&.active
+					position: relative
+					opacity: 1
+					z-index: 1
+
+				img
+					+unselectable()
+
+		.thumbnails
+			display: flex
+			gap: 10px
+
+			li
+				+transition(border-color)
+				border: 1px solid transparent
+				border-radius: 12px
+				overflow: hidden
+				height: 64px
+				width: 64px
+
+				&.active
+					border-color: $piccolo
+					padding: 3px
+
+			img
+				+unselectable()
+				border-radius: 11px
+
+		picture
+			border-radius: 0
+			margin: 0
+			flex-shrink: 0
+			height: auto
+			width: 100%

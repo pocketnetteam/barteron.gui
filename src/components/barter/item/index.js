@@ -15,7 +15,8 @@ export default {
 
 	data() {
 		return {
-			hover: 0
+			hover: 0,
+			active: 0
 		}
 	},
 
@@ -76,15 +77,6 @@ export default {
 		 */
 		calcDistance() {
 
-		},
-
-		/**
-		 * Make bullet and their image at hover state
-		 * 
-		 * @param {Number} index 
-		 */
-		hoverize(index) {
-			this.hover = index;
 		}
 	}
 }
