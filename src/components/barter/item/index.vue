@@ -135,34 +135,41 @@
 		<!-- View: Item (On page) -->
 		<template v-if="vType === 'item'">
 			<picture v-if="item.image">
-				<ul class="fade">
-					<li
-						v-for="(image, index) in item.image"
-						:key="index"
-						:class="{ 'active': active === index }"
-					>
-						<img
-							:src="imageUrl(image)"
-							:alt="`${ item.name }#${ index+1 }`"
-						>
-					</li>
-				</ul>
-				<ul
-					class="thumbnails"
-					v-if="item.image.length > 1"
+				<img
+					v-if="!Array.isArray(item.image)"
+					:src="imageUrl(item.image)"
+					:alt="item.name"
 				>
-					<li
-						v-for="(image, index) in item.image"
-						:key="index"
-						:class="{ 'active': active === index }"
-						@click="() => active = index"
-					>
-						<img
-							:src="imageUrl(image)"
-							:alt="`${ item.name }#${ index+1 }`"
+				<template v-else>
+					<ul class="fade">
+						<li
+							v-for="(image, index) in item.image"
+							:key="index"
+							:class="{ 'active': active === index }"
 						>
-					</li>
-				</ul>
+							<img
+								:src="imageUrl(image)"
+								:alt="`${ item.name }#${ index+1 }`"
+							>
+						</li>
+					</ul>
+					<ul
+						class="thumbnails"
+						v-if="item.image.length > 1"
+					>
+						<li
+							v-for="(image, index) in item.image"
+							:key="index"
+							:class="{ 'active': active === index }"
+							@click="() => active = index"
+						>
+							<img
+								:src="imageUrl(image)"
+								:alt="`${ item.name }#${ index+1 }`"
+							>
+						</li>
+					</ul>
+				</template>
 			</picture>
 		</template>
 	</div>

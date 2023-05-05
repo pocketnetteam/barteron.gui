@@ -230,6 +230,20 @@ div[class^="barter-item-"]
 		.thumbnails
 			+resetList()
 
+		picture
+			border-radius: 0
+			margin: 0
+			flex-shrink: 0
+			height: auto
+			width: 100%
+
+			img
+				+unselectable()
+				border-radius: 11px
+				
+			> img
+				height: 355px
+
 		.fade
 			border-radius: 11px
 			position: relative
@@ -251,9 +265,6 @@ div[class^="barter-item-"]
 					opacity: 1
 					z-index: 1
 
-				img
-					+unselectable()
-
 		.thumbnails
 			display: flex
 			gap: 10px
@@ -269,14 +280,3 @@ div[class^="barter-item-"]
 				&.active
 					border-color: $piccolo
 					padding: 3px
-
-			img
-				+unselectable()
-				border-radius: 11px
-
-		picture
-			border-radius: 0
-			margin: 0
-			flex-shrink: 0
-			height: auto
-			width: 100%
