@@ -20,13 +20,28 @@ class Categories {
 	}
 
 	/**
+		 * Decode text special chars
+		 * 
+		 * @param {String} html
+		 * @return {String}
+		 */
+	decodeString(html) {
+		const text = document.createElement("textarea");
+		text.innerHTML = html ?? "";
+		return text.value;
+	}
+
+	/**
 	 * Get category with id
 	 * 
 	 * @param {String|Number} id
 	 * @return {Object}
 	 */
 	get(id) {
-		return this.items[id] ? Object.assign({ id: Number(id) }, this.items[id]) : {};
+		return this.items[id] ? ((item) => Object.assign({
+			id: Number(id),
+			name: this.decodeString(item.name)
+		}, item))(this.items[id]) : {};
 	}
 
 	/**
