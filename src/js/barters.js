@@ -103,16 +103,6 @@ class Barters {
 	}
 
 	/**
-	 * Get barter with id
-	 * 
-	 * @param {String|Number} id
-	 * @return {Object}
-	 */
-	get(id) {
-		return this.items[id] ? Object.assign({ id: Number(id) }, this.items[id]) : {};
-	}
-
-	/**
 	 * Get random barter
 	 * 
 	 * @return {Object}
@@ -133,6 +123,32 @@ class Barters {
 	 */
 	randIntInArray(p) {
 		return Math.floor(Math.random() * (p[1] - p[0]) + p[0])
+	}
+
+	/**
+		 * Decode text special chars
+		 * 
+		 * @param {String} html
+		 * @return {String}
+		 */
+	decodeString(html) {
+		const text = document.createElement("textarea");
+		text.innerHTML = html ?? "";
+		return text.value;
+	}
+
+	/**
+	 * Get barter with id
+	 * 
+	 * @param {String|Number} id
+	 * @return {Object}
+	 */
+	get(id) {
+		return this.items[id] ? ((item) => Object.assign({
+			id: Number(id),
+			name: this.decodeString(item?.name),
+			descrition: this.decodeString(item?.descrition)
+		}, item))(this.items[id]) : {};
 	}
 
 	/**
