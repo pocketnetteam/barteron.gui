@@ -1,6 +1,6 @@
 <template>
 	<v-aside>
-		<menu class="steps">
+		<menu class="box steps">
 			<menuitem
 				v-for="(item, key) in $t('steps')"
 				:key="key"
