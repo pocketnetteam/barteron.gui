@@ -41,10 +41,6 @@ body
 		display: block
 		font-size: 1em
 		margin: 0 0 1.75em
-
-	p
-		color: $trunks
-		margin: 0
 		
 		&:not(:last-child)
 			margin: 0 0 $r * 2
@@ -85,9 +81,14 @@ body
 	display: flex
 	align-items: center
 
-	&.sep
+	&[class*="sep"]
 		border-bottom: 1px solid $beerus
 		padding: 0 0 $r * 4
+
+		&.d-sep
+			border: 1px solid $beerus
+			border-width: 1px 0
+			padding: $r * 2 0
 
 	&:not(:last-child)
 		margin: 0 0 $r * 3 0
@@ -98,6 +99,9 @@ body
 	&.center
 		justify-content: center
 
+	&.sided
+		justify-content: space-between
+
 	&.dir-column
 		flex-direction: column
 
@@ -107,6 +111,10 @@ body
 
 	.right
 		margin-left: auto
+
+	p
+		color: $trunks
+		margin: 0
 
 .box
 	+resetList()
