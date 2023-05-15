@@ -7,7 +7,7 @@ export default {
 			default: () => ({})
 		},
 		vType: {
-			/* row or tile */
+			/* row, tile or item */
 			type: String,
 			default: "tile"
 		}
@@ -33,18 +33,6 @@ export default {
 			} catch {
 				return false;
 			}
-		},
-
-		/**
-		 * Decode text special chars
-		 * 
-		 * @param {String} html
-		 * @return {String}
-		 */
-		decodeString(html) {
-			const text = document.createElement("textarea");
-			text.innerHTML = html;
-			return text.value;
 		},
 
 		/**

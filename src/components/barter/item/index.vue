@@ -1,7 +1,7 @@
 <template>
 	<div :class="{ [`barter-item-${ vType }`]: true }">
 		<!-- Picture -->
-		<picture v-if="item.image && vType !== 'item'">
+		<picture v-if="item?.image && vType !== 'item'">
 			<router-link :to="{ name: 'barterItem', params: { id: item.id } }">
 				<span class="state">{{ $t(`condition.${ !item.used ? 'new' : 'used' }`) }}</span>
 			
@@ -27,7 +27,7 @@
 					</ul>
 					<ul
 						class="bullets"
-						v-if="item.image.length > 1"
+						v-if="item?.image.length > 1"
 					>
 						<li
 							v-for="(image, index) in item.image"
@@ -43,7 +43,7 @@
 
 		<!-- View: Tile -->
 		<template v-if="vType === 'tile'">
-			<div class="row pricing" v-if="item.price">
+			<div class="row pricing" v-if="item?.price">
 				<span class="price">
 					<span class="currency pkoin"></span>
 					{{ formatCurrency({ value: item.price }) }}
@@ -53,11 +53,11 @@
 				</span>
 			</div>
 
-			<div class="row title" v-if="item.name">
-				<span>{{ decodeString(item.name) }}</span>
+			<div class="row title" v-if="item?.name">
+				<span>{{ item.name }}</span>
 			</div>
 
-			<div class="row to" v-if="item.to">
+			<div class="row to" v-if="item?.to">
 				<ul>
 					<li
 						v-for="(link, index) in [$t('barterLabels.to')].concat(getCategories(item.to))"
@@ -71,12 +71,12 @@
 				</ul>
 			</div>
 
-			<div class="row info" v-if="item.published || item.location">
+			<div class="row info" v-if="item?.published || item.location">
 				<ul>
-					<li v-if="item.published">
+					<li v-if="item?.published">
 						<time>{{ item.published }}</time>
 					</li>
-					<li v-if="item.location">
+					<li v-if="item?.location">
 						<address>{{ calcDistance(item.location) }}</address>
 					</li>
 				</ul>
@@ -85,11 +85,11 @@
 
 		<!-- View: Row -->
 		<template v-if="vType === 'row'">
-			<div class="row" v-if="item.name">
+			<div class="row" v-if="item?.name">
 				<div>
-					<span class="title">{{ decodeString(item.name) }}</span>
+					<span class="title">{{ item.name }}</span>
 
-					<div class="to" v-if="item.to">
+					<div class="to" v-if="item?.to">
 						<ul>
 							<li
 								v-for="(link, index) in [$t('barterLabels.to')].concat(getCategories(item.to))"
@@ -104,7 +104,7 @@
 					</div>
 				</div>
 
-				<div class="pricing" v-if="item.price">
+				<div class="pricing" v-if="item?.price">
 					<span class="price">
 						<span class="currency pkoin"></span>
 						{{ formatCurrency({ value: item.price }) }}
@@ -119,12 +119,12 @@
 
 				<slot name="offer"></slot>
 
-				<div class="info" v-if="item.published || item.location">
+				<div class="info" v-if="item?.published || item?.location">
 					<ul>
-						<li v-if="item.published">
+						<li v-if="item?.published">
 							<time>{{ item.published }}</time>
 						</li>
-						<li v-if="item.location">
+						<li v-if="item?.location">
 							<address>{{ calcDistance(item.location) }}</address>
 						</li>
 					</ul>
@@ -134,7 +134,7 @@
 
 		<!-- View: Item (On page) -->
 		<template v-if="vType === 'item'">
-			<picture v-if="item.image">
+			<picture v-if="item?.image">
 				<img
 					v-if="!Array.isArray(item.image)"
 					:src="imageUrl(item.image)"
@@ -155,7 +155,7 @@
 					</ul>
 					<ul
 						class="thumbnails"
-						v-if="item.image.length > 1"
+						v-if="item?.image.length > 1"
 					>
 						<li
 							v-for="(image, index) in item.image"
@@ -171,6 +171,51 @@
 					</ul>
 				</template>
 			</picture>
+
+			<div class="row d-sep sided">
+				<div class="col">
+					<ul class="stat">
+						<li v-if="item?.published">
+							<i class="fa fa-calendar-day"></i>
+							<time>{{ item.published }}</time>
+						</li>
+						<li>
+							<i class="fa fa-eye"></i>
+							<span class="count">32</span>
+						</li>
+					</ul>
+				</div>
+
+				<div class="col buttons">
+					<v-button vType="stroke-bulma">
+						<i class="fa fa-heart"></i>
+					</v-button>
+
+					<v-button vType="stroke-bulma">
+						<i class="fa fa-share-alt"></i>
+					</v-button>
+				</div>
+			</div>
+
+			<div class="row block sep" v-if="item?.description">
+				<strong class="title">{{ $t('steps.description') }}</strong>
+				<p class="description">{{ item.description }}</p>
+			</div>
+
+			<div class="row info sided">
+				<div class="col">
+					<ul>
+						<li>Kazakhstan, Astana</li>
+						<li>13km</li>
+					</ul>
+				</div>
+
+				<div class="col buttons">
+					<v-button vType="stroke-bulma">
+						<i class="fa fa-location"></i>
+					</v-button>
+				</div>
+			</div>
 		</template>
 	</div>
 </template>

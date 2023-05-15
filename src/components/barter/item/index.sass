@@ -234,6 +234,7 @@ div[class^="barter-item-"]
 			border-radius: 0
 			margin: 0
 			flex-shrink: 0
+			margin: 0 0 $r * 4.6
 			height: auto
 			width: 100%
 
@@ -280,3 +281,45 @@ div[class^="barter-item-"]
 				&.active
 					border-color: $piccolo
 					padding: 3px
+
+		.row
+			color: $trunks
+			margin-bottom: $r * 2.3
+
+			&.sided
+				margin-bottom: $r * 4.6
+
+			.col
+				gap: 8px
+
+			.stat,
+			.stat li
+				+resetList()
+				font-size: 1em
+				display: flex
+				gap: 8px
+
+				li
+					+unselectable()
+					border: 1px solid $beerus
+					border-radius: 100px
+					align-items: center
+					padding: 8px 12px
+
+			.buttons
+				font-size: 1.45em
+
+				.v-button-holder
+					.v-button
+						padding: $r / 1.5
+						min-width: 36px
+
+			.description
+				color: $popo
+				white-space: pre
+
+		.info
+			font-size: 1em
+			
+			ul li
+				color: $popo
