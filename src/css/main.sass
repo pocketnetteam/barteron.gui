@@ -81,6 +81,12 @@ body
 	display: flex
 	align-items: center
 
+	&:not(:last-child)
+		margin-bottom: $r
+
+	&.wide
+		width: 100%
+
 	&[class*="sep"]
 		border-bottom: 1px solid $beerus
 		padding: 0 0 $r * 4
@@ -90,6 +96,19 @@ body
 			border-width: 1px 0
 			padding: $r * 2 0
 
+	.col
+		display: flex
+		align-items: center
+
+	.right
+		margin-left: auto
+
+	p
+		color: $trunks
+		margin: 0
+
+.row,
+.col
 	&:not(:last-child)
 		margin: 0 0 $r * 3 0
 
@@ -105,16 +124,10 @@ body
 	&.dir-column
 		flex-direction: column
 
-	.col
-		display: flex
-		align-items: center
-
-	.right
-		margin-left: auto
-
-	p
-		color: $trunks
-		margin: 0
+.label
+	color: $popo
+	cursor: default
+	font-size: 1.15em
 
 .box
 	+resetList()

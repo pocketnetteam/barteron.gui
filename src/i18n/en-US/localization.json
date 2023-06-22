@@ -35,6 +35,16 @@
 		"location": "Location"
 	},
 
+	"rating": {
+		"label": "Rating",
+		"reviews": "Reviews"
+	},
+
+	"profile": {
+		"label": "Profile",
+		"edit": "Edit profile"
+	},
+
 	"filterLabels": {
 		"new": "New first",
 		"old": "Old first",

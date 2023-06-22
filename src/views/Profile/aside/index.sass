@@ -1,14 +1,80 @@
 @import "@/css/vars.sass"
 
 .profile
-	picture
-		display: flex
-		height: 64px
-		width: 64px
+	.author
+		color: $trunks
+		font-size: 0.85em
+		align-items: flex-start
+		gap: 12px
+		width: 100%
 
-		img
-			border-radius: 100px
-			display: block
-			overflow: hidden
-			height: 100%
+		picture
+			display: flex
+			position: relative
+			height: 64px
+			width: 64px
+
+			&[class*="status"]
+				&:before
+					background: $gray
+					border: 1px solid $beerus
+					border-radius: 50%
+					content: ""
+					position: absolute
+					right: 0
+					bottom: 0
+					height: 16px
+					width: 16px
+
+				&[class*="online"]
+					&:before
+						background: $roshi
+
+				&[class*="offline"]
+					&:before
+						background: $dodoria
+
+			img
+				border-radius: 100px
+				display: block
+				overflow: hidden
+				height: 100%
+				width: 100%
+
+		.user
+			width: 100%
+
+			.list
+				+resetList()
+
+				> li
+					display: flex
+
+					&:not(:last-child)
+						margin-bottom: .5em
+
+			.label
+				font-size: 1.3em
+
+			.stars
+				+resetList()
+				display: flex
+				font-size: 1.15em
+				margin: 0 0 0 -2px
+
+				a
+					+transition(color)
+					color: $hit
+					display: block
+					padding: 2px
+					text-decoration: none
+
+					&:hover
+						color: $hit-hover
+
+	.edit
+		width: 100%
+
+		.v-button-holder,
+		.v-button
 			width: 100%
