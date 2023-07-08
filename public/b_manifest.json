@@ -1,0 +1,15 @@
+{
+    "id": "barteron.pocketnet.app",
+    "name": "Barteron",
+    "version": "1.0.0",
+    "description": "A Revolutionary anti-censorship decentralized publishing and social platform. Based on the blockchain technology, it runs on a set of computers around the world, not controlled by any single entity. Self-policed by users with good reputation where nobody records your keystrokes, viewing habits or searches.",
+    "descriptions" : {
+        "en" : "A Revolutionary anti-censorship decentralized publishing and social platform. Based on the blockchain technology, it runs on a set of computers around the world, not controlled by any single entity. Self-policed by users with good reputation where nobody records your keystrokes, viewing habits or searches.",
+        "ru" : "Революционная антицензурная децентрализованная издательская и социальная платформа. Основанная на технологии блокчейн, она работает на множестве компьютеров по всему миру, не контролируется какой-либо отдельной организацией. Самостоятельно контролируется пользователями с хорошей репутацией, где никто не записывает ваши нажатия клавиш, привычки просмотра или поиски"
+    },
+    "author": "PUJjhGLa7KesEa3Ee8K9pi49u1mW9xqQZB",
+    "develop": true,
+    "scope" : "barteron.bastyonapps.com",
+    "start_url" : "index.html",
+    "permissions" : ["account", "notifications", "messaging", "payment", "sign", "mobilecamera"]
+}
