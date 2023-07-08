@@ -4,7 +4,7 @@
 		vAlign="right"
 		@click="categoriesToggle"
 	>
-		<template v-slot:before>
+		<template #before>
 			<div :class="{
 				'overlay': true,
 				'active': overlay
@@ -14,7 +14,7 @@
 		<i class="fa fa-caret-down"></i>
 		<span>{{ $t("buttonLabels.categories") }}</span>
 
-		<template v-slot:dropdown>
+		<template #dropdown>
 			<TreeList
 				v-if="items.length"
 				:items="items"
