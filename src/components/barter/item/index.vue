@@ -48,8 +48,10 @@
 					<span class="currency pkoin"></span>
 					{{ formatCurrency({ value: item.price }) }}
 				</span>
+
 				<span class="favorite">
-					<i class="fa fa-heart"></i>
+					<slot name="favorite" v-if="$slots.favorite"></slot>
+					<i class="fa fa-heart" v-else></i>
 				</span>
 			</div>
 
@@ -72,14 +74,22 @@
 			</div>
 
 			<div class="row info" v-if="item?.published || item.location">
-				<ul>
+				<slot name="info" v-if="$slots.info"></slot>
+				<ul v-else>
 					<li v-if="item?.published">
-						<time>{{ item.published }}</time>
+						<dl>
+							<dt><i class="fa fa-calendar"></i></dt>
+							<dd><time>{{ $d(item.published, 'middle') }}</time></dd>
+						</dl>
 					</li>
-					<li v-if="item?.location">
-						<address>{{ calcDistance(item.location) }}</address>
+					<li v-if="calcDistance(item)">
+						<address>{{ distances[item.id] }} {{ $t('metrics.km') }}</address>
 					</li>
 				</ul>
+			</div>
+
+			<div class="row offer" v-if="$slots.offer">
+				<slot name="offer"></slot>
 			</div>
 		</template>
 
@@ -122,7 +132,7 @@
 				<div class="info" v-if="item?.published || item?.location">
 					<ul>
 						<li v-if="item?.published">
-							<time>{{ item.published }}</time>
+							<time>{{ $d(item.published, 'middle') }}</time>
 						</li>
 						<li v-if="item?.location">
 							<address>{{ calcDistance(item.location) }}</address>
@@ -177,7 +187,7 @@
 					<ul class="stat">
 						<li v-if="item?.published">
 							<i class="fa fa-calendar-day"></i>
-							<time>{{ item.published }}</time>
+							<time>{{ $d(item.published, 'middle') }}</time>
 						</li>
 						<li>
 							<i class="fa fa-eye"></i>
@@ -204,6 +214,7 @@
 
 			<div class="row info sided">
 				<div class="col">
+					<span class="title">Location</span>
 					<ul>
 						<li>Kazakhstan, Astana</li>
 						<li>13km</li>
@@ -212,10 +223,15 @@
 
 				<div class="col buttons">
 					<v-button vType="stroke-bulma">
-						<i class="fa fa-location"></i>
+						<i class="fa fa-map-marker-alt"></i>
 					</v-button>
 				</div>
 			</div>
+
+			<div class="row">
+					<!-- Component: Map -->
+					<v-map />
+				</div>
 		</template>
 	</div>
 </template>

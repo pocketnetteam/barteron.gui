@@ -50,10 +50,10 @@ div[class^="barter-item-"]
 					+transition(opacity)
 
 		.bullets
+			+resetList()
 			background: $overlay-half
 			border-radius: 12px
 			display: flex
-			+resetList()
 			padding: 2px 4px
 			position: absolute
 			right: 8px
@@ -124,6 +124,7 @@ div[class^="barter-item-"]
 			+transition(color)
 			color: $gray
 			cursor: pointer
+			margin: 0
 
 			&:hover
 				color: $bulma
@@ -161,12 +162,17 @@ div[class^="barter-item-"]
 					text-decoration: underline
 
 	.info
-		ul
-			display: flex
+		display: flex
+		justify-content: space-between
+
+		ul,
+		dl
 			+resetList()
+			color: $trunks
+			display: flex
 
 			li
-				color: $trunks
+				display: flex
 
 				&:not(:first-child)
 					margin: 0 0 0 $r
@@ -175,6 +181,15 @@ div[class^="barter-item-"]
 						display: inline-block
 						content: "\2022"
 						margin: 0 $r 0 0
+
+		address
+			font-style: normal
+
+		dl
+			gap: 8px
+
+			dd
+				margin: 0
 
 	/* View: Row */
 	&.barter-item-row
@@ -320,6 +335,19 @@ div[class^="barter-item-"]
 
 		.info
 			font-size: 1em
+
+			.col
+				flex-wrap: wrap
+				gap: unset
+				margin: 0
+
+			.title
+				color: $trunks
+				display: block
+				font-family: "Noto Sans", sans-serif
+				font-size: .85em
+				text-transform: uppercase
+				width: 100%
 			
 			ul li
 				color: $popo
