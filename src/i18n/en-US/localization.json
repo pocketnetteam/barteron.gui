@@ -42,7 +42,20 @@
 
 	"profile": {
 		"label": "Profile",
-		"edit": "Edit profile"
+		"edit": "Edit profile",
+		"on_barteron_from": "On Barteron from {date}",
+		"account_confirmed": "Account confirmed",
+		"coins": "Coins",
+		"wallet": "Wallet",
+		"settings": "Settings",
+		"contact_support": "Contact support",
+		"my_ads": "My ads",
+		"my_barters": "My barters",
+		"messages": "Messages",
+		"favorites": "Favorites",
+		"feedbacks": "Feedbacks",
+		"active": "Active",
+		"inactive": "Inactive"
 	},
 
 	"filterLabels": {
@@ -53,7 +66,7 @@
 	},
 
 	"viewLabels": {
-		"tail": "Tails",
+		"tile": "Tiles",
 		"row": "Rows"
 	},
 
@@ -76,6 +89,20 @@
 
 	"barterLabels": {
 		"to": "Exchange to"
+	},
+
+	"exchange": {
+		"edit": "Edit list"
+	},
+
+	"item": {
+		"autorenew": "Autorenew",
+		"edit": "Edit",
+		"find_exchange": "Find exchange"
+	},
+
+	"metrics": {
+		"km": "km"
 	},
 
 	"title": "Title",
