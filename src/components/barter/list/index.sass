@@ -1,23 +1,21 @@
 @import "@/css/vars.sass"
 
-$item-width: 294px
+$item-width-min: 31%
+$item-width-max: 294px
 
 @mixin grid($carousel: false)
+	+resetList()
 	display: grid
-	grid-template-columns: repeat(auto-fill, $item-width)
+	grid-template-columns: repeat(auto-fit, minmax($item-width-max, 1fr))
 	grid-template-rows: 1fr
+	justify-content: center
 	@if $carousel
 		grid-auto-flow: column
 	grid-gap: 24px
-	+resetList()
 	
-div[class^="barter-list"],
-.barter-carousel
-	ul.barter-track
+div[class^="barter-list"]
+	.barter-track
 		+grid()
-
-		.barter-item
-			width: $item-width
 
 .barter-list-row
 	width: 100%
@@ -50,6 +48,9 @@ div[class^="barter-list"],
 		ul.barter-track
 			+grid(true)
 			+transition(transform)
+			grid-template-columns: none
+			grid-auto-columns: $item-width-max
+			justify-content: flex-start
 
 	.barter-carousel-prev,
 	.barter-carousel-next

@@ -18,8 +18,16 @@
 					:key="index"
 				>
 					<BarterItem :item="item" :vType="vType">
-						<template v-slot:offer v-if="$slots.offer">
-							<slot name="offer"></slot>
+						<template #favorite v-if="$slots.favorite || $scopedSlots.favorite">
+							<slot name="favorite" :item="item"></slot>
+						</template>
+
+						<template #info v-if="$slots.info || $scopedSlots.info">
+							<slot name="info" :item="item"></slot>
+						</template>
+
+						<template #offer v-if="$slots.offer || $scopedSlots.offer">
+							<slot name="offer" :item="item"></slot>
 						</template>
 					</BarterItem>
 				</li>
