@@ -36,7 +36,8 @@ class Barters {
 			name: "rand",				/* or String */
 			parent: "rand",			/* or Number */
 			to: "rand",					/* or Number or [...Number] */
-			published: "rand",	/* or Timestamp or [min, max]*/
+			published: "rand",	/* or Timestamp or [min, max] */
+			until: "fixed",			/* Month greater than published */
 			location: "rand"		/* or [lat, long] */
 		}, params);
 
@@ -80,7 +81,13 @@ class Barters {
 					}
 
 					case "published": {
-						if (value === "rand") barter[key] = this.randIntInArray([+new Date - 1000000, +new Date]);
+						if (value === "rand") barter[key] = this.randIntInArray([+new Date - 1000000000, +new Date]);
+						break;
+					}
+
+					case "until": {
+						const date = new Date(barter.published);
+						if (value === "fixed") barter[key] = new Date(date.setMonth(date.getMonth()+1));
 						break;
 					}
 
