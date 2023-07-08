@@ -11,6 +11,20 @@ body
 	overflow-x: hidden
 	height: 100%
 
+strong.title
+	display: flex
+	font-size: 1.6em
+	font-weight: normal
+	margin: 0 0 $r * 3
+
+a.link
+	color: $piccolo
+	text-decoration: none
+	+transition(color)
+
+	&:hover
+		color: $piccolo-hover
+
 #app
 	display: flex
 	flex-direction: column
@@ -30,11 +44,6 @@ body
 		border-top: 1px solid $beerus
 		margin-top: $r * 2.5
 		padding-top: $r * 2.5
-
-	strong.title
-		display: flex
-		font-size: 1.6em
-		margin: 0 0 $r * 3
 
 	.v-label
 		color: $backdrop
@@ -79,10 +88,7 @@ body
 
 .row
 	display: flex
-	align-items: center
-
-	&:not(:last-child)
-		margin-bottom: $r
+	align-items: flex-start
 
 	&.wide
 		width: 100%
@@ -112,6 +118,9 @@ body
 	&:not(:last-child)
 		margin: 0 0 $r * 3 0
 
+	&.no-offset
+		margin: 0
+
 	&.block
 		display: block
 
@@ -135,5 +144,14 @@ body
 	border-radius: 12px
 	display: flex
 	flex-direction: column
-	align-items: flex-start
-	padding: 16px 12px
+	margin: 0 0 $r
+	padding: 12px
+
+	&.transparent
+		border-color: transparent
+
+	.title
+		color: $popo
+		display: block
+		font-size: .8em
+		text-transform: uppercase
