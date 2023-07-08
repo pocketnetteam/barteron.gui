@@ -1,2 +1,43 @@
 @import "@/css/vars.sass"
 	
+.tabs.inner-tabs
+	.tabset
+		> ul
+			li
+				margin: -.45em 0 -.45em
+
+	.tabset-after
+		margin-left: auto
+
+	.tabcontent
+		padding: 1.15em 1.15em .7em
+
+div[class*="barter-item"]
+	.favorite
+		padding: 0
+
+		.v-button-holder
+			.v-button
+				i
+					margin: 0
+
+				.v-dropdown-arrow
+					display: none
+
+	.info
+		flex-wrap: wrap
+		gap: 12px
+		
+		.v-switch-holder
+			flex-basis: 100%
+	
+	.offer
+		display: flex
+		gap: 10px
+		justify-content: space-between
+
+		.v-button-holder
+			width: 50%
+
+			.v-button
+				width: 100%
