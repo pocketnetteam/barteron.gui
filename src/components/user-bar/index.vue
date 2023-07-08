@@ -14,7 +14,9 @@
 			</li>
 
 			<li>
-				<div class="avatar">UN</div>
+				<router-link class="avatar" :to="{ name: 'profile', params: { id: 1 } }">
+					<i>UN</i>
+				</router-link>
 			</li>
 
 			<li>
