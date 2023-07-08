@@ -73,11 +73,11 @@
 				class="currency-input"
 				vSize="lg"
 			>
-				<template v-slot:input0After>
+				<template #input0After>
 					<v-select :dropdown="[{ text: 'USD', value: 'usd' }]" />
 				</template>
 
-				<template v-slot:input1After>
+				<template #input1After>
 					<span class="icon pkoin">PKOIN</span>
 				</template>
 			</v-input>

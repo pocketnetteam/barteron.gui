@@ -34,7 +34,7 @@
 					:items="barters.generate(8)"
 					vType="row"
 				>
-					<template v-slot:offer>
+					<template #offer>
 						<v-button vType="hit">{{ $t('buttonLabels.offer_an_exchange') }}</v-button>
 					</template>
 				</BarterList>

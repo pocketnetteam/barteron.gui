@@ -1,13 +1,13 @@
 <template>
 	<v-content>
 		<div class="row">
-			<div class="col">
+			<div class="col no-offset">
 				<v-select @selected="selectFilter">
 					<template>
 						<span class="value"></span>
 					</template>
 	
-					<template v-slot:dropdown>
+					<template #dropdown>
 						<option
 							v-for="(filter, index) in filters"
 							:key="index"
@@ -35,7 +35,7 @@
 						<span class="value"></span>
 					</template>
 	
-					<template v-slot:dropdown>
+					<template #dropdown>
 						<option
 							v-for="(view, index) in views"
 							:key="index"
@@ -44,7 +44,7 @@
 							<i
 								:class="{
 									'fa': true,
-									'fa-th-large': view.value === 'tail',
+									'fa-th-large': view.value === 'tile',
 									'fa-align-justify': view.value === 'row',
 									'icon': true
 								}"

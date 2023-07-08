@@ -13,7 +13,7 @@
 			<span class="distance">200км</span>
 		</div>
 
-		<template v-slot:after>
+		<template #after>
 			<v-lightbox
 				:visible="lightbox"
 				size="sm"
