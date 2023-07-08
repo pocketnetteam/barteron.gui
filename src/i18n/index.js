@@ -4,6 +4,26 @@ import VueI18n from "vue-i18n";
 
 Vue.use(VueI18n);
 
+const dateTimeFormats = {
+	'en-US': {
+		short: {
+			year: 'numeric',
+			month: 'numeric',
+			day: 'numeric'
+		},
+		middle: {
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric'
+		},
+		long: {
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric'
+		}
+	}
+}
+
 function loadLocaleMessages() {
 	const
 		locales = require.context(
@@ -36,5 +56,6 @@ export default new VueI18n({
 	locale: process.env.VUE_APP_I18N_LOCALE || "en-US",
 	fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || "en-US",
 	messages: loadLocaleMessages(),
-	missingWarn: false
+	missingWarn: false,
+	dateTimeFormats
 });
