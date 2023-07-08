@@ -1,7 +1,7 @@
 <template>
 	<v-button
 		class="language-switcher"
-		vType="ghost"
+		vType="light"
 		vSize="xs"
 		:dropdown="[
 			{ text: 'EN', value: 'en-US', default: true },
