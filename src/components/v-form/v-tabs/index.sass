@@ -1,0 +1,70 @@
+@import "@/css/vars.sass"
+	
+.tabs
+	&.pills
+		> .tabset
+			border: 1px solid $beerus
+			border-radius: 12px 12px 0 0
+			border-width: 1px 1px 4px
+
+			ul
+				li
+					border-width: 0
+
+					a
+						border-radius: .55em
+
+					&.active
+						a
+							background: $piccolo
+							color: $gohan
+
+		> .tabcontent
+			border: 1px solid $beerus
+			border-radius: 0 0 12px 12px
+			padding-top: .45em
+
+	.tabset
+		display: flex
+		padding: .45em
+		width: 100%
+
+		> ul
+			+resetList()
+			background: $gohan
+			display: flex
+			gap: .45em
+
+			li
+				display: flex
+				align-items: center
+				border: 1px solid transparent
+				border-width: 0 0 2px
+
+				a
+					+transition(all)
+					color: $overlay-half
+					display: flex
+					align-items: center
+					gap: .45em
+					text-decoration: none
+					padding: .85em
+
+					&:hover
+						color: $overlay-dark
+
+					i
+						font-size: 16px
+
+				&.active
+					border-color: $piccolo
+
+					a
+						color: $piccolo
+
+	.tabcontent
+		border-top: 1px solid $beerus
+		padding: .65em .45em
+
+		.tabs
+			margin: -.45em -.45em 0
