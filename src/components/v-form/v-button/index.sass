@@ -8,7 +8,7 @@
 	
 	.v-button
 		background: $blue
-		border: 0
+		border: 1px solid transparent
 		border-radius: 10px
 		color: $primary
 		cursor: pointer
@@ -27,6 +27,13 @@
 			background: $blue-hover
 
 		/* Types */
+		&[class*="v-button-light"]
+			background: $beerus
+			color: $popo
+
+			&:hover
+				background: $beerus-hover
+
 		&[class*="v-button-ghost"]
 			background: none
 			color: $popo
@@ -37,7 +44,6 @@
 		&[class*="v-button-stroke"]
 			background: transparent
 			border: 1px solid $lightgray
-			border-radius: 8px
 			color: $popo
 
 			&:hover
@@ -48,6 +54,21 @@
 
 			&:hover
 				background: $hit-hover
+
+		&[class*="v-button-stroke-hit"]
+			border-color: $hit
+			color: $hit
+
+			&:hover
+				background: $hit-hover
+				border-color: $hit-hover
+				color: $goku
+
+		&[class*="v-button-transparent"]
+			background: transparent
+
+			&:hover
+				background: transparent
 
 		/* Colors */
 		&[class*="bulma"]
