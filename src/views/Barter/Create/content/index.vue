@@ -136,7 +136,7 @@
 				<v-button vType="stroke-bulma">{{ $t('buttonLabels.preview') }}</v-button>
 
 				<!-- Button: Publish -->
-				<v-button>{{ $t('buttonLabels.publish') }}</v-button>
+				<v-button :to="{ name: 'addedBarter' }">{{ $t('buttonLabels.publish') }}</v-button>
 			</div>
 		</div>
 	</v-content>
