@@ -24,89 +24,28 @@ class Barters {
 	 * given count and category
 	 * 
 	 * @param {Number} count
-	 * @param {Object} [params]
+	 * @param {Object} props
 	 * @return {Array}
 	 */
-	generate(count, params) {
-		/* Defaults */
-		params = Object.assign({
-			used: "rand",				/* or Boolean */
-			image: "rand",			/* or String or [...String] */
-			price: "rand",			/* or Number or [min, max] */
-			name: "rand",				/* or String */
-			parent: "rand",			/* or Number */
-			to: "rand",					/* or Number or [...Number] */
-			published: "rand",	/* or Timestamp or [min, max] */
-			until: "fixed",			/* Month greater than published */
-			location: "rand"		/* or [lat, long] */
-		}, params);
-
+	generate(count, props) {
 		/* Prepare barter item */
-		return [...Array(count)].map((m, index) => {
+		const barters = [];
+
+		for (let i = 0; i < count; i++) {
 			const
-				id = Object.keys(this.items).length + index,
-				barter = { id: id };
+				id = Object.keys(this.items).length + i,
+				barter = (() => {
+					const item = this.getRandom();
+					return item?.image === barters[i-1]?.image ? this.getRandom() : item;
+				})(),
+				date = new Date(barter.published),
+				until = new Date(date.setMonth(date.getMonth()+1));
 
-			for (const [key, value] of Object.entries(params)) {
-				switch(key) {
-					case "used": {
-						if (value === "rand") barter[key] = Math.random() < 0.5;
-						break;
-					}
+			this.items[id] = Object.assign(barter, { id: id, published: date, until: until }, props);
+			barters.push(this.items[id]);
+		}
 
-					case "image": {
-						if (value === "rand") barter[key] = this.getRandom()?.image;
-						break;
-					}
-
-					case "price": {
-						if (value === "rand") barter[key] = this.getRandom()?.price;
-						else if (Array.isArray(value)) barter[key] = this.randIntInArray(value);
-						break;
-					}
-
-					case "name": {
-						if (value === "rand") barter[key] = this.getRandom()?.name;
-						break;
-					}
-
-					case "parent": {
-						if (value === "rand") barter[key] = this.getRandom()?.parent;
-						break;
-					}
-
-					case "to": {
-						if (value === "rand") barter[key] = this.getRandom()?.to;
-						break;
-					}
-
-					case "published": {
-						if (value === "rand") barter[key] = this.randIntInArray([+new Date - 1000000000, +new Date]);
-						break;
-					}
-
-					case "until": {
-						const date = new Date(barter.published);
-						if (value === "fixed") barter[key] = new Date(date.setMonth(date.getMonth()+1));
-						break;
-					}
-
-					case "location": {
-						if (value === "rand") barter[key] = [
-							this.randIntInArray([-90, 90]), /* Lat */
-							this.randIntInArray([-180, 180]) /* Long */
-						];
-						break;
-					}
-				}
-
-				if (!barter.hasOwnProperty(key)) barter[key] = value;
-			}
-
-			this.items[id] = barter;
-
-			return barter;
-		});
+		return barters;
 	}
 
 	/**

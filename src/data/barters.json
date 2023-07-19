@@ -3,7 +3,7 @@
 		"used": true,
 		"image": ["macbook.jpeg", "macbook-1.jpeg", "macbook-2.jpeg", "macbook-3.jpeg"],
 		"price": 13465,
-		"name": "Macbook Pro 13&quot;",
+		"name": "Macbook Pro 13\"",
 		"description": "Top configuration:\n\n- 16GB RAM\n-Intel Core i7\n- 256GB SSD\n- macOS Ventura available\n- 15 inch Retina display\n- reset to factory settings (like new)\n\nGeneral condition - good\nFunctionality: 10/10 (like new)\nCosmetic condition: 8/10\n\nOf the minuses - scratches on the front of the case (shown in the photo).\nEasily fixed with a cover (costs 3-5k). The rest is in excellent condition.\n\nAdapter AS A GIFT\n\nKaspi Red installment available\n\nDelivery throughout the Republic of Kazakhstan (free of charge)\n\nWrite here or on whatsapp (Ruslan)\nCall only in the evening or on weekends\n\nBargain",
 		"parent": 37910,
 		"to": [37910, 162941],
@@ -11,10 +11,10 @@
 		"location": null
 	},
 	"2": {
-		"used": true,
-		"image": "headphones.jpeg",
-		"price": 10999,
-		"name": "Wireless headphones",
+		"used": false,
+		"image": "beet-bag.jpg",
+		"price": 100,
+		"name": "Bag of beet",
 		"description": "Lorem ispum dolor sit amet consectetur",
 		"parent": 162913,
 		"to": [162913, 37968, 153913],
@@ -22,10 +22,10 @@
 		"location": null
 	},
 	"3": {
-		"used": true,
-		"image": "camera.jpeg",
-		"price": 16500,
-		"name": "Old camera",
+		"used": false,
+		"image": "bread.jpg",
+		"price": 150,
+		"name": "Will sale self-maked bread",
 		"description": "Lorem ispum dolor sit amet consectetur",
 		"parent": 177928,
 		"to": [179911, 177928, 263194],
@@ -33,10 +33,10 @@
 		"location": null
 	},
 	"4": {
-		"used": true,
-		"image": "sunglasses.jpeg",
-		"price": 6700,
-		"name": "Brand sunglasses",
+		"used": false,
+		"image": "build-a-house.jpg",
+		"price": 50000,
+		"name": "Will build a house",
 		"description": "Lorem ispum dolor sit amet consectetur",
 		"parent": 57275,
 		"to": [3387, 116495, 57275, 179798],
@@ -44,10 +44,10 @@
 		"location": null
 	},
 	"5": {
-		"used": true,
-		"image": "shoe.jpeg",
-		"price": 9200,
-		"name": "Man's brand shoes",
+		"used": false,
+		"image": "carrot-bag.jpg",
+		"price": 100,
+		"name": "Will sale or exchange bag of carrot",
 		"description": "Lorem ispum dolor sit amet consectetur",
 		"parent": 57273,
 		"to": [158952, 57273],
@@ -55,9 +55,9 @@
 		"location": null
 	},
 	"6": {
-		"image": "pomade.jpeg",
-		"price": 1800,
-		"name": "Red pomade with bright red tint",
+		"image": "cut-hair.jpg",
+		"price": 100,
+		"name": "I'm barber, will cut your hairs",
 		"description": "Lorem ispum dolor sit amet consectetur",
 		"parent": 21137,
 		"to": [184527, 21137, 88886],
@@ -65,10 +65,10 @@
 		"location": null
 	},
 	"7": {
-		"used": true,
-		"image": "nike-sneakers.jpeg",
-		"price": 21000,
-		"name": "Red nike sneakers",
+		"used": false,
+		"image": "dig-up-a-garden.jpg",
+		"price": 1000,
+		"name": "Will dig up your garden",
 		"description": "Lorem ispum dolor sit amet consectetur",
 		"parent": 177796,
 		"to": [139861, 177796, 73980, 73989],
@@ -76,10 +76,10 @@
 		"location": null
 	},
 	"8": {
-		"used": true,
-		"image": "camera-nikon.jpeg",
-		"price": 48000,
-		"name": "Nikon camera",
+		"used": false,
+		"image": "milk-sour-cream-cheese.jpg",
+		"price": 300,
+		"name": "Will sale or exchange all milk products",
 		"description": "Lorem ispum dolor sit amet consectetur",
 		"parent": 184535,
 		"to": [27265, 184535],
@@ -87,10 +87,10 @@
 		"location": null
 	},
 	"9": {
-		"used": true,
-		"image": "glasses.jpeg",
-		"price": 12000,
-		"name": "Brand elite glasses",
+		"used": false,
+		"image": "onions-bag.jpg",
+		"price": 150,
+		"name": "Propose bag of onions",
 		"description": "Lorem ispum dolor sit amet consectetur",
 		"parent": 260125,
 		"to": [260125],
@@ -98,10 +98,10 @@
 		"location": null
 	},
 	"10": {
-		"used": true,
-		"image": "backpack.jpeg",
-		"price": 40000,
-		"name": "Vinta backpack",
+		"used": false,
+		"image": "potatoes-bag.jpg",
+		"price": 200,
+		"name": "Echanging bag of potatoes",
 		"description": "Lorem ispum dolor sit amet consectetur",
 		"parent": 260971,
 		"to": [260988, 260971, 156790],
@@ -109,10 +109,10 @@
 		"location": null
 	},
 	"11": {
-		"used": true,
-		"image": "gamepad.jpeg",
+		"used": false,
+		"image": "will-fix-buldozer.jpg",
 		"price": 60000,
-		"name": "Gamepad Xbox Series S Microsoft",
+		"name": "Will fix your buldozer",
 		"description": "Lorem ispum dolor sit amet consectetur",
 		"parent": 185116,
 		"to": [185116],
@@ -120,10 +120,54 @@
 		"location": null
 	},
 	"12": {
-		"used": true,
-		"image": "bicycle.jpeg",
+		"used": false,
+		"image": "buckwheat-bag.jpg",
 		"price": 120000,
-		"name": "Sport bicycle",
+		"name": "Will sale bag of buckwheat",
+		"description": "Lorem ispum dolor sit amet consectetur",
+		"parent": 97033,
+		"to": [97033],
+		"published": "10 Mar 2023",
+		"location": null
+	},
+	"13": {
+		"used": false,
+		"image": "welder.jpg",
+		"price": 1000,
+		"name": "Can weld for food",
+		"description": "Lorem ispum dolor sit amet consectetur",
+		"parent": 97033,
+		"to": [97033],
+		"published": "10 Mar 2023",
+		"location": null
+	},
+	"14": {
+		"used": false,
+		"image": "locksmith.jpg",
+		"price": 1500,
+		"name": "Proposing locksmith service",
+		"description": "Lorem ispum dolor sit amet consectetur",
+		"parent": 97033,
+		"to": [97033],
+		"published": "10 Mar 2023",
+		"location": null
+	},
+	"15": {
+		"used": false,
+		"image": "turner.jpg",
+		"price": 1010,
+		"name": "Hi, i'm turner. Can work on your blueprint",
+		"description": "Lorem ispum dolor sit amet consectetur",
+		"parent": 97033,
+		"to": [97033],
+		"published": "10 Mar 2023",
+		"location": null
+	},
+	"16": {
+		"used": false,
+		"image": "carpenter.jpg",
+		"price": 1010,
+		"name": "Any carpenter's work for you",
 		"description": "Lorem ispum dolor sit amet consectetur",
 		"parent": 97033,
 		"to": [97033],
