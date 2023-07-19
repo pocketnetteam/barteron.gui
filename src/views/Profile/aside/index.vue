@@ -1,65 +1,25 @@
 <template>
 	<v-aside>
 		<!-- Profile stats -->
-		<div class="box profile">
-			<div class="row author">
-				<div class="col">
-					<picture class="status-online">
-						<img src="@/assets/images/avatar.png" alt="avatar">
-					</picture>
-				</div>
+		<div class="box">
+			<Profile>
+				<!-- Edit button -->
+				<template #edit>
+					<v-button vType="stroke-bulma">
+						{{ $t('profile.edit') }}
+					</v-button>
+				</template>
 
-				<div class="col user">
-					<ul class="list">
-						<li>
-							<strong class="label">Username</strong>
-						</li>
+				<!-- State -->
+				<template #state>
+					<dl class="list">
+						<dt><i class="fa fa-user-shield"></i></dt>
+						<dd>{{ $t('profile.account_confirmed') }}</dd>
+					</dl>
 
-						<li>
-							<ul class="stars">
-								<li><a href="#"><i class="fa fa-star"></i></a></li>
-								<li><a href="#"><i class="fa fa-star"></i></a></li>
-								<li><a href="#"><i class="fa fa-star"></i></a></li>
-								<li><a href="#"><i class="fa fa-star"></i></a></li>
-								<li><a href="#"><i class="fa fa-star"></i></a></li>
-							</ul>
-						</li>
-
-						<li>
-							<span>0.0 {{ $t('rating.label').toLowerCase() }} (0 {{ $t('rating.reviews').toLowerCase() }})</span>
-						</li>
-					</ul>
-				</div>
-			</div>
-
-			<!-- Profile edit -->
-			<div class="row edit">
-				<v-button vType="stroke-bulma">
-					{{ $t('profile.edit') }}
-				</v-button>
-			</div>
-
-			<!-- Profile info -->
-			<div class="row info">
-				<dl class="list">
-					<dt><i class="fa fa-calendar-day"></i></dt>
-					<dd>{{
-					$t('profile.on_barteron_from', { date: $d(1630073595000, 'middle') })
-					}}</dd>
-					<dt><i class="fa fa-map-marker-alt"></i></dt>
-					<dd>Astana, Kazakhstan</dd>
-				</dl>
-			</div>
-
-			<!-- Account state -->
-			<div class="row state">
-				<dl class="list">
-					<dt><i class="fa fa-user-shield"></i></dt>
-					<dd>{{ $t('profile.account_confirmed') }}</dd>
-				</dl>
-
-				<a class="ask" href="#"><i class="fa fa-question"></i></a>
-			</div>
+					<a class="ask" href="#"><i class="fa fa-question"></i></a>
+				</template>
+			</Profile>
 		</div>
 
 		<!-- Wallet -->
@@ -76,29 +36,14 @@
 		</div>
 
 		<!-- Exchange -->
-		<div class="box exchange">
-			<strong class="title">{{ $t('barterLabels.to') }}:</strong>
-
-			<!-- Tags -->
-			<ul class="list">
-				<li>Electronics</li>
-				<li>Dress</li>
-				<li>Shoes</li>
-				<li>Beauty & Health</li>
-				<li>Sport & Recreation</li>
-			</ul>
-
-			<!-- Toggle -->
-			<div class="toggle">
-				<a href="#" class="link">
-					{{ $t(`category.${ 'show' || 'hide' }_all`) }}
-				</a>
-			</div>
-
-			<!-- Tags edit -->
-			<v-button vType="stroke-bulma">
-				{{ $t('exchange.edit') }}
-			</v-button>
+		<div class="box">
+			<ExchangeList>
+				<template #edit>
+					<v-button vType="stroke-bulma">
+						{{ $t('exchange.edit') }}
+					</v-button>
+				</template>
+			</ExchangeList>
 		</div>
 
 		<!-- Settings -->
