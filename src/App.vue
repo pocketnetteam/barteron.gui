@@ -27,11 +27,6 @@ export default {
 		return {
 			favorite: favoritesData
 		}
-	},
-
-	mounted() {
-		this.sdk = new window.BastyonSdk();
-		this.sdk.emit('loaded');
-	},
+	}
 }
 </script>

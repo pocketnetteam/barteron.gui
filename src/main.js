@@ -3,6 +3,7 @@ import App from "./App.vue";
 import router from "./router.js";
 import i18n from "./i18n/index.js";
 
+import SDK from "@/js/sdk.js"
 import Categories from "@/js/categories.js"
 import Barters from "@/js/barters.js"
 
@@ -36,6 +37,7 @@ vRequire([
 ]);
 
 /* Make categories and barters global */
+Vue.prototype.sdk = SDK;
 Vue.prototype.categories = Categories;
 Vue.prototype.barters = Barters;
 
