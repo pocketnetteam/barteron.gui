@@ -1,10 +1,13 @@
 {
+	"toggle": {
+		"show_all": "Show all",
+		"hide_all": "Hide all"
+	},
+
 	"category": {
 		"label": "Category",
 		"show": "Show",
-		"hide": "Hide",
-		"show_all": "Show all",
-		"hide_all": "Hide all"
+		"hide": "Hide"
 	},
 
 	"price": {
@@ -55,7 +58,8 @@
 		"favorites": "Favorites",
 		"feedbacks": "Feedbacks",
 		"active": "Active",
-		"inactive": "Inactive"
+		"inactive": "Inactive",
+		"report_abuse": "Report abuse"
 	},
 
 	"filterLabels": {
@@ -80,15 +84,18 @@
 		"cancel": "Cancel",
 		"preview": "Preview",
 		"publish": "Publish",
-		"prepose_exchange": "Propose exchange",
+		"propose_exchange": "Propose exchange",
+		"group_exchange": "Group exchange",
 		"my_announcements": "My announcements",
 		"find_exchange_options": "Find exchange options",
 		"offer_an_exchange": "Offer an exchange",
-		"show_more": "Show more"
+		"show_more": "Show more",
+		"buy_for": "Buy for {cost} PKOIN"
 	},
 
 	"barterLabels": {
-		"to": "Exchange to"
+		"to": "Exchange to",
+		"select": "Select item that you want exchange"
 	},
 
 	"exchange": {

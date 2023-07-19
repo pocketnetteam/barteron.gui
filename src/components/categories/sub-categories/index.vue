@@ -20,7 +20,7 @@
 			class="toggle"
 			@click="toggle"
 		>
-			{{ $t(`category.${ expanded ? 'hide' : 'show' }_all`) }} ({{ count }})
+			{{ $t(`toggle.${ expanded ? 'hide' : 'show' }_all`) }} ({{ count }})
 		</button>
 	</nav>
 </template>
