@@ -1,0 +1,139 @@
+@import "@/css/vars.sass"
+
+.profile
+	.list
+		+resetList()
+		color: $bulma
+
+		.link
+			color: $bulma
+
+			&:hover
+				color: $bulma-hover
+
+	dl.list
+		display: grid
+		grid-template-columns: 18px auto
+		grid-gap: 10px
+		align-items: center
+		width: 100%
+
+		dt
+			grid-column: 1
+			text-align: center
+
+		dd
+			margin-left: 0
+			grid-column: 2
+
+	.row
+		width: 100%
+
+	.author
+		color: $trunks
+		font-size: 0.85em
+		align-items: flex-start
+		gap: 12px
+		width: 100%
+
+		.col
+			margin: 0
+
+		picture
+			display: flex
+			position: relative
+			height: 64px
+			width: 64px
+
+			&[class*="status"]
+				&:before
+					background: $gray
+					border: 2px solid $beerus
+					border-radius: 50%
+					content: ""
+					position: absolute
+					right: -1px
+					bottom: -1px
+					height: 16px
+					width: 16px
+
+				&[class*="online"]
+					&:before
+						background: $roshi
+
+				&[class*="offline"]
+					&:before
+						background: $dodoria
+
+			img
+				border-radius: 100px
+				display: block
+				overflow: hidden
+				height: 100%
+				width: 100%
+
+		.user
+			width: 100%
+
+			ul.list
+				+resetList()
+
+				> li
+					display: flex
+
+					&:not(:last-child)
+						margin-bottom: .5em
+
+			.label
+				font-size: 1.3em
+				margin: 0
+
+			.stars
+				+resetList()
+				display: flex
+				font-size: 1.15em
+				margin: 0 0 0 -2px
+
+				a
+					+transition(color)
+					color: $hit
+					display: block
+					padding: 2px
+					text-decoration: none
+
+					&:hover
+						color: $hit-hover
+
+	.edit
+		.v-button-holder,
+		.v-button
+			width: 100%
+
+	.info,
+	.state
+		dl.list
+			dd
+				font-size: .85em
+
+	.state
+		border-top: 1px solid $beerus
+		display: flex
+		margin-top: -.75em
+		padding-top: .75em
+
+		dl.list
+			dt
+				color: $roshi
+
+		.ask
+			border: 1px solid $trunks
+			box-shadow: inset 0 0 1px $trunks
+			border-radius: 50%
+			color: $trunks
+			display: flex
+			align-items: center
+			justify-content: center
+			font-size: .8em
+			text-decoration: none
+			height: 1.55em
+			width: 1.55em
