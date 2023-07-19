@@ -9,11 +9,11 @@ export default {
 
 	data() {
 		return {
-			item: null
+			item: {}
 		}
 	},
 
 	mounted() {
 		this.item = this.routeComponents?.default?.item;
-	},
+	}
 }
