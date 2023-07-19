@@ -1,4 +1,63 @@
 @import "@/css/vars.sass"
 	
 #sidebar
-	
+	h1
+		font-size: 22px
+		margin: 0 0 16px
+		text-transform: none
+		font-weight: normal
+
+	.price
+		font-size: 20px
+		display: flex
+		align-items: center
+		margin: 0 0 $r * 2
+
+		.currency
+			background-color: $blue-hover
+			border-radius: 4px
+			display: block
+			margin: 0 $r 0 0
+			padding: 2px
+			overflow: hidden
+			height: 1.15em
+			width: 1.65em
+
+			&.pkoin::after
+				background: url("@/assets/images/pkoin.svg") no-repeat 50% 50%
+				background-size: contain
+				content: ""
+				display: block
+				height: 100%
+				width: 100%
+
+		font-weight: 700
+
+	.profile
+		.info
+			margin: 0 0 $r * 2
+
+	.exchange
+		.edit
+			border-top: 1px solid $beerus
+			display: flex
+			padding-top: .75em
+			align-items: center
+			justify-content: space-between
+
+			dl
+				grid-gap: 0
+				margin: 0
+
+				dt,
+				dd
+					color: $trunks
+					margin: 0
+
+			.report
+				color: $chi-chi
+				display: flex
+				gap: 8px
+				align-items: center
+				text-decoration: none
+				white-space: nowrap
