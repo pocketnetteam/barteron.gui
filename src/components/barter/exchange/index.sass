@@ -1,0 +1,86 @@
+@import "@/css/vars.sass"
+	
+.barter-exchange
+	ul
+		+resetList()
+		display: grid
+		grid-template-columns: repeat(3, 1fr)
+		gap: 8px
+		margin: 0 0 $r * 1.5
+
+		li
+			border: 1px solid transparent
+			border-radius: 12px
+			position: relative
+			height: 70px
+
+			i.fa
+				display: none
+
+			img
+				+unselectable()
+				border-radius: 12px
+				object-fit: cover
+				height: 100%
+				width: 100%
+
+			&.selected
+				border: 1px solid $piccolo
+
+				i.fa
+					background: $gohan
+					border: 1px solid $gohan
+					border-radius: 50%
+					color: $piccolo
+					display: block
+					font-size: 19px
+					position: absolute
+					top: 6px
+					right: 6px
+					height: 20px
+					width: 20px
+
+					&::before
+						position: relative
+						top: -1px
+
+				img
+					padding: 3px
+
+	.toggle
+		margin: 0 0 $r * 2
+
+	.propose
+		margin: 0 0 $r * 2
+
+		.v-button-holder:not(:last-child)
+			margin: 0 0 $r / 2
+
+		.v-button
+			width: 100%
+
+		.btn-group
+			.v-button
+				display: flex
+				align-items: center
+				justify-content: space-between
+			
+			span
+				display: flex
+
+			ul
+				+resetList()
+				gap: 0
+				margin: -6px 0
+
+				li
+					margin-left: -12px
+					height: auto
+
+					img
+						height: 24px
+						width: 24px
+
+	.buy
+		.v-button
+			width: 100%
