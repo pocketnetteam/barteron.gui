@@ -17,8 +17,10 @@ strong.title
 	font-weight: normal
 	margin: 0 0 $r * 3
 
-a.link
+a.link,
+span.link
 	color: $piccolo
+	cursor: pointer
 	text-decoration: none
 	+transition(color)
 
@@ -97,6 +99,11 @@ a.link
 		border-bottom: 1px solid $beerus
 		padding: 0 0 $r * 4
 
+		&.t-sep
+			border: 1px solid $beerus
+			border-width: 1px 0 0
+			padding: $r * 2 0 0
+
 		&.d-sep
 			border: 1px solid $beerus
 			border-width: 1px 0
@@ -133,6 +140,9 @@ a.link
 	&.dir-column
 		flex-direction: column
 
+		&.center
+			align-items: center
+
 .label
 	color: $popo
 	cursor: default
@@ -155,3 +165,10 @@ a.link
 		display: block
 		font-size: .8em
 		text-transform: uppercase
+
+	.label
+		color: $trunks
+		display: block
+		font-size: 1em
+		font-weight: normal
+		margin: 0 0 $r * 2
