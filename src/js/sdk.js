@@ -5,11 +5,15 @@
  */
 class SDK {
 	constructor() {
-		this.account = [];
-		this.lastresult = '';
 		this.address = '';
+		this.account = [];
+		this.location = {};
+
+		this.lastresult = '';
 		this.emitted = [];
 		this.localstorage = '';
+
+		if (!window.BastyonSdk) return;
 
 		this.sdk = new window.BastyonSdk();
 		this.sdk.emit('loaded');
@@ -90,8 +94,8 @@ class SDK {
 		}).catch(e => this.setLastResult(e));
 	}
 
-	getUserInfo() {
-		if(!this.address) return
+	async getUserInfo() {
+		if(!this.address) await this.getAccount();
 
 		return this.sdk.rpc('getuserprofile', [[this.address]]).then(data => {
 			this.lastresult = data;
@@ -118,7 +122,7 @@ class SDK {
 	getLocation() {
 		return this.sdk.get.location().then(data => {
 			this.lastresult = data;
-			this.account = data;
+			this.location = data;
 			return data;
 		}).catch(e => this.setLastResult(e))
 	}
@@ -141,4 +145,4 @@ class SDK {
 	}
 }
 
-export default new SDK();
+export default SDK;
