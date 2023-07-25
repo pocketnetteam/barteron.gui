@@ -16,7 +16,7 @@ class Barters {
 	 */
 	constructor(data) {
 		/** @private */
-		this.items = data;
+		this.items = data || bartersData;
 	}
 
 	/**
@@ -133,4 +133,4 @@ class Barters {
 	}
 };
 
-export default new Barters(bartersData);
+export default Barters;

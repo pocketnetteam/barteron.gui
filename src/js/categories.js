@@ -16,7 +16,7 @@ class Categories {
 	 */
 	constructor(data) {
 		/** @private */
-		this.items = data;
+		this.items = data || categoriesData;
 	}
 
 	/**
@@ -80,4 +80,4 @@ class Categories {
 	}
 };
 
-export default new Categories(categoriesData);
+export default Categories;
