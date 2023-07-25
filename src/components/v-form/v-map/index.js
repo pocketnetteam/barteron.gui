@@ -1,5 +1,25 @@
+import {
+	LMap,
+	LTileLayer,
+	LMarker
+} from "vue2-leaflet";
+import { Icon } from "leaflet";
+
+delete Icon.Default.prototype._getIconUrl;
+Icon.Default.mergeOptions({
+	iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
+	iconUrl: require("leaflet/dist/images/marker-icon.png"),
+	shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
+});
+
 export default {
 	name: "Vmap",
+
+	components: {
+		LMap,
+		LTileLayer,
+		LMarker
+	},
 
 	props: {
 		id: {
@@ -18,29 +38,19 @@ export default {
 
 	data() {
 		return {
-			script: null,
-			map: null
+			url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+			attribution: "&copy; <a target='_blank' href='http://osm.org/copyright'>OpenStreetMap</a> contributors",
+			zoom: 15,
+			center: [51.505, -0.159],
+			markerLatLng: [51.504, -0.159]
 		}
 	},
 
 	created() {
-		this.script = document.createElement("script");
-		this.script.type = "text/javascript";
-		this.script.src = "https://maps.api.2gis.ru/2.0/loader.js?pkg=full";
-		document.head.append(this.script);
+		
 	},
 
 	mounted() {
-		this.$refs.map.style.setProperty('--height', this.height);
-		this.$refs.map.style.setProperty('--width', this.width);
-
-		this.script.onload = () => {
-			DG.then(() => {
-					this.map = DG.map(this.id, {
-							center: [54.98, 82.89],
-							zoom: 13
-					});
-			});
-		}
+		
 	}
 }

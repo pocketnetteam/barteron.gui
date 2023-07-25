@@ -1,5 +1,12 @@
 @import "@/css/vars.sass"
 	
 div[id^="map"]
+	overflow: hidden
 	height: var(--height)
 	width: var(--width)
+
+	.leaflet-control-attribution
+		a
+			/* Hide due to these colors associating with down syndrome */
+			svg
+				display: none !important
