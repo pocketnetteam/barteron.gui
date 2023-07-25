@@ -109,7 +109,8 @@
 	},
 
 	"metrics": {
-		"km": "km"
+		"km": "km",
+		"number": "#"
 	},
 
 	"title": "Title",
