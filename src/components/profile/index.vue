@@ -2,15 +2,22 @@
 	<div class="profile">
 		<div class="row author">
 			<div class="col">
-				<picture class="status-online">
-					<img src="@/assets/images/avatar.png" alt="avatar">
-				</picture>
+				<div class="avatar">
+					<i
+						v-if="!user?.i"
+						:style="`--color: ${ color.generateHSL(user?.name || 'username') }`"
+					>{{ shortName || 'UN' }}</i>
+					
+					<picture class="status-online" v-else>
+						<img :src="user?.i" :alt="user?.name">
+					</picture>
+				</div>
 			</div>
 
 			<div class="col user">
 				<ul class="list">
 					<li>
-						<strong class="label">Username</strong>
+						<strong class="label">{{ user?.name }}</strong>
 					</li>
 
 					<li>
@@ -40,7 +47,7 @@
 			<dl class="list">
 				<dt><i class="fa fa-calendar-day"></i></dt>
 				<dd>{{
-				$t('profile.on_barteron_from', { date: $d(1630073595000, 'middle') })
+				$t('profile.on_barteron_from', { date: $d(user?.regdate * 1000 || 0, 'middle') })
 				}}</dd>
 				<dt><i class="fa fa-map-marker-alt"></i></dt>
 				<dd>Astana, Kazakhstan</dd>

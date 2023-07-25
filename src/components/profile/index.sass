@@ -39,38 +39,54 @@
 		.col
 			margin: 0
 
-		picture
+		.avatar
 			display: flex
+			border-radius: 50%
 			position: relative
 			height: 64px
 			width: 64px
 
-			&[class*="status"]
-				&:before
-					background: $gray
-					border: 2px solid $beerus
-					border-radius: 50%
-					content: ""
-					position: absolute
-					right: -1px
-					bottom: -1px
-					height: 16px
-					width: 16px
+			*
+				border-radius: 50%
 
-				&[class*="online"]
-					&:before
-						background: $roshi
-
-				&[class*="offline"]
-					&:before
-						background: $dodoria
-
-			img
-				border-radius: 100px
-				display: block
-				overflow: hidden
+			i
+				background-color: var(--color, rgba(255, 179, 25, 1))
+				color: rgba(255, 255, 255, 1)
+				cursor: pointer
+				display: flex
+				font-size: 1.8em
+				font-style: normal
+				line-height: 0
+				align-items: center
+				justify-content: center
 				height: 100%
 				width: 100%
+
+			picture
+				&[class*="status"]
+					&:before
+						background: $gray
+						border: 2px solid $beerus
+						border-radius: 50%
+						content: ""
+						position: absolute
+						right: -1px
+						bottom: -1px
+						height: 16px
+						width: 16px
+
+					&[class*="online"]
+						&:before
+							background: $roshi
+
+					&[class*="offline"]
+						&:before
+							background: $dodoria
+
+				img
+					display: block
+					height: 100%
+					width: 100%
 
 		.user
 			width: 100%

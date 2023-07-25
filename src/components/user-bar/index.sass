@@ -21,11 +21,17 @@
 			margin: 0 16px 0 0
 
 		.avatar
+			display: flex
+			border-radius: 50%
 			text-decoration: none
+			height: 32px
+			width: 32px
+
+			*
+				border-radius: 50%
 
 			i
-				background: rgba(255, 179, 25, 1)
-				border-radius: 50%
+				background-color: var(--color, rgba(255, 179, 25, 1))
 				color: rgba(255, 255, 255, 1)
 				cursor: pointer
 				display: flex
@@ -34,5 +40,10 @@
 				line-height: 0
 				align-items: center
 				justify-content: center
-				height: 32px
-				width: 32px
+				height: 100%
+				width: 100%
+				
+			img
+					display: block
+					height: 100%
+					width: 100%

@@ -14,8 +14,15 @@
 			</li>
 
 			<li>
-				<router-link class="avatar" :to="{ name: 'profile', params: { id: 1 } }">
-					<i>UN</i>
+				<router-link class="avatar" :to="{ name: 'profile', params: { id: user?.name || 'username' } }">
+					<i
+						v-if="!user?.i"
+						:style="`--color: ${ color.generateHSL(user?.name || 'username') }`"
+					>{{ shortName || 'UN' }}</i>
+					
+					<picture v-else>
+						<img :src="user?.i" :alt="user?.name">
+					</picture>
 				</router-link>
 			</li>
 
