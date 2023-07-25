@@ -37,9 +37,9 @@ vRequire([
 ]);
 
 /* Make categories and barters global */
-Vue.prototype.sdk = SDK;
-Vue.prototype.categories = Categories;
-Vue.prototype.barters = Barters;
+Vue.prototype.sdk = Vue.observable(new SDK());
+Vue.prototype.categories = Vue.observable(new Categories());
+Vue.prototype.barters = Vue.observable(new Barters());
 
 /* Add mixin for accessing sibling components in a route */
 Vue.mixin({
