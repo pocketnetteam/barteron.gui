@@ -16,7 +16,7 @@
 			<ExchangeList>
 				<template #edit>
 					<dl class="list">
-						<dt>#</dt>
+						<dt>{{ $t('metrics.number') }}</dt>
 						<dd>{{ item.id }}</dd>
 					</dl>
 
