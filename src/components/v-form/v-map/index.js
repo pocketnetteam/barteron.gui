@@ -34,23 +34,25 @@ export default {
 			type: String,
 			default: "100%"
 		},
-	},
-
-	data() {
-		return {
-			url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-			attribution: "&copy; <a target='_blank' href='http://osm.org/copyright'>OpenStreetMap</a> contributors",
-			zoom: 15,
-			center: [51.505, -0.159],
-			markerLatLng: [51.504, -0.159]
+		url: {
+			type: String,
+			default: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+		},
+		attribution: {
+			type: String,
+			default: "&copy; <a target='_blank' href='http://osm.org/copyright'>OpenStreetMap</a> contributors"
+		},
+		center: {
+			type: Array,
+			default: () => [55.751244, 37.618423]
+		},
+		marker: {
+			type: Array,
+			default: () => null
+		},
+		zoom: {
+			type: Number,
+			default: 15
 		}
-	},
-
-	created() {
-		
-	},
-
-	mounted() {
-		
 	}
 }
