@@ -23,16 +23,8 @@
 		</div>
 
 		<!-- Wallet -->
-		<div class="box wallet">
-			<dl class="list">
-				<dt><i class="fa fa-wallet"></i></dt>
-				<dd>
-					<strong>13 465</strong>
-					<span>{{ $t('profile.coins') }}</span>
-				</dd>
-			</dl>
-
-			<v-button>{{ $t('profile.wallet') }}</v-button>
+		<div class="box">
+			<Wallet />
 		</div>
 
 		<!-- Exchange -->

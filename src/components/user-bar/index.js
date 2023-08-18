@@ -5,20 +5,27 @@ export default {
 
 	data() {
 		return {
-			user: this.sdk.account[0],
 			color: new NameToHSL()
 		}
 	},
 
 	computed: {
-		shortName() {
-			return this.user?.name.substring(0, 1).toUpperCase()
-		}
-	},
+		/**
+		 * Get user from sdk
+		 * 
+		 * @return {Object}
+		 */
+		user() {
+			return this.sdk.account[0];
+		},
 
-	watch: {
-		"sdk.account"(account) {
-			this.user = account[0]
+		/**
+		 * Get first name from account name
+		 * 
+		 * @return {String}
+		 */
+		shortName() {
+			return this.user?.name.substring(0, 1).toUpperCase();
 		}
 	}
 }
