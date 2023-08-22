@@ -1,3 +1,5 @@
+import Vue from "vue";
+
 /**
  * Allow work with bastyon
  * 
@@ -8,12 +10,12 @@ class SDK {
 	account = [];
 	balance = {};
 	location = {};
-	barteron = {
+	barteron = Vue.observable({
 		account: {},
 		offers: {},
 		feed: {},
 		deals: {}
-	};
+	});
 
 	lastresult = "";
 	emitted = [];
@@ -206,7 +208,15 @@ class SDK {
 	 */
 	getBrtAccount(address) {
 		return this.rpc('getbarteronaccounts', [address ?? this.address]).then(account => {
-			return this.barteron.account[address ?? this.address] = account;
+			if (account) {
+				account.forEach(acc => {
+					acc.p.s4 = JSON.parse(acc.p.s4);
+				});
+			}
+
+			/* return this.barteron.account[address ?? this.address] = account; */
+			Vue.set(this.barteron.account, address ?? this.address, account);
+			return account;
 		});
 	}
 
