@@ -20,15 +20,6 @@ export default {
 		},
 
 		/**
-		 * Get barteron account
-		 * 
-		 * @return {Object}
-		 */
-		account() {
-			return this.sdk.barteron.account[this.sdk.address];
-		},
-
-		/**
 		 * Get first name from account name
 		 * 
 		 * @return {String}
@@ -36,13 +27,5 @@ export default {
 		shortName() {
 			return this.user?.name.substring(0, 1).toUpperCase();
 		}
-	},
-
-	created() {
-		/* this.sdk.setBrtAccount({
-			address: this.sdk.address,
-			tags: ['x', 'u', 'j']
-		}).then(e => console.log(e, this)); */
-		this.sdk.getBrtAccount().then(e => console.log(e, this));
 	}
 }
