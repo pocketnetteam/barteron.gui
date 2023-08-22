@@ -15,7 +15,70 @@
 			border-radius: 8px
 			color: $backdrop
 			padding: 0.2em .7em
+			position: relative
 			white-space: nowrap
+
+			&.add
+				position: relative
+				width: 100%
+
+			.remove
+				+transition(background-color)
+				background-color: $dodoria
+				border-radius: 50%
+				color: $primary
+				cursor: pointer
+				font-size: 12px
+				display: flex
+				align-items: center
+				justify-content: center
+				padding: $r
+				position: absolute
+				top: 0
+				right: -5px
+				height: 14px
+				width: 14px
+
+				&:hover
+					background-color: $dodoria-hover
+
+			input
+				background: none
+				border: 0
+				padding: $r / 2 20px $r / 2 0
+				outline: none
+				width: 100%
+				-webkit-appearance: none
+				-moz-appearance: none
+				appearance: none
+
+				&::-webkit-inner-spin-button,
+				&::-webkit-calendar-picker-indicator
+					display: none
+					opacity: 0
+
+			.insert
+				background-color: $blue
+				border-radius: 0 8px 8px 0
+				color: $gohan
+				cursor: pointer
+				display: flex
+				align-items: center
+				justify-content: center
+				padding: $r
+				position: absolute
+				top: 0
+				right: 0
+				height: 26px
+				width: 26px
+				+transition(background-color)
+
+				&:hover
+					background-color: $blue-hover
+
+				&.disabled
+					background-color: $gray
+					cursor: default
 
 	.toggle
 		margin: 0 0 1.2em
