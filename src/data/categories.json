@@ -804,7 +804,7 @@
 		]
 	},
 	"253": {
-		"name": "coins:_us",
+		"name": "coins_us",
 		"parent": 11116,
 		"children": [
 			173590,
@@ -837,7 +837,7 @@
 		"children": []
 	},
 	"256": {
-		"name": "coins:_world",
+		"name": "coins_world",
 		"parent": 11116,
 		"children": [
 			127144,
@@ -1640,7 +1640,7 @@
 		]
 	},
 	"563": {
-		"name": "bottles:_glass",
+		"name": "bottles_glass",
 		"parent": 562,
 		"children": []
 	},
@@ -1954,22 +1954,22 @@
 		"children": []
 	},
 	"675": {
-		"name": "19th_century:_used",
+		"name": "19th_century_used",
 		"parent": 261,
 		"children": []
 	},
 	"676": {
-		"name": "19th_century:_unused",
+		"name": "19th_century_unused",
 		"parent": 261,
 		"children": []
 	},
 	"678": {
-		"name": "1901-now:_used",
+		"name": "1901-now_used",
 		"parent": 261,
 		"children": []
 	},
 	"679": {
-		"name": "1941-now:_unused",
+		"name": "1941-now_unused",
 		"parent": 261,
 		"children": []
 	},
@@ -2034,7 +2034,7 @@
 		"children": []
 	},
 	"698": {
-		"name": "world:_errors_freaks_oddities",
+		"name": "world_errors_freaks_oddities",
 		"parent": 181420,
 		"children": []
 	},
@@ -2069,7 +2069,7 @@
 		"children": []
 	},
 	"713": {
-		"name": "native_american:_us",
+		"name": "native_american_us",
 		"parent": 3913,
 		"children": [
 			13742,
@@ -6098,7 +6098,7 @@
 		"children": []
 	},
 	"3365": {
-		"name": "roman:_republic_(300_bc-27_bc)",
+		"name": "roman_republic_(300_bc-27_bc)",
 		"parent": 4733,
 		"children": []
 	},
@@ -6128,7 +6128,7 @@
 		"children": []
 	},
 	"3377": {
-		"name": "coins:_canada",
+		"name": "coins_canada",
 		"parent": 11116,
 		"children": [
 			3389,
@@ -6295,7 +6295,7 @@
 		"children": []
 	},
 	"3411": {
-		"name": "paper_money:_world",
+		"name": "paper_money_world",
 		"parent": 11116,
 		"children": [
 			162194,
@@ -6311,7 +6311,7 @@
 		]
 	},
 	"3412": {
-		"name": "paper_money:_us",
+		"name": "paper_money_us",
 		"parent": 11116,
 		"children": [
 			162140,
@@ -6568,22 +6568,22 @@
 		"children": []
 	},
 	"3455": {
-		"name": "tokens:_other",
+		"name": "tokens_other",
 		"parent": 3452,
 		"children": []
 	},
 	"3456": {
-		"name": "tokens:_civil_war",
+		"name": "tokens_civil_war",
 		"parent": 3452,
 		"children": []
 	},
 	"3457": {
-		"name": "tokens:_transit",
+		"name": "tokens_transit",
 		"parent": 3452,
 		"children": []
 	},
 	"3458": {
-		"name": "tokens:_us_trade",
+		"name": "tokens_us_trade",
 		"parent": 3452,
 		"children": []
 	},
@@ -6593,7 +6593,7 @@
 		"children": []
 	},
 	"3461": {
-		"name": "1901-40:_unused",
+		"name": "1901-40_unused",
 		"parent": 261,
 		"children": []
 	},
@@ -7058,7 +7058,7 @@
 		"children": []
 	},
 	"3915": {
-		"name": "cans:_us",
+		"name": "cans_us",
 		"parent": 562,
 		"children": [
 			3916,
@@ -7083,7 +7083,7 @@
 		"children": []
 	},
 	"3919": {
-		"name": "cans:_international",
+		"name": "cans_international",
 		"parent": 562,
 		"children": []
 	},
@@ -7920,11 +7920,6 @@
 		"parent": 3143,
 		"children": []
 	},
-	"4259": {
-		"name": "publications",
-		"parent": 3213,
-		"children": []
-	},
 	"4270": {
 		"name": "irish",
 		"parent": 820,
@@ -7941,7 +7936,7 @@
 		"children": []
 	},
 	"4370": {
-		"name": "tokens:_love",
+		"name": "tokens_love",
 		"parent": 3452,
 		"children": []
 	},
@@ -8197,7 +8192,7 @@
 		"children": []
 	},
 	"4733": {
-		"name": "coins:_ancient",
+		"name": "coins_ancient",
 		"parent": 11116,
 		"children": [
 			4738,
@@ -8209,12 +8204,12 @@
 		]
 	},
 	"4734": {
-		"name": "roman:_imperial_(27_bc-476_ad)",
+		"name": "roman_imperial_(27_bc-476_ad)",
 		"parent": 4733,
 		"children": []
 	},
 	"4735": {
-		"name": "roman:_provincial_(100-400_ad)",
+		"name": "roman_provincial_(100-400_ad)",
 		"parent": 4733,
 		"children": []
 	},
@@ -13003,7 +12998,7 @@
 		]
 	},
 	"11140": {
-		"name": "badges:_obsolete",
+		"name": "badges_obsolete",
 		"parent": 4038,
 		"children": []
 	},
@@ -14677,7 +14672,7 @@
 		"children": []
 	},
 	"12921": {
-		"name": "stage_lighting:_systems_kits",
+		"name": "stage_lighting_systems_kits",
 		"parent": 12922,
 		"children": []
 	},
@@ -15444,7 +15439,7 @@
 		"children": []
 	},
 	"13651": {
-		"name": "horses:_merch._memorabilia",
+		"name": "horses_merch._memorabilia",
 		"parent": 1335,
 		"children": [
 			156262,
@@ -16870,47 +16865,47 @@
 		"children": []
 	},
 	"14032": {
-		"name": "us:_california",
+		"name": "us_california",
 		"parent": 14030,
 		"children": []
 	},
 	"14033": {
-		"name": "us:_colorado",
+		"name": "us_colorado",
 		"parent": 14030,
 		"children": []
 	},
 	"14034": {
-		"name": "us:_florida",
+		"name": "us_florida",
 		"parent": 14030,
 		"children": []
 	},
 	"14035": {
-		"name": "us:_illinois",
+		"name": "us_illinois",
 		"parent": 14030,
 		"children": []
 	},
 	"14036": {
-		"name": "us:_kansas",
+		"name": "us_kansas",
 		"parent": 14030,
 		"children": []
 	},
 	"14037": {
-		"name": "us:_new_york",
+		"name": "us_new_york",
 		"parent": 14030,
 		"children": []
 	},
 	"14038": {
-		"name": "us:_ohio",
+		"name": "us_ohio",
 		"parent": 14030,
 		"children": []
 	},
 	"14039": {
-		"name": "us:_pennsylvania",
+		"name": "us_pennsylvania",
 		"parent": 14030,
 		"children": []
 	},
 	"14040": {
-		"name": "us:_texas",
+		"name": "us_texas",
 		"parent": 14030,
 		"children": []
 	},
@@ -18449,7 +18444,7 @@
 		"children": []
 	},
 	"18466": {
-		"name": "coins:_medieval",
+		"name": "coins_medieval",
 		"parent": 11116,
 		"children": [
 			4740,
@@ -19725,57 +19720,57 @@
 		"children": []
 	},
 	"20273": {
-		"name": "us:_alabama",
+		"name": "us_alabama",
 		"parent": 14030,
 		"children": []
 	},
 	"20274": {
-		"name": "us:_indiana",
+		"name": "us_indiana",
 		"parent": 14030,
 		"children": []
 	},
 	"20275": {
-		"name": "us:_iowa",
+		"name": "us_iowa",
 		"parent": 14030,
 		"children": []
 	},
 	"20276": {
-		"name": "us:_maine",
+		"name": "us_maine",
 		"parent": 14030,
 		"children": []
 	},
 	"20277": {
-		"name": "us:_massachusetts",
+		"name": "us_massachusetts",
 		"parent": 14030,
 		"children": []
 	},
 	"20278": {
-		"name": "us:_michigan",
+		"name": "us_michigan",
 		"parent": 14030,
 		"children": []
 	},
 	"20279": {
-		"name": "us:_montana",
+		"name": "us_montana",
 		"parent": 14030,
 		"children": []
 	},
 	"20280": {
-		"name": "us:_new_hampshire",
+		"name": "us_new_hampshire",
 		"parent": 14030,
 		"children": []
 	},
 	"20281": {
-		"name": "us:_oregon",
+		"name": "us_oregon",
 		"parent": 14030,
 		"children": []
 	},
 	"20282": {
-		"name": "us:_tennessee",
+		"name": "us_tennessee",
 		"parent": 14030,
 		"children": []
 	},
 	"20283": {
-		"name": "us:_wisconsin",
+		"name": "us_wisconsin",
 		"parent": 14030,
 		"children": []
 	},
@@ -21324,7 +21319,7 @@
 		"children": []
 	},
 	"20979": {
-		"name": "us:_virginia",
+		"name": "us_virginia",
 		"parent": 14030,
 		"children": []
 	},
@@ -22452,27 +22447,27 @@
 		"children": []
 	},
 	"25428": {
-		"name": "us:_minnesota",
+		"name": "us_minnesota",
 		"parent": 14030,
 		"children": []
 	},
 	"25429": {
-		"name": "us:_missouri",
+		"name": "us_missouri",
 		"parent": 14030,
 		"children": []
 	},
 	"25430": {
-		"name": "us:_nebraska",
+		"name": "us_nebraska",
 		"parent": 14030,
 		"children": []
 	},
 	"25431": {
-		"name": "us:_new_jersey",
+		"name": "us_new_jersey",
 		"parent": 14030,
 		"children": []
 	},
 	"25432": {
-		"name": "us:_north_carolina",
+		"name": "us_north_carolina",
 		"parent": 14030,
 		"children": []
 	},
@@ -23420,7 +23415,7 @@
 		"children": []
 	},
 	"27444": {
-		"name": "tokens:_canada_(1861-now)",
+		"name": "tokens_canada_(1861-now)",
 		"parent": 3452,
 		"children": []
 	},
@@ -24669,16 +24664,6 @@
 		"parent": 29907,
 		"children": []
 	},
-	"29912": {
-		"name": "concert_memorabilia",
-		"parent": 29904,
-		"children": []
-	},
-	"29913": {
-		"name": "concert_memorabilia",
-		"parent": 29906,
-		"children": []
-	},
 	"29915": {
 		"name": "glassware",
 		"parent": 29905,
@@ -24750,16 +24735,6 @@
 	},
 	"29927": {
 		"name": "apparel",
-		"parent": 29924,
-		"children": []
-	},
-	"29929": {
-		"name": "concert_memorabilia",
-		"parent": 29923,
-		"children": []
-	},
-	"29930": {
-		"name": "concert_memorabilia",
 		"parent": 29924,
 		"children": []
 	},
@@ -26178,17 +26153,17 @@
 		"children": []
 	},
 	"32770": {
-		"name": "us:_arizona",
+		"name": "us_arizona",
 		"parent": 14030,
 		"children": []
 	},
 	"32771": {
-		"name": "us:_kentucky",
+		"name": "us_kentucky",
 		"parent": 14030,
 		"children": []
 	},
 	"32772": {
-		"name": "us:_mixed_state_lots",
+		"name": "us_mixed_state_lots",
 		"parent": 14030,
 		"children": []
 	},
@@ -28959,97 +28934,97 @@
 		"children": []
 	},
 	"35940": {
-		"name": "us:_alaska",
+		"name": "us_alaska",
 		"parent": 14030,
 		"children": []
 	},
 	"35941": {
-		"name": "us:_connecticut",
+		"name": "us_connecticut",
 		"parent": 14030,
 		"children": []
 	},
 	"35942": {
-		"name": "us:_delaware",
+		"name": "us_delaware",
 		"parent": 14030,
 		"children": []
 	},
 	"35943": {
-		"name": "us:_district_of_columbia",
+		"name": "us_district_of_columbia",
 		"parent": 14030,
 		"children": []
 	},
 	"35944": {
-		"name": "us:_georgia",
+		"name": "us_georgia",
 		"parent": 14030,
 		"children": []
 	},
 	"35945": {
-		"name": "us:_hawaii",
+		"name": "us_hawaii",
 		"parent": 14030,
 		"children": []
 	},
 	"35946": {
-		"name": "us:_idaho",
+		"name": "us_idaho",
 		"parent": 14030,
 		"children": []
 	},
 	"35947": {
-		"name": "us:_louisiana",
+		"name": "us_louisiana",
 		"parent": 14030,
 		"children": []
 	},
 	"35948": {
-		"name": "us:_maryland",
+		"name": "us_maryland",
 		"parent": 14030,
 		"children": []
 	},
 	"35949": {
-		"name": "us:_mississippi",
+		"name": "us_mississippi",
 		"parent": 14030,
 		"children": []
 	},
 	"35950": {
-		"name": "us:_new_mexico",
+		"name": "us_new_mexico",
 		"parent": 14030,
 		"children": []
 	},
 	"35951": {
-		"name": "us:_north_dakota",
+		"name": "us_north_dakota",
 		"parent": 14030,
 		"children": []
 	},
 	"35952": {
-		"name": "us:_oklahoma",
+		"name": "us_oklahoma",
 		"parent": 14030,
 		"children": []
 	},
 	"35953": {
-		"name": "us:_rhode_island",
+		"name": "us_rhode_island",
 		"parent": 14030,
 		"children": []
 	},
 	"35954": {
-		"name": "us:_utah",
+		"name": "us_utah",
 		"parent": 14030,
 		"children": []
 	},
 	"35955": {
-		"name": "us:_vermont",
+		"name": "us_vermont",
 		"parent": 14030,
 		"children": []
 	},
 	"35956": {
-		"name": "us:_washington",
+		"name": "us_washington",
 		"parent": 14030,
 		"children": []
 	},
 	"35957": {
-		"name": "us:_west_virginia",
+		"name": "us_west_virginia",
 		"parent": 14030,
 		"children": []
 	},
 	"35958": {
-		"name": "us:_wyoming",
+		"name": "us_wyoming",
 		"parent": 14030,
 		"children": []
 	},
@@ -29271,22 +29246,22 @@
 		"children": []
 	},
 	"35994": {
-		"name": "us:_arkansas",
+		"name": "us_arkansas",
 		"parent": 14030,
 		"children": []
 	},
 	"35995": {
-		"name": "us:_nevada",
+		"name": "us_nevada",
 		"parent": 14030,
 		"children": []
 	},
 	"35996": {
-		"name": "us:_south_carolina",
+		"name": "us_south_carolina",
 		"parent": 14030,
 		"children": []
 	},
 	"35997": {
-		"name": "us:_south_dakota",
+		"name": "us_south_dakota",
 		"parent": 14030,
 		"children": []
 	},
@@ -36027,7 +36002,7 @@
 		"children": []
 	},
 	"46105": {
-		"name": "go_karts:_high-performance",
+		"name": "go_karts_high-performance",
 		"parent": 66466,
 		"children": []
 	},
@@ -40228,11 +40203,6 @@
 		"parent": 104985,
 		"children": []
 	},
-	"53269": {
-		"name": "concert_memorabilia",
-		"parent": 29907,
-		"children": []
-	},
 	"53270": {
 		"name": "novelties",
 		"parent": 29907,
@@ -40319,7 +40289,7 @@
 		"children": []
 	},
 	"53295": {
-		"name": "hvac_refrigeration:_parts_accessories",
+		"name": "hvac_refrigeration_parts_accessories",
 		"parent": 42909,
 		"children": [
 			260105,
@@ -40372,12 +40342,12 @@
 		]
 	},
 	"53296": {
-		"name": "hvac_refrigeration:_controls_circuit_boards",
+		"name": "hvac_refrigeration_controls_circuit_boards",
 		"parent": 53295,
 		"children": []
 	},
 	"53297": {
-		"name": "hvac_refrigeration:_fans_blowers",
+		"name": "hvac_refrigeration_fans_blowers",
 		"parent": 53295,
 		"children": []
 	},
@@ -44235,17 +44205,6 @@
 		"parent": 50123,
 		"children": []
 	},
-	"64487": {
-		"name": "publications",
-		"parent": 50123,
-		"children": [
-			64488,
-			73429,
-			64489,
-			64491,
-			73430
-		]
-	},
 	"64488": {
 		"name": "magazines",
 		"parent": 64487,
@@ -45485,7 +45444,7 @@
 		"children": []
 	},
 	"66998": {
-		"name": "hvac_refrigeration:_gauges_probes",
+		"name": "hvac_refrigeration_gauges_probes",
 		"parent": 66996,
 		"children": []
 	},
@@ -50269,14 +50228,6 @@
 		"parent": 182266,
 		"children": []
 	},
-	"82190": {
-		"name": "publications",
-		"parent": 83274,
-		"children": [
-			530,
-			548
-		]
-	},
 	"82191": {
 		"name": "other_drivetrain_transmission",
 		"parent": 182266,
@@ -53197,11 +53148,6 @@
 		"parent": 97072,
 		"children": []
 	},
-	"97093": {
-		"name": "price_guides_publications",
-		"parent": 222,
-		"children": []
-	},
 	"97118": {
 		"name": "parts",
 		"parent": 58175,
@@ -55476,11 +55422,6 @@
 		"parent": 104660,
 		"children": []
 	},
-	"104662": {
-		"name": "concert_memorabilia",
-		"parent": 104660,
-		"children": []
-	},
 	"104663": {
 		"name": "novelties",
 		"parent": 104660,
@@ -55669,11 +55610,6 @@
 		"parent": 104694,
 		"children": []
 	},
-	"104696": {
-		"name": "concert_memorabilia",
-		"parent": 104694,
-		"children": []
-	},
 	"104697": {
 		"name": "novelties",
 		"parent": 104694,
@@ -55839,11 +55775,6 @@
 		"parent": 104716,
 		"children": []
 	},
-	"104718": {
-		"name": "concert_memorabilia",
-		"parent": 104716,
-		"children": []
-	},
 	"104719": {
 		"name": "photos",
 		"parent": 104716,
@@ -55867,11 +55798,6 @@
 	},
 	"104724": {
 		"name": "apparel",
-		"parent": 104723,
-		"children": []
-	},
-	"104725": {
-		"name": "concert_memorabilia",
 		"parent": 104723,
 		"children": []
 	},
@@ -56250,11 +56176,6 @@
 		"parent": 104939,
 		"children": []
 	},
-	"104941": {
-		"name": "concert_memorabilia",
-		"parent": 104939,
-		"children": []
-	},
 	"104942": {
 		"name": "posters",
 		"parent": 104939,
@@ -56346,11 +56267,6 @@
 		"parent": 104952,
 		"children": []
 	},
-	"104954": {
-		"name": "concert_memorabilia",
-		"parent": 104952,
-		"children": []
-	},
 	"104955": {
 		"name": "patches",
 		"parent": 104952,
@@ -56376,11 +56292,6 @@
 		"parent": 104957,
 		"children": []
 	},
-	"104959": {
-		"name": "concert_memorabilia",
-		"parent": 104957,
-		"children": []
-	},
 	"104960": {
 		"name": "posters",
 		"parent": 104957,
@@ -56403,11 +56314,6 @@
 	},
 	"104964": {
 		"name": "apparel",
-		"parent": 104963,
-		"children": []
-	},
-	"104965": {
-		"name": "concert_memorabilia",
 		"parent": 104963,
 		"children": []
 	},
@@ -56476,11 +56382,6 @@
 		"parent": 104972,
 		"children": []
 	},
-	"104974": {
-		"name": "concert_memorabilia",
-		"parent": 104972,
-		"children": []
-	},
 	"104975": {
 		"name": "posters",
 		"parent": 104972,
@@ -56504,11 +56405,6 @@
 	},
 	"104981": {
 		"name": "apparel",
-		"parent": 104980,
-		"children": []
-	},
-	"104982": {
-		"name": "concert_memorabilia",
 		"parent": 104980,
 		"children": []
 	},
@@ -56560,11 +56456,6 @@
 	},
 	"104988": {
 		"name": "apparel",
-		"parent": 104987,
-		"children": []
-	},
-	"104989": {
-		"name": "concert_memorabilia",
 		"parent": 104987,
 		"children": []
 	},
@@ -56621,11 +56512,6 @@
 	},
 	"105020": {
 		"name": "apparel",
-		"parent": 105019,
-		"children": []
-	},
-	"105021": {
-		"name": "concert_memorabilia",
 		"parent": 105019,
 		"children": []
 	},
@@ -56837,11 +56723,6 @@
 		"parent": 105047,
 		"children": []
 	},
-	"105049": {
-		"name": "concert_memorabilia",
-		"parent": 105047,
-		"children": []
-	},
 	"105050": {
 		"name": "posters",
 		"parent": 105047,
@@ -56886,11 +56767,6 @@
 	},
 	"105058": {
 		"name": "apparel",
-		"parent": 105057,
-		"children": []
-	},
-	"105059": {
-		"name": "concert_memorabilia",
 		"parent": 105057,
 		"children": []
 	},
@@ -56939,11 +56815,6 @@
 	},
 	"105066": {
 		"name": "apparel",
-		"parent": 105065,
-		"children": []
-	},
-	"105067": {
-		"name": "concert_memorabilia",
 		"parent": 105065,
 		"children": []
 	},
@@ -57719,11 +57590,6 @@
 		"parent": 34292,
 		"children": []
 	},
-	"108745": {
-		"name": "concert_memorabilia",
-		"parent": 34292,
-		"children": []
-	},
 	"108746": {
 		"name": "novelties",
 		"parent": 34292,
@@ -57749,11 +57615,6 @@
 		"parent": 2335,
 		"children": []
 	},
-	"108752": {
-		"name": "concert_memorabilia",
-		"parent": 2335,
-		"children": []
-	},
 	"108753": {
 		"name": "novelties",
 		"parent": 2335,
@@ -57776,11 +57637,6 @@
 	},
 	"108759": {
 		"name": "apparel",
-		"parent": 2375,
-		"children": []
-	},
-	"108760": {
-		"name": "concert_memorabilia",
 		"parent": 2375,
 		"children": []
 	},
@@ -63055,7 +62911,7 @@
 		"children": []
 	},
 	"142503": {
-		"name": "tokens:_hard_times",
+		"name": "tokens_hard_times",
 		"parent": 3452,
 		"children": []
 	},
@@ -65463,7 +65319,7 @@
 		"children": []
 	},
 	"156265": {
-		"name": "horses:_model_horses",
+		"name": "horses_model_horses",
 		"parent": 1335,
 		"children": [
 			35998,
@@ -70192,7 +70048,7 @@
 		"children": []
 	},
 	"162137": {
-		"name": "tokens:_tax",
+		"name": "tokens_tax",
 		"parent": 3452,
 		"children": []
 	},
@@ -71775,11 +71631,6 @@
 		"parent": 180014,
 		"children": []
 	},
-	"163950": {
-		"name": "concert_memorabilia",
-		"parent": 52462,
-		"children": []
-	},
 	"163951": {
 		"name": "photographs",
 		"parent": 52462,
@@ -71804,17 +71655,6 @@
 		"name": "clippings_cuttings_articles",
 		"parent": 2337,
 		"children": []
-	},
-	"163956": {
-		"name": "concert_memorabilia",
-		"parent": 2337,
-		"children": [
-			163957,
-			163958,
-			163959,
-			163960,
-			108738
-		]
 	},
 	"163957": {
 		"name": "backstage_passes",
@@ -74819,7 +74659,7 @@
 		"children": []
 	},
 	"165740": {
-		"name": "us:_territories",
+		"name": "us_territories",
 		"parent": 14030,
 		"children": []
 	},
@@ -76262,12 +76102,12 @@
 		"children": []
 	},
 	"167951": {
-		"name": "tokens:_parking",
+		"name": "tokens_parking",
 		"parent": 3452,
 		"children": []
 	},
 	"167952": {
-		"name": "tokens:_recovery_programs",
+		"name": "tokens_recovery_programs",
 		"parent": 3452,
 		"children": []
 	},
@@ -76372,12 +76212,12 @@
 		"children": []
 	},
 	"167987": {
-		"name": "badges:_novelty_replica",
+		"name": "badges_novelty_replica",
 		"parent": 928,
 		"children": []
 	},
 	"167988": {
-		"name": "badges:_obsolete",
+		"name": "badges_obsolete",
 		"parent": 928,
 		"children": [
 			929,
@@ -76550,24 +76390,9 @@
 		"parent": 52462,
 		"children": []
 	},
-	"168116": {
-		"name": "publications",
-		"parent": 2331,
-		"children": []
-	},
 	"168117": {
 		"name": "badges_pins_buttons",
 		"parent": 2337,
-		"children": []
-	},
-	"168118": {
-		"name": "publications",
-		"parent": 2337,
-		"children": []
-	},
-	"168119": {
-		"name": "publications",
-		"parent": 34292,
 		"children": []
 	},
 	"168120": {
@@ -76607,11 +76432,6 @@
 			164123,
 			164124
 		]
-	},
-	"168127": {
-		"name": "publications",
-		"parent": 2362,
-		"children": []
 	},
 	"168129": {
 		"name": "acoustical_treatments",
@@ -77402,7 +77222,7 @@
 		"children": []
 	},
 	"170075": {
-		"name": "bottles:_aluminum",
+		"name": "bottles_aluminum",
 		"parent": 562,
 		"children": []
 	},
@@ -77505,16 +77325,6 @@
 	"170115": {
 		"name": "other_gift_party_supplies",
 		"parent": 16086,
-		"children": []
-	},
-	"170129": {
-		"name": "price_guides_publications",
-		"parent": 870,
-		"children": []
-	},
-	"170135": {
-		"name": "price_guides_publications",
-		"parent": 212,
 		"children": []
 	},
 	"170137": {
@@ -77996,13 +77806,8 @@
 		"parent": 171120,
 		"children": []
 	},
-	"171122": {
-		"name": "price_guides_publications",
-		"parent": 262024,
-		"children": []
-	},
 	"171127": {
-		"name": "cars:_racing_nascar",
+		"name": "cars_racing_nascar",
 		"parent": 222,
 		"children": [
 			180270,
@@ -78051,184 +77856,9 @@
 			260017
 		]
 	},
-	"171166": {
-		"name": "price_guides_publications",
-		"parent": 20091,
-		"children": []
-	},
-	"171167": {
-		"name": "price_guides_publications",
-		"parent": 20094,
-		"children": []
-	},
-	"171168": {
-		"name": "price_guides_publications",
-		"parent": 20096,
-		"children": []
-	},
-	"171170": {
-		"name": "price_guides_publications",
-		"parent": 4707,
-		"children": []
-	},
-	"171171": {
-		"name": "price_guides_publications",
-		"parent": 20082,
-		"children": []
-	},
-	"171172": {
-		"name": "price_guides_publications",
-		"parent": 13777,
-		"children": []
-	},
-	"171173": {
-		"name": "price_guides_publications",
-		"parent": 2207,
-		"children": []
-	},
 	"171175": {
 		"name": "maritime_price_guides_publications",
 		"parent": 37965,
-		"children": []
-	},
-	"171176": {
-		"name": "price_guides_publications",
-		"parent": 181726,
-		"children": []
-	},
-	"171177": {
-		"name": "price_guides_publications",
-		"parent": 156323,
-		"children": []
-	},
-	"171180": {
-		"name": "price_guides_publications",
-		"parent": 34,
-		"children": []
-	},
-	"171181": {
-		"name": "price_guides_publications",
-		"parent": 1335,
-		"children": []
-	},
-	"171182": {
-		"name": "price_guides_publications",
-		"parent": 13658,
-		"children": []
-	},
-	"171183": {
-		"name": "price_guides_publications",
-		"parent": 66502,
-		"children": []
-	},
-	"171184": {
-		"name": "price_guides_publications",
-		"parent": 14429,
-		"children": []
-	},
-	"171185": {
-		"name": "price_guides_publications",
-		"parent": 66503,
-		"children": []
-	},
-	"171186": {
-		"name": "price_guides_publications",
-		"parent": 3265,
-		"children": []
-	},
-	"171187": {
-		"name": "price_guides_publications",
-		"parent": 29797,
-		"children": []
-	},
-	"171188": {
-		"name": "price_guides_publications",
-		"parent": 261602,
-		"children": []
-	},
-	"171189": {
-		"name": "price_guides_publications",
-		"parent": 3913,
-		"children": []
-	},
-	"171191": {
-		"name": "price_guides_publications",
-		"parent": 1430,
-		"children": []
-	},
-	"171192": {
-		"name": "price_guides_publications",
-		"parent": 13956,
-		"children": []
-	},
-	"171193": {
-		"name": "price_guides_publications",
-		"parent": 966,
-		"children": []
-	},
-	"171194": {
-		"name": "price_guides_publications",
-		"parent": 29832,
-		"children": []
-	},
-	"171195": {
-		"name": "price_guides_publications",
-		"parent": 593,
-		"children": []
-	},
-	"171196": {
-		"name": "price_guides_publications",
-		"parent": 412,
-		"children": []
-	},
-	"171197": {
-		"name": "price_guides_publications",
-		"parent": 13849,
-		"children": []
-	},
-	"171198": {
-		"name": "price_guides_publications",
-		"parent": 182982,
-		"children": []
-	},
-	"171199": {
-		"name": "price_guides_publications",
-		"parent": 597,
-		"children": []
-	},
-	"171200": {
-		"name": "price_guides_publications",
-		"parent": 113,
-		"children": []
-	},
-	"171201": {
-		"name": "price_guides_publications",
-		"parent": 156277,
-		"children": []
-	},
-	"171202": {
-		"name": "price_guides_publications",
-		"parent": 1401,
-		"children": []
-	},
-	"171203": {
-		"name": "price_guides",
-		"parent": 196,
-		"children": []
-	},
-	"171204": {
-		"name": "price_guides",
-		"parent": 2329,
-		"children": []
-	},
-	"171205": {
-		"name": "price_guides",
-		"parent": 1424,
-		"children": []
-	},
-	"171206": {
-		"name": "price_guides",
-		"parent": 2362,
 		"children": []
 	},
 	"171208": {
@@ -78351,31 +77981,6 @@
 			171786,
 			171784
 		]
-	},
-	"171782": {
-		"name": "seller_category_1",
-		"parent": 171781,
-		"children": []
-	},
-	"171783": {
-		"name": "seller_category_2",
-		"parent": 171781,
-		"children": []
-	},
-	"171784": {
-		"name": "seller_category_3",
-		"parent": 171781,
-		"children": []
-	},
-	"171785": {
-		"name": "seller_category_4",
-		"parent": 171781,
-		"children": []
-	},
-	"171786": {
-		"name": "seller_category_5",
-		"parent": 171781,
-		"children": []
 	},
 	"171813": {
 		"name": "batteries",
@@ -78953,7 +78558,7 @@
 		"children": []
 	},
 	"173621": {
-		"name": "tokens:_car_wash",
+		"name": "tokens_car_wash",
 		"parent": 3452,
 		"children": []
 	},
@@ -80270,7 +79875,7 @@
 		"children": []
 	},
 	"175662": {
-		"name": "tokens:_good_luck",
+		"name": "tokens_good_luck",
 		"parent": 3452,
 		"children": []
 	},
@@ -81491,17 +81096,17 @@
 		"children": []
 	},
 	"177022": {
-		"name": "stage_lighting:_single_units",
+		"name": "stage_lighting_single_units",
 		"parent": 12922,
 		"children": []
 	},
 	"177023": {
-		"name": "dj_lighting:_single_units",
+		"name": "dj_lighting_single_units",
 		"parent": 12922,
 		"children": []
 	},
 	"177024": {
-		"name": "dj_lighting:_systems_kits",
+		"name": "dj_lighting_systems_kits",
 		"parent": 12922,
 		"children": []
 	},
@@ -84104,743 +83709,6 @@
 			178112
 		]
 	},
-	"178088": {
-		"name": "category_1",
-		"parent": 178087,
-		"children": []
-	},
-	"178089": {
-		"name": "category_2",
-		"parent": 178087,
-		"children": []
-	},
-	"178090": {
-		"name": "category_3",
-		"parent": 178087,
-		"children": []
-	},
-	"178091": {
-		"name": "category_4",
-		"parent": 178087,
-		"children": []
-	},
-	"178092": {
-		"name": "category_5",
-		"parent": 178087,
-		"children": []
-	},
-	"178093": {
-		"name": "category_6",
-		"parent": 178087,
-		"children": []
-	},
-	"178094": {
-		"name": "category_7",
-		"parent": 178087,
-		"children": []
-	},
-	"178095": {
-		"name": "category_8",
-		"parent": 178087,
-		"children": []
-	},
-	"178096": {
-		"name": "category_9",
-		"parent": 178087,
-		"children": []
-	},
-	"178097": {
-		"name": "category_10",
-		"parent": 178087,
-		"children": []
-	},
-	"178098": {
-		"name": "category_11",
-		"parent": 178087,
-		"children": []
-	},
-	"178099": {
-		"name": "category_12",
-		"parent": 178087,
-		"children": []
-	},
-	"178100": {
-		"name": "category_13",
-		"parent": 178087,
-		"children": []
-	},
-	"178101": {
-		"name": "category_14",
-		"parent": 178087,
-		"children": []
-	},
-	"178102": {
-		"name": "category_15",
-		"parent": 178087,
-		"children": []
-	},
-	"178103": {
-		"name": "category_16",
-		"parent": 178087,
-		"children": []
-	},
-	"178104": {
-		"name": "category_17",
-		"parent": 178087,
-		"children": []
-	},
-	"178105": {
-		"name": "category_18",
-		"parent": 178087,
-		"children": []
-	},
-	"178106": {
-		"name": "category_19",
-		"parent": 178087,
-		"children": []
-	},
-	"178107": {
-		"name": "category_20",
-		"parent": 178087,
-		"children": []
-	},
-	"178108": {
-		"name": "category_21",
-		"parent": 178087,
-		"children": []
-	},
-	"178109": {
-		"name": "category_22",
-		"parent": 178087,
-		"children": []
-	},
-	"178110": {
-		"name": "category_23",
-		"parent": 178087,
-		"children": []
-	},
-	"178111": {
-		"name": "category_24",
-		"parent": 178087,
-		"children": []
-	},
-	"178112": {
-		"name": "category_25",
-		"parent": 178087,
-		"children": []
-	},
-	"178113": {
-		"name": "group_2",
-		"parent": 178086,
-		"children": [
-			178114,
-			178115,
-			178116,
-			178117,
-			178118,
-			178119,
-			178120,
-			178121,
-			178122,
-			178123,
-			178124,
-			178125,
-			178126,
-			178127,
-			178128,
-			178129,
-			178130,
-			178131,
-			178132,
-			178133,
-			178134,
-			178135,
-			178136,
-			178137,
-			178138
-		]
-	},
-	"178114": {
-		"name": "category_1",
-		"parent": 178113,
-		"children": []
-	},
-	"178115": {
-		"name": "category_2",
-		"parent": 178113,
-		"children": []
-	},
-	"178116": {
-		"name": "category_3",
-		"parent": 178113,
-		"children": []
-	},
-	"178117": {
-		"name": "category_4",
-		"parent": 178113,
-		"children": []
-	},
-	"178118": {
-		"name": "category_5",
-		"parent": 178113,
-		"children": []
-	},
-	"178119": {
-		"name": "category_6",
-		"parent": 178113,
-		"children": []
-	},
-	"178120": {
-		"name": "category_7",
-		"parent": 178113,
-		"children": []
-	},
-	"178121": {
-		"name": "category_8",
-		"parent": 178113,
-		"children": []
-	},
-	"178122": {
-		"name": "category_9",
-		"parent": 178113,
-		"children": []
-	},
-	"178123": {
-		"name": "category_10",
-		"parent": 178113,
-		"children": []
-	},
-	"178124": {
-		"name": "category_11",
-		"parent": 178113,
-		"children": []
-	},
-	"178125": {
-		"name": "category_12",
-		"parent": 178113,
-		"children": []
-	},
-	"178126": {
-		"name": "category_13",
-		"parent": 178113,
-		"children": []
-	},
-	"178127": {
-		"name": "category_14",
-		"parent": 178113,
-		"children": []
-	},
-	"178128": {
-		"name": "category_15",
-		"parent": 178113,
-		"children": []
-	},
-	"178129": {
-		"name": "category_16",
-		"parent": 178113,
-		"children": []
-	},
-	"178130": {
-		"name": "category_17",
-		"parent": 178113,
-		"children": []
-	},
-	"178131": {
-		"name": "category_18",
-		"parent": 178113,
-		"children": []
-	},
-	"178132": {
-		"name": "category_19",
-		"parent": 178113,
-		"children": []
-	},
-	"178133": {
-		"name": "category_20",
-		"parent": 178113,
-		"children": []
-	},
-	"178134": {
-		"name": "category_21",
-		"parent": 178113,
-		"children": []
-	},
-	"178135": {
-		"name": "category_22",
-		"parent": 178113,
-		"children": []
-	},
-	"178136": {
-		"name": "category_23",
-		"parent": 178113,
-		"children": []
-	},
-	"178137": {
-		"name": "category_24",
-		"parent": 178113,
-		"children": []
-	},
-	"178138": {
-		"name": "category_25",
-		"parent": 178113,
-		"children": []
-	},
-	"178139": {
-		"name": "group_3",
-		"parent": 178086,
-		"children": [
-			178140,
-			178141,
-			178142,
-			178143,
-			178144,
-			178145,
-			178146,
-			178147,
-			178148,
-			178149,
-			178150,
-			178151,
-			178152,
-			178153,
-			178154,
-			178155,
-			178156,
-			178157,
-			178158,
-			178159,
-			178160,
-			178161,
-			178162,
-			178163,
-			178164
-		]
-	},
-	"178140": {
-		"name": "category_1",
-		"parent": 178139,
-		"children": []
-	},
-	"178141": {
-		"name": "category_2",
-		"parent": 178139,
-		"children": []
-	},
-	"178142": {
-		"name": "category_3",
-		"parent": 178139,
-		"children": []
-	},
-	"178143": {
-		"name": "category_4",
-		"parent": 178139,
-		"children": []
-	},
-	"178144": {
-		"name": "category_5",
-		"parent": 178139,
-		"children": []
-	},
-	"178145": {
-		"name": "category_6",
-		"parent": 178139,
-		"children": []
-	},
-	"178146": {
-		"name": "category_7",
-		"parent": 178139,
-		"children": []
-	},
-	"178147": {
-		"name": "category_8",
-		"parent": 178139,
-		"children": []
-	},
-	"178148": {
-		"name": "category_9",
-		"parent": 178139,
-		"children": []
-	},
-	"178149": {
-		"name": "category_10",
-		"parent": 178139,
-		"children": []
-	},
-	"178150": {
-		"name": "category_11",
-		"parent": 178139,
-		"children": []
-	},
-	"178151": {
-		"name": "category_12",
-		"parent": 178139,
-		"children": []
-	},
-	"178152": {
-		"name": "category_13",
-		"parent": 178139,
-		"children": []
-	},
-	"178153": {
-		"name": "category_14",
-		"parent": 178139,
-		"children": []
-	},
-	"178154": {
-		"name": "category_15",
-		"parent": 178139,
-		"children": []
-	},
-	"178155": {
-		"name": "category_16",
-		"parent": 178139,
-		"children": []
-	},
-	"178156": {
-		"name": "category_17",
-		"parent": 178139,
-		"children": []
-	},
-	"178157": {
-		"name": "category_18",
-		"parent": 178139,
-		"children": []
-	},
-	"178158": {
-		"name": "category_19",
-		"parent": 178139,
-		"children": []
-	},
-	"178159": {
-		"name": "category_20",
-		"parent": 178139,
-		"children": []
-	},
-	"178160": {
-		"name": "category_21",
-		"parent": 178139,
-		"children": []
-	},
-	"178161": {
-		"name": "category_22",
-		"parent": 178139,
-		"children": []
-	},
-	"178162": {
-		"name": "category_23",
-		"parent": 178139,
-		"children": []
-	},
-	"178163": {
-		"name": "category_24",
-		"parent": 178139,
-		"children": []
-	},
-	"178164": {
-		"name": "category_25",
-		"parent": 178139,
-		"children": []
-	},
-	"178165": {
-		"name": "group_4",
-		"parent": 178086,
-		"children": [
-			183666,
-			178167,
-			178168,
-			178169,
-			178170,
-			178171,
-			178172,
-			178173,
-			178174,
-			178175,
-			178176,
-			178177,
-			178178,
-			178179,
-			178180,
-			178181,
-			178182,
-			178183,
-			178184,
-			178185,
-			178186,
-			178187,
-			178188,
-			178189,
-			178190
-		]
-	},
-	"178167": {
-		"name": "category_2",
-		"parent": 178165,
-		"children": []
-	},
-	"178168": {
-		"name": "category_3",
-		"parent": 178165,
-		"children": []
-	},
-	"178169": {
-		"name": "category_4",
-		"parent": 178165,
-		"children": []
-	},
-	"178170": {
-		"name": "category_5",
-		"parent": 178165,
-		"children": []
-	},
-	"178171": {
-		"name": "category_6",
-		"parent": 178165,
-		"children": []
-	},
-	"178172": {
-		"name": "category_7",
-		"parent": 178165,
-		"children": []
-	},
-	"178173": {
-		"name": "category_8",
-		"parent": 178165,
-		"children": []
-	},
-	"178174": {
-		"name": "category_9",
-		"parent": 178165,
-		"children": []
-	},
-	"178175": {
-		"name": "category_10",
-		"parent": 178165,
-		"children": []
-	},
-	"178176": {
-		"name": "category_11",
-		"parent": 178165,
-		"children": []
-	},
-	"178177": {
-		"name": "category_12",
-		"parent": 178165,
-		"children": []
-	},
-	"178178": {
-		"name": "category_13",
-		"parent": 178165,
-		"children": []
-	},
-	"178179": {
-		"name": "category_14",
-		"parent": 178165,
-		"children": []
-	},
-	"178180": {
-		"name": "category_15",
-		"parent": 178165,
-		"children": []
-	},
-	"178181": {
-		"name": "category_16",
-		"parent": 178165,
-		"children": []
-	},
-	"178182": {
-		"name": "category_17",
-		"parent": 178165,
-		"children": []
-	},
-	"178183": {
-		"name": "category_18",
-		"parent": 178165,
-		"children": []
-	},
-	"178184": {
-		"name": "category_19",
-		"parent": 178165,
-		"children": []
-	},
-	"178185": {
-		"name": "category_20",
-		"parent": 178165,
-		"children": []
-	},
-	"178186": {
-		"name": "category_21",
-		"parent": 178165,
-		"children": []
-	},
-	"178187": {
-		"name": "category_22",
-		"parent": 178165,
-		"children": []
-	},
-	"178188": {
-		"name": "category_23",
-		"parent": 178165,
-		"children": []
-	},
-	"178189": {
-		"name": "category_24",
-		"parent": 178165,
-		"children": []
-	},
-	"178190": {
-		"name": "category_25",
-		"parent": 178165,
-		"children": []
-	},
-	"178191": {
-		"name": "group_5",
-		"parent": 178086,
-		"children": [
-			178192,
-			178193,
-			178194,
-			178195,
-			178196,
-			178197,
-			178198,
-			178199,
-			178200,
-			178201,
-			178202,
-			178203,
-			178204,
-			178205,
-			178206,
-			178207,
-			178208,
-			178209,
-			178210,
-			178212,
-			178213,
-			178214,
-			178215
-		]
-	},
-	"178192": {
-		"name": "category_1",
-		"parent": 178191,
-		"children": []
-	},
-	"178193": {
-		"name": "category_2",
-		"parent": 178191,
-		"children": []
-	},
-	"178194": {
-		"name": "category_3",
-		"parent": 178191,
-		"children": []
-	},
-	"178195": {
-		"name": "category_4",
-		"parent": 178191,
-		"children": []
-	},
-	"178196": {
-		"name": "category_5",
-		"parent": 178191,
-		"children": []
-	},
-	"178197": {
-		"name": "category_6",
-		"parent": 178191,
-		"children": []
-	},
-	"178198": {
-		"name": "category_7",
-		"parent": 178191,
-		"children": []
-	},
-	"178199": {
-		"name": "category_8",
-		"parent": 178191,
-		"children": []
-	},
-	"178200": {
-		"name": "category_9",
-		"parent": 178191,
-		"children": []
-	},
-	"178201": {
-		"name": "category_10",
-		"parent": 178191,
-		"children": []
-	},
-	"178202": {
-		"name": "category_11",
-		"parent": 178191,
-		"children": []
-	},
-	"178203": {
-		"name": "category_12",
-		"parent": 178191,
-		"children": []
-	},
-	"178204": {
-		"name": "category_13",
-		"parent": 178191,
-		"children": []
-	},
-	"178205": {
-		"name": "category_14",
-		"parent": 178191,
-		"children": []
-	},
-	"178206": {
-		"name": "category_15",
-		"parent": 178191,
-		"children": []
-	},
-	"178207": {
-		"name": "category_16",
-		"parent": 178191,
-		"children": []
-	},
-	"178208": {
-		"name": "category_17",
-		"parent": 178191,
-		"children": []
-	},
-	"178209": {
-		"name": "category_18",
-		"parent": 178191,
-		"children": []
-	},
-	"178210": {
-		"name": "category_19",
-		"parent": 178191,
-		"children": []
-	},
-	"178211": {
-		"name": "ll_child_revived_2",
-		"parent": 183627,
-		"children": []
-	},
-	"178212": {
-		"name": "category_21",
-		"parent": 178191,
-		"children": []
-	},
-	"178213": {
-		"name": "category_22",
-		"parent": 178191,
-		"children": []
-	},
-	"178214": {
-		"name": "category_23",
-		"parent": 178191,
-		"children": []
-	},
-	"178215": {
-		"name": "category_24",
-		"parent": 178191,
-		"children": []
-	},
 	"178882": {
 		"name": "encore",
 		"parent": 6135,
@@ -86711,7 +85579,7 @@
 		"children": []
 	},
 	"179530": {
-		"name": "canada:_aboriginal",
+		"name": "canada_aboriginal",
 		"parent": 3913,
 		"children": []
 	},
@@ -99526,36 +98394,6 @@
 		"parent": 181736,
 		"children": []
 	},
-	"183550": {
-		"name": "category_10",
-		"parent": 183663,
-		"children": []
-	},
-	"183551": {
-		"name": "category_11",
-		"parent": 183663,
-		"children": []
-	},
-	"183552": {
-		"name": "category_12",
-		"parent": 183663,
-		"children": []
-	},
-	"183553": {
-		"name": "category_13",
-		"parent": 183663,
-		"children": []
-	},
-	"183554": {
-		"name": "category_14",
-		"parent": 183663,
-		"children": []
-	},
-	"183555": {
-		"name": "category_15",
-		"parent": 183663,
-		"children": []
-	},
 	"183556": {
 		"name": "4c",
 		"parent": 5340,
@@ -99569,51 +98407,6 @@
 	"183558": {
 		"name": "trax",
 		"parent": 5346,
-		"children": []
-	},
-	"183560": {
-		"name": "category_1",
-		"parent": 183663,
-		"children": []
-	},
-	"183561": {
-		"name": "category_2",
-		"parent": 183663,
-		"children": []
-	},
-	"183562": {
-		"name": "category_3",
-		"parent": 183663,
-		"children": []
-	},
-	"183563": {
-		"name": "category_4",
-		"parent": 183663,
-		"children": []
-	},
-	"183564": {
-		"name": "category_5",
-		"parent": 183663,
-		"children": []
-	},
-	"183565": {
-		"name": "category_6",
-		"parent": 183663,
-		"children": []
-	},
-	"183566": {
-		"name": "category_7",
-		"parent": 183663,
-		"children": []
-	},
-	"183567": {
-		"name": "category_8",
-		"parent": 183663,
-		"children": []
-	},
-	"183568": {
-		"name": "category_9",
-		"parent": 183663,
 		"children": []
 	},
 	"183569": {
@@ -99679,245 +98472,6 @@
 	"183581": {
 		"name": "5500",
 		"parent": 171998,
-		"children": []
-	},
-	"183592": {
-		"name": "test_category_group",
-		"parent": 14112,
-		"children": [
-			183593,
-			183594,
-			183595,
-			183596,
-			183597
-		]
-	},
-	"183593": {
-		"name": "test_category_1",
-		"parent": 183592,
-		"children": []
-	},
-	"183594": {
-		"name": "test_category_2",
-		"parent": 183592,
-		"children": []
-	},
-	"183595": {
-		"name": "test_category_3",
-		"parent": 183592,
-		"children": []
-	},
-	"183596": {
-		"name": "test_category_4",
-		"parent": 183592,
-		"children": []
-	},
-	"183597": {
-		"name": "test_category_5",
-		"parent": 183592,
-		"children": [
-			183598,
-			183599,
-			183600,
-			183601,
-			183602,
-			183603,
-			183604,
-			183605,
-			183606,
-			183607,
-			183608,
-			183609,
-			183610,
-			183611,
-			183612,
-			183613,
-			183614,
-			183615,
-			183616,
-			183617
-		]
-	},
-	"183598": {
-		"name": "category_5.1",
-		"parent": 183597,
-		"children": []
-	},
-	"183599": {
-		"name": "category_5.2",
-		"parent": 183597,
-		"children": []
-	},
-	"183600": {
-		"name": "category_5.3",
-		"parent": 183597,
-		"children": []
-	},
-	"183601": {
-		"name": "category_5.4",
-		"parent": 183597,
-		"children": []
-	},
-	"183602": {
-		"name": "category_5.5",
-		"parent": 183597,
-		"children": []
-	},
-	"183603": {
-		"name": "category_5.6",
-		"parent": 183597,
-		"children": []
-	},
-	"183604": {
-		"name": "category_5.7",
-		"parent": 183597,
-		"children": []
-	},
-	"183605": {
-		"name": "category_5.8",
-		"parent": 183597,
-		"children": []
-	},
-	"183606": {
-		"name": "category_5.9",
-		"parent": 183597,
-		"children": []
-	},
-	"183607": {
-		"name": "category_5.10",
-		"parent": 183597,
-		"children": []
-	},
-	"183608": {
-		"name": "category_5.11",
-		"parent": 183597,
-		"children": []
-	},
-	"183609": {
-		"name": "category_5.12",
-		"parent": 183597,
-		"children": []
-	},
-	"183610": {
-		"name": "category_5.13",
-		"parent": 183597,
-		"children": []
-	},
-	"183611": {
-		"name": "category_5.14",
-		"parent": 183597,
-		"children": []
-	},
-	"183612": {
-		"name": "category_5.15",
-		"parent": 183597,
-		"children": []
-	},
-	"183613": {
-		"name": "category_5.16",
-		"parent": 183597,
-		"children": []
-	},
-	"183614": {
-		"name": "category_5.17",
-		"parent": 183597,
-		"children": []
-	},
-	"183615": {
-		"name": "category_5.18",
-		"parent": 183597,
-		"children": []
-	},
-	"183616": {
-		"name": "category_5.19",
-		"parent": 183597,
-		"children": []
-	},
-	"183617": {
-		"name": "category_5.20",
-		"parent": 183597,
-		"children": []
-	},
-	"183618": {
-		"name": "category_16",
-		"parent": 183663,
-		"children": []
-	},
-	"183619": {
-		"name": "category_17",
-		"parent": 183663,
-		"children": []
-	},
-	"183620": {
-		"name": "category_18",
-		"parent": 183663,
-		"children": []
-	},
-	"183621": {
-		"name": "category_19",
-		"parent": 183663,
-		"children": []
-	},
-	"183622": {
-		"name": "category_20",
-		"parent": 183663,
-		"children": []
-	},
-	"183623": {
-		"name": "category_21",
-		"parent": 183663,
-		"children": []
-	},
-	"183624": {
-		"name": "category_22",
-		"parent": 183663,
-		"children": []
-	},
-	"183625": {
-		"name": "ll_child_revived_1",
-		"parent": 183627,
-		"children": []
-	},
-	"183627": {
-		"name": "lp_parent",
-		"parent": 99,
-		"children": [
-			184770,
-			183625,
-			178211
-		]
-	},
-	"183663": {
-		"name": "group_6",
-		"parent": 178086,
-		"children": [
-			183560,
-			183561,
-			183562,
-			183563,
-			183564,
-			183565,
-			183566,
-			183567,
-			183568,
-			183550,
-			183551,
-			183552,
-			183553,
-			183554,
-			183555,
-			183618,
-			183619,
-			183620,
-			183621,
-			183622,
-			183623,
-			183624
-		]
-	},
-	"183666": {
-		"name": "category_1",
-		"parent": 178165,
 		"children": []
 	},
 	"183673": {
@@ -104156,21 +102710,6 @@
 		"name": "figurines_statues",
 		"parent": 37919,
 		"children": []
-	},
-	"184463": {
-		"name": "test_category_for_internal_use_only_parent_level_4",
-		"parent": 37557,
-		"children": [
-			184464
-		]
-	},
-	"184464": {
-		"name": "test_category_for_internal_use_only_parent_level_5",
-		"parent": 184463,
-		"children": [
-			115623,
-			262973
-		]
 	},
 	"184476": {
 		"name": "armored_hoodies",
@@ -115680,7 +114219,7 @@
 		"children": []
 	},
 	"260114": {
-		"name": "hvac_refrigeration:_pipes_tubes",
+		"name": "hvac_refrigeration_pipes_tubes",
 		"parent": 53295,
 		"children": []
 	},
@@ -117027,7 +115566,7 @@
 		"children": []
 	},
 	"260456": {
-		"name": "heating_cooling:_installation_testing",
+		"name": "heating_cooling_installation_testing",
 		"parent": 69197,
 		"children": [
 			260457,
@@ -117069,7 +115608,7 @@
 		"children": []
 	},
 	"260463": {
-		"name": "heating_cooling:_parts_accessories",
+		"name": "heating_cooling_parts_accessories",
 		"parent": 69197,
 		"children": [
 			260497,
