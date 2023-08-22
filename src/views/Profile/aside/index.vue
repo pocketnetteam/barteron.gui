@@ -29,11 +29,30 @@
 
 		<!-- Exchange -->
 		<div class="box">
-			<ExchangeList>
-				<template #edit>
-					<v-button vType="stroke-bulma">
-						{{ $t('exchange.edit') }}
-					</v-button>
+			<ExchangeList
+				:tags="account && account[0]?.p?.s4?.a || []"
+				@change="changeTags"
+			>
+				<template #edit="{ instance }">
+					<!-- Edit button -->
+					<template v-if="!instance.editable">
+						<v-button vType="stroke-bulma" @click="instance.edit">
+							{{ $t('exchange.edit') }}
+						</v-button>
+					</template>
+
+					<!-- Cancel and Save buttons -->
+					<template v-else>
+						<div class="buttons-holder">
+							<v-button vType="chi-chi" @click="instance.cancel">
+								{{ $t('buttonLabels.cancel') }}
+							</v-button>
+
+							<v-button @click="instance.save">
+								{{ $t('exchange.save') }}
+							</v-button>
+						</div>
+					</template>
 				</template>
 			</ExchangeList>
 		</div>
