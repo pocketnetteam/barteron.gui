@@ -214,7 +214,6 @@ class SDK {
 				});
 			}
 
-			/* return this.barteron.account[address ?? this.address] = account; */
 			Vue.set(this.barteron.account, address ?? this.address, account);
 			return account;
 		});
