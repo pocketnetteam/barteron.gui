@@ -48,7 +48,7 @@
 		<!-- Toggle -->
 		<div class="toggle" v-if="!editable && vTags.length > visible">
 			<a href="#" class="link" @click.prevent="toggle">
-				{{ $t(`toggle.${ show < tags.length ? 'show' : 'hide' }_all`) }}
+				{{ $t(`toggle.${ show < vTags.length ? 'show' : 'hide' }_all`) }}
 			</a>
 		</div>
 
