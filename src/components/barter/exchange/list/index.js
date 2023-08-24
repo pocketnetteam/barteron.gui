@@ -25,7 +25,8 @@ export default {
 			vTags: [].concat(this.tags),
 			show: this.visible,
 			btnAddDisabled: true,
-			list: []
+			list: [],
+			values: {}
 		}
 	},
 
@@ -51,14 +52,7 @@ export default {
 		validate(check) {
 			const
 				input = this.$refs.tag,
-				list = this.$refs.list,
-				selected = document.evaluate(
-					`//option[text()="${ input.value }"]`,
-					list,
-					null,
-					XPathResult.ANY_TYPE,
-					null
-				)?.iterateNext();
+				selected = Object.keys(this.values).find(s => s === input.value);
 
 			if (check === true) {
 				/* Check is value in list range */
@@ -70,7 +64,7 @@ export default {
 
 				if (selected) {
 					this.btnAddDisabled = false;
-					input.dataset.value = selected.dataset.value;
+					input.dataset.value = this.values[selected];
 				}
 			}
 		},
@@ -143,6 +137,8 @@ export default {
 			return !item.parent && this.$te(item.name);
 		}).map(id => {
 			const name = this.categories.items[id].name;
+
+			this.values[this.$t(name)] = name;
 
 			return {
 				id: id,
