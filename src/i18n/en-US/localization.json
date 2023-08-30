@@ -101,7 +101,9 @@
 	"exchange": {
 		"edit": "Edit list",
 		"save": "Save list",
-		"add": "Input tag here"
+		"add": "Input tag here",
+		"back": "Back",
+		"insert": "Add tag"
 	},
 
 	"item": {
