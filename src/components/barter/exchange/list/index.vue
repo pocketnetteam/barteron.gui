@@ -19,13 +19,21 @@
 			<li v-show="editable" class="add">
 				<datalist id="categories" ref="list">
 					<option
-						v-for="(item, index) in list"
+						v-for="(item, index) in list[listIndex]"
 						:key="index"
-						:disabled="vTags.includes(item.value)"
-						:data-value="item.value"
-					>{{ item.name }}</option>
+						:disabled="vTags.includes(item.name)"
+						:data-value="item.name"
+					>{{ item.value }}</option>
 				</datalist>
 
+				<i
+					:class="{
+						'fa fa-angle-double-left back': true,
+						'disabled': btnBackDisabled
+					}"
+					:title="!btnBackDisabled && $t('exchange.back')"
+					@click="back"
+				></i>
 				<input
 					ref="tag"
 					type="text"
@@ -33,14 +41,15 @@
 					:placeholder="$t('exchange.add')"
 					@input="validate"
 					@keyup.esc="cancel"
-					@keyup.enter="add"
+					@keyup.enter="insert"
 				>
 				<i
 					:class="{
 						'fa fa-plus insert': true,
 						'disabled': btnAddDisabled
 					}"
-					@click="add"
+					:title="!btnAddDisabled && $t('exchange.insert')"
+					@click="insert"
 				></i>
 			</li>
 		</ul>

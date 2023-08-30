@@ -19,7 +19,9 @@
 			white-space: nowrap
 
 			&.add
+				display: flex
 				position: relative
+				padding: 0
 				width: 100%
 
 			.remove
@@ -45,8 +47,10 @@
 			input
 				background: none
 				border: 0
-				padding: $r / 2 20px $r / 2 0
+				padding: $r / 2 30px $r / 2 5px
 				outline: none
+				overflow: hidden
+				text-overflow: ellipsis
 				width: 100%
 				-webkit-appearance: none
 				-moz-appearance: none
@@ -57,18 +61,15 @@
 					display: none
 					opacity: 0
 
+			.back,
 			.insert
 				background-color: $blue
-				border-radius: 0 8px 8px 0
 				color: $gohan
 				cursor: pointer
 				display: flex
 				align-items: center
 				justify-content: center
 				padding: $r
-				position: absolute
-				top: 0
-				right: 0
 				height: 26px
 				width: 26px
 				+transition(background-color)
@@ -79,6 +80,15 @@
 				&.disabled
 					background-color: $gray
 					cursor: default
+
+			.back
+				border-radius: 8px 0 0 8px
+
+			.insert
+				border-radius: 0 8px 8px 0
+				position: absolute
+				top: 0
+				right: 0
 
 	.toggle
 		margin: 0 0 1.2em

@@ -24,13 +24,68 @@ export default {
 			editable: false,
 			vTags: [].concat(this.tags),
 			show: this.visible,
+			btnBackDisabled: true,
 			btnAddDisabled: true,
+			values: [],
 			list: [],
-			values: {}
+			listIndex: 0
 		}
 	},
 
 	methods: {
+		/**
+		 * Add children to list
+		 * 
+		 * @param {Array} ids
+		 */
+		add(ids) {
+			this.list.push(
+				ids.filter(
+					id => this.categories.items[id] && this.$te(this.categories.items[id].name)
+				).map(id => {
+					const item = this.categories.items[id];
+		
+					return Object.assign(item, { value: this.$t(item.name) });
+				})
+			)
+		},
+
+		/**
+		 * Back in children selection
+		 */
+		back() {
+			const input = this.$refs.tag;
+
+			if (this.listIndex) {
+				this.list.splice(this.listIndex, 1);
+				this.values.splice(this.listIndex, 1);
+				this.listIndex--;
+
+				input.value = "";
+				input.dataset.value = this.values[this.listIndex]?.name;
+				input.placeholder = this.values[this.listIndex]?.value;
+			}
+			
+			if (!this.listIndex) this.reset();
+
+			this.btnBackDisabled = this.btnAddDisabled = this.listIndex < 1;
+		},
+
+		/**
+		 * Reset children selection
+		 */
+		reset() {
+			const input = this.$refs.tag;
+
+			this.btnBackDisabled = true;
+			this.btnAddDisabled = true;
+			this.values = [];
+			this.list.splice(1, this.list.length);
+			this.listIndex = 0;
+			input.placeholder = this.$t("exchange.add");
+			input.value = input.dataset.value = "";
+		},
+
 		/**
 		 * Toggle items to see
 		 */
@@ -52,7 +107,7 @@ export default {
 		validate(check) {
 			const
 				input = this.$refs.tag,
-				selected = Object.keys(this.values).find(s => s === input.value);
+				selected = this.list[this.listIndex].find(s => s.value === input.value);
 
 			if (check === true) {
 				/* Check is value in list range */
@@ -62,23 +117,31 @@ export default {
 				this.btnAddDisabled = true;
 				input.dataset.value = "";
 
+				if (selected?.children.length) {
+					input.placeholder = selected.value;
+					input.value = "";
+					this.add(selected.children);
+					this.values.push(selected);
+					this.listIndex++;
+				}
+				
 				if (selected) {
+					this.btnBackDisabled = false;
 					this.btnAddDisabled = false;
-					input.dataset.value = this.values[selected];
+					input.dataset.value = selected.name;
 				}
 			}
 		},
 
 		/**
-		 * Add tag
+		 * Insert tag to list
 		 */
-		add() {
+		insert() {
 			const input = this.$refs.tag;
 			
 			if (this.validate(true) && !this.vTags.includes(input.dataset.value)) {
 				this.vTags.push(input.dataset.value);
-				input.value = input.dataset.value = "";
-				this.btnAddDisabled = true;
+				this.reset();
 			}
 		},
 
@@ -107,6 +170,7 @@ export default {
 		cancel() {
 			this.vTags = [].concat(this.tags);
 			this.editable = false;
+			this.reset();
 		},
 
 		/**
@@ -131,20 +195,10 @@ export default {
 
 	created() {
 		/* Get all categories and filter 1st level of them */
-		this.list = Object.keys(this.categories.items || []).filter(id => {
-			const item = this.categories.items[id];
-
-			return !item.parent && this.$te(item.name);
-		}).map(id => {
-			const name = this.categories.items[id].name;
-
-			this.values[this.$t(name)] = name;
-
-			return {
-				id: id,
-				name: this.$t(name),
-				value: name
-			}
-		});
+		this.add(
+			Object.keys(this.categories.items || []).filter(
+				id => !this.categories.items[id].parent
+			)
+		);
 	}
 }
