@@ -109,16 +109,14 @@ export default {
 		/**
 		 * Serialize files for form
 		 * 
-		 * @return {FormData}
+		 * @return {Object}
 		 */
 		serialize() {
 			const formData = new FormData();
 
-			for (const index in this.files) {
-				formData.append(index[index].id, this.files[index].file);
-			}
+			this.files.forEach(file => formData.append(file.id, file.image));
 
-			return formData;
+			return Object.fromEntries(formData.entries());
 		}
 	},
 
