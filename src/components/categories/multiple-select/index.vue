@@ -6,7 +6,7 @@
 				:key="index"
 				class="category-select"
 			>
-				<datalist :id="`category-select-${ index }`">
+				<datalist :id="`category-select-${ id }-${ index }`">
 					<option
 						v-for="(item, i) in list"
 						:key="i"
@@ -16,7 +16,7 @@
 
 				<input
 					type="text"
-					:list="`category-select-${ index }`"
+					:list="`category-select-${ id }-${ index }`"
 					:placeholder="$t('choose_category')"
 					ref="category"
 					@input="$event => validate($event, index)"

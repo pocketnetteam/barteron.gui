@@ -10,6 +10,7 @@ export default {
 
 	data() {
 		return {
+			id: (+new Date).toString(16),
 			tree: [],
 			values: []
 		}
