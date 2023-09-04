@@ -57,13 +57,13 @@ export default {
 			const input = this.$refs.tag;
 
 			if (this.listIndex) {
-				this.list.splice(this.listIndex, 1);
-				this.values.splice(this.listIndex, 1);
+				this.list.splice(this.listIndex, this.list.length);
+				this.values.splice(this.values.length - 1, this.values.length);
 				this.listIndex--;
 
 				input.value = "";
-				input.dataset.value = this.values[this.listIndex]?.name;
-				input.placeholder = this.values[this.listIndex]?.value;
+				input.dataset.value = this.values[this.values.length - 1]?.name;
+				input.placeholder = this.values[this.values.length - 1]?.value;
 			}
 			
 			if (!this.listIndex) this.reset();
@@ -107,7 +107,9 @@ export default {
 		validate(check) {
 			const
 				input = this.$refs.tag,
-				selected = this.list[this.listIndex].find(s => s.value === input.value);
+				selected = this.list.reduce((r, v) => {
+					return r.concat(v);
+				}, []).find(s => s.value === (input.value || input.placeholder));
 
 			if (check === true) {
 				/* Check is value in list range */
@@ -118,10 +120,10 @@ export default {
 				input.dataset.value = "";
 
 				if (selected?.children.length) {
+					this.values.push(selected);
 					input.placeholder = selected.value;
 					input.value = "";
 					this.add(selected.children);
-					this.values.push(selected);
 					this.listIndex++;
 				}
 				
