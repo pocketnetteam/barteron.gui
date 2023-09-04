@@ -1,10 +1,12 @@
 import BarterList from "@/components/barter/list/index.vue";
+import CategoriesSelect from "@/components/categories/multiple-select/index.vue";
 
 export default {
 	name: "Content",
 
 	components: {
-		BarterList
+		BarterList,
+		CategoriesSelect
 	},
 
 	data() {
@@ -62,6 +64,32 @@ export default {
 		 */
 		selectView(view) {
 			console.log(view)
+		},
+
+		/**
+		 * Submit form data
+		 */
+		submit() {
+			const
+				form = this.$refs.form,
+				photos = this.$refs.photos;
+
+			/* If all fields valid */
+			if (form.validate()) {
+				const 
+					data = form.serialize(),
+					images = photos.serialize();
+				
+				/* Upload images to imgur through bastyon */
+				/* this.sdk.uploadImagesToImgur(Object.values(images)).then(urls => {
+					console.log(urls)
+				}) */
+				form.popup.update({
+					text: "Sending data, please wait..."
+				}).show()
+
+				console.log(data, images)
+			}
 		}
 	}
 }
