@@ -4,24 +4,35 @@
 	.list
 		+resetList()
 		display: flex
+		align-items: flex-end
 		flex-wrap: wrap
 		gap: .7em
 		font-size: .85em
 		line-height: 1.7em
-		margin: 0 0 1em
+		margin: 1em 0 0
+		width: 100%
 
 		li
 			background: $beerus
 			border-radius: 8px
 			color: $backdrop
+			display: flex
+			align-items: center
+			cursor: default
 			padding: 0.2em .7em
 			position: relative
 			white-space: nowrap
+
+			&.toggle
+				background: none
+				padding: 0
+				width: 100%
 
 			&.add
 				display: flex
 				position: relative
 				padding: 0
+				overflow: hidden
 				width: 100%
 
 			.remove
@@ -47,6 +58,7 @@
 			input
 				background: none
 				border: 0
+				font-size: 100%
 				padding: $r / 2 30px $r / 2 5px
 				outline: none
 				overflow: hidden
@@ -70,7 +82,7 @@
 				align-items: center
 				justify-content: center
 				padding: $r
-				height: 26px
+				height: 100%
 				width: 26px
 				+transition(background-color)
 
@@ -81,17 +93,39 @@
 					background-color: $gray
 					cursor: default
 
-			.back
-				border-radius: 8px 0 0 8px
-
 			.insert
-				border-radius: 0 8px 8px 0
 				position: absolute
 				top: 0
 				right: 0
 
-	.toggle
-		margin: 0 0 1.2em
+	.edit
+		margin: 1em 0 0
 
-	.v-button
-		width: 100%
+		.v-button
+			width: 100%
+
+	/* Size */
+	&.v-list-xs
+		border-radius: .25rem
+		
+		.list
+			font-size: .9em
+
+	&.v-list-sm
+		border-radius: .5rem
+
+		.list
+			font-size: 1em
+
+	&.v-list-md
+		border-radius: .75rem
+
+		.list
+			font-size: 1em
+
+	&.v-list-lg,
+	&.v-list-xl
+		border-radius: 1rem
+
+		.list
+			font-size: 1.2em

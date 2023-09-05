@@ -15,6 +15,14 @@ export default {
 		visible: {
 			type: Number,
 			default: 5
+		},
+		title: {
+			type: Boolean,
+			default: true
+		},
+		vSize: {
+			type: String,
+			default: "md"
 		}
 	},
 
@@ -27,8 +35,7 @@ export default {
 			btnBackDisabled: true,
 			btnAddDisabled: true,
 			values: [],
-			list: [],
-			listIndex: 0
+			list: []
 		}
 	},
 
@@ -56,19 +63,21 @@ export default {
 		back() {
 			const input = this.$refs.tag;
 
-			if (this.listIndex) {
-				this.list.splice(this.listIndex, this.list.length);
-				this.values.splice(this.values.length - 1, this.values.length);
-				this.listIndex--;
+			if (this.values.length) {
+				if (
+					this.list.length > 1 &&
+					this.values[this.values.length - 1]?.children
+				) this.list.pop();
+				this.values.pop();
 
 				input.value = "";
 				input.dataset.value = this.values[this.values.length - 1]?.name;
 				input.placeholder = this.values[this.values.length - 1]?.value;
 			}
 			
-			if (!this.listIndex) this.reset();
+			if (!this.values.length) this.reset();
 
-			this.btnBackDisabled = this.btnAddDisabled = this.listIndex < 1;
+			this.btnBackDisabled = this.btnAddDisabled = this.values.length < 1;
 		},
 
 		/**
@@ -81,7 +90,6 @@ export default {
 			this.btnAddDisabled = true;
 			this.values = [];
 			this.list.splice(1, this.list.length);
-			this.listIndex = 0;
 			input.placeholder = this.$t("exchange.add");
 			input.value = input.dataset.value = "";
 		},
@@ -120,14 +128,13 @@ export default {
 				input.dataset.value = "";
 
 				if (selected?.children.length) {
-					this.values.push(selected);
 					input.placeholder = selected.value;
 					input.value = "";
 					this.add(selected.children);
-					this.listIndex++;
 				}
 				
 				if (selected) {
+					this.values.push(selected);
 					this.btnBackDisabled = false;
 					this.btnAddDisabled = false;
 					input.dataset.value = selected.name;

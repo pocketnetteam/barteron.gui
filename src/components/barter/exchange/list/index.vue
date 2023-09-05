@@ -1,6 +1,6 @@
 <template>
-	<div class="exchange">
-		<strong class="title">{{ $t('barterLabels.to') }}:</strong>
+	<div :class="{ 'exchange': true, [`v-list-${ vSize }`]: true }">
+		<strong class="title" v-if="title">{{ $t('barterLabels.to') }}:</strong>
 
 		<!-- Tags -->
 		<ul class="list">
@@ -16,10 +16,27 @@
 				></i>
 			</li>
 
+			<!-- Empty list -->
+			<li class="empty" v-if="!vTags.length">
+				{{ $t('exchange.empty') }}
+			</li>
+
+			<!-- Toggle list -->
+			<li class="toggle" v-if="!editable && vTags.length > visible">
+				<a
+					class="link"
+					href="#"
+					@click.prevent="toggle"
+				>
+					{{ $t(`toggle.${ show < vTags.length ? 'show' : 'hide' }_all`) }}
+				</a>
+			</li>
+
+			<!-- Insert tag -->
 			<li v-show="editable" class="add">
 				<datalist id="categories" ref="list">
 					<option
-						v-for="(item, index) in list[listIndex]"
+						v-for="(item, index) in list[list.length - 1]"
 						:key="index"
 						:disabled="vTags.includes(item.name)"
 						:data-value="item.name"
@@ -53,13 +70,6 @@
 				></i>
 			</li>
 		</ul>
-
-		<!-- Toggle -->
-		<div class="toggle" v-if="!editable && vTags.length > visible">
-			<a href="#" class="link" @click.prevent="toggle">
-				{{ $t(`toggle.${ show < vTags.length ? 'show' : 'hide' }_all`) }}
-			</a>
-		</div>
 
 		<!-- Tags edit -->
 		<div class="edit" v-if="$slots.edit || $scopedSlots.edit">
