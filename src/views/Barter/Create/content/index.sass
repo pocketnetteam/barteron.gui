@@ -1,43 +1,59 @@
 @import "@/css/vars.sass"
-	
-.currency-input
-	.v-input
+
+#content
+	.exchange
 		display: flex
-		align-items: center
-		gap: 1px
+		justify-content: space-between
+		gap: 10px
 
-		.v-select-holder
-			font-size: 1.15em
+		.list,
+		.edit
+			margin: 0
 
-			.v-select
-				border: 0
-				margin: 0 2px
-				padding: .7em calc(.7em - 2px)
-
-		~ .v-input
-			background: rgba(0, 164, 255, 0.06)
-			border-radius: 0 .75rem .75rem 0
-
-			input
-				background: transparent
-				border-radius: 2px !important
-
-		.icon
-			color: $blue
-			cursor: default
-			display: inline-flex
+		.buttons-holder
+			display: flex
+			flex-direction: column
+			justify-content: flex-end
+			height: 100%
+		
+	.currency-input
+		.v-input
+			display: flex
 			align-items: center
-			gap: 8px
-			font-size: 1.15em
-			margin: 0 $r * 2
+			gap: 1px
 
-			&.pkoin
-				&::before
-					background-color: $blue
-					mask-image: url(@/assets/images/pkoin.svg)
-					mask-size: contain
-					mask-repeat: no-repeat
-					content: ""
-					display: block
-					height: 16px
-					width: 16px
+			.v-select-holder
+				font-size: 1.15em
+
+				.v-select
+					border: 0
+					margin: 0 2px
+					padding: .7em calc(.7em - 2px)
+
+			~ .v-input
+				background: rgba(0, 164, 255, 0.06)
+				border-radius: 0 .75rem .75rem 0
+
+				input
+					background: transparent
+					border-radius: 2px !important
+
+			.icon
+				color: $blue
+				cursor: default
+				display: inline-flex
+				align-items: center
+				gap: 8px
+				font-size: 1.15em
+				margin: 0 $r * 2
+
+				&.pkoin
+					&::before
+						background-color: $blue
+						mask-image: url(@/assets/images/pkoin.svg)
+						mask-size: contain
+						mask-repeat: no-repeat
+						content: ""
+						display: block
+						height: 16px
+						width: 16px

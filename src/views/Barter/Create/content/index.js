@@ -1,17 +1,19 @@
 import BarterList from "@/components/barter/list/index.vue";
 import CategoriesSelect from "@/components/categories/multiple-select/index.vue";
+import ExchangeList from "@/components/barter/exchange/list/index.vue";
 
 export default {
 	name: "Content",
 
 	components: {
 		BarterList,
-		CategoriesSelect
+		CategoriesSelect,
+		ExchangeList
 	},
 
 	data() {
 		return {
-			value: this.$refs.value
+			tags: []
 		}
 	},
 
@@ -64,6 +66,15 @@ export default {
 		 */
 		selectView(view) {
 			console.log(view)
+		},
+
+		/**
+		 * Store tags
+		 * 
+		 * @param {Array} tags
+		 */
+		saveTags(tags) {
+			this.tags = tags;
 		},
 
 		/**
