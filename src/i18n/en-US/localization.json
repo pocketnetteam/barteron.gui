@@ -99,6 +99,7 @@
 	},
 
 	"exchange": {
+		"empty": "No tags added",
 		"edit": "Edit list",
 		"save": "Save list",
 		"add": "Input tag here",
