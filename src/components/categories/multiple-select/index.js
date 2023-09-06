@@ -10,7 +10,7 @@ export default {
 
 	data() {
 		return {
-			id: (+new Date).toString(16),
+			id: Math.random().toString(16).slice(2),
 			tree: [],
 			values: []
 		}
