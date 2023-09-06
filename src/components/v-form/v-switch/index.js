@@ -59,6 +59,15 @@ export default {
 
 					return a;
 				}, []);
+		},
+
+		/**
+		 * Change radio state
+		 * 
+		 * @param {Event} e
+		 */
+		change(e) {
+			this.$emit("change", e.target.value);
 		}
 	}
 }
