@@ -17,7 +17,7 @@ export default {
 		rules: {
 			type: Object,
 			default: () => ({
-				"input[name]": {
+				"input[name], textarea[name]": {
 					empty: true, /* Validate for emptity */
 					regex: false, /* Validate with regex */
 					value: "value" /* Check field prop */
