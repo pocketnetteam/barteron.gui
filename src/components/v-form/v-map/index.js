@@ -24,7 +24,7 @@ export default {
 	props: {
 		id: {
 			type: String,
-			default: `map-${ (+new Date).toString(16) }`
+			default: `map-${ Math.random().toString(16).slice(2) }`
 		},
 		height: {
 			type: String,
