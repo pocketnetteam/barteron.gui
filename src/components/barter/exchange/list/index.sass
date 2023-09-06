@@ -8,7 +8,7 @@
 		flex-wrap: wrap
 		gap: .7em
 		font-size: .85em
-		line-height: 1.7em
+		line-height: 1.8em
 		margin: 1em 0 0
 		width: 100%
 
@@ -105,26 +105,35 @@
 			width: 100%
 
 	/* Size */
-	&.v-list-xs
+	&.v-list-xs,
+	&.v-list-xs .list li
 		border-radius: .25rem
 		
 		.list
 			font-size: .9em
 
-	&.v-list-sm
+	&.v-list-sm,
+	&.v-list-sm .list li
 		border-radius: .5rem
 
 		.list
 			font-size: 1em
 
-	&.v-list-md
+	&.v-list-md,
+	&.v-list-md .list li,
+	&.v-list-lg,
+	&.v-list-lg .list li
 		border-radius: .75rem
 
 		.list
 			font-size: 1em
 
-	&.v-list-lg,
-	&.v-list-xl
+	&.v-list-lg
+		.list
+			font-size: 1.2em
+
+	&.v-list-xl,
+	&.v-list-xl .list li
 		border-radius: 1rem
 
 		.list

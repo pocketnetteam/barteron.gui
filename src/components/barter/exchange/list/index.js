@@ -29,6 +29,7 @@ export default {
 	data() {
 		return {
 			instance: this, /* Give instance to slot */
+			id: Math.random().toString(16).slice(2),
 			editable: false,
 			vTags: [].concat(this.tags),
 			show: this.visible,
@@ -204,6 +205,7 @@ export default {
 
 	created() {
 		/* Get all categories and filter 1st level of them */
+		console.log(this.id)
 		this.add(
 			Object.keys(this.categories.items || []).filter(
 				id => !this.categories.items[id].parent

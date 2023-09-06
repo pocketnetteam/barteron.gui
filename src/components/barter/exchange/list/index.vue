@@ -2,6 +2,8 @@
 	<div :class="{ 'exchange': true, [`v-list-${ vSize }`]: true }">
 		<strong class="title" v-if="title">{{ $t('barterLabels.to') }}:</strong>
 
+		<slot v-if="$slots.default || $scopedSlots.default" :instance="instance"></slot>
+
 		<!-- Tags -->
 		<ul class="list">
 			<li
@@ -33,8 +35,11 @@
 			</li>
 
 			<!-- Insert tag -->
-			<li v-show="editable" class="add">
-				<datalist id="categories" ref="list">
+			<li
+				v-if="($slots.edit || $scopedSlots.edit) && editable"
+				class="add"
+			>
+				<datalist :id="`categories-${ id }`" ref="list">
 					<option
 						v-for="(item, index) in list[list.length - 1]"
 						:key="index"
@@ -54,7 +59,7 @@
 				<input
 					ref="tag"
 					type="text"
-					list="categories"
+					:list="`categories-${ id }`"
 					:placeholder="$t('exchange.add')"
 					@input="validate"
 					@keyup.esc="cancel"
