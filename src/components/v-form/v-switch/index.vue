@@ -19,6 +19,7 @@
 				:value="sw.value"
 				:checked="sw.checked"
 				v-model="active"
+				@change="change"
 			/>
 			<div class="v-switch">
 				<span class="v-control"></span>
