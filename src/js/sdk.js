@@ -6,10 +6,6 @@ import Vue from "vue";
  * @class SDK
  */
 class SDK {
-	address = "";
-	account = [];
-	balance = {};
-	location = {};
 	barteron = Vue.observable({
 		account: {},
 		offers: {},
@@ -21,6 +17,34 @@ class SDK {
 	emitted = [];
 	localstorage = "";
 
+	_address = "";
+	get address() {
+		if (!this._address) this.getAccount();
+		return this._address;
+	}
+
+	_account = [];
+	get account() {
+		if (!this._account.length) this.getUserInfo();
+		return this._account;
+	}
+
+	_balance = {};
+	get balance() {
+		if (!this._balance.length) this.getBalance();
+		return this._balance;
+	}
+
+	_location = {};
+	get location() {
+		if (this.empty("_location")) this.getLocation();
+		return this._location;
+	}
+
+	empty(prop) {
+		return !Object.values(this?.[prop]).length;
+	}
+
 	constructor() {
 		if (!window.BastyonSdk) return;
 
@@ -28,17 +52,17 @@ class SDK {
 		this.sdk.emit('loaded');
 
 		this.sdk.on('action', d => {
-			this.balance = JSON.stringify(d);
+			const action = JSON.stringify(d);
 
 			this.emitted.push({
 				type : 'action',
-				data : this.balance,
+				data : action,
 				date : new Date(),
 			});
 		});
 
 		this.sdk.on('balance', balance => {
-			this.balance = balance;
+			this._balance = balance;
 			this.emitted.push({
 				type : 'balance',
 				data : JSON.stringify(balance),
@@ -62,7 +86,7 @@ class SDK {
 	}
 
 	imageFromMobileCamera() {
-		this.sdk.get.imageFromMobileCamera().then((images) => {
+		this.sdk.get.imageFromMobileCamera().then(images => {
 			this.lastresult = 'imageFromMobileCamera: success (console.log)'
 		}).catch(e => this.setLastResult(e))
 	}
@@ -70,6 +94,20 @@ class SDK {
 	alertMessage() {
 		this.sdk.helpers.alert('Test message').then(() => {
 			this.lastresult = 'alert: success'
+		}).catch(e => this.setLastResult(e))
+	}
+
+	/**
+	 * Upload images to imgur
+	 * 
+	 * @param {Array} images
+	 * 
+	 * @return {Promise}
+	 */
+	uploadImagesToImgur(images) {
+		return this.sdk.set.imagesToImgur(images).then(urls => {
+			this.lastresult = 'uploadImageToImgur: success (console.log)'
+			return urls;
 		}).catch(e => this.setLastResult(e))
 	}
 
@@ -94,7 +132,7 @@ class SDK {
 	getAccount() {
 		return this.sdk.get.account().then(address => {
 			this.lastresult = 'user address: ' + address;
-			return this.address = address;
+			return this._address = address;
 		}).catch(e => this.setLastResult(e));
 	}
 
@@ -106,7 +144,7 @@ class SDK {
 	getBalance() {
 		return this.sdk.get.balance().then(balance => {
 			this.lastresult = balance;
-			return this.balance = balance;
+			return this._balance = balance;
 		}).catch(e => this.setLastResult(e));
 	}
 
@@ -138,7 +176,7 @@ class SDK {
 	getLocation() {
 		return this.sdk.get.location().then(data => {
 			this.lastresult = data;
-			return this.location = data;
+			return this._location = data;
 		}).catch(e => this.setLastResult(e))
 	}
 
@@ -179,10 +217,10 @@ class SDK {
 	 * @return {Promise}
 	 */
 	async getUserInfo() {
-		if(!this.address) await this.getAccount();
+		if(!this._address) await this.getAccount();
 
-		return this.rpc('getuserprofile', [this.address]).then(data => {
-			return this.account = data;
+		return this.rpc('getuserprofile', [this._address]).then(data => {
+			return this._account = data;
 		});
 	}
 
@@ -207,14 +245,14 @@ class SDK {
 	 * @return {Promise}
 	 */
 	getBrtAccount(address) {
-		return this.rpc('getbarteronaccounts', [address ?? this.address]).then(account => {
+		return this.rpc('getbarteronaccounts', [address ?? this._address]).then(account => {
 			if (account) {
 				account.forEach(acc => {
 					acc.p.s4 = JSON.parse(acc.p.s4);
 				});
 			}
 
-			Vue.set(this.barteron.account, address ?? this.address, account);
+			Vue.set(this.barteron.account, address ?? this._address, account);
 			return account;
 		});
 	}
@@ -240,9 +278,31 @@ class SDK {
 	 * @return {Promise}
 	 */
 	getBrtOffers(name) {
-		return this.rpc('getbarteronoffersbyaddress', this.address).then(offers => {
+		return this.rpc('getbarteronoffersbyaddress', this._address).then(offers => {
 			return this.barteron.offers[name] = offers;
 		});
+	}
+
+	/**
+	 * Set barteron offer
+	 * 
+	 * @param {Object} data
+	 * 
+	 * Base
+	 * 
+	 * @param {String} data.language
+	 * @param {String} data.caption
+	 * @param {String} data.description
+	 * @param {String} data.tag
+	 * @param {Array} data.tags
+	 * @param {Array} data.images
+	 * @param {String} data.geohash
+	 * @param {Number} data.price
+	 * 
+	 * @return {Promise}
+	 */
+	setBrtOffer(data) {
+		return this.sdk.set.barteron.offer(data);
 	}
 
 	/**

@@ -30,15 +30,7 @@ export default {
 	},
 
 	mounted() {
-		Promise.all([
-			/* Account */
-			this.sdk.getUserInfo(),
-
-			/* Location */
-			this.sdk.getLocation()
-		]).then(() => {
-			console.warn('sdk loaded');
-		});
+		
 	},
 }
 </script>
