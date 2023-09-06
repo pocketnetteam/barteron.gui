@@ -12,6 +12,9 @@ export default {
 	},
 
 	computed: {
+		/**
+		 * Barteron account
+		 */
 		account() {
 			return this.sdk.barteron.account[this.sdk.address];
 		}
@@ -27,11 +30,7 @@ export default {
 			this.sdk.setBrtAccount({
 				address: this.sdk.address,
 				tags: tags
-			}).then(e => console.log(e, this));
+			});
 		}
-	},
-
-	created() {
-		this.sdk.getBrtAccount();
 	}
 }
