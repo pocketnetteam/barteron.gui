@@ -20,6 +20,7 @@
 
 				<!-- Component: Photo uploader -->
 				<v-photos
+					class="field"
 					ref="photos"
 					multiple="multiple"
 					accept="jpeg, png"
@@ -37,52 +38,75 @@
 				<!-- Radio: My list, Something, For nothing -->
 				<v-switch
 					type="radio"
-					checked="something"
+					:checked="getting"
 					:value="['my_list', 'something', 'for_nothing']"
 					:label="[$t('my_list'), $t('something'), $t('for_nothing')]"
 					vType="button"
 					vSize="lg"
+					@change="saveGetting"
 				/>
 			</div>
 
 			<div class="row block">
-				<!-- Select: Tags -->
-				<ExchangeList
-					:tags="tags"
-					:title="false"
-					vSize="lg"
-					@change="saveTags"
-				>
-					<template #edit="{ instance }">
-						<!-- Edit button -->
-						<template v-if="!instance.editable">
-							<v-button @click="instance.edit">
-								<i class="fa fa-pencil-alt fa-shrink"></i>
-							</v-button>
+				<!-- Select: Tags (from account) -->
+				<template v-if="getting === 'my_list'">
+					<ExchangeList
+						class="field"
+						vSize="lg"
+						:tags="accounts?.[0]?.tags || []"
+						:title="false"
+					>
+						<template #default="myList">
+							<input name="tags" type="hidden" :value="myList.instance.vTags.join()">
+						</template>
+					</ExchangeList>
+				</template>
+
+				<!-- Select: Tags (editable) -->
+				<template v-if="getting === 'something'">
+					<ExchangeList
+						class="field"
+						vSize="lg"
+						:tags="tags"
+						:title="false"
+						@change="saveTags"
+					>
+						<template #default="something">
+							<input name="tags" type="hidden" :value="something.instance.vTags.join()">
 						</template>
 
-						<!-- Cancel and Save buttons -->
-						<template v-else>
-							<div class="buttons-holder">
-								<v-button vSize="lg" vType="chi-chi" @click="instance.cancel">
-									{{ $t('buttonLabels.cancel') }}
+						<template #edit="something">
+							<!-- Edit button -->
+							<template v-if="!something.instance.editable">
+								<v-button @click="something.instance.edit">
+									<i class="fa fa-pencil-alt fa-shrink"></i>
 								</v-button>
+							</template>
 
-								<v-button vSize="lg" @click="instance.save">
-									{{ $t('exchange.save') }}
-								</v-button>
-							</div>
+							<!-- Cancel and Save buttons -->
+							<template v-else>
+								<div class="buttons-holder">
+									<v-button vType="chi-chi" @click="something.instance.cancel">
+										{{ $t('buttonLabels.cancel') }}
+									</v-button>
+
+									<v-button @click="something.instance.save">
+										{{ $t('exchange.save') }}
+									</v-button>
+								</div>
+							</template>
 						</template>
-					</template>
-				</ExchangeList>
+					</ExchangeList>
+				</template>
 			</div>
 
-			<div class="row block">
+			<div class="row block" v-if="getting !== 'for_nothing'">
 				<!-- Label: Currency text -->
 				<label for="currency" class="v-label">{{ $t('choose_currency_text') }}</label>
 
 				<!-- Input: Currency exchange to PKOIN -->
 				<v-input
+					:name="['price', '']"
 					:type="['number', 'number']"
 					:readonly="[null, true]"
 					:value="['0', '0']"
@@ -115,32 +139,20 @@
 				<strong class="title">{{ $t('steps.description') }}</strong>
 
 				<!-- Textarea: Description -->
-				<v-textarea class="field" length="9000" />
+				<v-textarea class="field" name="description" length="9000" />
 			</div>
 
 			<div class="row block">
 				<!-- Title: Location -->
 				<strong class="title">{{ $t('steps.location') }}</strong>
 
-				<!-- Radio: Current location, Exact address -->
-				<v-switch
-					class="full-width"
-					type="radio"
-					checked="location"
-					:value="['location', 'address']"
-					:label="[$t('steps.location'), $t('exact_address')]"
-					vType="slide"
-				/>
-			</div>
-
-			<div class="row block">
-				<!-- Input: City -->
-				<v-input :placeholder="$t('city_name')" vSize="lg" />
-			</div>
-
-			<div class="row block sep">
 				<!-- Component: Map -->
-				<v-map />
+				<v-map
+					ref="map"
+					:center="location"
+					:allowPosition="true"
+					:allowSelection="true"
+				/>
 			</div>
 
 			<div class="row full-width">

@@ -1,10 +1,17 @@
 @import "@/css/vars.sass"
 
 #content
+	.photo-uploader.field
+		&:not(.rejected)
+			border-color: transparent
+		
+		border-radius: 12px
+
 	.exchange
 		display: flex
 		justify-content: space-between
 		gap: 10px
+		padding: 2px
 
 		.list,
 		.edit

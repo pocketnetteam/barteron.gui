@@ -1,3 +1,4 @@
+import { GeoHash } from "geohash";
 import BarterList from "@/components/barter/list/index.vue";
 import CategoriesSelect from "@/components/categories/multiple-select/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
@@ -13,11 +14,29 @@ export default {
 
 	data() {
 		return {
+			getting: "something",
 			tags: []
 		}
 	},
 
 	computed: {
+		/**
+		 * Barteron account
+		 */
+		accounts() {
+			return this.sdk.barteron.account[this.sdk.address];
+		},
+
+		/**
+		 * Get my location
+		 * 
+		 * @return {Array}
+		 */
+		location() {
+			const location = Object.values(this.sdk.location);
+			return location.length ? location : undefined;
+		},
+
 		/**
 		 * Make list of filters
 		 * 
@@ -69,6 +88,15 @@ export default {
 		},
 
 		/**
+		 * Store what i want to get
+		 * 
+		 * @param {String} value
+		 */
+		saveGetting(value) {
+			this.getting = value;
+		},
+
+		/**
 		 * Store tags
 		 * 
 		 * @param {Array} tags
@@ -83,23 +111,48 @@ export default {
 		submit() {
 			const
 				form = this.$refs.form,
-				photos = this.$refs.photos;
+				photos = this.$refs.photos,
+				center = this.$refs.map.marker || this.$refs.map.center;
 
-			/* If all fields valid */
+			if (photos.validate()) {
+				photos.$el.classList.add(form.classes.passed);
+				photos.$el.classList.remove(form.classes.rejected);
+			} else {
+				photos.$el.classList.add(form.classes.rejected);
+				photos.$el.classList.remove(form.classes.passed);
+			}
+
+			/* Check all fields validity */
 			if (form.validate()) {
 				const 
 					data = form.serialize(),
 					images = photos.serialize();
 				
-				/* Upload images to imgur through bastyon */
-				/* this.sdk.uploadImagesToImgur(Object.values(images)).then(urls => {
-					console.log(urls)
-				}) */
+				/* Show loader */
 				form.popup.update({
 					text: "Sending data, please wait..."
 				}).show()
 
-				console.log(data, images)
+				/* Upload images to imgur through bastyon */
+				this.sdk.uploadImagesToImgur(Object.values(images))
+					.then(urls => {
+						/* Send request to create an offer */
+						this.sdk.setBrtOffer({
+							language: this.$i18n.locale,
+							caption: data.title,
+							description: data.description,
+							tag: data.category,
+							tags: data.tags.split(","),
+							images: urls,
+							geohash: GeoHash.encodeGeoHash.apply(null, center),
+							price: Number(data.price)
+						}).then(res => {
+							console.log(res)
+						});
+					})
+					.finally(() => {
+						form.popup.hide();
+					});
 			}
 		}
 	}
