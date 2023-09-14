@@ -6,13 +6,6 @@ import Vue from "vue";
  * @class SDK
  */
 class SDK {
-	barteron = Vue.observable({
-		account: {},
-		offers: {},
-		feed: {},
-		deals: {}
-	});
-
 	lastresult = "";
 	emitted = [];
 	localstorage = "";
@@ -37,7 +30,7 @@ class SDK {
 
 	_location = {};
 	get location() {
-		if (this.empty("_location")) this.getLocation();
+		this.getLocation();
 		return this._location;
 	}
 
@@ -46,6 +39,8 @@ class SDK {
 	}
 
 	constructor() {
+		const $ = this;
+
 		if (!window.BastyonSdk) return;
 
 		this.sdk = new window.BastyonSdk();
@@ -67,6 +62,36 @@ class SDK {
 				type : 'balance',
 				data : JSON.stringify(balance),
 				date : new Date(),
+			})
+		});
+
+		/* Reactive observable sub-objects */
+		this.barteron = Vue.observable({
+			_account: {},
+
+			_offers: {},
+			_feed: {},
+			_deals: {},
+
+			offers: {},
+			feed: {},
+			deals: {}
+		});
+
+		/* Observe sub-objects watchers */
+		Object.assign(this.barteron, {
+			/* Barteron account operations */
+			account: new Proxy(this.barteron._account, {
+				get(target, address) {
+					if (address?.length < 30) return this;
+					if (!target?.[address]) {
+						$.getBrtAccount(address);
+					}
+					return target?.[address];
+				},
+				set(target, address, { tags }) {
+					return $.setBrtAccount({ address, tags });
+				}
 			})
 		});
 	}
@@ -245,15 +270,28 @@ class SDK {
 	 * @return {Promise}
 	 */
 	getBrtAccount(address) {
-		return this.rpc('getbarteronaccounts', [address ?? this._address]).then(account => {
-			if (account) {
-				account.forEach(acc => {
-					acc.p.s4 = JSON.parse(acc.p.s4);
-				});
+		address = address || this._address;
+
+		if (!this.barteron._account[address]) {
+			Vue.set(this.barteron._account, address, []);
+		}
+
+		return this.rpc('getbarteronaccounts', [address]).then(accounts => {
+			if (accounts?.length) {
+				/* Extract JSON values */
+				accounts = accounts.reduce((arr, account) => {
+					arr.push({
+						...account,
+						address: account.s1,
+						tags: JSON.parse(account.p?.s4 || "{a:[]}").a
+					});
+
+					return arr;
+				}, []);
 			}
 
-			Vue.set(this.barteron.account, address ?? this._address, account);
-			return account;
+			Vue.set(this.barteron._account, address, accounts);
+			return accounts;
 		});
 	}
 
@@ -267,7 +305,10 @@ class SDK {
 	 * @return {Promise}
 	 */
 	setBrtAccount(data) {
-		return this.sdk.set.barteron.account(data);
+		return this.sdk.set.barteron.account(data).then(result => {
+			Vue.set(this.barteron._account?.[data.address]?.[0], "tags", data.tags);
+			return result;
+		});
 	}
 
 	/**
