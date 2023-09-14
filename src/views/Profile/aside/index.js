@@ -15,7 +15,7 @@ export default {
 		/**
 		 * Barteron account
 		 */
-		account() {
+		accounts() {
 			return this.sdk.barteron.account[this.sdk.address];
 		}
 	},
@@ -27,10 +27,7 @@ export default {
 		 * @param {Array} tags 
 		 */
 		changeTags(tags) {
-			this.sdk.setBrtAccount({
-				address: this.sdk.address,
-				tags: tags
-			});
+			this.sdk.barteron.account[this.sdk.address] = { tags };
 		}
 	}
 }
