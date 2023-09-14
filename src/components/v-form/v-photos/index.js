@@ -107,6 +107,13 @@ export default {
 		},
 
 		/**
+		 * Check at least one photo attached
+		 */
+		validate() {
+			return this.files.length;
+		},
+
+		/**
 		 * Serialize files for form
 		 * 
 		 * @return {Object}
