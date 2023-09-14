@@ -1,9 +1,14 @@
 import {
 	LMap,
 	LTileLayer,
-	LMarker
+	LMarker,
+	LCircle,
+	LCircleMarker,
+	LControl
 } from "vue2-leaflet";
 import { Icon } from "leaflet";
+import { OpenStreetMapProvider } from "leaflet-geosearch";
+import LGeosearch from "vue2-leaflet-geosearch";
 
 delete Icon.Default.prototype._getIconUrl;
 Icon.Default.mergeOptions({
@@ -18,7 +23,11 @@ export default {
 	components: {
 		LMap,
 		LTileLayer,
-		LMarker
+		LMarker,
+		LCircle,
+		LCircleMarker,
+		LControl,
+		LGeosearch
 	},
 
 	props: {
@@ -46,13 +55,59 @@ export default {
 			type: Array,
 			default: () => [55.751244, 37.618423]
 		},
-		marker: {
-			type: Array,
-			default: () => null
+		allowPosition: {
+			type: Boolean,
+			default: false
+		},
+		allowSelection: {
+			type: Boolean,
+			default: false
 		},
 		zoom: {
 			type: Number,
 			default: 15
+		}
+	},
+
+	data() {
+		this.provider = new OpenStreetMapProvider();
+
+		return {
+			mapObject: {},
+			geosearchOptions: {
+				provider: this.provider
+			},
+			marker: null
+		}
+	},
+
+	computed: {
+		/**
+		 * Get my location
+		 * 
+		 * @return {Array}
+		 */
+		location() {
+			const location = Object.values(this.sdk.location);
+			return location.length ? location : undefined;
+		}
+	},
+
+	methods: {
+		setLocation() {
+			this.mapObject.panTo(this.location);
+		}
+	},
+
+	mounted() {
+		this.mapObject = this.$refs.map.mapObject;
+		
+		if(this.allowSelection) {
+			this.mapObject.on("click", (e) => {
+				if (e.originalEvent.target.matches("div.vue2leaflet-map")) {
+					this.marker = Object.values(e.latlng);
+				}
+			});
 		}
 	}
 }

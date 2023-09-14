@@ -10,3 +10,37 @@ div[id^="map"]
 			/* Hide due to these colors associating with down syndrome */
 			svg
 				display: none !important
+
+	.leaflet-control-geosearch
+			a.leaflet-bar-part
+				&:before
+					top: 17px
+					left: 15px
+					width: 7px
+
+				&::after
+					top: 8px
+					left: 8px
+					height: 10px
+					width: 10px
+
+	.leaflet-control-geosearch
+		&.active
+			form
+				display: flex
+				flex-wrap: wrap
+				justify-content: space-between
+				overflow: hidden
+
+			input
+				padding-right: 22px
+
+			.reset
+				cursor: pointer
+				border: 0
+				position: absolute
+				top: 0
+				right: 0
+
+			.results
+				max-width: 500px
