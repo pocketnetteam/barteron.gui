@@ -24,6 +24,7 @@
 				:multiple="multiple"
 				:accept="mimeTypes"
 				type="file"
+				ref="file"
 				@change="upload"
 			/>
 			<i class="fa fa-plus"></i>
