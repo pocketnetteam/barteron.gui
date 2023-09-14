@@ -187,6 +187,7 @@ export default {
 		 * Save state
 		 */
 		save() {
+			this.insert();
 			this.editable = false;
 			this.$emit('change', this.vTags);
 		}
