@@ -30,7 +30,7 @@
 		<!-- Exchange -->
 		<div class="box">
 			<ExchangeList
-				:tags="accounts?.[0]?.tags || []"
+				:tags="account?.tags || []"
 				@change="changeTags"
 			>
 				<template #edit="{ instance }">

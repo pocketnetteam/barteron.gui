@@ -13,10 +13,21 @@ export default {
 
 	computed: {
 		/**
-		 * Barteron account
+		 * Get bastyon address
+		 * 
+		 * @return {String}
 		 */
-		accounts() {
-			return this.sdk.barteron.account[this.sdk.address];
+		address() {
+			return this.sdk.address;
+		},
+
+		/**
+		 * Barteron account
+		 * 
+		 * @return {Array}
+		 */
+		account() {
+			return this.sdk.barteron.account[this.address];
 		}
 	},
 
@@ -27,7 +38,7 @@ export default {
 		 * @param {Array} tags 
 		 */
 		changeTags(tags) {
-			this.sdk.barteron.account[this.sdk.address] = { tags };
+			this.sdk.barteron.account[this.address] = { tags };
 		}
 	}
 }
