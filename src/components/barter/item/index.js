@@ -1,3 +1,5 @@
+import { GeoHash } from "geohash";
+
 export default {
 	name: "BarterItem",
 
@@ -21,18 +23,29 @@ export default {
 		}
 	},
 
+	computed: {
+		geohash() {
+			const { latitude, longitude } = GeoHash.decodeGeoHash(this.item.geohash);
+			return [latitude[0], longitude[0]];
+		}
+	},
+
 	methods: {
 		/**
-		 * Get absolute path from relative
+		 * Get absolute path from path
 		 * 
-		 * @param {String} relative 
+		 * @param {String} path 
 		 * @returns {String}
 		 */
-		imageUrl(relative) {
-			try {
-				return require(`@/assets/images/barter/${ relative }`)
-			} catch {
-				return false;
+		imageUrl(path) {
+			if (path.startsWith("http")) {
+				return path;
+			} else {
+				try {
+					return require(`@/assets/images/barter/${ path }`)
+				} catch {
+					return null;
+				}
 			}
 		},
 
@@ -55,10 +68,10 @@ export default {
 		 * @return {String}
 		 */
 		getCategories(ids) {
-			return ids.map(id => Object.assign(
-				this.categories.items[id],
-				{ title: this.$t(this.categories.items[id]?.name) }
-			));
+			return ids.map(id => ({
+				...this.categories.items[id] || {},
+				title: this.$t(this.categories.items[id]?.name)
+			}));
 		},
 
 		/**

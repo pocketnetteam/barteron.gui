@@ -1,19 +1,19 @@
 <template>
 	<div :class="{ [`barter-item-${ vType }`]: true }">
 		<!-- Picture -->
-		<picture v-if="item?.image && vType !== 'item'">
-			<router-link :to="{ name: 'barterItem', params: { id: item.id } }">
+		<picture v-if="item.images?.length && vType !== 'item'">
+			<router-link :to="{ name: 'barterItem', params: { id: item.hash } }">
 				<span class="state">{{ $t(`condition.${ !item.used ? 'new' : 'used' }`) }}</span>
 			
 				<img
-					v-if="!Array.isArray(item.image)"
-					:src="imageUrl(item.image)"
+					v-if="item.images?.length < 2"
+					:src="imageUrl(item.images[0])"
 					:alt="item.name"
 				>
 				<template v-else>
 					<ul class="slide">
 						<li
-							v-for="(image, index) in item.image"
+							v-for="(image, index) in item.images"
 							:key="index"
 							:class="{ 'hover': hover === index }"
 							@mouseenter="() => hover = index"
@@ -27,10 +27,10 @@
 					</ul>
 					<ul
 						class="bullets"
-						v-if="item?.image.length > 1"
+						v-if="item.images?.length > 1"
 					>
 						<li
-							v-for="(image, index) in item.image"
+							v-for="(image, index) in item.images"
 							:key="index"
 							:class="{ 'hover': hover === index }"
 							@mouseenter="() => hover = index"
@@ -43,7 +43,7 @@
 
 		<!-- View: Tile -->
 		<template v-if="vType === 'tile'">
-			<div class="row pricing" v-if="item?.price">
+			<div class="row pricing" v-if="item.price">
 				<span class="price">
 					<span class="currency pkoin"></span>
 					{{ formatCurrency({ value: item.price }) }}
@@ -55,17 +55,17 @@
 				</span>
 			</div>
 
-			<div class="row title" v-if="item?.name">
-				<span>{{ item.name }}</span>
+			<div class="row title" v-if="item.caption">
+				<span>{{ item.caption }}</span>
 			</div>
 
-			<div class="row to" v-if="item?.to">
+			<div class="row to" v-if="item.tags?.length">
 				<ul>
 					<li
-						v-for="(link, index) in [$t('barterLabels.to')].concat(getCategories(item.to))"
+						v-for="(link, index) in [$t('barterLabels.to')].concat(getCategories(item.tags))"
 						:key="index"
 					>
-						<span v-if="!link.name">{{ link }}: </span>
+						<span v-if="typeof link === 'string'">{{ link }}: </span>
 						<router-link v-else
 							:to="{ 'name': 'category', params: { slug: link.name } }"
 						>{{ link.title }}</router-link>
@@ -73,17 +73,17 @@
 				</ul>
 			</div>
 
-			<div class="row info" v-if="item?.published || item.location">
+			<div class="row info" v-if="item.time || item.geohash">
 				<slot name="info" v-if="$slots.info"></slot>
 				<ul v-else>
-					<li v-if="item?.published">
+					<li v-if="item.time">
 						<dl>
 							<dt><i class="fa fa-calendar"></i></dt>
-							<dd><time>{{ $d(item.published, 'middle') }}</time></dd>
+							<dd><time>{{ $d(item.time * 1000, 'middle') }}</time></dd>
 						</dl>
 					</li>
 					<li v-if="calcDistance(item)">
-						<address>{{ distances[item.id] }} {{ $t('metrics.km') }}</address>
+						<address>{{ distances[item.hash] }} {{ $t('metrics.km') }}</address>
 					</li>
 				</ul>
 			</div>
@@ -95,17 +95,17 @@
 
 		<!-- View: Row -->
 		<template v-if="vType === 'row'">
-			<div class="row" v-if="item?.name">
+			<div class="row" v-if="item.caption">
 				<div>
-					<span class="title">{{ item.name }}</span>
+					<span class="title">{{ item.caption }}</span>
 
-					<div class="to" v-if="item?.to">
+					<div class="to" v-if="item.tags">
 						<ul>
 							<li
-								v-for="(link, index) in [$t('barterLabels.to')].concat(getCategories(item.to))"
+								v-for="(link, index) in [$t('barterLabels.to')].concat(getCategories(item.tags))"
 								:key="index"
 							>
-								<span v-if="!link.name">{{ link }}: </span>
+								<span v-if="typeof link === 'string'">{{ link }}: </span>
 								<router-link v-else
 									:to="{ 'name': 'category', params: { slug: link.name } }"
 								>{{ link.title }}</router-link>
@@ -114,7 +114,7 @@
 					</div>
 				</div>
 
-				<div class="pricing" v-if="item?.price">
+				<div class="pricing" v-if="item.price">
 					<span class="price">
 						<span class="currency pkoin"></span>
 						{{ formatCurrency({ value: item.price }) }}
@@ -129,13 +129,13 @@
 
 				<slot name="offer"></slot>
 
-				<div class="info" v-if="item?.published || item?.location">
+				<div class="info" v-if="item.time || item.geohash">
 					<ul>
-						<li v-if="item?.published">
-							<time>{{ $d(item.published, 'middle') }}</time>
+						<li v-if="item.time">
+							<time>{{ $d(item.time * 1000, 'middle') }}</time>
 						</li>
-						<li v-if="item?.location">
-							<address>{{ calcDistance(item.location) }}</address>
+						<li v-if="item.geohash">
+							<address>{{ calcDistance(item.geohash) }}</address>
 						</li>
 					</ul>
 				</div>
@@ -144,16 +144,16 @@
 
 		<!-- View: Item (On page) -->
 		<template v-if="vType === 'item'">
-			<picture v-if="item?.image">
+			<picture v-if="item.images">
 				<img
-					v-if="!Array.isArray(item.image)"
-					:src="imageUrl(item.image)"
+					v-if="item.images?.length < 2"
+					:src="imageUrl(item.images[0])"
 					:alt="item.name"
 				>
 				<template v-else>
 					<ul class="fade">
 						<li
-							v-for="(image, index) in item.image"
+							v-for="(image, index) in item.images"
 							:key="index"
 							:class="{ 'active': active === index }"
 						>
@@ -165,10 +165,10 @@
 					</ul>
 					<ul
 						class="thumbnails"
-						v-if="item?.image.length > 1"
+						v-if="item.images?.length"
 					>
 						<li
-							v-for="(image, index) in item.image"
+							v-for="(image, index) in item.images"
 							:key="index"
 							:class="{ 'active': active === index }"
 							@click="() => active = index"
@@ -185,9 +185,9 @@
 			<div class="row d-sep sided">
 				<div class="col">
 					<ul class="stat">
-						<li v-if="item?.published">
+						<li v-if="item.time">
 							<i class="fa fa-calendar-day"></i>
-							<time>{{ $d(item.published, 'middle') }}</time>
+							<time>{{ $d(item.time * 1000, 'middle') }}</time>
 						</li>
 						<li>
 							<i class="fa fa-eye"></i>
@@ -207,7 +207,7 @@
 				</div>
 			</div>
 
-			<div class="row block sep" v-if="item?.description">
+			<div class="row block sep" v-if="item.description">
 				<strong class="title">{{ $t('steps.description') }}</strong>
 				<p class="description">{{ item.description }}</p>
 			</div>
@@ -228,9 +228,13 @@
 				</div>
 			</div>
 
-			<div class="row">
+			<div class="row" v-if="item.geohash">
 					<!-- Component: Map -->
-					<v-map />
+					<v-map
+						:center="geohash"
+						:point="geohash"
+						:allowPosition="true"
+					/>
 				</div>
 		</template>
 	</div>
