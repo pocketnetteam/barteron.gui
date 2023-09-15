@@ -95,7 +95,8 @@
 
 	"barterLabels": {
 		"to": "Exchange to",
-		"select": "Select item that you want exchange"
+		"select": "Select item that you want exchange",
+		"unknown": "Unknown"
 	},
 
 	"exchange": {
@@ -131,5 +132,7 @@
 
 	"find_exchange_options": "We can find exchange options for you",
 	"exchange_options": "Exchange Options",
-	"echange_options_text": "Offer an exchange if you like the option found. Above are the best options."
+	"echange_options_text": "Offer an exchange if you like the option found. Above are the best options.",
+
+	"new_from_goods": "New from goods"
 }
