@@ -16,7 +16,7 @@ export default {
 		 * @return {Object}
 		 */
 		user() {
-			return this.sdk.account[0];
+			return this.sdk.account[this.sdk.address];
 		},
 
 		/**
@@ -25,7 +25,7 @@ export default {
 		 * @return {String}
 		 */
 		shortName() {
-			return this.user?.name.substring(0, 1).toUpperCase();
+			return this.user?.name?.substring(0, 1).toUpperCase();
 		}
 	}
 }

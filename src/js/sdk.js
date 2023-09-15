@@ -16,12 +16,6 @@ class SDK {
 		return this._address;
 	}
 
-	_account = [];
-	get account() {
-		if (!this._account.length) this.getUserInfo();
-		return this._account;
-	}
-
 	_balance = {};
 	get balance() {
 		if (!this._balance.length) this.getBalance();
@@ -65,11 +59,27 @@ class SDK {
 			})
 		});
 
-		/* Reactive observable sub-objects */
-		this.barteron = Vue.observable({
+		/**
+		 * Reactive observable
+		 */
+
+		/* Reactive accounts */
+		this._account = {};
+
+		/* Observe accounts watcher */
+		this.account = new Proxy(this._account, {
+			get(target, address) {
+				if (typeof address !== "string" || address?.length < 32) return this;
+				else if (!target?.[address]) $.getUserInfo(address);
+				return target?.[address];
+			}
+		})
+
+		/* Reactive sub-objects */
+		this.barteron = {
 			_account: {},
 			_offers: {}
-		});
+		};
 
 		/* Observe sub-objects watchers */
 		this.barteron = Object.assign(this.barteron, {
@@ -232,6 +242,11 @@ class SDK {
 
 	/**
 	 * RPC requests
+	 * 
+	 * @prop {String} method
+	 * @prop {Object} props
+	 * 
+	 * @return {Promise}
 	 */
 	rpc(method, props) {
 		return this.sdk.rpc(method, [props]).then(result => {
@@ -242,13 +257,19 @@ class SDK {
 	/**
 	 * Get bastyon user info
 	 * 
+	 * @prop {String} address
+	 * 
 	 * @return {Promise}
 	 */
-	async getUserInfo() {
-		if(!this._address) await this.getAccount();
+	async getUserInfo(address) {
+		if (!this._address) await this.getAccount();
+		address = address || this._address;
+		if (!this._account[address]) Vue.set(this._account, address, {});
 
-		return this.rpc("getuserprofile", [this._address]).then(data => {
-			return this._account = data;
+		return this.rpc("getuserprofile", [address]).then(accounts => {
+			return accounts.map(account => {
+				Vue.set(this._account, account.address, account);
+			});
 		});
 	}
 
