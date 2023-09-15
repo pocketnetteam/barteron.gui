@@ -7,13 +7,9 @@ export default {
 		BarterItem
 	},
 
-	data() {
-		return {
-			item: {}
+	computed: {
+		item() {
+			return this.sdk.barteron.offers[this.$route.params.id]
 		}
-	},
-
-	mounted() {
-		this.item = this.routeComponents?.default?.item;
 	}
 }

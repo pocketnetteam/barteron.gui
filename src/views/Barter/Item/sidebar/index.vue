@@ -1,7 +1,7 @@
 <template>
 	<v-sidebar>
 		<div class="box">
-			<h1 class="title">{{ item.name }}</h1>
+			<h1 class="title">{{ item.caption }}</h1>
 			<span class="price">
 				<span class="currency pkoin"></span> {{ item.price }}
 			</span>
@@ -17,7 +17,7 @@
 				<template #edit>
 					<dl class="list">
 						<dt>{{ $t('metrics.number') }}</dt>
-						<dd>{{ item.id }}</dd>
+						<dd>{{ item.hash }}</dd>
 					</dl>
 
 					<a class="report" href="#"><i class="fa fa-flag"></i> {{ $t('profile.report_abuse') }}</a>
