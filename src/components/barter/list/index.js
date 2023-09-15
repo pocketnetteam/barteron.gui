@@ -62,7 +62,7 @@ export default {
 				/* Calc item offset at right */
 				offset = (() => {
 					const slide = this.slides[0 + visible];
-					return (slide.offsetLeft + slide.offsetWidth) - this.$refs.holder.offsetWidth;
+					return (slide?.offsetLeft + slide?.offsetWidth) - this.$refs.holder.offsetWidth;
 				})(),
 
 				/* Next track offset by index */
