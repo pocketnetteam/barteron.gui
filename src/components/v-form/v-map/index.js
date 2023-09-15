@@ -55,6 +55,10 @@ export default {
 			type: Array,
 			default: () => [55.751244, 37.618423]
 		},
+		point: {
+			type: Array,
+			default: () => []
+		},
 		allowPosition: {
 			type: Boolean,
 			default: false

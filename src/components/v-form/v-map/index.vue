@@ -3,14 +3,14 @@
 		<l-map ref="map" :style="`height: ${ height }`" :zoom="zoom" :center="marker || center">
 			<template v-if="allowPosition">
 				<l-circle
-					:latLng="center"
+					:latLng="location"
 					:radius="50"
 					:stroke="false"
 					:fillColor="'#136aec'"
 					:fillOpacity="0.15"
 				/>
 				<l-circle-marker
-					:latLng="center"
+					:latLng="location"
 					:radius="9"
 					:color="'#fff'"
 					:fillColor="'#2a93ee'"
@@ -36,6 +36,7 @@
 				<l-geosearch :options="geosearchOptions" />
 			</template>
 
+			<l-marker :latLng="point" v-if="point.length" />
 			<l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
 		</l-map>
 	</div>
