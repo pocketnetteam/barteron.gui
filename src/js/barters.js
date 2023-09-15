@@ -36,12 +36,13 @@ class Barters {
 				id = Object.keys(this.items).length + i,
 				barter = (() => {
 					const item = this.getRandom();
-					return item?.image === barters[i-1]?.image ? this.getRandom() : item;
+					return item?.images === barters[i-1]?.images ? this.getRandom() : item;
 				})(),
-				date = new Date(barter.published),
-				until = new Date(date.setMonth(date.getMonth()+1));
+				date = new Date(barter.time * 1000),
+				time = date.getTime() / 1000,
+				until = new Date(date.setMonth(date.getMonth()+1)).getTime() / 1000;
 
-			this.items[id] = Object.assign(barter, { id: id, published: date, until: until }, props);
+			this.items[id] = Object.assign(barter, { id: id, time, until }, props);
 			barters.push(this.items[id]);
 		}
 
@@ -90,11 +91,12 @@ class Barters {
 	 * @return {Object}
 	 */
 	get(id) {
-		return this.items[id] ? ((item) => Object.assign({
+		return this.items[id] ? (item => ({
 			id: Number(id),
-			name: this.decodeString(item?.name),
-			descrition: this.decodeString(item?.descrition)
-		}, item))(this.items[id]) : {};
+			name: this.decodeString(item.name),
+			description: this.decodeString(item.description),
+			...item
+		}))(this.items[id]) : {};
 	}
 
 	/**
