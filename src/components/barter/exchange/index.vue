@@ -8,7 +8,7 @@
 				@click="() => selected = index"
 			>
 				<i class="fa fa-check-circle"></i>
-				<img :src="imageUrl(Array.isArray(item.image) ? item.image[0] : item.image)" :alt="item.name">
+				<img :src="imageUrl(item.images[0])" :alt="item.name">
 			</li>
 		</ul>
 
@@ -37,7 +37,7 @@
 					<li
 						v-for="(item, index) in barters.generate(3)" :key="index"
 					>
-						<img :src="imageUrl(Array.isArray(item.image) ? item.image[0] : item.image)" :alt="item.name">
+						<img :src="imageUrl(item.images[0])" :alt="item.name">
 					</li>
 				</ul>
 			</v-button>

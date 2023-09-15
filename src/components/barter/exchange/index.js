@@ -15,16 +15,20 @@ export default {
 
 	methods: {
 		/**
-		 * Get absolute path from relative
+		 * Get absolute path from path
 		 * 
-		 * @param {String} relative 
+		 * @param {String} path 
 		 * @returns {String}
 		 */
-		imageUrl(relative) {
-			try {
-				return require(`@/assets/images/barter/${ relative }`)
-			} catch {
-				return false;
+		imageUrl(path) {
+			if (path.startsWith("http")) {
+				return path;
+			} else {
+				try {
+					return require(`@/assets/images/barter/${ path }`)
+				} catch {
+					return null;
+				}
 			}
 		},
 
