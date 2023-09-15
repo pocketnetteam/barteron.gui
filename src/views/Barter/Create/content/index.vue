@@ -53,7 +53,7 @@
 					<ExchangeList
 						class="field"
 						vSize="lg"
-						:tags="accounts?.[0]?.tags || []"
+						:tags="account?.tags || []"
 						:title="false"
 					>
 						<template #default="myList">
@@ -106,15 +106,25 @@
 
 				<!-- Input: Currency exchange to PKOIN -->
 				<v-input
-					:name="['price', '']"
+					ref="price"
+					:name="['', 'price']"
 					:type="['number', 'number']"
 					:readonly="[null, true]"
 					:value="['0', '0']"
 					class="currency-input"
 					vSize="lg"
+					@input="calcPrice"
+					@change="calcPrice"
 				>
 					<template #input0After>
-						<v-select :dropdown="[{ text: 'USD', value: 'usd' }]" />
+						<v-select
+							ref="currency"
+							:dropdown="[
+								{ text: 'USD', value: 'usd' },
+								{ text: 'EUR', value: 'eur' }
+							]"
+							@selected="calcPrice"
+						/>
 					</template>
 
 					<template #input1After>

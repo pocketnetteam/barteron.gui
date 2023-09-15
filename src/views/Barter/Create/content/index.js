@@ -21,10 +21,21 @@ export default {
 
 	computed: {
 		/**
-		 * Barteron account
+		 * Get bastyon address
+		 * 
+		 * @return {String}
 		 */
-		accounts() {
-			return this.sdk.barteron.account[this.sdk.address];
+		address() {
+			return this.sdk.address;
+		},
+
+		/**
+		 * Barteron account
+		 * 
+		 * @return {Array}
+		 */
+		account() {
+			return this.sdk.barteron.account[this.address];
 		},
 
 		/**
@@ -105,6 +116,17 @@ export default {
 			this.tags = tags;
 		},
 
+		calcPrice() {
+			const
+				values = { "usd": 0.25, "eur": 0.24, "pkoin": 1},
+				currency = this.$refs.currency.selected,
+				field = this.$refs.price,
+				input = field.inputs[0],
+				pkoin = field.inputs[1];
+
+				pkoin.value = Math.ceil((input.value / values[currency.value]) * 100) / 100;
+		},
+
 		/**
 		 * Submit form data
 		 */
@@ -131,7 +153,7 @@ export default {
 				/* Show loader */
 				form.popup.update({
 					text: "Sending data, please wait..."
-				}).show()
+				}).show();
 
 				/* Upload images to imgur through bastyon */
 				this.sdk.uploadImagesToImgur(Object.values(images))
@@ -146,12 +168,24 @@ export default {
 							images: urls,
 							geohash: GeoHash.encodeGeoHash.apply(null, center),
 							price: Number(data.price)
-						}).then(res => {
-							console.log(res)
+						}).then(() => {
+							form.popup.hide();
+						}).catch(err => {
+							/* Show error popup */
+							form.popup.update({
+								text: `Offer error has occured ${ err }`,
+								close: true,
+								icon: false
+							});
 						});
 					})
-					.finally(() => {
-						form.popup.hide();
+					.catch(err => {
+						/* Show error popup */
+						form.popup.update({
+							text: `Image upload error ${ err }`,
+							close: true,
+							icon: false
+						});
 					});
 			}
 		}
