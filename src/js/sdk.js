@@ -44,22 +44,22 @@ class SDK {
 		if (!window.BastyonSdk) return;
 
 		this.sdk = new window.BastyonSdk();
-		this.sdk.emit('loaded');
+		this.sdk.emit("loaded");
 
-		this.sdk.on('action', d => {
+		this.sdk.on("action", d => {
 			const action = JSON.stringify(d);
 
 			this.emitted.push({
-				type : 'action',
+				type : "action",
 				data : action,
 				date : new Date(),
 			});
 		});
 
-		this.sdk.on('balance', balance => {
+		this.sdk.on("balance", balance => {
 			this._balance = balance;
 			this.emitted.push({
-				type : 'balance',
+				type : "balance",
 				data : JSON.stringify(balance),
 				date : new Date(),
 			})
@@ -68,29 +68,32 @@ class SDK {
 		/* Reactive observable sub-objects */
 		this.barteron = Vue.observable({
 			_account: {},
-
-			_offers: {},
-			_feed: {},
-			_deals: {},
-
-			offers: {},
-			feed: {},
-			deals: {}
+			_offers: {}
 		});
 
 		/* Observe sub-objects watchers */
-		Object.assign(this.barteron, {
+		this.barteron = Object.assign(this.barteron, {
 			/* Barteron account operations */
 			account: new Proxy(this.barteron._account, {
 				get(target, address) {
-					if (address?.length < 30) return this;
-					if (!target?.[address]) {
-						$.getBrtAccount(address);
-					}
+					if (typeof address !== "string" || address?.length < 32) return this;
+					else if (!target?.[address]) $.getBrtAccount(address);
 					return target?.[address];
 				},
 				set(target, address, { tags }) {
 					return $.setBrtAccount({ address, tags });
+				}
+			}),
+
+			/* Barteron offers operations */
+			offers: new Proxy(this.barteron._offers, {
+				get(target, hash) {
+					if (typeof hash !== "string" || hash?.length < 64) return this;
+					else if (!target?.[hash]) $.getBrtOffersByHashes([hash]);
+					return target?.[hash];
+				},
+				set(target, hash, data) {
+					return $.setBrtOffer({ hash, ...data });
 				}
 			})
 		});
@@ -101,24 +104,24 @@ class SDK {
 	}
 
 	clearLastResult() {
-		this.setLastResult('');
+		this.setLastResult("");
 	}
 
 	openSettings() {
 		this.sdk.helpers.opensettings().then(() => {
-			this.lastresult = 'opensettings: success'
+			this.lastresult = "opensettings: success"
 		}).catch(e => this.setLastResult(e))
 	}
 
 	imageFromMobileCamera() {
 		this.sdk.get.imageFromMobileCamera().then(images => {
-			this.lastresult = 'imageFromMobileCamera: success (console.log)'
+			this.lastresult = "imageFromMobileCamera: success (console.log)"
 		}).catch(e => this.setLastResult(e))
 	}
 
 	alertMessage() {
-		this.sdk.helpers.alert('Test message').then(() => {
-			this.lastresult = 'alert: success'
+		this.sdk.helpers.alert("Test message").then(() => {
+			this.lastresult = "alert: success"
 		}).catch(e => this.setLastResult(e))
 	}
 
@@ -131,7 +134,7 @@ class SDK {
 	 */
 	uploadImagesToImgur(images) {
 		return this.sdk.set.imagesToImgur(images).then(urls => {
-			this.lastresult = 'uploadImageToImgur: success (console.log)'
+			this.lastresult = "uploadImageToImgur: success (console.log)"
 			return urls;
 		}).catch(e => this.setLastResult(e))
 	}
@@ -145,7 +148,7 @@ class SDK {
 	 */
 	requestPermissions(permissions) {
 		return this.sdk.request.permissions(permissions).then(() => {
-			this.lastresult = 'messaging: granted'
+			this.lastresult = "messaging: granted"
 		}).catch(e => this.setLastResult(e))
 	}
 
@@ -156,7 +159,7 @@ class SDK {
 	 */
 	getAccount() {
 		return this.sdk.get.account().then(address => {
-			this.lastresult = 'user address: ' + address;
+			this.lastresult = "user address: " + address;
 			return this._address = address;
 		}).catch(e => this.setLastResult(e));
 	}
@@ -180,16 +183,16 @@ class SDK {
 	 */
 	makePayment() {
 		var data = {
-			'recievers' : [{
-				address : 'PR7srzZt4EfcNb3s27grgmiG8aB9vYNV82',
+			"recievers" : [{
+				address : "PR7srzZt4EfcNb3s27grgmiG8aB9vYNV82",
 				amount : 0.01
 			}], 
-			'feemode' : 'include', 
-			'message' : ''
+			"feemode" : "include", 
+			"message" : ""
 		}
 
 		this.sdk.payment(data).then(data => {
-			this.lastresult = JSON.stringify(data, null, '\t')
+			this.lastresult = JSON.stringify(data, null, "\t")
 		}).catch(e => this.setLastResult(e));
 	}
 
@@ -223,7 +226,7 @@ class SDK {
 			return values;
 		}
 
-		localStorage['checkLocalStorageAccess'] = true
+		localStorage["checkLocalStorageAccess"] = true
 		return this.localstorage = allStorage()
 	}
 
@@ -244,7 +247,7 @@ class SDK {
 	async getUserInfo() {
 		if(!this._address) await this.getAccount();
 
-		return this.rpc('getuserprofile', [this._address]).then(data => {
+		return this.rpc("getuserprofile", [this._address]).then(data => {
 			return this._account = data;
 		});
 	}
@@ -255,12 +258,29 @@ class SDK {
 	 * @return {Promise}
 	 */
 	getNodeInfo() {
-		return this.rpc('getnodeinfo');
+		return this.rpc("getnodeinfo");
 	}
 
 	/**
 	 * BARTERON REQUESTS
 	 */
+
+	/**
+	 * Convert server-side account object
+	 * 
+	 * @param {Object} account
+	 * @return {Object}
+	 */
+	importBrtAccount(account) {
+		/* Extract JSON values and format object */
+		const { a } = JSON.parse(account.p?.s4 || "{a:[]}");
+
+		return {
+			...account,
+			address: account.s1,
+			tags: a
+		};
+	}
 
 	/**
 	 * Get barteron account
@@ -273,24 +293,19 @@ class SDK {
 		address = address || this._address;
 
 		if (!this.barteron._account[address]) {
-			Vue.set(this.barteron._account, address, []);
+			Vue.set(this.barteron._account, address, {});
 		}
 
-		return this.rpc('getbarteronaccounts', [address]).then(accounts => {
+		return this.rpc("getbarteronaccounts", [address]).then(accounts => {
 			if (accounts?.length) {
-				/* Extract JSON values */
-				accounts = accounts.reduce((arr, account) => {
-					arr.push({
-						...account,
-						address: account.s1,
-						tags: JSON.parse(account.p?.s4 || "{a:[]}").a
-					});
+				accounts = accounts.map(account => {
+					account = this.importBrtAccount(account);
+					Vue.set(this.barteron._account, account.address, account);
 
-					return arr;
-				}, []);
+					return account;
+				});
 			}
 
-			Vue.set(this.barteron._account, address, accounts);
 			return accounts;
 		});
 	}
@@ -306,21 +321,48 @@ class SDK {
 	 */
 	setBrtAccount(data) {
 		return this.sdk.set.barteron.account(data).then(result => {
-			Vue.set(this.barteron._account?.[data.address]?.[0], "tags", data.tags);
+			Vue.set(this.barteron._account?.[data.address], "tags", data.tags);
 			return result;
 		});
 	}
 
 	/**
-	 * Get barteron offers by address
+	 * Convert server-side offer object
 	 * 
-	 * @param {String} name
+	 * @param {Object} offer
+	 * @return {Object}
+	 */
+	importBrtOffer(offer) {
+		/* Extract JSON values and format object */
+		const
+			{ t, a } = JSON.parse(offer.p?.s4 || "{t:'',a:[]}"),
+			images = JSON.parse(offer.p?.s5 || "[]");
+
+		return {
+			...offer,
+			language: offer.p?.s1,
+			caption: offer.p?.s2,
+			description: offer.p?.s3,
+			tag: t,
+			tags: a,
+			images,
+			geohash: offer.p?.s6,
+			price: offer.p?.i1
+		}
+	}
+
+	/**
+	 * Get barteron offers by address
 	 * 
 	 * @return {Promise}
 	 */
-	getBrtOffers(name) {
-		return this.rpc('getbarteronoffersbyaddress', this._address).then(offers => {
-			return this.barteron.offers[name] = offers;
+	getBrtOffers() {
+		return this.rpc("getbarteronoffersbyaddress", this._address).then(offers => {
+			if (offers?.length) {
+				offers = offers.map(offer => this.importBrtOffer(offer));
+			}
+
+			return offers;
 		});
 	}
 
@@ -349,30 +391,43 @@ class SDK {
 	/**
 	 * Get barteron offers by hashes
 	 * 
-	 * @param {String} name
 	 * @param {Array[String]} hashes
 	 * 
 	 * @return {Promise}
 	 */
-	getBrtOffersByHashes(name, hashes) {
-		return this.rpc('getbarteronoffersbyhashes', hashes).then(offers => {
-			return this.barteron.offers[name] = offers;
+	getBrtOffersByHashes(hashes = []) {
+		hashes.forEach(hash => {
+			if (!this.barteron._offers[hash]) {
+				Vue.set(this.barteron._offers, hash, {});
+			}
+		});
+
+		return this.rpc("getbarteronoffersbyhashes", hashes).then(offers => {
+			if (offers?.length) {
+				offers = offers.map(offer => {
+					offer = this.importBrtOffer(offer);
+					Vue.set(this.barteron._offers, offer.hash, offer);
+
+					return offer;
+				});
+			}
+
+			return offers;
 		});
 	}
 
 	/**
 	 * Get barteron offers feed
 	 * 
-	 * @param {String} name
 	 * @param {Object} request
 	 * 
 	 * Base
 	 * 
-	 * @param {String} request.lang en, ru, etc
+	 * @param {String} request.lang en-US, ru-RU, etc
 	 * @param {Array} request.tags Tags for filter offers
-	 * @param {String} request.location location like 'ABC%'
-	 * @param {Number} request.priceMax 0 for unuse
+	 * @param {String} request.location location like "ABC%"
 	 * @param {Number} request.priceMin 0 for unuse
+	 * @param {Number} request.priceMax 0 for unuse
 	 * @param {String} request.search String for fulltext search in Caption and Description
 	 * 
 	 * Pagination
@@ -385,9 +440,9 @@ class SDK {
 	 * 
 	 * @return {Promise}
 	 */
-	getBrtOffersFeed(name, request) {
-		return this.rpc('getbarteronfeed', request).then(offers => {
-			return this.barteron.feed[name] = offers;
+	getBrtOffersFeed(request = {}) {
+		return this.rpc("getbarteronfeed", request).then(offers => {
+			return offers?.map(offer => this.importBrtOffer(offer)) || [];
 		});
 	}
 
@@ -415,8 +470,8 @@ class SDK {
 	 * @return {Promise}
 	 */
 	getBrtOfferDeals(name, request) {
-		return this.rpc('getbarterondeals', request).then(deals => {
-			return this.barteron.deals[name] = deals;
+		return this.rpc("getbarterondeals", request).then(deals => {
+			return deals;
 		});
 	}
 }
