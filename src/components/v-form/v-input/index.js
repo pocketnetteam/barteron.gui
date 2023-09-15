@@ -73,6 +73,11 @@ export default {
 				case "minmax": return "number";
 				default: return type;
 			}
+		},
+
+		emit(type, e, index) {
+			this.inputs[index].value = e.target.value;
+			this.$emit(type, e, this.inputs[index]);
 		}
 	}
 }

@@ -20,6 +20,11 @@
 				:max="input.max"
 				:placeholder="input.placeholder"
 				:value="input.value"
+				@change="$event => emit('change', $event, index)"
+				@input="$event => emit('input', $event, index)"
+				@cut="$event => emit('cut', $event, index)"
+				@copy="$event => emit('copy', $event, index)"
+				@paste="$event => emit('paste', $event, index)"
 			/>
 			<slot :name="`input${ index }After`"></slot>
 		</div>
