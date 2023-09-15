@@ -1,11 +1,11 @@
 <template>
 	<div id="content">
-		<AssocList :items="categories" />
+		<AssocList :items="favorite" />
 
 		<section>
-			<h1>New from goods</h1>
+			<h1>{{ $t('new_from_goods') }}</h1>
 			<BarterList
-				:items="barters.generate(25)"
+				:items="newFromGoods"
 				:carousel="true"
 			/>
 		</section>

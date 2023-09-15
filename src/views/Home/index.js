@@ -15,7 +15,11 @@ export default {
 
 	data() {
 		return {
-			categories: this.favorite
+			newFromGoods: []
 		}
+	},
+
+	async mounted() {
+		this.newFromGoods = await this.sdk.getBrtOffersFeed();
 	}
 }
