@@ -21,21 +21,12 @@ export default {
 
 	computed: {
 		/**
-		 * Get bastyon address
-		 * 
-		 * @return {String}
-		 */
-		address() {
-			return this.sdk.address;
-		},
-
-		/**
 		 * Barteron account
 		 * 
 		 * @return {Array}
 		 */
 		account() {
-			return this.sdk.barteron.account[this.address];
+			return this.sdk.barteron.account[this.sdk.address];
 		},
 
 		/**
@@ -44,26 +35,8 @@ export default {
 		 * @return {Array}
 		 */
 		location() {
-			const location = Object.values(this.sdk.location);
-			return location.length ? location : undefined;
-		},
-
-		/**
-		 * Make list of filters
-		 * 
-		 * @return {Array}
-		 */
-		filters() {
-			return this.parseLabels("filterLabels");
-		},
-
-		/**
-		 * Make list of view
-		 * 
-		 * @return {Array}
-		 */
-		views() {
-			return this.parseLabels("viewLabels");
+			const location = this.sdk.location;
+			return location.latitude ? Object.values(location) : undefined; 
 		}
 	},
 
@@ -78,24 +51,6 @@ export default {
 			return Object.keys(this.$t(label)).map((value, index) => {
 				return { text: this.$t(`${ label }.${ value }`), value, default: index === 0 };
 			});
-		},
-
-		/**
-		 * Filter change callback
-		 * 
-		 * @param {Object} item 
-		 */
-		selectFilter(item) {
-			console.log(item)
-		},
-
-		/**
-		 * View change callback
-		 * 
-		 * @param {Object} view 
-		 */
-		selectView(view) {
-			console.log(view)
 		},
 
 		/**
