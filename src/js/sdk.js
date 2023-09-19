@@ -24,7 +24,7 @@ class SDK {
 
 	_location = {};
 	get location() {
-		this.getLocation();
+		if (this.empty("_location")) this.getLocation();
 		return this._location;
 	}
 
@@ -170,7 +170,8 @@ class SDK {
 	getAccount() {
 		return this.sdk.get.account().then(address => {
 			this.lastresult = "user address: " + address;
-			return this._address = address;
+			Vue.set(this, "_address", address);
+			return address;
 		}).catch(e => this.setLastResult(e));
 	}
 
@@ -182,7 +183,8 @@ class SDK {
 	getBalance() {
 		return this.sdk.get.balance().then(balance => {
 			this.lastresult = balance;
-			return this._balance = balance;
+			Vue.set(this, "_balance", balance)
+			return balance;
 		}).catch(e => this.setLastResult(e));
 	}
 
@@ -212,9 +214,10 @@ class SDK {
 	 * @return {Promise}
 	 */
 	getLocation() {
-		return this.sdk.get.location().then(data => {
-			this.lastresult = data;
-			return this._location = data;
+		return this.sdk.get.location().then(location => {
+			this.lastresult = location;
+			Vue.set(this, "_location", location)
+			return location;
 		}).catch(e => this.setLastResult(e))
 	}
 
@@ -262,13 +265,14 @@ class SDK {
 	 * @return {Promise}
 	 */
 	async getUserInfo(address) {
-		if (!this._address) await this.getAccount();
+		if (!address && !this._address) await this.getAccount();
 		address = address || this._address;
 		if (!this._account[address]) Vue.set(this._account, address, {});
 
 		return this.rpc("getuserprofile", [address]).then(accounts => {
 			return accounts.map(account => {
 				Vue.set(this._account, account.address, account);
+				return account;
 			});
 		});
 	}
@@ -301,6 +305,31 @@ class SDK {
 			address: account.s1,
 			tags: a
 		};
+	}
+
+	/**
+	 * Convert server-side offer object
+	 * 
+	 * @param {Object} offer
+	 * @return {Object}
+	 */
+	importBrtOffer(offer) {
+		/* Extract JSON values and format object */
+		const
+			{ t, a } = JSON.parse(offer.p?.s4 || "{t:'',a:[]}"),
+			images = JSON.parse(offer.p?.s5 || "[]");
+
+		return {
+			...offer,
+			language: offer.p?.s1,
+			caption: offer.p?.s2,
+			description: offer.p?.s3,
+			tag: t,
+			tags: a,
+			images,
+			geohash: offer.p?.s6,
+			price: offer.p?.i1
+		}
 	}
 
 	/**
@@ -348,37 +377,17 @@ class SDK {
 	}
 
 	/**
-	 * Convert server-side offer object
-	 * 
-	 * @param {Object} offer
-	 * @return {Object}
-	 */
-	importBrtOffer(offer) {
-		/* Extract JSON values and format object */
-		const
-			{ t, a } = JSON.parse(offer.p?.s4 || "{t:'',a:[]}"),
-			images = JSON.parse(offer.p?.s5 || "[]");
-
-		return {
-			...offer,
-			language: offer.p?.s1,
-			caption: offer.p?.s2,
-			description: offer.p?.s3,
-			tag: t,
-			tags: a,
-			images,
-			geohash: offer.p?.s6,
-			price: offer.p?.i1
-		}
-	}
-
-	/**
 	 * Get barteron offers by address
+	 * 
+	 * @param {String} address
 	 * 
 	 * @return {Promise}
 	 */
-	getBrtOffers() {
-		return this.rpc("getbarteronoffersbyaddress", this._address).then(offers => {
+	async getBrtOffers(address) {
+		if (!address && !this._address) await this.getAccount();
+		address = address || this._address;
+
+		return this.rpc("getbarteronoffersbyaddress", address).then(offers => {
 			if (offers?.length) {
 				offers = offers.map(offer => this.importBrtOffer(offer));
 			}
