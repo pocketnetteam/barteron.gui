@@ -8,7 +8,9 @@
 	>
 		<slot name="before"></slot>
 
-		<button
+		<component
+			:is="type"
+			:to="to"
 			:class="{
 				'v-button': true,
 				'v-button-right': vAlign === 'right',
@@ -17,20 +19,13 @@
 				active
 			}"
 			ref="button"
+			tag="button"
 			@click="clickButton"
 		>
-			<router-link
-				v-if="to"
-				class="link"
-				:to="to"
-			>
-				<slot></slot>
-			</router-link>
-			
-			<slot v-else></slot>
+			<slot></slot>
 
 			<i class="fa fa-angle-down v-dropdown-arrow" v-if="hasDropdown"></i>
-		</button>
+		</component>
 
 		<div class="v-button-dropdown" v-if="hasDropdown">
 			<slot name="dropdown" v-if="$slots.dropdown"></slot>

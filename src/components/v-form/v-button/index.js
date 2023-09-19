@@ -28,6 +28,13 @@ export default {
 	},
 
 	computed: {
+		type() {
+			if (this.to) {
+				return "router-link";
+			}
+			return "button";
+		},
+
 		value() {
 			return this.$slots?.default[0]?.elm?.parentNode?.querySelector(this.valueSelector);
 		},
