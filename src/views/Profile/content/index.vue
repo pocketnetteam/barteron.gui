@@ -72,7 +72,7 @@
 					<!-- Tab: Active -->
 					<template #active>
 						<BarterList
-							:items="barters.generate(8)"
+							:items="myAds"
 							:vType="bartersView"
 						>
 							<!-- 3-dots dropdown -->
@@ -99,13 +99,13 @@
 								/>
 
 								<ul>
-									<li v-if="item?.published">
+									<li v-if="item?.time">
 										<dl>
 											<dt><i class="fa fa-calendar"></i></dt>
 											<dd>
 												<time>
-													{{ $d(item.published, 'short') }} -
-													{{ $d(item.until, 'short') }}
+													{{ $d(item.time * 1000, 'short') }} -
+													{{ $d(item.until ? item.until * 1000 : (item.time + 2629746) * 1000, 'short') }}
 												</time>
 											</dd>
 										</dl>
@@ -122,7 +122,7 @@
 
 							<!-- Edit and find exchange -->
 							<template #offer="{ item }">
-								<v-button :to="`/barter/edit/${ item.id }`">{{ $t('item.edit') }}</v-button>
+								<v-button :to="`/barter/edit/${ item.hash }`">{{ $t('item.edit') }}</v-button>
 								<v-button vType="stroke-hit">{{ $t('item.find_exchange') }}</v-button>
 							</template>
 						</BarterList>

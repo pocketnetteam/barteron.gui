@@ -9,6 +9,7 @@ export default {
 
 	data() {
 		return {
+			myAds: [],
 			bartersView: "tile"
 		}
 	},
@@ -45,5 +46,9 @@ export default {
 		selectView(view) {
 			this.bartersView = view?.value;
 		}
-	}
+	},
+
+	async mounted() {
+		this.myAds = await this.sdk.getBrtOffers();
+	},
 }
