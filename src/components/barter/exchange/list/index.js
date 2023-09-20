@@ -206,7 +206,6 @@ export default {
 
 	created() {
 		/* Get all categories and filter 1st level of them */
-		console.log(this.id)
 		this.add(
 			Object.keys(this.categories.items || []).filter(
 				id => !this.categories.items[id].parent
