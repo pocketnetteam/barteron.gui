@@ -2,10 +2,10 @@
 	<ul :class="{ 'children-open': subOpened.length }">
 		<li
 			v-for="(item, i) in items"
-			:key="item.id"
+			:key="i"
 			:class="{
 				'tree-item': true,
-				'has-dropdown': item.children.length,
+				'has-dropdown': item?.children.length,
 				'dropdown-open': item.active,
 			}"
 			@click="$event => selectItem($event, item, i)"
