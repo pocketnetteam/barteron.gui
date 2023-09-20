@@ -13,7 +13,7 @@
 			@click="() => makeFirst(index)"
 		>
 			<div class="img-holder">
-				<img :src="item.image" :alt="item.file.name">
+				<img :src="item.image" :alt="item.file?.name || `image-${ index }`">
 			</div>
 			<i class="fa fa-times remove" @click="$event => remove($event, index)"></i>
 		</picture>

@@ -46,12 +46,12 @@ export default {
 
 	methods: {
 		/**
-		 * Make hash based on timestamp
+		 * Make hash
 		 * 
-		 * @param {Number} slug
+		 * @return {String}
 		 */
-		hash(slug) {
-			return (+new Date + slug).toString(16);
+		hash() {
+			return Math.random().toString(16).slice(2);
 		},
 
 		dragtoggle(e) {
@@ -70,8 +70,7 @@ export default {
 				reader.onload = (e) => {
 					/* Check if maxLen disabled or files count less than maxLen */
 					if (!this.max || this.files.length < this.max) {
-						this.files.push({
-							id: `image-${ this.hash(index) }`,
+						this.add({
 							image: e.target.result,
 							file: file
 						});
@@ -82,6 +81,27 @@ export default {
 			});
 
 			e.target.value = "";
+		},
+
+		/**
+		 * Add image handler
+		 * 
+		 * @param {Object|Array} images 
+		 */
+		add(images) {
+			if (Array.isArray(images)) {
+				images.forEach(image => {
+					this.files.push({
+						id: `image-${ this.hash() }`,
+						image
+					});
+				});
+			} else {
+				this.files.push({
+					id: `image-${ this.hash() }`,
+					...images
+				});
+			}
 		},
 
 		/**
