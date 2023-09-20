@@ -62,7 +62,7 @@ class Categories {
 	/**
 	 * Search by id
 	 * 
-	 * @param {String|Number[]} id
+	 * @param {String|String[]} id
 	 * @return {Object|Array}
 	 */
 	findById(id) {
@@ -72,7 +72,7 @@ class Categories {
 	/**
 	 * Search by name
 	 * 
-	 * @param {String|Number[]} name
+	 * @param {String|String[]} name
 	 * @return {Object|Array}
 	 */
 	findByName(name) {
