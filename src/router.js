@@ -17,7 +17,7 @@ const routes = [
 		}
 	},
 	{
-		path: "/barter/create",
+		path: "/barter/create/:id?",
 		alias: "/barter/edit/:id",
 		name: "createBarter",
 		components: {
