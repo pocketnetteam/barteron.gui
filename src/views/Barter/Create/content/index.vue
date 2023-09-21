@@ -6,12 +6,19 @@
 
 			<div class="row block">
 				<!-- Input: Title -->
-				<v-input class="field" name="title" :placeholder="$t('title')" vSize="lg" />
+				<v-input
+					ref="caption"
+					class="field"
+					name="title"
+					:placeholder="$t('title')"
+					:value="offer.caption"
+					vSize="lg"
+				/>
 			</div>
 			
 			<div class="row block sep">
 				<!-- Select: Category -->
-				<CategoriesSelect class="field" />
+				<CategoriesSelect ref="category" class="field" />
 			</div>
 
 			<div class="row block sep">
@@ -137,7 +144,8 @@
 				<!-- Radio: Used, New -->
 				<v-switch
 					type="radio"
-					checked="used"
+					name="condition"
+					:checked="condition"
 					:value="['used', 'new']"
 					:label="[$t('condition.used'), $t('condition.new')]"
 					vType="slide"
@@ -149,7 +157,12 @@
 				<strong class="title">{{ $t('steps.description') }}</strong>
 
 				<!-- Textarea: Description -->
-				<v-textarea class="field" name="description" length="9000" />
+				<v-textarea
+					ref="description"
+					class="field"
+					name="description"
+					length="9000"
+				/>
 			</div>
 
 			<div class="row block">

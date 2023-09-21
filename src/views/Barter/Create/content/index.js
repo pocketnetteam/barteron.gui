@@ -15,6 +15,7 @@ export default {
 	data() {
 		return {
 			getting: "something",
+			condition: "new",
 			tags: []
 		}
 	},
@@ -27,6 +28,51 @@ export default {
 		 */
 		account() {
 			return this.sdk.barteron.account[this.sdk.address];
+		},
+
+		/**
+		 * Get offer data (edit mode)
+		 * 
+		 * @return {Object}
+		 */
+		offer() {
+			const offer = this.sdk.barteron.offers[this.$route.params.id];
+			
+			/* Fill fields from offer */
+			this.$nextTick(() => {
+				if (offer.hash) {
+					if (offer.tags) {
+						if (["my_list", "for_nothing"].includes(offer.tags[0])) {
+							this.tags = [];
+							this.getting = offer.tags[0];
+						} else {
+							this.getting = "something";
+							this.tags = offer.tags;
+						}
+					}
+					if (offer.condition) this.condition = offer.condition;
+
+					if (offer.caption && this.$refs.caption?.inputs) this.$refs.caption.inputs[0].value = offer.caption;
+					if (offer.images && this.$refs.photos) this.$refs.photos.add(offer.images);
+					if (offer.tag && this.$refs.category) this.$refs.category.value(offer.tag);
+					if (offer.price && this.$refs.price) this.calcPrice(offer.price);
+					if (offer.description && this.$refs.description) this.$refs.description.content = offer.description;
+					if (offer.geohash) null;
+				} else {
+					/* Reset fields to default */
+					this.tags = [];
+					this.getting = "something";
+					this.condition = "new";
+
+					if (this.$refs.caption?.inputs) this.$refs.caption.inputs[0].value = "";
+					if (this.$refs.photos) this.$refs.photos.remove();
+					if (this.$refs.category) this.$refs.category.remove();
+					if (this.$refs.price) this.calcPrice(0);
+					if (this.$refs.description) this.$refs.description.content = "";
+				}
+			});
+
+			return offer;
 		},
 
 		/**
@@ -71,7 +117,7 @@ export default {
 			this.tags = tags;
 		},
 
-		calcPrice() {
+		calcPrice(reverse) {
 			const
 				values = { "usd": 0.25, "eur": 0.24, "pkoin": 1},
 				currency = this.$refs.currency.selected,
@@ -79,7 +125,12 @@ export default {
 				input = field.inputs[0],
 				pkoin = field.inputs[1];
 
-				pkoin.value = Math.ceil((input.value / values[currency.value]) * 100) / 100;
+				if (!Number.isInteger(reverse)) {
+					pkoin.value = Math.ceil((input.value / values[currency.value]) * 100) / 100;
+				} else {
+					pkoin.value = reverse;
+					input.value = Math.ceil((reverse * values[currency.value]) * 100) / 100;
+				}
 		},
 
 		/**
@@ -89,7 +140,8 @@ export default {
 			const
 				form = this.$refs.form,
 				photos = this.$refs.photos,
-				center = this.$refs.map.marker || this.$refs.map.center;
+				center = this.$refs.map.marker || this.$refs.map.center,
+				hash = offer.hash;
 
 			if (photos.validate()) {
 				photos.$el.classList.add(form.classes.passed);
@@ -103,7 +155,8 @@ export default {
 			if (form.validate()) {
 				const 
 					data = form.serialize(),
-					images = photos.serialize();
+					images = photos.serialize(),
+					upload = Object.values(images).filter(image => image.startsWith("data:image"));
 				
 				/* Show loader */
 				form.popup.update({
@@ -111,16 +164,26 @@ export default {
 				}).show();
 
 				/* Upload images to imgur through bastyon */
-				this.sdk.uploadImagesToImgur(Object.values(images))
+				this.sdk.uploadImagesToImgur(upload)
 					.then(urls => {
-						/* Send request to create an offer */
+						/* Merge images with urls */
+						if (urls?.length) {
+							for (let i in images) {
+								const index = upload.findIndex(image => image === images[i]);
+								if (index > -1) images[i] = urls[index];
+							}
+						}
+
+						/* Send request to create or update(hash) an offer */
 						this.sdk.setBrtOffer({
+							...(hash && { hash }),
 							language: this.$i18n.locale,
 							caption: data.title,
 							description: data.description,
 							tag: data.category,
-							tags: data.tags.split(","),
-							images: urls,
+							tags: this.getting === "something" ? data.tags.split(",") : [this.getting],
+							condition: this.condition,
+							images: Object.values(images),
 							geohash: GeoHash.encodeGeoHash.apply(null, center),
 							price: Number(data.price)
 						}).then(() => {
