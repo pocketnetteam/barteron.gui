@@ -4,6 +4,7 @@
 			:breadcrumbs="false"
 			:favorite="false"
 			:count="false"
+			:title="$t(`pageLabels.${ offer.hash ? 'edit' : 'create' }Barter`)"
 		/>
 	</v-page-header>
 </template>

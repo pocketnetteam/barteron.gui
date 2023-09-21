@@ -1,3 +1,9 @@
 export default {
-	name: "CreateBarter"
+	name: "CreateBarter",
+
+	computed: {
+		offer() {
+			return this.sdk.barteron.offers[this.$route.params.id];
+		}
+	}
 }
