@@ -76,7 +76,8 @@
 
 	"pageLabels": {
 		"home": "Home",
-		"createBarter": "Create barter"
+		"createBarter": "Create barter",
+		"editBarter": "Edit barter"
 	},
 
 	"buttonLabels": {
