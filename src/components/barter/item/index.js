@@ -24,9 +24,18 @@ export default {
 	},
 
 	computed: {
+		/**
+		 * Decode offer geohash
+		 * 
+		 * @return {Array}
+		 */
 		geohash() {
-			const { latitude, longitude } = GeoHash.decodeGeoHash(this.item.geohash);
-			return [latitude[0], longitude[0]];
+			if (this.item.geohash) {
+				const { latitude, longitude } = GeoHash.decodeGeoHash(this.item.geohash);
+				return [latitude[0], longitude[0]];
+			} else {
+				return null;
+			}
 		}
 	},
 

@@ -212,19 +212,13 @@
 				<p class="description">{{ item.description }}</p>
 			</div>
 
-			<div class="row info sided">
+			<div class="row info">
 				<div class="col">
 					<span class="title">Location</span>
 					<ul>
 						<li>Kazakhstan, Astana</li>
 						<li>13km</li>
 					</ul>
-				</div>
-
-				<div class="col buttons">
-					<v-button vType="stroke-bulma">
-						<i class="fa fa-map-marker-alt"></i>
-					</v-button>
 				</div>
 			</div>
 
