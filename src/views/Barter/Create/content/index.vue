@@ -50,7 +50,7 @@
 					:label="[$t('my_list'), $t('something'), $t('for_nothing')]"
 					vType="button"
 					vSize="lg"
-					@change="saveGetting"
+					@change="(value) => getting = value"
 				/>
 			</div>
 
@@ -76,7 +76,7 @@
 						vSize="lg"
 						:tags="tags"
 						:title="false"
-						@change="saveTags"
+						@change="(value) => tags = value"
 					>
 						<template #default="something">
 							<input name="tags" type="hidden" :value="something.instance.vTags.join()">
@@ -149,6 +149,7 @@
 					:value="['used', 'new']"
 					:label="[$t('condition.used'), $t('condition.new')]"
 					vType="slide"
+					@change="(value) => condition = value"
 				/>
 			</div>
 

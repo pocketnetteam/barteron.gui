@@ -53,11 +53,10 @@ export default {
 					if (offer.condition) this.condition = offer.condition;
 
 					if (offer.caption && this.$refs.caption?.inputs) this.$refs.caption.inputs[0].value = offer.caption;
-					if (offer.images && this.$refs.photos) this.$refs.photos.add(offer.images);
-					if (offer.tag && this.$refs.category) this.$refs.category.value(offer.tag);
+					if (offer.images && this.$refs.photos) this.$refs.photos.remove().add(offer.images);
+					if (offer.tag && this.$refs.category) this.$refs.category.remove().value(offer.tag);
 					if (offer.price && this.$refs.price) this.calcPrice(offer.price);
 					if (offer.description && this.$refs.description) this.$refs.description.content = offer.description;
-					if (offer.geohash) null;
 				} else {
 					/* Reset fields to default */
 					this.tags = [];
@@ -114,23 +113,10 @@ export default {
 		},
 
 		/**
-		 * Store what i want to get
+		 * Convert price from currency to pkoin
 		 * 
-		 * @param {String} value
+		 * @param {Number} reverse - from pkoin to currency
 		 */
-		saveGetting(value) {
-			this.getting = value;
-		},
-
-		/**
-		 * Store tags
-		 * 
-		 * @param {Array} tags
-		 */
-		saveTags(tags) {
-			this.tags = tags;
-		},
-
 		calcPrice(reverse) {
 			const
 				values = { "usd": 0.25, "eur": 0.24, "pkoin": 1},
@@ -154,8 +140,12 @@ export default {
 			const
 				form = this.$refs.form,
 				photos = this.$refs.photos,
-				center = ["marker", "point", "center"].filter(p => this.$refs.map[p]).shift(),
-				hash = offer.hash;
+				center = [
+					"marker",
+					"point",
+					"center"
+				].map(p => this.$refs.map[p]).filter(p => p).shift(),
+				hash = this.offer.hash;
 
 			if (photos.validate()) {
 				photos.$el.classList.add(form.classes.passed);
@@ -183,6 +173,8 @@ export default {
 						/* Merge images with urls */
 						if (urls?.length) {
 							for (let i in images) {
+								if (images[i].startsWith("http")) continue;
+
 								const index = upload.findIndex(image => image === images[i]);
 								if (index > -1) images[i] = urls[index];
 							}
@@ -205,16 +197,17 @@ export default {
 						}).catch(err => {
 							/* Show error popup */
 							form.popup.update({
-								text: `Offer error has occured ${ err }`,
+								text: `Offer error has occured: ${ err }`,
 								close: true,
 								icon: false
 							});
 						});
 					})
 					.catch(err => {
+						console.log(this.sdk)
 						/* Show error popup */
 						form.popup.update({
-							text: `Image upload error ${ err }`,
+							text: `Image upload error: ${ err }`,
 							close: true,
 							icon: false
 						});
