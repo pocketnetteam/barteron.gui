@@ -316,7 +316,7 @@ class SDK {
 	importBrtOffer(offer) {
 		/* Extract JSON values and format object */
 		const
-			{ t, a } = JSON.parse(offer.p?.s4 || "{t:'',a:[]}"),
+			{ t, a, c } = JSON.parse(offer.p?.s4 || "{t:'',a:[],c:'new'}"),
 			images = JSON.parse(offer.p?.s5 || "[]");
 
 		return {
@@ -326,6 +326,7 @@ class SDK {
 			description: offer.p?.s3,
 			tag: t,
 			tags: a,
+			condition: c,
 			images,
 			geohash: offer.p?.s6,
 			price: offer.p?.i1
@@ -415,7 +416,10 @@ class SDK {
 	 * @return {Promise}
 	 */
 	setBrtOffer(data) {
-		return this.sdk.set.barteron.offer(data);
+		return this.sdk.set.barteron.offer(data).then(result => {
+			if (data.hash) Vue.set(this.barteron._offers, data.hash, data);
+			return result;
+		});
 	}
 
 	/**
