@@ -83,6 +83,20 @@ export default {
 		location() {
 			const location = this.sdk.location;
 			return location.latitude ? Object.values(location) : undefined; 
+		},
+
+		/**
+		 * Decode offer geohash
+		 * 
+		 * @return {Array}
+		 */
+		geohash() {
+			if (this.offer.geohash) {
+				const { latitude, longitude } = GeoHash.decodeGeoHash(this.offer.geohash);
+				return [latitude[0], longitude[0]];
+			} else {
+				return null;
+			}
 		}
 	},
 
@@ -140,7 +154,7 @@ export default {
 			const
 				form = this.$refs.form,
 				photos = this.$refs.photos,
-				center = this.$refs.map.marker || this.$refs.map.center,
+				center = ["marker", "point", "center"].filter(p => this.$refs.map[p]).shift(),
 				hash = offer.hash;
 
 			if (photos.validate()) {

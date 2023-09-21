@@ -172,7 +172,8 @@
 				<!-- Component: Map -->
 				<v-map
 					ref="map"
-					:center="location"
+					:center="geohash || location"
+					:point="geohash"
 					:allowPosition="true"
 					:allowSelection="true"
 				/>
