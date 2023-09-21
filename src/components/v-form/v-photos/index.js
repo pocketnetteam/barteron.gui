@@ -11,7 +11,8 @@ export default {
 		return {
 			files: [],
 			max: parseInt(this.maxLen) || 0,
-			drag: false
+			drag: false,
+			moving: null
 		}
 	},
 
@@ -55,7 +56,22 @@ export default {
 		},
 
 		dragtoggle(e) {
+			if (this.moving && e?.target.dataset.index) {
+				const 
+					newIndex = e.target.dataset.index,
+					oldIndex = this.files.findIndex(file => file === this.moving);
+
+				this.files.splice(newIndex, 0, this.files.splice(oldIndex, 1)[0]);
+			}
 			this.drag = e?.type === "dragover";
+		},
+
+		dragStart(e) {
+			this.moving = this.files[e.target.dataset.index];
+		},
+
+		dragEnd() {
+			this.moving = null;
 		},
 
 		/**
@@ -112,7 +128,7 @@ export default {
 		 */
 		remove(e, index) {
 			e?.preventDefault();
-			this.files.splice(index, 1);
+			this.files.splice(index || 0, e === undefined ? this.files.length : 1);
 		},
 
 		/**

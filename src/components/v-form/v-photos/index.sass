@@ -1,6 +1,7 @@
 @import "@/css/vars.sass"
 	
 .photo-uploader
+	+resetList()
 	+transition(color)
 	display: flex
 	align-items: center
@@ -27,14 +28,14 @@
 		left: 0
 		opacity: 0
 
-	picture
+	li
 		cursor: pointer
 
 		&:first-child
 			border-width: 2px
 			border-style: solid
 
-	picture,
+	li,
 	.add
 		border: 1px dashed $trunks
 		border-radius: 12px
@@ -67,7 +68,7 @@
 			background-color: $dodoria-hover
 
 	.img-holder
-		border-radius: 12px
+		border-radius: 10px
 		overflow: hidden
 		height: 100%
 		width: 100%

@@ -1,24 +1,31 @@
 <template>
-	<div :class="{
+	<ul :class="{
 		'photo-uploader': true,
 		'no-files': !files.length,
 		'dragover': drag
 		}"
 		@drop="upload"
+		@dragstart="dragStart"
+		@dragend="dragEnd"
 	>
-		<picture
+		<li
 			v-for="(item, index) in files"
 			:key="index"
 			:id="item.id"
+			draggable="true"
 			@click="() => makeFirst(index)"
 		>
-			<div class="img-holder">
-				<img :src="item.image" :alt="item.file?.name || `image-${ index }`">
-			</div>
+			<picture class="img-holder">
+				<img
+					:src="item.image"
+					:alt="item.file?.name || `image-${ index }`"
+					:data-index="index"
+				>
+			</picture>
 			<i class="fa fa-times remove" @click="$event => remove($event, index)"></i>
-		</picture>
+		</li>
 
-		<div class="add" v-if="!max || files.length < max">
+		<li class="add" v-if="!max || files.length < max">
 			<!-- Hidden input -->
 			<input
 				:multiple="multiple"
@@ -29,8 +36,8 @@
 			/>
 			<i class="fa fa-plus"></i>
 			<span>{{ $t('upload_image') }}</span>
-		</div>
-	</div>
+		</li>
+	</ul>
 </template>
 
 <style lang="sass" src="./index.sass"></style>
