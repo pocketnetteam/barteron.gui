@@ -102,7 +102,9 @@ export default {
 		/**
 		 * Add image handler
 		 * 
-		 * @param {Object|Array} images 
+		 * @param {Object|Array} images
+		 * 
+		 * @return {this}
 		 */
 		add(images) {
 			if (Array.isArray(images)) {
@@ -118,6 +120,8 @@ export default {
 					...images
 				});
 			}
+
+			return this;
 		},
 
 		/**
@@ -125,10 +129,14 @@ export default {
 		 * 
 		 * @param {Event} e
 		 * @param {Number} index
+		 * 
+		 * @return {this}
 		 */
 		remove(e, index) {
 			e?.preventDefault();
 			this.files.splice(index || 0, e === undefined ? this.files.length : 1);
+
+			return this;
 		},
 
 		/**

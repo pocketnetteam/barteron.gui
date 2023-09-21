@@ -40,15 +40,21 @@ export default {
 		 * Add categories to list
 		 * 
 		 * @param {Array[String]} ids - Array of categories ids
+		 * 
+		 * @return {this}
 		 */
 		add(ids) {
 			this.tree.push(this.importChildren(ids));
+
+			return this;
 		},
 
 		/**
 		 * Remove categories list
 		 * 
-		 * @param {Number} index 
+		 * @param {Number} index
+		 * 
+		 * @return {this}
 		 */
 		remove(index) {
 			if (index && !this.values[index]) return;
@@ -61,12 +67,16 @@ export default {
 			this.$refs.category[index > 1 ? index - 1 : 0].value = "";
 			this.$refs.category[index > 1 ? index - 1 : 0].dataset.value = "";
 			if (index) this.$refs.category[index > 1 ? index - 1 : 0].focus();
+
+			return this;
 		},
 
 		/**
 		 * Add tree reversed-recursively
 		 * 
-		 * @param {String} id 
+		 * @param {String} id
+		 * 
+		 * @return {this}
 		 */
 		value(id) {
 			let category = this.categories.items[id];
@@ -101,6 +111,8 @@ export default {
 			});
 
 			category = null;
+
+			return this;
 		},
 
 		/**
