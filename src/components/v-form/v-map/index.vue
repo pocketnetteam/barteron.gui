@@ -31,12 +31,11 @@
 				</l-control>
 			</template>
 
-			<template v-if="allowSelection">
-				<l-marker :latLng="marker" v-if="marker" />
-				<l-geosearch :options="geosearchOptions" />
+			<template v-if="allowSelection || marker || point">
+				<l-marker :latLng="marker || point" v-if="marker || point" />
+				<l-geosearch :options="geosearchOptions" v-if="allowSelection" />
 			</template>
 
-			<l-marker :latLng="point" v-if="point.length" />
 			<l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
 		</l-map>
 	</div>

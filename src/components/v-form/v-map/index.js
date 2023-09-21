@@ -57,7 +57,7 @@ export default {
 		},
 		point: {
 			type: Array,
-			default: () => []
+			default: null
 		},
 		allowPosition: {
 			type: Boolean,
@@ -81,7 +81,7 @@ export default {
 			geosearchOptions: {
 				provider: this.provider
 			},
-			marker: null
+			marker: this.point
 		}
 	},
 
