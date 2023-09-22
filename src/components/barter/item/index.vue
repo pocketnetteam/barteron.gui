@@ -183,7 +183,7 @@
 			</picture>
 
 			<div class="row d-sep sided">
-				<div class="col">
+				<div class="col no-offset">
 					<ul class="stat">
 						<li v-if="item.time">
 							<i class="fa fa-calendar-day"></i>
