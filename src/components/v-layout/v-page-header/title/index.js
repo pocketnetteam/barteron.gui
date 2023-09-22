@@ -7,19 +7,23 @@ export default {
 	props: {
 		title: {
 			type: [String, Boolean],
-			default: true
+			default: false
+		},
+		parent: {
+			type: String,
+			default: ""
 		},
 		breadcrumbs: {
-			type: Boolean,
-			default: true
+			type: [String, Boolean],
+			default: false
 		},
 		favorite: {
 			type: Boolean,
-			default: true
+			default: false
 		},
 		count: {
 			type: Boolean,
-			default: true
+			default: false
 		}
 	},
 
