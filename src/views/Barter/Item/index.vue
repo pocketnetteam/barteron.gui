@@ -1,10 +1,6 @@
 <template>
 	<v-page-header>
-		<v-page-header-title
-			:title="false"
-			:favorite="false"
-			:count="false"
-		/>
+		<v-page-header-title parent="category" :breadcrumbs="offer.tag" />
 	</v-page-header>
 </template>
 
