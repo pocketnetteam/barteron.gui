@@ -2,7 +2,7 @@
 	<v-aside>
 		<!-- Profile stats -->
 		<div class="box">
-			<Profile>
+			<Profile :address="address">
 				<!-- Edit button -->
 				<template #edit>
 					<v-button vType="stroke-bulma">
