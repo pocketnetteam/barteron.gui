@@ -3,6 +3,12 @@ import NameToHSL from "@/js/nametohsl.js";
 export default {
 	name: "Profile",
 
+	props: {
+		address: {
+			type: String
+		}
+	},
+
 	data() {
 		return {
 			color: new NameToHSL()
@@ -11,12 +17,12 @@ export default {
 
 	computed: {
 		/**
-		 * Get user from sdk
+		 * Get user
 		 * 
 		 * @return {Object}
 		 */
 		user() {
-			return this.sdk.account[this.sdk.address];
+			return this.sdk.account[this.address];
 		},
 
 		/**
@@ -25,7 +31,7 @@ export default {
 		 * @return {String}
 		 */
 		shortName() {
-			return this.user?.name?.substring(0, 1).toUpperCase();
+			return this.account?.name?.substring(0, 1).toUpperCase();
 		}
 	}
 }
