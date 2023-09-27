@@ -321,6 +321,7 @@ class SDK {
 
 		return {
 			...offer,
+			address: offer.s1,
 			language: offer.p?.s1,
 			caption: offer.p?.s2,
 			description: offer.p?.s3,
