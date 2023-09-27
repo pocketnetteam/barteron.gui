@@ -12,8 +12,8 @@
 		</div>
 
 		<div class="box">
-			<Profile />
-			<ExchangeList>
+			<Profile :address="address" />
+			<ExchangeList :tags="account?.tags || []">
 				<template #edit>
 					<dl class="list">
 						<dt>{{ $t('metrics.number') }}</dt>

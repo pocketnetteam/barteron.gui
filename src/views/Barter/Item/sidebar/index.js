@@ -12,8 +12,31 @@ export default {
 	},
 
 	computed: {
+		/**
+		 * Get offer data
+		 * 
+		 * @return {Object}
+		 */
 		item() {
-			return this.sdk.barteron.offers[this.$route.params.id]
+			return this.sdk.barteron.offers[this.$route.params.id];
+		},
+
+		/**
+		 * Get author address
+		 * 
+		 * @return {String}
+		 */
+		address() {
+			return this.item.address;
+		},
+		
+		/**
+		 * Get author account
+		 * 
+		 * @return {Object}
+		 */
+		account() {
+			return this.sdk.barteron.account[this.address];
 		}
 	}
 }
