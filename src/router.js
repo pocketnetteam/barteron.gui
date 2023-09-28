@@ -8,7 +8,7 @@ const routes = [
 		component: () => import("@/views/Home/index.vue")
 	},
 	{
-		path: "/category/:slug",
+		path: "/category/:id",
 		name: "category",
 		components: {
 			default: () => import("@/views/Category/index.vue"),
