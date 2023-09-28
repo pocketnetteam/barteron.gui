@@ -9,7 +9,7 @@ export default {
 
 	computed: {
 		category() {
-			return this.categories.findByName(this.$route.params.slug);
+			return this.categories.findById(this.$route.params.id);
 		},
 
 		subCategories() {
