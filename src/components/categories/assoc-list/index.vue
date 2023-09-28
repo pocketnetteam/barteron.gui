@@ -7,7 +7,7 @@
 				'assoc-item': true,
 			}"
 		>
-			<router-link :to="{ name: 'category', params: { slug: item.name } }">
+			<router-link :to="{ name: 'category', params: { id: item.id } }">
 				<span class="text">
 					{{ $t(item.name) }}
 				</span>
