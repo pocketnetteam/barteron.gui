@@ -23,6 +23,7 @@ class Categories {
 		 * Decode text special chars
 		 * 
 		 * @param {String} html
+		 * 
 		 * @return {String}
 		 */
 	decodeString(html) {
@@ -32,29 +33,20 @@ class Categories {
 	}
 
 	/**
-	 * Get category with id
-	 * 
-	 * @param {String|Number} id
-	 * @return {Object}
-	 */
-	get(id) {
-		return this.items[id] ? ((item) => Object.assign({
-			id: Number(id),
-			name: this.decodeString(item.name)
-		}, item))(this.items[id]) : {};
-	}
-
-	/**
 	 * Search through items
 	 * 
-	 * @param {String} param
 	 * @param {String|Number} value
+	 * 
 	 * @return {Object}
 	 */
-	find(param, value) {
-		for (let id in this.items) {
-			if (this.items[id][param] === value) {
-				return this.get(id);
+	find(value) {
+		if (Number.isInteger(value)) {
+			return this.items[value];
+		} else {
+			for (let id in this.items) {
+				if (this.items[id][param] === value) {
+					return this.items[id];
+				}
 			}
 		}
 	}
@@ -63,20 +55,22 @@ class Categories {
 	 * Search by id
 	 * 
 	 * @param {String|String[]} id
+	 * 
 	 * @return {Object|Array}
 	 */
 	findById(id) {
-		return Array.isArray(id) ? id.map(n => this.get(n)) : this.get(id);
+		return Array.isArray(id) ? id.map(ids => this.items[ids]) : this.items[id];
 	}
 
 	/**
 	 * Search by name
 	 * 
 	 * @param {String|String[]} name
+	 * 
 	 * @return {Object|Array}
 	 */
 	findByName(name) {
-		return Array.isArray(name) ? name.map(n => this.find("name", n)) : this.find("name", name);
+		return Array.isArray(name) ? name.map(n => this.find(n)) : this.find(name);
 	}
 };
 
