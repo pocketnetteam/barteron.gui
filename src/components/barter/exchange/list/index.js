@@ -72,7 +72,7 @@ export default {
 				this.values.pop();
 
 				input.value = "";
-				input.dataset.value = this.values[this.values.length - 1]?.name;
+				input.dataset.value = this.values[this.values.length - 1]?.id;
 				input.placeholder = this.values[this.values.length - 1]?.value;
 			}
 			
@@ -138,7 +138,7 @@ export default {
 					this.values.push(selected);
 					this.btnBackDisabled = false;
 					this.btnAddDisabled = false;
-					input.dataset.value = selected.name;
+					input.dataset.value = selected.id;
 				}
 			}
 		},

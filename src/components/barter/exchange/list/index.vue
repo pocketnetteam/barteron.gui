@@ -10,7 +10,7 @@
 				v-for="(tag, index) in !editable ? vTags.slice(0, show) : vTags"
 				:key="index"
 			>
-				{{ $t(tag) }}
+				{{ $te(categories.items[tag]?.name) ? $t(categories.items[tag]?.name) : tag }}
 				<i
 					v-if="editable"
 					class="fa fa-times remove"
