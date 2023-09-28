@@ -1,6 +1,6 @@
 <template>
 	<v-page-header>
-		<v-page-header-title />
+		<v-page-header-title parent="category" :breadcrumbs="category" />
 	</v-page-header>
 </template>
 

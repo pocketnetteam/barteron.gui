@@ -1,3 +1,9 @@
 export default {
-	name: "Category"
+	name: "Category",
+
+	computed: {
+		category() {
+			return this.$route.params.id
+		}
+	}
 }
