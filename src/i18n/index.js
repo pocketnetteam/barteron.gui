@@ -4,7 +4,7 @@ import VueI18n from "vue-i18n";
 Vue.use(VueI18n);
 
 const
-	dateFormats = {
+	dateTimeFormats = {
 		"en-US": {
 			short: {
 				year: "numeric",
@@ -37,7 +37,7 @@ const
 				maximumFractionDigits: 0
 			}
 		}
-	};
+	}
 
 function loadLocaleMessages() {
 	const
@@ -64,8 +64,8 @@ function loadLocaleMessages() {
 export default new VueI18n({
 	locale: process.env.VUE_APP_I18N_LOCALE || "en-US",
 	fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || "en-US",
-	missingWarn: false,
 	messages: loadLocaleMessages(),
-	dateFormats,
+	missingWarn: false,
+	dateTimeFormats,
 	numberFormats
 });
