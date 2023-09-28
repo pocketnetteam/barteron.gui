@@ -61,7 +61,7 @@ export default {
 
 			this.tree.splice(index || 1, this.tree.length);
 			
-			this.$refs.input.value = this.$refs.category[index > 1 ? index - 1 : -1]?.value || "";
+			this.$refs.input.value = this.$refs.category[index > 1 ? index - 1 : -1]?.id || "";
 			
 			this.values.splice(index > 1 ? index - 1 : 0, this.values.length);
 			this.$refs.category[index > 1 ? index - 1 : 0].value = "";
@@ -92,7 +92,7 @@ export default {
 						category.children = this.importChildren(category.children);
 
 						tree.unshift(category.children);
-						this.values.unshift(category.name);
+						this.values.unshift(category.id);
 					}
 				}
 				
@@ -130,8 +130,8 @@ export default {
 
 			if (selected) {
 				this.values.push(selected.value);
-				input.dataset.value = selected.name;
-				this.$refs.input.value = selected.name;
+				input.dataset.value = selected.id;
+				this.$refs.input.value = selected.id;
 				this.$refs.category[i].value = selected.value;
 			}
 
