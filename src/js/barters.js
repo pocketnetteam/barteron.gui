@@ -42,7 +42,13 @@ class Barters {
 				time = date.getTime() / 1000,
 				until = new Date(date.setMonth(date.getMonth()+1)).getTime() / 1000;
 
-			this.items[id] = Object.assign(barter, { id: id, time, until }, props);
+			this.items[id] = {
+				...barter,
+				...props,
+				hash: id,
+				time,
+				until
+			}
 			barters.push(this.items[id]);
 		}
 
