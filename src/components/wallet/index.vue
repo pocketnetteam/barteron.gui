@@ -3,7 +3,7 @@
 		<dl class="list">
 			<dt><i class="fa fa-wallet"></i></dt>
 			<dd>
-				<strong>{{ (balance?.actual || 0).toFixed(2) }}</strong>
+				<strong>{{ $n(balance?.actual || 0) }}</strong>
 				<span>{{ $t('profile.coins') }}</span>
 			</dd>
 		</dl>
