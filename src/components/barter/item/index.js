@@ -35,17 +35,23 @@ export default {
 			if (ids[0] === "my_list") {
 				ids = this.sdk.barteron.account[this.sdk.address].tags;
 			} else if(ids[0] === "for_nothing") {
-				ids = [];
+				ids = [{ value: this.$t("barterLabels.free") }];
 			}
 
-			return ids?.map(id => {
-				const category = this.categories.items[id];
+			return this.isEmpty(
+				/* Values */
+				ids?.map(id => {
+					const category = this.categories.items[id];
+	
+					return {
+						...category,
+						value: this.$t(category?.name)
+					}
+				}).filter(c => c.id),
 
-				return category?.id ? {
-					...category,
-					value: this.$t(category?.name)
-				} : null;
-			}).filter(c => c) || [];
+				/* Alternative */
+				[{ value: this.$t("barterLabels.unknown") }]
+			);
 		},
 
 		/**
@@ -64,6 +70,20 @@ export default {
 	},
 
 	methods: {
+		/**
+		 * Check return alternative if empty
+		 * 
+		 * @return {*}
+		 */
+		isEmpty() {
+			for (let a in arguments) {
+				const prop = arguments[a];
+				if (prop?.length) return prop;
+			}
+
+			return arguments[arguments.length - 1];
+		},
+
 		/**
 		 * Get absolute path from path
 		 * 

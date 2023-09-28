@@ -96,6 +96,7 @@
 
 	"barterLabels": {
 		"to": "Exchange to",
+		"free": "For free",
 		"select": "Select item that you want exchange",
 		"unknown": "Unknown"
 	},

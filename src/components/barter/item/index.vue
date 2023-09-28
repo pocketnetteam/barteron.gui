@@ -67,8 +67,10 @@
 						:key="index"
 					>
 						<router-link
+							v-if="link.id"
 							:to="{ 'name': 'category', params: { id: link.id } }"
 						>{{ link.value }}</router-link>
+						<span v-else>{{ link.value }}</span>
 					</li>
 				</ul>
 			</div>
@@ -95,9 +97,9 @@
 
 		<!-- View: Row -->
 		<template v-if="vType === 'row'">
-			<div class="row" v-if="item.caption">
+			<div class="row">
 				<div>
-					<span class="title">{{ item.caption }}</span>
+					<span class="title" v-if="item.caption">{{ item.caption }}</span>
 
 					<div class="to" v-if="exchangeList.length">
 						<ul>
@@ -107,8 +109,10 @@
 								:key="index"
 							>
 								<router-link
+									v-if="link.id"
 									:to="{ 'name': 'category', params: { id: link.id } }"
 								>{{ link.value }}</router-link>
+								<span v-else>{{ link.value }}</span>
 							</li>
 						</ul>
 					</div>
