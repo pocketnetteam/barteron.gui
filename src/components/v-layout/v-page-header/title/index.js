@@ -14,7 +14,7 @@ export default {
 			default: ""
 		},
 		breadcrumbs: {
-			type: [String, Boolean],
+			type: [Number, Boolean],
 			default: false
 		},
 		favorite: {
@@ -39,7 +39,7 @@ export default {
 		 * @return {String}
 		 */
 		pageTitle() {
-			const title = this.$route.params?.slug ?? this.$route.name;
+			const title = this.$route.params.id ?? this.$route.name;
 
 			if (typeof this.title === 'string') {
 				return this.decodeString(this.title);
