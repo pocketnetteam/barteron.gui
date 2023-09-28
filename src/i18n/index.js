@@ -29,25 +29,19 @@ function loadLocaleMessages() {
 		locales = require.context(
 			"./", true, /[A-Za-z0-9-_,\s]+\.json$/i
 		),
-		data = {};
+		data = locales.keys().reduce((obj, path) => {
+			const locale = path.substring(
+				path.indexOf("/") + 1,
+				path.lastIndexOf("/")
+			);
+	
+			if (locale) {
+				/* Merge localization from different files to one */
+				obj[locale] = { ...obj[locale], ...locales(path) };
+			}
 
-	locales.keys().forEach(key => {
-		const
-			matched = key.match(/\.\/(?<locale>.+)\//i),
-			locale = matched.groups?.locale;
-
-		if (locale) {
-			if (!data[locale]) data[locale] = [];
-			data[locale].push(locales(key));
-		}
-	});
-
-	for (let k in data) {
-		let localization = {};
-		data[k].forEach(d => localization = Object.assign(localization, d));
-		data[k] = localization;
-		localization = null;
-	}
+			return obj;
+		}, {});
 	
 	return data;
 }
