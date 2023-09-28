@@ -27,7 +27,8 @@ const
 	numberFormats = {
 		"en-US": {
 			currency: {
-				style: "currency", currency: "USD"
+				style: "currency",
+				currency: "USD"
 			},
 			currencyNoCents: {
 				style: "currency",

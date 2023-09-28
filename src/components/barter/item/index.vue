@@ -46,7 +46,7 @@
 			<div class="row pricing" v-if="item.price">
 				<span class="price">
 					<span class="currency pkoin"></span>
-					{{ formatCurrency({ value: item.price }) }}
+					{{ $n(item.price) }}
 				</span>
 
 				<span class="favorite">
@@ -121,7 +121,7 @@
 				<div class="pricing" v-if="item.price">
 					<span class="price">
 						<span class="currency pkoin"></span>
-						{{ formatCurrency({ value: item.price }) }}
+						{{ $n(item.price) }}
 					</span>
 				</div>
 			</div>

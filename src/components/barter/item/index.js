@@ -104,19 +104,6 @@ export default {
 		},
 
 		/**
-		 * Format price to given currency
-		 * 
-		 * @param {Object} param0
-		 * @param {Number} param0.value
-		 * @param {String} [param0.locale]
-		 * 
-		 * @return {String}
-		 */
-		formatCurrency({ value, locale }) {
-			return (value).toLocaleString(locale ?? "en-US");
-		},
-
-		/**
 		 * Calculate item distance to you
 		 * 
 		 * @param {Object} item
