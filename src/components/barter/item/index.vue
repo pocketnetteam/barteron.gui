@@ -59,14 +59,14 @@
 				<span>{{ item.caption }}</span>
 			</div>
 
-			<div class="row to" v-if="item.tags?.length">
+			<div class="row to" v-if="exchangeList.length">
 				<ul>
+					<li><span>{{ $t('barterLabels.to') }}: </span></li>
 					<li
-						v-for="(link, index) in [$t('barterLabels.to')].concat(getCategories(item.tags))"
+						v-for="(link, index) in exchangeList"
 						:key="index"
 					>
-						<span v-if="typeof link === 'string'">{{ link }}: </span>
-						<router-link v-else
+						<router-link
 							:to="{ 'name': 'category', params: { id: link.id } }"
 						>{{ link.value }}</router-link>
 					</li>
@@ -99,14 +99,14 @@
 				<div>
 					<span class="title">{{ item.caption }}</span>
 
-					<div class="to" v-if="item.tags">
+					<div class="to" v-if="exchangeList.length">
 						<ul>
+							<li><span>{{ $t('barterLabels.to') }}: </span></li>
 							<li
-								v-for="(link, index) in [$t('barterLabels.to')].concat(getCategories(item.tags))"
+								v-for="(link, index) in exchangeList"
 								:key="index"
 							>
-								<span v-if="typeof link === 'string'">{{ link }}: </span>
-								<router-link v-else
+								<router-link
 									:to="{ 'name': 'category', params: { id: link.id } }"
 								>{{ link.value }}</router-link>
 							</li>

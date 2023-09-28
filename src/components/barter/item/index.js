@@ -25,6 +25,30 @@ export default {
 
 	computed: {
 		/**
+		 * Get exchange list
+		 * 
+		 * @return {Array}
+		 */
+		exchangeList() {
+			let ids = this.item.tags;
+
+			if (ids[0] === "my_list") {
+				ids = this.sdk.barteron.account[this.sdk.address].tags;
+			} else if(ids[0] === "for_nothing") {
+				ids = [];
+			}
+
+			return ids?.map(id => {
+				const category = this.categories.items[id];
+
+				return category?.id ? {
+					...category,
+					value: this.$t(category?.name)
+				} : null;
+			}).filter(c => c) || [];
+		},
+
+		/**
 		 * Decode offer geohash
 		 * 
 		 * @return {Array}
@@ -70,26 +94,6 @@ export default {
 		 */
 		formatCurrency({ value, locale }) {
 			return (value).toLocaleString(locale ?? "en-US");
-		},
-
-		/**
-		 * Get categories list from id's array
-		 * 
-		 * @param {Array} ids
-		 * 
-		 * @return {Array}
-		 */
-		getCategories(ids) {
-			if (ids[0] === "my_list") {
-				ids = this.sdk.barteron.account[this.sdk.address].tags;
-			} else if(ids[0] === "for_nothing") {
-				ids = [];
-			}
-
-			return ids?.map(id => ({
-				...this.categories.items[id] || {},
-				value: this.$t(this.categories.items[id]?.name)
-			})) || [];
 		},
 
 		/**
