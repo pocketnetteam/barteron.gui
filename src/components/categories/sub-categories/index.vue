@@ -8,7 +8,7 @@
 					v-if="!expanded && index < visible || expanded"
 					:key="index"
 				>
-					<router-link :to="{ name: 'category', params: { slug: item.name } }">
+					<router-link :to="{ name: 'category', params: { id: item.id } }">
 						{{ $t(item.name) }}
 					</router-link>
 				</menuitem>
