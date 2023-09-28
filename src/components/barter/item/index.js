@@ -43,7 +43,8 @@ export default {
 		/**
 		 * Get absolute path from path
 		 * 
-		 * @param {String} path 
+		 * @param {String} path
+		 * 
 		 * @returns {String}
 		 */
 		imageUrl(path) {
@@ -64,6 +65,7 @@ export default {
 		 * @param {Object} param0
 		 * @param {Number} param0.value
 		 * @param {String} [param0.locale]
+		 * 
 		 * @return {String}
 		 */
 		formatCurrency({ value, locale }) {
@@ -74,13 +76,20 @@ export default {
 		 * Get categories list from id's array
 		 * 
 		 * @param {Array} ids
-		 * @return {String}
+		 * 
+		 * @return {Array}
 		 */
 		getCategories(ids) {
-			return ids.map(id => ({
+			if (ids[0] === "my_list") {
+				ids = this.sdk.barteron.account[this.sdk.address].tags;
+			} else if(ids[0] === "for_nothing") {
+				ids = [];
+			}
+
+			return ids?.map(id => ({
 				...this.categories.items[id] || {},
-				title: this.$t(this.categories.items[id]?.name)
-			}));
+				value: this.$t(this.categories.items[id]?.name)
+			})) || [];
 		},
 
 		/**

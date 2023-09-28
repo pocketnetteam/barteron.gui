@@ -67,8 +67,8 @@
 					>
 						<span v-if="typeof link === 'string'">{{ link }}: </span>
 						<router-link v-else
-							:to="{ 'name': 'category', params: { slug: link.name } }"
-						>{{ link.title }}</router-link>
+							:to="{ 'name': 'category', params: { id: link.id } }"
+						>{{ link.value }}</router-link>
 					</li>
 				</ul>
 			</div>
@@ -107,8 +107,8 @@
 							>
 								<span v-if="typeof link === 'string'">{{ link }}: </span>
 								<router-link v-else
-									:to="{ 'name': 'category', params: { slug: link.name } }"
-								>{{ link.title }}</router-link>
+									:to="{ 'name': 'category', params: { id: link.id } }"
+								>{{ link.value }}</router-link>
 							</li>
 						</ul>
 					</div>
@@ -122,7 +122,7 @@
 				</div>
 			</div>
 
-			<div class="row">
+			<div class="row offer">
 				<div class="favorite">
 					<i class="fa fa-heart"></i>
 				</div>
