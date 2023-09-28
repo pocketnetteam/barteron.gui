@@ -7,7 +7,7 @@ export default {
 			default: ""
 		},
 		target: {
-			type: [String, Boolean],
+			type: [Number, String, Boolean],
 			default: true
 		}
 	},
@@ -18,24 +18,31 @@ export default {
 		 */
 		tree() {
 			const type = ["category", "barterItem"];
-			let tree = ["home"];
+			let tree = [
+				{
+					name: "home",
+					value: this.$t("pageLabels.home"),
+					link: "/"
+				}
+			];
 
 			/* When needs list of categories */
 			if (type.includes(this.$route.matched[0].name)) {
-				/* When target is set */
-				if (typeof this.target === "string") {
-					let
+				let
 						category = this.categories.items[this.target],
 						hierarchy = [];
 
-					while(category.parent) {
-						hierarchy.unshift(category.name);
-						category = { ...this.categories.items[category.parent] };
-					}
-
-					tree = tree.concat(hierarchy);
-					category = hierarchy = null;
+				while(category?.id) {
+					hierarchy.unshift({
+						...category,
+						...(this.$te(category.name) && { value: this.$t(category.name) }),
+						link: { name: "category", id: category.id }
+					});
+					category = category.parent ? { ...this.categories.items[category.parent] } : null;
 				}
+
+				tree = tree.concat(hierarchy);
+				category = hierarchy = null;
 			}
 
 			return tree;
