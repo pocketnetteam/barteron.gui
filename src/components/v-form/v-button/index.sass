@@ -49,21 +49,6 @@
 			&:hover
 				background: $darkgray
 
-		&[class*="v-button-hit"]
-			background: $hit
-
-			&:hover
-				background: $hit-hover
-
-		&[class*="v-button-stroke-hit"]
-			border-color: $hit
-			color: $hit
-
-			&:hover
-				background: $hit-hover
-				border-color: $hit-hover
-				color: $goku
-
 		&[class*="v-button-transparent"]
 			background: transparent
 
@@ -77,11 +62,48 @@
 			&:hover
 				color: $bulma-hover
 
+			/* Stroke */
+			&[class*="bulma-stroke"]
+				background: none
+				border-color: $bulma
+				color: $bulma
+
+				&:hover
+					background: $bulma-hover
+					border-color: $bulma-hover
+					color: $goku
+
 		&[class*="gray"]
 			color: $gray
 
 			&:hover
 				color: $lightgray
+
+			/* Stroke */
+			&[class*="gray-stroke"]
+				background: none
+				color: $gohan
+				background: $gray
+
+				&:hover
+					background: $lightgray
+					color: $darkgray
+
+		&[class*="hit"]
+			background: $hit
+
+			&:hover
+				background: $hit-hover
+
+			/* Stroke */
+			&[class*="hit-stroke"]
+				border-color: $hit
+				color: $gohan
+
+				&:hover
+					background: $hit-hover
+					border-color: $hit-hover
+					color: $goku
 
 		&[class*="roshi"]
 			color: $gohan
@@ -90,12 +112,52 @@
 			&:hover
 				background: $roshi-hover
 
+			/* Stroke */
+			&[class*="roshi-stroke"]
+				background: none
+				color: $gohan
+				border-color: $roshi
+
+				&:hover
+					background: $roshi-hover
+					border-color: $roshi-hover
+					color: $goku
+
 		&[class*="chi-chi"]
 			color: $gohan
 			background: $chi-chi
 
 			&:hover
 				background: $chi-chi-hover
+
+			/* Stroke */
+			&[class*="chi-chi-stroke"]
+				background: none
+				color: $chi-chi
+				border-color: $chi-chi
+
+				&:hover
+					background: $chi-chi-hover
+					border-color: $chi-chi-hover
+					color: $goku
+
+		&[class*="dodoria"]
+			color: $gohan
+			background: $dodoria
+
+			&:hover
+				background: $dodoria-hover
+
+			/* Stroke */
+			&[class*="dodoria-stroke"]
+				background: none
+				border-color: $dodoria
+				color: $dodoria
+
+				&:hover
+					background: $dodoria-hover
+					border-color: $dodoria-hover
+					color: $goku
 
 		/* Align */
 		&.v-button-right
