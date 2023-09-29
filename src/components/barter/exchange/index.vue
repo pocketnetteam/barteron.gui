@@ -45,7 +45,7 @@
 
 		<div class="buy">
 			<v-button vType="roshi">
-				<span>{{ $t('buttonLabels.buy_for', { cost: item.price }) }}</span>
+				<span>{{ $t('buttonLabels.buy_for', { cost: $n(item.price) }) }}</span>
 			</v-button>
 		</div>
 	</div>
