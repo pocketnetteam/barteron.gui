@@ -3,7 +3,7 @@
 		<div class="box">
 			<h1 class="title">{{ item.caption }}</h1>
 			<span class="price">
-				<span class="currency pkoin"></span> {{ item.price }}
+				<span class="currency pkoin"></span> {{ $n(item.price) }}
 			</span>
 
 			<div class="row t-sep">
