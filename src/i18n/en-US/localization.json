@@ -91,7 +91,10 @@
 		"find_exchange_options": "Find exchange options",
 		"offer_an_exchange": "Offer an exchange",
 		"show_more": "Show more",
-		"buy_for": "Buy for {cost} PKOIN"
+		"buy_for": "Buy for {cost} PKOIN",
+		"edit": "Edit",
+		"withdraw": "Withdraw from publication",
+		"remove": "Remove"
 	},
 
 	"barterLabels": {
