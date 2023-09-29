@@ -31,7 +31,7 @@ export default {
 		 * @return {String}
 		 */
 		shortName() {
-			return this.account?.name?.substring(0, 1).toUpperCase();
+			return this.user?.name?.substring(0, 1).toUpperCase();
 		}
 	}
 }
