@@ -22,6 +22,15 @@ export default {
 		},
 
 		/**
+		 * Show is this offer is owner's
+		 * 
+		 * @return {Boolean}
+		 */
+		isMyOffer() {
+			return this.address === this.sdk.address;
+		},
+
+		/**
 		 * Get author address
 		 * 
 		 * @return {String}

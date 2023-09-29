@@ -7,7 +7,37 @@
 			</span>
 
 			<div class="row t-sep">
-				<BarterExchange :item="item" :items="barters.generate(8)" />
+				<!-- My offer -->
+				<template v-if="isMyOffer">
+					<div class="buttons">
+						<v-button :to="{ path: `/barter/edit/${ item.hash }`, params: { id: item.hash } }">
+							<i class="fa fa-pen"></i>
+							<span>{{ $t('buttonLabels.edit') }}</span>
+						</v-button>
+
+						<v-button vType="hit">
+							<i class="fa fa-sync"></i>
+							<span>{{ $t('buttonLabels.find_exchange_options') }}</span>
+						</v-button>
+
+						<v-button vType="bulma-stroke">
+							<i class="fa fa-undo"></i>
+							<span>{{ $t('buttonLabels.withdraw') }}</span>
+						</v-button>
+
+						<v-button vType="dodoria-stroke">
+							<i class="fa fa-trash"></i>
+							<span>{{ $t('buttonLabels.remove') }}</span>
+						</v-button>
+					</div>
+				</template>
+
+				<!-- Someone's offer -->
+				<BarterExchange
+					v-else
+					:item="item"
+					:items="barters.generate(8)"
+				/>
 			</div>
 		</div>
 
