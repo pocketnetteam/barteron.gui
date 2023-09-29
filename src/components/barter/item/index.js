@@ -55,6 +55,16 @@ export default {
 		},
 
 		/**
+		 * Get my location
+		 * 
+		 * @return {Array}
+		 */
+		location() {
+			const location = Object.values(this.sdk.location);
+			return location.length ? location : undefined;
+		},
+
+		/**
 		 * Decode offer geohash
 		 * 
 		 * @return {Array}
@@ -66,6 +76,29 @@ export default {
 			} else {
 				return null;
 			}
+		},
+
+		/**
+		 * Calculate distance from geohash to location
+		 * 
+		 * @return {Number}
+		 */
+		distance() {
+			const
+				R = 6371, /* Radius of the earth in km */
+				toRad = (value) => value * Math.PI / 180,
+				lat1 = this.location?.[0],
+				lon1 = this.location?.[1],
+				lat2 = this.geohash?.[0],
+				lon2 = this.geohash?.[1],
+				destLat = toRad(lat2 - lat1),
+				destLon = toRad(lon2 - lon1),
+				radLat1 = toRad(lat1),
+				radLat2 = toRad(lat2),
+				a = Math.sin(destLat / 2) * Math.sin(destLat /2 ) + Math.sin(destLon / 2) * Math.sin(destLon / 2) * Math.cos(radLat1) * Math.cos(radLat2),
+				c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+			return parseFloat((R * c).toFixed(1));
 		}
 	},
 
@@ -100,40 +133,6 @@ export default {
 				} catch {
 					return null;
 				}
-			}
-		},
-
-		/**
-		 * Calculate item distance to you
-		 * 
-		 * @param {Object} item
-		 */
-		calcDistance(item) {
-			if (navigator.geolocation && Array.isArray(item.location)) {
-				navigator.geolocation.getCurrentPosition(
-					/* Success */
-					(pos) => {
-						const
-							R = 6371, /* Radius of the earth in km */
-							toRad = (value) => value * Math.PI / 180,
-							lat1 = pos.coords.latitude,
-							lon1 = pos.coords.longitude,
-							lat2 = item.location[0],
-							lon2 = item.location[1],
-							destLat = toRad(lat2 - lat1),
-							destLon = toRad(lon2 - lon1),
-							radLat1 = toRad(lat1),
-							radLat2 = toRad(lat2),
-							a = Math.sin(destLat / 2) * Math.sin(destLat /2 ) + Math.sin(destLon / 2) * Math.sin(destLon / 2) * Math.cos(radLat1) * Math.cos(radLat2),
-							c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-	
-						this.$set(this.distances, item.id, parseFloat((R * c).toFixed(1)));
-					}
-				);
-
-				return true;
-			} else {
-				return false;
 			}
 		}
 	}

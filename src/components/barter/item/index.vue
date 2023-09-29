@@ -84,8 +84,8 @@
 							<dd><time>{{ $d(item.time * 1000, 'middle') }}</time></dd>
 						</dl>
 					</li>
-					<li v-if="calcDistance(item)">
-						<address>{{ distances[item.hash] }} {{ $t('metrics.km') }}</address>
+					<li v-if="distance > -1">
+						{{ distance }} {{ $t('metrics.km') }}
 					</li>
 				</ul>
 			</div>
@@ -138,8 +138,8 @@
 						<li v-if="item.time">
 							<time>{{ $d(item.time * 1000, 'middle') }}</time>
 						</li>
-						<li v-if="item.geohash">
-							<address>{{ calcDistance(item.geohash) }}</address>
+						<li v-if="distance > -1">
+							{{ distance }} {{ $t('metrics.km') }}
 						</li>
 					</ul>
 				</div>
@@ -216,12 +216,12 @@
 				<p class="description">{{ item.description }}</p>
 			</div>
 
-			<div class="row info">
+			<div class="row info" v-if="geohash">
 				<div class="col">
 					<span class="title">Location</span>
 					<ul>
-						<li>Kazakhstan, Astana</li>
-						<li>13km</li>
+						<li><address>Kazakhstan, Astana</address></li>
+						<li v-if="distance > -1">{{ distance }} {{ $t('metrics.km') }}</li>
 					</ul>
 				</div>
 			</div>
