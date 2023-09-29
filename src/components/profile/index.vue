@@ -5,8 +5,8 @@
 				<div class="avatar">
 					<i
 						v-if="!user?.i"
-						:style="`--color: ${ color.generateHSL(user?.name || 'username') }`"
-					>{{ shortName || 'UN' }}</i>
+						:style="hslColor"
+					>{{ shortName }}</i>
 					
 					<picture class="status-online" v-else>
 						<img :src="user?.i" :alt="user?.name">

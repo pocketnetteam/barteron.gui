@@ -17,8 +17,8 @@
 				<router-link class="avatar" :to="{ name: 'profile', params: { id: user?.name || 'username' } }">
 					<i
 						v-if="!user?.i"
-						:style="`--color: ${ color.generateHSL(user?.name || 'username') }`"
-					>{{ shortName || 'UN' }}</i>
+						:style="hslColor"
+					>{{ shortName }}</i>
 					
 					<picture v-else>
 						<img :src="user?.i" :alt="user?.name">

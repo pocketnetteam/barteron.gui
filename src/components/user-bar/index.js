@@ -25,7 +25,16 @@ export default {
 		 * @return {String}
 		 */
 		shortName() {
-			return this.user?.name?.substring(0, 1).toUpperCase();
+			return this.user?.name?.substring(0, 1).toUpperCase() || "UN";
+		},
+
+		/**
+		 * Generate hsl background for user
+		 * 
+		 * @return {String}
+		 */
+		hslColor() {
+			return `--color: ${ this.color.generateHSL(this.user?.name || "username") }`
 		}
 	}
 }
