@@ -62,9 +62,10 @@
 			&:hover
 				color: $bulma-hover
 
-			/* Stroke */
-			&[class*="bulma-stroke"]
-				background: none
+			/* Stroke & Transparent */
+			&[class*="bulma-stroke"],
+			&[class*="bulma-transparent"]
+				background: transparent
 				border-color: $bulma
 				color: $bulma
 
@@ -79,9 +80,10 @@
 			&:hover
 				color: $lightgray
 
-			/* Stroke */
-			&[class*="gray-stroke"]
-				background: none
+			/* Stroke & Transparent */
+			&[class*="gray-stroke"],
+			&[class*="gray-transparent"]
+				background: transparent
 				color: $gohan
 				background: $gray
 
@@ -95,8 +97,10 @@
 			&:hover
 				background: $hit-hover
 
-			/* Stroke */
-			&[class*="hit-stroke"]
+			/* Stroke & Transparent */
+			&[class*="hit-stroke"],
+			&[class*="hit-transparent"]
+				background: transparent
 				border-color: $hit
 				color: $gohan
 
@@ -112,9 +116,10 @@
 			&:hover
 				background: $roshi-hover
 
-			/* Stroke */
-			&[class*="roshi-stroke"]
-				background: none
+			/* Stroke & Transparent */
+			&[class*="roshi-stroke"],
+			&[class*="roshi-transparent"]
+				background: transparent
 				color: $gohan
 				border-color: $roshi
 
@@ -130,9 +135,10 @@
 			&:hover
 				background: $chi-chi-hover
 
-			/* Stroke */
-			&[class*="chi-chi-stroke"]
-				background: none
+			/* Stroke & Transparent */
+			&[class*="chi-chi-stroke"],
+			&[class*="chi-chi-transparent"]
+				background: transparent
 				color: $chi-chi
 				border-color: $chi-chi
 
@@ -148,9 +154,10 @@
 			&:hover
 				background: $dodoria-hover
 
-			/* Stroke */
-			&[class*="dodoria-stroke"]
-				background: none
+			/* Stroke & Transparent */
+			&[class*="dodoria-stroke"],
+			&[class*="dodoria-transparent"]
+				background: transparent
 				border-color: $dodoria
 				color: $dodoria
 
@@ -158,6 +165,10 @@
 					background: $dodoria-hover
 					border-color: $dodoria-hover
 					color: $goku
+
+		/* Transparent */
+		&[class][class*="transparent"]
+			border-color: transparent
 
 		/* Align */
 		&.v-button-right

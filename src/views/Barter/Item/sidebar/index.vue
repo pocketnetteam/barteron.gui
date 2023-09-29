@@ -25,7 +25,7 @@
 							<span>{{ $t('buttonLabels.withdraw') }}</span>
 						</v-button>
 
-						<v-button vType="dodoria-stroke">
+						<v-button vType="dodoria-transparent">
 							<i class="fa fa-trash"></i>
 							<span>{{ $t('buttonLabels.remove') }}</span>
 						</v-button>
