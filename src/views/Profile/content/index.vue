@@ -123,7 +123,7 @@
 							<!-- Edit and find exchange -->
 							<template #offer="{ item }">
 								<v-button :to="{ path: `/barter/edit/${ item.hash }`, params: { id: item.hash } }">{{ $t('item.edit') }}</v-button>
-								<v-button vType="stroke-hit">{{ $t('item.find_exchange') }}</v-button>
+								<v-button vType="hit-stroke">{{ $t('item.find_exchange') }}</v-button>
 							</template>
 						</BarterList>
 					</template>
