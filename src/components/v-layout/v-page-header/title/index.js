@@ -14,7 +14,7 @@ export default {
 			default: ""
 		},
 		breadcrumbs: {
-			type: [Number, Boolean],
+			type: [Number, String, Boolean],
 			default: false
 		},
 		favorite: {
