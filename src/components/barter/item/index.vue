@@ -201,11 +201,11 @@
 				</div>
 
 				<div class="col buttons">
-					<v-button vType="stroke-bulma">
+					<v-button vType="stroke bulma-color">
 						<i class="fa fa-heart"></i>
 					</v-button>
 
-					<v-button vType="stroke-bulma">
+					<v-button vType="stroke bulma-color">
 						<i class="fa fa-share-alt"></i>
 					</v-button>
 				</div>

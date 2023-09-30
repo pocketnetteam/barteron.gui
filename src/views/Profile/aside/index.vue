@@ -5,7 +5,7 @@
 			<Profile :address="address">
 				<!-- Edit button -->
 				<template #edit>
-					<v-button vType="stroke-bulma">
+					<v-button vType="bulma-stroke">
 						{{ $t('profile.edit') }}
 					</v-button>
 				</template>
@@ -36,7 +36,7 @@
 				<template #edit="{ instance }">
 					<!-- Edit button -->
 					<template v-if="!instance.editable">
-						<v-button vType="stroke-bulma" @click="instance.edit">
+						<v-button vType="bulma-stroke" @click="instance.edit">
 							{{ $t('exchange.edit') }}
 						</v-button>
 					</template>

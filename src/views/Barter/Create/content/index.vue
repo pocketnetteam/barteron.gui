@@ -182,11 +182,11 @@
 
 			<div class="row full-width">
 				<!-- Button: Cancel -->
-				<v-button vType="stroke-bulma">{{ $t('buttonLabels.cancel') }}</v-button>
+				<v-button vType="bulma-stroke">{{ $t('buttonLabels.cancel') }}</v-button>
 
 				<div class="buttons-holder h-w">
 					<!-- Button: Preview -->
-					<v-button vType="stroke-bulma">{{ $t('buttonLabels.preview') }}</v-button>
+					<v-button vType="bulma-stroke">{{ $t('buttonLabels.preview') }}</v-button>
 
 					<!-- Button: Publish -->
 					<v-button
