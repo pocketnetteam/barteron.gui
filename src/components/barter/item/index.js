@@ -85,8 +85,12 @@ export default {
 		 * @return {Object}
 		 */
 		address() {
-			if (!this.addr.country) this.getAddress();
-			return this.addr;
+			if (!this.addr.country) {
+				this.getAddress();
+				return null;
+			} else {
+				return this.addr;
+			}
 		},
 
 		/**
