@@ -1,4 +1,5 @@
 import { GeoHash } from "geohash";
+import { OpenStreetMapProvider } from "leaflet-geosearch";
 
 export default {
 	name: "BarterItem",
@@ -19,7 +20,7 @@ export default {
 		return {
 			hover: 0,
 			active: 0,
-			distances: {}
+			addr: {}
 		}
 	},
 
@@ -79,6 +80,16 @@ export default {
 		},
 
 		/**
+		 * Get address from geohash
+		 * 
+		 * @return {Object}
+		 */
+		address() {
+			if (!this.addr.country) this.getAddress();
+			return this.addr;
+		},
+
+		/**
 		 * Calculate distance from geohash to location
 		 * 
 		 * @return {Number}
@@ -133,6 +144,32 @@ export default {
 				} catch {
 					return null;
 				}
+			}
+		},
+
+		/**
+		 * Get address from geohash
+		 */
+		async getAddress() {
+			if (this.geohash) {
+				/* Send request to provider url */
+					const 
+				provider = new OpenStreetMapProvider(),
+				destination = await fetch(`
+					${ provider.reverseUrl }?
+					${ new URLSearchParams({
+						format: "json",
+						lat: this.geohash?.[0],
+						lon: this.geohash?.[1],
+						zoom: 18,
+						addressdetails: 1
+					}).toString() }
+				`);
+			
+				/* Parse json response */
+				const { address } = await destination.json();
+				this.addr = address;
+				this.$set(this, "addr", address);
 			}
 		}
 	}

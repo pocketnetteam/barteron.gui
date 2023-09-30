@@ -220,7 +220,9 @@
 				<div class="col">
 					<span class="title">Location</span>
 					<ul>
-						<li><address>Kazakhstan, Astana</address></li>
+						<li v-if="address.country">
+							<address>{{ address.city || address.county }}, {{ address.country }}</address>
+						</li>
 						<li v-if="distance > -1">{{ distance }} {{ $t('metrics.km') }}</li>
 					</ul>
 				</div>
