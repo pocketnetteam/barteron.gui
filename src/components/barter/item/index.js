@@ -39,7 +39,7 @@ export default {
 				ids = [{ value: this.$t("barterLabels.free") }];
 			}
 
-			return this.isEmpty(
+			return this.ifEmpty(
 				/* Values */
 				ids?.map(id => {
 					const category = this.categories.items[id];
@@ -119,7 +119,7 @@ export default {
 		 * 
 		 * @return {*}
 		 */
-		isEmpty() {
+		ifEmpty() {
 			for (let a in arguments) {
 				const prop = arguments[a];
 				if (prop?.length) return prop;
