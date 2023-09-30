@@ -37,39 +37,8 @@ export default {
 		 */
 		offer() {
 			const offer = this.sdk.barteron.offers[this.$route.params.id];
-			
-			/* Fill fields from offer */
-			this.$nextTick(() => {
-				if (offer.hash) {
-					if (offer.tags) {
-						if (["my_list", "for_nothing"].includes(offer.tags[0])) {
-							this.tags = [];
-							this.getting = offer.tags[0];
-						} else {
-							this.getting = "something";
-							this.tags = offer.tags;
-						}
-					}
-					if (offer.condition) this.condition = offer.condition;
 
-					if (offer.caption && this.$refs.caption?.inputs) this.$refs.caption.inputs[0].value = offer.caption;
-					if (offer.images && this.$refs.photos) this.$refs.photos.remove().add(offer.images);
-					if (offer.tag && this.$refs.category) this.$refs.category.remove().value(offer.tag);
-					if (offer.price && this.$refs.price) this.calcPrice(offer.price);
-					if (offer.description && this.$refs.description) this.$refs.description.content = offer.description;
-				} else {
-					/* Reset fields to default */
-					this.tags = [];
-					this.getting = "something";
-					this.condition = "new";
-
-					if (this.$refs.caption?.inputs) this.$refs.caption.inputs[0].value = "";
-					if (this.$refs.photos) this.$refs.photos.remove();
-					if (this.$refs.category) this.$refs.category.remove();
-					if (this.$refs.price) this.calcPrice(0);
-					if (this.$refs.description) this.$refs.description.content = "";
-				}
-			});
+			if (offer) this.fillData(offer);
 
 			return offer;
 		},
@@ -131,6 +100,45 @@ export default {
 					pkoin.value = reverse;
 					input.value = Math.ceil((reverse * values[currency.value]) * 100) / 100;
 				}
+		},
+
+		/**
+		 * Fill fields from offer
+		 * 
+		 * @param {Object} offer
+		 */
+		fillData(offer) {
+			setTimeout(() => {
+				if (offer.hash) {
+					if (offer.tags) {
+						if (["my_list", "for_nothing"].includes(offer.tags[0])) {
+							this.tags = [];
+							this.getting = offer.tags[0];
+						} else {
+							this.getting = "something";
+							this.tags = offer.tags;
+						}
+					}
+					if (offer.condition) this.condition = offer.condition;
+	
+					if (offer.caption && this.$refs.caption?.inputs) this.$refs.caption.inputs[0].value = offer.caption;
+					if (offer.images && this.$refs.photos) this.$refs.photos.remove().add(offer.images);
+					if (offer.tag && this.$refs.category) this.$refs.category.remove().value(offer.tag);
+					if (offer.price && this.$refs.price) this.calcPrice(offer.price);
+					if (offer.description && this.$refs.description) this.$refs.description.content = offer.description;
+				} else {
+					/* Reset fields to default */
+					this.tags = [];
+					this.getting = "something";
+					this.condition = "new";
+	
+					if (this.$refs.caption?.inputs) this.$refs.caption.inputs[0].value = "";
+					if (this.$refs.photos) this.$refs.photos.remove();
+					if (this.$refs.category) this.$refs.category.remove();
+					if (this.$refs.price) this.calcPrice(0);
+					if (this.$refs.description) this.$refs.description.content = "";
+				}
+			}, 10);
 		},
 
 		/**
