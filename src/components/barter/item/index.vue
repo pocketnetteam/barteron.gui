@@ -221,7 +221,7 @@
 					<span class="title">Location</span>
 					<ul>
 						<li v-if="address">
-							<address>{{ address.city || address.county }}, {{ address.country }}</address>
+							<address>{{ address.country }}, {{ address.city || address.county }}</address>
 						</li>
 						<li v-if="distance > -1">{{ distance }} {{ $t('metrics.km') }}</li>
 					</ul>
