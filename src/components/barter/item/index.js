@@ -34,7 +34,7 @@ export default {
 			let ids = this.item.tags;
 
 			if (ids[0] === "my_list") {
-				ids = this.sdk.barteron.account[this.sdk.address].tags;
+				ids = this.sdk.barteron.accounts[this.sdk.address]?.tags || [];
 			} else if(ids[0] === "for_nothing") {
 				ids = [{ value: this.$t("barterLabels.free") }];
 			}

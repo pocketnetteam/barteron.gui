@@ -27,7 +27,7 @@ export default {
 		 * @return {Array}
 		 */
 		account() {
-			return this.sdk.barteron.account[this.sdk.address];
+			return this.sdk.barteron.accounts[this.sdk.address];
 		},
 
 		/**
@@ -199,7 +199,7 @@ export default {
 							condition: this.condition,
 							images: Object.values(images),
 							geohash: GeoHash.encodeGeoHash.apply(null, center),
-							price: Number(data.price)
+							price: Number(data.price || 1)
 						}).then(() => {
 							form.popup.hide();
 						}).catch(err => {

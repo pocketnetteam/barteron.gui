@@ -45,7 +45,7 @@ export default {
 		 * @return {Object}
 		 */
 		account() {
-			return this.sdk.barteron.account[this.address];
+			return this.sdk.barteron.accounts[this.address];
 		}
 	}
 }

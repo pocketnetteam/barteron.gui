@@ -1,5 +1,8 @@
 import Vue from "vue";
 
+import Account from "@/js/models/account.js";
+import Offer from "@/js/models/offer.js";
+
 /**
  * Allow work with bastyon
  * 
@@ -64,10 +67,10 @@ class SDK {
 		 */
 
 		/* Reactive accounts */
-		this._account = {};
+		this._accounts = {};
 
 		/* Observe accounts watcher */
-		this.account = new Proxy(this._account, {
+		this.account = new Proxy(this._accounts, {
 			get(target, address) {
 				if (typeof address !== "string" || address?.length < 32) return this;
 				else if (!target?.[address]) $.getUserInfo(address);
@@ -77,14 +80,14 @@ class SDK {
 
 		/* Reactive sub-objects */
 		this.barteron = {
-			_account: {},
+			_accounts: {},
 			_offers: {}
 		};
 
 		/* Observe sub-objects watchers */
 		this.barteron = Object.assign(this.barteron, {
 			/* Barteron account operations */
-			account: new Proxy(this.barteron._account, {
+			accounts: new Proxy(this.barteron._accounts, {
 				get(target, address) {
 					if (typeof address !== "string" || address?.length < 32) return this;
 					else if (!target?.[address]) $.getBrtAccount(address);
@@ -267,11 +270,11 @@ class SDK {
 	async getUserInfo(address) {
 		if (!address && !this._address) await this.getAccount();
 		address = address || this._address;
-		if (!this._account[address]) Vue.set(this._account, address, {});
+		if (!this._accounts[address]) Vue.set(this._accounts, address, {});
 
 		return this.rpc("getuserprofile", [address]).then(accounts => {
 			return accounts.map(account => {
-				Vue.set(this._account, account.address, account);
+				Vue.set(this._accounts, account.address, account);
 				return account;
 			});
 		});
@@ -291,50 +294,6 @@ class SDK {
 	 */
 
 	/**
-	 * Convert server-side account object
-	 * 
-	 * @param {Object} account
-	 * @return {Object}
-	 */
-	importBrtAccount(account) {
-		/* Extract JSON values and format object */
-		const { a } = JSON.parse(account.p?.s4 || "{a:[]}");
-
-		return {
-			...account,
-			address: account.s1,
-			tags: a
-		};
-	}
-
-	/**
-	 * Convert server-side offer object
-	 * 
-	 * @param {Object} offer
-	 * @return {Object}
-	 */
-	importBrtOffer(offer) {
-		/* Extract JSON values and format object */
-		const
-			{ t, a, c } = JSON.parse(offer.p?.s4 || "{t:'',a:[],c:'new'}"),
-			images = JSON.parse(offer.p?.s5 || "[]");
-
-		return {
-			...offer,
-			address: offer.s1,
-			language: offer.p?.s1,
-			caption: offer.p?.s2,
-			description: offer.p?.s3,
-			tag: t,
-			tags: a,
-			condition: c,
-			images,
-			geohash: offer.p?.s6,
-			price: offer.p?.i1
-		}
-	}
-
-	/**
 	 * Get barteron account
 	 * 
 	 * @param {String} address
@@ -344,21 +303,17 @@ class SDK {
 	getBrtAccount(address) {
 		address = address || this._address;
 
-		if (!this.barteron._account[address]) {
-			Vue.set(this.barteron._account, address, {});
+		if (!this.barteron._accounts[address]) {
+			Vue.set(this.barteron._accounts, address, {});
 		}
 
 		return this.rpc("getbarteronaccounts", [address]).then(accounts => {
-			if (accounts?.length) {
-				accounts = accounts.map(account => {
-					account = this.importBrtAccount(account);
-					Vue.set(this.barteron._account, account.address, account);
+			return accounts.map(account => {
+				account = new Account(this, account);
+				Vue.set(this.barteron._accounts, account.address, account);
 
-					return account;
-				});
-			}
-
-			return accounts;
+				return account;
+			});
 		});
 	}
 
@@ -373,7 +328,7 @@ class SDK {
 	 */
 	setBrtAccount(data) {
 		return this.sdk.set.barteron.account(data).then(result => {
-			Vue.set(this.barteron._account?.[data.address], "tags", data.tags);
+			Vue.set(this.barteron._accounts?.[data.address], "tags", data.tags);
 			return result;
 		});
 	}
@@ -391,7 +346,7 @@ class SDK {
 
 		return this.rpc("getbarteronoffersbyaddress", address).then(offers => {
 			if (offers?.length) {
-				offers = offers.map(offer => this.importBrtOffer(offer));
+				offers = offers.map(offer => new Offer(this, offer));
 			}
 
 			return offers;
@@ -440,7 +395,7 @@ class SDK {
 		return this.rpc("getbarteronoffersbyhashes", hashes).then(offers => {
 			if (offers?.length) {
 				offers = offers.map(offer => {
-					offer = this.importBrtOffer(offer);
+					offer = new Offer(this, offer);
 					Vue.set(this.barteron._offers, offer.hash, offer);
 
 					return offer;
@@ -477,14 +432,13 @@ class SDK {
 	 */
 	getBrtOffersFeed(request = {}) {
 		return this.rpc("getbarteronfeed", request).then(offers => {
-			return offers?.map(offer => this.importBrtOffer(offer)) || [];
+			return offers?.map(offer => new Offer(this, offer)) || [];
 		});
 	}
 
 	/**
 	 * Get barteron potencial offer deals
 	 * 
-	 * @param {String} name
 	 * @param {Object} request
 	 * 
 	 * Base
@@ -504,9 +458,9 @@ class SDK {
 	 * 
 	 * @return {Promise}
 	 */
-	getBrtOfferDeals(name, request) {
+	getBrtOfferDeals(request) {
 		return this.rpc("getbarterondeals", request).then(deals => {
-			return deals;
+			return deals?.map(deal => new Offer(this, deal)) || [];
 		});
 	}
 }

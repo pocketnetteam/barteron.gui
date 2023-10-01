@@ -27,7 +27,7 @@ export default {
 		 * @return {Array}
 		 */
 		account() {
-			return this.sdk.barteron.account[this.address];
+			return this.sdk.barteron.accounts[this.address];
 		}
 	},
 
@@ -38,7 +38,7 @@ export default {
 		 * @param {Array} tags 
 		 */
 		changeTags(tags) {
-			this.sdk.barteron.account[this.address] = { tags };
+			this.account.update({ tags });
 		}
 	}
 }
