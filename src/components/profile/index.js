@@ -35,6 +35,15 @@ export default {
 		},
 
 		/**
+		 * Barteron account
+		 * 
+		 * @return {Object}
+		 */
+		account() {
+			return this.sdk.barteron.accounts[this.address];
+		},
+
+		/**
 		 * Generate hsl background for user
 		 * 
 		 * @return {String}
