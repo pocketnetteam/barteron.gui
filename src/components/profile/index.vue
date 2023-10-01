@@ -4,12 +4,12 @@
 			<div class="col">
 				<div class="avatar">
 					<i
-						v-if="!user?.i"
+						v-if="!user.i"
 						:style="hslColor"
 					>{{ shortName }}</i>
 					
 					<picture class="status-online" v-else>
-						<img :src="user?.i" :alt="user?.name">
+						<img :src="user.i" :alt="user.name">
 					</picture>
 				</div>
 			</div>
@@ -47,7 +47,7 @@
 			<dl class="list">
 				<dt><i class="fa fa-calendar-day"></i></dt>
 				<dd>{{
-				$t('profile.on_barteron_from', { date: $d(user?.regdate * 1000 || 0, 'middle') })
+				$t('profile.on_barteron_from', { date: $d(account.time * 1000 || 0, 'middle') })
 				}}</dd>
 				<dt><i class="fa fa-map-marker-alt"></i></dt>
 				<dd>Astana, Kazakhstan</dd>
