@@ -11,7 +11,7 @@ class Barters {
 	/**
 	 * Initialize class
 	 * 
-	 * @constructor
+	 * @constructor Barters
 	 * @param {Object} data
 	 */
 	constructor(data) {
@@ -25,6 +25,7 @@ class Barters {
 	 * 
 	 * @param {Number} count
 	 * @param {Object} props
+	 * 
 	 * @return {Array}
 	 */
 	generate(count, props) {
@@ -72,7 +73,8 @@ class Barters {
 	 * Get random int between min and max in Array
 	 * 
 	 * @param {Number[]} p - [min, max]
-	 * @returns 
+	 * 
+	 * @return {Number}
 	 */
 	randIntInArray(p) {
 		return Math.floor(Math.random() * (p[1] - p[0]) + p[0])
@@ -82,6 +84,7 @@ class Barters {
 		 * Decode text special chars
 		 * 
 		 * @param {String} html
+		 * 
 		 * @return {String}
 		 */
 	decodeString(html) {
@@ -94,6 +97,7 @@ class Barters {
 	 * Get barter with id
 	 * 
 	 * @param {String|Number} id
+	 * 
 	 * @return {Object}
 	 */
 	get(id) {
@@ -110,6 +114,7 @@ class Barters {
 	 * 
 	 * @param {String} param
 	 * @param {String|Number} value
+	 * 
 	 * @return {Object}
 	 */
 	find(param, value) {
@@ -124,6 +129,7 @@ class Barters {
 	 * Search by id
 	 * 
 	 * @param {String|Number[]} id
+	 * 
 	 * @return {Object|Array}
 	 */
 	findById(id) {
@@ -134,6 +140,7 @@ class Barters {
 	 * Search by name
 	 * 
 	 * @param {String|Number[]} name
+	 * 
 	 * @return {Object|Array}
 	 */
 	findByName(name) {
