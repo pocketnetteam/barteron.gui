@@ -67,6 +67,7 @@ export default {
 		 * Decode text special chars
 		 * 
 		 * @param {String} html
+		 * 
 		 * @return {String}
 		 */
 		decodeString(html) {

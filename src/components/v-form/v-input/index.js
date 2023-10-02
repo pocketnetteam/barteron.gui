@@ -33,7 +33,8 @@ export default {
 		/**
 		 * Build input list from props
 		 * 
-		 * @param {Array} inputs 
+		 * @param {Array} inputs
+		 * 
 		 * @return {Object[]}
 		 */
 		getInputs(inputs) {
@@ -66,6 +67,7 @@ export default {
 		 * Get input type
 		 * 
 		 * @param {String}
+		 * 
 		 * @return {String}
 		 */
 		getType(type) {

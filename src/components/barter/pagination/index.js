@@ -28,7 +28,7 @@ export default {
 		/**
 		 * Get grid gap in px
 		 * 
-		 * @returns {Number}
+		 * @return {Number}
 		 */
 		gridGap() {
 			return parseFloat(getComputedStyle(this.$refs.track).gap);
@@ -37,7 +37,7 @@ export default {
 		/**
 		 * Get slides
 		 * 
-		 * @returns {Array}
+		 * @return {Array}
 		 */
 		slides() {
 			return [...this.$refs.track.children];

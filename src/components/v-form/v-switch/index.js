@@ -33,7 +33,8 @@ export default {
 		/**
 		 * Build switch list from props
 		 * 
-		 * @param {Array} switches 
+		 * @param {Array} switches
+		 * 
 		 * @return {Object[]}
 		 */
 		getSwitches(switches) {

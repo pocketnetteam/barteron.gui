@@ -17,8 +17,9 @@ export default {
 		/**
 		 * Get absolute path from path
 		 * 
-		 * @param {String} path 
-		 * @returns {String}
+		 * @param {String} path
+		 * 
+		 * @return {String}
 		 */
 		imageUrl(path) {
 			if (path.startsWith("http")) {

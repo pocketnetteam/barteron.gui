@@ -14,8 +14,9 @@ export default {
 		/**
 		 * Get image from assets
 		 * 
-		 * @param {String} image 
-		 * @returns {URL}
+		 * @param {String} image
+		 * 
+		 * @return {URL}
 		 */
 		imageUrl(image) {
 			try {

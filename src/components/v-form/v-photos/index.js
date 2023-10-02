@@ -104,7 +104,7 @@ export default {
 		 * 
 		 * @param {Object|Array} images
 		 * 
-		 * @return {this}
+		 * @return {Vphotos}
 		 */
 		add(images) {
 			if (Array.isArray(images)) {
@@ -130,7 +130,7 @@ export default {
 		 * @param {Event} e
 		 * @param {Number} index
 		 * 
-		 * @return {this}
+		 * @return {Vphotos}
 		 */
 		remove(e, index) {
 			e?.preventDefault();

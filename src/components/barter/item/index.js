@@ -137,7 +137,7 @@ export default {
 		 * 
 		 * @param {String} path
 		 * 
-		 * @returns {String}
+		 * @return {String}
 		 */
 		imageUrl(path) {
 			if (path.startsWith("http")) {

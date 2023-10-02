@@ -34,6 +34,7 @@ export default {
 		 * Create parents history for given child
 		 * 
 		 * @param {Object} item
+		 * 
 		 * @return {Array}
 		 **/
 		parentsList(item) {

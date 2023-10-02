@@ -38,7 +38,7 @@ export default {
 		 * @param {Array} tags 
 		 */
 		changeTags(tags) {
-			this.account.update({ tags });
+			this.account.set({ tags });
 		}
 	}
 }

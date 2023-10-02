@@ -29,7 +29,8 @@ export default {
 		/**
 		 * Parse labels object from localization
 		 * 
-		 * @param {String} label 
+		 * @param {String} label
+		 * 
 		 * @return {Array}
 		 */
 		parseLabels(label) {
