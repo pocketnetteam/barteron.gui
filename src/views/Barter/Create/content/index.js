@@ -72,7 +72,8 @@ export default {
 		/**
 		 * Parse labels object from localization
 		 * 
-		 * @param {String} label 
+		 * @param {String} label
+		 * 
 		 * @return {Array}
 		 */
 		parseLabels(label) {
@@ -142,6 +143,17 @@ export default {
 		},
 
 		/**
+		 * Create new offer instance
+		 * 
+		 * @param {Object} data 
+		 * 
+		 * @return {Offer}
+		 */
+		newOffer(data) {
+			return new this.sdk.models.Offer(data);
+		},
+
+		/**
 		 * Submit form data
 		 */
 		submit() {
@@ -189,8 +201,9 @@ export default {
 						}
 
 						/* Send request to create or update(hash) an offer */
-						this.sdk.setBrtOffer({
-							...(hash && { hash }),
+						this.newOffer({
+							hash: hash || "draft"
+						}).set({
 							language: this.$i18n.locale,
 							caption: data.title,
 							description: data.description,

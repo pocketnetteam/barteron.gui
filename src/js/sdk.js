@@ -13,6 +13,11 @@ class SDK {
 	emitted = [];
 	localstorage = "";
 
+	models = {
+		Account,
+		Offer
+	}
+
 	_address = "";
 	get address() {
 		if (!this._address) this.getAccount();
@@ -21,7 +26,7 @@ class SDK {
 
 	_balance = {};
 	get balance() {
-		if (!this._balance.length) this.getBalance();
+		if (!Object.keys(this._balance).length) this.getBalance();
 		return this._balance;
 	}
 
@@ -93,8 +98,9 @@ class SDK {
 					else if (!target?.[address]) $.getBrtAccount(address);
 					return target?.[address];
 				},
-				set(target, address, { tags }) {
-					return $.setBrtAccount({ address, tags });
+				set(target, address, data) {
+					/* Also calling from Model: Account.set() */
+					return $.setBrtAccount({ address, ...data });
 				}
 			}),
 
@@ -106,6 +112,7 @@ class SDK {
 					return target?.[hash];
 				},
 				set(target, hash, data) {
+					/* Also calling from Model: Offer.set() */
 					return $.setBrtOffer({ hash, ...data });
 				}
 			})
@@ -251,7 +258,6 @@ class SDK {
 	 * 
 	 * @prop {String} method
 	 * @prop {Object} props
-	 * 
 	 * @return {Promise}
 	 */
 	rpc(method, props) {
@@ -372,7 +378,10 @@ class SDK {
 	 * @return {Promise}
 	 */
 	setBrtOffer(data) {
-		return this.sdk.set.barteron.offer(data).then(result => {
+		return this.sdk.set.barteron.offer({
+			...data,
+			...{ hash: data.hash?.length === 64 ? data.hash : null }
+		}).then(result => {
 			if (data.hash) Vue.set(this.barteron._offers, data.hash, data);
 			return result;
 		});

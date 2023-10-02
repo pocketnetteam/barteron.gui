@@ -38,12 +38,27 @@ class Offer {
 	}
 
 	/**
-	 * Store data in node
+	 * Update model properties
+	 * 
+	 * @param {Object} data
+	 * 
+	 * @return {Offer}
+	 */
+	update(data) {
+		for (const p in data) {
+			this[p] = data[p];
+		}
+
+		return thisl
+	}
+
+	/**
+	 * Store model data
 	 * 
 	 * @param {Object} data
 	 */
-	update(data) {
-		this.sdk.barteron.offers[this.hash] = { ...this, ...data };
+	set(data) {
+		return this.sdk.barteron.offers[this.hash] = { ...this, ...data };
 	}
 };
 

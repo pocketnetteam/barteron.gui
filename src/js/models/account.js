@@ -32,11 +32,26 @@ class Account {
 	}
 
 	/**
-	 * Store data in node
+	 * Update model properties
+	 * 
+	 * @param {Object} data
+	 * 
+	 * @return {Account}
+	 */
+	update(data) {
+		for (const p in data) {
+			this[p] = data[p];
+		}
+
+		return this;
+	}
+
+	/**
+	 * Store model data
 	 * 
 	 * @param {Object} data
 	 */
-	update(data) {
+	set(data) {
 		this.sdk.barteron.accounts[this.address] = { ...this, ...data };
 	}
 };
