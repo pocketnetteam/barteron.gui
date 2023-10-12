@@ -28,7 +28,7 @@ export default {
 		 */
 		content(val) {
 			if (this.length && val.length > this.length) {
-				this.content = val.substr(0, this.length);
+				this.content = val.substring(0, this.length);
 			}
 
 			this.count = val.length;
@@ -37,6 +37,10 @@ export default {
 				this.$refs.textarea.style.height = "1px";
 				this.$refs.textarea.style.height = (this.$refs.textarea.scrollHeight) + "px";
 			});
+		},
+
+		value(val) {
+			this.content = val;
 		}
 	}
 }
