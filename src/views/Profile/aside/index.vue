@@ -4,11 +4,11 @@
 		<div class="box">
 			<Profile :address="address">
 				<!-- Edit button -->
-				<template #edit>
+				<!-- <template #edit>
 					<v-button vType="bulma-stroke">
 						{{ $t('profile.edit') }}
 					</v-button>
-				</template>
+				</template> -->
 
 				<!-- State -->
 				<template #state>
