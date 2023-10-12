@@ -89,11 +89,11 @@ export default {
 		/**
 		 * Get my location
 		 * 
-		 * @return {Array}
+		 * @return {Array|null}
 		 */
 		location() {
 			const location = Object.values(this.sdk.location);
-			return location.length ? location : undefined;
+			return location.length ? location : null;
 		}
 	},
 
