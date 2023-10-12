@@ -113,6 +113,14 @@
 		"insert": "Add tag"
 	},
 
+	"location": {
+		"preferred": "Location for new offers",
+		"static": "Static",
+		"dynamic": "Dynamic",
+		"radius": "Look to offers in radius",
+		"save": "Save"
+	},
+
 	"item": {
 		"autorenew": "Autorenew",
 		"edit": "Edit",
@@ -139,5 +147,7 @@
 	"exchange_options": "Exchange Options",
 	"echange_options_text": "Offer an exchange if you like the option found. Above are the best options.",
 
+	"may_match_exchanges": "May match with your exchanges",
+	"popular_categories": "Most popular categories",
 	"new_from_goods": "New from goods"
 }
