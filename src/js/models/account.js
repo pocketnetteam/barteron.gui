@@ -13,13 +13,16 @@ class Account {
 	 */
 	constructor(sdk, data) {
 		/* Extract JSON values and format object */
-		const { a } = JSON.parse(data.p?.s4 || "{a:[]}");
+		const { a, g, s, r } = JSON.parse(data?.p?.s4 || '{"a":[],"g":"","s":false,"r":0}');
 		
 		this.address = data?.s1 || "";
 		this.hash = data?.hash || null;
 		this.blockHash = data?.blockHash || "";
 		this.height = data?.height || 0;
-		this.tags = a;
+		this.tags = a || [];
+		this.geohash = g || "";
+		this.static = s || false;
+		this.radius = r || 0;
 		this.time = data?.time || 0;
 		this.type = data?.type || 0;
 
@@ -52,7 +55,8 @@ class Account {
 	 * @param {Object} data
 	 */
 	set(data) {
-		this.sdk.barteron.accounts[this.address] = { ...this, ...data };
+		this.update(data);
+		return this.sdk.setBrtAccount({ ...this, ...data });
 	}
 };
 
