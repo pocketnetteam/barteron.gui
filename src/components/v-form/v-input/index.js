@@ -9,14 +9,14 @@ export default {
 		min: { type: [Number, String, Array], default: () => [] },
 		max: { type: [Number, String, Array], default: () => [] },
 		placeholder: { type: [String, Array], default: () => [] },
-		value: { type: [String, Array], default: () => [] },
+		value: { type: [Number, String, Array], default: () => [] },
 
 		vSize: String,
 	},
 
-	data() {
-		return {
-			inputs: this.getInputs([this.id, this.name, this.type, this.placeholder, this.value])
+	computed:{
+		inputs() {
+			return this.getInputs([this.id, this.name, this.type, this.placeholder, this.value]);
 		}
 	},
 
