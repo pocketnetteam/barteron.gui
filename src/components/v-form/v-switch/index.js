@@ -13,10 +13,21 @@ export default {
 		vType: String
 	},
 
+	computed: {
+		switches() {
+			return this.getSwitches([this.id, this.name, this.type, this.value, this.checked, this.label]);
+		}
+	},
+
 	data() {
 		return {
-			switches: this.getSwitches([this.id, this.name, this.type, this.value, this.checked, this.label]),
 			active: this.checked
+		}
+	},
+
+	watch: {
+		checked(value) {
+			this.active = value;
 		}
 	},
 
