@@ -1,8 +1,6 @@
 @import "@/css/vars.sass"
 
 .location-switcher
-	border: 1px solid $beerus
-	border-radius: 12px
 	color: $trunks
 	cursor: pointer
 	display: flex
@@ -12,7 +10,7 @@
 		z-index: 100
 
 	&.v-button-holder /deep/
-		.v-button
+		>.v-button
 			font-size: .9em
 			padding: .25em .75em
 
@@ -30,3 +28,14 @@
 					&.location
 						color: $popo
 						margin: 0 0 2px
+						overflow: hidden
+						text-overflow: ellipsis
+						max-width: 150px
+
+		.v-form
+			.info
+				gap: 10px
+				
+				i
+					color: $trunks
+					display: flex

@@ -1,5 +1,4 @@
 import { GeoHash } from "geohash";
-import { OpenStreetMapProvider } from "leaflet-geosearch";
 
 export default {
 	name: "BarterItem",
@@ -58,7 +57,7 @@ export default {
 		/**
 		 * Get my location
 		 * 
-		 * @return {Array}
+		 * @return {Array|null}
 		 */
 		location() {
 			const location = Object.values(this.sdk.location);
@@ -68,7 +67,7 @@ export default {
 		/**
 		 * Decode offer geohash
 		 * 
-		 * @return {Array}
+		 * @return {Array|null}
 		 */
 		geohash() {
 			if (this.item.geohash) {
@@ -86,7 +85,15 @@ export default {
 		 */
 		address() {
 			if (!this.addr.country) {
-				this.getAddress();
+				if (!this.addr.fetching && this.geohash) {
+					this.addr.fetching = true;
+				
+					this.sdk.getAddress(this.geohash)
+						.then(result => {
+							this.$set(this, "addr", result.address);
+						});
+				}
+
 				return null;
 			} else {
 				return this.addr;
@@ -148,32 +155,6 @@ export default {
 				} catch {
 					return null;
 				}
-			}
-		},
-
-		/**
-		 * Get address from geohash
-		 */
-		async getAddress() {
-			if (this.geohash) {
-				/* Send request to provider url */
-					const 
-				provider = new OpenStreetMapProvider(),
-				destination = await fetch(`
-					${ provider.reverseUrl }?
-					${ new URLSearchParams({
-						format: "json",
-						lat: this.geohash?.[0],
-						lon: this.geohash?.[1],
-						zoom: 18,
-						addressdetails: 1
-					}).toString() }
-				`);
-			
-				/* Parse json response */
-				const { address } = await destination.json();
-				this.addr = address;
-				this.$set(this, "addr", address);
 			}
 		}
 	}

@@ -1,4 +1,5 @@
 import Vue from "vue";
+import { OpenStreetMapProvider } from "leaflet-geosearch";
 
 import Account from "@/js/models/account.js";
 import Offer from "@/js/models/offer.js";
@@ -99,7 +100,6 @@ class SDK {
 					return target?.[address];
 				},
 				set(target, address, data) {
-					/* Also calling from Model: Account.set() */
 					return $.setBrtAccount({ address, ...data });
 				}
 			}),
@@ -112,11 +112,35 @@ class SDK {
 					return target?.[hash];
 				},
 				set(target, hash, data) {
-					/* Also calling from Model: Offer.set() */
 					return $.setBrtOffer({ hash, ...data });
 				}
 			})
 		});
+	}
+
+	/**
+	 * Get address of coodrinates
+	 * 
+	 * @param {Array} coords
+	 * @param {Object} [data]
+	 * 
+	 * @return {Promise}
+	 */
+	getAddress(coords, data) {
+		/* Send request to provider url */
+		const provider = new OpenStreetMapProvider();
+
+		return fetch(`
+			${ provider.reverseUrl }?
+			${ new URLSearchParams({
+				format: "json",
+				lat: coords?.[0],
+				lon: coords?.[1],
+				zoom: 18,
+				addressdetails: 1,
+				...data
+			}).toString() }
+		`).then(result => result.json());
 	}
 
 	setLastResult(e) {
@@ -329,12 +353,14 @@ class SDK {
 	 * @param {Object} data
 	 * @param {Array} data.address
 	 * @param {Array} data.tags
+	 * @param {String} data.geohash
+	 * @param {Number} data.radius
 	 * 
 	 * @return {Promise}
 	 */
 	setBrtAccount(data) {
 		return this.sdk.set.barteron.account(data).then(result => {
-			Vue.set(this.barteron._accounts?.[data.address], "tags", data.tags);
+			Vue.set(this.barteron._accounts, data.address, { ...this.barteron._accounts?.[data.address], ...data });
 			return result;
 		});
 	}
@@ -366,11 +392,13 @@ class SDK {
 	 * 
 	 * Base
 	 * 
+	 * @param {String} [data.hash]
 	 * @param {String} data.language
 	 * @param {String} data.caption
 	 * @param {String} data.description
 	 * @param {String} data.tag
 	 * @param {Array} data.tags
+	 * @param {String} data.condition
 	 * @param {Array} data.images
 	 * @param {String} data.geohash
 	 * @param {Number} data.price
