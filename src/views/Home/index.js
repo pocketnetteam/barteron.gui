@@ -15,11 +15,13 @@ export default {
 
 	data() {
 		return {
+			mayMatchExchanges: [],
 			newFromGoods: []
 		}
 	},
 
 	async mounted() {
+		this.mayMatchExchanges = await this.sdk.getBrtOffersFeed();
 		this.newFromGoods = await this.sdk.getBrtOffersFeed();
 	}
 }

@@ -1,8 +1,19 @@
 <template>
 	<div id="content">
-		<AssocList :items="favorite" />
+		<section v-if="mayMatchExchanges.length">
+			<h1>{{ $t('may_match_exchanges') }}</h1>
+			<BarterList
+				:items="mayMatchExchanges"
+				:carousel="true"
+			/>
+		</section>
 
 		<section>
+			<h1>{{ $t('popular_categories') }}</h1>
+			<AssocList :items="favorite" />
+		</section>
+
+		<section v-if="newFromGoods.length">
 			<h1>{{ $t('new_from_goods') }}</h1>
 			<BarterList
 				:items="newFromGoods"
@@ -10,11 +21,13 @@
 			/>
 		</section>
 
-		<Banner>
-			<picture>
-				<img :src="require('@/assets/images/banner.jpeg')" alt="banner">
-			</picture>
-		</Banner>
+		<section>
+			<Banner>
+				<picture>
+					<img :src="require('@/assets/images/banner.jpeg')" alt="banner">
+				</picture>
+			</Banner>
+		</section>
 
 		<section>
 			<h1>Services</h1>
