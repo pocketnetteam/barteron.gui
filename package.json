@@ -11,7 +11,6 @@
 	},
 	"dependencies": {
 		"core-js": "^3.8.3",
-		"geohash": "^0.0.1",
 		"husky": "^8.0.3",
 		"leaflet": "^1.9.4",
 		"leaflet-geosearch": "^3.8.0",
@@ -29,6 +28,7 @@
 		"@babel/core": "^7.12.16",
 		"@vue/cli-plugin-babel": "~5.0.0",
 		"@vue/cli-service": "~5.0.0",
+		"geohash": "^0.0.1",
 		"node-sass": "^8.0.0",
 		"sass-loader": "^13.2.1",
 		"style-loader": "^3.3.2",
