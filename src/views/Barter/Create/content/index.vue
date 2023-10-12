@@ -25,7 +25,7 @@
 				<!-- Title: Photos -->
 				<strong class="title">{{ $t('steps.photos') }}</strong>
 
-				<!-- Component: Photo uploader -->
+				<!-- vPhotos -->
 				<v-photos
 					class="field"
 					ref="photos"
@@ -42,7 +42,7 @@
 				<!-- Title: What you want to get -->
 				<strong class="title">{{ $t('steps.get') }}</strong>
 
-				<!-- Radio: My list, Something, For nothing -->
+				<!-- vSwitch: My list, Something, For nothing -->
 				<v-switch
 					type="radio"
 					:checked="getting"
@@ -117,7 +117,8 @@
 					:name="['', 'price']"
 					:type="['number', 'number']"
 					:readonly="[null, true]"
-					:value="['0', '0']"
+					:value="[price, pkoin]"
+					:min="['0', '']"
 					class="currency-input"
 					vSize="lg"
 					@input="calcPrice"
@@ -141,7 +142,7 @@
 			</div>
 
 			<div class="row block sep">
-				<!-- Radio: Used, New -->
+				<!-- vSwitch (Radio) -->
 				<v-switch
 					type="radio"
 					name="condition"
@@ -157,12 +158,13 @@
 				<!-- Title: Description -->
 				<strong class="title">{{ $t('steps.description') }}</strong>
 
-				<!-- Textarea: Description -->
+				<!-- vTextarea -->
 				<v-textarea
 					ref="description"
 					class="field"
 					name="description"
 					length="9000"
+					:value="offer.description"
 				/>
 			</div>
 
@@ -170,7 +172,7 @@
 				<!-- Title: Location -->
 				<strong class="title">{{ $t('steps.location') }}</strong>
 
-				<!-- Component: Map -->
+				<!-- vMap -->
 				<v-map
 					ref="map"
 					:center="geohash || location"
@@ -181,14 +183,14 @@
 			</div>
 
 			<div class="row full-width">
-				<!-- Button: Cancel -->
+				<!-- vButton: Cancel -->
 				<v-button vType="bulma-stroke">{{ $t('buttonLabels.cancel') }}</v-button>
 
 				<div class="buttons-holder h-w">
-					<!-- Button: Preview -->
+					<!-- vButton: Preview -->
 					<v-button vType="bulma-stroke">{{ $t('buttonLabels.preview') }}</v-button>
 
-					<!-- Button: Publish -->
+					<!-- vButton: Publish -->
 					<v-button
 						@click="submit"
 					>{{ $t('buttonLabels.publish') }}</v-button>

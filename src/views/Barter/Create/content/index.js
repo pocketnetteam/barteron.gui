@@ -16,6 +16,8 @@ export default {
 		return {
 			getting: "something",
 			condition: "new",
+			price: 0,
+			pkoin: 0,
 			tags: []
 		}
 	},
@@ -36,9 +38,10 @@ export default {
 		 * @return {Object}
 		 */
 		offer() {
-			const offer = this.sdk.barteron.offers[this.$route.params.id];
+			const offer = this.sdk.barteron.offers[this.$route.params.id] ||
+										new this.sdk.models.Offer(this.sdk, {}).update({ hash: "draft" });
 
-			if (offer) this.fillData(offer);
+			this.fillData(offer);
 
 			return offer;
 		},
@@ -46,17 +49,17 @@ export default {
 		/**
 		 * Get my location
 		 * 
-		 * @return {Array}
+		 * @return {Array|null}
 		 */
 		location() {
 			const location = this.sdk.location;
-			return location.latitude ? Object.values(location) : undefined; 
+			return location.latitude ? Object.values(location) : null; 
 		},
 
 		/**
 		 * Decode offer geohash
 		 * 
-		 * @return {Array}
+		 * @return {Array|null}
 		 */
 		geohash() {
 			if (this.offer.geohash) {
@@ -90,16 +93,16 @@ export default {
 		calcPrice(reverse) {
 			const
 				values = { "usd": 0.25, "eur": 0.24, "pkoin": 1},
-				currency = this.$refs.currency.selected,
-				field = this.$refs.price,
-				input = field.inputs[0],
-				pkoin = field.inputs[1];
+				currency = this.$refs.currency.selected;
 
 				if (!Number.isInteger(reverse)) {
-					pkoin.value = Math.ceil((input.value / values[currency.value]) * 100) / 100;
+					/* Typing in price field */
+					this.price = parseInt(reverse.target.value);
+					this.pkoin = Math.ceil((this.price / values[currency.value]) * 100) / 100;
 				} else {
-					pkoin.value = reverse;
-					input.value = Math.ceil((reverse * values[currency.value]) * 100) / 100;
+					/* Get value from offer */
+					this.pkoin = parseInt(reverse);
+					this.price = Math.ceil((this.pkoin * values[currency.value]) * 100) / 100;
 				}
 		},
 
@@ -110,7 +113,7 @@ export default {
 		 */
 		fillData(offer) {
 			setTimeout(() => {
-				if (offer.hash) {
+				if (offer.hash?.length >= 64) {
 					if (offer.tags) {
 						if (["my_list", "for_nothing"].includes(offer.tags[0])) {
 							this.tags = [];
@@ -122,35 +125,20 @@ export default {
 					}
 					if (offer.condition) this.condition = offer.condition;
 	
-					if (offer.caption && this.$refs.caption?.inputs) this.$refs.caption.inputs[0].value = offer.caption;
 					if (offer.images && this.$refs.photos) this.$refs.photos.remove().add(offer.images);
 					if (offer.tag && this.$refs.category) this.$refs.category.remove().value(offer.tag);
 					if (offer.price && this.$refs.price) this.calcPrice(offer.price);
-					if (offer.description && this.$refs.description) this.$refs.description.content = offer.description;
 				} else {
 					/* Reset fields to default */
 					this.tags = [];
 					this.getting = "something";
 					this.condition = "new";
 	
-					if (this.$refs.caption?.inputs) this.$refs.caption.inputs[0].value = "";
 					if (this.$refs.photos) this.$refs.photos.remove();
 					if (this.$refs.category) this.$refs.category.remove();
 					if (this.$refs.price) this.calcPrice(0);
-					if (this.$refs.description) this.$refs.description.content = "";
 				}
 			}, 10);
-		},
-
-		/**
-		 * Create new offer instance
-		 * 
-		 * @param {Object} data 
-		 * 
-		 * @return {Offer}
-		 */
-		newOffer(data) {
-			return new this.sdk.models.Offer(data);
 		},
 
 		/**
@@ -201,9 +189,8 @@ export default {
 						}
 
 						/* Send request to create or update(hash) an offer */
-						this.newOffer({
-							hash: hash || "draft"
-						}).set({
+						this.offer.set({
+							hash: hash || "draft",
 							language: this.$i18n.locale,
 							caption: data.title,
 							description: data.description,
@@ -213,8 +200,14 @@ export default {
 							images: Object.values(images),
 							geohash: GeoHash.encodeGeoHash.apply(null, center),
 							price: Number(data.price || 1)
-						}).then(() => {
-							form.popup.hide();
+						}).then((data) => {
+							if (data.transaction) {
+								form.popup.hide();
+								if (this.offer.hash?.length < 64) {
+									this.offer.update({ hash: data.transaction });
+								}
+								console.log(offer)
+							}
 						}).catch(err => {
 							/* Show error popup */
 							form.popup.update({
@@ -225,7 +218,7 @@ export default {
 						});
 					})
 					.catch(err => {
-						console.log(this.sdk)
+						console.log(this.sdk, err)
 						/* Show error popup */
 						form.popup.update({
 							text: `Image upload error: ${ err }`,
