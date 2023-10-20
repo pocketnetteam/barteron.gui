@@ -72,7 +72,7 @@ export default {
 				if (!this.addr.fetching && (this.geohash || this.location)) {
 					this.addr.fetching = true;
 
-					this.sdk.getAddress(this.account.static ? this.geohash : this.location)
+					this.sdk.geoLocation(this.account.static ? this.geohash : this.location)
 						.then(result => {
 							this.$set(this, "addr", result.address);
 						});
