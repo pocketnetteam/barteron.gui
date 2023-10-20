@@ -25,7 +25,7 @@
 							<span>{{ $t('buttonLabels.withdraw') }}</span>
 						</v-button>
 
-						<v-button vType="dodoria-transparent">
+						<v-button vType="dodoria-stroke">
 							<i class="fa fa-trash"></i>
 							<span>{{ $t('buttonLabels.remove') }}</span>
 						</v-button>
@@ -34,9 +34,9 @@
 
 				<!-- Someone's offer -->
 				<BarterExchange
-					v-else
+					v-else-if="myOffers.length"
 					:item="item"
-					:items="barters.generate(8)"
+					:items="myOffers"
 				/>
 			</div>
 		</div>
