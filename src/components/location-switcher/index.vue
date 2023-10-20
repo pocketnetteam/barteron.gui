@@ -9,8 +9,10 @@
 	>
 		<i class="fa fa-map-marker-alt"></i>
 		<div class="info">
-			<strong class="location" v-if="address">{{ address.country }}, {{ address.city || address.town || address.county }}</strong>
-			<span class="distance">{{ radius }}{{ $t('metrics.km') }}</span>
+			<strong class="location">
+				<template v-if="address">{{ address.country }}, {{ address.city || address.town || address.county }}</template>
+			</strong>
+			<span class="distance">{{ radius || 0 }}{{ $t('metrics.km') }}</span>
 		</div>
 
 		<template #after>
@@ -23,7 +25,9 @@
 				<v-form ref="form">
 					<div class="row info">
 						<i class="fa fa-map-marker-alt"></i>
-						<span v-if="address">{{ address.country }}, {{ address.city || address.town || address.county }}</span>
+						<span>
+							<template v-if="address">{{ address.country }}, {{ address.city || address.town || address.county }}</template>
+						</span>
 					</div>
 
 					<div class="row full-width">
@@ -55,7 +59,7 @@
 									type="number"
 									min="0"
 									max="9999"
-									:value="account.radius"
+									:value="account.radius || 0"
 								/>
 								&nbsp;{{ $t('metrics.km') }}
 							</div>
