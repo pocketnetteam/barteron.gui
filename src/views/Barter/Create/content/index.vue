@@ -63,8 +63,8 @@
 						:tags="account?.tags || []"
 						:title="false"
 					>
-						<template #default="myList">
-							<input name="tags" type="hidden" :value="myList.instance.vTags.join()">
+						<template #default="{ instance }">
+							<input name="tags" type="hidden" :value="instance.vTags.join()">
 						</template>
 					</ExchangeList>
 				</template>
@@ -78,8 +78,8 @@
 						:title="false"
 						@change="(value) => tags = value"
 					>
-						<template #default="something">
-							<input name="tags" type="hidden" :value="something.instance.vTags.join()">
+						<template #default="{ instance }">
+							<input name="tags" type="hidden" :value="instance.vTags.join()">
 						</template>
 
 						<template #edit="something">
@@ -118,7 +118,7 @@
 					:type="['number', 'number']"
 					:readonly="[null, true]"
 					:value="[price, pkoin]"
-					:min="['0', '']"
+					:min="['0.01', '']"
 					class="currency-input"
 					vSize="lg"
 					@input="calcPrice"
@@ -127,10 +127,7 @@
 					<template #input0After>
 						<v-select
 							ref="currency"
-							:dropdown="[
-								{ text: 'USD', value: 'usd' },
-								{ text: 'EUR', value: 'eur' }
-							]"
+							:dropdown="currencies"
 							@selected="calcPrice"
 						/>
 					</template>
@@ -188,12 +185,13 @@
 
 				<div class="buttons-holder h-w">
 					<!-- vButton: Preview -->
-					<v-button vType="bulma-stroke">{{ $t('buttonLabels.preview') }}</v-button>
+					<v-button
+						vType="bulma-stroke"
+						@click="preview"
+					>{{ $t('buttonLabels.preview') }}</v-button>
 
 					<!-- vButton: Publish -->
-					<v-button
-						@click="submit"
-					>{{ $t('buttonLabels.publish') }}</v-button>
+					<v-button @click="submit">{{ $t('buttonLabels.publish') }}</v-button>
 				</div>
 			</div>
 		</v-form>

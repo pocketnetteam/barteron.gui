@@ -38,8 +38,9 @@ export default {
 		 * @return {Object}
 		 */
 		offer() {
-			const offer = this.sdk.barteron.offers[this.$route.params.id] ||
-										new this.sdk.models.Offer(this.sdk, {}).update({ hash: "draft" });
+			let offer = this.sdk.barteron.offers[this.$route.params.id];
+
+			if (!offer.hash) offer = new this.sdk.models.Offer(this.sdk, { hash: "draft" });
 
 			this.fillData(offer);
 
@@ -68,6 +69,18 @@ export default {
 			} else {
 				return null;
 			}
+		},
+
+		/**
+		 * Format currencies to list
+		 */
+		currencies() {
+			const currencies = this.sdk.currency;
+
+			return Object.keys(currencies).map(key => ({
+				text: key,
+				value: key.toLocaleLowerCase()
+			}));
 		}
 	},
 
@@ -92,17 +105,20 @@ export default {
 		 */
 		calcPrice(reverse) {
 			const
-				values = { "usd": 0.25, "eur": 0.24, "pkoin": 1},
-				currency = this.$refs.currency.selected;
+				values = this.sdk.currency,
+				price = this.$refs.price.$refs.fields[0],
+				currency = this.$refs.currency?.selected?.toUpperCase();
 
-				if (!Number.isInteger(reverse)) {
-					/* Typing in price field */
-					this.price = parseInt(reverse.target.value);
-					this.pkoin = Math.ceil((this.price / values[currency.value]) * 100) / 100;
-				} else {
-					/* Get value from offer */
-					this.pkoin = parseInt(reverse);
-					this.price = Math.ceil((this.pkoin * values[currency.value]) * 100) / 100;
+				if (Object.keys(values).length) {
+					if (reverse?.target) {
+						/* Typing in price field */
+						this.price = parseFloat(price.value);
+						this.pkoin = (((this.price / values[currency]) * 100) / 100).toFixed(2);
+					} else {
+						/* Get value from offer */
+						this.pkoin = parseFloat(reverse);
+						this.price = (((this.pkoin * values[currency]) * 100) / 100).toFixed(2);
+					}
 				}
 		},
 
@@ -113,7 +129,7 @@ export default {
 		 */
 		fillData(offer) {
 			setTimeout(() => {
-				if (offer.hash?.length >= 64) {
+				if (offer.hash?.length >= 64 || offer.hash === "draft") {
 					if (offer.tags) {
 						if (["my_list", "for_nothing"].includes(offer.tags[0])) {
 							this.tags = [];
@@ -142,10 +158,11 @@ export default {
 		},
 
 		/**
-		 * Submit form data
+		 * Create new offer model and fill data
 		 */
-		submit() {
+		serializeForm() {
 			const
+				hash = this.offer.hash,
 				form = this.$refs.form,
 				photos = this.$refs.photos,
 				center = [
@@ -153,7 +170,46 @@ export default {
 					"point",
 					"center"
 				].map(p => this.$refs.map[p]).filter(p => p).shift(),
-				hash = this.offer.hash;
+				data = form.serialize(),
+				images = photos.serialize();
+
+			/* Fill offer data */
+			this.offer.update({
+				address: this.sdk.address,
+				language: this.$i18n.locale,
+				caption: data.title,
+				description: data.description,
+				tag: data.category,
+				tags: this.getting === "something" ? data.tags.split(",") : [this.getting],
+				condition: this.condition,
+				images: Object.values(images),
+				geohash: GeoHash.encodeGeoHash.apply(null, center),
+				price: Number(data.price || 1)
+			});
+
+			return { hash, form, photos, center, data, images };
+		},
+
+		/**
+		 * Preview an offer
+		 */
+		preview() {
+			this.serializeForm();
+
+			console.log(this.$i18n)
+			this.$router.push({
+				name: "barterItem",
+				params: {
+					id: this.offer.hash
+				}
+			});
+		},
+
+		/**
+		 * Submit form data
+		 */
+		submit() {
+			const { hash, form, photos, images } = this.serializeForm();
 
 			if (photos.validate()) {
 				photos.$el.classList.add(form.classes.passed);
@@ -165,10 +221,7 @@ export default {
 
 			/* Check all fields validity */
 			if (form.validate()) {
-				const 
-					data = form.serialize(),
-					images = photos.serialize(),
-					upload = Object.values(images).filter(image => image.startsWith("data:image"));
+				const upload = Object.values(images).filter(image => image.startsWith("data:image"));
 				
 				/* Show loader */
 				form.popup.update({
@@ -190,16 +243,7 @@ export default {
 
 						/* Send request to create or update(hash) an offer */
 						this.offer.set({
-							hash: hash || "draft",
-							language: this.$i18n.locale,
-							caption: data.title,
-							description: data.description,
-							tag: data.category,
-							tags: this.getting === "something" ? data.tags.split(",") : [this.getting],
-							condition: this.condition,
-							images: Object.values(images),
-							geohash: GeoHash.encodeGeoHash.apply(null, center),
-							price: Number(data.price || 1)
+							hash: hash
 						}).then((data) => {
 							if (data.transaction) {
 								form.popup.hide();
