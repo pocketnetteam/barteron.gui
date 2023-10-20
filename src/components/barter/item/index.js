@@ -88,7 +88,7 @@ export default {
 				if (!this.addr.fetching && this.geohash) {
 					this.addr.fetching = true;
 				
-					this.sdk.getAddress(this.geohash)
+					this.sdk.geoLocation(this.geohash)
 						.then(result => {
 							this.$set(this, "addr", result.address);
 						});
@@ -147,7 +147,7 @@ export default {
 		 * @return {String}
 		 */
 		imageUrl(path) {
-			if (path.startsWith("http")) {
+			if (["http", "data:image"].some(str => path?.startsWith(str))) {
 				return path;
 			} else {
 				try {
