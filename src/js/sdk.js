@@ -1,4 +1,5 @@
 import Vue from "vue";
+import { numberFormats } from "@/i18n/index.js";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
 
 import Account from "@/js/models/account.js";
@@ -35,6 +36,12 @@ class SDK {
 	get location() {
 		if (this.empty("_location")) this.getLocation();
 		return this._location;
+	}
+
+	_currency = {};
+	get currency() {
+		if (this.empty("_currency")) this.getCurrency();
+		return this._currency;
 	}
 
 	empty(prop) {
@@ -84,7 +91,7 @@ class SDK {
 			}
 		})
 
-		/* Reactive sub-objects */
+		/* Inner storage */
 		this.barteron = {
 			_accounts: {},
 			_offers: {}
@@ -107,7 +114,7 @@ class SDK {
 			/* Barteron offers operations */
 			offers: new Proxy(this.barteron._offers, {
 				get(target, hash) {
-					if (typeof hash !== "string" || hash?.length < 64) return this;
+					if (hash !== "draft" && (typeof hash !== "string" || hash?.length < 64)) return this;
 					else if (!target?.[hash]) $.getBrtOffersByHashes([hash]);
 					return target?.[hash];
 				},
@@ -116,31 +123,6 @@ class SDK {
 				}
 			})
 		});
-	}
-
-	/**
-	 * Get address of coodrinates
-	 * 
-	 * @param {Array} coords
-	 * @param {Object} [data]
-	 * 
-	 * @return {Promise}
-	 */
-	getAddress(coords, data) {
-		/* Send request to provider url */
-		const provider = new OpenStreetMapProvider();
-
-		return fetch(`
-			${ provider.reverseUrl }?
-			${ new URLSearchParams({
-				format: "json",
-				lat: coords?.[0],
-				lon: coords?.[1],
-				zoom: 18,
-				addressdetails: 1,
-				...data
-			}).toString() }
-		`).then(result => result.json());
 	}
 
 	setLastResult(e) {
@@ -250,9 +232,60 @@ class SDK {
 	getLocation() {
 		return this.sdk.get.location().then(location => {
 			this.lastresult = location;
-			Vue.set(this, "_location", location)
+			Vue.set(this, "_location", location);
 			return location;
-		}).catch(e => this.setLastResult(e))
+		}).catch(e => this.setLastResult(e));
+	}
+
+	/**
+	 * Currency from min-api
+	 */
+	getCurrency() {
+		const currencies = Object.keys(numberFormats).reduce((a, locale) => {
+			return a.concat(a, [numberFormats[locale].currency.currency.toUpperCase()]);
+		}, []);
+
+		return fetch(`
+			https://min-api.cryptocompare.com/data/price?
+			${ new URLSearchParams({
+				fsym: "PKOIN",
+				tsyms: /* currencies */["USD", "EUR", "RUB"]
+			}).toString() }
+		`)
+			.then(result => result.json())
+			.then(currency => {
+				this.lastresult = currency;
+				Vue.set(this, "_currency", currency);
+				return currency;
+			})
+			.catch(e => this.setLastResult(e));
+	}
+
+	/**
+	 * Get address of coodrinates
+	 * 
+	 * @param {Array} latLng
+	 * @param {Object} [data]
+	 * 
+	 * @return {Promise}
+	 */
+	geoLocation(latLng, data) {
+		/* Send request to provider url */
+		const provider = new OpenStreetMapProvider();
+
+		return fetch(`
+			${ provider.reverseUrl }?
+			${ new URLSearchParams({
+				format: "json",
+				lat: latLng?.[0],
+				lon: latLng?.[1],
+				zoom: 18,
+				addressdetails: 1,
+				...data
+			}).toString() }
+		`)
+			.then(result => result.json())
+			.catch(e => this.setLastResult(e));
 	}
 
 	/**
@@ -334,11 +367,11 @@ class SDK {
 		address = address || this._address;
 
 		if (!this.barteron._accounts[address]) {
-			Vue.set(this.barteron._accounts, address, {});
+			Vue.set(this.barteron._accounts, address, new Account(this, {}));
 		}
 
 		return this.rpc("getbarteronaccounts", [address]).then(accounts => {
-			return accounts.map(account => {
+			return accounts?.map(account => {
 				account = new Account(this, account);
 				Vue.set(this.barteron._accounts, account.address, account);
 
@@ -425,7 +458,7 @@ class SDK {
 	getBrtOffersByHashes(hashes = []) {
 		hashes.forEach(hash => {
 			if (!this.barteron._offers[hash]) {
-				Vue.set(this.barteron._offers, hash, {});
+				Vue.set(this.barteron._offers, hash, new Offer(this, {}));
 			}
 		});
 
