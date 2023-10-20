@@ -1,3 +1,5 @@
+import Vue from "vue";
+
 /**
  * Offer object model
  * 
@@ -17,17 +19,17 @@ class Offer {
 			{ t, a, c } = JSON.parse(data?.p?.s4 || '{"t":"","a":[],"c":"new"}'),
 			images = JSON.parse(data?.p?.s5 || "[]");
 		
-		this.address = data?.s1 || "";
-		this.hash = data?.s2 || null;
-		this.language = data?.p?.s1 || "";
-		this.caption = data?.p?.s2 || "";
-		this.description = data?.p?.s3 || "";
-		this.tag = t || "";
-		this.tags = a || [];
-		this.condition = c || "new";
-		this.images = images;
-		this.geohash = data?.p?.s6 || "";
-		this.price = data?.p?.i1 || 0;
+		this.address = data?.address || data?.s1 || "";
+		this.hash = data?.hash || data?.s2 || null;
+		this.language = data?.language || data?.p?.s1 || "";
+		this.caption = data?.caption || data?.p?.s2 || "";
+		this.description = data?.description || data?.p?.s3 || "";
+		this.tag = data?.tag || t || "";
+		this.tags = data?.tags || a || [];
+		this.condition = data?.condition || c || "new";
+		this.images = data?.images || images;
+		this.geohash = data?.geohash || data?.p?.s6 || "";
+		this.price = data?.price || data?.p?.i1 || 0;
 
 		/* Make hidden property */
 		Object.defineProperty(this, "sdk", {
@@ -35,6 +37,10 @@ class Offer {
 			writable: true,
 			value: sdk
 		});
+
+		if (data.hash === "draft" && !this.sdk.barteron._offers[data.hash]) {
+			Vue.set(this.sdk.barteron._offers, data.hash, this);
+		}
 	}
 
 	/**
