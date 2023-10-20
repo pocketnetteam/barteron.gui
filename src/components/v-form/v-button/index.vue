@@ -19,7 +19,6 @@
 				active
 			}"
 			ref="button"
-			tag="button"
 			@click="clickButton"
 		>
 			<slot></slot>

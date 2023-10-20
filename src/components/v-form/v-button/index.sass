@@ -27,6 +27,35 @@
 			background: $blue-hover
 
 		/* Colors */
+		&[class*="blue"]
+			background: $blue
+			border-color: $blue
+			color: $gohan
+
+			&:hover
+				background: $blue-hover
+				border-color: $blue-hover
+
+			/* Color */
+			&[class*="blue-color"]
+				background: transparent
+				color: $blue
+
+				&:hover
+					color: $blue-hover
+
+			/* Stroke & Transparent */
+			&[class*="blue-stroke"],
+			&[class*="blue-transparent"]
+				background: transparent
+				border-color: $blue
+				color: $blue
+
+				&:hover
+					background: $blue-hover
+					border-color: $blue-hover
+					color: $goku
+
 		&[class*="bulma"]
 			background: $bulma
 			border-color: $bulma
