@@ -12,17 +12,21 @@ export default {
 
 	methods: {
 		/**
-		 * Get image from assets
+		 * Get absolute path from path
 		 * 
-		 * @param {String} image
+		 * @param {String} path
 		 * 
-		 * @return {URL}
+		 * @return {String}
 		 */
-		imageUrl(image) {
-			try {
-				return require(`@/assets/images/${ image }`)
-			} catch {
-				return false;
+		imageUrl(path) {
+			if (["http", "data:image"].some(str => path?.startsWith(str))) {
+				return path;
+			} else {
+				try {
+					return require(`@/assets/images/${ path }`)
+				} catch {
+					return null;
+				}
 			}
 		}
 	}
