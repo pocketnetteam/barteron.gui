@@ -11,6 +11,12 @@ export default {
 		ExchangeList
 	},
 
+	data() {
+		return {
+			myOffers: []
+		}
+	},
+
 	computed: {
 		/**
 		 * Get offer data
@@ -18,7 +24,7 @@ export default {
 		 * @return {Object}
 		 */
 		item() {
-			return this.sdk.barteron.offers[this.$route.params.id];
+			return (Number.isInteger(this.$route.params.id) ? this.barters.items : this.sdk.barteron.offers)[this.$route.params.id];
 		},
 
 		/**
@@ -47,5 +53,9 @@ export default {
 		account() {
 			return this.sdk.barteron.accounts[this.address];
 		}
+	},
+
+	async mounted() {
+		this.myOffers = await this.sdk.getBrtOffers();
 	}
 }
