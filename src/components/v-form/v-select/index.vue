@@ -14,9 +14,17 @@
 				'v-hidden': true,
 				[`v-select-${ vSize ?? 'md' }`]: true
 			}"
+			v-model="selected"
 			ref="select"
 		>
-			<slot name="dropdown" v-if="$slots.dropdown"></slot>
+			<template v-if="dropdown.length">
+				<option
+					v-for="(item, index) in items"
+					:key="index"
+					:selected="selected === item.value"
+					:value="item.value"
+				>{{ item.value?.toUpperCase() }}</option>
+			</template>
 		</select>
 
 		<button
@@ -30,10 +38,11 @@
 			ref="button"
 			@click="clickSelect"
 		>
-			<slot v-if="$slots.default"></slot>
+			<slot v-if="$slots.default || $scopedSlots.default" :instance="instance"></slot>
 			<span
 				class="value"
 				ref="value"
+				v-html="value"
 				v-else
 			></span>
 			<i class="fa fa-angle-down v-dropdown-arrow" v-if="items.length"></i>
@@ -45,7 +54,7 @@
 					v-for="(item, index) in items"
 					:key="index"
 					:class="{
-						'selected': selected === item,
+						'selected': selected === item.value,
 						'hidden': !item.value
 					}"
 					v-html="item[dropdownItemKey] || item.text || item"

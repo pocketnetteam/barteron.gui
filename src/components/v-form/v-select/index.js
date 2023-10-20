@@ -30,16 +30,66 @@ export default {
 	data() {
 		return {
 			active: false,
-			items: this.dropdown ?? [],
-			selected: null
+			value: null,
+			selected: null,
+			options: []
 		}
 	},
 
 	computed: {
-		value() {
-			return this.$slots?.default ? this.$slots?.default[0]?.elm?.parentNode?.querySelector(this.valueSelector) : this.$refs.value
+		/**
+		 * Get instance of class
+		 * 
+		 * @return {@Vselect}
+		 */
+		instance() {
+			return this;
 		},
 
+		/**
+		 * Build list of options
+		 * 
+		 * @return {Array}
+		 */
+		items() {
+			const dropdown = this.dropdown;
+
+			this.$nextTick(() => {
+				if (!this.$refs.select) return;
+
+				/* Create innerWidth method of select computed styles */
+				const computed = Object.defineProperties(
+					getComputedStyle(this.$refs.select),
+					{
+						innerWidth: {
+							get() {
+								const exclude = ["paddingLeft", "paddingRight", "borderLeftWidth", "borderRightWidth"];
+
+								return exclude.reduce((w, p) => {
+									w -= parseInt(this[p]);
+									return w;
+								}, parseInt(this.width));
+							}
+						}
+					}
+				);
+				
+				this.$refs.button.style.setProperty('--min-width', `${ computed.innerWidth }px`);
+			});
+
+			if (dropdown.length) {
+				/* Set text to value */
+				this.setValue(dropdown.filter(f => f.selected)[0] ?? dropdown[0]);
+			}
+
+			return dropdown;
+		},
+
+		/**
+		 * Is dropdown available
+		 * 
+		 * @return {Number}
+		 */
 		hasDropdown() {
 			return this.items.length;
 		}
@@ -54,13 +104,10 @@ export default {
 		setValue(item) {
 			if (item) {
 				/* Set value in select */
-				this.$refs.select.value = item.value;
+				this.selected = item.value;
 
 				/* Set value in valueSelector */
-				this.value.innerHTML = item[this.dropdownItemKey] || item.text || item;
-
-				/* Select given item */
-				this.selected = item;
+				this.value = item[this.dropdownItemKey] || item.text || item;
 			}
 		},
 
@@ -98,6 +145,7 @@ export default {
 		 * @param {MouseEvent} e
 		 * @param {Object|String} item
 		 * @param {Number|String} index
+		 * 
 		 * @emits @selected
 		 */
 		clickItem(e, item, index) {
@@ -116,44 +164,6 @@ export default {
 	},
 
 	mounted() {
-		if (!this.$slots.dropdown && this.dropdown.length) {
-			/* Build options in select */
-			this.$refs.select.innerHTML = this.dropdown
-				.map(o => `
-				<option value="${ o.value }"${ o.selected ? 'selected' : '' }>
-					${ o[this.dropdownValueKey] || o.text || o }
-				</option>`
-				)
-				.join("\n");
-		} else if(this.$slots.dropdown) {
-			/* Build dropdown list from select */
-			this.items = [...this.$refs.select.querySelectorAll(":scope > *")].map(o => {
-				return { text: o.innerHTML, value: o.value, selected: o.selected };
-			});
-		}
-
-		/* Set text to value */
-		this.setValue(this.items.filter(f => f.selected)[0] ?? this.items[0]);
-
-		/* Create innerWidth method of select computed styles */
-		const computed = Object.defineProperties(
-			getComputedStyle(this.$refs.select),
-			{
-				innerWidth: {
-					get() {
-						const exclude = ["paddingLeft", "paddingRight", "borderLeftWidth", "borderRightWidth"];
-
-						return exclude.reduce((w, p) => {
-							w -= parseInt(this[p]);
-							return w;
-						}, parseInt(this.width));
-					}
-				}
-			}
-		);
-
-		this.$refs.button.style.setProperty('--min-width', `${ computed.innerWidth }px`);
-
 		/* Bind click to close dropdown */
 		document.addEventListener("click", () => {
 			if (this.active) this.clickSelect(null, false);
