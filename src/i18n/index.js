@@ -69,3 +69,5 @@ export default new VueI18n({
 	dateTimeFormats,
 	numberFormats
 });
+
+export { dateTimeFormats, numberFormats };
