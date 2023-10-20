@@ -2,57 +2,45 @@
 	<v-content>
 		<div class="row">
 			<div class="col no-offset">
-				<v-select @selected="selectFilter">
-					<template>
-						<span class="value"></span>
-					</template>
-	
-					<template #dropdown>
-						<option
-							v-for="(filter, index) in filters"
-							:key="index"
-							:value="filter.value"
-						>
-							<i
-								:class="{
-									'fa': true,
-									'fa-sort-amount-up': filter.value === 'new',
-									'fa-sort-amount-up-alt': filter.value === 'old',
-									'fa-sort-numeric-down': filter.value === 'price_asc',
-									'fa-sort-numeric-down-alt': filter.value === 'price_desc',
-									'icon': true
-								}"
-							></i>
-							{{ $t(`filterLabels.${ filter.value }`) }}
-						</option>
-					</template>
-				</v-select>
+				<v-select
+					:dropdown="filters.map((filter, index) => ({
+						text: `
+							<i class='fa icon ${ 
+								(() => {
+									switch (filter.value) {
+										case 'new': return 'fa-sort-amount-up';
+										case 'old': return 'fa-sort-amount-up-alt';
+										case 'price_asc': return 'fa-sort-numeric-down';
+										case 'price_desc': return 'fa-sort-numeric-down-alt';
+									}
+								})()
+							}'></i>
+							${ $t(`filterLabels.${ filter.value }`) }
+						`,
+						value: filter.value
+					}))"
+					@selected="selectFilter"
+				/>
 			</div>
 
 			<div class="col right">
-				<v-select @selected="selectView">
-					<template>
-						<span class="value"></span>
-					</template>
-	
-					<template #dropdown>
-						<option
-							v-for="(view, index) in views"
-							:key="index"
-							:value="view.value"
-						>
-							<i
-								:class="{
-									'fa': true,
-									'fa-th-large': view.value === 'tile',
-									'fa-align-justify': view.value === 'row',
-									'icon': true
-								}"
-							></i>
-							{{ $t(`viewLabels.${ view.value }`) }}
-						</option>
-					</template>
-				</v-select>
+				<v-select
+					:dropdown="views.map(view => ({
+						text: `
+							<i class='fa icon ${ 
+								(() => {
+									switch (view.value) {
+										case 'tile': return 'fa-th-large';
+										case 'row': return 'fa-align-justify';
+									}
+								})()
+							}'></i>
+							${ $t(`viewLabels.${ view.value }`) }
+						`,
+						value: view.value
+					}))"
+					@selected="selectView"
+				/>
 			</div>
 		</div>
 
