@@ -44,35 +44,29 @@
 				>
 					<!-- After tabset -->
 					<template #after>
-						<v-select @selected="selectView">
-							<template>
-								<span class="value"></span>
-							</template>
-			
-							<template #dropdown>
-								<option
-									v-for="(view, index) in views"
-									:key="index"
-									:value="view.value"
-								>
-									<i
-										:class="{
-											'fa': true,
-											'fa-th-large': view.value === 'tile',
-											'fa-align-justify': view.value === 'row',
-											'icon': true
-										}"
-									></i>
-									{{ $t(`viewLabels.${ view.value }`) }}
-								</option>
-							</template>
-						</v-select>
+						<v-select
+							:dropdown="views.map(view => ({
+								text: `
+									<i class='fa icon ${ 
+										(() => {
+											switch (view.value) {
+												case 'tile': return 'fa-th-large';
+												case 'row': return 'fa-align-justify';
+											}
+										})()
+									}'></i>
+									${ $t(`viewLabels.${ view.value }`) }
+								`,
+								value: view.value
+							}))"
+							@selected="selectView"
+						/>
 					</template>
 
 					<!-- Tab: Active -->
 					<template #active>
 						<BarterList
-							:items="myAds"
+							:items="myOffers"
 							:vType="bartersView"
 						>
 							<!-- 3-dots dropdown -->

@@ -9,7 +9,7 @@ export default {
 
 	data() {
 		return {
-			myAds: [],
+			myOffers: [],
 			bartersView: "tile"
 		}
 	},
@@ -50,6 +50,6 @@ export default {
 	},
 
 	async mounted() {
-		this.myAds = await this.sdk.getBrtOffers();
-	},
+		this.myOffers = await this.sdk.getBrtOffers();
+	}
 }
