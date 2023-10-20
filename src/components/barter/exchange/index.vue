@@ -26,6 +26,7 @@
 			</v-button>
 
 			<v-button
+				v-if="groupExchange.length"
 				vType="stroke"
 				class="btn-group"
 			>
@@ -35,7 +36,7 @@
 				</span>
 				<ul>
 					<li
-						v-for="(item, index) in barters.generate(3)" :key="index"
+						v-for="(item, index) in groupExchange" :key="index"
 					>
 						<img :src="imageUrl(item.images[0])" :alt="item.name">
 					</li>

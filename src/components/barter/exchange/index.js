@@ -9,7 +9,8 @@ export default {
 	data() {
 		return {
 			selected: 0,
-			show: 3
+			show: 3,
+			groupExchange: []
 		}
 	},
 
@@ -22,7 +23,7 @@ export default {
 		 * @return {String}
 		 */
 		imageUrl(path) {
-			if (path.startsWith("http")) {
+			if (["http", "data:image"].some(str => path?.startsWith(str))) {
 				return path;
 			} else {
 				try {
@@ -43,5 +44,12 @@ export default {
 				this.show = 3;
 			}
 		}
+	},
+
+	async mounted() {
+		this.groupExchange = await this.sdk.getBrtOfferDeals({
+			offer: this.item.hash,
+			address: this.address
+		});
 	}
 }
