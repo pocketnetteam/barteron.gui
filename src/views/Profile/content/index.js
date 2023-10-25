@@ -23,8 +23,7 @@ export default {
 		address() {
 			const address = this.$route.params.id || this.sdk.address;
 
-			/* Get offers list */
-			this.sdk.getBrtOffers(address).then(offers => this.offersList = offers);
+			this.getTabsContent(address);
 
 			return address;
 		},
@@ -49,6 +48,16 @@ export default {
 	},
 
 	methods: {
+		/**
+		 * Load all tabs contents based by user address
+		 * 
+		 * @param {String} address 
+		 */
+		getTabsContent(address) {
+			/* Get offers list */
+			this.sdk.getBrtOffers(address).then(offers => this.offersList = offers);
+		},
+
 		/**
 		 * Parse labels object from localization
 		 * 
