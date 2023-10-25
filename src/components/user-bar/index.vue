@@ -2,19 +2,19 @@
 	<div class="user-bar">
 		<ul>
 			<li>
-				<router-link :to="{ name: 'home' }" class="link">
+				<router-link :to="{ name: 'profile', params: { id: sdk.address, tab: 'favorites' } }" class="link">
 					<i class="fa fa-heart"></i>
 				</router-link>
 			</li>
 
 			<li>
-				<router-link :to="{ name: 'home' }" class="link">
+				<router-link :to="{ name: 'profile', params: { id: sdk.address, tab: 'feedbacks' } }" class="link">
 					<i class="fa fa-comment"></i>
 				</router-link>
 			</li>
 
 			<li>
-				<router-link class="avatar" :to="{ name: 'profile', params: { id: user?.name || 'username' } }">
+				<router-link class="avatar" :to="{ name: 'profile', params: { id: sdk.address } }">
 					<i
 						v-if="!user?.i"
 						:style="hslColor"

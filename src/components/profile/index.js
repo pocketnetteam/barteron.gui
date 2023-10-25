@@ -22,7 +22,7 @@ export default {
 		 * @return {Object}
 		 */
 		user() {
-			return this.sdk.account[this.address];
+			return this.sdk.accounts[this.address];
 		},
 
 		/**

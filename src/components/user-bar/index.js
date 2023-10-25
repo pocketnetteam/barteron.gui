@@ -16,7 +16,7 @@ export default {
 		 * @return {Object}
 		 */
 		user() {
-			return this.sdk.account[this.sdk.address];
+			return this.sdk.accounts[this.sdk.address];
 		},
 
 		/**

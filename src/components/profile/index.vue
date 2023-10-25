@@ -2,7 +2,7 @@
 	<div class="profile">
 		<div class="row author">
 			<div class="col">
-				<div class="avatar">
+				<router-link class="avatar" :to="{ name: 'profile', params: { id: address } }">
 					<i
 						v-if="!user.i"
 						:style="hslColor"
@@ -11,7 +11,7 @@
 					<picture class="status-online" v-else>
 						<img :src="user.i" :alt="user.name">
 					</picture>
-				</div>
+				</router-link>
 			</div>
 
 			<div class="col user">
