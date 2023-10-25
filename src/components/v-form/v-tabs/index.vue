@@ -3,8 +3,6 @@
 		'tabs': true,
 		[vType]: vType
 	}">
-		active: {{ active }}
-		selected: {{ selected }}
 		<div class="tabset">
 			<div class="tabset-before" v-if="$slots.before">
 				<slot name="before"></slot>
