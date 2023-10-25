@@ -83,7 +83,7 @@ class SDK {
 		this._accounts = {};
 
 		/* Observe accounts watcher */
-		this.account = new Proxy(this._accounts, {
+		this.accounts = new Proxy(this._accounts, {
 			get(target, address) {
 				if (typeof address !== "string" || address?.length < 32) return this;
 				else if (!target?.[address]) $.getUserInfo(address);
@@ -501,8 +501,8 @@ class SDK {
 	 * @return {Promise}
 	 */
 	getBrtOffersFeed(request = {}) {
-		return this.rpc("getbarteronfeed", request).then(offers => {
-			return offers?.map(offer => new Offer(this, offer)) || [];
+		return this.rpc("getbarteronfeed", request).then(feed => {
+			return feed?.offers?.map(offer => new Offer(this, offer)) || [];
 		});
 	}
 
