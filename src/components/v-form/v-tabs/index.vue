@@ -3,6 +3,8 @@
 		'tabs': true,
 		[vType]: vType
 	}">
+		active: {{ active }}
+		selected: {{ selected }}
 		<div class="tabset">
 			<div class="tabset-before" v-if="$slots.before">
 				<slot name="before"></slot>
@@ -12,7 +14,7 @@
 				<li
 					v-for="(tab, i) in tabset"
 					:key="i"
-					:class="{ 'active': active === tab.tabId }"
+					:class="{ 'active': (active || selected) === tab.tabId }"
 				>
 					<a
 						:href="`#${ tab.tabId }`"
@@ -33,7 +35,7 @@
 			>
 				<slot
 					:name="tab.tabId"
-					v-if="active === tab.tabId"
+					v-if="(active || selected) === tab.tabId"
 				></slot>
 			</template>
 		</div>
