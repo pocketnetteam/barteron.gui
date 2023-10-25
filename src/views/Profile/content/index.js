@@ -9,12 +9,35 @@ export default {
 
 	data() {
 		return {
-			myOffers: [],
+			offersList: [],
 			bartersView: "tile"
 		}
 	},
 
 	computed: {
+		/**
+		 * Get bastyon address
+		 * 
+		 * @return {String}
+		 */
+		address() {
+			const address = this.$route.params.id || this.sdk.address;
+
+			/* Get offers list */
+			this.sdk.getBrtOffers(address).then(offers => this.offersList = offers);
+
+			return address;
+		},
+
+		/**
+		 * Show is this profile is your's
+		 * 
+		 * @return {Boolean}
+		 */
+		isMyProfile() {
+			return this.address === this.sdk.address;
+		},
+
 		/**
 		 * Make list of view
 		 * 
@@ -47,9 +70,5 @@ export default {
 		selectView(view) {
 			this.bartersView = view?.value;
 		}
-	},
-
-	async mounted() {
-		this.myOffers = await this.sdk.getBrtOffers();
 	}
 }

@@ -18,7 +18,16 @@ export default {
 		 * @return {String}
 		 */
 		address() {
-			return this.sdk.address;
+			return this.$route.params.id || this.sdk.address;
+		},
+
+		/**
+		 * Show is this profile is your's
+		 * 
+		 * @return {Boolean}
+		 */
+		isMyProfile() {
+			return this.address === this.sdk.address;
 		},
 
 		/**

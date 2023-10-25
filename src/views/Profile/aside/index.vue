@@ -23,7 +23,7 @@
 		</div>
 
 		<!-- Wallet -->
-		<div class="box">
+		<div class="box" v-if="isMyProfile">
 			<Wallet />
 		</div>
 
@@ -33,7 +33,7 @@
 				:tags="account?.tags || []"
 				@change="changeTags"
 			>
-				<template #edit="{ instance }">
+				<template #edit="{ instance }" v-if="isMyProfile">
 					<!-- Edit button -->
 					<template v-if="!instance.editable">
 						<v-button vType="bulma-stroke" @click="instance.edit">
@@ -60,7 +60,7 @@
 		<!-- Settings -->
 		<div class="settings">
 			<ul class="list">
-				<li><a href="#" class="link"><i class="fa fa-cog"></i> {{ $t('profile.settings') }}</a></li>
+				<!-- <li><a href="#" class="link"><i class="fa fa-cog"></i> {{ $t('profile.settings') }}</a></li> -->
 				<li><a href="#" class="link"><i class="fa fa-question-circle"></i> {{ $t('profile.contact_support') }}</a></li>
 			</ul>
 		</div>

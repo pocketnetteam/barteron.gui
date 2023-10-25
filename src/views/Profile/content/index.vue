@@ -4,16 +4,12 @@
 		<v-tabs
 			:tabset="[
 				{
-					tabId: 'my-ads',
-					title: `<i class='fa fa-list'></i> ${ $t('profile.my_ads') } (0)`
+					tabId: 'ads',
+					title: `<i class='fa fa-list'></i> ${ $t('profile.ads') } (${ offersList.length })`
 				},
 				{
-					tabId: 'my-barters',
-					title: `<i class='fa fa-sync-alt'></i> ${ $t('profile.my_barters') } (0)`
-				},
-				{
-					tabId: 'messages',
-					title: `<i class='fa fa-comment'></i> ${ $t('profile.messages') } (0)`
+					tabId: 'barters',
+					title: `<i class='fa fa-sync-alt'></i> ${ $t('profile.barters') } (0)`
 				},
 				{
 					tabId: 'favorites',
@@ -26,8 +22,8 @@
 			]"
 			vType="pills"
 		>
-			<!-- Tab: My ads -->
-			<template #my-ads>
+			<!-- Tab: Ads -->
+			<template #ads>
 				<!-- Secondary tabs level -->
 				<v-tabs
 					class="inner-tabs"
@@ -66,7 +62,7 @@
 					<!-- Tab: Active -->
 					<template #active>
 						<BarterList
-							:items="myOffers"
+							:items="offersList"
 							:vType="bartersView"
 						>
 							<!-- 3-dots dropdown -->
@@ -86,11 +82,11 @@
 
 							<!-- Date range, views and favorites -->
 							<template #info="{ item }">
-								<v-switch
+								<!-- <v-switch
 									class="no-padding"
 									type="checkbox"
 									:label="$t('item.autorenew')"
-								/>
+								/> -->
 
 								<ul>
 									<li v-if="item?.time">
@@ -107,15 +103,15 @@
 								</ul>
 
 								<dl>
-									<dt><i class="fa fa-eye"></i></dt>
-									<dd>33</dd>
+									<!-- <dt><i class="fa fa-eye"></i></dt>
+									<dd>33</dd> -->
 									<dt><i class="fa fa-heart"></i></dt>
 									<dd>99</dd>
 								</dl>
 							</template>
 
 							<!-- Edit and find exchange -->
-							<template #offer="{ item }">
+							<template #offer="{ item }" v-if="isMyProfile">
 								<v-button :to="{ path: `/barter/edit/${ item.hash }`, params: { id: item.hash } }">{{ $t('item.edit') }}</v-button>
 								<v-button vType="hit-stroke">{{ $t('item.find_exchange') }}</v-button>
 							</template>
@@ -132,18 +128,13 @@
 				</v-tabs>
 			</template>
 
-			<!-- Tab: My barters -->
-			<template #my-barters>
-				My barters
-			</template>
-
-			<!-- Tab: Messages -->
-			<template #messages>
-				Messages
+			<!-- Tab: Barters -->
+			<template #barters v-if="isMyProfile">
+				Barters
 			</template>
 
 			<!-- Tab: Favorites -->
-			<template #favorites>
+			<template #favorites v-if="isMyProfile">
 				Favorites
 			</template>
 
