@@ -52,9 +52,8 @@
 		"wallet": "Wallet",
 		"settings": "Settings",
 		"contact_support": "Contact support",
-		"my_ads": "My ads",
-		"my_barters": "My barters",
-		"messages": "Messages",
+		"ads": "Ads",
+		"barters": "Barters",
 		"favorites": "Favorites",
 		"feedbacks": "Feedbacks",
 		"active": "Active",
@@ -94,7 +93,8 @@
 		"buy_for": "Buy for {cost} PKOIN",
 		"edit": "Edit",
 		"withdraw": "Withdraw from publication",
-		"remove": "Remove"
+		"remove": "Remove",
+		"continue_edit": "Continute edit"
 	},
 
 	"barterLabels": {
