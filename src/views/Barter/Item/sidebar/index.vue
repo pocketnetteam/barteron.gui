@@ -11,8 +11,14 @@
 				<template v-if="isMyOffer">
 					<div class="buttons">
 						<v-button :to="{ path: `/barter/edit/${ item.hash }`, params: { id: item.hash } }">
-							<i class="fa fa-pen"></i>
-							<span>{{ $t('buttonLabels.edit') }}</span>
+							<template v-if="item.hash !== 'draft'">
+								<i class="fa fa-pen"></i>
+								<span>{{ $t('buttonLabels.edit') }}</span>
+							</template>
+							<template v-else>
+								<i class="fa fa-undo"></i>
+								<span>{{ $t('buttonLabels.continue_edit') }}</span>
+							</template>
 						</v-button>
 
 						<v-button vType="hit">
@@ -20,15 +26,17 @@
 							<span>{{ $t('buttonLabels.find_exchange_options') }}</span>
 						</v-button>
 
-						<v-button vType="bulma-stroke">
-							<i class="fa fa-undo"></i>
-							<span>{{ $t('buttonLabels.withdraw') }}</span>
-						</v-button>
+						<template v-if="item.hash !== 'draft'">
+							<v-button vType="bulma-stroke">
+								<i class="fa fa-undo"></i>
+								<span>{{ $t('buttonLabels.withdraw') }}</span>
+							</v-button>
 
-						<v-button vType="dodoria-stroke">
-							<i class="fa fa-trash"></i>
-							<span>{{ $t('buttonLabels.remove') }}</span>
-						</v-button>
+							<v-button vType="dodoria-stroke">
+								<i class="fa fa-trash"></i>
+								<span>{{ $t('buttonLabels.remove') }}</span>
+							</v-button>
+						</template>
 					</div>
 				</template>
 
