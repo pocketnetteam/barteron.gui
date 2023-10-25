@@ -13,11 +13,13 @@
 				},
 				{
 					tabId: 'favorites',
-					title: `<i class='fa fa-heart'></i> ${ $t('profile.favorites') }`
+					title: `<i class='fa fa-heart'></i> ${ $t('profile.favorites') }`,
+					active: $route.params.tab === 'favorites'
 				},
 				{
 					tabId: 'feedbacks',
-					title: `<i class='fa fa-comments'></i> ${ $t('profile.feedbacks') }`
+					title: `<i class='fa fa-comments'></i> ${ $t('profile.feedbacks') }`,
+					active: $route.params.tab === 'feedbacks'
 				}
 			]"
 			vType="pills"
