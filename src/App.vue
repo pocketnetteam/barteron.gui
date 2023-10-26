@@ -1,8 +1,8 @@
 <template>
 	<div id="app">
-		<template v-if="!this.user?.name">
+		<transition type="fade" v-if="!this.user?.name">
 			<loader :loading="!this.user?.name" />
-		</template>
+		</transition>
 
 		<template v-else>
 			<v-header />

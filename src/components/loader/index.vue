@@ -1,9 +1,11 @@
 <template>
-	<div class="loader" v-if="loading">
-		<div class="straight"></div>
-		<div class="curve"></div>
-		<div class="center"></div>
-		<div class="inner"></div>
+	<div class="overlay" v-if="loading">
+		<div class="loader">
+			<div class="straight"></div>
+			<div class="curve"></div>
+			<div class="center"></div>
+			<div class="inner"></div>
+		</div>
 	</div>
 </template>
 
