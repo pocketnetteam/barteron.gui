@@ -1,7 +1,7 @@
 <template>
 	<footer id="footer">
 		<div class="footer-holder">
-			<div class="links">
+			<!-- <div class="links">
 				<nav>
 					<strong class="title">Empresa</strong>
 					<ul>
@@ -39,7 +39,7 @@
 						<li><a href="#">Item #3</a></li>
 					</ul>
 				</nav>
-			</div>
+			</div> -->
 
 			<div class="bottom">
 				<strong class="logo"><router-link to="/">Barteron</router-link></strong>
