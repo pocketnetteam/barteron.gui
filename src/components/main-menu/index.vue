@@ -1,11 +1,11 @@
 <template>
 	<nav class="main-menu">
-		<menu>
+		<menu v-if="items.length">
 			<menuitem
-				v-for="(item, name) in items"
-				:key="name"
+				v-for="(item, index) in items"
+				:key="index"
 			>
-				<router-link :to="item.path">{{ item.name }}</router-link>
+				<router-link :to="item.to">{{ $t(item.name) }}</router-link>
 			</menuitem>
 		</menu>
 	</nav>
