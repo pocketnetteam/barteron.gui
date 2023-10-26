@@ -25,19 +25,12 @@
 <style src="@/assets/font-awesome/css/all.css"></style>
 <script>
 import loader from "@/components/loader/index.vue";
-import favoritesData from "@/data/favorites.json";
 
 export default {
 	name: "Barteron",
 
 	components: {
 		loader
-	},
-
-	provide() {
-		return {
-			favorite: favoritesData
-		}
 	},
 
 	computed: {

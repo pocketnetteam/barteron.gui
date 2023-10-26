@@ -10,7 +10,7 @@
 
 		<section>
 			<h1>{{ $t('popular_categories') }}</h1>
-			<AssocList :items="favorite" />
+			<AssocList :items="favorites" />
 		</section>
 
 		<section v-if="newFromGoods.length">

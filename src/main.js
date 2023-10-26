@@ -6,6 +6,7 @@ import i18n from "./i18n/index.js";
 import SDK from "@/js/sdk.js"
 import Categories from "@/js/categories.js"
 import Barters from "@/js/barters.js"
+import Favorites from "@/data/favorites.json";
 
 Vue.config.productionTip = false;
 
@@ -40,6 +41,7 @@ vRequire([
 Vue.prototype.sdk = Vue.observable(new SDK());
 Vue.prototype.categories = Vue.observable(new Categories());
 Vue.prototype.barters = Vue.observable(new Barters());
+Vue.prototype.favorites = Favorites;
 
 /* Add mixin for accessing sibling components in a route */
 Vue.mixin({

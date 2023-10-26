@@ -5,8 +5,6 @@ import Banner from "@/components/banner/index.vue";
 export default {
 	name: "Home",
 
-	inject: ["favorite"],
-
 	components: {
 		AssocList,
 		BarterList,
