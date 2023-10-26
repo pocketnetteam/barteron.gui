@@ -38,6 +38,15 @@ export default {
 		},
 
 		/**
+		 * Active tab param
+		 * 
+		 * @return {String|undefined}
+		 */
+		activeTab() {
+			return this.$route.hash;
+		},
+
+		/**
 		 * Make list of view
 		 * 
 		 * @return {Array}
@@ -53,9 +62,9 @@ export default {
 		 * 
 		 * @param {String} address 
 		 */
-		getTabsContent(address) {
+		async getTabsContent(address) {
 			/* Get offers list */
-			this.sdk.getBrtOffers(address).then(offers => this.offersList = offers);
+			this.offersList = await this.sdk.getBrtOffers(address);
 		},
 
 		/**
