@@ -2,13 +2,13 @@
 	<div class="user-bar">
 		<ul>
 			<li>
-				<router-link :to="{ name: 'profile', params: { id: sdk.address, tab: 'favorites' } }" class="link">
+				<router-link :to="{ path: `/profile/${ sdk.address }#favorites` }" class="link">
 					<i class="fa fa-heart"></i>
 				</router-link>
 			</li>
 
 			<li>
-				<router-link :to="{ name: 'profile', params: { id: sdk.address, tab: 'feedbacks' } }" class="link">
+				<router-link :to="{ path: `/profile/${ sdk.address }#feedbacks` }" class="link">
 					<i class="fa fa-comment"></i>
 				</router-link>
 			</li>
