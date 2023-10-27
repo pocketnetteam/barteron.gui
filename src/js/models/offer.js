@@ -51,8 +51,10 @@ class Offer {
 	 * @return {Offer}
 	 */
 	update(data) {
-		for (const p in data) {
-			this[p] = data[p];
+		if (Object.keys(data).length) {
+			for (const p in data) {
+				this[p] = data[p];
+			}
 		}
 
 		return this;
@@ -64,8 +66,14 @@ class Offer {
 	 * @param {Object} data
 	 */
 	set(data) {
-		this.update(data);
-		return this.sdk.setBrtOffer({ ...this, ...data });
+		return this.sdk.setBrtOffer({ ...this.update(data) });
+	}
+
+	/**
+	 * Destroy model data
+	 */
+	destroy() {
+		delete this.sdk.barteron._offers[this.hash];
 	}
 };
 
