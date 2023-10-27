@@ -218,8 +218,8 @@ export default {
 			if (form.validate()) {
 				const upload = Object.values(images).filter(image => image.startsWith("data:image"));
 				
-				/* Show loader */
-				form.dialog.view("load", "Sending data, please wait...");
+				/* Show dialog */
+				form.dialog.view("load", this.$t("dialog.images_imgur"));
 
 				/* Upload images to imgur through bastyon */
 				this.sdk.uploadImagesToImgur(upload)
@@ -234,6 +234,9 @@ export default {
 							}
 
 						}
+
+						/* Show dialog */
+						form.dialog.view("load", this.$t("dialog.data_node"));
 
 						/* Send request to create or update(hash) an offer */
 						this.offer.set({
