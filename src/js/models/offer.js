@@ -31,11 +31,10 @@ class Offer {
 		this.geohash = data?.geohash || data?.p?.s6 || "";
 		this.price = data?.price || data?.p?.i1 || 0;
 
-		/* Make hidden property */
-		Object.defineProperty(this, "sdk", {
-			enumerable: false,
-			writable: true,
-			value: sdk
+		/* Make hidden properties */
+		Object.defineProperties(this, {
+			sdk: { value: sdk },
+			time: { value: data.time * 1000 || (new Date()) }
 		});
 
 		if (data.hash === "draft" && !this.sdk.barteron._offers[data.hash]) {

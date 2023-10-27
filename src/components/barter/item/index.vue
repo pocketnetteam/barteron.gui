@@ -43,10 +43,16 @@
 
 		<!-- View: Tile -->
 		<template v-if="vType === 'tile'">
-			<div class="row pricing" v-if="item.price">
+			<div class="row pricing">
 				<span class="price">
-					<span class="currency pkoin"></span>
-					{{ $n(item.price) }}
+					<template v-if="item.price">
+						<span class="currency pkoin"></span>
+						{{ $n(item.price) }}
+					</template>
+					<template v-else>
+						<span class="currency fa fa-gift"></span>
+						{{ $t('barterLabels.free') }}
+					</template>
 				</span>
 
 				<span class="favorite">
@@ -81,7 +87,7 @@
 					<li v-if="item.time">
 						<dl>
 							<dt><i class="fa fa-calendar"></i></dt>
-							<dd><time>{{ $d(item.time * 1000, 'middle') }}</time></dd>
+							<dd><time>{{ $d(item.time, 'middle') }}</time></dd>
 						</dl>
 					</li>
 					<li v-if="distance > -1">
@@ -118,10 +124,16 @@
 					</div>
 				</div>
 
-				<div class="pricing" v-if="item.price">
+				<div class="pricing">
 					<span class="price">
-						<span class="currency pkoin"></span>
-						{{ $n(item.price) }}
+						<template v-if="item.price">
+							<span class="currency pkoin"></span>
+							{{ $n(item.price) }}
+						</template>
+						<template v-else>
+							<span class="currency fa fa-gift"></span>
+							{{ $t('barterLabels.free') }}
+						</template>
 					</span>
 				</div>
 			</div>
@@ -134,9 +146,10 @@
 				<slot name="offer"></slot>
 
 				<div class="info" v-if="item.time || item.geohash">
-					<ul>
+					<slot name="info" v-if="$slots.info"></slot>
+					<ul v-else>
 						<li v-if="item.time">
-							<time>{{ $d(item.time * 1000, 'middle') }}</time>
+							<time>{{ $d(item.time, 'middle') }}</time>
 						</li>
 						<li v-if="distance > -1">
 							{{ distance }} {{ $t('metrics.km') }}
@@ -191,10 +204,10 @@
 					<ul class="stat">
 						<li v-if="item.time">
 							<i class="fa fa-calendar-day"></i>
-							<time>{{ $d(item.time * 1000, 'middle') }}</time>
+							<time>{{ $d(item.time, 'middle') }}</time>
 						</li>
 						<li>
-							<i class="fa fa-eye"></i>
+							<i class="fa fa-heart"></i>
 							<span class="count">32</span>
 						</li>
 					</ul>
