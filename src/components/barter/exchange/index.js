@@ -49,7 +49,7 @@ export default {
 	async mounted() {
 		this.groupExchange = await this.sdk.getBrtOfferDeals({
 			offer: this.item.hash,
-			address: this.address
+			address: this.sdk.address
 		});
 	}
 }
