@@ -1,0 +1,72 @@
+@import "@/css/vars.sass"
+	
+.v-dialog
+	display: flex
+	justify-content: center
+	align-items: flex-start
+	position: absolute
+	top: 0
+	right: 0
+	bottom: 0
+	left: 0
+
+	&:before
+		background: $gohan
+		content: ""
+		opacity: 75%
+		position: absolute
+		height: 100%
+		width: 100%
+		z-index: 1000
+
+	.content
+		background: $gohan
+		border: 1px solid $beerus
+		border-radius: .7em
+		display: flex
+		flex-direction: column
+		gap: 1em
+		padding: 1em
+		position: sticky
+		top: 50%
+		transform: translateY(-50%)
+		z-index: 1005
+
+		main
+			display: inline-flex
+			gap: 1em
+			align-items: center
+			justify-content: center
+
+			*
+				color: $bulma
+				
+				&.color-default
+					color: $dark
+
+				&.color-info
+					color: $blue
+
+				&.color-success
+					color: $roshi
+
+				&.color-warn
+					color: $hit
+
+				&.color-error
+					color: $dodoria
+
+			.icon
+				display: flex
+				justify-content: center
+				align-items: center
+				font-size: 2em
+
+			.text
+				margin: 0
+				filter: brightness(85%)
+
+		footer
+			display: flex
+			justify-content: flex-end
+			gap: 1em
