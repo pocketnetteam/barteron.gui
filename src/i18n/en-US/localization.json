@@ -130,6 +130,11 @@
 		"find_exchange": "Find exchange"
 	},
 
+	"dialog": {
+		"images_imgur": "Sending images to imgur..",
+		"data_node": "Posting data to node, please wait.."
+	},
+
 	"metrics": {
 		"km": "km",
 		"number": "#"
