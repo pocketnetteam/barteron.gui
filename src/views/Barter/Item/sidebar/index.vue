@@ -3,7 +3,14 @@
 		<div class="box">
 			<h1 class="title">{{ item.caption }}</h1>
 			<span class="price">
-				<span class="currency pkoin"></span> {{ $n(item.price) }}
+				<template v-if="item.price">
+					<span class="currency pkoin"></span>
+					{{ $n(item.price) }}
+				</template>
+				<template v-else>
+					<span class="currency fa fa-gift"></span>
+					{{ $t('barterLabels.free') }}
+				</template>
 			</span>
 
 			<div class="row t-sep">
