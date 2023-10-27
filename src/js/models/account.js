@@ -27,11 +27,9 @@ class Account {
 		this.type = data?.type || 0;
 		this.additional = data?.additional || {};
 
-		/* Make hidden property */
-		Object.defineProperty(this, "sdk", {
-			enumerable: false,
-			writable: true,
-			value: sdk
+		/* Make hidden properties */
+		Object.defineProperties(this, {
+			sdk: { value: sdk }
 		});
 	}
 
