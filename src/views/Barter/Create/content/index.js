@@ -251,15 +251,18 @@ export default {
 								form.dialog.hide();
 								this.$router.push({ name: "addedBarter", params: { id: data.transaction } });
 							}
-						}).catch(err => {
+						}).catch(error => {
 							/* Show error dialog */
-							form.dialog.view("error", `Offer error has occured: ${ err }`);
+							const errNum = error?.toString().replace(/\D/g, '');
+							form.dialog.view("error", this.$t('dialog.offer_error', {
+								error: this.$t(`dialog.error#${ errNum }`)
+							}));
 						});
 					})
-					.catch(err => {
+					.catch(error => {
 						console.log(this.sdk, err)
 						/* Show error dialog */
-						form.dialog.view("error", `Image upload error: ${ err }`);
+						form.dialog.view("error", this.$t('dialog.image_error', { error }));
 					});
 			}
 		}
