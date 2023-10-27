@@ -117,7 +117,7 @@ export default {
 				geohash: GeoHash.encodeGeoHash.apply(null, center || this.location),
 				static: data.static === "static",
 				radius: Number(data.radius)
-			}).then(() => this.hideLightbox);
+			}).then(() => this.hideLightbox());
 		}
 	}
 }
