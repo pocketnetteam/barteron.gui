@@ -112,12 +112,12 @@ export default {
 				if (Object.keys(values).length) {
 					if (reverse?.target) {
 						/* Typing in price field */
-						this.price = parseFloat(price.value);
-						this.pkoin = (((this.price / values[currency]) * 100) / 100).toFixed(2);
+						this.price = parseInt(price.value);
+						this.pkoin = Math.ceil(((this.price / values[currency]) * 100) / 100);
 					} else {
 						/* Get value from offer */
-						this.pkoin = parseFloat(reverse);
-						this.price = (((this.pkoin * values[currency]) * 100) / 100).toFixed(2);
+						this.pkoin = parseInt(reverse);
+						this.price = Math.ceil(((this.pkoin * values[currency]) * 100) / 100);
 					}
 				}
 		},
@@ -197,12 +197,7 @@ export default {
 			this.serializeForm();
 
 			console.log(this.$i18n)
-			this.$router.push({
-				name: "barterItem",
-				params: {
-					id: this.offer.hash
-				}
-			});
+			this.$router.push({ name: "barterItem", params: { id: this.offer.hash } });
 		},
 
 		/**
@@ -224,14 +219,12 @@ export default {
 				const upload = Object.values(images).filter(image => image.startsWith("data:image"));
 				
 				/* Show loader */
-				form.popup.update({
-					text: "Sending data, please wait..."
-				}).show();
+				form.dialog.view("load", "Sending data, please wait...");
 
 				/* Upload images to imgur through bastyon */
 				this.sdk.uploadImagesToImgur(upload)
 					.then(urls => {
-						/* Merge images with urls */
+						/* Replace data:image with given urls */
 						if (urls?.length) {
 							for (let i in images) {
 								if (images[i].startsWith("http")) continue;
@@ -239,36 +232,31 @@ export default {
 								const index = upload.findIndex(image => image === images[i]);
 								if (index > -1) images[i] = urls[index];
 							}
+
 						}
 
 						/* Send request to create or update(hash) an offer */
 						this.offer.set({
-							hash: hash
+							hash,
+							images: Object.values(images)
 						}).then((data) => {
 							if (data.transaction) {
-								form.popup.hide();
 								if (this.offer.hash?.length < 64) {
-									this.offer.update({ hash: data.transaction });
+									this.offer.destroy();
 								}
-								console.log(offer)
+
+								form.dialog.hide();
+								this.$router.push({ name: "addedBarter", params: { id: data.transaction } });
 							}
 						}).catch(err => {
-							/* Show error popup */
-							form.popup.update({
-								text: `Offer error has occured: ${ err }`,
-								close: true,
-								icon: false
-							});
+							/* Show error dialog */
+							form.dialog.view("error", `Offer error has occured: ${ err }`);
 						});
 					})
 					.catch(err => {
 						console.log(this.sdk, err)
-						/* Show error popup */
-						form.popup.update({
-							text: `Image upload error: ${ err }`,
-							close: true,
-							icon: false
-						});
+						/* Show error dialog */
+						form.dialog.view("error", `Image upload error: ${ err }`);
 					});
 			}
 		}
