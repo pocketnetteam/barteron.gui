@@ -1,7 +1,7 @@
 <template>
 	<div :class="{ [`barter-item-${ vType }`]: true }">
 		<!-- Picture -->
-		<picture v-if="item.images?.length && vType !== 'item'">
+		<picture v-if="item.images?.length && vType !== 'page'">
 			<router-link :to="{ name: 'barterItem', params: { id: item.hash } }">
 				<span class="state">{{ $t(`condition.${ !item.used ? 'new' : 'used' }`) }}</span>
 			
@@ -159,8 +159,8 @@
 			</div>
 		</template>
 
-		<!-- View: Item (On page) -->
-		<template v-if="vType === 'item'">
+		<!-- View: Page -->
+		<template v-if="vType === 'page'">
 			<picture v-if="item.images">
 				<img
 					v-if="item.images?.length < 2"
