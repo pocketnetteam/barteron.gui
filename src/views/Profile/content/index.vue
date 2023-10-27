@@ -68,7 +68,7 @@
 							:vType="bartersView"
 						>
 							<!-- 3-dots dropdown -->
-							<template #favorite>
+							<template #favorite v-if="isMyProfile">
 								<v-button
 									vType="transparent"
 									vSize="xs"
@@ -83,7 +83,7 @@
 							</template>
 
 							<!-- Date range, views and favorites -->
-							<template #info="{ item }">
+							<template #info="{ item }" v-if="isMyProfile">
 								<!-- <v-switch
 									class="no-padding"
 									type="checkbox"
@@ -142,7 +142,7 @@
 
 			<!-- Tab: Feedbacks -->
 			<template #feedbacks>
-				Feedbacks
+				<Feedbacks />
 			</template>
 		</v-tabs>
 	</v-content>
