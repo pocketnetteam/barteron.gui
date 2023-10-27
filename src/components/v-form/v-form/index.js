@@ -29,8 +29,13 @@ export default {
 	data() {
 		return {
 			form: this,
-			valid: [],
-			popup: new Popup()
+			valid: []
+		}
+	},
+
+	computed: {
+		dialog() {
+			return this.$refs.dialog;
 		}
 	},
 
@@ -84,29 +89,6 @@ export default {
 		 */
 		serialize() {
 			return Object.fromEntries(new FormData(this.$refs.form).entries());
-		},
-	}
-}
-
-class Popup {
-	visible = false;
-	icon = "fa fa-spinner fa-spin";
-	text = "just text";
-
-	show() {
-		this.visible = true;
-		return this;
-	}
-
-	hide() {
-		this.visible = false;
-		return this;
-	}
-
-	update(data) {
-		for (let prop in data) {
-			this[prop] = data[prop];
 		}
-		return this;
 	}
 }
