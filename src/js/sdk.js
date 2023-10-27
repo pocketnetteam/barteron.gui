@@ -443,7 +443,8 @@ class SDK {
 			...data,
 			...{ hash: data.hash?.length === 64 ? data.hash : null }
 		}).then(result => {
-			if (data.hash) Vue.set(this.barteron._offers, data.hash, data);
+			const txid = (data.hash?.length === 64 ? data.hash : result.transaction);
+			Vue.set(this.barteron._offers, txid, data);
 			return result;
 		});
 	}
@@ -531,6 +532,27 @@ class SDK {
 	getBrtOfferDeals(request) {
 		return this.rpc("getbarterondeals", request).then(deals => {
 			return deals?.map(deal => new Offer(this, deal)) || [];
+		});
+	}
+
+	/**
+	 * Set barteron offer
+	 * 
+	 * @param {Object} data
+	 * 
+	 * Base
+	 * 
+	 * @param {String} [data.parentid]
+	 * @param {String} [data.answerid]
+	 * @param {String} data.postid
+	 * @param {String} data.message
+	 * 
+	 * @return {Promise}
+	 */
+	setBrtComment(data) {
+		return this.sdk.set.barteron.comment(data).then(result => {
+			if (data.answerid) Vue.set(this.barteron._comments, data.answerid, data);
+			return result;
 		});
 	}
 }
