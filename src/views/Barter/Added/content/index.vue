@@ -6,8 +6,8 @@
 					'my-barter': true,
 					'small': exchangeOptions
 				}">
-					<router-link :to="{ name: 'barterItem', params: { id: 123 } }">
-						<img src="@/assets/images/barter/macbook-2.jpeg" alt="barter-name">
+					<router-link :to="{ name: 'barterItem', params: { id: offer.hash } }">
+						<img :src="offer.images[0]" :alt="offer.caption">
 					</router-link>
 				</div>
 			</div>
@@ -23,7 +23,10 @@
 			</div>
 
 			<div class="buttons-holder center" v-if="!exchangeOptions">
-				<v-button vType="stroke">{{ $t('buttonLabels.my_announcements') }}</v-button>
+				<v-button
+					vType="stroke"
+					:to="{ name: 'profile', params: { id: offer.address } }"
+				>{{ $t('buttonLabels.my_announcements') }}</v-button>
 				<v-button @click="() => exchangeOptions = true">{{ $t('buttonLabels.find_exchange_options') }}</v-button>
 			</div>
 		</div>

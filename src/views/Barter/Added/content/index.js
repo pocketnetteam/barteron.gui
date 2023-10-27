@@ -7,6 +7,12 @@ export default {
 		BarterList
 	},
 
+	computed: {
+		offer() {
+			return this.sdk.barteron.offers[this.$route.params.id];
+		}
+	},
+
 	data() {
 		return {
 			exchangeOptions: false
