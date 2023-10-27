@@ -260,7 +260,6 @@ export default {
 						});
 					})
 					.catch(error => {
-						console.log(this.sdk, err)
 						/* Show error dialog */
 						form.dialog.view("error", this.$t('dialog.image_error', { error }));
 					});
