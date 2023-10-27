@@ -94,7 +94,10 @@
 		"edit": "Edit",
 		"withdraw": "Withdraw from publication",
 		"remove": "Remove",
-		"continue_edit": "Continute edit"
+		"continue_edit": "Continute edit",
+		"ok": "Ok",
+		"yes": "Yes",
+		"no": "No"
 	},
 
 	"barterLabels": {
