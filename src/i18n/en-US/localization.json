@@ -132,7 +132,11 @@
 
 	"dialog": {
 		"images_imgur": "Sending images to imgur..",
-		"data_node": "Posting data to node, please wait.."
+		"data_node": "Posting data to node, please wait..",
+		"image_error": "Image upload error",
+		"offer_error": "Offer error has occured: {error}",
+		
+		"error#65": "Exceeded limit"
 	},
 
 	"feedbacks": {
