@@ -96,7 +96,7 @@
 											<dt><i class="fa fa-calendar"></i></dt>
 											<dd>
 												<time>
-													{{ $d(item.time * 1000, 'short') }} -
+													{{ $d(item.time, 'short') }} -
 													{{ $d(item.until ? item.until * 1000 : (item.time + 2629746) * 1000, 'short') }}
 												</time>
 											</dd>
