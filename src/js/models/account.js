@@ -25,7 +25,7 @@ class Account {
 		this.radius = data?.radius || r || 0;
 		this.time = data?.time || 0;
 		this.type = data?.type || 0;
-		this.additional = data?.additional || {};
+		this.regdate = data?.additional?.regdate * 1000 || +new Date;
 
 		/* Make hidden properties */
 		Object.defineProperties(this, {

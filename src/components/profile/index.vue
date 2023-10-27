@@ -47,7 +47,7 @@
 			<dl class="list">
 				<dt><i class="fa fa-calendar-day"></i></dt>
 				<dd>{{
-				$t('profile.on_barteron_from', { date: $d(account.additional?.regdate * 1000 || 0, 'middle') })
+				$t('profile.on_barteron_from', { date: $d(account.regdate, 'middle') })
 				}}</dd>
 				<dt><i class="fa fa-map-marker-alt"></i></dt>
 				<dd>Astana, Kazakhstan</dd>
