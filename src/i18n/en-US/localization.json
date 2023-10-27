@@ -135,6 +135,11 @@
 		"data_node": "Posting data to node, please wait.."
 	},
 
+	"feedbacks": {
+		"placeholder": "Leave your feedback here",
+		"empty": "There is no feedbacks yet"
+	},
+
 	"metrics": {
 		"km": "km",
 		"number": "#"
