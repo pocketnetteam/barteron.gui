@@ -253,9 +253,9 @@ export default {
 							}
 						}).catch(error => {
 							/* Show error dialog */
-							const errNum = error?.toString().replace(/\D/g, '');
+							const errNum = error?.toString().replace(/[^\d-]/g, '');
 							form.dialog.view("error", this.$t('dialog.offer_error', {
-								error: this.$t(`dialog.error#${ errNum }`)
+								error: this.$t(`dialog.error#${ errNum || 0 }`)
 							}));
 						});
 					})
