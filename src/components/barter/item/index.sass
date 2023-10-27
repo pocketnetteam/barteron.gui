@@ -247,20 +247,28 @@ div[class^="barter-item-"]
 			+resetList()
 
 		picture
-			border-radius: 0
+			border-radius: 11px
 			margin: 0
 			flex-shrink: 0
 			margin: 0 0 $r * 4.6
+			transition: box-shadow .25s ease-in-out
 			height: auto
 			width: 100%
 
 			img
 				+unselectable()
 				object-fit: cover
-				border-radius: 11px
 				
 			> img
 				height: 355px
+
+			&.zoom
+				background: var(--url) 50% 50% no-repeat
+				background-size: cover
+				box-shadow: 0 0 3px 1px $bulma
+
+				img
+					opacity: 0
 
 		.fade
 			border-radius: 11px
