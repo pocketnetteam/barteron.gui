@@ -184,7 +184,7 @@ class SDK {
 	 * @return {Promise}
 	 */
 	getAccount() {
-		return this.sdk.get.account().then(address => {
+		return this.sdk.get.account().then(({ address }) => {
 			this.lastresult = "user address: " + address;
 			Vue.set(this, "_address", address);
 			return address;
@@ -336,7 +336,7 @@ class SDK {
 		if (!this._accounts[address]) Vue.set(this._accounts, address, {});
 
 		return this.rpc("getuserprofile", [address]).then(accounts => {
-			return accounts.map(account => {
+			return accounts?.map(account => {
 				Vue.set(this._accounts, account.address, account);
 				return account;
 			});
