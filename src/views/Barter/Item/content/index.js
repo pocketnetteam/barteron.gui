@@ -1,10 +1,12 @@
 import BarterItem from "@/components/barter/item/index.vue";
+import Feedbacks from "@/components/barter/feedbacks/index.vue";
 
 export default {
 	name: "Content",
 
 	components: {
-		BarterItem
+		BarterItem,
+		Feedbacks
 	},
 
 	computed: {
