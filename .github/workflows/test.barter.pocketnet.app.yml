@@ -1,0 +1,27 @@
+name: test.barter.pocketnet.app
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: gui
+    steps:
+      - name: Checkout git repository
+        uses: actions/checkout@v3
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Prepare
+        run: |
+          npm i
+          npm run build
+      - name: Copy
+        run: |
+          rm -rf /docker/barter/*
+          rsync -ah ./dist/ /docker/barter/
+        
