@@ -19,7 +19,7 @@ jobs:
       - name: Prepare
         run: |
           npm i
-          npm build
+          npm run build
       - name: Copy
         run: rsync -ah ./dist/ /docker/barter/
         
