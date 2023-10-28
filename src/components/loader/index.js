@@ -5,6 +5,11 @@ export default {
 		loading: {
 			type: Boolean,
 			default: false
+		},
+
+		type: {
+			type: {String},
+			default: "main"
 		}
 	}
 }
