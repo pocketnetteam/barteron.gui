@@ -1,7 +1,7 @@
 <template>
-	<div id="app">
-		<transition type="fade" v-if="!user?.name">
-			<loader :loading="!user?.name" />
+	<div id="app" v-if="permissions">
+		<transition type="fade" v-if="loading">
+			<loader :loading="loading" />
 		</transition>
 
 		<template v-else>
@@ -33,6 +33,12 @@ export default {
 		loader
 	},
 
+	data() {
+		return {
+			permissions: false
+		}
+	},
+
 	computed: {
 		/**
 		 * Get user from sdk
@@ -41,11 +47,25 @@ export default {
 		 */
 		 user() {
 			return this.sdk.accounts[this.sdk.address];
+		},
+
+		/**
+		 * Watch for loading state
+		 * 
+		 * @return {Boolean}
+		 */
+		loading() {
+			return !this.user?.name;
 		}
 	},
 
 	mounted() {
-		
+		this.sdk.requestPermissions([
+			"account",
+			"location"
+		]).then(() => {
+			this.permissions = true;
+		});
 	}
 }
 </script>
