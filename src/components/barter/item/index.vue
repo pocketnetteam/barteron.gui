@@ -161,7 +161,13 @@
 
 		<!-- View: Page -->
 		<template v-if="vType === 'page'">
-			<picture v-if="item.images">
+			<picture
+				v-if="item.images"
+				ref="picture"
+				@mouseenter="imageZoom"
+				@mousemove="imageZoom"
+				@mouseleave="imageZoom"
+			>
 				<img
 					v-if="item.images?.length < 2"
 					:src="imageUrl(item.images[0])"

@@ -249,14 +249,20 @@ export default {
 								}
 
 								form.dialog.hide();
-								this.$router.push({ name: "addedBarter", params: { id: data.transaction } });
+								this.$router.push({
+									name: "addedBarter",
+									params: {
+										id: hash?.length < 64 ? data.transaction : hash
+									}
+								});
 							}
-						}).catch(error => {
+						}).catch(e => {
 							/* Show error dialog */
-							const errNum = error?.toString().replace(/[^\d-]/g, '');
-							form.dialog.view("error", this.$t('dialog.offer_error', {
-								error: this.$t(`dialog.error#${ errNum || 0 }`)
-							}));
+							const error = this.$t(
+								`dialog.error#${ e?.toString()?.replace(/[^\d-]/g, '') || 0 }`,
+								{ details: e }
+							);
+							form.dialog.view("error", this.$t('dialog.node_error', { error }));
 						});
 					})
 					.catch(error => {

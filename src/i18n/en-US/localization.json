@@ -134,10 +134,10 @@
 		"images_imgur": "Sending images to imgur..",
 		"data_node": "Posting data to node, please wait..",
 		"image_error": "Image upload error",
-		"offer_error": "Offer error has occured: {error}",
+		"node_error": "Node error has occured: {error}",
 
 		"error#-26": "Min relay fee not met",
-		"error#0": "Unknown error",
+		"error#0": "{details}",
 		"error#21": "Failed OpReturn",
 		"error#28": "Too many transactions",
 		"error#65": "Exceeded limit"
