@@ -21,5 +21,7 @@ jobs:
           npm i
           npm run build
       - name: Copy
-        run: rsync -ah ./dist/ /docker/barter/
+        run: |
+          rm -rf /docker/barter/*
+          rsync -ah ./dist/ /docker/barter/
         
