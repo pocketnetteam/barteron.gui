@@ -10,32 +10,28 @@ import Favorites from "@/data/favorites.json";
 
 Vue.config.productionTip = false;
 
-/**
- * Require components from subfolders
- * 
- * @param {require.context[]} context 
- */
-const vRequire = (context) => {
-	context.forEach(src => {
-		src.keys().forEach(path => {
-			const
-				chunks = path.split("/"),
-				componentName = chunks.slice(1, chunks.length - 1).join("-"),
-				componentPath = src.resolve(path).replace("./src/", "");
-			
-			Vue.component(
-				componentName,
-				() => import(`@/${ componentPath }`)
-			);
-		});
-	});
-}
+/* Register layout components */
+Vue.component("v-header", () => import("@/components/v-layout/v-header/index.vue"));
+Vue.component("v-content", () => import("@/components/v-layout/v-content/index.vue"));
+Vue.component("v-aside", () => import("@/components/v-layout/v-aside/index.vue"));
+Vue.component("v-sidebar", () => import("@/components/v-layout/v-sidebar/index.vue"));
+Vue.component("v-footer", () => import("@/components/v-layout/v-footer/index.vue"));
+Vue.component("v-page-header", () => import("@/components/v-layout/v-page-header/index.vue"));
+Vue.component("v-page-footer", () => import("@/components/v-layout/v-page-footer/index.vue"));
 
-/* Require v-components */
-vRequire([
-	require.context("@/components/v-layout", true, /index\.vue$/),
-	require.context("@/components/v-form", true, /index\.vue$/)
-]);
+/* Register form components */
+Vue.component("v-button", () => import("@/components/v-form/v-button/index.vue"));
+Vue.component("v-details", () => import("@/components/v-form/v-details/index.vue"));
+Vue.component("v-dialog", () => import("@/components/v-form/v-dialog/index.vue"));
+Vue.component("v-form", () => import("@/components/v-form/v-form/index.vue"));
+Vue.component("v-input", () => import("@/components/v-form/v-input/index.vue"));
+Vue.component("v-lightbox", () => import("@/components/v-form/v-lightbox/index.vue"));
+Vue.component("v-map", () => import("@/components/v-form/v-map/index.vue"));
+Vue.component("v-photos", () => import("@/components/v-form/v-photos/index.vue"));
+Vue.component("v-select", () => import("@/components/v-form/v-select/index.vue"));
+Vue.component("v-switch", () => import("@/components/v-form/v-switch/index.vue"));
+Vue.component("v-tabs", () => import("@/components/v-form/v-tabs/index.vue"));
+Vue.component("v-textarea", () => import("@/components/v-form/v-textarea/index.vue"));
 
 /* Make categories and barters global */
 Vue.prototype.sdk = Vue.observable(new SDK());
