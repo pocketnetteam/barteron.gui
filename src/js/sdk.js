@@ -71,6 +71,7 @@ class SDK {
 		if (!window.BastyonSdk) return;
 
 		this.sdk = new window.BastyonSdk();
+
 		this.sdk.emit("loaded");
 
 		this.sdk.on("action", d => {
@@ -115,7 +116,9 @@ class SDK {
 		};
 
 		/* Observe sub-objects watchers */
-		this.barteron = Object.assign(this.barteron, {
+		this.barteron = {
+			...this.barteron,
+
 			/* Barteron account operations */
 			accounts: new Proxy(this.barteron._accounts, {
 				get(target, address) {
@@ -139,7 +142,7 @@ class SDK {
 					return $.setBrtOffer({ hash, ...data });
 				}
 			})
-		});
+		}
 	}
 
 	setLastResult(e) {

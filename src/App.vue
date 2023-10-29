@@ -39,7 +39,8 @@ export default {
 
 	data() {
 		return {
-			permissions: false
+			permissions: false,
+			dialog: null
 		}
 	},
 
@@ -65,7 +66,7 @@ export default {
 
 	methods: {
 		requestPermissions() {
-			const dialog = this.$refs.dialog;
+			const dialog = this.dialog;
 
 			dialog?.view("load", this.$t("dialog.checking_connection"));
 
@@ -87,17 +88,31 @@ export default {
 		}
 	},
 
-	created() {
-		this.sdk.requestPermissions([
-			"account",
-			"location"
-		])
-		.then(() => {
-			this.permissions = true;
-			this.$refs.dialog?.hide();
-		});
+	mounted() {
+		if (this.sdk.sdk) {
+			this.sdk.requestPermissions([
+				"account",
+				"location"
+			])
+			.then(() => {
+				this.permissions = true;
+				this.dialog?.hide();
+			});
 
-		this.requestPermissions();
+			this.requestPermissions();
+		}
+
+		/* Watch for dialog */
+		const interval = setInterval(() => {
+			if (this.$refs.dialog) {
+				clearInterval(interval);
+				this.dialog = this.$refs.dialog;
+
+				if (!this.sdk.sdk) {
+					this.dialog?.view("error", "Error loading sdk library");
+				}
+			}
+		}, 100);
 	}
 }
 </script>
