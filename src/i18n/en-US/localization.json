@@ -131,7 +131,7 @@
 	},
 
 	"dialog": {
-		"check_connection": "Check connection. Please wait..",
+		"checking_connection": "Checking connection. Please wait..",
 
 		"images_imgur": "Sending images to imgur..",
 		"data_node": "Posting data to node, please wait..",

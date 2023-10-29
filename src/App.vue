@@ -67,16 +67,7 @@ export default {
 		requestPermissions() {
 			const dialog = this.$refs.dialog;
 
-			dialog?.view("load", this.$t("dialog.check_connection"));
-
-			this.sdk.requestPermissions([
-				"account",
-				"location"
-			])
-			.then(() => {
-				this.permissions = true;
-				dialog?.hide();
-			});
+			dialog?.view("load", this.$t("dialog.checking_connection"));
 
 			setTimeout(() => {
 				if (!this.permissions) {
@@ -97,6 +88,15 @@ export default {
 	},
 
 	created() {
+		this.sdk.requestPermissions([
+			"account",
+			"location"
+		])
+		.then(() => {
+			this.permissions = true;
+			this.$refs.dialog?.hide();
+		});
+
 		this.requestPermissions();
 	}
 }
