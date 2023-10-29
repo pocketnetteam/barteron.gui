@@ -1,6 +1,12 @@
-const { defineConfig } = require('@vue/cli-service')
+const
+	{ defineConfig } = require('@vue/cli-service'),
+	path = require("path");
+
 module.exports = defineConfig({
+	outputDir: path.resolve(__dirname, process.env.VUE_APP_EXPORT || "./dist"),
+
 	transpileDependencies: true,
+
 	devServer: {
 		open: process.platform === "darwin",
 		host: "0.0.0.0",
@@ -11,6 +17,7 @@ module.exports = defineConfig({
 		},
 		headers: { "Access-Control-Allow-Origin": "*" }
 	},
+
 	pluginOptions: {
 		i18n: {
 			locale: "en-US",
@@ -19,4 +26,4 @@ module.exports = defineConfig({
 			enableInSFC: false
 		}
 	}
-})
+});
