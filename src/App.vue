@@ -1,22 +1,26 @@
 <template>
-	<div id="app" v-if="permissions">
-		<transition type="fade" v-if="loading">
-			<loader :loading="loading" />
-		</transition>
+	<div id="app">
+		<v-dialog ref="dialog" />
 
-		<template v-else>
-			<v-header />
+		<template v-if="permissions">
+			<transition type="fade" v-if="loading">
+				<loader :loading="loading" />
+			</transition>
 
-			<section id="main">
-				<router-view />
-				<div id="container">
-					<router-view name="aside" />
-					<router-view name="content" />
-					<router-view name="sidebar" />
-				</div>
-			</section>
+			<template v-else>
+				<v-header />
 
-			<v-footer />
+				<section id="main">
+					<router-view />
+					<div id="container">
+						<router-view name="aside" />
+						<router-view name="content" />
+						<router-view name="sidebar" />
+					</div>
+				</section>
+
+				<v-footer />
+			</template>
 		</template>
 	</div>
 </template>
@@ -41,31 +45,57 @@ export default {
 
 	computed: {
 		/**
-		 * Get user from sdk
-		 * 
-		 * @return {Object}
-		 */
-		 user() {
-			return this.sdk.accounts[this.sdk.address];
-		},
-
-		/**
 		 * Watch for loading state
 		 * 
 		 * @return {Boolean}
 		 */
-		loading() {
+		 loading() {
 			return !this.user?.name;
+		},
+		
+		/**
+		 * Get user from sdk
+		 * 
+		 * @return {Object}
+		 */
+		user() {
+			return this.sdk.accounts[this.sdk.address];
 		}
 	},
 
-	mounted() {
-		this.sdk.requestPermissions([
-			"account",
-			"location"
-		]).then(() => {
-			this.permissions = true;
-		});
+	methods: {
+		requestPermissions() {
+			this.$refs.dialog?.view("load", "Check connection. Please wait..");
+
+			this.sdk.requestPermissions([
+				"account",
+				"location"
+			])
+			.then(() => {
+				this.permissions = true;
+				this.$refs.dialog?.hide();
+			});
+
+			setTimeout(() => {
+				if (!this.permissions) {
+					if (this.$refs.dialog) {
+						this.$refs.dialog.view("question", {
+							text: "Connection error. Try again?",
+							buttons: [
+							{ text: this.$t("buttonLabels.no"), vType: "dodoria", vSize: "sm", click: () => this.dialog.hide() },
+							{ text: this.$t("buttonLabels.yes"), vType: "blue", vSize: "sm", click: () => this.requestPermissions() }
+							]
+						});
+					} else {
+						this.requestPermissions();
+					}
+				}
+			}, 5000);
+		}
+	},
+
+	created() {
+		this.requestPermissions();
 	}
 }
 </script>
