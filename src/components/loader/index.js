@@ -8,7 +8,7 @@ export default {
 		},
 
 		type: {
-			type: {String},
+			type: String,
 			default: "main"
 		}
 	}

@@ -1,7 +1,6 @@
 @import "@/css/vars.sass"
 
 .overlay
-	background: $beerus
 	position: fixed
 	display: flex
 	align-items: center
@@ -11,12 +10,15 @@
 	bottom: 0
 	left: 0
 
-/* Loader main */
 $main-color1: $hit
 $main-color2: $bulma
 $main-color3: $bulma-hover
 $main-scale: 2
 
+$circular-color1: $hit
+$circular-scale: 1
+
+/* Loader: main */
 .type-main
 	transform: scale($main-scale)
 	height: 50px
@@ -98,7 +100,19 @@ $main-scale: 2
 				right: 5%
 				transform: rotate(115deg) translateX(-26px) translateY(-12px)
 
-/* Animation main */
+/* Loader: circular */
+.type-circular
+	transform: scale($circular-scale)
+	width: 48px
+	height: 48px
+	border: 5px solid
+	border-color: $circular-color1
+	border-radius: 50%
+	display: inline-block
+	box-sizing: border-box
+	animation: circular-rotation 1s linear infinite
+
+/* Animation: main */
 @keyframes main-rotate
 	0%
 		transform: rotate(0deg) scale(0.8)
@@ -139,3 +153,10 @@ $main-scale: 2
 @keyframes main-curve
 	100%
 		transform: rotate(179deg)
+
+/* Animation: circular */
+@keyframes circular-rotation
+	0%
+		transform: rotate(0deg)
+	100%
+		transform: rotate(360deg)
