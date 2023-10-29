@@ -131,12 +131,15 @@
 	},
 
 	"dialog": {
+		"check_connection": "Check connection. Please wait..",
+
 		"images_imgur": "Sending images to imgur..",
 		"data_node": "Posting data to node, please wait..",
 		"image_error": "Image upload error",
 		"node_error": "Node error has occured: {error}",
 
 		"error#-26": "Min relay fee not met",
+		"error#-1": "Connection error. Try again?",
 		"error#0": "{details}",
 		"error#21": "Failed OpReturn",
 		"error#28": "Too many transactions",

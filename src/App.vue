@@ -65,7 +65,7 @@ export default {
 
 	methods: {
 		requestPermissions() {
-			this.$refs.dialog?.view("load", "Check connection. Please wait..");
+			this.$refs.dialog?.view("load", this.$t("dialog.check_connection"));
 
 			this.sdk.requestPermissions([
 				"account",
@@ -80,7 +80,7 @@ export default {
 				if (!this.permissions) {
 					if (this.$refs.dialog) {
 						this.$refs.dialog.view("question", {
-							text: "Connection error. Try again?",
+							text: this.$t("dialog.error#-1"),
 							buttons: [
 							{ text: this.$t("buttonLabels.no"), vType: "dodoria", vSize: "sm", click: () => this.dialog.hide() },
 							{ text: this.$t("buttonLabels.yes"), vType: "blue", vSize: "sm", click: () => this.requestPermissions() }
