@@ -1,6 +1,6 @@
 <template>
-	<div class="v-dialog" v-show="visible">
-		<transition name="fade" mode="in-out">
+	<transition name="fade" mode="in-out">
+		<div class="v-dialog" v-show="visible">
 			<section class="content">
 				<main>
 					<i :class="`icon color-${ iconColor } fa ${ icon }`"></i>
@@ -16,8 +16,8 @@
 					>{{ button.text }}</v-button>
 				</footer>
 			</section>
-		</transition>
-	</div>
+		</div>
+	</transition>
 </template>
 
 <style lang="sass" src="./index.sass"></style>
