@@ -74,7 +74,7 @@ export default {
 				if (!this.permissions) {
 					if (dialog) {
 						dialog.view("question", {
-							text: this.$t("dialog.error#-1"),
+							text: this.$t("dialog.error#-2"),
 							buttons: [
 							{ text: this.$t("buttonLabels.no"), vType: "dodoria", vSize: "sm", click: () => dialog.hide() },
 							{ text: this.$t("buttonLabels.yes"), vType: "blue", vSize: "sm", click: () => this.requestPermissions() }
@@ -109,7 +109,7 @@ export default {
 				this.dialog = this.$refs.dialog;
 
 				if (!this.sdk.sdk) {
-					this.dialog?.view("error", "Error loading sdk library");
+					this.dialog?.view("error", this.$t("dialog.error#-1"));
 				}
 			}
 		}, 100);
