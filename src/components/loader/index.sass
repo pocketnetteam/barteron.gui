@@ -1,25 +1,34 @@
 @import "@/css/vars.sass"
 
 .overlay
-	position: fixed
 	display: flex
 	align-items: center
 	justify-content: center
-	top: 0
-	right: 0
-	bottom: 0
-	left: 0
+	height: 100%
+	width: 100%
 
-$main-color1: $hit
-$main-color2: $bulma
-$main-color3: $bulma-hover
+	&.type-main
+		position: fixed
+		min-height: 150px
+		min-width: 150px
+
+	&.type-circular
+		min-height: 48px
+		min-width: 48px
+
+/* Variables: main */
+$main-color1: $ghost
+$main-color2: $blue
+$main-color3: $bulma
 $main-scale: 2
 
-$circular-color1: $hit
+/* Variables: curcular */
+$circular-color1: $ghost
+$circular-color2: $blue
 $circular-scale: 1
 
 /* Loader: main */
-.type-main
+.type-main .loader
 	transform: scale($main-scale)
 	height: 50px
 	width: 50px
@@ -101,16 +110,28 @@ $circular-scale: 1
 				transform: rotate(115deg) translateX(-26px) translateY(-12px)
 
 /* Loader: circular */
-.type-circular
-	transform: scale($circular-scale)
-	width: 48px
-	height: 48px
-	border: 5px solid
-	border-color: $circular-color1
-	border-radius: 50%
-	display: inline-block
-	box-sizing: border-box
+.type-circular .loader
 	animation: circular-rotation 1s linear infinite
+	border: 5px solid $circular-color1
+	border-radius: 50%
+	box-sizing: border-box
+	display: inline-block
+	transform: scale($circular-scale)
+	height: 48px
+	width: 48px
+
+	&::after
+		box-sizing: border-box
+		border: 3px solid
+		border-color: $circular-color2 transparent
+		border-radius: 50%
+		content: ""
+		position: absolute
+		left: 50%
+		top: 50%
+		transform: translate(-50%, -50%)
+		height: 40px
+		width: 40px
 
 /* Animation: main */
 @keyframes main-rotate
@@ -158,5 +179,6 @@ $circular-scale: 1
 @keyframes circular-rotation
 	0%
 		transform: rotate(0deg)
+
 	100%
 		transform: rotate(360deg)
