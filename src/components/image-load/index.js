@@ -15,7 +15,7 @@ export default {
 		 * 
 		 * @param {String} url
 		 * 
-		 * @return {String}
+		 * @returns {String}
 		 */
 		extractUrl(url) {
 			return url.includes("url") ? url.match(/url\((.+)\)/)?.[1] : url;

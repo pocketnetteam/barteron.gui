@@ -17,7 +17,7 @@ export default {
 		/**
 		 * Make list of filters
 		 * 
-		 * @return {Array}
+		 * @returns {Array}
 		 */
 		filters() {
 			return this.parseLabels("filterLabels");
@@ -26,7 +26,7 @@ export default {
 		/**
 		 * Make list of view
 		 * 
-		 * @return {Array}
+		 * @returns {Array}
 		 */
 		views() {
 			return this.parseLabels("viewLabels");
@@ -39,7 +39,7 @@ export default {
 		 * 
 		 * @param {String} label
 		 * 
-		 * @return {Array}
+		 * @returns {Array}
 		 */
 		parseLabels(label) {
 			return Object.keys(this.$t(label)).map((value, index) => {

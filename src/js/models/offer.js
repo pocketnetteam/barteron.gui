@@ -47,7 +47,7 @@ class Offer {
 	 * 
 	 * @param {Object} data
 	 * 
-	 * @return {Offer}
+	 * @returns {Offer}
 	 */
 	update(data) {
 		if (Object.keys(data).length) {

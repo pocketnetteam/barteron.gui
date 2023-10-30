@@ -22,7 +22,7 @@ export default class NameToHSL {
    *
    * @param str {string}
    * 
-   * @return {number}
+   * @returns {number}
    */
   getHashOfString(str) {
     let hash = 0;
@@ -41,7 +41,7 @@ export default class NameToHSL {
    * @param min {number}
    * @param max {number}
    * 
-   * @return {number}
+   * @returns {number}
    */
   normalizeHash(hash, min, max) {
     return Math.floor((hash % (max - min)) + min);
@@ -52,7 +52,7 @@ export default class NameToHSL {
    *
    * @param name {string}
    * 
-   * @return {hsl([number,string,string])}
+   * @returns {hsl([number,string,string])}
    */
   generateHSL(name) {
     const

@@ -20,7 +20,7 @@ export default {
 		/**
 		 * Convert given extensions to mime types
 		 * 
-		 * @return {String}
+		 * @returns {String}
 		 */
 		mimeTypes() {
 			return (this.accept?.replace(" ", "").split(",") || []).reduce((a, t) => {
@@ -49,7 +49,7 @@ export default {
 		/**
 		 * Make hash
 		 * 
-		 * @return {String}
+		 * @returns {String}
 		 */
 		hash() {
 			return Math.random().toString(16).slice(2);
@@ -104,7 +104,7 @@ export default {
 		 * 
 		 * @param {Object|Array} images
 		 * 
-		 * @return {Vphotos}
+		 * @returns {Vphotos}
 		 */
 		add(images) {
 			if (Array.isArray(images)) {
@@ -130,7 +130,7 @@ export default {
 		 * @param {Event} e
 		 * @param {Number} index
 		 * 
-		 * @return {Vphotos}
+		 * @returns {Vphotos}
 		 */
 		remove(e, index) {
 			e?.preventDefault();
@@ -160,7 +160,7 @@ export default {
 		/**
 		 * Serialize files for form
 		 * 
-		 * @return {Object}
+		 * @returns {Object}
 		 */
 		serialize() {
 			const formData = new FormData();

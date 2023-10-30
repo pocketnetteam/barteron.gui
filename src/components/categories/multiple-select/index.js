@@ -41,7 +41,7 @@ export default {
 		 * 
 		 * @param {Array[String]} ids - Array of categories ids
 		 * 
-		 * @return {CategoriesSelect}
+		 * @returns {CategoriesSelect}
 		 */
 		add(ids) {
 			this.tree.push(this.importChildren(ids));
@@ -54,7 +54,7 @@ export default {
 		 * 
 		 * @param {Number} index
 		 * 
-		 * @return {CategoriesSelect}
+		 * @returns {CategoriesSelect}
 		 */
 		remove(index) {
 			if (index && !this.values[index]) return;
@@ -76,7 +76,7 @@ export default {
 		 * 
 		 * @param {String} id
 		 * 
-		 * @return {CategoriesSelect}
+		 * @returns {CategoriesSelect}
 		 */
 		value(id) {
 			let category = this.categories.items[id];

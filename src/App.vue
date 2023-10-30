@@ -12,7 +12,7 @@
 
 				<section id="main">
 					<router-view />
-					<div id="container">
+					<div id="container" v-if="hasComponents(['aside', 'content', 'sidebar'])">
 						<router-view name="aside" />
 						<router-view name="content" />
 						<router-view name="sidebar" />
@@ -48,7 +48,7 @@ export default {
 		/**
 		 * Watch for loading state
 		 * 
-		 * @return {Boolean}
+		 * @returns {Boolean}
 		 */
 		 loading() {
 			return !this.user?.name;
@@ -57,7 +57,7 @@ export default {
 		/**
 		 * Get user from sdk
 		 * 
-		 * @return {Object}
+		 * @returns {Object}
 		 */
 		user() {
 			return this.sdk.accounts[this.sdk.address];
@@ -65,6 +65,11 @@ export default {
 	},
 
 	methods: {
+		/**
+		 * Request permissions through bastyon dialog
+		 * 
+		 * @returns {Void}
+		 */
 		requestPermissions() {
 			const dialog = this.dialog;
 
@@ -85,6 +90,20 @@ export default {
 					}
 				}
 			}, 5000);
+		},
+
+
+		/**
+		 * Check is components includes given names
+		 * 
+		 * @param {Array} names
+		 * 
+		 * @returns {Boolean}
+		 */
+		hasComponents(names) {
+			return Object.keys(this.$route.matched?.[0]?.components ?? {}).some(name => {
+				return names.includes(name);
+			});
 		}
 	},
 

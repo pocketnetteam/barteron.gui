@@ -20,7 +20,7 @@ export default {
 		 * 
 		 * @param {String} path
 		 * 
-		 * @return {String}
+		 * @returns {String}
 		 */
 		imageUrl(path) {
 			if (["http", "data:image"].some(str => path?.startsWith(str))) {

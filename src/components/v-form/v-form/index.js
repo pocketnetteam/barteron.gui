@@ -85,7 +85,7 @@ export default {
 		/**
 		 * Serialize form data
 		 * 
-		 * @return {Object}
+		 * @returns {Object}
 		 */
 		serialize() {
 			return Object.fromEntries(new FormData(this.$refs.form).entries());

@@ -5,7 +5,9 @@ const routes = [
 	{
 		path: "/",
 		name: "home",
-		component: () => import("@/views/Home/index.vue")
+		components: {
+			default: () => import("@/views/Home/index.vue")
+		}
 	},
 	{
 		path: "/category/:id",
@@ -53,7 +55,9 @@ const routes = [
 	{
 		path: "/about",
 		name: "about",
-		component: () => import("@/views/About/index.vue"),
+		components: {
+			default: () => import("@/views/About/index.vue")
+		}
 	}
 ];
 

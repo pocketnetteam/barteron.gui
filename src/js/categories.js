@@ -24,7 +24,7 @@ class Categories {
 		 * 
 		 * @param {String} html
 		 * 
-		 * @return {String}
+		 * @returns {String}
 		 */
 	decodeString(html) {
 		const text = document.createElement("textarea");
@@ -37,7 +37,7 @@ class Categories {
 	 * 
 	 * @param {String|Number} value
 	 * 
-	 * @return {Object}
+	 * @returns {Object}
 	 */
 	find(value) {
 		if (Number.isInteger(value)) {
@@ -56,7 +56,7 @@ class Categories {
 	 * 
 	 * @param {String|String[]} id
 	 * 
-	 * @return {Object|Array}
+	 * @returns {Object|Array}
 	 */
 	findById(id) {
 		return Array.isArray(id) ? id.map(ids => this.items[ids]) : this.items[id];
@@ -67,7 +67,7 @@ class Categories {
 	 * 
 	 * @param {String|String[]} name
 	 * 
-	 * @return {Object|Array}
+	 * @returns {Object|Array}
 	 */
 	findByName(name) {
 		return Array.isArray(name) ? name.map(n => this.find(n)) : this.find(name);

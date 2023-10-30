@@ -36,7 +36,7 @@ export default {
 		/**
 		 * Get page title from route.js
 		 * 
-		 * @return {String}
+		 * @returns {String}
 		 */
 		pageTitle() {
 			const title = this.$route.params.id ?? this.$route.name;
@@ -53,7 +53,7 @@ export default {
 		/**
 		 * Get list of favorite categories
 		 * 
-		 * @return {Array}
+		 * @returns {Array}
 		 */
 		favoriteCategories() {
 			const category = this.categories.findByName(this.title);
@@ -68,7 +68,7 @@ export default {
 		 * 
 		 * @param {String} html
 		 * 
-		 * @return {String}
+		 * @returns {String}
 		 */
 		decodeString(html) {
 			const text = document.createElement("textarea");

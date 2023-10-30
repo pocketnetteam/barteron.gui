@@ -26,7 +26,7 @@ export default {
 		/**
 		 * Barteron account
 		 * 
-		 * @return {Object}
+		 * @returns {Object}
 		 */
 		account() {
 			return this.sdk.barteron.accounts[this.sdk.address];
@@ -35,7 +35,7 @@ export default {
 		/**
 		 * Get offer data (edit mode)
 		 * 
-		 * @return {Object}
+		 * @returns {Object}
 		 */
 		offer() {
 			let offer = this.sdk.barteron.offers[this.$route.params.id];
@@ -50,7 +50,7 @@ export default {
 		/**
 		 * Get my location
 		 * 
-		 * @return {Array|null}
+		 * @returns {Array|null}
 		 */
 		location() {
 			const location = this.sdk.location;
@@ -60,7 +60,7 @@ export default {
 		/**
 		 * Decode offer geohash
 		 * 
-		 * @return {Array|null}
+		 * @returns {Array|null}
 		 */
 		geohash() {
 			if (this.offer.geohash) {
@@ -90,7 +90,7 @@ export default {
 		 * 
 		 * @param {String} label
 		 * 
-		 * @return {Array}
+		 * @returns {Array}
 		 */
 		parseLabels(label) {
 			return Object.keys(this.$t(label)).map((value, index) => {

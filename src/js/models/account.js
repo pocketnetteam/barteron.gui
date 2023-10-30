@@ -38,7 +38,7 @@ class Account {
 	 * 
 	 * @param {Object} data
 	 * 
-	 * @return {Account}
+	 * @returns {Account}
 	 */
 	update(data) {
 		if (Object.keys(data).length) {

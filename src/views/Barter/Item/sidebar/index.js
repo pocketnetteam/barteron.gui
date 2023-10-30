@@ -21,7 +21,7 @@ export default {
 		/**
 		 * Get offer data
 		 * 
-		 * @return {Object}
+		 * @returns {Object}
 		 */
 		item() {
 			return (Number.isInteger(this.$route.params.id) ? this.barters.items : this.sdk.barteron.offers)[this.$route.params.id];
@@ -30,7 +30,7 @@ export default {
 		/**
 		 * Show is this offer is owner's
 		 * 
-		 * @return {Boolean}
+		 * @returns {Boolean}
 		 */
 		isMyOffer() {
 			return this.address === this.sdk.address;
@@ -39,7 +39,7 @@ export default {
 		/**
 		 * Get author address
 		 * 
-		 * @return {String}
+		 * @returns {String}
 		 */
 		address() {
 			return this.item.address;
@@ -48,7 +48,7 @@ export default {
 		/**
 		 * Get author account
 		 * 
-		 * @return {Object}
+		 * @returns {Object}
 		 */
 		account() {
 			return this.sdk.barteron.accounts[this.address];

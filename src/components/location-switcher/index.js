@@ -14,7 +14,7 @@ export default {
 		/**
 		 * Barteron account
 		 * 
-		 * @return {Object}
+		 * @returns {Object}
 		 */
 		account() {
 			return this.sdk.barteron.accounts[this.sdk.address];
@@ -23,7 +23,7 @@ export default {
 		/**
 		 * Static or dynamic location
 		 * 
-		 * @return {String}
+		 * @returns {String}
 		 */
 		mapType() {
 			return this.account.static ? "static" : "dynamic";
@@ -32,7 +32,7 @@ export default {
 		/**
 		 * Get radius of search
 		 * 
-		 * @return {Number}
+		 * @returns {Number}
 		 */
 		radius() {
 			return this.account.radius;
@@ -41,7 +41,7 @@ export default {
 		/**
 		 * Get my location
 		 * 
-		 * @return {Array|null}
+		 * @returns {Array|null}
 		 */
 		location() {
 			const location = this.sdk.location;
@@ -51,7 +51,7 @@ export default {
 		/**
 		 * Decode offer geohash
 		 * 
-		 * @return {Array|null}
+		 * @returns {Array|null}
 		 */
 		geohash() {
 			if (this.account.geohash) {
@@ -65,7 +65,7 @@ export default {
 		/**
 		 * Get address from geohash
 		 * 
-		 * @return {Object|null}
+		 * @returns {Object|null}
 		 */
 		address() {
 			if (!this.addr.country) {
