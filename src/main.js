@@ -17,6 +17,7 @@ Vue.component("v-aside", () => import("@/components/v-layout/v-aside/index.vue")
 Vue.component("v-sidebar", () => import("@/components/v-layout/v-sidebar/index.vue"));
 Vue.component("v-footer", () => import("@/components/v-layout/v-footer/index.vue"));
 Vue.component("v-page-header", () => import("@/components/v-layout/v-page-header/index.vue"));
+Vue.component("v-page-header-title", () => import("@/components/v-layout/v-page-header/title/index.vue"));
 Vue.component("v-page-footer", () => import("@/components/v-layout/v-page-footer/index.vue"));
 
 /* Register form components */
