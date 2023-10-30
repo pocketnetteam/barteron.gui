@@ -2,7 +2,7 @@
 	<div class="profile">
 		<div class="row author">
 			<div class="col">
-				<router-link class="avatar" :to="{ name: 'profile', params: { id: address } }">
+				<router-link class="avatar" :to="{ name: 'profile', params: { id: address } }" v-if="address">
 					<i
 						v-if="!user.i"
 						:style="hslColor"
