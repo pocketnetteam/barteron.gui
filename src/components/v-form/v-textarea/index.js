@@ -9,15 +9,18 @@ export default {
 		value: String,
 		resize: String,
 		length: String,
-
-		vSize: String,
+		vSize: String
 	},
 
 	data() {
 		return {
-			content: this.value ?? "",
+			content: null,
 			count: 0
 		}
+	},
+
+	mounted() {
+		this.content = this.value ?? "";
 	},
 
 	watch: {
@@ -34,8 +37,10 @@ export default {
 			this.count = val.length;
 			
 			this.$nextTick(() => {
-				this.$refs.textarea.style.height = "1px";
-				this.$refs.textarea.style.height = (this.$refs.textarea.scrollHeight) + "px";
+				const textarea = this.$refs.textarea;
+
+				textarea.style.height = "1px";
+				textarea.style.height = (textarea.scrollHeight) + "px";
 			});
 		},
 
