@@ -185,65 +185,63 @@
 			<picture
 				v-if="item.images"
 				ref="picture"
-				@mouseenter="imageZoom"
-				@mousemove="imageZoom"
-				@mouseleave="imageZoom"
 			>
-				<template>
-					<ul class="fade">
-						<li
-							v-for="(image, index) in item.images"
-							:key="index"
-							:class="{ 'active': active === index }"
-						>
-							<!-- First image -->
-							<image-load v-if="index === 0">
-								<!-- Image -->
-								<template #image>
-									<img
-										:src="imageUrl(item.images[0])"
-										:alt="item.caption"
-									>
-								</template>
-
-								<!-- Loader -->
-								<template #loader>
-									<loader type="circular" />
-								</template>
-
-								<template #error>
-									<div class="img-error">
-										<i class="fa fa-times-circle"></i>
-									</div>
-								</template>
-							</image-load>
-
-							<!-- Next images -->
-							<div class="image" v-else>
-								<img
-									:src="imageUrl(image)"
-									:alt="`${ item.caption }#${ index+1 }`"
-								>
-							</div>
-						</li>
-					</ul>
-					<ul
-						class="thumbnails"
-						v-if="item.images?.length > 1"
+				<ul class="fade">
+					<li
+						v-for="(image, index) in item.images"
+						:key="index"
+						:class="{ 'active': active === index }"
+						@mouseenter="imageZoom"
+						@mousemove="imageZoom"
+						@mouseleave="imageZoom"
 					>
-						<li
-							v-for="(image, index) in item.images"
-							:key="index"
-							:class="{ 'active': active === index }"
-							@click="() => active = index"
-						>
+						<!-- First image -->
+						<image-load v-if="index === 0">
+							<!-- Image -->
+							<template #image>
+								<img
+									:src="imageUrl(item.images[0])"
+									:alt="item.caption"
+								>
+							</template>
+
+							<!-- Loader -->
+							<template #loader>
+								<loader type="circular" />
+							</template>
+
+							<template #error>
+								<div class="img-error">
+									<i class="fa fa-times-circle"></i>
+								</div>
+							</template>
+						</image-load>
+
+						<!-- Next images -->
+						<div class="image" v-else>
 							<img
 								:src="imageUrl(image)"
 								:alt="`${ item.caption }#${ index+1 }`"
 							>
-						</li>
-					</ul>
-				</template>
+						</div>
+					</li>
+				</ul>
+				<ul
+					class="thumbnails"
+					v-if="item.images?.length > 1"
+				>
+					<li
+						v-for="(image, index) in item.images"
+						:key="index"
+						:class="{ 'active': active === index }"
+						@click="() => active = index"
+					>
+						<img
+							:src="imageUrl(image)"
+							:alt="`${ item.caption }#${ index+1 }`"
+						>
+					</li>
+				</ul>
 			</picture>
 
 			<div class="row d-sep sided">

@@ -285,27 +285,8 @@ div[class^="barter-item-"]
 			margin: 0
 			flex-shrink: 0
 			margin: 0 0 $r * 4.6
-			transition: box-shadow .25s ease-in-out
 			height: auto
 			width: 100%
-
-			.image
-				height: 355px
-
-			img
-				+unselectable()
-				object-fit: cover
-				
-			> img
-				height: 100%
-
-			&.zoom
-				background: var(--url) 50% 50% no-repeat
-				background-size: cover
-				box-shadow: 0 0 3px 1px $bulma
-
-				.fade
-					opacity: 0
 
 		.fade
 			border-radius: 11px
@@ -326,6 +307,20 @@ div[class^="barter-item-"]
 					position: relative
 					opacity: 1
 					z-index: 1
+
+				&.zoom
+					background: var(--url) 50% 50% no-repeat
+					background-size: cover
+				
+					.image img
+						opacity: 0
+
+				.image
+					height: 355px
+
+					img
+						+unselectable()
+						object-fit: cover
 
 		.thumbnails
 			display: flex

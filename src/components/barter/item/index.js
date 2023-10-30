@@ -168,29 +168,30 @@ export default {
 		imageZoom(e) {
 			const
 				picture = this.$refs.picture,
-				image = picture.querySelector("img");
+				holder = picture.querySelector("li.active"),
+				image = holder?.querySelector("img");
 
 			if (!image?.src) return;
 
 			if (e.type !== "mouseleave") {
-				picture.classList.add("zoom");
-				picture.style.setProperty("--url", `url(${ image.src })`);
+				holder.classList.add("zoom");
+				holder.style.setProperty("--url", `url(${ image.src })`);
 
 				/* Move */
 				const
 					rect = e.target.getBoundingClientRect(),
 					xPos = e.clientX - rect.left,
 					yPos = e.clientY - rect.top,
-					xPercent = `${ xPos / (picture.clientWidth / 100) }%`,
-					yPercent = `${ yPos / (picture.clientHeight / 100) }%`;
+					xPercent = `${ xPos / (holder.clientWidth / 100) }%`,
+					yPercent = `${ yPos / (holder.clientHeight / 100) }%`;
  
-				Object.assign(picture.style, {
+				Object.assign(holder.style, {
 					backgroundPosition: `${ xPercent } ${ yPercent }`,
 					backgroundSize: `${ (image.offsetWidth / 100) * 120 }px`
 				});
 			} else if(e.type === "mouseleave") {
-				picture.removeAttribute("class");
-				picture.removeAttribute("style");
+				holder.classList.remove("zoom");
+				holder.removeAttribute("style");
 			}
 		}
 	}
