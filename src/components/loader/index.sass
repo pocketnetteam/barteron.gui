@@ -1,5 +1,40 @@
 @import "@/css/vars.sass"
 
+/* Variables: main */
+$main-color1: $blue
+$main-color2: $ghost
+$main-color3: $blue
+$main-scale: 2
+
+/* Variables: curcular */
+$circular-color1: $ghost
+$circular-color2: $blue
+$circular-scale: 1
+
+/* Preset: circular */
+@mixin circular($color1, $color2, $scale)
+	animation: circular-rotation 1s linear infinite
+	border: 5px solid $color1
+	border-radius: 50%
+	box-sizing: border-box
+	display: inline-block
+	transform: scale($scale)
+	height: 48px
+	width: 48px
+
+	&::after
+		box-sizing: border-box
+		border: 3px solid
+		border-color: $color2 transparent
+		border-radius: 50%
+		content: ""
+		position: absolute
+		left: 50%
+		top: 50%
+		transform: translate(-50%, -50%)
+		height: 40px
+		width: 40px
+
 .overlay
 	display: flex
 	align-items: center
@@ -16,20 +51,14 @@
 		min-height: 48px
 		min-width: 48px
 
-/* Variables: main */
-$main-color1: $blue
-$main-scale: 2
-
-/* Variables: curcular */
-$circular-color1: $ghost
-$circular-color2: $blue
-$circular-scale: 1
-
 /* Loader: main */
 .type-main .loader
 	transform: scale($main-scale)
 	height: 50px
 	width: 50px
+
+	.holder
+		+circular($main-color2, $main-color3, $main-scale)
 
 	.circle
 		position: absolute
@@ -84,29 +113,8 @@ $circular-scale: 1
 				transform: rotate(115deg) translateX(-26px) translateY(-12px)
 
 /* Loader: circular */
-.type-main .holder,
 .type-circular .loader
-	animation: circular-rotation 1s linear infinite
-	border: 5px solid $circular-color1
-	border-radius: 50%
-	box-sizing: border-box
-	display: inline-block
-	transform: scale($circular-scale)
-	height: 48px
-	width: 48px
-
-	&::after
-		box-sizing: border-box
-		border: 3px solid
-		border-color: $circular-color2 transparent
-		border-radius: 50%
-		content: ""
-		position: absolute
-		left: 50%
-		top: 50%
-		transform: translate(-50%, -50%)
-		height: 40px
-		width: 40px
+	+circular($circular-color1, $circular-color2, $circular-scale)
 
 /* Animation: main */
 

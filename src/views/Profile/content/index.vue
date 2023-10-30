@@ -97,7 +97,7 @@
 											<dd>
 												<time>
 													{{ $d(item.time, 'short') }} -
-													{{ $d(item.until ? item.until * 1000 : (item.time + 2629746) * 1000, 'short') }}
+													{{ $d(item.until, 'short') }}
 												</time>
 											</dd>
 										</dl>
