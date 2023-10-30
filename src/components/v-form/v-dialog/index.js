@@ -18,7 +18,7 @@ export default {
 		 * 
 		 * @param {String} [type]
 		 * 
-		 * @return {Vdialog}
+		 * @returns {Vdialog}
 		 */
 		view(type, props) {
 			this.iconColor = type;
@@ -82,7 +82,7 @@ export default {
 		/**
 		 * Reset to default state
 		 * 
-		 * @return {Vdialog}
+		 * @returns {Vdialog}
 		 */
 		reset() {
 			this.icon = false;
@@ -97,7 +97,7 @@ export default {
 		/**
 		 * Show dialog
 		 * 
-		 * @return {Vdialog}
+		 * @returns {Vdialog}
 		 */
 		show() {
 			this.visible = true;
@@ -108,7 +108,7 @@ export default {
 		/**
 		 * Hide dialog
 		 * 
-		 * @return {Vdialog}
+		 * @returns {Vdialog}
 		 */
 		hide() {
 			this.visible = false;
@@ -121,7 +121,7 @@ export default {
 		 * 
 		 * @param {Object} data
 		 * 
-		 * @return {Vdialog}
+		 * @returns {Vdialog}
 		 */
 		update(data) {
 			for (let prop in data) {

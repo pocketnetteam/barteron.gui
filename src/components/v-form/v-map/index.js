@@ -89,7 +89,7 @@ export default {
 		/**
 		 * Get my location
 		 * 
-		 * @return {Array|null}
+		 * @returns {Array|null}
 		 */
 		location() {
 			const location = Object.values(this.sdk.location);

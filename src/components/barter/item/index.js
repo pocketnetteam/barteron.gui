@@ -34,7 +34,7 @@ export default {
 		/**
 		 * Get exchange list
 		 * 
-		 * @return {Array}
+		 * @returns {Array}
 		 */
 		exchangeList() {
 			let ids = this.item.tags;
@@ -64,7 +64,7 @@ export default {
 		/**
 		 * Get my location
 		 * 
-		 * @return {Array|null}
+		 * @returns {Array|null}
 		 */
 		location() {
 			const location = Object.values(this.sdk.location);
@@ -74,7 +74,7 @@ export default {
 		/**
 		 * Decode offer geohash
 		 * 
-		 * @return {Array|null}
+		 * @returns {Array|null}
 		 */
 		geohash() {
 			if (this.item.geohash) {
@@ -88,7 +88,7 @@ export default {
 		/**
 		 * Get address from geohash
 		 * 
-		 * @return {Object}
+		 * @returns {Object}
 		 */
 		address() {
 			if (!this.addr.country) {
@@ -110,7 +110,7 @@ export default {
 		/**
 		 * Calculate distance from geohash to location
 		 * 
-		 * @return {Number}
+		 * @returns {Number}
 		 */
 		distance() {
 			const
@@ -135,7 +135,7 @@ export default {
 		/**
 		 * Check return alternative if empty
 		 * 
-		 * @return {*}
+		 * @returns {*}
 		 */
 		ifEmpty() {
 			for (let a in arguments) {
@@ -151,7 +151,7 @@ export default {
 		 * 
 		 * @param {String} path
 		 * 
-		 * @return {String}
+		 * @returns {String}
 		 */
 		imageUrl(path) {
 			if (["http", "data:image"].some(str => path?.startsWith(str))) {

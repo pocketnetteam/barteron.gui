@@ -40,7 +40,7 @@ export default {
 		/**
 		 * Get instance of class
 		 * 
-		 * @return {@Vselect}
+		 * @returns {@Vselect}
 		 */
 		instance() {
 			return this;
@@ -49,7 +49,7 @@ export default {
 		/**
 		 * Build list of options
 		 * 
-		 * @return {Array}
+		 * @returns {Array}
 		 */
 		items() {
 			const dropdown = this.dropdown;
@@ -88,7 +88,7 @@ export default {
 		/**
 		 * Is dropdown available
 		 * 
-		 * @return {Number}
+		 * @returns {Number}
 		 */
 		hasDropdown() {
 			return this.items.length;

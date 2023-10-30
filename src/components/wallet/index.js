@@ -5,7 +5,7 @@ export default {
 		/**
 		 * Get account balance
 		 * 
-		 * @return {Object}
+		 * @returns {Object}
 		 */
 		balance() {
 			return this.sdk.balance;

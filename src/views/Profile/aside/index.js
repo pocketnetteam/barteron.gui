@@ -15,7 +15,7 @@ export default {
 		/**
 		 * Get bastyon address
 		 * 
-		 * @return {String}
+		 * @returns {String}
 		 */
 		address() {
 			return this.$route.params.id || this.sdk.address;
@@ -24,7 +24,7 @@ export default {
 		/**
 		 * Show is this profile is your's
 		 * 
-		 * @return {Boolean}
+		 * @returns {Boolean}
 		 */
 		isMyProfile() {
 			return this.address === this.sdk.address;
@@ -33,7 +33,7 @@ export default {
 		/**
 		 * Barteron account
 		 * 
-		 * @return {Object}
+		 * @returns {Object}
 		 */
 		account() {
 			return this.sdk.barteron.accounts[this.address];

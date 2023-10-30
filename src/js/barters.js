@@ -26,7 +26,7 @@ class Barters {
 	 * @param {Number} count
 	 * @param {Object} props
 	 * 
-	 * @return {Array}
+	 * @returns {Array}
 	 */
 	generate(count, props) {
 		/* Prepare barter item */
@@ -59,7 +59,7 @@ class Barters {
 	/**
 	 * Get random barter
 	 * 
-	 * @return {Object}
+	 * @returns {Object}
 	 */
 	getRandom() {
 		const ids = Object.keys(this.items);
@@ -74,7 +74,7 @@ class Barters {
 	 * 
 	 * @param {Number[]} p - [min, max]
 	 * 
-	 * @return {Number}
+	 * @returns {Number}
 	 */
 	randIntInArray(p) {
 		return Math.floor(Math.random() * (p[1] - p[0]) + p[0])
@@ -85,7 +85,7 @@ class Barters {
 		 * 
 		 * @param {String} html
 		 * 
-		 * @return {String}
+		 * @returns {String}
 		 */
 	decodeString(html) {
 		const text = document.createElement("textarea");
@@ -98,7 +98,7 @@ class Barters {
 	 * 
 	 * @param {String|Number} id
 	 * 
-	 * @return {Object}
+	 * @returns {Object}
 	 */
 	get(id) {
 		return this.items[id] ? (item => ({
@@ -115,7 +115,7 @@ class Barters {
 	 * @param {String} param
 	 * @param {String|Number} value
 	 * 
-	 * @return {Object}
+	 * @returns {Object}
 	 */
 	find(param, value) {
 		for (let id in this.items) {
@@ -130,7 +130,7 @@ class Barters {
 	 * 
 	 * @param {String|Number[]} id
 	 * 
-	 * @return {Object|Array}
+	 * @returns {Object|Array}
 	 */
 	findById(id) {
 		return Array.isArray(id) ? id.map(n => this.get(n)) : this.get(id);
@@ -141,7 +141,7 @@ class Barters {
 	 * 
 	 * @param {String|Number[]} name
 	 * 
-	 * @return {Object|Array}
+	 * @returns {Object|Array}
 	 */
 	findByName(name) {
 		return Array.isArray(name) ? name.map(n => this.find("name", n)) : this.find("name", name);

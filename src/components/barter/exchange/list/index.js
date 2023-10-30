@@ -111,7 +111,7 @@ export default {
 		 * 
 		 * @param {Boolean} check
 		 * 
-		 * @return {Boolean|Void}
+		 * @returns {Boolean|Void}
 		 */
 		validate(check) {
 			const

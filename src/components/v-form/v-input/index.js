@@ -35,7 +35,7 @@ export default {
 		 * 
 		 * @param {Array} inputs
 		 * 
-		 * @return {Object[]}
+		 * @returns {Object[]}
 		 */
 		getInputs(inputs) {
 			const input = Object.keys(this.$props).reduce((o, p) => {
@@ -68,7 +68,7 @@ export default {
 		 * 
 		 * @param {String}
 		 * 
-		 * @return {String}
+		 * @returns {String}
 		 */
 		getType(type) {
 			switch(type) {

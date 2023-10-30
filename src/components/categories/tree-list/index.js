@@ -22,7 +22,7 @@ export default {
 		/**
 		 * Detect if tree has active elements
 		 * 
-		 * @return {Array}
+		 * @returns {Array}
 		 */
 		subOpened() {
 			return this.items.filter(f => f.active);
@@ -35,7 +35,7 @@ export default {
 		 * 
 		 * @param {Object} item
 		 * 
-		 * @return {Array}
+		 * @returns {Array}
 		 **/
 		parentsList(item) {
 			return this.parents.concat(item);

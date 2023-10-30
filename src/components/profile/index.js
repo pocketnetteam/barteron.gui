@@ -19,7 +19,7 @@ export default {
 		/**
 		 * Get user
 		 * 
-		 * @return {Object}
+		 * @returns {Object}
 		 */
 		user() {
 			return this.sdk.accounts[this.address];
@@ -28,7 +28,7 @@ export default {
 		/**
 		 * Get first name from account name
 		 * 
-		 * @return {String}
+		 * @returns {String}
 		 */
 		shortName() {
 			return this.user?.name?.substring(0, 1).toUpperCase() || "UN";
@@ -37,7 +37,7 @@ export default {
 		/**
 		 * Barteron account
 		 * 
-		 * @return {Object}
+		 * @returns {Object}
 		 */
 		account() {
 			return this.sdk.barteron.accounts[this.address];
@@ -46,7 +46,7 @@ export default {
 		/**
 		 * Generate hsl background for user
 		 * 
-		 * @return {String}
+		 * @returns {String}
 		 */
 		hslColor() {
 			return `--color: ${ this.color.generateHSL(this.user?.name || "username") }`

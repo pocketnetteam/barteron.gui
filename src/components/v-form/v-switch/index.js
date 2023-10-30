@@ -46,7 +46,7 @@ export default {
 		 * 
 		 * @param {Array} switches
 		 * 
-		 * @return {Object[]}
+		 * @returns {Object[]}
 		 */
 		getSwitches(switches) {
 			const sw = Object.keys(this.$props).reduce((o, p) => {

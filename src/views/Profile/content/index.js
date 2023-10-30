@@ -20,7 +20,7 @@ export default {
 		/**
 		 * Get bastyon address
 		 * 
-		 * @return {String}
+		 * @returns {String}
 		 */
 		address() {
 			const address = this.$route.params.id || this.sdk.address;
@@ -33,7 +33,7 @@ export default {
 		/**
 		 * Show is this profile is your's
 		 * 
-		 * @return {Boolean}
+		 * @returns {Boolean}
 		 */
 		isMyProfile() {
 			return this.address === this.sdk.address;
@@ -42,7 +42,7 @@ export default {
 		/**
 		 * Active tab param
 		 * 
-		 * @return {String|undefined}
+		 * @returns {String|undefined}
 		 */
 		activeTab() {
 			return this.$route.hash;
@@ -51,7 +51,7 @@ export default {
 		/**
 		 * Make list of view
 		 * 
-		 * @return {Array}
+		 * @returns {Array}
 		 */
 		views() {
 			return this.parseLabels("viewLabels");
@@ -74,7 +74,7 @@ export default {
 		 * 
 		 * @param {String} label
 		 * 
-		 * @return {Array}
+		 * @returns {Array}
 		 */
 		parseLabels(label) {
 			return Object.keys(this.$t(label)).map((value, index) => {

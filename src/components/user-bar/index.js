@@ -13,7 +13,7 @@ export default {
 		/**
 		 * Get user from sdk
 		 * 
-		 * @return {Object}
+		 * @returns {Object}
 		 */
 		user() {
 			return this.sdk.accounts[this.sdk.address];
@@ -22,7 +22,7 @@ export default {
 		/**
 		 * Get first name from account name
 		 * 
-		 * @return {String}
+		 * @returns {String}
 		 */
 		shortName() {
 			return this.user?.name?.substring(0, 1).toUpperCase() || "UN";
@@ -31,7 +31,7 @@ export default {
 		/**
 		 * Generate hsl background for user
 		 * 
-		 * @return {String}
+		 * @returns {String}
 		 */
 		hslColor() {
 			return `--color: ${ this.color.generateHSL(this.user?.name || "username") }`

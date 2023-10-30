@@ -176,7 +176,7 @@ class SDK {
 	 * 
 	 * @param {Array} images
 	 * 
-	 * @return {Promise}
+	 * @returns {Promise}
 	 */
 	uploadImagesToImgur(images) {
 		return this.sdk.set.imagesToImgur(images).then(urls => {
@@ -190,7 +190,7 @@ class SDK {
 	 * 
 	 * @param {Array} permissions
 	 * 
-	 * @return {Promise}
+	 * @returns {Promise}
 	 */
 	permissionsDialog = {}
 	requestPermissions(permissions) {
@@ -211,7 +211,7 @@ class SDK {
 	/**
 	 * Get bastyon address
 	 * 
-	 * @return {Promise}
+	 * @returns {Promise}
 	 */
 	getAccount() {
 		return this.sdk.get.account().then(({ address }) => {
@@ -224,7 +224,7 @@ class SDK {
 	/**
 	 * Get bastyon account balance
 	 * 
-	 * @return {Promise}
+	 * @returns {Promise}
 	 */
 	getBalance() {
 		return this.sdk.get.balance().then(balance => {
@@ -237,7 +237,7 @@ class SDK {
 	/**
 	 * Make payment
 	 * 
-	 * @return {Promise}
+	 * @returns {Promise}
 	 */
 	makePayment() {
 		var data = {
@@ -257,7 +257,7 @@ class SDK {
 	/**
 	 * Location from bastyon
 	 * 
-	 * @return {Promise}
+	 * @returns {Promise}
 	 */
 	getLocation() {
 		return this.sdk.get.location().then(location => {
@@ -297,7 +297,7 @@ class SDK {
 	 * @param {Array} latLng
 	 * @param {Object} [data]
 	 * 
-	 * @return {Promise}
+	 * @returns {Promise}
 	 */
 	geoLocation(latLng, data) {
 		/* Send request to provider url */
@@ -321,7 +321,7 @@ class SDK {
 	/**
 	 * Check access to localstroage
 	 * 
-	 * @return {Array}
+	 * @returns {Array}
 	 */
 	checkLocalStorageAccess() {
 		function allStorage() {
@@ -345,7 +345,7 @@ class SDK {
 	 * 
 	 * @prop {String} method
 	 * @prop {Object} props
-	 * @return {Promise}
+	 * @returns {Promise}
 	 */
 	rpc(method, props) {
 		return this.sdk.rpc(method, [props]).then(result => {
@@ -358,7 +358,7 @@ class SDK {
 	 * 
 	 * @prop {String} address
 	 * 
-	 * @return {Promise}
+	 * @returns {Promise}
 	 */
 	async getUserInfo(address) {
 		if (!address && !this._address) await this.getAccount();
@@ -376,7 +376,7 @@ class SDK {
 	/**
 	 * Get Node data
 	 * 
-	 * @return {Promise}
+	 * @returns {Promise}
 	 */
 	getNodeInfo() {
 		return this.rpc("getnodeinfo");
@@ -391,7 +391,7 @@ class SDK {
 	 * 
 	 * @param {String} address
 	 * 
-	 * @return {Promise}
+	 * @returns {Promise}
 	 */
 	getBrtAccount(address) {
 		address = address || this._address;
@@ -419,7 +419,7 @@ class SDK {
 	 * @param {String} data.geohash
 	 * @param {Number} data.radius
 	 * 
-	 * @return {Promise}
+	 * @returns {Promise}
 	 */
 	setBrtAccount(data) {
 		return this.sdk.set.barteron.account(data).then(result => {
@@ -433,7 +433,7 @@ class SDK {
 	 * 
 	 * @param {String} address
 	 * 
-	 * @return {Promise}
+	 * @returns {Promise}
 	 */
 	async getBrtOffers(address) {
 		if (!address && !this._address) await this.getAccount();
@@ -466,7 +466,7 @@ class SDK {
 	 * @param {String} data.geohash
 	 * @param {Number} data.price
 	 * 
-	 * @return {Promise}
+	 * @returns {Promise}
 	 */
 	setBrtOffer(data) {
 		return this.sdk.set.barteron.offer({
@@ -484,7 +484,7 @@ class SDK {
 	 * 
 	 * @param {Array[String]} hashes
 	 * 
-	 * @return {Promise}
+	 * @returns {Promise}
 	 */
 	getBrtOffersByHashes(hashes = []) {
 		hashes.forEach(hash => {
@@ -529,7 +529,7 @@ class SDK {
 	 * @param {String} request.orderBy height | location | price
 	 * @param {Boolean} request.orderDesc true | false
 	 * 
-	 * @return {Promise}
+	 * @returns {Promise}
 	 */
 	getBrtOffersFeed(request = {}) {
 		return this.rpc("getbarteronfeed", request).then(feed => {
@@ -557,7 +557,7 @@ class SDK {
 	 * @param {String} request.orderBy height | location | price
 	 * @param {Boolean} request.orderDesc true | false
 	 * 
-	 * @return {Promise}
+	 * @returns {Promise}
 	 */
 	getBrtOfferDeals(request) {
 		return this.rpc("getbarterondeals", request).then(deals => {
@@ -577,7 +577,7 @@ class SDK {
 	 * @param {String} data.postid
 	 * @param {String} data.message
 	 * 
-	 * @return {Promise}
+	 * @returns {Promise}
 	 */
 	setBrtComment(data) {
 		return this.sdk.set.barteron.comment(data).then(result => {
