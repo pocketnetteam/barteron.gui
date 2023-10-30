@@ -1,7 +1,14 @@
 import { GeoHash } from "geohash";
+import ImageLoad from "@/components/image-load/index.vue";
+import Loader from "@/components/loader/index.vue";
 
 export default {
 	name: "BarterItem",
+
+	components: {
+		ImageLoad,
+		Loader
+	},
 
 	props: {
 		item: {
@@ -163,7 +170,7 @@ export default {
 				picture = this.$refs.picture,
 				image = picture.querySelector("img");
 
-			if (!image.src) return;
+			if (!image?.src) return;
 
 			if (e.type !== "mouseleave") {
 				picture.classList.add("zoom");

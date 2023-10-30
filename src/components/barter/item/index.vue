@@ -5,12 +5,8 @@
 			<router-link :to="{ name: 'barterItem', params: { id: item.hash } }">
 				<span class="state">{{ $t(`condition.${ !item.used ? 'new' : 'used' }`) }}</span>
 			
-				<img
-					v-if="item.images?.length < 2"
-					:src="imageUrl(item.images[0])"
-					:alt="item.name"
-				>
-				<template v-else>
+				<!-- Images -->
+				<template>
 					<ul class="slide">
 						<li
 							v-for="(image, index) in item.images"
@@ -19,10 +15,35 @@
 							@mouseenter="() => hover = index"
 							@mouseleave="() => hover = 0"
 						>
-							<img
-								:src="imageUrl(image)"
-								:alt="`${ item.name }#${ index+1 }`"
-							>
+							<!-- First image -->
+							<image-load v-if="index === 0">
+								<!-- Image -->
+								<template #image>
+									<img
+										:src="imageUrl(item.images[0])"
+										:alt="item.caption"
+									>
+								</template>
+
+								<!-- Loader -->
+								<template #loader>
+									<loader type="circular" />
+								</template>
+
+								<template #error>
+									<div class="img-error">
+										<i class="fa fa-times-circle"></i>
+									</div>
+								</template>
+							</image-load>
+
+							<!-- Next images -->
+							<div class="image" v-else>
+								<img
+									:src="imageUrl(image)"
+									:alt="`${ item.caption }#${ index+1 }`"
+								>
+							</div>
 						</li>
 					</ul>
 					<ul
@@ -168,27 +189,47 @@
 				@mousemove="imageZoom"
 				@mouseleave="imageZoom"
 			>
-				<img
-					v-if="item.images?.length < 2"
-					:src="imageUrl(item.images[0])"
-					:alt="item.name"
-				>
-				<template v-else>
+				<template>
 					<ul class="fade">
 						<li
 							v-for="(image, index) in item.images"
 							:key="index"
 							:class="{ 'active': active === index }"
 						>
-							<img
-								:src="imageUrl(image)"
-								:alt="`${ item.name }#${ index+1 }`"
-							>
+							<!-- First image -->
+							<image-load v-if="index === 0">
+								<!-- Image -->
+								<template #image>
+									<img
+										:src="imageUrl(item.images[0])"
+										:alt="item.caption"
+									>
+								</template>
+
+								<!-- Loader -->
+								<template #loader>
+									<loader type="circular" />
+								</template>
+
+								<template #error>
+									<div class="img-error">
+										<i class="fa fa-times-circle"></i>
+									</div>
+								</template>
+							</image-load>
+
+							<!-- Next images -->
+							<div class="image" v-else>
+								<img
+									:src="imageUrl(image)"
+									:alt="`${ item.caption }#${ index+1 }`"
+								>
+							</div>
 						</li>
 					</ul>
 					<ul
 						class="thumbnails"
-						v-if="item.images?.length"
+						v-if="item.images?.length > 1"
 					>
 						<li
 							v-for="(image, index) in item.images"
@@ -198,7 +239,7 @@
 						>
 							<img
 								:src="imageUrl(image)"
-								:alt="`${ item.name }#${ index+1 }`"
+								:alt="`${ item.caption }#${ index+1 }`"
 							>
 						</li>
 					</ul>

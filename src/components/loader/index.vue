@@ -1,11 +1,12 @@
 <template>
-	<div class="overlay" v-if="loading">
-		<div
-			:class="{
-				'loader': true,
-				[`type-${ type }`]: type
-			}"
-		>
+	<div
+		:class="{
+			'overlay': true,
+			[`type-${ type }`]: type
+		}"
+		v-if="loading"
+	>
+		<div class="loader">
 			<template v-if="type === 'main'">
 				<div class="holder"></div>
 				<div class="circle">

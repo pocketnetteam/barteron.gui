@@ -20,11 +20,41 @@ div[class^="barter-item-"]
 		width: 100%
 		+unselectable()
 
+		a
+			text-decoration: none
+
+		.image
+			height: 100%
+			width: 100%
+
 		img
 			display: block
 			object-fit: cover
 			height: 100%
 			width: 100%
+
+		.img-error
+			background: none !important
+			color: $dodoria
+			container-type: size
+			display: flex
+			align-items: center
+			justify-content: center
+			position: relative
+			height: 100%
+			width: 100%
+
+			&::before
+				background: $bulma
+				opacity: .25
+				content: ""
+				position: absolute
+				height: 100%
+				width: 100%
+
+			.fa
+				position: relative
+				font-size: 27cqh
 
 		ul.slide
 			display: flex
@@ -36,10 +66,10 @@ div[class^="barter-item-"]
 				width: 100%
 
 				&.hover
-					img
+					.image
 						opacity: 1
 
-				img
+				.image
 					position: absolute
 					top: 0
 					right: 0
@@ -208,6 +238,10 @@ div[class^="barter-item-"]
 			height: 137px
 			width: 203px
 
+			.image
+				height: 100%
+				width: 100%
+
 		.row
 			flex-direction: column
 			align-items: flex-start
@@ -255,26 +289,28 @@ div[class^="barter-item-"]
 			height: auto
 			width: 100%
 
+			.image
+				height: 355px
+
 			img
 				+unselectable()
 				object-fit: cover
 				
 			> img
-				height: 355px
+				height: 100%
 
 			&.zoom
 				background: var(--url) 50% 50% no-repeat
 				background-size: cover
 				box-shadow: 0 0 3px 1px $bulma
 
-				img
+				.fade
 					opacity: 0
 
 		.fade
 			border-radius: 11px
 			position: relative
 			overflow: hidden
-			margin: 0 0 1.15em
 			height: 355px
 
 			li
@@ -294,6 +330,7 @@ div[class^="barter-item-"]
 		.thumbnails
 			display: flex
 			gap: 10px
+			margin: 1.15em 0 0
 
 			li
 				+transition(border-color)
@@ -306,6 +343,9 @@ div[class^="barter-item-"]
 				&.active
 					border-color: $piccolo
 					padding: 3px
+
+				img
+					border-radius: 10px
 
 		.row
 			color: $trunks
