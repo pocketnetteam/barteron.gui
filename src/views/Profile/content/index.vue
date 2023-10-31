@@ -97,7 +97,7 @@
 											<dd>
 												<time>
 													{{ $d(item.time, 'short') }} -
-													{{ $d(item.until, 'short') }}
+													{{ $d(item.till, 'short') }}
 												</time>
 											</dd>
 										</dl>
