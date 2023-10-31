@@ -9,7 +9,7 @@
 		@dragend="dragEnd"
 	>
 		<li
-			v-for="(item, index) in files"
+			v-for="(item, index) in values"
 			:key="index"
 			:id="item.id"
 			draggable="true"

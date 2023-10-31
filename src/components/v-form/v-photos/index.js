@@ -2,9 +2,13 @@ export default {
 	name: "Vphotos",
 
 	props: {
-		multiple: String, /* Allow upload multiple files at once */
-		accept: String, /* File extensions with comma - gif, jpeg, png */
-		maxLen: String /* Count of maximum photos */
+		multiple: String,
+		accept: String,
+		maxLen: String,
+		images: {
+			type: Array,
+			default: () => []
+		}
 	},
 
 	data() {
@@ -42,6 +46,15 @@ export default {
 				a.push(t);
 				return a;
 			}, []).join(", ");
+		},
+
+		/**
+		 * Add images from property
+		 * 
+		 * @returns {Object}
+		 */
+		values() {
+			return this.remove().add(this.images).files;
 		}
 	},
 
