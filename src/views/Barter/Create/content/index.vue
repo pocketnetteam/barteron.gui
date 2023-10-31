@@ -35,7 +35,11 @@
 				/>
 
 				<!-- Paragraph: Image upload text -->
-				<p>{{ $t('upload_image_text').replace('%s', 'JPEG, PNG') }}</p>
+				<p>{{ $t('upload_image_text', {
+					count: 10,
+					formats: ["JPEG, PNG"].join(),
+					size: 25
+				}) }}</p>
 			</div>
 
 			<div class="row block">

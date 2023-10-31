@@ -159,7 +159,7 @@
 
 	"title": "Title",
 	"upload_image": "Upload image",
-	"upload_image_text": "The first photo will be displayed in the search results, select the best one. You can upload up to 10 photos in %s format. The maximum photo size is 25MB.",
+	"upload_image_text": "The first photo will be displayed in the search results, select the best one. You can upload up to {count} photos in {formats} format. The maximum photo size is {size}MB.",
 	"my_list": "My list",
 	"something": "Something",
 	"for_nothing": "For nothing",
