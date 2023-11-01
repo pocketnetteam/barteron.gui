@@ -1,7 +1,5 @@
-import { Object } from "core-js";
-
 export default {
-	name: "AssocList",
+	name: "PopularList",
 
 	props: {
 		items: {

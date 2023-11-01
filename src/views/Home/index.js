@@ -1,4 +1,5 @@
-import AssocList from "@/components/categories/assoc-list/index.vue";
+import PopularList from "@/components/categories/popular-list/index.vue";
+import Categories from "@/components/categories/select/index.vue";
 import BarterList from "@/components/barter/list/index.vue";
 import Banner from "@/components/banner/index.vue";
 
@@ -6,7 +7,8 @@ export default {
 	name: "Home",
 
 	components: {
-		AssocList,
+		PopularList,
+		Categories,
 		BarterList,
 		Banner
 	},

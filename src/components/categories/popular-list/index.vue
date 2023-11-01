@@ -1,10 +1,10 @@
 <template>
-	<ul class="categories-assoc-list">
+	<ul class="categories-popular-list">
 		<li
 			v-for="(item, id) in items"
 			:key="id"
 			:class="{
-				'assoc-item': true,
+				'popular-item': true,
 			}"
 		>
 			<router-link :to="{ name: 'category', params: { id: item.id } }">
