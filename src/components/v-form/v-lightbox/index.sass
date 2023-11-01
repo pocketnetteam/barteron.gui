@@ -20,7 +20,7 @@
 	&.v-lightbox-open
 		background: $overlay-visible
 		visibility: visible
-		z-index: 1000
+		z-index: 1100
 
 		section
 			display: flex
@@ -31,7 +31,7 @@
 		color: $popo
 		display: none
 		flex-direction: column
-		padding: 22px
+		padding: 8px
 		max-height: 80%
 		max-width: 80%
 
@@ -51,16 +51,15 @@
 		@at-root .v-lightbox-xl#{&}
 			width: 1000px
 
-		header,
-		footer
-			display: flex
-			align-items: center
-			justify-content: space-between
-			margin: 0 0 13px
+		header
+			.title
+				display: flex
+				align-items: center
+				justify-content: space-between
 
-			h1
-				font-size: 16px
-				margin: 0
+				h1
+					font-size: 16px
+					margin: 0
 		
 		.v-lightbox-close
 			border-radius: 8px
@@ -77,10 +76,16 @@
 			&:hover
 				background: $darkgray
 
+		header
+			border-bottom: 1px solid $beerus
+			margin: 0 -8px 0
+			padding: 8px 16px 16px
+
 		main
 			flex: 1
 			line-height: 0
-			margin: 0 -6px 0 0
+			margin: 8px 0 0 0
+			padding: 0 8px 0 0
 			+scrollbar(6px)
 			scrollbar-gutter: stable
 
@@ -88,5 +93,4 @@
 				line-height: normal
 
 		footer
-			margin-top: 13px
-			margin-bottom: auto
+			margin-top: 8px
