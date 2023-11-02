@@ -152,6 +152,11 @@
 		"empty": "There is no feedbacks yet"
 	},
 
+	"search": {
+		"found": "{count} results has found",
+		"not_found": "Nothing found"
+	},
+
 	"metrics": {
 		"km": "km",
 		"number": "#"
