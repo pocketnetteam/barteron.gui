@@ -9,14 +9,26 @@ export default {
 		min: { type: [Number, String, Array], default: () => [] },
 		max: { type: [Number, String, Array], default: () => [] },
 		placeholder: { type: [String, Array], default: () => [] },
+		list: { type: [String, Array], default: () => [] },
 		value: { type: [Number, String, Array], default: () => [] },
 
 		vSize: String,
 	},
 
+	data() {
+		return {
+			inputs: []
+		}
+	},
+
 	computed:{
-		inputs() {
-			return this.getInputs([this.id, this.name, this.type, this.placeholder, this.value]);
+		/**
+		 * Make object with inputs attributes
+		 * 
+		 * @returns {Object[]}
+		 */
+		attrs() {
+			return this.getAttrs([this.id, this.name, this.type, this.placeholder, this.value]);
 		}
 	},
 
@@ -25,6 +37,8 @@ export default {
 		 * Convert String to Array
 		 * 
 		 * @param {String} param
+		 * 
+		 * @returns {Array}
 		 */
 		toArray(param) {
 			return Array.isArray(param) ? param : [param];
@@ -35,9 +49,9 @@ export default {
 		 * 
 		 * @param {Array} inputs
 		 * 
-		 * @returns {Object[]}
+		 * @returns {Object}
 		 */
-		getInputs(inputs) {
+		getAttrs(inputs) {
 			const input = Object.keys(this.$props).reduce((o, p) => {
 				o[p] = this.toArray(this[p]);
 
@@ -77,9 +91,24 @@ export default {
 			}
 		},
 
+		/**
+		 * Emit event to parent
+		 * 
+		 * @param {String} type
+		 * @param {Event} e
+		 * @param {Number} index
+		 */
 		emit(type, e, index) {
-			this.inputs[index].value = e.target.value;
-			this.$emit(type, e, this.inputs[index]);
+			this.$emit(type, e, this.fields?.[index] ?? e.target);
 		}
-	}
+	},
+
+	mounted() {
+		/* Create real-time computed property */
+		this.inputs = new Proxy(this.$refs.fields, {
+			get(target, index) {
+				return target?.[index];
+			}
+		});
+	},
 }
