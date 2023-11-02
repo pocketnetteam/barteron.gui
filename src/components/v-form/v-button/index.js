@@ -23,7 +23,8 @@ export default {
 
 	data() {
 		return {
-			active: false
+			active: false,
+			ripples: []
 		}
 	},
 
@@ -46,6 +47,18 @@ export default {
 
 	methods: {
 		/**
+		 * Add prefix to each word in string
+		 * 
+		 * @param {String} string
+		 * @param {String} prefix
+		 * 
+		 * @returns {String}
+		 */
+		prefix(string, prefix) {
+			return (string ?? "").split(" ").map(word => `${ prefix }-${ word }`).join(" ");
+		},
+
+		/**
 		 * Set value in button
 		 * 
 		 * @param {Object|String}
@@ -55,6 +68,34 @@ export default {
 				/* Set value in valueSelector */
 				this.value.innerHTML = item[this.dropdownItemKey] || item.text || item;
 			}
+		},
+
+		/**
+		 * Start ripple animation
+		 * 
+		 * @param {Event} e
+		 */
+		animateRipple(e) {
+			const 
+				el  = this.$refs.button,
+				pos = el.getBoundingClientRect();
+			
+			if (e) {
+				this.ripples.push({
+					x: e.clientX - pos.left,
+					y: e.clientY - pos.top,
+					show: true
+				});
+			}
+		},
+
+		/**
+		 * End ripple animation
+		 * 
+		 * @param {Number} i
+		 */
+		rippleEnd(i) {
+			this.ripples[i].show = false;
 		},
 
 		/**
@@ -82,6 +123,7 @@ export default {
 				this.active = active;
 			}
 
+			this.animateRipple(e);
 			this.$emit("click", e, this);
 		},
 

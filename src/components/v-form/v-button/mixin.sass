@@ -1,0 +1,39 @@
+/* Color scheme */
+@mixin color($name, $background, $border, $color, $hover, $hoverColor)
+	/* Opaque */
+	&.v-button-#{$name}:not([class*="#{$name}-"])
+		background: $background
+		border-color: $border
+		color: $color
+
+		&:hover
+			background: $hover
+			border-color: $hover
+
+		.ripples .ripple
+			background-color: $background
+
+	/* Color */
+	&.v-button-#{$name}-color
+		background: transparent
+		color: $background
+
+		&:hover
+			color: $hoverColor
+
+		.ripples .ripple
+			background-color: $border
+
+	/* Stroke & Transparent */
+	&.v-button-#{$name}-stroke
+		border-color: $border
+
+	&.v-button-#{$name}-stroke,
+	&.v-button-#{$name}-transparent
+		background: transparent
+		color: $border
+
+		&:hover
+			background: $hover
+			border-color: $hover
+			color: $hoverColor

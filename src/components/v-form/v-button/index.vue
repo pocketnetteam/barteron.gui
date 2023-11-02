@@ -14,16 +14,35 @@
 			:class="{
 				'v-button': true,
 				'v-button-right': vAlign === 'right',
-				[`v-button-${ vType ?? 'primary' }`]: true,
-				[`v-button-${ vSize ?? 'md' }`]: true,
+				[prefix(vType ?? 'primary', 'v-button')]: true,
+				[prefix(vSize ?? 'md', 'v-button')]: true,
 				active
 			}"
 			ref="button"
 			@click="clickButton"
 		>
-			<slot></slot>
+			<div class="text">
+				<slot></slot>
 
-			<i class="fa fa-angle-down v-dropdown-arrow" v-if="hasDropdown"></i>
+				<i class="fa fa-angle-down v-dropdown-arrow" v-if="hasDropdown"></i>
+			</div>
+
+			<transition-group
+				class="ripples"
+				
+			>
+				<template
+					v-for="(ripple, index) in ripples"
+				>
+					<span
+						class="ripple"
+						
+						:ref="`ripple-${ index }`"
+						:key="`ripple-${ index }`"
+						:style="{'top': `${ ripple.y }px`, 'left': `${ ripple.x }px`}"
+						@animationend="rippleEnd(index)"></span>
+				</template>
+			</transition-group>
 		</component>
 
 		<div class="v-button-dropdown" v-if="hasDropdown">
