@@ -19,6 +19,10 @@
 				active
 			}"
 			ref="button"
+			@mousedown="animateRipple"
+			@mousedown.native="animateRipple"
+			@touch:start="animateRipple"
+			@touch:start.native="animateRipple"
 			@click="clickButton"
 		>
 			<div class="text">
@@ -29,14 +33,14 @@
 
 			<transition-group
 				class="ripples"
-				
+				v-if="ripples.filter(r => r.show).length"
 			>
 				<template
 					v-for="(ripple, index) in ripples"
 				>
 					<span
 						class="ripple"
-						
+						v-if="ripple.show"
 						:ref="`ripple-${ index }`"
 						:key="`ripple-${ index }`"
 						:style="{'top': `${ ripple.y }px`, 'left': `${ ripple.x }px`}"

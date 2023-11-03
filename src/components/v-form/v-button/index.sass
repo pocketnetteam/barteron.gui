@@ -24,13 +24,6 @@
 		height: 100%
 		+transition()
 
-		.text
-			display: inline-flex
-			align-items: center
-			justify-content: center
-			position: relative
-			z-index: 1
-
 		/* Primary hover state */
 		@at-root .dropdown-open #{&},
 		&:hover
@@ -54,12 +47,18 @@
 			&:hover
 				background: $beerus-hover
 
+			.ripples .ripple
+				background-color: $darkgray
+
 		&.v-button-ghost
 			background: none
 			color: $popo
 
 			&:hover
 				background: $ghost
+			
+			.ripples .ripple
+				background-color: $darkgray
 
 		&.v-button-stroke
 			background: transparent
@@ -69,11 +68,18 @@
 			&:hover
 				background: $darkgray
 
+			.ripples .ripple
+				background-color: $darkgray
+
 		&.v-button-transparent
 			background: transparent
+			color: $popo
 
 			&:hover
 				background: transparent
+
+			.ripples .ripple
+				background-color: $darkgray
 
 		/* Transparent */
 		&[class][class*="transparent"]
@@ -83,17 +89,18 @@
 		&.v-button-right
 			flex-direction: row-reverse
 
-			span ~ i.fa
-				margin: 0 $r * 2 0 0
-
-			i.fa:not(.v-dropdown-arrow)
-				margin: 0 0 0 $r * 2
-
 			& ~ .v-button-dropdown
 				right: 0
 
 		/* Content */
 		.text
+			display: inline-flex
+			align-items: center
+			justify-content: center
+			gap: $r * 2
+			position: relative
+			z-index: 1
+
 			& > .link
 				color: inherit
 				display: flex
@@ -104,14 +111,7 @@
 				display: flex
 				align-items: center
 				justify-content: center
-				margin: 0 $r * 2 0 0
 				line-height: 100%
-
-			span ~ i.fa
-				margin: 0 0 0 $r * 2
-
-			i.fa:first-child:last-child
-				margin: 0
 
 			.value
 				display: flex

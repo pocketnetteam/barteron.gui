@@ -30,10 +30,7 @@ export default {
 
 	computed: {
 		type() {
-			if (this.to) {
-				return "router-link";
-			}
-			return "button";
+			return this.to ? "router-link" : "button";
 		},
 
 		value() {
@@ -77,10 +74,10 @@ export default {
 		 */
 		animateRipple(e) {
 			const 
-				el  = this.$refs.button,
-				pos = el.getBoundingClientRect();
-			
-			if (e) {
+				el = this.$refs.button.$el || this.$refs.button,
+				pos = el?.getBoundingClientRect();
+
+			if (e && pos) {
 				this.ripples.push({
 					x: e.clientX - pos.left,
 					y: e.clientY - pos.top,
@@ -123,7 +120,6 @@ export default {
 				this.active = active;
 			}
 
-			this.animateRipple(e);
 			this.$emit("click", e, this);
 		},
 
