@@ -1,5 +1,5 @@
 import Vue from "vue";
-import VueRouter from 'vue-router';
+import VueRouter from "vue-router";
 
 const routes = [
 	{
@@ -65,6 +65,7 @@ Vue.use(VueRouter);
 
 export default new VueRouter({
 	mode: "history",
+	duplicateNavigationPolicy: "reload",
 	scrollBehavior: function(to, from, savedPosition) {
 		if (to.hash) {
 			return {selector: to.hash}
