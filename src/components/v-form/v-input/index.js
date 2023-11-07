@@ -11,13 +11,15 @@ export default {
 		placeholder: { type: [String, Array], default: () => [] },
 		list: { type: [String, Array], default: () => [] },
 		value: { type: [Number, String, Array], default: () => [] },
-
+		
+		vEvents: { type: [Object], default: () => ({}) },
 		vSize: String,
 	},
 
 	data() {
 		return {
-			inputs: []
+			inputs: [],
+			exclude: ["vEvents", "vSize"]
 		}
 	},
 
@@ -28,7 +30,9 @@ export default {
 		 * @returns {Object[]}
 		 */
 		attrs() {
-			return this.getAttrs([this.id, this.name, this.type, this.placeholder, this.value]);
+			return this.getAttrs(
+				Object.keys(this.$props).filter(e => !this.exclude.includes(e))
+			);
 		}
 	},
 
@@ -52,7 +56,7 @@ export default {
 		 * @returns {Object}
 		 */
 		getAttrs(inputs) {
-			const input = Object.keys(this.$props).reduce((o, p) => {
+			const props = inputs.reduce((o, p) => {
 				o[p] = this.toArray(this[p]);
 
 				return o;
@@ -64,10 +68,10 @@ export default {
 				.reduce((a, v, i) => {
 					a.push(
 						/* Generate input keys */
-						Object.keys(input).reduce((o, k) => {
-							if (k === "type") o[k] = this.getType(input[k][i] ?? input[k][input[k].length - 1]);
-							else if (["min", "max"].includes(k)) o[k] = input[k][i] ?? input[k][input[k].length - 1];
-							else o[k] = input[k][i] ?? null
+						Object.keys(props).reduce((o, k) => {
+							if (k === "type") o[k] = this.getType(props[k][i] ?? props[k][props[k].length - 1]);
+							else if (["min", "max"].includes(k)) o[k] = props[k][i] ?? props[k][props[k].length - 1];
+							else o[k] = props[k][i] ?? null
 	
 							return o;
 						}, {})
@@ -89,17 +93,6 @@ export default {
 				case "minmax": return "number";
 				default: return type;
 			}
-		},
-
-		/**
-		 * Emit event to parent
-		 * 
-		 * @param {String} type
-		 * @param {Event} e
-		 * @param {Number} index
-		 */
-		emit(type, e, index) {
-			this.$emit(type, e, this.fields?.[index] ?? e.target);
 		}
 	},
 

@@ -13,20 +13,9 @@
 			<slot :name="`input${ index }Before`"></slot>
 			<input
 				ref="fields"
-				:id="attr.id"
-				:name="attr.name"
-				:type="attr.type"
-				:readonly="attr.readonly"
-				:min="attr.min"
-				:max="attr.max"
-				:placeholder="attr.placeholder"
-				:list="attr.list"
+				v-bind="attr"
 				v-model="attr.value"
-				@change="$event => emit('change', $event, index)"
-				@input="$event => emit('input', $event, index)"
-				@cut="$event => emit('cut', $event, index)"
-				@copy="$event => emit('copy', $event, index)"
-				@paste="$event => emit('paste', $event, index)"
+				v-on="vEvents"
 			/>
 			<slot :name="`input${ index }After`"></slot>
 		</div>
