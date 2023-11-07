@@ -1,10 +1,10 @@
 <template>
 	<form action="#" class="search-bar">
 		<CategorySelect
-		ref="categorySelect"
-		:marked="[catId]"
-		:value="catId"
-		@selected="selected"
+			ref="categorySelect"
+			:marked="[catId]"
+			:value="catId"
+			@selected="selected"
 		/>
 		<v-button
 			vType="light"

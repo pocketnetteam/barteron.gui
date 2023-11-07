@@ -14,6 +14,11 @@ export default {
 	},
 
 	methods: {
+		/**
+		 * Selected category id from lightbox
+		 * 
+		 * @param {Number} id
+		 */
 		selected(id) {
 			this.$router.push({ name: "category", params: { id } });
 		}
