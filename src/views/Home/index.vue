@@ -9,9 +9,8 @@
 		</section>
 
 		<section>
-			<h1>{{ $t('popular_categories') }}</h1>
+			<h1>{{ $t('categories.popular') }}</h1>
 			<PopularList :items="favorites" />
-			<Categories />
 		</section>
 
 		<section v-if="newFromGoods.length">
