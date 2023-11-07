@@ -2,6 +2,7 @@
 	<form action="#" class="search-bar">
 		<CategorySelect
 		ref="categorySelect"
+		:marked="[currentCategory]"
 		:value="currentCategory"
 		@selected="selected"
 		/>
