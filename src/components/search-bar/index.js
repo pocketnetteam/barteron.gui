@@ -8,7 +8,7 @@ export default {
 	},
 
 	computed: {
-		currentCategory() {
+		catId() {
 			return this.$route.name === "category" && this.$route.params.id || "";
 		}
 	},

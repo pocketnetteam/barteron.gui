@@ -5,6 +5,8 @@
 	},
 
 	"search": {
+		"global": "Search on Barteron",
+		"category": "Search in {category}",
 		"placeholder": "Search",
 		"found": "{count} {results} has found",
 		"result": "result",
