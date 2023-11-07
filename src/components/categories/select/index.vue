@@ -18,7 +18,7 @@
 					:placeholder="$t('search.placeholder')"
 					:value="query"
 					:vEvents="{
-						'keyup': search,
+						'keydown': search,
 						'change': change,
 						'input': change
 					}"
@@ -50,7 +50,14 @@
 
 		<!-- Main -->
 		<template #default>
-			<template v-if="!searching && !results.length">
+			<!-- Loader -->
+			<template v-if="searching">
+				<div class="searching">
+					<Loader type="circular" />
+				</div>
+			</template>
+
+			<template v-else-if="!searching && !results.length">
 				<!-- History -->
 				<ul
 					class="history"
@@ -137,13 +144,6 @@
 						</details>
 					</li>
 				</ul>
-			</template>
-
-			<!-- Loader -->
-			<template v-else-if="searching">
-				<div class="searching">
-					<Loader type="circular" />
-				</div>
 			</template>
 		</template>
 

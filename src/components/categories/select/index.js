@@ -80,9 +80,9 @@ export default {
 			while(pid) {
 				const parent = this.categories.items[pid];
 				
-				list.unshift(parent);
+				if (parent?.id) list.unshift(parent);
 
-				pid = parent.parent;
+				pid = parent?.parent;
 			}
 
 			pid = null;
@@ -96,28 +96,31 @@ export default {
 		 * @returns {Void}
 		 */
 		search(e) {
-			if (e && e.keyCode !== 13) return;
-			if (this.changed) return this.clear();
+			if (e?.keyCode === 13) e.preventDefault();
+			if (e?.type === "click" || e?.type === "keydown" && e?.keyCode === 13) {
+				if (this.changed) return this.clear();
 
-			this.input = this.$refs.search?.inputs?.[0];
-			this.query = (this.input?.value || "").toLowerCase();
-			this.searching = true;
-			this.changed = true;
-
-			if (this.query?.length) {
+				this.input = this.$refs.search?.inputs?.[0];
+				this.query = (this.input?.value || "").toLowerCase();
+				this.searching = true;
+				this.changed = true;
 				this.results = [];
-				this.importChildren(Object.keys(this.categories.items)).forEach(item => {
-					const value = this.$t(item.name).toLowerCase();
-
-					if (value.includes(this.query)) {
-						this.results.push({ ...item, history: this.getParents(item) });
-					}
-				});
-
-				this.searching = false;
+	
+				if (this.query?.length) {
+					this.results = [];
+					this.importChildren(Object.keys(this.categories.items)).forEach(item => {
+						const value = this.$t(item.name).toLowerCase();
+	
+						if (value.includes(this.query)) {
+							this.results.push({ ...item, history: this.getParents(item) });
+						}
+					});
+	
+					setTimeout(() => this.searching = false, 1);
+				}
+	
+				if (this.input) this.input.blur();
 			}
-
-			if (this.input) this.input.focus();
 		},
 
 		/**
@@ -199,7 +202,7 @@ export default {
 
 	watch: {
 		value(id) {
-			this.expanded = this.categories.items[id];
+			if (this.categories.items[id]) this.expand(id);
 		}
 	},
 
