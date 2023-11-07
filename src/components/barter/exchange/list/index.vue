@@ -7,10 +7,10 @@
 		<!-- Tags -->
 		<ul class="list">
 			<li
-				v-for="(tag, index) in !editable ? vTags.slice(0, show) : vTags"
+				v-for="(id, index) in !editable ? vTags.slice(0, show) : vTags"
 				:key="index"
 			>
-				{{ $te(categories.items[tag]?.name) ? $t(categories.items[tag]?.name) : tag }}
+				{{ $te(categories.items[id]?.name) ? $t(categories.items[id]?.name) : tag }}
 				<i
 					v-if="editable"
 					class="fa fa-times remove"
@@ -38,43 +38,17 @@
 			<li
 				v-if="($slots.edit || $scopedSlots.edit) && editable"
 				class="add"
+				@click="$refs.categorySelect.show()"
 			>
-				<datalist :id="`categories-${ id }`" ref="list">
-					<option
-						v-for="(item, index) in list[list.length - 1]"
-						:key="index"
-						:disabled="vTags.includes(item.name)"
-						:data-value="item.name"
-					>{{ item.value }}</option>
-				</datalist>
-
-				<i
-					:class="{
-						'fa fa-angle-double-left back': true,
-						'disabled': btnBackDisabled
-					}"
-					:title="!btnBackDisabled && $t('exchange.back')"
-					@click="back"
-				></i>
-				<input
-					ref="tag"
-					type="text"
-					:list="`categories-${ id }`"
-					:placeholder="$t('exchange.add')"
-					@input="validate"
-					@keyup.esc="cancel"
-					@keyup.enter="insert"
-				>
-				<i
-					:class="{
-						'fa fa-plus insert': true,
-						'disabled': btnAddDisabled
-					}"
-					:title="!btnAddDisabled && $t('exchange.insert')"
-					@click="insert"
-				></i>
+				<i class="fa fa-plus"></i>
 			</li>
 		</ul>
+
+		<CategorySelect
+			ref="categorySelect"
+			:marked="vTags"
+			@selected="insert"
+		/>
 
 		<!-- Tags edit -->
 		<div class="edit" v-if="$slots.edit || $scopedSlots.edit">
