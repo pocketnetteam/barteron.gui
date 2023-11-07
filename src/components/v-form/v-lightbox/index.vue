@@ -10,7 +10,10 @@
 	>
 		<slot name="before" v-if="$slots.before"></slot>
 		<section @click.stop="() => {}">
-			<header class="v-lightbox-header">
+			<header
+				class="v-lightbox-header"
+				ref="header"
+			>
 				<template>
 					<div class="title">
 						<h1>{{ title }}</h1>
@@ -24,13 +27,20 @@
 				<slot name="header" v-if="$slots.header"></slot>
 			</header>
 
-			<main v-if="$slots.default">
+			<main
+				v-if="$slots.default"
+				ref="main"
+			>
 				<div class="v-lightbox-content">
 					<slot></slot>
 				</div>
 			</main>
 
-			<footer class="v-lightbox-footer" v-if="$slots.footer">
+			<footer
+				class="v-lightbox-footer"
+				ref="footer"
+				v-if="$slots.footer"
+			>
 				<slot name="footer"></slot>
 			</footer>
 		</section>
