@@ -18,6 +18,7 @@
 				[prefix(vSize ?? 'md', 'v-button')]: true,
 				active
 			}"
+			:disabled="disabled"
 			ref="button"
 			@mousedown="animateRipple"
 			@mousedown.native="animateRipple"

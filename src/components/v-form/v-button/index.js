@@ -2,6 +2,7 @@ export default {
 	name: "Vbutton",
 
 	props: {
+		disabled: [String, Boolean],
 		vAlign: String,
 		vType: String, /* ghost, stroke, bulma, gray */
 		vSize: String,
