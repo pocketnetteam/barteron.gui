@@ -1,15 +1,15 @@
-import Categories from "@/components/categories/index.vue";
+import CategorySelect from "@/components/categories/select/index.vue";
 
 export default {
 	name: "SearchBar",
 
 	components: {
-		Categories
+		CategorySelect
 	},
 
 	methods: {
-		categorySelected(item, button) {
-			console.log(item, button)
+		selected(id) {
+			this.$router.push({ name: "category", params: { id } });
 		}
 	},
 }
