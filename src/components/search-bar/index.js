@@ -7,9 +7,15 @@ export default {
 		CategorySelect
 	},
 
+	computed: {
+		currentCategory() {
+			return this.$route.name === "category" && this.$route.params.id || "";
+		}
+	},
+
 	methods: {
 		selected(id) {
 			this.$router.push({ name: "category", params: { id } });
 		}
-	},
+	}
 }

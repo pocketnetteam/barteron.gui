@@ -2,7 +2,7 @@
 	<form action="#" class="search-bar">
 		<CategorySelect
 		ref="categorySelect"
-		value=""
+		:value="currentCategory"
 		@selected="selected"
 		/>
 		<v-button
