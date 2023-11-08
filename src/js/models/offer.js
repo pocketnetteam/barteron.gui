@@ -30,7 +30,7 @@ class Offer {
 		this.condition = data?.condition || c || "new";
 		this.images = data?.images || images;
 		this.geohash = data?.geohash || data?.p?.s6 || "";
-		this.price = data?.price || data?.p?.i1 || 0;
+		this.price = (data?.price || data?.p?.i1 || 0) / 100;
 
 		const
 			time = data?.time * 1000 || +new Date,
@@ -72,7 +72,7 @@ class Offer {
 	 * @param {Object} data
 	 */
 	set(data) {
-		return this.sdk.setBrtOffer({ ...this.update(data) });
+		return this.sdk.setBrtOffer({ ...this.update(data), price: this.price * 100 });
 	}
 
 	/**
