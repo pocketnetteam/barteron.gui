@@ -72,10 +72,10 @@ export default {
 		 * @returns {Array}
 		 */
 		getParents(item, current) {
-			let pid = item.parent;
+			let   pid = this.categories.items[item?.id ?? item]?.parent;
 			const list = [];
 
-			if (current) pid = item.id;
+			if (current) pid = item?.id;
 
 			while(pid) {
 				const parent = this.categories.items[pid];
@@ -201,8 +201,13 @@ export default {
 	},
 
 	watch: {
+		/**
+		 * Watch for value changes
+		 * 
+		 * @param {Number|String} id
+		 */
 		value(id) {
-			if (this.categories.items[id]) this.expand(id);
+			this.expand(id);
 		}
 	},
 
