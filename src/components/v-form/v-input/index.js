@@ -30,8 +30,11 @@ export default {
 		 * @returns {Object[]}
 		 */
 		attrs() {
+			const data = Object.keys(this.$props).filter(e => !this.exclude.includes(e));
+
 			return this.getAttrs(
-				Object.keys(this.$props).filter(e => !this.exclude.includes(e))
+				data,
+				data.map(prop => this.$props[prop])
 			);
 		}
 	},
@@ -55,20 +58,20 @@ export default {
 		 * 
 		 * @returns {Object}
 		 */
-		getAttrs(inputs) {
-			const props = inputs.reduce((o, p) => {
+		getAttrs(keys, values) {
+			const props = keys.reduce((o, p) => {
 				o[p] = this.toArray(this[p]);
 
 				return o;
 			}, {});
 
-			return inputs
+			return values
 				.map(m => this.toArray(m))
 				.sort((a, b) => a.length > b.length ? -1 : (a.length < b.length ? 1 : 0))[0]
 				.reduce((a, v, i) => {
 					a.push(
 						/* Generate input keys */
-						Object.keys(props).reduce((o, k) => {
+						keys.reduce((o, k) => {
 							if (k === "type") o[k] = this.getType(props[k][i] ?? props[k][props[k].length - 1]);
 							else if (["min", "max"].includes(k)) o[k] = props[k][i] ?? props[k][props[k].length - 1];
 							else o[k] = props[k][i] ?? null
