@@ -217,5 +217,7 @@ export default {
 				id => !this.categories.items[id].parent
 			)
 		);
+
+		if (this.value) this.expand(this.value);
 	}
 }
