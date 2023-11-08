@@ -1,0 +1,67 @@
+@import "@/css/vars.sass"
+
+.category-field
+	background-color: $goku
+	border: 1px solid $beerus
+	border-radius: 1rem
+	cursor: pointer
+	padding: 2px
+
+	.category-field-holder
+		position: relative
+		font-size: 1.2em
+		padding: .7em calc(26px + .7em) .7em .7em
+		width: 100%
+
+		ul
+			+resetList()
+			color: $backdrop
+			display: flex
+			gap: .7em
+			
+			li
+				flex-shrink: 10
+				overflow: hidden
+				text-overflow: ellipsis
+				white-space: nowrap
+				height: 100%
+
+				&:not(:first-child)
+					position: relative
+					padding: 0 0 0 calc(#{$r*2} + 3px)
+
+				&:first-child
+					.fa
+						display: none
+
+				&:last-child
+					flex-shrink: 0
+
+				.fa
+					position: absolute
+					top: 50%
+					left: 0
+					transform: translateY(-50%)
+
+		.clear
+			+transition(background-color)
+			background-color: $dodoria
+			border-radius: 2px .75rem .75rem 2px
+			color: $gohan
+			cursor: pointer
+			display: flex
+			align-items: center
+			justify-content: center
+			padding: $r
+			position: absolute
+			top: 0
+			right: 0
+			height: 100%
+			width: 26px
+
+			&:hover
+				background-color: $dodoria-hover
+
+			&.disabled
+				background-color: $gray
+				cursor: default
