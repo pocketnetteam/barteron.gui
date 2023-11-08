@@ -65,5 +65,9 @@ export default {
 		value(id) {
 			this.id = id;
 		}
+	},
+
+	mounted() {
+		if (this.value) this.id = this.value;
 	}
 }
