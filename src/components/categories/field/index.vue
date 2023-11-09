@@ -1,5 +1,11 @@
 <template>
-	<div class="category-field">
+	<div
+		:class="{
+			'category-field': true,
+			'filled': id,
+			'focus-within': $refs?.categorySelect?.visible
+		}"
+	>
 		<div
 			class="category-field-holder"
 			@click="$refs.categorySelect.show()"

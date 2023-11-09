@@ -1,16 +1,27 @@
 @import "@/css/vars.sass"
 
 .category-field
+	+transition(background-color)
 	background-color: $goku
 	border: 1px solid $beerus
 	border-radius: 1rem
 	cursor: pointer
-	padding: 2px
+	padding: 1px
+
+	&.focus-within
+		background: none
+
+		.category-field-holder
+			+transition(border-color, .3s, ease-in)
+			border-color: $blue
 
 	.category-field-holder
+		+transition(border-color, 0s, ease-out)
+		border: 2px solid transparent
+		border-radius: .85em
 		position: relative
 		font-size: 1.2em
-		padding: .7em calc(26px + .7em) .7em .7em
+		padding: calc(.7em - 1px) calc(26px + .7em) calc(.7em - 1px) .7em
 		width: 100%
 
 		ul
@@ -18,6 +29,9 @@
 			color: $backdrop
 			display: flex
 			gap: .7em
+
+			@at-root .filled#{&}
+				color: $popo
 			
 			li
 				flex-shrink: 10
@@ -46,7 +60,7 @@
 		.clear
 			+transition(background-color)
 			background-color: $dodoria
-			border-radius: 2px .75rem .75rem 2px
+			border-radius: 2px .9rem .9rem 2px
 			color: $gohan
 			cursor: pointer
 			display: flex
@@ -54,9 +68,9 @@
 			justify-content: center
 			padding: $r
 			position: absolute
-			top: 0
-			right: 0
-			height: 100%
+			top: 1px
+			right: 1px
+			height: calc(100% - 2px)
 			width: 26px
 
 			&:hover
