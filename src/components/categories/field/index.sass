@@ -44,18 +44,20 @@
 					position: relative
 					padding: 0 0 0 calc(#{$r*2} + 3px)
 
+					&:before
+						+fontAwesome("\f105")
+						color: $trunks
+						position: absolute
+						top: 50%
+						left: 0
+						transform: translateY(-50%)
+
 				&:first-child
 					.fa
 						display: none
 
 				&:last-child
 					flex-shrink: 0
-
-				.fa
-					position: absolute
-					top: 50%
-					left: 0
-					transform: translateY(-50%)
 
 		.clear
 			+transition(background-color)

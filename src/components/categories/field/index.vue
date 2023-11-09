@@ -16,12 +16,10 @@
 					:key="index"
 				>
 					{{ $t(parent.name) }}
-					<i class="fa fa-angle-right" v-if="index"></i>
 				</li>
 
 				<li>
 					{{ $t(id && categories.items[id]?.name || 'categories.choose') }}
-					<i class="fa fa-angle-right"></i>
 				</li>
 			</ul>
 

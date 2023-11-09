@@ -78,8 +78,6 @@
 							@click="expand(parent.id)"
 						>{{ $t(parent.name) }}</a>
 						<span v-else>{{ $t(parent.name) }}</span>
-
-						<i class="fa fa-angle-right"></i>
 					</li>
 				</ul>
 
