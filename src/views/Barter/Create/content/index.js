@@ -1,6 +1,6 @@
 import { GeoHash } from "geohash";
 import BarterList from "@/components/barter/list/index.vue";
-import CategoriesSelect from "@/components/categories/multiple-select/index.vue";
+import Category from "@/components/categories/field/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
 
 export default {
@@ -8,7 +8,7 @@ export default {
 
 	components: {
 		BarterList,
-		CategoriesSelect,
+		Category,
 		ExchangeList
 	},
 
@@ -106,20 +106,21 @@ export default {
 		calcPrice(reverse) {
 			const
 				values = this.sdk.currency,
-				price = this.$refs.price.$refs.fields[0],
+				price = this.$refs.price.inputs?.[0],
 				currency = this.$refs.currency?.selected?.toUpperCase();
 
-				if (Object.keys(values).length) {
-					if (reverse?.target) {
-						/* Typing in price field */
-						this.price = parseInt(price.value);
-						this.pkoin = Math.ceil(((this.price / values[currency]) * 100) / 100);
-					} else {
-						/* Get value from offer */
-						this.pkoin = parseInt(reverse);
-						this.price = Math.ceil(((this.pkoin * values[currency]) * 100) / 100);
-					}
+			if (Object.keys(values).length) {
+				if (!price?.value.length) price.value = 0;
+				if (reverse?.target || reverse?.value) {
+					/* Typing in price field */
+					this.price = parseFloat(price?.value || 0);
+					this.pkoin = (((this.price / values[currency]) * 100) / 100).toFixed(2);
+				} else {
+					/* Get value from offer */
+					this.pkoin = parseFloat(reverse || 0);
+					this.price = (((this.pkoin * values[currency]) * 100) / 100).toFixed(2);
 				}
+			}
 		},
 
 		/**
@@ -139,20 +140,16 @@ export default {
 							this.tags = offer.tags;
 						}
 					}
+
 					if (offer.condition) this.condition = offer.condition;
 	
-					if (offer.images && this.$refs.photos) this.$refs.photos.remove().add(offer.images);
-					if (offer.tag && this.$refs.category) this.$refs.category.remove().value(offer.tag);
-					if (offer.price && this.$refs.price) this.calcPrice(offer.price);
+					if (offer.price) this.calcPrice(offer.price);
 				} else {
 					/* Reset fields to default */
 					this.tags = [];
 					this.getting = "something";
 					this.condition = "new";
-	
-					if (this.$refs.photos) this.$refs.photos.remove();
-					if (this.$refs.category) this.$refs.category.remove();
-					if (this.$refs.price) this.calcPrice(0);
+					this.price = this.pkoin = 0;
 				}
 			}, 10);
 		},

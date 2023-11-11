@@ -18,7 +18,11 @@
 			
 			<div class="row block sep">
 				<!-- Select: Category -->
-				<CategoriesSelect ref="category" class="field" />
+				<Category
+					ref="category"
+					class="field"
+					:value="offer.tag"
+				/>
 			</div>
 
 			<div class="row block sep">
@@ -27,11 +31,12 @@
 
 				<!-- vPhotos -->
 				<v-photos
-					class="field"
 					ref="photos"
+					class="field"
 					multiple="multiple"
 					accept="jpeg, png"
 					maxLen="10"
+					:images="offer.images"
 				/>
 
 				<!-- Paragraph: Image upload text -->
@@ -54,7 +59,7 @@
 					:label="[$t('my_list'), $t('something'), $t('for_nothing')]"
 					vType="button"
 					vSize="lg"
-					@change="(value) => getting = value"
+					@change="(tags) => getting = tags"
 				/>
 			</div>
 
@@ -63,13 +68,19 @@
 				<template v-if="getting === 'my_list'">
 					<ExchangeList
 						class="field"
+						key="account"
+						ref="account"
 						vSize="lg"
 						:tags="account?.tags || []"
 						:title="false"
+						:editable="true"
+						@change="(tags) => account.set({ tags })"
 					>
 						<template #default="{ instance }">
 							<input name="tags" type="hidden" :value="instance.vTags.join()">
 						</template>
+
+						
 					</ExchangeList>
 				</template>
 
@@ -77,35 +88,16 @@
 				<template v-if="getting === 'something'">
 					<ExchangeList
 						class="field"
+						key="something"
+						ref="something"
 						vSize="lg"
 						:tags="tags"
 						:title="false"
+						:editable="true"
 						@change="(value) => tags = value"
 					>
 						<template #default="{ instance }">
 							<input name="tags" type="hidden" :value="instance.vTags.join()">
-						</template>
-
-						<template #edit="something">
-							<!-- Edit button -->
-							<template v-if="!something.instance.editable">
-								<v-button @click="something.instance.edit">
-									<i class="fa fa-pencil-alt fa-shrink"></i>
-								</v-button>
-							</template>
-
-							<!-- Cancel and Save buttons -->
-							<template v-else>
-								<div class="buttons-holder">
-									<v-button vType="chi-chi" @click="something.instance.cancel">
-										{{ $t('buttonLabels.cancel') }}
-									</v-button>
-
-									<v-button @click="something.instance.save">
-										{{ $t('exchange.save') }}
-									</v-button>
-								</div>
-							</template>
 						</template>
 					</ExchangeList>
 				</template>
@@ -122,11 +114,13 @@
 					:type="['number', 'number']"
 					:readonly="[null, true]"
 					:value="[price, pkoin]"
-					:min="['0.01', '']"
+					:min="['0', '']"
 					class="currency-input"
 					vSize="lg"
-					@input="calcPrice"
-					@change="calcPrice"
+					:vEvents="{
+						'input': calcPrice,
+						'change': calcPrice
+					}"
 				>
 					<template #input0After>
 						<v-select
