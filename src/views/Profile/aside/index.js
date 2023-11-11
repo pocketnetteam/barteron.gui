@@ -38,16 +38,5 @@ export default {
 		account() {
 			return this.sdk.barteron.accounts[this.address];
 		}
-	},
-
-	methods: {
-		/**
-		 * Store tags to account
-		 * 
-		 * @param {Array} tags 
-		 */
-		changeTags(tags) {
-			this.account.set({ tags });
-		}
 	}
 }

@@ -31,11 +31,12 @@
 		<div class="box">
 			<ExchangeList
 				:tags="account?.tags || []"
-				@change="changeTags"
+				:editable="isMyProfile"
+				@change="(tags) => account.set({ tags })"
 			>
-				<template #edit="{ instance }" v-if="isMyProfile">
+				<template #edit="{ instance }">
 					<!-- Edit button -->
-					<template v-if="!instance.editable">
+					<template v-if="!instance.editing">
 						<v-button vType="bulma-stroke" @click="instance.edit">
 							{{ $t('exchange.edit') }}
 						</v-button>
