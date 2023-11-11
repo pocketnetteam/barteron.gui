@@ -1,3 +1,4 @@
+import Vue from "vue";
 import CategorySelect from "@/components/categories/select/index.vue";
 
 export default {
@@ -29,6 +30,22 @@ export default {
 		vSize: {
 			type: String,
 			default: "md"
+		},
+		editable: {
+			type: Boolean,
+			default: false
+		},
+		editText: {
+			type: String,
+			default: "<i class='fa fa-pencil-alt fa-shrink'></i>"
+		},
+		cancelText: {
+			type: String,
+			default: "<i class='fa fa-times fa-shrink'></i>"
+		},
+		saveText: {
+			type: String,
+			default: "<i class='fa fa-check fa-shrink'></i>"
 		}
 	},
 
@@ -36,7 +53,7 @@ export default {
 		return {
 			instance: this, /* Give instance to slot */
 			id: Math.random().toString(16).slice(2),
-			editable: false,
+			editing: false,
 			vTags: [].concat(this.tags),
 			show: this.visible
 		}
@@ -85,7 +102,7 @@ export default {
 		 * Edit state
 		 */
 		edit() {
-			this.editable = true;
+			this.editing = true;
 		},
 
 		/**
@@ -93,14 +110,14 @@ export default {
 		 */
 		cancel() {
 			this.vTags = [].concat(this.tags);
-			this.editable = false;
+			this.editing = false;
 		},
 
 		/**
 		 * Save state
 		 */
 		save() {
-			this.editable = false;
+			this.editing = false;
 			this.$emit('change', this.vTags);
 		}
 	},
