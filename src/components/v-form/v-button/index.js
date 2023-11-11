@@ -1,12 +1,17 @@
+import Vue from "vue";
+
 export default {
 	name: "Vbutton",
 
 	props: {
 		disabled: [String, Boolean],
-		vAlign: String,
-		vType: String, /* ghost, stroke, bulma, gray */
-		vSize: String,
+		vAlign: String,	/* right */
+		vType: String,	/* ghost, stroke, bulma, gray */
+		vSize: String,	/* xs, sm, md, lg, xl */
 		to: [String, Object],
+
+		vText: String,
+		vHtml: String,
 
 		dropdown: {
 			type: Array,
@@ -36,6 +41,15 @@ export default {
 
 		value() {
 			return this.$slots?.default[0]?.elm?.parentNode?.querySelector(this.valueSelector);
+		},
+
+		rawHTML() {
+			const string = new DOMParser()
+				.parseFromString(this.vText || this.vHtml, "text/html").body.childNodes[0];
+				
+			this.$nextTick(() => {
+				this.$refs.text.insertBefore(string, null);
+			});
 		},
 
 		hasDropdown() {

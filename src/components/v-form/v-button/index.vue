@@ -26,11 +26,15 @@
 			@touch:start.native="animateRipple"
 			@click="clickButton"
 		>
-			<div class="text">
-				<slot></slot>
+			<span
+				class="text"
+				ref="text"
+			>
+				<slot v-if="$slots.default"></slot>
+				<template v-if="vHtml || vText">{{ rawHTML }}</template>
 
 				<i class="fa fa-angle-down v-dropdown-arrow" v-if="hasDropdown"></i>
-			</div>
+			</span>
 
 			<transition-group
 				class="ripples"
