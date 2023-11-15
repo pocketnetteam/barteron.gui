@@ -22,7 +22,7 @@ class SDK {
 
 	_address = "";
 	get address() {
-		if (!this._address) this.getAccount();
+		if (!this._address) this.getAddress();
 		return this._address;
 	}
 
@@ -34,7 +34,10 @@ class SDK {
 
 	_location = {};
 	get location() {
-		if (this.empty("_location")) this.getLocation();
+		if (this.empty("_location")) {
+			this.getLocation();
+		}
+
 		return this._location;
 	}
 
@@ -104,7 +107,7 @@ class SDK {
 		this.accounts = new Proxy(this._accounts, {
 			get(target, address) {
 				if (typeof address !== "string" || address?.length < 32) return this;
-				else if (!target?.[address]) $.getUserInfo(address);
+				else if (!target?.[address]) $.getUserProfile(address);
 				return target?.[address];
 			}
 		})
@@ -186,6 +189,17 @@ class SDK {
 	}
 
 	/**
+	 * Check if permission is granted
+	 * 
+	 * @param {String} permission - Permission name
+	 * 
+	 * @returns {Boolean}
+	 */
+	checkPermission(permission) {
+		return this.sdk.check.permission({ permission });
+	}
+
+	/**
 	 * Request permissions
 	 * 
 	 * @param {Array} permissions
@@ -198,8 +212,9 @@ class SDK {
 
 		if (!this.permissionsDialog?.[hash]) {
 			this.permissionsDialog[hash] = this.sdk.request.permissions(permissions)
-				.then(() => {
+				.then(result => {
 					this.lastresult = "messaging: granted"
+					return result.reduce((o, p) => ({ ...o, ...p }), {});
 				})
 				.catch(e => this.setLastResult(e))
 				.finally(() => delete this.permissionsDialog[hash])
@@ -213,12 +228,38 @@ class SDK {
 	 * 
 	 * @returns {Promise}
 	 */
-	getAccount() {
-		return this.sdk.get.account().then(({ address }) => {
-			this.lastresult = "user address: " + address;
-			Vue.set(this, "_address", address);
-			return address;
-		}).catch(e => this.setLastResult(e));
+	async getAddress() {
+		const isGranted = await this.checkPermission("account");
+
+		if (isGranted) {
+			return this.sdk.get.account().then(({ address }) => {
+				this.lastresult = "user address: " + address;
+				Vue.set(this, "_address", address);
+				return address;
+			}).catch(e => this.setLastResult(e));
+		} else {
+			return Promise.resolve({});
+		}
+	}
+
+	/**
+	 * Get bastyon user by address
+	 * 
+	 * @prop {String} address
+	 * 
+	 * @returns {Promise}
+	 */
+	async getUserProfile(address) {
+		if (!address && !this._address) await this.getAddress();
+		address = address || this._address;
+		if (!this._accounts[address]) Vue.set(this._accounts, address, {});
+
+		return this.rpc("getuserprofile", [address]).then(accounts => {
+			return accounts?.map(account => {
+				Vue.set(this._accounts, account.address, account);
+				return account;
+			});
+		});
 	}
 
 	/**
@@ -259,12 +300,18 @@ class SDK {
 	 * 
 	 * @returns {Promise}
 	 */
-	getLocation() {
-		return this.sdk.get.location().then(location => {
-			this.lastresult = location;
-			Vue.set(this, "_location", location);
-			return location;
-		}).catch(e => this.setLastResult(e));
+	async getLocation() {
+		const isGranted = await this.checkPermission("location");
+		
+		if (isGranted) {
+			return this.sdk.get.location().then(location => {
+				this.lastresult = location;
+				Vue.set(this, "_location", location);
+				return this._location;
+			}).catch(e => this.setLastResult(e))
+		} else {
+			return Promise.resolve(this._location);
+		}
 	}
 
 	/**
@@ -354,26 +401,6 @@ class SDK {
 	}
 
 	/**
-	 * Get bastyon user info
-	 * 
-	 * @prop {String} address
-	 * 
-	 * @returns {Promise}
-	 */
-	async getUserInfo(address) {
-		if (!address && !this._address) await this.getAccount();
-		address = address || this._address;
-		if (!this._accounts[address]) Vue.set(this._accounts, address, {});
-
-		return this.rpc("getuserprofile", [address]).then(accounts => {
-			return accounts?.map(account => {
-				Vue.set(this._accounts, account.address, account);
-				return account;
-			});
-		});
-	}
-
-	/**
 	 * Get Node data
 	 * 
 	 * @returns {Promise}
@@ -436,7 +463,7 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	async getBrtOffers(address) {
-		if (!address && !this._address) await this.getAccount();
+		if (!address && !this._address) await this.getAddress();
 		address = address || this._address;
 
 		return this.rpc("getbarteronoffersbyaddress", address).then(offers => {
