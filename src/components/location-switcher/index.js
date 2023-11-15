@@ -6,7 +6,9 @@ export default {
 	data() {
 		return {
 			lightbox: false,
-			addr: {}
+			addr: {
+				fetching: false
+			}
 		}
 	},
 
@@ -43,9 +45,12 @@ export default {
 		 * 
 		 * @returns {Array|null}
 		 */
-		location() {
-			const location = this.sdk.location;
-			return location.latitude ? Object.values(location) : null; 
+		location: {
+			cache: false,
+			get() {
+				const location = this.sdk.location;
+				return location.latitude ? Object.values(location) : null; 
+			}
 		},
 
 		/**
@@ -67,20 +72,31 @@ export default {
 		 * 
 		 * @returns {Object|null}
 		 */
-		address() {
-			if (!this.addr.country) {
-				if (!this.addr.fetching && (this.geohash || this.location)) {
-					this.addr.fetching = true;
-
-					this.sdk.geoLocation(this.account.static ? this.geohash : this.location)
-						.then(result => {
-							this.$set(this, "addr", result.address);
-						});
+		address: {
+			cache: false,
+			get() {
+				if (!this.addr?.country) {
+					const location = this.account?.static ? this.geohash : this.location;
+	
+					if (
+						!this.addr.fetching &&
+						location
+					) {
+						this.addr.fetching = true;
+	
+						this.sdk.geoLocation(location)
+							.then(result => {
+								this.$set(this, "addr", { ...this.addr, ...result.address });
+							});
+					}
+	
+					return null;
+				} else {
+					return [
+						this.addr.country,
+						this.addr.city || this.addr.town || this.addr.county
+					].filter(a => a).join(", ");
 				}
-
-				return null;
-			} else {
-				return this.addr;
 			}
 		}
 	},
@@ -90,7 +106,12 @@ export default {
 		 * Show lightbox
 		 */
 		showLightbox() {
-			this.lightbox = true;
+			this.sdk.requestPermissions(["location"]).then(result => {
+				console.log(result)
+				if (result?.location) {
+					this.lightbox = true;
+				}
+			});
 		},
 
 		/**
