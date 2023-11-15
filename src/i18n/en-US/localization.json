@@ -134,6 +134,7 @@
 	},
 
 	"location": {
+		"unknown": "Unknown",
 		"preferred": "Location for new offers",
 		"static": "Static",
 		"dynamic": "Dynamic",
@@ -157,7 +158,6 @@
 
 		"error#-26": "Min relay fee not met",
 		"error#-1": "Error loading sdk library",
-		"error#-2": "Connection error. Try again?",
 		"error#0": "{details}",
 		"error#21": "Failed OpReturn",
 		"error#28": "Too many transactions",
