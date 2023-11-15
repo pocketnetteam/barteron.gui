@@ -13,14 +13,13 @@
 	visibility: hidden
 	height: 100%
 	width: 100%
-	z-index: -1
+	z-index: 1100
 	+transition()
 
 	/* Visible state */
 	&.v-lightbox-open
 		background: $overlay-visible
 		visibility: visible
-		z-index: 1100
 
 		section
 			display: flex

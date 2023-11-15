@@ -30,13 +30,16 @@
 		.ripples .ripple
 			background-color: $border
 
-		/* Color */
+	/* Color */
 	&.v-button-#{$name}-color
-		background: transparent
 		color: $background
 
 		&:hover
 			color: $hoverColor
+
+		&.v-button-#{$name}-color-hover
+			&:hover
+				color: $hover
 
 		.ripples .ripple
 			background-color: $border
