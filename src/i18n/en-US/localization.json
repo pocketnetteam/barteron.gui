@@ -165,6 +165,8 @@
 	},
 
 	"feedbacks": {
+		"title": "Rating",
+		"votes": "{count} votes",
 		"placeholder": "Leave your feedback here",
 		"empty": "There is no feedbacks yet"
 	},
