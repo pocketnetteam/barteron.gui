@@ -49,28 +49,30 @@ export default {
 
 	methods: {
 		/**
-		 * Parse links with account permission
+		 * Parse links with permission request
 		 * 
 		 * @param {MouseEvent} e
 		 * @param {Object} to
 		 * 
-		 * @returns {Void}
+		 * @returns {false}
 		 */
-		requestAccount(e, to) {
+		requestPermissions(e, to, permissions = ["account"]) {
 			e.preventDefault();
 			
-			this.sdk.requestPermissions(["account"]).then(async result => {
+			this.sdk.requestPermissions(permissions).then(async result => {
 				if (result?.account) {
 					if (this.address === "%address%") {
-						const address = await this.sdk.getAddress();
+						const
+							address = await this.sdk.getAddress(),	/* Get account address */
+							params = to?.params || to || {};				/* Get route params */
 
-						for (const p in to?.params || {}) {
-							to.params[p] = to.params[p].replace("%address%", address);
+						for (const p in params) {
+							params[p] = params[p].replace("%address%", address);
 						}
 					}
-
-					if (to) this.$router.push(to);
 				}
+
+				if (permissions.every(p => result?.[p]) && to) this.$router.push(to);
 			});
 
 			return false;

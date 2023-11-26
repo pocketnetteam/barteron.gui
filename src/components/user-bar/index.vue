@@ -4,7 +4,7 @@
 			<li>
 				<a
 					class="link"
-					@click="$event => requestAccount($event, { name: 'profile', params: { id: `${ address }#favorites` } })"
+					@click="$event => requestPermissions($event, { path: `/profile/${ address }#favorites` })"
 				>
 					<i class="fa fa-heart"></i>
 			</a>
@@ -13,7 +13,7 @@
 			<li>
 				<a
 					class="link"
-					@click="$event => requestAccount($event, { name: 'profile', params: { id: `${ address }#feedbacks` } })"
+					@click="$event => requestPermissions($event, { path: `/profile/${ address }#feedbacks` })"
 				>
 					<i class="fa fa-comment"></i>
 			</a>
@@ -22,7 +22,7 @@
 			<li>
 				<a
 					class="avatar"
-					@click="$event => requestAccount($event, { name: 'profile', params: { id: address } })"
+					@click="$event => requestPermissions($event, { path: `/profile/${ address }` })"
 				>
 					<i
 						v-if="!user?.i"
@@ -36,7 +36,7 @@
 			</li>
 
 			<li>
-				<v-button @click="$event => requestAccount($event, { name: 'createBarter' })">
+				<v-button @click="$event => requestPermissions($event, { name: 'createBarter' })">
 					<i class="fa fa-plus"></i>
 					<span>Create barter</span>
 				</v-button>
