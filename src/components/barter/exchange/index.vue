@@ -27,14 +27,14 @@
 
 			<v-button
 				v-if="groupExchange.length"
-				vType="stroke"
+				vType="bulma-stroke"
 				class="btn-group"
 			>
 				<span>
 					<i class="fa fa-users"></i>
 					<span>{{ $t('buttonLabels.group_exchange') }}</span>
 				</span>
-				<ul>
+				<ul :style="{ '--len': groupExchange.length }">
 					<li
 						v-for="(item, index) in groupExchange" :key="index"
 					>
