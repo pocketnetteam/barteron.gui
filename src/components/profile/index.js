@@ -1,7 +1,12 @@
 import NameToHSL from "@/js/nametohsl.js";
+import Score from "@/components/score/index.vue";
 
 export default {
 	name: "Profile",
+
+	components: {
+		Score
+	},
 
 	props: {
 		address: {
