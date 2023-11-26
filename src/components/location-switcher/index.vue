@@ -28,7 +28,7 @@
 					<div class="row info">
 						<i class="fa fa-map-marker-alt"></i>
 						<span>
-							<template v-if="address">{{ address }}</template>
+							<template>{{ address ?? $t('location.unknown') }}</template>
 						</span>
 					</div>
 
@@ -72,10 +72,10 @@
 						<!-- vMap -->
 						<v-map
 							ref="map"
-							:center="mapType === 'static' ? geohash : location"
+							:center="mapType === 'static' ? geohash : (location || undefined)"
 							:allowPosition="true"
 							:allowSelection="true"
-							v-if="address"
+							v-if="lightbox"
 						/>
 					</div>
 				</v-form>

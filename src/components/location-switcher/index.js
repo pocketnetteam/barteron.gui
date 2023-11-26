@@ -106,12 +106,7 @@ export default {
 		 * Show lightbox
 		 */
 		showLightbox() {
-			this.sdk.requestPermissions(["location"]).then(result => {
-				console.log(result)
-				if (result?.location) {
-					this.lightbox = true;
-				}
-			});
+			this.lightbox = true;
 		},
 
 		/**
