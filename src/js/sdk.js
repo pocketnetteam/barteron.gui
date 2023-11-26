@@ -34,7 +34,7 @@ class SDK {
 
 	_location = {};
 	get location() {
-		if (this.empty("_location")) {
+		if (this.empty(this._location)) {
 			this.getLocation();
 		}
 
@@ -43,12 +43,12 @@ class SDK {
 
 	_currency = {};
 	get currency() {
-		if (this.empty("_currency")) this.getCurrency();
+		if (this.empty(this._currency)) this.getCurrency();
 		return this._currency;
 	}
 
 	empty(prop) {
-		return !Object.values(this?.[prop]).length;
+		return !Object.values(prop).length;
 	}
 
 	cyrb53(str, seed = 0) {
@@ -115,34 +115,40 @@ class SDK {
 		/* Inner storage */
 		this.barteron = {
 			_accounts: {},
-			_offers: {}
+			_offers: {},
+			_details: {}
 		};
 
 		/* Observe sub-objects watchers */
 		this.barteron = {
 			...this.barteron,
 
-			/* Barteron account operations */
+			/* Barteron account */
 			accounts: new Proxy(this.barteron._accounts, {
 				get(target, address) {
 					if (typeof address !== "string" || address?.length < 32) return this;
 					else if (!target?.[address]) $.getBrtAccount(address);
 					return target?.[address];
-				},
-				set(target, address, data) {
-					return $.setBrtAccount({ address, ...data });
 				}
 			}),
 
-			/* Barteron offers operations */
+			/* Barteron offers */
 			offers: new Proxy(this.barteron._offers, {
 				get(target, hash) {
 					if (hash !== "draft" && (typeof hash !== "string" || hash?.length < 64)) return this;
 					else if (!target?.[hash]) $.getBrtOffersByHashes([hash]);
 					return target?.[hash];
-				},
-				set(target, hash, data) {
-					return $.setBrtOffer({ hash, ...data });
+				}
+			})
+
+			,
+
+			/* Barteron offers details */
+			details: new Proxy(this.barteron._details, {
+				get(target, hash) {
+					if (hash !== "draft" && (typeof hash !== "string" || hash?.length < 64)) return this;
+					else if (!target?.[hash]) $.getBrtOffersDetails({ offerIds: [hash] });
+					return target?.[hash];
 				}
 			})
 		}
@@ -310,6 +316,7 @@ class SDK {
 				return this._location;
 			}).catch(e => this.setLastResult(e))
 		} else {
+			Vue.set(this, "_location", this._location);
 			return Promise.resolve(this._location);
 		}
 	}
@@ -535,6 +542,60 @@ class SDK {
 	}
 
 	/**
+	 * Get barteron offers details
+	 * 
+	 * @param {Object} request
+	 * 
+	 * Base
+	 * 
+	 * @param {Array[String]} request.offerIds Offer tx hashes
+	 * @param {Boolean} request.includeAccounts Owner's accounts data, default: true
+	 * @param {Boolean} request.includeScores Owner's accounts scores, default: true
+	 * @param {Boolean} request.includeComments Owner's feedbacks, default: true
+	 * @param {Boolean} request.includeCommentScores Owner's feedbacks scores, default: true
+	 * 
+	 * @returns {Promise}
+	 */
+	getBrtOffersDetails(request) {
+		request?.offerIds.forEach(hash => {
+			if (!this.barteron._details[hash]) {
+				Vue.set(this.barteron._details, hash, {});
+			}
+		});
+
+		return this.rpc("getbarteronoffersdetails", {
+			offerIds: [],
+			includeAccounts: true,
+			includeScores: true,
+			includeComments: true,
+			includeCommentScores: true,
+			...request
+		}).then(details => {
+			request?.offerIds.forEach(hash => {
+				if (!this.empty(details)) {
+					const data = {};
+
+					/* Map responses with their hashes */
+					for (const key in details) {
+						if (key === "accounts") {
+							data[key] = details[key]?.map(account => {
+								account = new Account(this, account);
+								return Vue.set(this.barteron._accounts, account.address, account);
+							}) || [];
+						} else {
+							data[key] = details[key]?.filter(f => f.hash === hash) || [];
+						}
+					}
+
+					Vue.set(this.barteron._details, hash, data);
+				}
+			});
+
+			return details;
+		});
+	}
+
+	/**
 	 * Get barteron offers feed
 	 * 
 	 * @param {Object} request
@@ -608,7 +669,6 @@ class SDK {
 	 */
 	setBrtComment(data) {
 		return this.sdk.set.barteron.comment(data).then(result => {
-			if (data.answerid) Vue.set(this.barteron._comments, data.answerid, data);
 			return result;
 		});
 	}
