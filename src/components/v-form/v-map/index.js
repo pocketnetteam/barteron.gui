@@ -91,9 +91,12 @@ export default {
 		 * 
 		 * @returns {Array|null}
 		 */
-		location() {
-			const location = Object.values(this.sdk.location);
-			return location.length ? location : null;
+		location: {
+			cache: false,
+			get() {
+				const location = Object.values(this.sdk.location);
+				return location.length ? location : null;
+			}
 		}
 	},
 
@@ -104,6 +107,11 @@ export default {
 	},
 
 	mounted() {
+		/* Request for permissons */
+		this.sdk.requestPermissions(["location"]).then(() => {
+			this.$forceUpdate();
+		});
+		
 		this.mapObject = this.$refs.map.mapObject;
 		
 		if(this.allowSelection) {

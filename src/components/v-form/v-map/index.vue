@@ -3,14 +3,14 @@
 		<l-map ref="map" :style="`height: ${ height }`" :zoom="zoom" :center="marker || center">
 			<template v-if="allowPosition">
 				<l-circle
-					:latLng="location"
+					:latLng="location || {lat: center[0], lng: center[1]}"
 					:radius="50"
 					:stroke="false"
 					:fillColor="'#136aec'"
 					:fillOpacity="0.15"
 				/>
 				<l-circle-marker
-					:latLng="location"
+					:latLng="location || {lat: center[0], lng: center[1]}"
 					:radius="9"
 					:color="'#fff'"
 					:fillColor="'#2a93ee'"
