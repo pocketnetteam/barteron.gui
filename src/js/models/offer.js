@@ -21,7 +21,7 @@ class Offer {
 		
 		/* Iterable properties */
 		this.address = data?.address || data?.s1 || "";
-		this.hash = data?.hash || data?.s2 || null;
+		this.hash = data?.s2 || data?.hash || null;
 		this.language = data?.language || data?.p?.s1 || "";
 		this.caption = data?.caption || data?.p?.s2 || "";
 		this.description = data?.description || data?.p?.s3 || "";

@@ -56,8 +56,10 @@ class Account {
 	 * 
 	 * @param {Object} data
 	 */
-	set(data) {
-		return this.sdk.setBrtAccount({ ...this.update(data) });
+	async set(data) {
+		const result = await this.sdk.requestPermissions(["account"]);
+		
+		return result?.account ? this.sdk.setBrtAccount({ ...this.update(data) }) : Promise.reject(result);
 	}
 
 	/**
