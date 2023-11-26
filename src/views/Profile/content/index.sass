@@ -1,16 +1,22 @@
 @import "@/css/vars.sass"
 	
-.tabs.inner-tabs
-	.tabset
-		> ul
-			li
+.tabs
+	.inner-tabs
+		.tabset
+			> ul li
 				margin: -.45em 0 -.45em
 
-	.tabset-after
-		margin-left: auto
+		.tabset-after
+			margin-left: auto
 
-	.tabcontent
-		padding: 1.15em 1.15em .7em
+		.tabcontent
+			padding: 0
+
+		.tabcontent-holder
+			padding: 1.15em 1.15em .7em
+
+	.tabcontent-holder
+		padding: .7em
 
 div[class*="barter-item"]
 	.favorite

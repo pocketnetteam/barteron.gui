@@ -1,12 +1,12 @@
 import BarterList from "@/components/barter/list/index.vue";
-import Feedbacks from "@/components/barter/feedbacks/index.vue";
+import Votes from "@/components/votes/index.vue";
 
 export default {
 	name: "Content",
 
 	components: {
 		BarterList,
-		Feedbacks
+		Votes
 	},
 
 	data() {

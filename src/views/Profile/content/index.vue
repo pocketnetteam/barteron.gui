@@ -64,6 +64,7 @@
 					<!-- Tab: Active -->
 					<template #active>
 						<BarterList
+							class="tabcontent-holder"
 							:items="offersList"
 							:vType="bartersView"
 						>
@@ -123,6 +124,7 @@
 					<!-- Tab: Inactive -->
 					<template #inactive>
 						<BarterList
+							class="tabcontent-holder"
 							:items="barters.generate(8)"
 							:vType="bartersView"
 						/>
@@ -132,17 +134,21 @@
 
 			<!-- Tab: Barters -->
 			<template #barters v-if="isMyProfile">
-				Barters
+				<div class="tabcontent-holder">
+					Barters
+				</div>
 			</template>
 
 			<!-- Tab: Favorites -->
 			<template #favorites v-if="isMyProfile">
-				Favorites
+				<div class="tabcontent-holder">
+					Favorites
+				</div>
 			</template>
 
 			<!-- Tab: Feedbacks -->
 			<template #feedbacks>
-				<Feedbacks />
+				<Votes class="tabcontent-holder" />
 			</template>
 		</v-tabs>
 	</v-content>
