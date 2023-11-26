@@ -103,7 +103,10 @@ export default {
 
 				return null;
 			} else {
-				return this.addr;
+				return [
+					this.address.country,
+					this.address.city || this.address.town || this.address.county
+				].filter(f => f).join(", ");
 			}
 		},
 
