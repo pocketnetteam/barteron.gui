@@ -259,6 +259,7 @@ export default {
 								`dialog.error#${ e?.toString()?.replace(/[^\d-]/g, '') || 0 }`,
 								{ details: e }
 							);
+
 							form.dialog.view("error", this.$t('dialog.node_error', { error }));
 						});
 					})
@@ -268,5 +269,10 @@ export default {
 					});
 			}
 		}
+	},
+
+	beforeCreate() {
+		/* Request for permissons */
+		this.sdk.requestPermissions(["account"]);
 	}
 }

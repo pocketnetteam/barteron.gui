@@ -170,8 +170,8 @@
 				<!-- vMap -->
 				<v-map
 					ref="map"
-					:center="geohash || location"
-					:point="geohash"
+					:center="geohash || location || undefined"
+					:point="geohash || undefined"
 					:allowPosition="true"
 					:allowSelection="true"
 				/>
