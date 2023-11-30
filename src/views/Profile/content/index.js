@@ -70,6 +70,15 @@ export default {
 		},
 
 		/**
+		 * Handle active tab change
+		 * 
+		 * @param {String} tab
+		 */
+		updatePath(tab) {
+			this.$router.replace({ path: `/profile/${ this.address }`, hash: `#${ tab }` }).catch(() => {});
+		},
+
+		/**
 		 * Parse labels object from localization
 		 * 
 		 * @param {String} label

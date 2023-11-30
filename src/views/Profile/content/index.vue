@@ -5,11 +5,13 @@
 			:tabset="[
 				{
 					tabId: 'ads',
-					title: `<i class='fa fa-list'></i> ${ $t('profile.ads') } (${ offersList.length })`
+					title: `<i class='fa fa-list'></i> ${ $t('profile.ads') } (${ offersList.length })`,
+					active: activeTab === '#ads'
 				},
 				{
 					tabId: 'barters',
-					title: `<i class='fa fa-sync-alt'></i> ${ $t('profile.barters') } (0)`
+					title: `<i class='fa fa-sync-alt'></i> ${ $t('profile.barters') } (0)`,
+					active: activeTab === '#barters'
 				},
 				{
 					tabId: 'favorites',
@@ -23,6 +25,8 @@
 				}
 			]"
 			vType="pills"
+			:hashTabs="true"
+			@change="updatePath"
 		>
 			<!-- Tab: Ads -->
 			<template #ads>
