@@ -9,7 +9,13 @@ export default {
 				active: true
 			} */
 		],
-		vType: String
+		vType: String,
+
+		/*
+			Ignore active state on click and follow tab active state
+			use @change handler to update route state with new #hash
+		*/
+		hashTabs: Boolean
 	},
 
 	data() {
@@ -27,7 +33,9 @@ export default {
 	methods: {
 		change(e, index) {
 			e.preventDefault();
-			this.active = this.tabset[index].tabId;
+			const active = this.tabset[index].tabId;
+			if (!this.hashTabs) this.active = active;
+			this.$emit("change", active);
 		}
-	},
+	}
 }
