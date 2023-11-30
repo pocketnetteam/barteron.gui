@@ -58,15 +58,41 @@ const routes = [
 		components: {
 			default: () => import("@/views/About/index.vue")
 		}
+	},
+	/**
+	 * Apply pid to route
+	 */
+	{
+		path: "/pid/:pid",
+		beforeEnter: (to, from, next) => {
+			if (to?.params?.pid) {
+				const path = atob(to.params.pid);
+
+				/* Apply pid to history state */
+				console.group("Read state from history");
+				console.log(`pid: \n%c${ to.params.pid }`, `color: blue;`);
+				console.log(`path: \n%c${ path }`, `color: blue;`);
+				console.groupEnd();
+
+				next({ path, query: { pid: to.params.pid } });
+			} else {
+				next();
+			}
+		}
+	},
+	{
+		path: "/404",
+		alias: "*",
+		component: { render: (h) => h("div", ["404! Page Not Found!"]) },
 	}
 ];
 
 Vue.use(VueRouter);
 
-export default new VueRouter({
+const router = new VueRouter({
 	mode: "history",
 	duplicateNavigationPolicy: "reload",
-	scrollBehavior: function(to, from, savedPosition) {
+	scrollBehavior(to, from, savedPosition) {
 		if (to.hash) {
 			return {selector: to.hash}
 		} else {
@@ -75,3 +101,22 @@ export default new VueRouter({
 	},
 	routes
 });
+
+/**
+ * Make pid from route
+ */
+router.beforeEach((to, from, next) => {
+	if (!to?.params?.pid && !to?.query?.pid) {
+		const pid = btoa(to.fullPath);
+
+		/* Push to history state */
+		console.group("Push state to history");
+		console.log(`path: \n%c${ to.fullPath }`, `color: blue;`);
+		console.log(`pid: \n%c${ pid }`, `color: blue;`);
+		console.groupEnd();
+	}
+
+	next();
+});
+
+export default router;
