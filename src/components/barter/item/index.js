@@ -104,8 +104,8 @@ export default {
 				return null;
 			} else {
 				return [
-					this.address.country,
-					this.address.city || this.address.town || this.address.county
+					this.addr.country,
+					this.addr.city || this.addr.town || this.addr.county
 				].filter(f => f).join(", ");
 			}
 		},
@@ -131,6 +131,15 @@ export default {
 				c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
 			return parseFloat((R * c).toFixed(1));
+		},
+
+		/**
+		 * Get offer details
+		 * 
+		 * @returns {Object}
+		 */
+		details() {
+			return sdk.barteron.details[this.item.hash];
 		}
 	},
 

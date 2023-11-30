@@ -287,13 +287,13 @@
 			</div>
 
 			<div class="row" v-if="item.geohash">
-					<!-- Component: Map -->
-					<v-map
-						:center="geohash"
-						:point="geohash"
-						:allowPosition="true"
-					/>
-				</div>
+				<!-- Component: Map -->
+				<v-map
+					:center="geohash"
+					:point="geohash"
+					:allowPosition="true"
+				/>
+			</div>
 		</template>
 	</div>
 </template>
