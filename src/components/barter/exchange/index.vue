@@ -20,7 +20,7 @@
 		</div>
 
 		<div class="propose">
-			<v-button>
+			<v-button @click="proposeExchange">
 				<i class="fa fa-sync"></i>
 				<span>{{ $t('buttonLabels.propose_exchange') }}</span>
 			</v-button>
