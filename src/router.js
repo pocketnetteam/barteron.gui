@@ -29,10 +29,10 @@ const routes = [
 		}
 	},
 	{
-		path: "/barter/added",
-		name: "addedBarter",
+		path: "/barter/exchange/:id",
+		name: "exchangeOptions",
 		components: {
-			content: () => import("@/views/Barter/Added/content/index.vue")
+			content: () => import("@/views/Barter/Exchange/content/index.vue")
 		}
 	},
 	{
