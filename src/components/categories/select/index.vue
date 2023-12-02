@@ -13,7 +13,6 @@
 			<div class="search">
 				<v-input
 					ref="search"
-					name="search"
 					type="text"
 					:placeholder="$t('search.placeholder')"
 					:value="query"
