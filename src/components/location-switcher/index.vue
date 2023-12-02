@@ -12,7 +12,7 @@
 		></i>
 		<div class="info">
 			<strong class="location">
-				<template>{{ address ?? $t('location.unknown') }}</template>
+				<template>{{ address ?? $t('buttonLabels.unknown') }}</template>
 			</strong>
 			<span class="distance">{{ address ? (radius || 0) + $t('metrics.km') : '~' }}</span>
 		</div>
@@ -28,7 +28,7 @@
 					<div class="row info">
 						<i class="fa fa-map-marker-alt"></i>
 						<span>
-							<template>{{ address ?? $t('location.unknown') }}</template>
+							<template>{{ address ?? $t('buttonLabels.unknown') }}</template>
 						</span>
 					</div>
 
