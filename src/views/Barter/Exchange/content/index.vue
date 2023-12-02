@@ -26,15 +26,15 @@
 				<v-button
 					vType="stroke"
 					:to="{ name: 'profile', params: { id: offer.address } }"
-				>{{ $t('buttonLabels.my_announcements') }}</v-button>
-				<v-button @click="() => exchangeOptions = true">{{ $t('buttonLabels.find_exchange_options') }}</v-button>
+				>{{ $t('profile.ads') }}</v-button>
+				<v-button @click="expand">{{ $t('buttonLabels.find_exchange_options') }}</v-button>
 			</div>
 		</div>
 
 		<template v-if="exchangeOptions">
 			<div class="row block">
 				<BarterList
-					:items="barters.generate(8)"
+					:items="deals"
 					vType="row"
 				>
 					<template #offer>
@@ -43,9 +43,9 @@
 				</BarterList>
 			</div>
 
-			<div class="row center">
+			<!-- <div class="row center">
 				<v-button>{{ $t('buttonLabels.show_more') }}</v-button>
-			</div>
+			</div> -->
 		</template>
 	</v-content>
 </template>
