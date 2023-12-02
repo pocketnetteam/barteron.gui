@@ -57,7 +57,7 @@ export default {
 				}).filter(c => c.id),
 
 				/* Alternative */
-				[{ value: this.$t("barterLabels.unknown") }]
+				[{ value: this.$t("buttonLabels.unknown") }]
 			);
 		},
 
