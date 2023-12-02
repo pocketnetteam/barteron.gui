@@ -18,6 +18,10 @@ export default {
 	},
 
 	computed: {
+		isPreview() {
+			return this.$route.query.preview;
+		},
+
 		/**
 		 * Get offer data
 		 * 
@@ -25,6 +29,15 @@ export default {
 		 */
 		item() {
 			return (Number.isInteger(this.$route.params.id) ? this.barters.items : this.sdk.barteron.offers)[this.$route.params.id];
+		},
+
+		/**
+		 * Get author address
+		 * 
+		 * @returns {String}
+		 */
+		address() {
+			return this.item.address;
 		},
 
 		/**
@@ -37,21 +50,22 @@ export default {
 		},
 
 		/**
-		 * Get author address
-		 * 
-		 * @returns {String}
-		 */
-		address() {
-			return this.item.address;
-		},
-		
-		/**
 		 * Get author account
 		 * 
 		 * @returns {Object}
 		 */
 		account() {
 			return this.sdk.barteron.accounts[this.address];
+		}
+	},
+
+	methods: {
+		proposeExchange(offer) {
+			this.sdk.createRoom({
+				name: this.item.caption,
+				members: [this.sdk.address, this.address],
+				message: `/barter/${ offer.hash }`
+			});
 		}
 	},
 

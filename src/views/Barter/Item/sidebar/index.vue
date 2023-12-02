@@ -18,7 +18,7 @@
 				<template v-if="isMyOffer">
 					<div class="buttons">
 						<v-button :to="{ path: `/barter/edit/${ item.hash }`, params: { id: item.hash } }">
-							<template v-if="item.hash !== 'draft'">
+							<template v-if="!isPreview">
 								<i class="fa fa-pen"></i>
 								<span>{{ $t('buttonLabels.edit') }}</span>
 							</template>
@@ -33,7 +33,7 @@
 							<span>{{ $t('buttonLabels.find_exchange_options') }}</span>
 						</v-button>
 
-						<template v-if="item.hash !== 'draft'">
+						<template v-if="!isPreview">
 							<v-button vType="bulma-stroke">
 								<i class="fa fa-undo"></i>
 								<span>{{ $t('buttonLabels.withdraw') }}</span>
@@ -52,6 +52,7 @@
 					v-else-if="myOffers.length"
 					:item="item"
 					:items="myOffers"
+					@propose="proposeExchange"
 				/>
 			</div>
 		</div>
