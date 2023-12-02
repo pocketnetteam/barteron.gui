@@ -25,8 +25,8 @@ class Offer {
 		this.language = data?.language || data?.p?.s1 || "";
 		this.caption = data?.caption || data?.p?.s2 || "";
 		this.description = data?.description || data?.p?.s3 || "";
-		this.tag = data?.tag || t || "";
-		this.tags = data?.tags || a || [];
+		this.tag = data?.tag || t || null;
+		this.tags = (data?.tags || a || []).map(tag => !isNaN(+tag) ? +tag : tag);
 		this.condition = data?.condition || c || "new";
 		this.images = data?.images || images;
 		this.geohash = data?.geohash || data?.p?.s6 || "";
@@ -57,10 +57,19 @@ class Offer {
 	 * @returns {Offer}
 	 */
 	update(data) {
+		const
+			oldHash = this.hash,
+			newHash = data.hash;
+
 		if (Object.keys(data).length) {
 			for (const p in data) {
 				this[p] = data[p];
 			}
+		}
+
+		if (oldHash && newHash && oldHash !== newHash) {
+			Vue.delete(this.sdk.barteron._offers, oldHash);
+			Vue.set(this.sdk.barteron._offers, newHash, this);
 		}
 
 		return this;

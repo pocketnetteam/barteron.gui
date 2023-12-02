@@ -48,7 +48,7 @@ class SDK {
 	}
 
 	empty(prop) {
-		return !Object.values(prop).length;
+		return prop && !Object.values(prop).length;
 	}
 
 	cyrb53(str, seed = 0) {
@@ -166,6 +166,19 @@ class SDK {
 		this.sdk.helpers.opensettings().then(() => {
 			this.lastresult = "opensettings: success"
 		}).catch(e => this.setLastResult(e))
+	}
+
+	/**
+	 * 
+	 * @param {Object} request
+	 * @param {String} request.name
+	 * @param {Array} request.members
+	 * @param {String} request.message
+	 * 
+	 * @returns {Promise}
+	 */
+	createRoom(request) {
+		return this.sdk.helpers.createroom(request);
 	}
 
 	imageFromMobileCamera() {
@@ -474,9 +487,12 @@ class SDK {
 		address = address || this._address;
 
 		return this.rpc("getbarteronoffersbyaddress", address).then(offers => {
-			if (offers?.length) {
-				offers = offers.map(offer => new Offer(this, offer));
-			}
+			offers = offers?.map(offer => {
+				offer = new Offer(this, offer);
+				Vue.set(this.barteron._offers, offer.hash, offer);
+
+				return offer;
+			}) || [];
 
 			return offers;
 		});
@@ -528,14 +544,12 @@ class SDK {
 		});
 
 		return this.rpc("getbarteronoffersbyhashes", hashes).then(offers => {
-			if (offers?.length) {
-				offers = offers.map(offer => {
-					offer = new Offer(this, offer);
-					Vue.set(this.barteron._offers, offer.hash, offer);
+			offers = offers?.map(offer => {
+				offer = new Offer(this, offer);
+				Vue.set(this.barteron._offers, offer.hash, offer);
 
-					return offer;
-				});
-			}
+				return offer;
+			}) || [];
 
 			return offers;
 		});
@@ -571,6 +585,7 @@ class SDK {
 			includeCommentScores: true,
 			...request
 		}).then(details => {
+			console.log(details)
 			request?.offerIds.forEach(hash => {
 				if (!this.empty(details)) {
 					const data = {};
@@ -621,7 +636,14 @@ class SDK {
 	 */
 	getBrtOffersFeed(request = {}) {
 		return this.rpc("getbarteronfeed", request).then(feed => {
-			return feed?.offers?.map(offer => new Offer(this, offer)) || [];
+			feed = feed?.map(offer => {
+				offer = new Offer(this, offer);
+				Vue.set(this.barteron._offers, offer.hash, offer);
+
+				return offer;
+			}) || [];
+
+			return feed;
 		});
 	}
 
@@ -632,10 +654,12 @@ class SDK {
 	 * 
 	 * Base
 	 * 
-	 * @param {String} request.offer Offer tx hash for find deals
-	 * @param {String} request.address Filter potencial offers with this account address
-	 * @param {Number} request.location Count of symbols for compare locations: substr(loc1, X) == substr(loc2, X)
+	 * @param {Array} request.addresses Filter potencial offers with these account addresses
+	 * @param {Array} request.excludeAddresses Filter potencial offers by excluding offers with these addresses
+	 * @param {String} request.location An SQLite3 language expression to be used with `LIKE` operator when comparing locations
 	 * @param {Number} request.price Max amount of difference offer prices: abs(price1 - price2) < X
+	 * @param {Array} request.myTags Filter potencial offers by the tags they are exchangable for
+	 * @param {Array} request.theirTags
 	 * 
 	 * Pagination
 	 * 
@@ -648,8 +672,19 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	getBrtOfferDeals(request) {
-		return this.rpc("getbarterondeals", request).then(deals => {
-			return deals?.map(deal => new Offer(this, deal)) || [];
+		return this.rpc("getbarterondeals", {
+			...request,
+			myTags: (request?.myTags || []).map(tag => parseInt(tag)),
+			theirTags: (request?.theirTags || []).map(tag => parseInt(tag))
+		}).then(deals => {
+			deals = deals?.map(offer => {
+				offer = new Offer(this, offer);
+				Vue.set(this.barteron._offers, offer.hash, offer);
+
+				return offer;
+			}) || [];
+
+			return deals;
 		});
 	}
 
