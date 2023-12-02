@@ -36,7 +36,7 @@
 					multiple="multiple"
 					accept="jpeg, png"
 					maxLen="10"
-					:images="offer.images"
+					:images="Array.isArray(offer.images) ? offer.images : []"
 				/>
 
 				<!-- Paragraph: Image upload text -->
@@ -79,8 +79,6 @@
 						<template #default="{ instance }">
 							<input name="tags" type="hidden" :value="instance.vTags.join()">
 						</template>
-
-						
 					</ExchangeList>
 				</template>
 

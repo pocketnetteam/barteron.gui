@@ -109,7 +109,7 @@ export default {
 				price = this.$refs.price.inputs?.[0],
 				currency = this.$refs.currency?.selected?.toUpperCase();
 
-			if (Object.keys(values).length) {
+			if (!this.sdk.empty(values)) {
 				if (!price?.value.length) price.value = 0;
 				if (reverse?.target || reverse?.value) {
 					/* Typing in price field */
@@ -129,7 +129,7 @@ export default {
 		 * @param {Object} offer
 		 */
 		fillData(offer) {
-			setTimeout(() => {
+			this.$nextTick(() => {
 				if (offer.hash?.length >= 64 || offer.hash === "draft") {
 					if (offer.tags) {
 						if (["my_list", "for_nothing"].includes(offer.tags[0])) {
@@ -143,7 +143,20 @@ export default {
 
 					if (offer.condition) this.condition = offer.condition;
 	
-					if (offer.price) this.calcPrice(offer.price);
+					if (offer.price) {
+						this.pkoin = offer.price;
+
+						/* Await for currencies list */
+						clearInterval(this.awaitCurrency);
+						this.awaitCurrency = setInterval(() => {
+							if (!this.sdk.empty(this.sdk.currency)) {
+								clearInterval(this.awaitCurrency);
+								delete this.awaitCurrency;
+
+								this.calcPrice(offer.price);
+							}
+						});
+					}
 				} else {
 					/* Reset fields to default */
 					this.tags = [];
@@ -151,7 +164,7 @@ export default {
 					this.condition = "new";
 					this.price = this.pkoin = 0;
 				}
-			}, 10);
+			});
 		},
 
 		/**
@@ -176,8 +189,8 @@ export default {
 				language: this.$i18n.locale,
 				caption: data.title,
 				description: data.description,
-				tag: data.category,
-				tags: this.getting === "something" ? data.tags.split(",") : [this.getting],
+				tag: Number(data.category),
+				tags: this.getting === "something" ? data.tags.split(",").map(tag => Number(tag)) : [this.getting],
 				condition: this.condition,
 				images: Object.values(images),
 				geohash: GeoHash.encodeGeoHash.apply(null, center),
@@ -193,8 +206,11 @@ export default {
 		preview() {
 			this.serializeForm();
 
-			console.log(this.$i18n)
-			this.$router.push({ name: "barterItem", params: { id: this.offer.hash } });
+			this.$router.push({
+				name: "barterItem",
+				params: { id: this.offer.hash },
+				query: { preview: 1 }
+			});
 		},
 
 		/**
@@ -242,12 +258,12 @@ export default {
 						}).then((data) => {
 							if (data.transaction) {
 								if (this.offer.hash?.length < 64) {
-									this.offer.destroy();
+									this.offer.update({ hash: data.transaction });
 								}
 
 								form.dialog.hide();
 								this.$router.push({
-									name: "addedBarter",
+									name: "exchangeOptions",
 									params: {
 										id: hash?.length < 64 ? data.transaction : hash
 									}
