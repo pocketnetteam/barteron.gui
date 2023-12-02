@@ -46,15 +46,6 @@ export default {
 				a.push(t);
 				return a;
 			}, []).join(", ");
-		},
-
-		/**
-		 * Add images from property
-		 * 
-		 * @returns {Object}
-		 */
-		values() {
-			return this.remove().add(this.images).files;
 		}
 	},
 
@@ -122,12 +113,14 @@ export default {
 		add(images) {
 			if (Array.isArray(images)) {
 				images.forEach(image => {
-					this.files.push({
-						id: `image-${ this.hash() }`,
-						image
-					});
+					if (!this.files.filter(file => file.image === image)?.length) {
+						this.files.push({
+							id: `image-${ this.hash() }`,
+							image
+						});
+					}
 				});
-			} else {
+			} else if(!this.files.filter(file => file.image === images)?.length) {
 				this.files.push({
 					id: `image-${ this.hash() }`,
 					...images
@@ -184,7 +177,15 @@ export default {
 		}
 	},
 
+	watch: {
+		images(images) {
+			this.add(images);
+		}
+	},
+
 	created() {
+		this.add(this.images);
+		
 		document.addEventListener("dragover", e => this.dragtoggle(e));
 		document.addEventListener("dragleave", e => this.dragtoggle(e));
 		document.addEventListener("drop", e => this.dragtoggle(e));
