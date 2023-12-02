@@ -46,7 +46,7 @@ export default {
 		},
 
 		proposeExchange() {
-			this.$emit("propose");
+			this.$emit("propose", this.items[this.selected]);
 		}
 	},
 

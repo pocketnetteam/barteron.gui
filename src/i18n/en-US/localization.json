@@ -114,14 +114,14 @@
 		"continue_edit": "Continute edit",
 		"ok": "Ok",
 		"yes": "Yes",
-		"no": "No"
+		"no": "No",
+		"unknown": "Unknown"
 	},
 
 	"barterLabels": {
 		"to": "Exchange to",
 		"free": "For free",
-		"select": "Select item that you want exchange",
-		"unknown": "Unknown"
+		"select": "Select item that you want exchange"
 	},
 
 	"exchange": {
@@ -134,7 +134,6 @@
 	},
 
 	"location": {
-		"unknown": "Unknown",
 		"preferred": "Location for new offers",
 		"static": "Static",
 		"dynamic": "Dynamic",
