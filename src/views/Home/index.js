@@ -23,11 +23,12 @@ export default {
 		/* Get account address if granted */
 		const
 			data = {},
-			address = await Vue.prototype.sdk.getAddress();
+			sdk = Vue.prototype.sdk,
+			address = await sdk.getAddress();
 
 		if (address) {
 			const
-				myOffers = await Vue.prototype.sdk.getBrtOffers(address),
+				myOffers = await sdk.getBrtOffers(address),
 				exchange = myOffers?.reduce((o, offer) => {
 					if (
 						Number.isInteger(+offer.tag) &&
@@ -54,12 +55,12 @@ export default {
 
 			/* Get potential exchange offers */
 			if (myOffers?.length) {
-				data.mayMatchExchanges = await Vue.prototype.sdk.getBrtOfferDeals(exchange);
+				data.mayMatchExchanges = await sdk.getBrtOfferDeals(exchange);
 			}
 		}
 		
 		/* Get new offers */
-		data.newFromGoods = await Vue.prototype.sdk.getBrtOffersFeed();
+		data.newFromGoods = await sdk.getBrtOffersFeed();
 
 		/* Pass data to instance */
 		next(vm => {
