@@ -119,8 +119,13 @@
 
 							<!-- Edit and find exchange -->
 							<template #offer="{ item }" v-if="isMyProfile">
-								<v-button :to="{ path: `/barter/edit/${ item.hash }`, params: { id: item.hash } }">{{ $t('item.edit') }}</v-button>
-								<v-button vType="hit-stroke">{{ $t('item.find_exchange') }}</v-button>
+								<v-button
+									:to="{ name: 'createBarter', params: { id: item.hash } }"
+								>{{ $t('item.edit') }}</v-button>
+								<v-button
+									vType="hit-stroke"
+									:to="{ name: 'exchangeOptions', params: { id: item.hash }, query: { expanded: 1 } }"
+								>{{ $t('item.find_exchange') }}</v-button>
 							</template>
 						</BarterList>
 					</template>

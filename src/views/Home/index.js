@@ -1,3 +1,4 @@
+import Vue from "vue";
 import PopularList from "@/components/categories/popular-list/index.vue";
 import BarterList from "@/components/barter/list/index.vue";
 import Banner from "@/components/banner/index.vue";
@@ -18,34 +19,53 @@ export default {
 		}
 	},
 
-	async mounted() {
+	async beforeRouteEnter (to, from, next) {
 		/* Get account address if granted */
-		const address = await this.sdk.getAddress();
+		const
+			data = {},
+			address = await Vue.prototype.sdk.getAddress();
 
 		if (address) {
 			const
-				myOffers = await this.sdk.getBrtOffers(address),
+				myOffers = await Vue.prototype.sdk.getBrtOffers(address),
 				exchange = myOffers?.reduce((o, offer) => {
 					if (
-						!o.myTags.includes(offer.tag) &&
-						Number.isInteger(parseInt(offer.tag))
-					) o.myTags = o.myTags.concat(offer.tag);
+						Number.isInteger(+offer.tag) &&
+						!o.myTags.includes(offer.tag)
+					) {
+						o.myTags = o.myTags.concat(+offer.tag);
+					}
 
 					offer.tags?.forEach(tag => {
 						if (
-							!o.theirTags.includes(tag) &&
-							Number.isInteger(parseInt(offer.tag))
-						) o.theirTags = o.theirTags.concat(tag);
+							Number.isInteger(+tag) &&
+							!o.theirTags.includes(tag)
+						) {
+							o.theirTags = o.theirTags.concat(+tag);
+						}
 					});
 	
 					return o;
-				}, { myTags: [], theirTags: [] });
+				}, {
+					myTags: [],
+					theirTags: [],
+					excludeAddresses: [address]
+				});
 
 			/* Get potential exchange offers */
-			this.mayMatchExchanges = await this.sdk.getBrtOfferDeals(exchange);
+			if (myOffers?.length) {
+				data.mayMatchExchanges = await Vue.prototype.sdk.getBrtOfferDeals(exchange);
+			}
 		}
 		
 		/* Get new offers */
-		this.newFromGoods = await this.sdk.getBrtOffersFeed();
+		data.newFromGoods = await Vue.prototype.sdk.getBrtOffersFeed();
+
+		/* Pass data to instance */
+		next(vm => {
+			for(const key in data) {
+				vm[key] = data[key];
+			}
+		});
 	}
 }
