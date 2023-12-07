@@ -29,7 +29,7 @@ export default {
 		 * 
 		 * @returns {Boolean}
 		 */
-		exchangeOptions() {
+		expanded() {
 			return !!this.$route.query.expanded;
 		}
 	},
