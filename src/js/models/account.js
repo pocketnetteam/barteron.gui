@@ -30,7 +30,8 @@ class Account {
 		/* Hidden properties */
 		Object.defineProperties(this, {
 			sdk: { value: sdk },
-			regdate: { value: data?.additional?.regdate * 1000 || +new Date }
+			regdate: { value: data?.additional?.regdate * 1000 || +new Date },
+			rating: { value: data?.additional?.rating ?? 0 }
 		});
 	}
 
