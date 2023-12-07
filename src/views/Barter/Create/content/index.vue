@@ -108,9 +108,8 @@
 				<!-- Input: Currency exchange to PKOIN -->
 				<v-input
 					ref="price"
-					:name="['', 'price']"
+					:name="['price', 'pkoin']"
 					:type="['number', 'number']"
-					:readonly="[null, true]"
 					:value="[price, pkoin]"
 					:min="['0', '']"
 					class="currency-input"
