@@ -13,11 +13,12 @@
 			padding: 0 0 0 $r * 2
 			position: relative
 
-		.fa
-			position: absolute
-			top: 50%
-			left: -3px
-			transform: translateY(-50%)
+			&:before
+				+fontAwesome("\f105")
+				position: absolute
+				top: 50%
+				left: -3px
+				transform: translateY(-50%)
 
 		a
 			color: $blue

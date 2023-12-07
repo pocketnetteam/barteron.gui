@@ -6,26 +6,16 @@
 		<slot name="before"></slot>
 
 		<div
-			v-for="(input, index) in inputs"
+			v-for="(attr, index) in attrs"
 			:key="index"
 			class="v-input"
 		>
 			<slot :name="`input${ index }Before`"></slot>
 			<input
 				ref="fields"
-				:id="input.id"
-				:name="input.name"
-				:type="input.type"
-				:readonly="input.readonly"
-				:min="input.min"
-				:max="input.max"
-				:placeholder="input.placeholder"
-				v-model="input.value"
-				@change="$event => emit('change', $event, index)"
-				@input="$event => emit('input', $event, index)"
-				@cut="$event => emit('cut', $event, index)"
-				@copy="$event => emit('copy', $event, index)"
-				@paste="$event => emit('paste', $event, index)"
+				v-bind="attr"
+				v-model="attr.value"
+				v-on="vEvents"
 			/>
 			<slot :name="`input${ index }After`"></slot>
 		</div>

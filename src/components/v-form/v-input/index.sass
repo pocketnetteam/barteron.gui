@@ -7,6 +7,8 @@
 	gap: 1px
 
 	.v-input
+		+transition(background-color)
+		background-color: $goku
 		padding: 2px
 		width: 100%
 
@@ -22,11 +24,20 @@
 				height: 100%
 				width: 1px
 
+		&:focus-within
+			background: none
+
 		input
+			+transition(outline-color)
+			background: transparent
 			border: 0
 			font-size: 100%
 			padding: 11px
+			outline-color: $beerus
 			width: 100%
+
+			&:focus
+				outline-color: $blue
 
 	/* Size */
 	&.v-input-xs
@@ -63,44 +74,59 @@
 			padding: 1em .7em
 
 	.v-input
-		&:first-child input
-			border-radius: 6px 0 0 6px
+		&:first-child
+			border-top-left-radius: inherit
+			border-top-right-radius: 0
+			border-bottom-right-radius: 0
+			border-bottom-left-radius: inherit
 
-			@at-root
-				.v-input-sm#{&}
-					border-radius: .45rem 0 0 .45rem
+			input
+				border-radius: 6px 0 0 6px
 
-				.v-input-md#{&}
-					border-radius: .7rem 0 0 .7rem
+				@at-root
+					.v-input-sm#{&}
+						border-radius: .3rem 0 0 .3rem
 
-				.v-input-lg#{&},
-				.v-input-xl#{&}
-					border-radius: .9rem 0 0 .9rem
+					.v-input-md#{&}
+						border-radius: .6rem 0 0 .6rem
 
-		&:last-child input
-			border-radius: 0 6px 6px 0
+					.v-input-lg#{&},
+					.v-input-xl#{&}
+						border-radius: .85rem 0 0 .85rem
 
-			@at-root
-				.v-input-sm#{&}
-					border-radius: 0 .45rem .45rem 0
+		&:last-child
+			border-top-left-radius: 0
+			border-top-right-radius: inherit
+			border-bottom-right-radius: inherit
+			border-bottom-left-radius: 0
+			
+			input
+				border-radius: 0 6px 6px 0
 
-				.v-input-md#{&}
-					border-radius: 0 .7rem .7rem 0
+				@at-root
+					.v-input-sm#{&}
+						border-radius: 0 .3rem .3rem 0
 
-				.v-input-lg#{&},
-				.v-input-xl#{&}
-					border-radius: 0 .9rem .9rem 0
+					.v-input-md#{&}
+						border-radius: 0 .6rem .6rem 0
 
-		&:first-child:last-child input
-			border-radius: 6px
+					.v-input-lg#{&},
+					.v-input-xl#{&}
+						border-radius: 0 .85rem .85rem 0
 
-			@at-root
-				.v-input-sm#{&}
-					border-radius: .45rem
+		&:first-child:last-child
+			border-radius: inherit
 
-				.v-input-md#{&}
-					border-radius: .7rem
+			input
+				border-radius: 6px
 
-				.v-input-lg#{&},
-				.v-input-xl#{&}
-					border-radius: .9rem
+				@at-root
+					.v-input-sm#{&}
+						border-radius: .3rem
+
+					.v-input-md#{&}
+						border-radius: .6rem
+
+					.v-input-lg#{&},
+					.v-input-xl#{&}
+						border-radius: .85rem

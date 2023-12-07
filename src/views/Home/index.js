@@ -1,4 +1,5 @@
-import AssocList from "@/components/categories/assoc-list/index.vue";
+import Vue from "vue";
+import PopularList from "@/components/categories/popular-list/index.vue";
 import BarterList from "@/components/barter/list/index.vue";
 import Banner from "@/components/banner/index.vue";
 
@@ -6,7 +7,7 @@ export default {
 	name: "Home",
 
 	components: {
-		AssocList,
+		PopularList,
 		BarterList,
 		Banner
 	},
@@ -18,8 +19,54 @@ export default {
 		}
 	},
 
-	async mounted() {
-		this.mayMatchExchanges = await this.sdk.getBrtOffersFeed();
-		this.newFromGoods = await this.sdk.getBrtOffersFeed();
+	async beforeRouteEnter (to, from, next) {
+		/* Get account address if granted */
+		const
+			data = {},
+			sdk = Vue.prototype.sdk,
+			address = await sdk.getAddress();
+
+		if (address) {
+			const
+				myOffers = await sdk.getBrtOffers(address),
+				exchange = myOffers?.reduce((o, offer) => {
+					if (
+						Number.isInteger(+offer.tag) &&
+						!o.myTags.includes(offer.tag)
+					) {
+						o.myTags = o.myTags.concat(+offer.tag);
+					}
+
+					offer.tags?.forEach(tag => {
+						if (
+							Number.isInteger(+tag) &&
+							!o.theirTags.includes(tag)
+						) {
+							o.theirTags = o.theirTags.concat(+tag);
+						}
+					});
+	
+					return o;
+				}, {
+					myTags: [],
+					theirTags: [],
+					excludeAddresses: [address]
+				});
+
+			/* Get potential exchange offers */
+			if (myOffers?.length) {
+				data.mayMatchExchanges = await sdk.getBrtOfferDeals(exchange);
+			}
+		}
+		
+		/* Get new offers */
+		data.newFromGoods = await sdk.getBrtOffersFeed();
+
+		/* Pass data to instance */
+		next(vm => {
+			for(const key in data) {
+				vm[key] = data[key];
+			}
+		});
 	}
 }

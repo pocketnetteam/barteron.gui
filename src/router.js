@@ -1,5 +1,5 @@
 import Vue from "vue";
-import VueRouter from 'vue-router';
+import VueRouter from "vue-router";
 
 const routes = [
 	{
@@ -29,10 +29,10 @@ const routes = [
 		}
 	},
 	{
-		path: "/barter/added",
-		name: "addedBarter",
+		path: "/barter/exchange/:id",
+		name: "exchangeOptions",
 		components: {
-			content: () => import("@/views/Barter/Added/content/index.vue")
+			content: () => import("@/views/Barter/Exchange/content/index.vue")
 		}
 	},
 	{
@@ -58,14 +58,41 @@ const routes = [
 		components: {
 			default: () => import("@/views/About/index.vue")
 		}
+	},
+	/**
+	 * Apply pid to route
+	 */
+	{
+		path: "/pid/:pid",
+		beforeEnter: (to, from, next) => {
+			if (to?.params?.pid) {
+				const path = atob(to.params.pid);
+
+				/* Apply pid to history state */
+				console.group("Read state from history");
+				console.log(`pid: \n%c${ to.params.pid }`, `color: blue;`);
+				console.log(`path: \n%c${ path }`, `color: blue;`);
+				console.groupEnd();
+
+				next({ path, query: { pid: to.params.pid } });
+			} else {
+				next();
+			}
+		}
+	},
+	{
+		path: "/404",
+		alias: "*",
+		component: { render: (h) => h("div", ["404! Page Not Found!"]) },
 	}
 ];
 
 Vue.use(VueRouter);
 
-export default new VueRouter({
-	mode: "history",
-	scrollBehavior: function(to, from, savedPosition) {
+const router = new VueRouter({
+	/* mode: "history", */
+	duplicateNavigationPolicy: "reload",
+	scrollBehavior(to, from, savedPosition) {
 		if (to.hash) {
 			return {selector: to.hash}
 		} else {
@@ -74,3 +101,19 @@ export default new VueRouter({
 	},
 	routes
 });
+
+/**
+ * Get pid from route
+ */
+router.beforeEach((to, from, next) => {
+	if (!to?.params?.pid && !to?.query?.pid) {
+		/* Push to history state */
+		if (Vue.prototype.sdk?.emit && to.fullPath !== "/?testnetwork=true") {
+			Vue.prototype.sdk.emit("historychange", { path: to.fullPath });
+		}
+	}
+
+	next();
+});
+
+export default router;

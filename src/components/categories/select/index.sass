@@ -1,0 +1,200 @@
+@import "@/css/vars.sass"
+
+$columnWidth: 250px
+
+.v-lightbox-header
+	.search
+		border-top: 1px solid $beerus
+		margin: 16px -24px 0
+		padding: 16px 24px 0
+
+		.v-input
+			position: relative
+
+			input
+				padding-right: 34px
+
+			.action
+				color: $trunks
+				cursor: pointer
+				display: flex
+				align-items: center
+				justify-content: center
+				position: absolute
+				top: 0
+				right: 2px
+				height: 100%
+				width: 34px
+
+.v-lightbox.categories-select
+	section
+		main
+			.v-button-holder
+				&.marked
+					.v-button
+						.text
+							&::before
+								+transition(color)
+								color: $bulma
+								content: "\2022"
+								position: absolute
+								top: 50%
+								left: -8px
+								transform: translateY(-50%)
+
+						&:hover
+							.text
+								&::before
+									color: $gohan
+
+			.v-button
+				.text
+					justify-content: flex-start
+
+	.v-button
+		.text,
+		> span
+			width: 100%
+
+			> span
+				display: block
+				overflow: hidden
+				text-overflow: ellipsis
+
+	.searching
+		display: flex
+		align-items: center
+		justify-content: center
+		min-height: 300px
+
+	.found
+		margin: 16px 0 0
+		padding: 0px 12px
+
+		p
+			margin: 0
+
+	.history
+		display: flex
+		align-items: center
+		flex-wrap: wrap
+		gap: $r*2
+
+		~ .categories
+			border-top: 1px solid $beerus
+			margin-top: 16px
+			padding-top: 16px
+
+		li
+			color: $gray
+
+			&:not(:first-child)
+				padding: 0 0 0 $r*2
+				position: relative
+
+				&:before
+					+fontAwesome("\f105")
+					position: absolute
+					top: 50%
+					left: -3px
+					transform: translateY(-50%)
+
+			a
+				color: $blue
+				cursor: pointer
+
+				&:hover
+					text-decoration: underline
+
+	ul
+		+resetList()
+		display: grid
+		grid-template-columns: repeat(2, minmax($columnWidth, 1fr))
+		gap: 12px
+
+		li
+			display: flex
+			align-items: center
+			gap: 10px
+
+			.v-button-holder,
+			.v-button
+				justify-content: flex-start
+				width: 100%
+
+			.fa
+				min-width: 18px
+
+		&.results
+			align-items: flex-start
+
+			> li
+				align-items: flex-start
+				flex-direction: column
+				position: relative
+
+				&.even .history
+					right: 100%
+					left: auto
+
+				details
+					display: block
+					width: 100%
+
+					&[open]
+						.text .toggle
+							transform: rotate(-180deg)
+
+				.text
+					display: flex
+					justify-content: space-between
+					width: 100%
+
+					span
+						+transition(color)
+						color: $bulma
+						cursor: pointer
+
+						mark
+							background: $ghost
+							color: inherit
+
+						&:hover
+							color: bulma-hover
+							text-decoration: underline
+
+					.toggle
+						+transition(transform)
+						color: $bulma
+						cursor: pointer
+						display: flex
+						align-items: center
+						justify-content: center
+
+						&:hover
+							color: $bulma-hover
+
+			.history
+				border-bottom: 1px solid $beerus
+				gap: 8px
+				padding: 10px 0
+				white-space: nowrap
+
+				li
+					display: block
+					overflow: hidden
+					text-overflow: ellipsis
+					padding: 0
+					width: $columnWidth
+
+					&:before
+						content: unset
+
+					a
+						+transition(color)
+						color: $blue
+						cursor: pointer
+
+						&:hover
+							color: $blue-hover
+							text-decoration: underline

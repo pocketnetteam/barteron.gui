@@ -69,15 +69,24 @@
 			
 			span
 				display: flex
+				gap: $r
 
 			ul
 				+resetList()
-				gap: 0
+				display: block
 				margin: -6px 0
+				margin-right: calc(24px - 24px / var(--len))
+				width: 20%
+
+				&::after
+					content: ""
+					clear: both
+					display: block
 
 				li
-					margin-left: -12px
+					float: left
 					height: auto
+					width: calc(var(--len) * 1%)
 
 					img
 						height: 24px

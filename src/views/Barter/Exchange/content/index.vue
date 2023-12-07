@@ -4,7 +4,7 @@
 			<div class="row center">
 				<div :class="{
 					'my-barter': true,
-					'small': exchangeOptions
+					'small': expanded
 				}">
 					<router-link :to="{ name: 'barterItem', params: { id: offer.hash } }">
 						<img :src="offer.images[0]" :alt="offer.caption">
@@ -13,28 +13,28 @@
 			</div>
 
 			<div class="row dir-column center">
-				<template v-if="!exchangeOptions">
-					<strong class="title">{{ $t('find_exchange_options') }}</strong>
+				<template v-if="!expanded">
+					<strong class="title">{{ $t('exchange_options.title') }}</strong>
 				</template>
 				<template v-else>
-					<strong class="title">{{ $t('exchange_options') }}</strong>
+					<strong class="title">{{ $t('exchange_options.label') }}</strong>
 					<p>{{ $t('echange_options_text') }}</p>
 				</template>
 			</div>
 
-			<div class="buttons-holder center" v-if="!exchangeOptions">
+			<div class="buttons-holder center" v-if="!expanded">
 				<v-button
 					vType="stroke"
 					:to="{ name: 'profile', params: { id: offer.address } }"
-				>{{ $t('buttonLabels.my_announcements') }}</v-button>
-				<v-button @click="() => exchangeOptions = true">{{ $t('buttonLabels.find_exchange_options') }}</v-button>
+				>{{ $t('profile.ads') }}</v-button>
+				<v-button @click="expand">{{ $t('buttonLabels.find_exchange_options') }}</v-button>
 			</div>
 		</div>
 
-		<template v-if="exchangeOptions">
+		<template v-if="expanded && deals?.length">
 			<div class="row block">
 				<BarterList
-					:items="barters.generate(8)"
+					:items="deals"
 					vType="row"
 				>
 					<template #offer>
@@ -43,8 +43,14 @@
 				</BarterList>
 			</div>
 
-			<div class="row center">
+			<!-- <div class="row center">
 				<v-button>{{ $t('buttonLabels.show_more') }}</v-button>
+			</div> -->
+		</template>
+
+		<template v-else>
+			<div class="row block">
+				
 			</div>
 		</template>
 	</v-content>

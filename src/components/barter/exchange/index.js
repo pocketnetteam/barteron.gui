@@ -43,6 +43,10 @@ export default {
 			} else {
 				this.show = 3;
 			}
+		},
+
+		proposeExchange() {
+			this.$emit("propose", this.items[this.selected]);
 		}
 	},
 

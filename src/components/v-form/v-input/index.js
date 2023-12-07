@@ -9,14 +9,33 @@ export default {
 		min: { type: [Number, String, Array], default: () => [] },
 		max: { type: [Number, String, Array], default: () => [] },
 		placeholder: { type: [String, Array], default: () => [] },
+		list: { type: [String, Array], default: () => [] },
 		value: { type: [Number, String, Array], default: () => [] },
-
+		
+		vEvents: { type: [Object], default: () => ({}) },
 		vSize: String,
 	},
 
+	data() {
+		return {
+			inputs: [],
+			exclude: ["vEvents", "vSize"]
+		}
+	},
+
 	computed:{
-		inputs() {
-			return this.getInputs([this.id, this.name, this.type, this.placeholder, this.value]);
+		/**
+		 * Make object with inputs attributes
+		 * 
+		 * @returns {Object[]}
+		 */
+		attrs() {
+			const data = Object.keys(this.$props).filter(e => !this.exclude.includes(e));
+
+			return this.getAttrs(
+				data,
+				data.map(prop => this.$props[prop])
+			);
 		}
 	},
 
@@ -25,6 +44,8 @@ export default {
 		 * Convert String to Array
 		 * 
 		 * @param {String} param
+		 * 
+		 * @returns {Array}
 		 */
 		toArray(param) {
 			return Array.isArray(param) ? param : [param];
@@ -35,25 +56,25 @@ export default {
 		 * 
 		 * @param {Array} inputs
 		 * 
-		 * @returns {Object[]}
+		 * @returns {Object}
 		 */
-		getInputs(inputs) {
-			const input = Object.keys(this.$props).reduce((o, p) => {
+		getAttrs(keys, values) {
+			const props = keys.reduce((o, p) => {
 				o[p] = this.toArray(this[p]);
 
 				return o;
 			}, {});
 
-			return inputs
+			return values
 				.map(m => this.toArray(m))
 				.sort((a, b) => a.length > b.length ? -1 : (a.length < b.length ? 1 : 0))[0]
 				.reduce((a, v, i) => {
 					a.push(
 						/* Generate input keys */
-						Object.keys(input).reduce((o, k) => {
-							if (k === "type") o[k] = this.getType(input[k][i] ?? input[k][input[k].length - 1]);
-							else if (["min", "max"].includes(k)) o[k] = input[k][i] ?? input[k][input[k].length - 1];
-							else o[k] = input[k][i] ?? null
+						keys.reduce((o, k) => {
+							if (k === "type") o[k] = this.getType(props[k][i] ?? props[k][props[k].length - 1]);
+							else if (["min", "max"].includes(k)) o[k] = props[k][i] ?? props[k][props[k].length - 1];
+							else o[k] = props[k][i] ?? null
 	
 							return o;
 						}, {})
@@ -75,11 +96,15 @@ export default {
 				case "minmax": return "number";
 				default: return type;
 			}
-		},
-
-		emit(type, e, index) {
-			this.inputs[index].value = e.target.value;
-			this.$emit(type, e, this.inputs[index]);
 		}
-	}
+	},
+
+	mounted() {
+		/* Create real-time computed property */
+		this.inputs = new Proxy(this.$refs.fields, {
+			get(target, index) {
+				return target?.[index];
+			}
+		});
+	},
 }

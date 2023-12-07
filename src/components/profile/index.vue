@@ -21,13 +21,7 @@
 					</li>
 
 					<li>
-						<ul class="stars">
-							<li><a href="#"><i class="fa fa-star"></i></a></li>
-							<li><a href="#"><i class="fa fa-star"></i></a></li>
-							<li><a href="#"><i class="fa fa-star"></i></a></li>
-							<li><a href="#"><i class="fa fa-star"></i></a></li>
-							<li><a href="#"><i class="fa fa-star"></i></a></li>
-						</ul>
+						<Score :value="0" />
 					</li>
 
 					<li>

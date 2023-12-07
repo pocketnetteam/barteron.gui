@@ -1,6 +1,6 @@
 <template>
 	<div id="content">
-		<section v-if="mayMatchExchanges.length">
+		<section v-if="mayMatchExchanges?.length">
 			<h1>{{ $t('may_match_exchanges') }}</h1>
 			<BarterList
 				:items="mayMatchExchanges"
@@ -8,12 +8,12 @@
 			/>
 		</section>
 
-		<section>
-			<h1>{{ $t('popular_categories') }}</h1>
-			<AssocList :items="favorites" />
-		</section>
+		<!-- <section>
+			<h1>{{ $t('categories.popular') }}</h1>
+			<PopularList :items="favorites" />
+		</section> -->
 
-		<section v-if="newFromGoods.length">
+		<section v-if="newFromGoods?.length">
 			<h1>{{ $t('new_from_goods') }}</h1>
 			<BarterList
 				:items="newFromGoods"

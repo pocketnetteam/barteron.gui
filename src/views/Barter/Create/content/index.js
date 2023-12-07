@@ -1,6 +1,6 @@
 import { GeoHash } from "geohash";
 import BarterList from "@/components/barter/list/index.vue";
-import CategoriesSelect from "@/components/categories/multiple-select/index.vue";
+import Category from "@/components/categories/field/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
 
 export default {
@@ -8,7 +8,7 @@ export default {
 
 	components: {
 		BarterList,
-		CategoriesSelect,
+		Category,
 		ExchangeList
 	},
 
@@ -106,20 +106,21 @@ export default {
 		calcPrice(reverse) {
 			const
 				values = this.sdk.currency,
-				price = this.$refs.price.$refs.fields[0],
+				price = this.$refs.price.inputs?.[0],
 				currency = this.$refs.currency?.selected?.toUpperCase();
 
-				if (Object.keys(values).length) {
-					if (reverse?.target) {
-						/* Typing in price field */
-						this.price = parseInt(price.value);
-						this.pkoin = Math.ceil(((this.price / values[currency]) * 100) / 100);
-					} else {
-						/* Get value from offer */
-						this.pkoin = parseInt(reverse);
-						this.price = Math.ceil(((this.pkoin * values[currency]) * 100) / 100);
-					}
+			if (!this.sdk.empty(values)) {
+				if (!price?.value.length) price.value = 0;
+				if (reverse?.target || reverse?.value) {
+					/* Typing in price field */
+					this.price = parseFloat(price?.value || 0);
+					this.pkoin = (((this.price / values[currency]) * 100) / 100).toFixed(2);
+				} else {
+					/* Get value from offer */
+					this.pkoin = parseFloat(reverse || 0);
+					this.price = (((this.pkoin * values[currency]) * 100) / 100).toFixed(2);
 				}
+			}
 		},
 
 		/**
@@ -128,7 +129,7 @@ export default {
 		 * @param {Object} offer
 		 */
 		fillData(offer) {
-			setTimeout(() => {
+			this.$nextTick(() => {
 				if (offer.hash?.length >= 64 || offer.hash === "draft") {
 					if (offer.tags) {
 						if (["my_list", "for_nothing"].includes(offer.tags[0])) {
@@ -139,22 +140,31 @@ export default {
 							this.tags = offer.tags;
 						}
 					}
+
 					if (offer.condition) this.condition = offer.condition;
 	
-					if (offer.images && this.$refs.photos) this.$refs.photos.remove().add(offer.images);
-					if (offer.tag && this.$refs.category) this.$refs.category.remove().value(offer.tag);
-					if (offer.price && this.$refs.price) this.calcPrice(offer.price);
+					if (offer.price) {
+						this.pkoin = offer.price;
+
+						/* Await for currencies list */
+						clearInterval(this.awaitCurrency);
+						this.awaitCurrency = setInterval(() => {
+							if (!this.sdk.empty(this.sdk.currency)) {
+								clearInterval(this.awaitCurrency);
+								delete this.awaitCurrency;
+
+								this.calcPrice(offer.price);
+							}
+						});
+					}
 				} else {
 					/* Reset fields to default */
 					this.tags = [];
 					this.getting = "something";
 					this.condition = "new";
-	
-					if (this.$refs.photos) this.$refs.photos.remove();
-					if (this.$refs.category) this.$refs.category.remove();
-					if (this.$refs.price) this.calcPrice(0);
+					this.price = this.pkoin = 0;
 				}
-			}, 10);
+			});
 		},
 
 		/**
@@ -179,8 +189,8 @@ export default {
 				language: this.$i18n.locale,
 				caption: data.title,
 				description: data.description,
-				tag: data.category,
-				tags: this.getting === "something" ? data.tags.split(",") : [this.getting],
+				tag: Number(data.category),
+				tags: this.getting === "something" ? data.tags.split(",").map(tag => Number(tag)) : [this.getting],
 				condition: this.condition,
 				images: Object.values(images),
 				geohash: GeoHash.encodeGeoHash.apply(null, center),
@@ -196,8 +206,11 @@ export default {
 		preview() {
 			this.serializeForm();
 
-			console.log(this.$i18n)
-			this.$router.push({ name: "barterItem", params: { id: this.offer.hash } });
+			this.$router.push({
+				name: "barterItem",
+				params: { id: this.offer.hash },
+				query: { preview: 1 }
+			});
 		},
 
 		/**
@@ -245,12 +258,12 @@ export default {
 						}).then((data) => {
 							if (data.transaction) {
 								if (this.offer.hash?.length < 64) {
-									this.offer.destroy();
+									this.offer.update({ hash: data.transaction });
 								}
 
 								form.dialog.hide();
 								this.$router.push({
-									name: "addedBarter",
+									name: "exchangeOptions",
 									params: {
 										id: hash?.length < 64 ? data.transaction : hash
 									}
@@ -262,6 +275,7 @@ export default {
 								`dialog.error#${ e?.toString()?.replace(/[^\d-]/g, '') || 0 }`,
 								{ details: e }
 							);
+
 							form.dialog.view("error", this.$t('dialog.node_error', { error }));
 						});
 					})
@@ -271,5 +285,10 @@ export default {
 					});
 			}
 		}
+	},
+
+	beforeCreate() {
+		/* Request for permissons */
+		this.sdk.requestPermissions(["account"]);
 	}
 }

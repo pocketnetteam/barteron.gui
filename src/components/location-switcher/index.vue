@@ -7,12 +7,14 @@
 		vType="stroke"
 		@click="showLightbox"
 	>
-		<i class="fa fa-map-marker-alt"></i>
+		<i
+			:class="`fa fa-map-marker-alt${ !address ? ' slash' : '' }`"
+		></i>
 		<div class="info">
 			<strong class="location">
-				<template v-if="address">{{ address.country }}, {{ address.city || address.town || address.county }}</template>
+				<template>{{ address ?? $t('buttonLabels.unknown') }}</template>
 			</strong>
-			<span class="distance">{{ radius || 0 }}{{ $t('metrics.km') }}</span>
+			<span class="distance">{{ address ? (radius || 0) + $t('metrics.km') : '~' }}</span>
 		</div>
 
 		<template #after>
@@ -26,7 +28,7 @@
 					<div class="row info">
 						<i class="fa fa-map-marker-alt"></i>
 						<span>
-							<template v-if="address">{{ address.country }}, {{ address.city || address.town || address.county }}</template>
+							<template>{{ address ?? $t('buttonLabels.unknown') }}</template>
 						</span>
 					</div>
 
@@ -70,7 +72,7 @@
 						<!-- vMap -->
 						<v-map
 							ref="map"
-							:center="mapType === 'static' ? geohash : location"
+							:center="mapType === 'static' ? geohash : (location || undefined)"
 							:allowPosition="true"
 							:allowSelection="true"
 							v-if="lightbox"

@@ -4,6 +4,23 @@
 		"hide_all": "Hide all"
 	},
 
+	"search": {
+		"global": "Search on Barteron",
+		"category": "Search in {category}",
+		"placeholder": "Search",
+		"found": "{count} {results} has found",
+		"result": "result",
+		"results": "results",
+		"not_found": "Nothing found"
+	},
+
+	"categories": {
+		"root": "Categories",
+		"choose": "Choose a category",
+		"popular": "Most popular categories",
+		"select": "Select"
+	},
+
 	"category": {
 		"label": "Category",
 		"show": "Show",
@@ -97,14 +114,14 @@
 		"continue_edit": "Continute edit",
 		"ok": "Ok",
 		"yes": "Yes",
-		"no": "No"
+		"no": "No",
+		"unknown": "Unknown"
 	},
 
 	"barterLabels": {
 		"to": "Exchange to",
 		"free": "For free",
-		"select": "Select item that you want exchange",
-		"unknown": "Unknown"
+		"select": "Select item that you want exchange"
 	},
 
 	"exchange": {
@@ -126,8 +143,14 @@
 
 	"item": {
 		"autorenew": "Autorenew",
-		"edit": "Edit",
-		"find_exchange": "Find exchange"
+		"edit": "Edit"
+	},
+
+	"exchange_options": {
+		"label": "Exchange Options",
+		"title": "We can find exchange options for you",
+		"text": "Offer an exchange if you like the option found. Above are the best options.",
+		"find": "Find exchange"
 	},
 
 	"dialog": {
@@ -140,7 +163,6 @@
 
 		"error#-26": "Min relay fee not met",
 		"error#-1": "Error loading sdk library",
-		"error#-2": "Connection error. Try again?",
 		"error#0": "{details}",
 		"error#21": "Failed OpReturn",
 		"error#28": "Too many transactions",
@@ -148,6 +170,8 @@
 	},
 
 	"feedbacks": {
+		"title": "Rating",
+		"votes": "{count} votes",
 		"placeholder": "Leave your feedback here",
 		"empty": "There is no feedbacks yet"
 	},
@@ -159,20 +183,14 @@
 
 	"title": "Title",
 	"upload_image": "Upload image",
-	"upload_image_text": "The first photo will be displayed in the search results, select the best one. You can upload up to 10 photos in %s format. The maximum photo size is 25MB.",
+	"upload_image_text": "The first photo will be displayed in the search results, select the best one. You can upload up to {count} photos in {formats} format. The maximum photo size is {size}MB.",
 	"my_list": "My list",
 	"something": "Something",
 	"for_nothing": "For nothing",
-	"choose_category": "Choose a category",
 	"choose_currency_text": "Barteron uses its own cryptocurrency (PKOIN) as the main assessment, you can evaluate your item in any currency convenient for you and find out how much it will be in PKOIN",
 	"exact_address": "Exact address",
 	"city_name": "City name",
 
-	"find_exchange_options": "We can find exchange options for you",
-	"exchange_options": "Exchange Options",
-	"echange_options_text": "Offer an exchange if you like the option found. Above are the best options.",
-
 	"may_match_exchanges": "May match with your exchanges",
-	"popular_categories": "Most popular categories",
 	"new_from_goods": "New from goods"
 }

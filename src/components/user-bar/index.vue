@@ -2,19 +2,28 @@
 	<div class="user-bar">
 		<ul>
 			<li>
-				<router-link :to="{ path: `/profile/${ sdk.address }#favorites` }" class="link">
+				<a
+					class="link"
+					@click="$event => requestPermissions($event, { path: `/profile/${ address }#favorites` })"
+				>
 					<i class="fa fa-heart"></i>
-				</router-link>
+			</a>
 			</li>
 
 			<li>
-				<router-link :to="{ path: `/profile/${ sdk.address }#feedbacks` }" class="link">
+				<a
+					class="link"
+					@click="$event => requestPermissions($event, { path: `/profile/${ address }#feedbacks` })"
+				>
 					<i class="fa fa-comment"></i>
-				</router-link>
+			</a>
 			</li>
 
 			<li>
-				<router-link class="avatar" :to="{ name: 'profile', params: { id: sdk.address } }">
+				<a
+					class="avatar"
+					@click="$event => requestPermissions($event, { path: `/profile/${ address }` })"
+				>
 					<i
 						v-if="!user?.i"
 						:style="hslColor"
@@ -23,11 +32,11 @@
 					<picture v-else>
 						<img :src="user?.i" :alt="user?.name">
 					</picture>
-				</router-link>
+				</a>
 			</li>
 
 			<li>
-				<v-button :to="{ name: 'createBarter' }">
+				<v-button @click="$event => requestPermissions($event, { name: 'createBarter' })">
 					<i class="fa fa-plus"></i>
 					<span>Create barter</span>
 				</v-button>

@@ -1,17 +1,28 @@
 @import "@/css/vars.sass"
 	
 .v-textarea-holder
+	+transition(background-color)
+	background-color: $goku
 	border: 1px solid $beerus
 	border-radius: 9px
 	display: flex
 	padding: 2px
 	position: relative
 
+	&:focus-within
+		background: none
+
 	textarea
+		+transition(outline-color)
+		background: none
 		border: 0
 		padding: 0
+		outline-color: $beerus
 		min-height: 113px
 		width: 100%
+
+		&:focus
+			outline-color: $blue
 
 		&.no-resize
 			resize: none

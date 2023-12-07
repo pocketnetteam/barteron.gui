@@ -19,22 +19,29 @@ class Offer {
 			{ t, a, c } = JSON.parse(data?.p?.s4 || '{"t":"","a":[],"c":"new"}'),
 			images = JSON.parse(data?.p?.s5 || "[]");
 		
+		/* Iterable properties */
 		this.address = data?.address || data?.s1 || "";
-		this.hash = data?.hash || data?.s2 || null;
+		this.hash = data?.s2 || data?.hash || null;
 		this.language = data?.language || data?.p?.s1 || "";
 		this.caption = data?.caption || data?.p?.s2 || "";
 		this.description = data?.description || data?.p?.s3 || "";
-		this.tag = data?.tag || t || "";
-		this.tags = data?.tags || a || [];
+		this.tag = data?.tag || t || null;
+		this.tags = (data?.tags || a || []).map(tag => !isNaN(+tag) ? +tag : tag);
 		this.condition = data?.condition || c || "new";
 		this.images = data?.images || images;
 		this.geohash = data?.geohash || data?.p?.s6 || "";
-		this.price = data?.price || data?.p?.i1 || 0;
+		this.price = (data?.price || data?.p?.i1 || 0) / 100;
 
-		/* Make hidden properties */
+		const
+			time = data?.time * 1000 || +new Date,
+			date = data?.till || new Date(time),
+			till = date?.setMonth(date.getMonth() + 1) || date;
+
+		/* Hidden properties */
 		Object.defineProperties(this, {
 			sdk: { value: sdk },
-			time: { value: data.time * 1000 || (new Date()) }
+			time: { value: time },
+			till: { value: till }
 		});
 
 		if (data.hash === "draft" && !this.sdk.barteron._offers[data.hash]) {
@@ -50,10 +57,19 @@ class Offer {
 	 * @returns {Offer}
 	 */
 	update(data) {
+		const
+			oldHash = this.hash,
+			newHash = data.hash;
+
 		if (Object.keys(data).length) {
 			for (const p in data) {
 				this[p] = data[p];
 			}
+		}
+
+		if (oldHash && newHash && oldHash !== newHash) {
+			Vue.delete(this.sdk.barteron._offers, oldHash);
+			Vue.set(this.sdk.barteron._offers, newHash, this);
 		}
 
 		return this;
@@ -65,7 +81,7 @@ class Offer {
 	 * @param {Object} data
 	 */
 	set(data) {
-		return this.sdk.setBrtOffer({ ...this.update(data) });
+		return this.sdk.setBrtOffer({ ...this.update(data), price: this.price * 100 });
 	}
 
 	/**

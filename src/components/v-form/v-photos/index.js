@@ -2,9 +2,13 @@ export default {
 	name: "Vphotos",
 
 	props: {
-		multiple: String, /* Allow upload multiple files at once */
-		accept: String, /* File extensions with comma - gif, jpeg, png */
-		maxLen: String /* Count of maximum photos */
+		multiple: String,
+		accept: String,
+		maxLen: String,
+		images: {
+			type: Array,
+			default: () => []
+		}
 	},
 
 	data() {
@@ -109,12 +113,14 @@ export default {
 		add(images) {
 			if (Array.isArray(images)) {
 				images.forEach(image => {
-					this.files.push({
-						id: `image-${ this.hash() }`,
-						image
-					});
+					if (!this.files.filter(file => file.image === image)?.length) {
+						this.files.push({
+							id: `image-${ this.hash() }`,
+							image
+						});
+					}
 				});
-			} else {
+			} else if(!this.files.filter(file => file.image === images)?.length) {
 				this.files.push({
 					id: `image-${ this.hash() }`,
 					...images
@@ -171,7 +177,15 @@ export default {
 		}
 	},
 
+	watch: {
+		images(images) {
+			this.add(images);
+		}
+	},
+
 	created() {
+		this.add(this.images);
+		
 		document.addEventListener("dragover", e => this.dragtoggle(e));
 		document.addEventListener("dragleave", e => this.dragtoggle(e));
 		document.addEventListener("drop", e => this.dragtoggle(e));

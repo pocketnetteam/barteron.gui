@@ -1,0 +1,58 @@
+@import "@/css/vars.sass"
+
+.score
+	display: flex
+	align-items: center
+	gap: $r
+
+	.rating
+		color: $popo
+		font-size: 1em
+		font-weight: bold
+
+		&.score-behind
+			order: 2
+
+	.stars
+		position: relative
+
+		ul
+			+resetList()
+			display: flex
+			font-size: 1.15em
+			margin: 0 0 0 -2px
+
+			li
+				+transition(color)
+				color: $lightgray
+				cursor: default
+				display: block
+				padding: 2px
+				text-decoration: none
+
+		.padded
+			position: absolute
+			top: 0
+			left: 0
+			overflow: hidden
+			width: calc(100% / 5 * var(--r))
+
+			li
+				color: $hit
+
+			@at-root .voteable#{&}
+				width: auto
+
+				li
+					color: transparent
+
+					&.voted
+						color: $hit
+
+				&:hover
+					li
+						color: $hit-hover
+						cursor: pointer
+
+						&:hover ~ li
+							color: $lightgray

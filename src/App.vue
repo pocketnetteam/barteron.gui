@@ -2,7 +2,7 @@
 	<div id="app">
 		<v-dialog ref="dialog" />
 
-		<template v-if="permissions">
+		<template v-if="sdk.sdk">
 			<transition type="fade" v-if="loading">
 				<loader :loading="loading" />
 			</transition>
@@ -51,48 +51,11 @@ export default {
 		 * @returns {Boolean}
 		 */
 		 loading() {
-			return !this.user?.name;
-		},
-		
-		/**
-		 * Get user from sdk
-		 * 
-		 * @returns {Object}
-		 */
-		user() {
-			return this.sdk.accounts[this.sdk.address];
+			return !this.sdk?.sdk;
 		}
 	},
 
 	methods: {
-		/**
-		 * Request permissions through bastyon dialog
-		 * 
-		 * @returns {Void}
-		 */
-		requestPermissions() {
-			const dialog = this.dialog;
-
-			dialog?.view("load", this.$t("dialog.checking_connection"));
-
-			setTimeout(() => {
-				if (!this.permissions) {
-					if (dialog) {
-						dialog.view("question", {
-							text: this.$t("dialog.error#-2"),
-							buttons: [
-							{ text: this.$t("buttonLabels.no"), vType: "dodoria", vSize: "sm", click: () => dialog.hide() },
-							{ text: this.$t("buttonLabels.yes"), vType: "blue", vSize: "sm", click: () => this.requestPermissions() }
-							]
-						});
-					} else {
-						this.requestPermissions();
-					}
-				}
-			}, 5000);
-		},
-
-
 		/**
 		 * Check is components includes given names
 		 * 
@@ -108,19 +71,6 @@ export default {
 	},
 
 	mounted() {
-		if (this.sdk.sdk) {
-			this.sdk.requestPermissions([
-				"account",
-				"location"
-			])
-			.then(() => {
-				this.permissions = true;
-				this.dialog?.hide();
-			});
-
-			this.requestPermissions();
-		}
-
 		/* Watch for dialog */
 		const interval = setInterval(() => {
 			if (this.$refs.dialog) {

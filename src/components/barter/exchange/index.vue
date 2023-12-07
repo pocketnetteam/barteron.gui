@@ -20,21 +20,21 @@
 		</div>
 
 		<div class="propose">
-			<v-button>
+			<v-button @click="proposeExchange">
 				<i class="fa fa-sync"></i>
 				<span>{{ $t('buttonLabels.propose_exchange') }}</span>
 			</v-button>
 
 			<v-button
 				v-if="groupExchange.length"
-				vType="stroke"
+				vType="bulma-stroke"
 				class="btn-group"
 			>
 				<span>
 					<i class="fa fa-users"></i>
 					<span>{{ $t('buttonLabels.group_exchange') }}</span>
 				</span>
-				<ul>
+				<ul :style="{ '--len': groupExchange.length }">
 					<li
 						v-for="(item, index) in groupExchange" :key="index"
 					>

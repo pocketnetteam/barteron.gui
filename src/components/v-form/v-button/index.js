@@ -1,11 +1,17 @@
+import Vue from "vue";
+
 export default {
 	name: "Vbutton",
 
 	props: {
-		vAlign: String,
-		vType: String, /* ghost, stroke, bulma, gray */
-		vSize: String,
+		disabled: [String, Boolean],
+		vAlign: String,	/* right */
+		vType: String,	/* ghost, stroke, bulma, gray */
+		vSize: String,	/* xs, sm, md, lg, xl */
 		to: [String, Object],
+
+		vText: String,
+		vHtml: String,
 
 		dropdown: {
 			type: Array,
@@ -23,20 +29,27 @@ export default {
 
 	data() {
 		return {
-			active: false
+			active: false,
+			ripples: []
 		}
 	},
 
 	computed: {
 		type() {
-			if (this.to) {
-				return "router-link";
-			}
-			return "button";
+			return this.to ? "router-link" : "button";
 		},
 
 		value() {
 			return this.$slots?.default[0]?.elm?.parentNode?.querySelector(this.valueSelector);
+		},
+
+		rawHTML() {
+			const string = new DOMParser()
+				.parseFromString(this.vText || this.vHtml, "text/html").body.childNodes[0];
+				
+			this.$nextTick(() => {
+				this.$refs.text.insertBefore(string, null);
+			});
 		},
 
 		hasDropdown() {
@@ -45,6 +58,18 @@ export default {
 	},
 
 	methods: {
+		/**
+		 * Add prefix to each word in string
+		 * 
+		 * @param {String} string
+		 * @param {String} prefix
+		 * 
+		 * @returns {String}
+		 */
+		prefix(string, prefix) {
+			return (string ?? "").split(" ").map(word => `${ prefix }-${ word }`).join(" ");
+		},
+
 		/**
 		 * Set value in button
 		 * 
@@ -55,6 +80,34 @@ export default {
 				/* Set value in valueSelector */
 				this.value.innerHTML = item[this.dropdownItemKey] || item.text || item;
 			}
+		},
+
+		/**
+		 * Start ripple animation
+		 * 
+		 * @param {Event} e
+		 */
+		animateRipple(e) {
+			const 
+				el = this.$refs.button.$el || this.$refs.button,
+				pos = el?.getBoundingClientRect();
+
+			if (e && pos) {
+				this.ripples.push({
+					x: e.clientX - pos.left,
+					y: e.clientY - pos.top,
+					show: true
+				});
+			}
+		},
+
+		/**
+		 * End ripple animation
+		 * 
+		 * @param {Number} i
+		 */
+		rippleEnd(i) {
+			this.ripples[i].show = false;
 		},
 
 		/**

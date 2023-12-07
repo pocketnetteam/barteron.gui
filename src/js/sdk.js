@@ -22,7 +22,7 @@ class SDK {
 
 	_address = "";
 	get address() {
-		if (!this._address) this.getAccount();
+		if (!this._address) this.getAddress();
 		return this._address;
 	}
 
@@ -34,18 +34,21 @@ class SDK {
 
 	_location = {};
 	get location() {
-		if (this.empty("_location")) this.getLocation();
+		if (this.empty(this._location)) {
+			this.getLocation();
+		}
+
 		return this._location;
 	}
 
 	_currency = {};
 	get currency() {
-		if (this.empty("_currency")) this.getCurrency();
+		if (this.empty(this._currency)) this.getCurrency();
 		return this._currency;
 	}
 
 	empty(prop) {
-		return !Object.values(this?.[prop]).length;
+		return prop && !Object.values(prop).length;
 	}
 
 	cyrb53(str, seed = 0) {
@@ -72,9 +75,10 @@ class SDK {
 
 		this.sdk = new window.BastyonSdk();
 
-		this.sdk.emit("loaded");
+		this.emit = this.sdk.emit;
+		this.on = this.sdk.on;
 
-		this.sdk.on("action", d => {
+		this.on("action", d => {
 			const action = JSON.stringify(d);
 
 			this.emitted.push({
@@ -84,7 +88,7 @@ class SDK {
 			});
 		});
 
-		this.sdk.on("balance", balance => {
+		this.on("balance", balance => {
 			this._balance = balance;
 			this.emitted.push({
 				type : "balance",
@@ -92,6 +96,12 @@ class SDK {
 				date : new Date(),
 			})
 		});
+
+		this.on("changeroute", route => {
+			console.log(`receive emit: ${ route }`)
+		});
+
+		this.emit("loaded");
 
 		/**
 		 * Reactive observable
@@ -104,7 +114,7 @@ class SDK {
 		this.accounts = new Proxy(this._accounts, {
 			get(target, address) {
 				if (typeof address !== "string" || address?.length < 32) return this;
-				else if (!target?.[address]) $.getUserInfo(address);
+				else if (!target?.[address]) $.getUserProfile(address);
 				return target?.[address];
 			}
 		})
@@ -112,34 +122,40 @@ class SDK {
 		/* Inner storage */
 		this.barteron = {
 			_accounts: {},
-			_offers: {}
+			_offers: {},
+			_details: {}
 		};
 
 		/* Observe sub-objects watchers */
 		this.barteron = {
 			...this.barteron,
 
-			/* Barteron account operations */
+			/* Barteron account */
 			accounts: new Proxy(this.barteron._accounts, {
 				get(target, address) {
 					if (typeof address !== "string" || address?.length < 32) return this;
 					else if (!target?.[address]) $.getBrtAccount(address);
 					return target?.[address];
-				},
-				set(target, address, data) {
-					return $.setBrtAccount({ address, ...data });
 				}
 			}),
 
-			/* Barteron offers operations */
+			/* Barteron offers */
 			offers: new Proxy(this.barteron._offers, {
 				get(target, hash) {
 					if (hash !== "draft" && (typeof hash !== "string" || hash?.length < 64)) return this;
 					else if (!target?.[hash]) $.getBrtOffersByHashes([hash]);
 					return target?.[hash];
-				},
-				set(target, hash, data) {
-					return $.setBrtOffer({ hash, ...data });
+				}
+			})
+
+			,
+
+			/* Barteron offers details */
+			details: new Proxy(this.barteron._details, {
+				get(target, hash) {
+					if (hash !== "draft" && (typeof hash !== "string" || hash?.length < 64)) return this;
+					else if (!target?.[hash]) $.getBrtOffersDetails({ offerIds: [hash] });
+					return target?.[hash];
 				}
 			})
 		}
@@ -157,6 +173,19 @@ class SDK {
 		this.sdk.helpers.opensettings().then(() => {
 			this.lastresult = "opensettings: success"
 		}).catch(e => this.setLastResult(e))
+	}
+
+	/**
+	 * 
+	 * @param {Object} request
+	 * @param {String} request.name
+	 * @param {Array} request.members
+	 * @param {String} request.message
+	 * 
+	 * @returns {Promise}
+	 */
+	createRoom(request) {
+		return this.sdk.helpers.createroom(request);
 	}
 
 	imageFromMobileCamera() {
@@ -186,6 +215,17 @@ class SDK {
 	}
 
 	/**
+	 * Check if permission is granted
+	 * 
+	 * @param {String} permission - Permission name
+	 * 
+	 * @returns {Boolean}
+	 */
+	checkPermission(permission) {
+		return this.sdk.check.permission({ permission });
+	}
+
+	/**
 	 * Request permissions
 	 * 
 	 * @param {Array} permissions
@@ -198,8 +238,9 @@ class SDK {
 
 		if (!this.permissionsDialog?.[hash]) {
 			this.permissionsDialog[hash] = this.sdk.request.permissions(permissions)
-				.then(() => {
+				.then(result => {
 					this.lastresult = "messaging: granted"
+					return result.reduce((o, p) => ({ ...o, ...p }), {});
 				})
 				.catch(e => this.setLastResult(e))
 				.finally(() => delete this.permissionsDialog[hash])
@@ -213,12 +254,38 @@ class SDK {
 	 * 
 	 * @returns {Promise}
 	 */
-	getAccount() {
-		return this.sdk.get.account().then(({ address }) => {
-			this.lastresult = "user address: " + address;
-			Vue.set(this, "_address", address);
-			return address;
-		}).catch(e => this.setLastResult(e));
+	async getAddress() {
+		const isGranted = await this.checkPermission("account");
+
+		if (isGranted) {
+			return this.sdk.get.account().then(({ address }) => {
+				this.lastresult = "user address: " + address;
+				Vue.set(this, "_address", address);
+				return address;
+			}).catch(e => this.setLastResult(e));
+		} else {
+			return Promise.resolve({});
+		}
+	}
+
+	/**
+	 * Get bastyon user by address
+	 * 
+	 * @prop {String} address
+	 * 
+	 * @returns {Promise}
+	 */
+	async getUserProfile(address) {
+		if (!address && !this._address) await this.getAddress();
+		address = address || this._address;
+		if (!this._accounts[address]) Vue.set(this._accounts, address, {});
+
+		return this.rpc("getuserprofile", [address]).then(accounts => {
+			return accounts?.map(account => {
+				Vue.set(this._accounts, account.address, account);
+				return account;
+			});
+		});
 	}
 
 	/**
@@ -259,12 +326,19 @@ class SDK {
 	 * 
 	 * @returns {Promise}
 	 */
-	getLocation() {
-		return this.sdk.get.location().then(location => {
-			this.lastresult = location;
-			Vue.set(this, "_location", location);
-			return location;
-		}).catch(e => this.setLastResult(e));
+	async getLocation() {
+		const isGranted = await this.checkPermission("location");
+		
+		if (isGranted) {
+			return this.sdk.get.location().then(location => {
+				this.lastresult = location;
+				Vue.set(this, "_location", location);
+				return this._location;
+			}).catch(e => this.setLastResult(e))
+		} else {
+			Vue.set(this, "_location", this._location);
+			return Promise.resolve(this._location);
+		}
 	}
 
 	/**
@@ -354,26 +428,6 @@ class SDK {
 	}
 
 	/**
-	 * Get bastyon user info
-	 * 
-	 * @prop {String} address
-	 * 
-	 * @returns {Promise}
-	 */
-	async getUserInfo(address) {
-		if (!address && !this._address) await this.getAccount();
-		address = address || this._address;
-		if (!this._accounts[address]) Vue.set(this._accounts, address, {});
-
-		return this.rpc("getuserprofile", [address]).then(accounts => {
-			return accounts?.map(account => {
-				Vue.set(this._accounts, account.address, account);
-				return account;
-			});
-		});
-	}
-
-	/**
 	 * Get Node data
 	 * 
 	 * @returns {Promise}
@@ -436,13 +490,16 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	async getBrtOffers(address) {
-		if (!address && !this._address) await this.getAccount();
+		if (!address && !this._address) await this.getAddress();
 		address = address || this._address;
 
 		return this.rpc("getbarteronoffersbyaddress", address).then(offers => {
-			if (offers?.length) {
-				offers = offers.map(offer => new Offer(this, offer));
-			}
+			offers = offers?.map(offer => {
+				offer = new Offer(this, offer);
+				Vue.set(this.barteron._offers, offer.hash, offer);
+
+				return offer;
+			}) || [];
 
 			return offers;
 		});
@@ -494,16 +551,69 @@ class SDK {
 		});
 
 		return this.rpc("getbarteronoffersbyhashes", hashes).then(offers => {
-			if (offers?.length) {
-				offers = offers.map(offer => {
-					offer = new Offer(this, offer);
-					Vue.set(this.barteron._offers, offer.hash, offer);
+			offers = offers?.map(offer => {
+				offer = new Offer(this, offer);
+				Vue.set(this.barteron._offers, offer.hash, offer);
 
-					return offer;
-				});
-			}
+				return offer;
+			}) || [];
 
 			return offers;
+		});
+	}
+
+	/**
+	 * Get barteron offers details
+	 * 
+	 * @param {Object} request
+	 * 
+	 * Base
+	 * 
+	 * @param {Array[String]} request.offerIds Offer tx hashes
+	 * @param {Boolean} request.includeAccounts Owner's accounts data, default: true
+	 * @param {Boolean} request.includeScores Owner's accounts scores, default: true
+	 * @param {Boolean} request.includeComments Owner's feedbacks, default: true
+	 * @param {Boolean} request.includeCommentScores Owner's feedbacks scores, default: true
+	 * 
+	 * @returns {Promise}
+	 */
+	getBrtOffersDetails(request) {
+		request?.offerIds.forEach(hash => {
+			if (!this.barteron._details[hash]) {
+				Vue.set(this.barteron._details, hash, {});
+			}
+		});
+
+		return this.rpc("getbarteronoffersdetails", {
+			offerIds: [],
+			includeAccounts: true,
+			includeScores: true,
+			includeComments: true,
+			includeCommentScores: true,
+			...request
+		}).then(details => {
+			console.log(details)
+			request?.offerIds.forEach(hash => {
+				if (!this.empty(details)) {
+					const data = {};
+
+					/* Map responses with their hashes */
+					for (const key in details) {
+						if (key === "accounts") {
+							data[key] = details[key]?.map(account => {
+								account = new Account(this, account);
+								return Vue.set(this.barteron._accounts, account.address, account);
+							}) || [];
+						} else {
+							data[key] = details[key]?.filter(f => f.hash === hash) || [];
+						}
+					}
+
+					Vue.set(this.barteron._details, hash, data);
+				}
+			});
+
+			return details;
 		});
 	}
 
@@ -533,7 +643,14 @@ class SDK {
 	 */
 	getBrtOffersFeed(request = {}) {
 		return this.rpc("getbarteronfeed", request).then(feed => {
-			return feed?.offers?.map(offer => new Offer(this, offer)) || [];
+			feed = feed?.map(offer => {
+				offer = new Offer(this, offer);
+				Vue.set(this.barteron._offers, offer.hash, offer);
+
+				return offer;
+			}) || [];
+
+			return feed;
 		});
 	}
 
@@ -544,10 +661,12 @@ class SDK {
 	 * 
 	 * Base
 	 * 
-	 * @param {String} request.offer Offer tx hash for find deals
-	 * @param {String} request.address Filter potencial offers with this account address
-	 * @param {Number} request.location Count of symbols for compare locations: substr(loc1, X) == substr(loc2, X)
+	 * @param {Array} request.addresses Filter potencial offers with these account addresses
+	 * @param {Array} request.excludeAddresses Filter potencial offers by excluding offers with these addresses
+	 * @param {String} request.location An SQLite3 language expression to be used with `LIKE` operator when comparing locations
 	 * @param {Number} request.price Max amount of difference offer prices: abs(price1 - price2) < X
+	 * @param {Array} request.myTags Filter potencial offers by the tags they are exchangable for
+	 * @param {Array} request.theirTags
 	 * 
 	 * Pagination
 	 * 
@@ -560,8 +679,19 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	getBrtOfferDeals(request) {
-		return this.rpc("getbarterondeals", request).then(deals => {
-			return deals?.map(deal => new Offer(this, deal)) || [];
+		return this.rpc("getbarterondeals", {
+			...request,
+			myTags: (request?.myTags || []).map(tag => parseInt(tag)),
+			theirTags: (request?.theirTags || []).map(tag => parseInt(tag))
+		}).then(deals => {
+			deals = deals?.map(offer => {
+				offer = new Offer(this, offer);
+				Vue.set(this.barteron._offers, offer.hash, offer);
+
+				return offer;
+			}) || [];
+
+			return deals;
 		});
 	}
 
@@ -581,7 +711,6 @@ class SDK {
 	 */
 	setBrtComment(data) {
 		return this.sdk.set.barteron.comment(data).then(result => {
-			if (data.answerid) Vue.set(this.barteron._comments, data.answerid, data);
 			return result;
 		});
 	}

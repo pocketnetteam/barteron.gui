@@ -1,0 +1,83 @@
+@import "@/css/vars.sass"
+
+.category-field
+	+transition(background-color)
+	background-color: $goku
+	border: 1px solid $beerus
+	border-radius: 1rem
+	cursor: pointer
+	padding: 1px
+
+	&.focus-within
+		background: none
+
+		.category-field-holder
+			+transition(border-color, .3s, ease-in)
+			border-color: $blue
+
+	.category-field-holder
+		+transition(border-color, 0s, ease-out)
+		border: 2px solid transparent
+		border-radius: .85em
+		position: relative
+		font-size: 1.2em
+		padding: calc(.7em - 1px) calc(26px + .7em) calc(.7em - 1px) .7em
+		width: 100%
+
+		ul
+			+resetList()
+			color: $backdrop
+			display: flex
+			gap: .7em
+
+			@at-root .filled#{&}
+				color: $popo
+			
+			li
+				flex-shrink: 10
+				overflow: hidden
+				text-overflow: ellipsis
+				white-space: nowrap
+				height: 100%
+
+				&:not(:first-child)
+					position: relative
+					padding: 0 0 0 calc(#{$r*2} + 3px)
+
+					&:before
+						+fontAwesome("\f105")
+						color: $trunks
+						position: absolute
+						top: 50%
+						left: 0
+						transform: translateY(-50%)
+
+				&:first-child
+					.fa
+						display: none
+
+				&:last-child
+					flex-shrink: 0
+
+		.clear
+			+transition(background-color)
+			background-color: $dodoria
+			border-radius: 2px .9rem .9rem 2px
+			color: $gohan
+			cursor: pointer
+			display: flex
+			align-items: center
+			justify-content: center
+			padding: $r
+			position: absolute
+			top: 1px
+			right: 1px
+			height: calc(100% - 2px)
+			width: 26px
+
+			&:hover
+				background-color: $dodoria-hover
+
+			&.disabled
+				background-color: $gray
+				cursor: default

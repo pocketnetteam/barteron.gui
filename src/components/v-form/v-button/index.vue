@@ -14,16 +14,44 @@
 			:class="{
 				'v-button': true,
 				'v-button-right': vAlign === 'right',
-				[`v-button-${ vType ?? 'primary' }`]: true,
-				[`v-button-${ vSize ?? 'md' }`]: true,
+				[prefix(vType ?? 'primary', 'v-button')]: true,
+				[prefix(vSize ?? 'md', 'v-button')]: true,
 				active
 			}"
+			:disabled="disabled"
 			ref="button"
+			@mousedown="animateRipple"
+			@mousedown.native="animateRipple"
+			@touch:start="animateRipple"
+			@touch:start.native="animateRipple"
 			@click="clickButton"
 		>
-			<slot></slot>
+			<span
+				class="text"
+				ref="text"
+			>
+				<slot v-if="$slots.default"></slot>
+				<template v-if="vHtml || vText">{{ rawHTML }}</template>
 
-			<i class="fa fa-angle-down v-dropdown-arrow" v-if="hasDropdown"></i>
+				<i class="fa fa-angle-down v-dropdown-arrow" v-if="hasDropdown"></i>
+			</span>
+
+			<transition-group
+				class="ripples"
+				v-if="ripples.filter(r => r.show).length"
+			>
+				<template
+					v-for="(ripple, index) in ripples"
+				>
+					<span
+						class="ripple"
+						v-if="ripple.show"
+						:ref="`ripple-${ index }`"
+						:key="`ripple-${ index }`"
+						:style="{'top': `${ ripple.y }px`, 'left': `${ ripple.x }px`}"
+						@animationend="rippleEnd(index)"></span>
+				</template>
+			</transition-group>
 		</component>
 
 		<div class="v-button-dropdown" v-if="hasDropdown">

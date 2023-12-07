@@ -259,11 +259,11 @@
 				</div>
 
 				<div class="col buttons">
-					<v-button vType="stroke bulma-color">
+					<v-button vType="stroke bulma-color bulma-color-hover">
 						<i class="fa fa-heart"></i>
 					</v-button>
 
-					<v-button vType="stroke bulma-color">
+					<v-button vType="stroke bulma-color bulma-color-hover">
 						<i class="fa fa-share-alt"></i>
 					</v-button>
 				</div>
@@ -279,7 +279,7 @@
 					<span class="title">Location</span>
 					<ul>
 						<li v-if="address">
-							<address>{{ address.country }}, {{ address.city || address.town || address.county }}</address>
+							<address>{{ address }}</address>
 						</li>
 						<li v-if="distance > -1">{{ distance }} {{ $t('metrics.km') }}</li>
 					</ul>
@@ -287,13 +287,13 @@
 			</div>
 
 			<div class="row" v-if="item.geohash">
-					<!-- Component: Map -->
-					<v-map
-						:center="geohash"
-						:point="geohash"
-						:allowPosition="true"
-					/>
-				</div>
+				<!-- Component: Map -->
+				<v-map
+					:center="geohash"
+					:point="geohash"
+					:allowPosition="true"
+				/>
+			</div>
 		</template>
 	</div>
 </template>

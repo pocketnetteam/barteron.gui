@@ -1,13 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100&display=swap');
 	
-/* Main */
 $theme: light !default
 $width: 1248px
 $sidebar-width: 260px
-$dropdown-width: 320px
 $r: .5em
 
-/* Theme */
 @if $theme == light
 	$ghost: rgb(224, 244, 255)					!global
 	$beerus: rgb(235, 235, 235)				!global
@@ -16,7 +13,6 @@ $r: .5em
 	$gohan: rgb(255, 255, 255)					!global
 	$bulma: rgb(3, 71, 120)						!global
 	$bulma-hover: rgb(15, 82, 139)			!global
-	$trunks: rgb(153, 156, 160)				!global
 @else
 	$ghost: rgb(12, 65, 94)						!global
 	$beerus: rgb(46, 46, 46)						!global
@@ -25,20 +21,19 @@ $r: .5em
 	$gohan: rgb(31, 31, 31)						!global
 	$bulma: rgb(255, 255, 255)					!global
 	$bulma-hover: rgb(243, 244, 236)		!global
-	$trunks: rgb(153, 156, 160)				!global
 
-/* Primary color */
 $primary: $gohan
 
-/* Supportive */
+$trunks: rgb(153, 156, 160)
 $piccolo: rgb(0, 144, 224)
 $piccolo-hover: rgb(0, 164, 255)
-$hit: rgb(242, 135, 5)
-$hit-hover: rgb(223, 124, 5)
+$hit: rgb(223, 124, 5)
+$hit-hover: rgb(242, 135, 5)
 $popo: rgb(0, 0, 0)
 
-$gray: rgb(142, 144, 166)
 $lightgray: rgb(199, 200, 217)
+$gray: rgb(142, 144, 166)
+$satgray: rgb(127, 127, 127)
 $darkgray: rgba(0, 0, 0, 0.08)
 $blue: rgb(0, 133, 207)
 $blue-hover: rgb(0, 164, 255)
@@ -81,18 +76,15 @@ $dodoria: rgb(211, 48, 48)
 $dodoria-hover: rgb(219, 78, 78)
 $dodoria-lighten: rgb(255, 150, 163)
 
-/* Backgrounds */
 $background-gray-default: linear-gradient(0deg, #EBEBEB, #EBEBEB), linear-gradient(0deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08))
 $background-gray-focus: linear-gradient(0deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04)), linear-gradient(0deg, #FFFFFF, #FFFFFF)
 $background-gray-ghost: rgba(235, 235, 235, 0.18)
 
-/* Overlay */
 $overlay-hidden: rgba(0, 0, 0, 0)
 $overlay-visible: rgba(0, 0, 0, 0.25)
 $overlay-half: rgba(0, 0, 0, 0.5)
 $overlay-dark: rgba(0, 0, 0, 0.75)
 
-/* Mixins */
 @mixin resetList()
 	list-style: none
 	margin: 0
@@ -143,5 +135,6 @@ $overlay-dark: rgba(0, 0, 0, 0.75)
 	font-variant: normal
 	text-rendering: auto
 	line-height: 1
+	
 	@if $icon
 		content: $icon

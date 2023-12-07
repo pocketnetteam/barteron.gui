@@ -1,7 +1,7 @@
 <template>
 	<v-content>
 		<BarterItem :item="item" vType="page" />
-		<Feedbacks :form="true" />
+		<Votes :form="true" />
 	</v-content>
 </template>
 

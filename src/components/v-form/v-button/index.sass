@@ -1,4 +1,5 @@
 @import "@/css/vars.sass"
+@import "./mixin.sass"
 	
 .v-button-holder
 	position: relative
@@ -16,6 +17,8 @@
 		align-items: center
 		justify-content: center
 		padding: 0.45em 0.8em
+		position: relative
+		overflow: hidden
 		text-decoration: none
 		white-space: nowrap
 		height: 100%
@@ -26,225 +29,29 @@
 		&:hover
 			background: $blue-hover
 
-		/* Colors */
-		&[class*="blue"]
-			background: $blue
-			border-color: $blue
-			color: $gohan
-
-			&:hover
-				background: $blue-hover
-				border-color: $blue-hover
-
-			/* Color */
-			&[class*="blue-color"]
-				background: transparent
-				color: $blue
-
-				&:hover
-					color: $blue-hover
-
-			/* Stroke & Transparent */
-			&[class*="blue-stroke"],
-			&[class*="blue-transparent"]
-				background: transparent
-				border-color: $blue
-				color: $blue
-
-				&:hover
-					background: $blue-hover
-					border-color: $blue-hover
-					color: $goku
-
-		&[class*="bulma"]
-			background: $bulma
-			border-color: $bulma
-			color: $gohan
-
-			&:hover
-				background: $bulma-hover
-				border-color: $bulma-hover
-
-			/* Color */
-			&[class*="bulma-color"]
-				background: transparent
-				color: $bulma
-
-				&:hover
-					color: $bulma-hover
-
-			/* Stroke & Transparent */
-			&[class*="bulma-stroke"],
-			&[class*="bulma-transparent"]
-				background: transparent
-				border-color: $bulma
-				color: $bulma
-
-				&:hover
-					background: $bulma-hover
-					border-color: $bulma-hover
-					color: $goku
-
-		&[class*="gray"]
-			background: $gray
-			border-color: $gray
-			color: $popo
-
-			&:hover
-				background: $lightgray
-				border-color: $lightgray
-
-			/* Color */
-			&[class*="gray-color"]
-				background: transparent
-				color: $gray
-
-				&:hover
-					color: $lightgray
-
-			/* Stroke & Transparent */
-			&[class*="gray-stroke"],
-			&[class*="gray-transparent"]
-				background: transparent
-				color: $gray
-				background: $gray
-
-				&:hover
-					background: $lightgray
-					color: $darkgray
-
-		&[class*="hit"]
-			background: $hit
-			border-color: $hit
-			color: $gohan
-
-			&:hover
-				background: $hit-hover
-				border-color: $hit-hover
-
-			/* Color */
-			&[class*="hit-color"]
-				background: transparent
-				color: $hit
-
-				&:hover
-					color: $hit-hover
-
-			/* Stroke & Transparent */
-			&[class*="hit-stroke"],
-			&[class*="hit-transparent"]
-				background: transparent
-				border-color: $hit
-				color: $hit
-
-				&:hover
-					background: $hit-hover
-					border-color: $hit-hover
-					color: $goku
-
-		&[class*="roshi"]
-			background: $roshi
-			border-color: $roshi
-			color: $gohan
-
-			&:hover
-				background: $roshi-hover
-				border-color: $roshi-hover
-			
-			/* Color */
-			&[class*="roshi-color"]
-				background: transparent
-				color: $roshi
-
-				&:hover
-					color: $roshi-hover
-
-			/* Stroke & Transparent */
-			&[class*="roshi-stroke"],
-			&[class*="roshi-transparent"]
-				background: transparent
-				color: $roshi
-				border-color: $roshi
-
-				&:hover
-					background: $roshi-hover
-					border-color: $roshi-hover
-					color: $goku
-
-		&[class*="chi-chi"]
-			background: $chi-chi
-			border-color: $chi-chi
-			color: $gohan
-
-			&:hover
-				background: $chi-chi-hover
-				border-color: $chi-chi-hover
-
-			/* Color */
-			&[class*="chi-chi-color"]
-				background: transparent
-				color: $chi-chi
-
-				&:hover
-					color: $chi-chi-hover
-
-			/* Stroke & Transparent */
-			&[class*="chi-chi-stroke"],
-			&[class*="chi-chi-transparent"]
-				background: transparent
-				color: $chi-chi
-				border-color: $chi-chi
-
-				&:hover
-					background: $chi-chi-hover
-					border-color: $chi-chi-hover
-					color: $goku
-
-		&[class*="dodoria"]
-			background: $dodoria
-			border-color: $dodoria
-			color: $gohan
-
-			&:hover
-				background: $dodoria-hover
-				border-color: $dodoria-hover
-
-			/* Color */
-			&[class*="dodoria-color"]
-				background: transparent
-				color: $dodoria
-
-				&:hover
-					color: $dodoria-hover
-
-			/* Stroke & Transparent */
-			&[class*="dodoria-stroke"],
-			&[class*="dodoria-transparent"]
-				background: transparent
-				border-color: $dodoria
-				color: $dodoria
-
-				&:hover
-					background: $dodoria-hover
-					border-color: $dodoria-hover
-					color: $goku
-
 		/* Types */
-		&[class*="v-button-light"]
+		&.v-button-light
 			background: $beerus
-			color: $popo
+			color: $backdrop
 
 			&:hover
 				background: $beerus-hover
+				color: $popo
 
-		&[class*="v-button-ghost"]
+			.ripples .ripple
+				background-color: $darkgray
+
+		&.v-button-ghost
 			background: none
 			color: $popo
 
 			&:hover
 				background: $ghost
+			
+			.ripples .ripple
+				background-color: $darkgray
 
-		&[class*="v-button-stroke"]
+		&.v-button-stroke
 			background: transparent
 			border: 1px solid $lightgray
 			color: $popo
@@ -252,53 +59,72 @@
 			&:hover
 				background: $darkgray
 
-		&[class*="v-button-transparent"]
+			.ripples .ripple
+				background-color: $darkgray
+
+		&.v-button-transparent
 			background: transparent
+			color: $popo
 
 			&:hover
 				background: transparent
+
+			.ripples .ripple
+				background-color: $darkgray
 
 		/* Transparent */
 		&[class][class*="transparent"]
 			border-color: transparent
 
+		/* Colors */
+		+color("beerus", $beerus, $beerus, $bulma, $bulma-hover, $goku)
+		+color("blue", $blue, $blue, $gohan, $blue-hover, $goku)
+		+color("bulma", $bulma, $bulma, $gohan, $bulma-hover, $goku)
+		+color("gray", $gray, $gray, $popo, $lightgray, $darkgray)
+		+color("hit", $hit, $hit, $gohan, $hit-hover, $goku)
+		+color("roshi", $roshi, $roshi, $gohan, $roshi-hover, $goku)
+		+color("chi-chi", $chi-chi, $chi-chi, $gohan, $chi-chi-hover, $goku)
+		+color("dodoria", $dodoria, $dodoria, $gohan, $dodoria-hover, $goku)
+
 		/* Align */
 		&.v-button-right
 			flex-direction: row-reverse
 
-			span ~ i.fa
-				margin: 0 $r * 2 0 0
-
-			i.fa:not(.v-dropdown-arrow)
-				margin: 0 0 0 $r * 2
-
 			& ~ .v-button-dropdown
 				right: 0
 
-		/* Content */
-		& > .link
-			color: inherit
-			display: flex
-			text-decoration: none
+		&:disabled
+			background: $lightgray
+			cursor: default
 
-		i.fa:not(.v-dropdown-arrow),
-		& ~ .v-select-dropdown i.fa
-			display: flex
+		/* Content */
+		.text
+			display: inline-flex
 			align-items: center
 			justify-content: center
-			margin: 0 $r * 2 0 0
-			line-height: 100%
+			gap: $r * 2
+			position: relative
+			z-index: 1
 
-		span ~ i.fa
-			margin: 0 0 0 $r * 2
+			& > .link
+				color: inherit
+				display: flex
+				text-decoration: none
 
-		i.fa:first-child:last-child
-			margin: 0
+			i.fa:first-child:last-child
+				width: 14px
 
-		.value
-			display: flex
-			align-items: center
-			justify-content: flex-start
+			i.fa:not(.v-dropdown-arrow),
+			& ~ .v-select-dropdown i.fa
+				display: flex
+				align-items: center
+				justify-content: center
+				line-height: 100%
+
+			.value
+				display: flex
+				align-items: center
+				justify-content: flex-start
 
 		& ~ .v-button-dropdown
 			background: rgba(255, 255, 255, 1)
@@ -373,6 +199,7 @@
 		border-radius: .75rem
 		padding: .75em 1em
 
+		& .ripples,
 		& ~ .v-button-dropdown,
 		& ~ .v-button-dropdown ul
 			border-radius: .75rem
@@ -390,3 +217,46 @@
 
 	.v-button-xl
 		padding: 1.1em 1.6em
+
+/* Ripples */
+.ripples
+	overflow: hidden
+	position: absolute
+	top: 0
+	right: 0
+	bottom: 0
+	left: 0
+	opacity: 0
+	transition: opacity .25s ease-in-out
+	width: 100%
+
+	.ripple
+		animation: ripple 1250ms ease-out forwards, fade 1500ms ease-out forwards
+		background-color: $blue
+		border-radius: 50%
+		mix-blend-mode: normal
+		position: absolute
+		transform: translateX(-100%) translateY(-100%)
+		height: 1rem
+		width: 1rem
+
+.v-button-holder:hover .ripples
+	opacity: 1
+
+@keyframes ripple
+	0%
+		transform: translate(-100%, -100%)
+		
+	80%
+		transform: translate(-100%, -100%) scale(50)
+
+	100%
+		opacity: 0
+		transform: translate(-100%, -100%) scale(50)
+
+@keyframes fade
+	0%
+		opacity: 1
+
+	100%
+		opacity: 0

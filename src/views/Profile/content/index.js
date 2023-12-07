@@ -1,12 +1,12 @@
 import BarterList from "@/components/barter/list/index.vue";
-import Feedbacks from "@/components/barter/feedbacks/index.vue";
+import Votes from "@/components/votes/index.vue";
 
 export default {
 	name: "Content",
 
 	components: {
 		BarterList,
-		Feedbacks
+		Votes
 	},
 
 	data() {
@@ -67,6 +67,15 @@ export default {
 		async getTabsContent(address) {
 			/* Get offers list */
 			this.offersList = await this.sdk.getBrtOffers(address);
+		},
+
+		/**
+		 * Handle active tab change
+		 * 
+		 * @param {String} tab
+		 */
+		updatePath(tab) {
+			this.$router.replace({ path: `/profile/${ this.address }`, hash: `#${ tab }` }).catch(() => {});
 		},
 
 		/**

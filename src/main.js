@@ -1,11 +1,12 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router.js";
+import VueHead from "vue-head";
 import i18n from "./i18n/index.js";
 
-import SDK from "@/js/sdk.js"
-import Categories from "@/js/categories.js"
-import Barters from "@/js/barters.js"
+import SDK from "@/js/sdk.js";
+import Categories from "@/js/categories.js";
+import Barters from "@/js/barters.js";
 import Favorites from "@/data/favorites.json";
 
 Vue.config.productionTip = false;
@@ -44,10 +45,12 @@ Vue.prototype.favorites = Favorites;
 Vue.mixin({
 	computed: {
 		routeComponents() {
-			return Object.assign({}, this.$route.matched[0].instances);
+			return Vue.observable(this.$route.matched[0].instances);
 		}
 	}
 });
+
+Vue.use(VueHead);
 
 new Vue({
 	router,

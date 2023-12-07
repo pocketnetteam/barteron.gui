@@ -7,20 +7,12 @@ export default {
 			default: false
 		},
 		size: String,
-		header: {
-			type: Boolean,
-			default: true
-		},
 		title: String,
-		closeButton: {
+		close: {
 			type: Boolean,
 			default: true
 		},
-		footer: {
-			type: Boolean,
-			default: true
-		},
-		overlayClickClose: {
+		overlayClick: {
 			type: Boolean,
 			default: true
 		}
@@ -49,8 +41,8 @@ export default {
 			this.$emit("onHide", this);
 		},
 
-		overlayClick() {
-			if (this.overlayClickClose) this.hide();
+		overlay() {
+			if (this.overlayClick) this.hide();
 		}
 	}
 }

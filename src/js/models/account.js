@@ -15,6 +15,7 @@ class Account {
 		/* Extract JSON values and format object */
 		const { a, g, s, r } = JSON.parse(data?.p?.s4 || '{"a":[],"g":"","s":false,"r":0}');
 		
+		/* Iterable properties */
 		this.address = data?.address || data?.s1 || "";
 		this.hash = data?.hash || data?.hash || null;
 		this.blockHash = data?.blockHash || "";
@@ -25,11 +26,12 @@ class Account {
 		this.radius = data?.radius || r || 0;
 		this.time = data?.time || 0;
 		this.type = data?.type || 0;
-		this.regdate = data?.additional?.regdate * 1000 || +new Date;
 
-		/* Make hidden properties */
+		/* Hidden properties */
 		Object.defineProperties(this, {
-			sdk: { value: sdk }
+			sdk: { value: sdk },
+			regdate: { value: data?.additional?.regdate * 1000 || +new Date },
+			rating: { value: data?.additional?.rating ?? 0 }
 		});
 	}
 
@@ -55,8 +57,10 @@ class Account {
 	 * 
 	 * @param {Object} data
 	 */
-	set(data) {
-		return this.sdk.setBrtAccount({ ...this.update(data) });
+	async set(data) {
+		const result = await this.sdk.requestPermissions(["account"]);
+		
+		return result?.account ? this.sdk.setBrtAccount({ ...this.update(data) }) : Promise.reject(result);
 	}
 
 	/**

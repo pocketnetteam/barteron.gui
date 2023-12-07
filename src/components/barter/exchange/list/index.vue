@@ -7,24 +7,24 @@
 		<!-- Tags -->
 		<ul class="list">
 			<li
-				v-for="(tag, index) in !editable ? vTags.slice(0, show) : vTags"
+				v-for="(id, index) in !editing ? vTags.slice(0, show) : vTags"
 				:key="index"
 			>
-				{{ $te(categories.items[tag]?.name) ? $t(categories.items[tag]?.name) : tag }}
+				{{ $te(categories.items[id]?.name) ? $t(categories.items[id]?.name) : $t('buttonLabels.unknown') }}
 				<i
-					v-if="editable"
+					v-if="editing"
 					class="fa fa-times remove"
 					@click="remove(index)"
 				></i>
 			</li>
 
 			<!-- Empty list -->
-			<li class="empty" v-if="!vTags.length">
+			<li class="empty" v-if="!vTags.length && !editing">
 				{{ $t('exchange.empty') }}
 			</li>
 
 			<!-- Toggle list -->
-			<li class="toggle" v-if="!editable && vTags.length > visible">
+			<li class="toggle" v-if="!editing && vTags.length > visible">
 				<a
 					class="link"
 					href="#"
@@ -36,49 +36,54 @@
 
 			<!-- Insert tag -->
 			<li
-				v-if="($slots.edit || $scopedSlots.edit) && editable"
 				class="add"
+				v-if="editing"
+				@click="$refs.categorySelect.show()"
 			>
-				<datalist :id="`categories-${ id }`" ref="list">
-					<option
-						v-for="(item, index) in list[list.length - 1]"
-						:key="index"
-						:disabled="vTags.includes(item.name)"
-						:data-value="item.name"
-					>{{ item.value }}</option>
-				</datalist>
-
-				<i
-					:class="{
-						'fa fa-angle-double-left back': true,
-						'disabled': btnBackDisabled
-					}"
-					:title="!btnBackDisabled && $t('exchange.back')"
-					@click="back"
-				></i>
-				<input
-					ref="tag"
-					type="text"
-					:list="`categories-${ id }`"
-					:placeholder="$t('exchange.add')"
-					@input="validate"
-					@keyup.esc="cancel"
-					@keyup.enter="insert"
-				>
-				<i
-					:class="{
-						'fa fa-plus insert': true,
-						'disabled': btnAddDisabled
-					}"
-					:title="!btnAddDisabled && $t('exchange.insert')"
-					@click="insert"
-				></i>
+				<i class="fa fa-plus"></i>
 			</li>
 		</ul>
 
+		<CategorySelect
+			ref="categorySelect"
+			:marked="vTags"
+			@selected="insert"
+		/>
+
 		<!-- Tags edit -->
-		<div class="edit" v-if="$slots.edit || $scopedSlots.edit">
-			<slot name="edit" :instance="instance"></slot>
+		<div class="edit" v-if="editable">
+			<slot
+				name="edit"
+				:instance="instance"
+				v-if="$slots.edit || $scopedSlots.edit"
+			></slot>
+			
+			<template v-else>
+				<!-- Edit button -->
+				<v-button
+					@click="edit"
+					:vHtml="editText"
+					v-if="!editing"
+				/>
+
+				<!-- Cancel and Save buttons -->
+				<div class="buttons-holder" v-else>
+					<v-button
+						vType="chi-chi"
+						:vHtml="cancelText"
+						@click="cancel"
+					/>
+
+					<v-button
+						:vHtml="saveText"
+						@click="save"
+					/>
+				</div>
+			</template>
+		</div>
+
+		<div class="after" v-if="$slots.after || $scopedSlots.after">
+			<slot name="after" :instance="instance"></slot>
 		</div>
 	</div>
 </template>
