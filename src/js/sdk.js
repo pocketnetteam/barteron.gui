@@ -75,9 +75,10 @@ class SDK {
 
 		this.sdk = new window.BastyonSdk();
 
-		this.sdk.emit("loaded");
+		this.emit = this.sdk.emit;
+		this.on = this.sdk.on;
 
-		this.sdk.on("action", d => {
+		this.on("action", d => {
 			const action = JSON.stringify(d);
 
 			this.emitted.push({
@@ -87,7 +88,7 @@ class SDK {
 			});
 		});
 
-		this.sdk.on("balance", balance => {
+		this.on("balance", balance => {
 			this._balance = balance;
 			this.emitted.push({
 				type : "balance",
@@ -95,6 +96,12 @@ class SDK {
 				date : new Date(),
 			})
 		});
+
+		this.on("changeroute", route => {
+			console.log(`receive emit: ${ route }`)
+		});
+
+		this.emit("loaded");
 
 		/**
 		 * Reactive observable
