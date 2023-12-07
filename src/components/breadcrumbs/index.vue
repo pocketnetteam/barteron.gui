@@ -5,7 +5,7 @@
 				v-for="(item, index) in tree"
 				:key="index"
 			>
-				<template v-if="index < tree.length - 1">
+				<template v-if="lastActive || index < tree.length - 1">
 					<router-link :to="item.link">{{ item.value }}</router-link>
 				</template>
 				<template v-else>{{ item.value }}</template>

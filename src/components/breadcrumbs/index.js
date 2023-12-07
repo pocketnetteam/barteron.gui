@@ -2,14 +2,12 @@ export default {
 	name: "Breadcrumbs",
 
 	props: {
-		parent: {
-			type: String,
-			default: ""
-		},
+		parent: String,
 		target: {
 			type: [Number, String, Boolean],
 			default: true
-		}
+		},
+		lastActive: Boolean
 	},
 
 	computed: {
