@@ -90,7 +90,7 @@ const routes = [
 Vue.use(VueRouter);
 
 const router = new VueRouter({
-	mode: "history",
+	/* mode: "history", */
 	duplicateNavigationPolicy: "reload",
 	scrollBehavior(to, from, savedPosition) {
 		if (to.hash) {
@@ -103,17 +103,14 @@ const router = new VueRouter({
 });
 
 /**
- * Make pid from route
+ * Get pid from route
  */
 router.beforeEach((to, from, next) => {
 	if (!to?.params?.pid && !to?.query?.pid) {
-		const pid = btoa(to.fullPath);
-
 		/* Push to history state */
-		console.group("Push state to history");
-		console.log(`path: \n%c${ to.fullPath }`, `color: blue;`);
-		console.log(`pid: \n%c${ pid }`, `color: blue;`);
-		console.groupEnd();
+		if (Vue.prototype.sdk?.emit && to.fullPath !== "/?testnetwork=true") {
+			Vue.prototype.sdk.emit("historychange", { path: to.fullPath });
+		}
 	}
 
 	next();
