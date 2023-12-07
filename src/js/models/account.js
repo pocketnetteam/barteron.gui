@@ -1,3 +1,5 @@
+import Vue from "vue";
+
 /**
  * Barteron account object model
  * 
@@ -33,6 +35,8 @@ class Account {
 			regdate: { value: data?.additional?.regdate * 1000 || +new Date },
 			rating: { value: data?.additional?.rating ?? 0 }
 		});
+
+		Vue.set(this.sdk.barteron._accounts, this.address, this);
 	}
 
 	/**
@@ -60,14 +64,18 @@ class Account {
 	async set(data) {
 		const result = await this.sdk.requestPermissions(["account"]);
 		
-		return result?.account ? this.sdk.setBrtAccount({ ...this.update(data) }) : Promise.reject(result);
+		if (result?.account) {
+			return this.sdk.setBrtAccount({ ...this.update(data) });
+		} else {
+			return Promise.reject(result);
+		}
 	}
 
 	/**
 	 * Destroy model data
 	 */
 	destroy() {
-		delete this.sdk.barteron._accounts[this.address];
+		Vue.delete(this.sdk.barteron._accounts, this.address);
 	}
 };
 

@@ -30,12 +30,21 @@ class Offer {
 		this.condition = data?.condition || c || "new";
 		this.images = data?.images || images;
 		this.geohash = data?.geohash || data?.p?.s6 || "";
-		this.price = (data?.price || data?.p?.i1 || 0) / 100;
+		this.price = (data?.price || data?.p?.i1 / 100 || 0);
 
 		const
-			time = data?.time * 1000 || +new Date,
-			date = data?.till || new Date(time),
-			till = date?.setMonth(date.getMonth() + 1) || date;
+			isMs = (timestamp) => {
+				const date = new Date(timestamp);
+
+				if (Math.abs(Date.now() - date) < Math.abs(Date.now() - date * 1000)) {
+					return true;
+				} else {
+					return false;
+				}
+			},
+			time = isMs(data?.time) ? data?.time * 1000 : +new Date,
+			date = new Date(time),
+			till = data?.till || date?.setMonth(date.getMonth() + 1);
 
 		/* Hidden properties */
 		Object.defineProperties(this, {
@@ -44,9 +53,7 @@ class Offer {
 			till: { value: till }
 		});
 
-		if (data.hash === "draft" && !this.sdk.barteron._offers[data.hash]) {
-			Vue.set(this.sdk.barteron._offers, data.hash, this);
-		}
+		Vue.set(this.sdk.barteron._offers, this.hash || "draft", this);
 	}
 
 	/**
@@ -57,19 +64,11 @@ class Offer {
 	 * @returns {Offer}
 	 */
 	update(data) {
-		const
-			oldHash = this.hash,
-			newHash = data.hash;
-
 		if (Object.keys(data).length) {
+			/* Iterate given props */
 			for (const p in data) {
 				this[p] = data[p];
 			}
-		}
-
-		if (oldHash && newHash && oldHash !== newHash) {
-			Vue.delete(this.sdk.barteron._offers, oldHash);
-			Vue.set(this.sdk.barteron._offers, newHash, this);
 		}
 
 		return this;
@@ -81,14 +80,31 @@ class Offer {
 	 * @param {Object} data
 	 */
 	set(data) {
-		return this.sdk.setBrtOffer({ ...this.update(data), price: this.price * 100 });
+		return this.sdk.setBrtOffer({
+			...this.update(data),
+			price: this.price * 100
+		}).then(data => {
+			const
+				txid = (this.hash?.length === 64 ? this.hash : data.transaction),
+				hash = this.hash;
+
+			/* Create new key in storage when hash had changed */
+			if (txid && hash && txid !== hash) {
+				this.update({ hash: txid });
+
+				Vue.set(this.sdk.barteron._offers, txid, this);
+				Vue.delete(this.sdk.barteron._offers, hash);
+			}
+
+			return data;
+		});
 	}
 
 	/**
 	 * Destroy model data
 	 */
 	destroy() {
-		delete this.sdk.barteron._offers[this.hash];
+		Vue.delete(this.sdk.barteron._offers, this.hash);
 	}
 };
 
