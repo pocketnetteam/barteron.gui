@@ -143,8 +143,14 @@
 
 	"item": {
 		"autorenew": "Autorenew",
-		"edit": "Edit",
-		"find_exchange": "Find exchange"
+		"edit": "Edit"
+	},
+
+	"exchange_options": {
+		"label": "Exchange Options",
+		"title": "We can find exchange options for you",
+		"text": "Offer an exchange if you like the option found. Above are the best options.",
+		"find": "Find exchange"
 	},
 
 	"dialog": {
@@ -184,10 +190,6 @@
 	"choose_currency_text": "Barteron uses its own cryptocurrency (PKOIN) as the main assessment, you can evaluate your item in any currency convenient for you and find out how much it will be in PKOIN",
 	"exact_address": "Exact address",
 	"city_name": "City name",
-
-	"find_exchange_options": "We can find exchange options for you",
-	"exchange_options": "Exchange Options",
-	"echange_options_text": "Offer an exchange if you like the option found. Above are the best options.",
 
 	"may_match_exchanges": "May match with your exchanges",
 	"new_from_goods": "New from goods"
