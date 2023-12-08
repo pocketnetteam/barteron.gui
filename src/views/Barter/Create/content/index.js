@@ -106,14 +106,14 @@ export default {
 		calcPrice(reverse) {
 			const
 				values = this.sdk.currency,
-				price = this.$refs.price.inputs?.[0],
+				price = this.$refs.price?.inputs?.[0],
 				currency = this.$refs.currency?.selected?.toUpperCase();
 
 			/* Handle pkoin input */
 			if (reverse?.target?.name === "pkoin") reverse = reverse.target.value;
 
 			if (!this.sdk.empty(values)) {
-				if (!price?.value.length) price.value = 0;
+				if (price && !price?.value?.length) price.value = 0;
 				if (reverse?.target || reverse?.value) {
 					/* Typing in price field */
 					this.price = parseFloat(price?.value || 0);
