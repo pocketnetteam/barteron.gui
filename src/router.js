@@ -108,7 +108,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
 	if (!to?.params?.pid && !to?.query?.pid) {
 		/* Push to history state */
-		if (Vue.prototype.sdk?.emit && to.fullPath !== "/?testnetwork=true") {
+		if (Vue.prototype.sdk?.emit) {
 			Vue.prototype.sdk.emit("historychange", { path: to.fullPath });
 		}
 	}

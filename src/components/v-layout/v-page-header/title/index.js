@@ -9,22 +9,14 @@ export default {
 			type: [String, Boolean],
 			default: false
 		},
-		parent: {
-			type: String,
-			default: ""
-		},
+		parent: String,
 		breadcrumbs: {
 			type: [Number, String, Boolean],
 			default: false
 		},
-		favorite: {
-			type: Boolean,
-			default: false
-		},
-		count: {
-			type: Boolean,
-			default: false
-		}
+		lastActive: Boolean,
+		favorite: Boolean,
+		count: Boolean
 	},
 
 	components: {

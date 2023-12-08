@@ -1,6 +1,6 @@
 <template>
 	<v-page-header>
-		<v-page-header-title parent="category" :breadcrumbs="offer.tag" />
+		<v-page-header-title parent="category" :breadcrumbs="offer.tag" :lastActive="true" />
 	</v-page-header>
 </template>
 

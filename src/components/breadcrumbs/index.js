@@ -2,14 +2,12 @@ export default {
 	name: "Breadcrumbs",
 
 	props: {
-		parent: {
-			type: String,
-			default: ""
-		},
+		parent: String,
 		target: {
 			type: [Number, String, Boolean],
 			default: true
-		}
+		},
+		lastActive: Boolean
 	},
 
 	computed: {
@@ -36,8 +34,9 @@ export default {
 					hierarchy.unshift({
 						...category,
 						...(this.$te(category.name) && { value: this.$t(category.name) }),
-						link: { name: "category", id: category.id }
+						link: { name: "category", params: { id: category.id } }
 					});
+
 					category = category.parent ? { ...this.categories.items[category.parent] } : null;
 				}
 

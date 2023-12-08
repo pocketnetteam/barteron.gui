@@ -451,16 +451,11 @@ class SDK {
 		address = address || this._address;
 
 		if (!this.barteron._accounts[address]) {
-			Vue.set(this.barteron._accounts, address, new Account(this, {}));
+			new Account(this, { address });
 		}
 
 		return this.rpc("getbarteronaccounts", [address]).then(accounts => {
-			return accounts?.map(account => {
-				account = new Account(this, account);
-				Vue.set(this.barteron._accounts, account.address, account);
-
-				return account;
-			});
+			return accounts?.map(account => new Account(this, account));
 		});
 	}
 
@@ -494,14 +489,7 @@ class SDK {
 		address = address || this._address;
 
 		return this.rpc("getbarteronoffersbyaddress", address).then(offers => {
-			offers = offers?.map(offer => {
-				offer = new Offer(this, offer);
-				Vue.set(this.barteron._offers, offer.hash, offer);
-
-				return offer;
-			}) || [];
-
-			return offers;
+			return offers?.map(offer => new Offer(this, offer)) || [];
 		});
 	}
 
@@ -529,10 +517,6 @@ class SDK {
 		return this.sdk.set.barteron.offer({
 			...data,
 			...{ hash: data.hash?.length === 64 ? data.hash : null }
-		}).then(result => {
-			const txid = (data.hash?.length === 64 ? data.hash : result.transaction);
-			Vue.set(this.barteron._offers, txid, data);
-			return result;
 		});
 	}
 
@@ -546,19 +530,12 @@ class SDK {
 	getBrtOffersByHashes(hashes = []) {
 		hashes.forEach(hash => {
 			if (!this.barteron._offers[hash]) {
-				Vue.set(this.barteron._offers, hash, new Offer(this, {}));
+				new Offer(this, { hash });
 			}
 		});
 
 		return this.rpc("getbarteronoffersbyhashes", hashes).then(offers => {
-			offers = offers?.map(offer => {
-				offer = new Offer(this, offer);
-				Vue.set(this.barteron._offers, offer.hash, offer);
-
-				return offer;
-			}) || [];
-
-			return offers;
+			return offers?.map(offer => new Offer(this, offer)) || [];
 		});
 	}
 
@@ -600,10 +577,7 @@ class SDK {
 					/* Map responses with their hashes */
 					for (const key in details) {
 						if (key === "accounts") {
-							data[key] = details[key]?.map(account => {
-								account = new Account(this, account);
-								return Vue.set(this.barteron._accounts, account.address, account);
-							}) || [];
+							data[key] = details[key]?.map(account => new Account(this, account)) || [];
 						} else {
 							data[key] = details[key]?.filter(f => f.hash === hash) || [];
 						}
@@ -643,14 +617,7 @@ class SDK {
 	 */
 	getBrtOffersFeed(request = {}) {
 		return this.rpc("getbarteronfeed", request).then(feed => {
-			feed = feed?.map(offer => {
-				offer = new Offer(this, offer);
-				Vue.set(this.barteron._offers, offer.hash, offer);
-
-				return offer;
-			}) || [];
-
-			return feed;
+			return feed?.map(offer => new Offer(this, offer)) || [];
 		});
 	}
 
@@ -684,14 +651,7 @@ class SDK {
 			myTags: (request?.myTags || []).map(tag => parseInt(tag)),
 			theirTags: (request?.theirTags || []).map(tag => parseInt(tag))
 		}).then(deals => {
-			deals = deals?.map(offer => {
-				offer = new Offer(this, offer);
-				Vue.set(this.barteron._offers, offer.hash, offer);
-
-				return offer;
-			}) || [];
-
-			return deals;
+			return deals?.map(offer => new Offer(this, offer)) || [];
 		});
 	}
 

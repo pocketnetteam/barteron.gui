@@ -40,7 +40,7 @@ export default {
 		offer() {
 			let offer = this.sdk.barteron.offers[this.$route.params.id];
 
-			if (!offer.hash) offer = new this.sdk.models.Offer(this.sdk, { hash: "draft" });
+			if (!offer.hash) offer = new this.sdk.models.Offer(this.sdk);
 
 			this.fillData(offer);
 
@@ -106,11 +106,14 @@ export default {
 		calcPrice(reverse) {
 			const
 				values = this.sdk.currency,
-				price = this.$refs.price.inputs?.[0],
+				price = this.$refs.price?.inputs?.[0],
 				currency = this.$refs.currency?.selected?.toUpperCase();
 
+			/* Handle pkoin input */
+			if (reverse?.target?.name === "pkoin") reverse = reverse.target.value;
+
 			if (!this.sdk.empty(values)) {
-				if (!price?.value.length) price.value = 0;
+				if (price && !price?.value?.length) price.value = 0;
 				if (reverse?.target || reverse?.value) {
 					/* Typing in price field */
 					this.price = parseFloat(price?.value || 0);
@@ -194,7 +197,7 @@ export default {
 				condition: this.condition,
 				images: Object.values(images),
 				geohash: GeoHash.encodeGeoHash.apply(null, center),
-				price: Number(data.price || 1)
+				price: Number(data.pkoin || 0)
 			});
 
 			return { hash, form, photos, center, data, images };
@@ -257,10 +260,6 @@ export default {
 							images: Object.values(images)
 						}).then((data) => {
 							if (data.transaction) {
-								if (this.offer.hash?.length < 64) {
-									this.offer.update({ hash: data.transaction });
-								}
-
 								form.dialog.hide();
 								this.$router.push({
 									name: "exchangeOptions",

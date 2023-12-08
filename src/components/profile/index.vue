@@ -21,11 +21,13 @@
 					</li>
 
 					<li>
-						<Score :value="0" />
+						<Score :value="account?.rating || 0" />
 					</li>
 
 					<li>
-						<span>0.0 {{ $t('rating.label').toLowerCase() }} (0 {{ $t('rating.reviews').toLowerCase() }})</span>
+						<span>
+							{{ (account?.rating || 0).toFixed(1) }} {{ $t('rating.label').toLowerCase() }} 
+							(0 {{ $t('rating.reviews').toLowerCase() }})</span>
 					</li>
 				</ul>
 			</div>

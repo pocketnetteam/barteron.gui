@@ -1,7 +1,7 @@
 <template>
 	<v-aside>
 		<v-details
-			v-if="subCategories.length"
+			v-if="subCategories?.length"
 			:title="$t('category.label')"
 			:open="true"
 		>
