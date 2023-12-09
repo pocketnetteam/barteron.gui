@@ -1,4 +1,16 @@
+import Vue from "vue";
 import BarterList from "@/components/barter/list/index.vue";
+
+/**
+ * Get items from category
+ * 
+ * @param {Object} request
+ * 
+ * @returns {Promise}
+ */
+const requestItems = (request) => {
+	return Vue.prototype.sdk.getBrtOffersFeed(request);
+}
 
 export default {
 	name: "Content",
@@ -9,7 +21,8 @@ export default {
 
 	data() {
 		return {
-			bartersView: "tile"
+			bartersView: "tile",
+			items: []
 		}
 	},
 
@@ -64,5 +77,15 @@ export default {
 		selectView(view) {
 			this.bartersView = view?.value;
 		}
+	},
+
+	async beforeRouteEnter (to, from, next) {
+		const items = await requestItems({
+			tags: [Number.isInteger(+to.params.id) && +to.params.id]
+		});
+
+		next(vm => {
+			vm.items = items;
+		});
 	}
 }
