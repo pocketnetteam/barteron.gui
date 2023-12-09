@@ -46,6 +46,8 @@ div[class^="barter-list"]
 		ul.barter-track
 			+grid(true)
 			+transition(transform)
+			grid-template-columns: none
+			grid-auto-columns: $item-width-max
 			grid-auto-flow: column
 
 	.barter-carousel-prev,
