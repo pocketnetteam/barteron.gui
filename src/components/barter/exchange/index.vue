@@ -15,7 +15,7 @@
 		<!-- Toggle -->
 		<div class="toggle">
 			<span class="link" @click.prevent="toggle">
-				{{ $t(`toggle.${ show < items.length ? 'show' : 'hide' }_all`) }}
+				{{ $t(`toggle.${ show < items.length ? 'show_all' : 'hide' }`) }}
 			</span>
 		</div>
 

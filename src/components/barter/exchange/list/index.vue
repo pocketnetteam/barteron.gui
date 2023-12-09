@@ -30,7 +30,7 @@
 					href="#"
 					@click.prevent="toggle"
 				>
-					{{ $t(`toggle.${ show < vTags.length ? 'show' : 'hide' }_all`) }}
+					{{ $t(`toggle.${ show < vTags.length ? 'show_all' : 'hide' }`) }}
 				</a>
 			</li>
 

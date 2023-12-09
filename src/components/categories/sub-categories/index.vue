@@ -20,7 +20,14 @@
 			class="toggle"
 			@click="toggle"
 		>
-			{{ $t(`toggle.${ expanded ? 'hide' : 'show' }_all`) }} ({{ count }})
+			<template v-if="!expanded">
+				{{ $t('toggle.show_all') }} ({{ count }})
+			</template>
+			<template v-else>
+				<div>
+					{{ $t('toggle.hide') }}
+				</div>
+			</template>
 		</button>
 	</nav>
 </template>
