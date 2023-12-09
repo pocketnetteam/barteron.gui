@@ -97,10 +97,6 @@ class SDK {
 			})
 		});
 
-		this.on("changeroute", route => {
-			console.log(`receive emit: ${ route }`)
-		});
-
 		this.emit("loaded");
 
 		/**

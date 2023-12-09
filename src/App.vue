@@ -82,6 +82,12 @@ export default {
 				}
 			}
 		}, 100);
+
+		/* Support urls from parent window */
+		this.sdk.on("changeroute", route => {
+			console.log('bastyon -> barteron: ' + route)
+			this.$router.push({ path: route, query: { pid: +new Date } });
+		});
 	}
 }
 </script>
