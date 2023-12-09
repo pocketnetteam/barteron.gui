@@ -59,27 +59,6 @@ const routes = [
 			default: () => import("@/views/About/index.vue")
 		}
 	},
-	/**
-	 * Apply pid to route
-	 */
-	{
-		path: "/pid/:pid",
-		beforeEnter: (to, from, next) => {
-			if (to?.params?.pid) {
-				const path = atob(to.params.pid);
-
-				/* Apply pid to history state */
-				console.group("Read state from history");
-				console.log(`pid: \n%c${ to.params.pid }`, `color: blue;`);
-				console.log(`path: \n%c${ path }`, `color: blue;`);
-				console.groupEnd();
-
-				next({ path, query: { pid: to.params.pid } });
-			} else {
-				next();
-			}
-		}
-	},
 	{
 		path: "/404",
 		alias: "*",
@@ -105,13 +84,17 @@ const router = new VueRouter({
 /**
  * Get pid from route
  */
+let historyReady = false;
 router.beforeEach((to, from, next) => {
-	if (!to?.params?.pid && !to?.query?.pid) {
+	if (historyReady) {
 		/* Push to history state */
+		console.log('barteron -> bastyon: ' + to.path)
 		if (Vue.prototype.sdk?.emit) {
-			Vue.prototype.sdk.emit("historychange", { path: to.fullPath });
+			Vue.prototype.sdk.emit("historychange", { path: to.path });
 		}
 	}
+
+	historyReady = true;
 
 	next();
 });
