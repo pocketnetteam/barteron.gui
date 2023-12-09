@@ -42,7 +42,7 @@
 			</div>
 		</v-details>
 
-		<v-details
+		<!-- <v-details
 			:title="$t('type.label')"
 			:open="true"
 		>
@@ -77,7 +77,7 @@
 					:label="$t('type.transformer')"
 				/>
 			</div>
-		</v-details>
+		</v-details> -->
 	</v-aside>
 </template>
 
