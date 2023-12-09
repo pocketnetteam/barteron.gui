@@ -1,6 +1,8 @@
 {
 	"toggle": {
+		"show": "Show",
 		"show_all": "Show all",
+		"hide": "Hide",
 		"hide_all": "Hide all"
 	},
 
