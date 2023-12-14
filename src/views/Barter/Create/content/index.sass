@@ -8,18 +8,46 @@
 		border-radius: 12px
 
 	.exchange
-		display: flex
-		justify-content: space-between
-		gap: 10px
-		padding: 2px
+		.v-list-holder
+			border-radius: 12px
+			display: flex
+			justify-content: space-between
+			gap: 10px
+			padding: 2px
 
 		.list,
 		.edit
 			margin: 0
 
+			li.toggle
+				padding: 0 4px
+
 		.edit
 			display: flex
 			align-items: flex-end
+
+		.favorites
+			+resetList()
+			display: flex
+			align-items: flex-end
+			flex-wrap: wrap
+			gap: .7em
+			font-size: .85em
+			line-height: 1.8em
+			margin: 1em 0 0
+			padding: 0 4px
+			width: 100%
+
+			li
+				background: $beerus
+				border-radius: 8px
+				color: $backdrop
+				display: flex
+				align-items: center
+				cursor: pointer
+				padding: 0.2em .7em
+				position: relative
+				white-space: nowrap
 	
 	.currency-input
 		.v-input

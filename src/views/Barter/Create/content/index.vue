@@ -85,9 +85,9 @@
 				<!-- Select: Tags (editable) -->
 				<template v-if="getting === 'something'">
 					<ExchangeList
-						class="field"
 						key="something"
 						ref="something"
+						holderClass="field"
 						vSize="lg"
 						:tags="tags"
 						:title="false"
@@ -96,6 +96,21 @@
 					>
 						<template #default="{ instance }">
 							<input name="tags" type="hidden" :value="instance.vTags.join()">
+						</template>
+
+						<template #after="{ instance }">
+							<!-- Favorite tags -->
+							<ul class="favorites">
+								<template v-for="(id, index) in [13587,258850,156282,10906,10866,10864]">
+									<li
+										:key="`favorite-${ index }`"
+										v-if="!instance.vTags.includes(id)"
+										@click="instance.insert(id)"
+									>
+										{{ $te(categories.items[id]?.name) ? $t(categories.items[id]?.name) : $t('buttonLabels.unknown') }}
+									</li>
+								</template>
+							</ul>
 						</template>
 					</ExchangeList>
 				</template>
@@ -140,7 +155,7 @@
 					name="condition"
 					:checked="condition"
 					:value="['used', 'new']"
-					:label="[$t('condition.used'), $t('condition.new')]"
+					:label="[$t('filters.used'), $t('filters.new')]"
 					vType="slide"
 					@change="(value) => condition = value"
 				/>

@@ -26,7 +26,7 @@ export default {
 		/**
 		 * Barteron account
 		 * 
-		 * @returns {Object}
+		 * @returns {@Account}
 		 */
 		account() {
 			return this.sdk.barteron.accounts[this.sdk.address];
@@ -35,7 +35,7 @@ export default {
 		/**
 		 * Get offer data (edit mode)
 		 * 
-		 * @returns {Object}
+		 * @returns {@Offer}
 		 */
 		offer() {
 			let offer = this.sdk.barteron.offers[this.$route.params.id];
