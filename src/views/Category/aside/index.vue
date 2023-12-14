@@ -9,37 +9,36 @@
 		</v-details>
 
 		<v-details
-			:title="$t('price.label')"
+			:title="$t('filters.price')"
 			:open="true"
 		>
 			<v-input
 				:id="['price_min', 'price_max']"
-				:placeholder="[$t('price.from'), $t('price.to')]"
+				:placeholder="[$t('filters.from'), $t('filters.to')]"
+				:value="[filters.priceMin, filters.priceMax]"
+				ref="price"
 				min="0"
 				type="minmax"
 				vSize="lg"
+				:vEvents="{
+					change: changePrice,
+					input: changePrice
+				}"
 			/>
 		</v-details>
 
 		<v-details
-			:title="$t('condition.label')"
+			:title="$t('filters.condition')"
 			:open="true"
 		>
-			<div class="row">
-				<v-switch
-					id="condition_new"
-					type="checkbox"
-					:label="$t('condition.new')"
-				/>
-			</div>
-
-			<div class="row">
-				<v-switch
-					id="condition_used"
-					type="checkbox"
-					:label="$t('used')"
-				/>
-			</div>
+			<v-switch
+				ref="condition"
+				type="checkbox"
+				name="condition"
+				:value="['used', 'new']"
+				:label="[$t('filters.used'), $t('filters.new')]"
+				@change="changeCondition"
+			/>
 		</v-details>
 
 		<!-- <v-details
@@ -78,6 +77,13 @@
 				/>
 			</div>
 		</v-details> -->
+
+		<div class="v-details filter-apply">
+			<v-button
+				:disabled="applyDisabled"
+				@click="applyFilters"
+			>{{ $t('buttonLabels.apply') }}</v-button>
+		</div>
 	</v-aside>
 </template>
 
