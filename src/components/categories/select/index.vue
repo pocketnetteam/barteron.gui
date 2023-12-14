@@ -17,9 +17,9 @@
 					:placeholder="$t('search.placeholder')"
 					:value="query"
 					:vEvents="{
-						'keydown': search,
-						'change': change,
-						'input': change
+						keydown: search,
+						change: change,
+						input: change
 					}"
 				>
 					<template #input0After>
