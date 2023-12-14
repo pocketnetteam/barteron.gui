@@ -15,7 +15,7 @@
 									}
 								})()
 							}'></i>
-							${ $t(`order.${ order.value }`) }
+							${ $t(`orderLabels.${ order.value }`) }
 						`,
 						value: order.value
 					}))"
@@ -35,7 +35,7 @@
 									}
 								})()
 							}'></i>
-							${ $t(`view.${ view.value }`) }
+							${ $t(`viewLabels.${ view.value }`) }
 						`,
 						value: view.value
 					}))"

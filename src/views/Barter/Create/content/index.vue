@@ -155,7 +155,7 @@
 					name="condition"
 					:checked="condition"
 					:value="['used', 'new']"
-					:label="[$t('filters.used'), $t('filters.new')]"
+					:label="[$t('filterLabels.used'), $t('filterLabels.new')]"
 					vType="slide"
 					@change="(value) => condition = value"
 				/>

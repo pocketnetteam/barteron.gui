@@ -9,12 +9,12 @@
 		</v-details>
 
 		<v-details
-			:title="$t('filters.price')"
+			:title="$t('filterLabels.price')"
 			:open="true"
 		>
 			<v-input
 				:id="['price_min', 'price_max']"
-				:placeholder="[$t('filters.from'), $t('filters.to')]"
+				:placeholder="[$t('filterLabels.from'), $t('filterLabels.to')]"
 				:value="[filters.priceMin, filters.priceMax]"
 				ref="price"
 				min="0"
@@ -28,7 +28,7 @@
 		</v-details>
 
 		<v-details
-			:title="$t('filters.condition')"
+			:title="$t('filterLabels.condition')"
 			:open="true"
 		>
 			<v-switch
@@ -36,7 +36,7 @@
 				type="checkbox"
 				name="condition"
 				:value="['used', 'new']"
-				:label="[$t('filters.used'), $t('filters.new')]"
+				:label="[$t('filterLabels.used'), $t('filterLabels.new')]"
 				@change="changeCondition"
 			/>
 		</v-details>

@@ -42,7 +42,7 @@ export default {
 		 * @returns {Array}
 		 */
 		orders() {
-			return this.parseLabels("order");
+			return this.parseLabels("orderLabels");
 		},
 
 		/**
@@ -51,7 +51,7 @@ export default {
 		 * @returns {Array}
 		 */
 		views() {
-			return this.parseLabels("view");
+			return this.parseLabels("viewLabels");
 		}
 	},
 

@@ -3,7 +3,7 @@
 		<!-- Picture -->
 		<picture v-if="item.images?.length && vType !== 'page'">
 			<router-link :to="{ name: 'barterItem', params: { id: item.hash } }">
-				<span class="state">{{ $t(`filters.${ !item.used ? 'new' : 'used' }`) }}</span>
+				<span class="state">{{ $t(`filterLabels.${ !item.used ? 'new' : 'used' }`) }}</span>
 			
 				<!-- Images -->
 				<template>
