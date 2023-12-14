@@ -18,8 +18,13 @@ export default {
 	},
 
 	computed: {
+		/**
+		 * Getting preview flag
+		 * 
+		 * @returns {Boolean}
+		 */
 		isPreview() {
-			return this.$route.query.preview;
+			return this.$route.query.preview && this.isMyOffer;
 		},
 
 		/**
