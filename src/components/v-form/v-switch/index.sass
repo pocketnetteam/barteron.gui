@@ -1,7 +1,9 @@
 @import "@/css/vars.sass"
 	
 .v-switch-holder
-	display: flex
+	display: inline-flex
+	flex-direction: column
+	gap: $r*2
 	
 	.v-switch-input
 		position: relative
@@ -82,6 +84,7 @@
 	/* Type: Button */
 	&.v-switch-button
 		display: flex
+		flex-direction: row
 		align-items: center
 		justify-content: stretch
 		gap: 10px
@@ -122,6 +125,8 @@
 	&.v-switch-slide
 		background: $beerus
 		display: inline-flex
+		flex-direction: row
+		gap: 0
 		padding: 4px
 		position: relative
 		overflow: hidden

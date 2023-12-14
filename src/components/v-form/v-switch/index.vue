@@ -12,7 +12,7 @@
 			class="v-switch-input"
 		>
 			<input
-				ref="input"
+				ref="fields"
 				:id="sw.id"
 				:name="sw.name || sw.id"
 				:type="sw.type"
