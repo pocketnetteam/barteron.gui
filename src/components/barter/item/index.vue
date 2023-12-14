@@ -3,7 +3,7 @@
 		<!-- Picture -->
 		<picture v-if="item.images?.length && vType !== 'page'">
 			<router-link :to="{ name: 'barterItem', params: { id: item.hash } }">
-				<span class="state">{{ $t(`condition.${ !item.used ? 'new' : 'used' }`) }}</span>
+				<span class="state">{{ $t(`filters.${ !item.used ? 'new' : 'used' }`) }}</span>
 			
 				<!-- Images -->
 				<template>
@@ -86,7 +86,7 @@
 				<span>{{ item.caption }}</span>
 			</div>
 
-			<div class="row to" v-if="exchangeList.length">
+			<div class="row to" v-if="item?.tags.length">
 				<ul>
 					<li><span>{{ $t('barterLabels.to') }}: </span></li>
 					<li
@@ -128,13 +128,14 @@
 				<div>
 					<span class="title" v-if="item.caption">{{ item.caption }}</span>
 
-					<div class="to" v-if="exchangeList.length">
+					<div class="to" v-if="item?.tags.length">
 						<ul>
 							<li><span>{{ $t('barterLabels.to') }}: </span></li>
 							<li
 								v-for="(link, index) in exchangeList"
 								:key="index"
 							>
+								{{ link }}
 								<router-link
 									v-if="link.id"
 									:to="{ 'name': 'category', params: { id: link.id } }"

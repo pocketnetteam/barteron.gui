@@ -32,6 +32,15 @@ export default {
 
 	computed: {
 		/**
+		 * Get owner account
+		 * 
+		 * @returns {@Account}
+		 */
+		account() {
+			return this.sdk.barteron.accounts[this.item.address];
+		},
+		
+		/**
 		 * Get exchange list
 		 * 
 		 * @returns {Array}
@@ -39,9 +48,9 @@ export default {
 		exchangeList() {
 			let ids = this.item.tags;
 
-			if (ids[0] === "my_list") {
-				ids = this.sdk.barteron.accounts[this.sdk.address]?.tags || [];
-			} else if(ids[0] === "for_nothing") {
+			if (ids.includes("my_list")) {
+				ids = this.account?.tags || [];
+			} else if (ids.includes("for_nothing")) {
 				ids = [{ value: this.$t("barterLabels.free") }];
 			}
 
