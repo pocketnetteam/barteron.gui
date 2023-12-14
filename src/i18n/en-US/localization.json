@@ -1,4 +1,10 @@
 {
+	"pageLabels": {
+		"home": "Home",
+		"createBarter": "Create barter",
+		"editBarter": "Edit barter"
+	},
+
 	"toggle": {
 		"show": "Show",
 		"show_all": "Show all",
@@ -25,18 +31,28 @@
 
 	"category": {
 		"label": "Category",
+		"empty": "There is no offers yet:(",
 		"show": "Show",
 		"hide": "Hide"
 	},
 
-	"price": {
-		"label": "Price",
-		"from": "From",
-		"to": "To"
+	"order": {
+		"height_desc": "New first",
+		"height_asc": "Old first",
+		"price_desc": "Cheap first",
+		"price_asc": "Expensive first"
 	},
 
-	"condition": {
-		"label": "Condition",
+	"view": {
+		"tile": "Tiles",
+		"row": "Rows"
+	},
+
+	"filters": {
+		"price": "Price",
+		"from": "From",
+		"to": "To",
+		"condition": "Condition",
 		"new": "New",
 		"used": "Used"
 	},
@@ -80,24 +96,6 @@
 		"report_abuse": "Report abuse"
 	},
 
-	"filterLabels": {
-		"new": "New first",
-		"old": "Old first",
-		"price_asc": "Cheap first",
-		"price_desc": "Expensive first"
-	},
-
-	"viewLabels": {
-		"tile": "Tiles",
-		"row": "Rows"
-	},
-
-	"pageLabels": {
-		"home": "Home",
-		"createBarter": "Create barter",
-		"editBarter": "Edit barter"
-	},
-
 	"buttonLabels": {
 		"categories": "Categories",
 		"cancel": "Cancel",
@@ -117,7 +115,8 @@
 		"ok": "Ok",
 		"yes": "Yes",
 		"no": "No",
-		"unknown": "Unknown"
+		"unknown": "Unknown",
+		"apply": "Apply"
 	},
 
 	"barterLabels": {
@@ -136,6 +135,7 @@
 	},
 
 	"location": {
+		"enter_address": "Enter address",
 		"preferred": "Location for new offers",
 		"static": "Static",
 		"dynamic": "Dynamic",
@@ -190,8 +190,6 @@
 	"something": "Something",
 	"for_nothing": "For nothing",
 	"choose_currency_text": "Barteron uses its own cryptocurrency (PKOIN) as the main assessment, you can evaluate your item in any currency convenient for you and find out how much it will be in PKOIN",
-	"exact_address": "Exact address",
-	"city_name": "City name",
 
 	"may_match_exchanges": "May match with your exchanges",
 	"new_from_goods": "New from goods"
