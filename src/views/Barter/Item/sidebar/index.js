@@ -25,7 +25,7 @@ export default {
 		/**
 		 * Get offer data
 		 * 
-		 * @returns {Object}
+		 * @returns {@Offer}
 		 */
 		item() {
 			return (Number.isInteger(this.$route.params.id) ? this.barters.items : this.sdk.barteron.offers)[this.$route.params.id];
@@ -52,7 +52,7 @@ export default {
 		/**
 		 * Get author account
 		 * 
-		 * @returns {Object}
+		 * @returns {@Account}
 		 */
 		account() {
 			return this.sdk.barteron.accounts[this.address];
