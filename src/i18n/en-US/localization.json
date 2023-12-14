@@ -36,35 +36,6 @@
 		"hide": "Hide"
 	},
 
-	"order": {
-		"height_desc": "New first",
-		"height_asc": "Old first",
-		"price_desc": "Cheap first",
-		"price_asc": "Expensive first"
-	},
-
-	"view": {
-		"tile": "Tiles",
-		"row": "Rows"
-	},
-
-	"filters": {
-		"price": "Price",
-		"from": "From",
-		"to": "To",
-		"condition": "Condition",
-		"new": "New",
-		"used": "Used"
-	},
-
-	"type": {
-		"label": "Type",
-		"gaming_notebook": "Gaming notebook",
-		"notebook": "Notebook",
-		"notebook_tablet": "Notebook tablet",
-		"transformer": "Transformer"
-	},
-
 	"steps": {
 		"propose": "What you propose",
 		"photos": "Add photos",
@@ -123,6 +94,35 @@
 		"to": "Exchange to",
 		"free": "For free",
 		"select": "Select item that you want exchange"
+	},
+
+	"orderLabels": {
+		"height_desc": "New first",
+		"height_asc": "Old first",
+		"price_desc": "Cheap first",
+		"price_asc": "Expensive first"
+	},
+
+	"viewLabels": {
+		"tile": "Tiles",
+		"row": "Rows"
+	},
+
+	"filterLabels": {
+		"price": "Price",
+		"from": "From",
+		"to": "To",
+		"condition": "Condition",
+		"new": "New",
+		"used": "Used"
+	},
+
+	"type": {
+		"label": "Type",
+		"gaming_notebook": "Gaming notebook",
+		"notebook": "Notebook",
+		"notebook_tablet": "Notebook tablet",
+		"transformer": "Transformer"
 	},
 
 	"exchange": {
