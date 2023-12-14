@@ -1,11 +1,5 @@
-import SubCategories from "@/components/categories/sub-categories/index.vue";
-
 export default {
 	name: "Aside",
-
-	components: {
-		SubCategories
-	},
 
 	computed: {
 		category() {
