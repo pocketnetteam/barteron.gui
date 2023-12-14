@@ -97,20 +97,6 @@ export default {
 		 */
 		selectView(view) {
 			this.bartersView = view?.value;
-		},
-
-		/**
-		 * Parse labels object from localization
-		 * 
-		 * @param {String} label
-		 * 
-		 * @returns {Array}
-		 */
-		parseLabels(label) {
-			return Object.keys(this.$t(label)).map((value, index) => ({
-				text: this.$t(`${ label }.${ value }`),
-				value, default: index === 0
-			}));
 		}
 	},
 
