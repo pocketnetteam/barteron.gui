@@ -54,7 +54,7 @@ export default {
 		 * @returns {Array}
 		 */
 		views() {
-			return this.parseLabels("viewLabels");
+			return this.parseLabels("view");
 		}
 	},
 

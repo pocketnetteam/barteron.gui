@@ -57,7 +57,7 @@
 											}
 										})()
 									}'></i>
-									${ $t(`viewLabels.${ view.value }`) }
+									${ $t(`view.${ view.value }`) }
 								`,
 								value: view.value
 							}))"
