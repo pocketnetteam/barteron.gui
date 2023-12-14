@@ -16,7 +16,7 @@ export default {
 		/**
 		 * Barteron account
 		 * 
-		 * @returns {Object}
+		 * @returns {@Account}
 		 */
 		account() {
 			return this.sdk.barteron.accounts[this.sdk.address];
