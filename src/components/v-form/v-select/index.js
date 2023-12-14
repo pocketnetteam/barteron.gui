@@ -79,7 +79,7 @@ export default {
 
 			if (dropdown.length) {
 				/* Set text to value */
-				this.setValue(dropdown.filter(f => f.selected)[0] ?? dropdown[0]);
+				if (!this.selected) this.setValue(dropdown.filter(f => f.selected)[0] ?? dropdown[0]);
 			}
 
 			return dropdown;
