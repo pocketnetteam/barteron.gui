@@ -8,7 +8,7 @@ $item-width-max: 294px
 	display: grid
 	grid-template-columns: repeat(auto-fit, $item-width-max)
 	grid-template-rows: 1fr
-	justify-content: flex-start
+	justify-content: center
 	grid-gap: 24px
 	
 div[class^="barter-list"]
@@ -44,11 +44,12 @@ div[class^="barter-list"]
 		width: 100%
 
 		ul.barter-track
-			+grid(true)
+			+grid()
 			+transition(transform)
 			grid-template-columns: none
 			grid-auto-columns: $item-width-max
 			grid-auto-flow: column
+			justify-content: flex-start
 
 	.barter-carousel-prev,
 	.barter-carousel-next
