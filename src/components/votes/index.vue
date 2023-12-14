@@ -4,13 +4,13 @@
 		'feedbacks': true
 	}">
 		<header v-if="header">
-			<h1>{{ $t('feedbacks.title') }} - </h1>
+			<h1>{{ $t('feedbackLabels.title') }} - </h1>
 			<Score
 				:rating="true"
 				:stars="1"
 				:value="3.5"
 			/>
-			<span>{{ $t('feedbacks.votes', { count: 207 }) }}</span>
+			<span>{{ $t('feedbackLabels.votes', { count: 207 }) }}</span>
 		</header>
 
 		<main>
@@ -20,7 +20,7 @@
 					class="field"
 					name="feedback"
 					length="9000"
-					:placeholder="$t('feedbacks.placeholder')"
+					:placeholder="$t('feedbackLabels.placeholder')"
 				>
 					<template #after>
 						<div class="buttons">
@@ -44,7 +44,7 @@
 				</template>
 
 				<template v-else>
-					<li>{{ $t('feedbacks.empty') }}</li>
+					<li>{{ $t('feedbackLabels.empty') }}</li>
 				</template>
 			</ul>
 		</main>

@@ -6,7 +6,7 @@
 				<!-- Edit button -->
 				<!-- <template #edit>
 					<v-button vType="bulma-stroke">
-						{{ $t('profile.edit') }}
+						{{ $t('profileLabels.edit') }}
 					</v-button>
 				</template> -->
 
@@ -14,7 +14,7 @@
 				<template #state>
 					<dl class="list">
 						<dt><i class="fa fa-user-shield"></i></dt>
-						<dd>{{ $t('profile.account_confirmed') }}</dd>
+						<dd>{{ $t('profileLabels.account_confirmed') }}</dd>
 					</dl>
 
 					<a class="ask" href="#"><i class="fa fa-question"></i></a>
@@ -38,7 +38,7 @@
 					<!-- Edit button -->
 					<template v-if="!instance.editing">
 						<v-button vType="bulma-stroke" @click="instance.edit">
-							{{ $t('exchange.edit') }}
+							{{ $t('buttonLabels.edit') }}
 						</v-button>
 					</template>
 
@@ -50,7 +50,7 @@
 							</v-button>
 
 							<v-button @click="instance.save">
-								{{ $t('exchange.save') }}
+								{{ $t('buttonLabels.save') }}
 							</v-button>
 						</div>
 					</template>
@@ -61,8 +61,8 @@
 		<!-- Settings -->
 		<div class="settings">
 			<ul class="list">
-				<!-- <li><a href="#" class="link"><i class="fa fa-cog"></i> {{ $t('profile.settings') }}</a></li> -->
-				<li><a href="#" class="link"><i class="fa fa-question-circle"></i> {{ $t('profile.contact_support') }}</a></li>
+				<!-- <li><a href="#" class="link"><i class="fa fa-cog"></i> {{ $t('profileLabels.settings') }}</a></li> -->
+				<li><a href="#" class="link"><i class="fa fa-question-circle"></i> {{ $t('profileLabels.contact_support') }}</a></li>
 			</ul>
 		</div>
 	</v-aside>

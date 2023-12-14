@@ -3,7 +3,7 @@
 		class="categories-select"
 		size="md"
 		ref="lightbox"
-		:title="$t('categories.choose')"
+		:title="$t('categoriesLabels.choose')"
 		:visible="visible"
 		@onHide="hide"
 	>
@@ -14,7 +14,7 @@
 				<v-input
 					ref="search"
 					type="text"
-					:placeholder="$t('search.placeholder')"
+					:placeholder="$t('searchLabels.label')"
 					:value="query"
 					:vEvents="{
 						keydown: search,
@@ -38,12 +38,12 @@
 			<!-- Found -->
 			<div class="found" v-if="query">
 				<p v-if="results.length">{{
-					$t('search.found', {
+					$t('searchLabels.found', {
 						count: results.length,
-						results: $t(`search.result${ results.length > 1 ? 's' : '' }`)
+						results: $t(`searchLabels.result${ results.length > 1 ? 's' : '' }`)
 					})
 				}}</p>
-				<p v-else>{{ $t('search.not_found') }}</p>
+				<p v-else>{{ $t('searchLabels.not_found') }}</p>
 			</div>
 		</template>
 
@@ -64,7 +64,7 @@
 				>
 					<!-- Root item -->
 					<li class="root">
-						<a @click="expand(null)">{{ $t('categories.root') }}</a>
+						<a @click="expand(null)">{{ $t('categoriesLabels.label') }}</a>
 					</li>
 
 					<!-- Dynamic items -->
@@ -151,7 +151,7 @@
 					<v-button
 						:disabled="!expanded || isMarked(expanded.id)"
 						@click="select"
-					>{{ $t('categories.select') }}</v-button>
+					>{{ $t('categoriesLabels.select') }}</v-button>
 				</div>
 			</div>
 		</template>

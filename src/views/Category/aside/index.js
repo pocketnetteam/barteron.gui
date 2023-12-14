@@ -32,21 +32,18 @@ export default {
 		/**
 		 * Make price fields related
 		 */
-		changePrice() {
+		changePrice(e) {
 			const
 				inputs = this.$refs.price?.inputs,
-				min = +inputs[0].value || "",
-				max = +inputs[1].value || "";
+				opt = typeof e === "string" && e.split("-"),
+				min = opt ? (+opt[0] || "") : (+inputs[0].value || ""),
+				max = opt ? (+opt[1] || "") : (+inputs[1].value || "");
 
 			this.filters.priceMin = min;
 			this.filters.priceMax = max;
-			
+
 			if (min && max && min > max) {
 				this.filters.priceMax = min;
-			}
-
-			if (!min && max) {
-				this.filters.priceMin = max;
 			}
 		},
 

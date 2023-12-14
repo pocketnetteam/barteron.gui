@@ -5,7 +5,7 @@
 		</div>
 
 		<div class="v-list-holder" :class="holderClass">
-			<strong class="title" v-if="title">{{ $t('barterLabels.to') }}:</strong>
+			<strong class="title" v-if="title">{{ $t('barterLabels.label') }}:</strong>
 
 			<slot v-if="$slots.default || $scopedSlots.default" :instance="instance"></slot>
 
@@ -25,7 +25,7 @@
 
 				<!-- Empty list -->
 				<li class="empty" v-if="!vTags.length && !editing">
-					{{ $t('exchange.empty') }}
+					{{ $t('exchangeLabels.empty') }}
 				</li>
 
 				<!-- Toggle list -->
@@ -35,7 +35,7 @@
 						href="#"
 						@click.prevent="toggle"
 					>
-						{{ $t(`toggle.${ show < vTags.length ? 'show_all' : 'hide' }`) }}
+						{{ $t(`toggleLabels.${ show < vTags.length ? 'show_all' : 'hide' }`) }}
 					</a>
 				</li>
 

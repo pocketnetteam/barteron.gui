@@ -9,7 +9,7 @@
 		</section>
 
 		<!-- <section>
-			<h1>{{ $t('categories.popular') }}</h1>
+			<h1>{{ $t('categoriesLabels.popular') }}</h1>
 			<PopularList :items="favorites" />
 		</section> -->
 

@@ -21,11 +21,11 @@
 			@click="toggle"
 		>
 			<template v-if="!expanded">
-				{{ $t('toggle.show_all') }} ({{ count }})
+				{{ $t('toggleLabels.show_all') }} ({{ count }})
 			</template>
 			<template v-else>
 				<div>
-					{{ $t('toggle.hide') }}
+					{{ $t('toggleLabels.hide') }}
 				</div>
 			</template>
 		</button>

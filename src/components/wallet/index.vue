@@ -4,11 +4,11 @@
 			<dt><i class="fa fa-wallet"></i></dt>
 			<dd>
 				<strong>{{ $n((balance?.actual || 0).toFixed(2)) }}</strong>
-				<span>{{ $t('profile.coins') }}</span>
+				<span>{{ $t('profileLabels.coins') }}</span>
 			</dd>
 		</dl>
 
-		<v-button>{{ $t('profile.wallet') }}</v-button>
+		<v-button>{{ $t('profileLabels.wallet') }}</v-button>
 	</div>
 </template>
 

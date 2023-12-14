@@ -2,80 +2,75 @@
 	<v-aside>
 		<v-details
 			v-if="subCategories?.length"
-			:title="$t('category.label')"
+			:title="$t('categoryLabels.label')"
 			:open="true"
 		>
 			<SubCategories :items="subCategories" />
 		</v-details>
 
 		<v-details
-			:title="$t('filterLabels.price')"
+			:title="$t('priceLabels.label')"
 			:open="true"
 		>
-			<v-input
-				:id="['price_min', 'price_max']"
-				:placeholder="[$t('filterLabels.from'), $t('filterLabels.to')]"
-				:value="[filters.priceMin, filters.priceMax]"
-				ref="price"
-				min="0"
-				type="minmax"
-				vSize="lg"
-				:vEvents="{
-					change: changePrice,
-					input: changePrice
-				}"
-			/>
+			<div class="row">
+				<v-input
+					:id="['price_min', 'price_max']"
+					:placeholder="[$t('priceLabels.from'), $t('priceLabels.to')]"
+					:value="[filters.priceMin, filters.priceMax]"
+					ref="price"
+					min="0"
+					type="minmax"
+					vSize="lg"
+					:vEvents="{
+						change: changePrice,
+						input: changePrice
+					}"
+				/>
+			</div>
+
+			<div class="row">
+				<v-switch
+					type="radio"
+					name="price"
+					:value="['-10', '10-50', '50-100', '100-', '-']"
+					:label="[
+						$t('priceLabels.under', { to: 10 }),
+						$t('priceLabels.range', { from: 10, to: 50 }),
+						$t('priceLabels.range', { from: 50, to: 100 }),
+						$t('priceLabels.over', { from: 100 }),
+						$t('priceLabels.no_matter')
+					]"
+					@change="changePrice"
+				/>
+			</div>
 		</v-details>
 
 		<v-details
-			:title="$t('filterLabels.condition')"
+			:title="$t('conditionLabels.label')"
 			:open="true"
 		>
 			<v-switch
 				ref="condition"
 				type="checkbox"
 				name="condition"
-				:value="['used', 'new']"
-				:label="[$t('filterLabels.used'), $t('filterLabels.new')]"
+				:set="condition = parseLabels('conditionLabels')"
+				:label="condition.map(item => item.text)"
+				:value="condition.map(item => item.value)"
 				@change="changeCondition"
 			/>
 		</v-details>
 
 		<!-- <v-details
-			:title="$t('type.label')"
+			:title="$t('typeLabels.label')"
 			:open="true"
 		>
-			<div class="row">
-				<v-switch
-					id="gaming_notebook"
-					type="checkbox"
-					:label="$t('type.gaming_notebook')"
-				/>
-			</div>
-
-			<div class="row">
-				<v-switch
-					id="notebook"
-					type="checkbox"
-					:label="$t('type.notebook')"
-				/>
-			</div>
-
-			<div class="row">
-				<v-switch
-					id="notebook_tablet"
-					type="checkbox"
-					:label="$t('type.notebook_tablet')"
-				/>
-			</div>
-
-			<div class="row">
-				<v-switch
-					id="transformer"
-					type="checkbox"
-					:label="$t('type.transformer')"
-				/>
-			</div>
+			<v-switch
+				id="gaming_notebook"
+				type="checkbox"
+				:set="type = parseLabels('typeLabels.notebook')"
+				:label="type.map(item => item.text)"
+				:value="type.map(item => item.value)"
+			/>
 		</v-details> -->
 
 		<div class="v-details filter-apply">

@@ -50,7 +50,7 @@
 				:vType="bartersView"
 				v-if="items?.length"
 			/>
-			<p v-else>{{ $t('category.empty') }}</p>
+			<p v-else>{{ $t('categoryLabels.empty') }}</p>
 		</div>
 
 		<div class="row center">

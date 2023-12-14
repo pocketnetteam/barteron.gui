@@ -2,10 +2,10 @@
 	<v-aside>
 		<menu class="box steps">
 			<menuitem
-				v-for="(item, key) in $t('steps')"
+				v-for="(step, key) in steps"
 				:key="key"
 			>
-				<a :href="`#${ key }`">{{ item }}</a>
+				<a :href="`#${ key }`">{{ step.text }}</a>
 			</menuitem>
 		</menu>
 	</v-aside>

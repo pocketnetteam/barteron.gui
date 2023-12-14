@@ -26,8 +26,8 @@
 
 					<li>
 						<span>
-							{{ (account?.rating || 0).toFixed(1) }} {{ $t('rating.label').toLowerCase() }} 
-							(0 {{ $t('rating.reviews').toLowerCase() }})</span>
+							{{ (account?.rating || 0).toFixed(1) }} {{ $t('ratingLabels.label').toLowerCase() }} 
+							(0 {{ $t('ratingLabels.reviews').toLowerCase() }})</span>
 					</li>
 				</ul>
 			</div>
@@ -43,7 +43,7 @@
 			<dl class="list">
 				<dt><i class="fa fa-calendar-day"></i></dt>
 				<dd>{{
-				$t('profile.on_barteron_from', { date: $d(account.regdate, 'middle') })
+				$t('profileLabels.on_barteron_from', { date: $d(account.regdate, 'middle') })
 				}}</dd>
 				<dt><i class="fa fa-map-marker-alt"></i></dt>
 				<dd>Astana, Kazakhstan</dd>
