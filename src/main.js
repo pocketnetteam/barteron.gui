@@ -44,7 +44,7 @@ Vue.prototype.favorites = Favorites;
 /* Add mixin for accessing sibling components in a route */
 Vue.mixin({
 	computed: {
-		routeComponents() {
+		$components() {
 			return Vue.observable(this.$route.matched[0].instances);
 		}
 	}
