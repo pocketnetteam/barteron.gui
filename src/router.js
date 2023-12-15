@@ -36,6 +36,14 @@ const routes = [
 		}
 	},
 	{
+		path: "/barter/search",
+		name: "3sidedSearch",
+		components: {
+			default: () => import("@/views/Barter/3SidedSearch/index.vue"),
+			content: () => import("@/views/Barter/3SidedSearch/content/index.vue")
+		}
+	},
+	{
 		path: "/barter/:id",
 		name: "barterItem",
 		components: {
@@ -88,9 +96,9 @@ let historyReady = false;
 router.beforeEach((to, from, next) => {
 	if (historyReady) {
 		/* Push to history state */
-		console.log('barteron -> bastyon: ' + to.path)
+		console.log('barteron -> bastyon: ' + to.fullPath)
 		if (Vue.prototype.sdk?.emit) {
-			Vue.prototype.sdk.emit("historychange", { path: to.path });
+			Vue.prototype.sdk.emit("historychange", { path: to.fullPath });
 		}
 	}
 
