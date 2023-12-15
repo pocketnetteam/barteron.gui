@@ -29,6 +29,7 @@
 				v-if="groupExchange.length"
 				vType="bulma-stroke"
 				class="btn-group"
+				:to="{ name: '3sidedSearch', query: { source: item.hash, target: items[selected].hash } }"
 			>
 				<span>
 					<i class="fa fa-users"></i>
