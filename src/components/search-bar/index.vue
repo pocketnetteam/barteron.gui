@@ -27,6 +27,7 @@
 			class="btn-search"
 			vType="light"
 			vSize="md"
+			:disabled="!query"
 			@click="submit"
 		>
 			<i class="fa fa-search"></i>
