@@ -98,6 +98,7 @@
 
 	"barterLabels": {
 		"label": "Exchange to",
+		"empty": "No tags added",
 		"free": "For free",
 		"select": "Select item that you want exchange"
 	},
@@ -147,7 +148,7 @@
 		"label": "Exchange Options",
 		"title": "We can find exchange options for you",
 		"text": "Offer an exchange if you like the option found. Above are the best options.",
-		"empty": "No tags added"
+		"empty": "We can't find any exchange directions right now:("
 	},
 
 	"locationLabels": {

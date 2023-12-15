@@ -18,7 +18,7 @@
 				</template>
 				<template v-else>
 					<strong class="title">{{ $t('exchangeLabels.label') }}</strong>
-					<p>{{ $t('echange_options_text') }}</p>
+					<p>{{ $t('exchangeLabels.text') }}</p>
 				</template>
 			</div>
 
@@ -49,8 +49,8 @@
 		</template>
 
 		<template v-else>
-			<div class="row block">
-				
+			<div class="row center">
+				<p>{{ $t('exchangeLabels.empty') }}</p>
 			</div>
 		</template>
 	</v-content>

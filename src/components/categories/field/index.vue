@@ -19,7 +19,7 @@
 				</li>
 
 				<li>
-					{{ $t(id && categories.items[id]?.name || 'categories.choose') }}
+					{{ $t(id && categories.items[id]?.name || 'categoriesLabels.choose') }}
 				</li>
 			</ul>
 

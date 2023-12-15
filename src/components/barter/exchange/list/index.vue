@@ -25,7 +25,7 @@
 
 				<!-- Empty list -->
 				<li class="empty" v-if="!vTags.length && !editing">
-					{{ $t('exchangeLabels.empty') }}
+					{{ $t('barterLabels.empty') }}
 				</li>
 
 				<!-- Toggle list -->
