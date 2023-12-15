@@ -1,0 +1,13 @@
+<template>
+	<v-page-header>
+		<v-page-header-title
+			:breadcrumbs="false"
+			:favorite="false"
+			:count="false"
+			:title="$t('buttonLabels.group_exchange')"
+			description="Some text"
+		/>
+	</v-page-header>
+</template>
+
+<script src="./index.js"></script>

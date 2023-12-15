@@ -28,7 +28,10 @@
 							</template>
 						</v-button>
 
-						<v-button vType="hit">
+						<v-button
+							vType="hit"
+							:to="{ name: 'exchangeOptions', params: { id: item.hash }, query: { expanded: 1 } }"
+						>
 							<i class="fa fa-sync"></i>
 							<span>{{ $t('buttonLabels.find_exchange_options') }}</span>
 						</v-button>
@@ -68,7 +71,7 @@
 					<!-- Edit button -->
 					<template v-if="!instance.editing">
 						<v-button vType="bulma-stroke" @click="instance.edit">
-							{{ $t('exchange.edit') }}
+							{{ $t('buttonLabels.edit') }}
 						</v-button>
 					</template>
 
@@ -80,7 +83,7 @@
 							</v-button>
 
 							<v-button @click="instance.save">
-								{{ $t('exchange.save') }}
+								{{ $t('buttonLabels.save') }}
 							</v-button>
 						</div>
 					</template>
@@ -88,11 +91,11 @@
 				
 				<template #after>
 					<dl class="list">
-						<dt>{{ $t('metrics.number') }}</dt>
+						<dt>{{ $t('metricsLabels.number') }}</dt>
 						<dd>{{ item.hash }}</dd>
 					</dl>
 
-					<a class="report" href="#"><i class="fa fa-flag"></i> {{ $t('profile.report_abuse') }}</a>
+					<a class="report" href="#"><i class="fa fa-flag"></i> {{ $t('profileLabels.report_abuse') }}</a>
 				</template>
 			</ExchangeList>
 		</div>

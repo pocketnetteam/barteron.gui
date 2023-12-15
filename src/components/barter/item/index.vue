@@ -3,7 +3,7 @@
 		<!-- Picture -->
 		<picture v-if="item.images?.length && vType !== 'page'">
 			<router-link :to="{ name: 'barterItem', params: { id: item.hash } }">
-				<span class="state">{{ $t(`condition.${ !item.used ? 'new' : 'used' }`) }}</span>
+				<span class="state">{{ $t(`conditionLabels.${ !item.used ? 'new' : 'used' }`) }}</span>
 			
 				<!-- Images -->
 				<template>
@@ -86,9 +86,9 @@
 				<span>{{ item.caption }}</span>
 			</div>
 
-			<div class="row to" v-if="exchangeList.length">
+			<div class="row to" v-if="item?.tags.length">
 				<ul>
-					<li><span>{{ $t('barterLabels.to') }}: </span></li>
+					<li><span>{{ $t('barterLabels.label') }}: </span></li>
 					<li
 						v-for="(link, index) in exchangeList"
 						:key="index"
@@ -112,7 +112,7 @@
 						</dl>
 					</li>
 					<li v-if="distance > -1">
-						{{ distance }} {{ $t('metrics.km') }}
+						{{ distance }} {{ $t('metricsLabels.km') }}
 					</li>
 				</ul>
 			</div>
@@ -128,13 +128,14 @@
 				<div>
 					<span class="title" v-if="item.caption">{{ item.caption }}</span>
 
-					<div class="to" v-if="exchangeList.length">
+					<div class="to" v-if="item?.tags.length">
 						<ul>
-							<li><span>{{ $t('barterLabels.to') }}: </span></li>
+							<li><span>{{ $t('barterLabels.label') }}: </span></li>
 							<li
 								v-for="(link, index) in exchangeList"
 								:key="index"
 							>
+								{{ link }}
 								<router-link
 									v-if="link.id"
 									:to="{ 'name': 'category', params: { id: link.id } }"
@@ -173,7 +174,7 @@
 							<time>{{ $d(item.time, 'middle') }}</time>
 						</li>
 						<li v-if="distance > -1">
-							{{ distance }} {{ $t('metrics.km') }}
+							{{ distance }} {{ $t('metricsLabels.km') }}
 						</li>
 					</ul>
 				</div>
@@ -270,7 +271,7 @@
 			</div>
 
 			<div class="row block sep" v-if="item.description">
-				<strong class="title">{{ $t('steps.description') }}</strong>
+				<strong class="title">{{ $t('stepsLabels.description') }}</strong>
 				<p class="description">{{ item.description }}</p>
 			</div>
 
@@ -281,7 +282,7 @@
 						<li v-if="address">
 							<address>{{ address }}</address>
 						</li>
-						<li v-if="distance > -1">{{ distance }} {{ $t('metrics.km') }}</li>
+						<li v-if="distance > -1">{{ distance }} {{ $t('metricsLabels.km') }}</li>
 					</ul>
 				</div>
 			</div>

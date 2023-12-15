@@ -7,8 +7,19 @@ export default {
 		CategorySelect
 	},
 
+	data() {
+		return {
+			query: this.$route.query.search || ""
+		}
+	},
+
 	computed: {
-		catId() {
+		/**
+		 * Category id
+		 * 
+		 * @returns {Number}
+		 */
+		id() {
 			return this.$route.name === "category" && this.$route.params.id || "";
 		}
 	},
@@ -20,7 +31,21 @@ export default {
 		 * @param {Number} id
 		 */
 		selected(id) {
-			this.$router.push({ name: "category", params: { id } });
+			this.$router.push({
+				name: "category",
+				params: { id }
+			}).catch(() => {});
+		},
+
+		/**
+		 * Store search string in url query
+		 */
+		submit() {
+			this.$router.push({
+				name: "category",
+				params: { id: this.id || "search" },
+				query: { search: `%${ this.query }%` }
+			}).catch(() => {});
 		}
 	}
 }

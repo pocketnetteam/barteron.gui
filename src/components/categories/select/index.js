@@ -60,7 +60,7 @@ export default {
 		importChildren(ids) {
 			return ids
 				.filter(id => this.categories.items[id]/*  && this.$te(this.categories.items[id].name) */)
-				.map(id => this.categories.items[id]);
+				.map(id => ({ ...this.categories.items[id] }));
 		},
 
 		/**
@@ -107,19 +107,56 @@ export default {
 				this.results = [];
 	
 				if (this.query?.length) {
-					this.results = [];
-					this.importChildren(Object.keys(this.categories.items)).forEach(item => {
+					/* Fist version of search */
+					/*this.importChildren(Object.keys(this.categories.items)).forEach(item => {
 						const value = this.$t(item.name).toLowerCase();
 	
 						if (value.includes(this.query)) {
 							this.results.push({ ...item, history: this.getParents(item) });
 						}
-					});
+					}); */
+
+					/* Second version of search */
+					([].concat(this.root)).forEach(item => this.recursiveSearch(item));
 	
 					setTimeout(() => this.searching = false, 1);
 				}
 	
 				if (this.input) this.input.blur();
+			}
+		},
+
+		/**
+		 * Recursively search in item and all children
+		 * All children results will be in item.matched
+		 * matched param only for inner usage
+		 * 
+		 * Collect all direct and children matches to results array
+		 * 
+		 * @param {Object} item
+		 * @param {Array} matched
+		 */
+		recursiveSearch(item, matched) {
+			const value = this.$t(item.name).toLowerCase();
+
+			/* Search in item */
+			if (value.includes(this.query)) {
+				if (!matched) matched = item.matched = [];
+				else matched.push(item);
+			}
+
+			/* Search in item children */
+			if (item.children?.length) {
+				item.children = this.importChildren(item.children);
+
+				for (const child of item.children) {
+					this.recursiveSearch(child, matched);
+				}
+			}
+
+			/* Push item to results */
+			if (item.matched) {
+				this.results.push({ ...item, history: item.matched });
 			}
 		},
 

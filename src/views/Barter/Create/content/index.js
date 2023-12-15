@@ -26,7 +26,7 @@ export default {
 		/**
 		 * Barteron account
 		 * 
-		 * @returns {Object}
+		 * @returns {@Account}
 		 */
 		account() {
 			return this.sdk.barteron.accounts[this.sdk.address];
@@ -35,7 +35,7 @@ export default {
 		/**
 		 * Get offer data (edit mode)
 		 * 
-		 * @returns {Object}
+		 * @returns {@Offer}
 		 */
 		offer() {
 			let offer = this.sdk.barteron.offers[this.$route.params.id];
@@ -85,19 +85,6 @@ export default {
 	},
 
 	methods: {
-		/**
-		 * Parse labels object from localization
-		 * 
-		 * @param {String} label
-		 * 
-		 * @returns {Array}
-		 */
-		parseLabels(label) {
-			return Object.keys(this.$t(label)).map((value, index) => {
-				return { text: this.$t(`${ label }.${ value }`), value, default: index === 0 };
-			});
-		},
-
 		/**
 		 * Convert price from currency to pkoin
 		 * 
@@ -235,7 +222,7 @@ export default {
 				const upload = Object.values(images).filter(image => image.startsWith("data:image"));
 				
 				/* Show dialog */
-				form.dialog.view("load", this.$t("dialog.images_imgur"));
+				form.dialog.view("load", this.$t("dialogLabels.images_imgur"));
 
 				/* Upload images to imgur through bastyon */
 				this.sdk.uploadImagesToImgur(upload)
@@ -252,7 +239,7 @@ export default {
 						}
 
 						/* Show dialog */
-						form.dialog.view("load", this.$t("dialog.data_node"));
+						form.dialog.view("load", this.$t("dialogLabels.data_node"));
 
 						/* Send request to create or update(hash) an offer */
 						this.offer.set({
@@ -275,12 +262,12 @@ export default {
 								{ details: e }
 							);
 
-							form.dialog.view("error", this.$t('dialog.node_error', { error }));
+							form.dialog.view("error", this.$t('dialogLabels.node_error', { error }));
 						});
 					})
 					.catch(error => {
 						/* Show error dialog */
-						form.dialog.view("error", this.$t('dialog.image_error', { error }));
+						form.dialog.view("error", this.$t('dialogLabels.image_error', { error }));
 					});
 			}
 		}

@@ -1,6 +1,6 @@
 <template>
-	<div :id="id" :style="`height: ${ height }; width: ${ width }`">
-		<l-map ref="map" :style="`height: ${ height }`" :zoom="zoom" :center="marker || center">
+	<div :id="id" :style="{ height, width, '--height': height, '--width': width }">
+		<l-map ref="map" :style="{ height }" :zoom="zoom" :center="marker || center">
 			<template v-if="allowPosition">
 				<l-circle
 					:latLng="location || {lat: center[0], lng: center[1]}"

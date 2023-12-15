@@ -9,7 +9,8 @@ export default {
 			type: [String, Boolean],
 			default: false
 		},
-		parent: String,
+		description: String,
+		type: String,
 		breadcrumbs: {
 			type: [Number, String, Boolean],
 			default: false

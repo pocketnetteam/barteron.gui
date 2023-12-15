@@ -5,22 +5,22 @@
 			:tabset="[
 				{
 					tabId: 'ads',
-					title: `<i class='fa fa-list'></i> ${ $t('profile.ads') } (${ offersList.length })`,
+					title: `<i class='fa fa-list'></i> ${ $t('profileLabels.ads') } (${ offersList.length })`,
 					active: activeTab === '#ads'
 				},
 				{
 					tabId: 'barters',
-					title: `<i class='fa fa-sync-alt'></i> ${ $t('profile.barters') } (0)`,
+					title: `<i class='fa fa-sync-alt'></i> ${ $t('profileLabels.barters') } (0)`,
 					active: activeTab === '#barters'
 				},
 				{
 					tabId: 'favorites',
-					title: `<i class='fa fa-heart'></i> ${ $t('profile.favorites') }`,
+					title: `<i class='fa fa-heart'></i> ${ $t('profileLabels.favorites') }`,
 					active: activeTab === '#favorites'
 				},
 				{
 					tabId: 'feedbacks',
-					title: `<i class='fa fa-comments'></i> ${ $t('profile.feedbacks') }`,
+					title: `<i class='fa fa-comments'></i> ${ $t('profileLabels.feedbacks') }`,
 					active: activeTab === '#feedbacks'
 				}
 			]"
@@ -36,11 +36,11 @@
 					:tabset="[
 						{
 							tabId: 'active',
-							title: $t('profile.active')
+							title: $t('profileLabels.active')
 						},
 						{
 							tabId: 'inactive',
-							title: $t('profile.inactive')
+							title: $t('profileLabels.inactive')
 						}
 					]"
 				>
@@ -92,7 +92,7 @@
 								<!-- <v-switch
 									class="no-padding"
 									type="checkbox"
-									:label="$t('item.autorenew')"
+									:label="$t('itemLabels.autorenew')"
 								/> -->
 
 								<ul>
@@ -121,11 +121,11 @@
 							<template #offer="{ item }" v-if="isMyProfile">
 								<v-button
 									:to="{ name: 'createBarter', params: { id: item.hash } }"
-								>{{ $t('item.edit') }}</v-button>
+								>{{ $t('buttonLabels.edit') }}</v-button>
 								<v-button
 									vType="hit-stroke"
 									:to="{ name: 'exchangeOptions', params: { id: item.hash }, query: { expanded: 1 } }"
-								>{{ $t('exchange_options.find') }}</v-button>
+								>{{ $t('buttonLabels.find_exchange') }}</v-button>
 							</template>
 						</BarterList>
 					</template>

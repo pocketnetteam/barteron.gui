@@ -78,10 +78,16 @@ export default {
 				this.dialog = this.$refs.dialog;
 
 				if (!this.sdk.sdk) {
-					this.dialog?.view("error", this.$t("dialog.error#-1"));
+					this.dialog?.view("error", this.$t("dialogLabels.error#-1"));
 				}
 			}
 		}, 100);
+
+		/* Support urls from parent window */
+		this.sdk.on("changeroute", route => {
+			console.log('bastyon -> barteron: ' + route)
+			this.$router.push({ path: route, query: { pid: +new Date } });
+		});
 	}
 }
 </script>

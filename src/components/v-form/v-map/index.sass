@@ -1,6 +1,7 @@
 @import "@/css/vars.sass"
 	
 div[id^="map"]
+	box-sizing: content-box
 	overflow: hidden
 	height: var(--height)
 	width: var(--width)
@@ -13,34 +14,54 @@ div[id^="map"]
 
 	.leaflet-control-geosearch
 			a.leaflet-bar-part
-				&:before
-					top: 17px
-					left: 15px
-					width: 7px
-
-				&::after
-					top: 8px
-					left: 8px
-					height: 10px
-					width: 10px
+				display: none
 
 	.leaflet-control-geosearch
-		&.active
-			form
-				display: flex
-				flex-wrap: wrap
-				justify-content: space-between
-				overflow: hidden
-
+		form
+			border-radius: 4px
+			display: flex
+			flex-wrap: wrap
+			justify-content: space-between
+			overflow: hidden
+			top: 11px
+			right: 10px
+			left: 55px
+			z-index: 1000
+		
 			input
 				padding-right: 22px
 
+				&:placeholder-shown ~ .reset
+					display: none
+
 			.reset
-				cursor: pointer
 				border: 0
+				color: $dark
+				cursor: pointer
+				display: flex
+				align-items: center
+				justify-content: center
 				position: absolute
 				top: 0
-				right: 0
+				right: 8px
+				height: 30px
+				width: 22px
 
 			.results
-				max-width: 500px
+				+scrollbar()
+				border: 0
+				padding-right: 8px
+				max-height: calc(var(--height) - 62px)
+				width: 100%
+
+				&:not(:empty)
+					position: relative
+					margin: 0 0 8px
+
+					&::before
+						border-top: 1px solid $beerus
+						content: ""
+						position: absolute
+						top: 0
+						right: 8px
+						left: 0

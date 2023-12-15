@@ -2,7 +2,7 @@
 	<v-content class="shrink-right">
 		<v-form ref="form">
 			<!-- Title: What you propose -->
-			<strong class="title">{{ $t('steps.propose') }}</strong>
+			<strong class="title">{{ $t('stepsLabels.propose') }}</strong>
 
 			<div class="row block">
 				<!-- Input: Title -->
@@ -27,7 +27,7 @@
 
 			<div class="row block sep">
 				<!-- Title: Photos -->
-				<strong class="title">{{ $t('steps.photos') }}</strong>
+				<strong class="title">{{ $t('stepsLabels.photos') }}</strong>
 
 				<!-- vPhotos -->
 				<v-photos
@@ -49,7 +49,7 @@
 
 			<div class="row block">
 				<!-- Title: What you want to get -->
-				<strong class="title">{{ $t('steps.get') }}</strong>
+				<strong class="title">{{ $t('stepsLabels.get') }}</strong>
 
 				<!-- vSwitch: My list, Something, For nothing -->
 				<v-switch
@@ -85,9 +85,9 @@
 				<!-- Select: Tags (editable) -->
 				<template v-if="getting === 'something'">
 					<ExchangeList
-						class="field"
 						key="something"
 						ref="something"
+						holderClass="field"
 						vSize="lg"
 						:tags="tags"
 						:title="false"
@@ -96,6 +96,21 @@
 					>
 						<template #default="{ instance }">
 							<input name="tags" type="hidden" :value="instance.vTags.join()">
+						</template>
+
+						<template #after="{ instance }">
+							<!-- Favorite tags -->
+							<ul class="favorites">
+								<template v-for="(id, index) in [13587,258850,156282,10906,10866,10864]">
+									<li
+										:key="`favorite-${ index }`"
+										v-if="!instance.vTags.includes(id)"
+										@click="instance.insert(id)"
+									>
+										{{ $te(categories.items[id]?.name) ? $t(categories.items[id]?.name) : $t('buttonLabels.unknown') }}
+									</li>
+								</template>
+							</ul>
 						</template>
 					</ExchangeList>
 				</template>
@@ -140,7 +155,7 @@
 					name="condition"
 					:checked="condition"
 					:value="['used', 'new']"
-					:label="[$t('condition.used'), $t('condition.new')]"
+					:label="[$t('conditionLabels.used'), $t('conditionLabels.new')]"
 					vType="slide"
 					@change="(value) => condition = value"
 				/>
@@ -148,7 +163,7 @@
 
 			<div class="row block sep">
 				<!-- Title: Description -->
-				<strong class="title">{{ $t('steps.description') }}</strong>
+				<strong class="title">{{ $t('stepsLabels.description') }}</strong>
 
 				<!-- vTextarea -->
 				<v-textarea
@@ -162,7 +177,7 @@
 
 			<div class="row block">
 				<!-- Title: Location -->
-				<strong class="title">{{ $t('steps.location') }}</strong>
+				<strong class="title">{{ $t('stepsLabels.location') }}</strong>
 
 				<!-- vMap -->
 				<v-map

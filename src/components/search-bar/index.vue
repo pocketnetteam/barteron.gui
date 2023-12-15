@@ -2,8 +2,8 @@
 	<form action="#" class="search-bar">
 		<CategorySelect
 			ref="categorySelect"
-			:marked="[catId]"
-			:value="catId"
+			:marked="[id]"
+			:value="id"
 			@selected="selected"
 		/>
 		<v-button
@@ -15,9 +15,11 @@
 			<input
 				type="text"
 				:placeholder="$t(
-					`search.${ catId ? 'category' : 'global' }`,
-					{ category: $t(categories.items[catId]?.name || 'category.label') })
+					`searchLabels.${ id && id !== 'search' ? 'category' : 'global' }`,
+					{ category: $t(categories.items[id]?.name || 'categoryLabels.label') })
 				"
+				v-model="query"
+				@keyup.enter="submit"
 			>
 		</div>
 		
@@ -25,6 +27,8 @@
 			class="btn-search"
 			vType="light"
 			vSize="md"
+			:disabled="!query"
+			@click="submit"
 		>
 			<i class="fa fa-search"></i>
 		</v-button>

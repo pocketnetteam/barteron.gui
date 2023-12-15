@@ -21,6 +21,7 @@ export default {
 
 	data() {
 		return {
+			inputs: [],
 			active: this.checked
 		}
 	},
@@ -79,7 +80,16 @@ export default {
 		 * @param {Event} e
 		 */
 		change(e) {
-			this.$emit("change", e.target.value);
+			this.$emit("change", e.target.value, e);
 		}
+	},
+
+	mounted() {
+		/* Create real-time computed property */
+		this.inputs = new Proxy(this.$refs.fields, {
+			get(target, index) {
+				return target?.[index];
+			}
+		});
 	}
 }

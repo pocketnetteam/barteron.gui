@@ -12,7 +12,7 @@ export default {
 		list: { type: [String, Array], default: () => [] },
 		value: { type: [Number, String, Array], default: () => [] },
 		
-		vEvents: { type: [Object], default: () => ({}) },
+		vEvents: { type: Object, default: () => ({}) },
 		vSize: String,
 	},
 
@@ -106,5 +106,5 @@ export default {
 				return target?.[index];
 			}
 		});
-	},
+	}
 }

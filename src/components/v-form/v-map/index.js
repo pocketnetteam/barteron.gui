@@ -79,7 +79,10 @@ export default {
 		return {
 			mapObject: {},
 			geosearchOptions: {
-				provider: this.provider
+				provider: this.provider,
+				style: "bar",
+				autoClose: true,
+				searchLabel: this.$t("locationLabels.enter_address")
 			},
 			marker: this.point
 		}

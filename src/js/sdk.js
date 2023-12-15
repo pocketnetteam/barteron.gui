@@ -97,10 +97,6 @@ class SDK {
 			})
 		});
 
-		this.on("changeroute", route => {
-			console.log(`receive emit: ${ route }`)
-		});
-
 		this.emit("loaded");
 
 		/**
@@ -648,8 +644,32 @@ class SDK {
 	getBrtOfferDeals(request) {
 		return this.rpc("getbarterondeals", {
 			...request,
-			myTags: (request?.myTags || []).map(tag => parseInt(tag)),
-			theirTags: (request?.theirTags || []).map(tag => parseInt(tag))
+			myTags: (request?.myTags || []).map(tag => +tag),
+			theirTags: (request?.theirTags || []).map(tag => +tag)
+		}).then(deals => {
+			return deals?.map(offer => new Offer(this, offer)) || [];
+		});
+	}
+
+	/**
+	 * Get potencial complex deals (3-side search)
+	 * 
+	 * @param {Object} request
+	 * 
+	 * Base
+	 * 
+	 * @param {Array} request.myTags Filter potencial offers by the tags they are exchangable for
+	 * @param {Array} request.theirTags
+	 * @param {String} request.location An SQLite3 language expression to be used with `LIKE` operator when comparing locations
+	 * @param {Array} request.excludeAddresses Filter potencial offers by excluding offers with these addresses
+	 * 
+	 * @returns {Promise}
+	 */
+	getBrtOfferComplexDeals(request) {
+		return this.rpc("getbarteroncomplexdeals", {
+			...request,
+			myTags: (request?.myTags || []).map(tag => +tag),
+			theirTags: (request?.theirTags || []).map(tag => +tag)
 		}).then(deals => {
 			return deals?.map(offer => new Offer(this, offer)) || [];
 		});

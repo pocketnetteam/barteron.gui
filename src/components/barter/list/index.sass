@@ -6,11 +6,9 @@ $item-width-max: 294px
 @mixin grid($carousel: false)
 	+resetList()
 	display: grid
-	grid-template-columns: repeat(auto-fit, minmax($item-width-max, 1fr))
+	grid-template-columns: repeat(auto-fit, $item-width-max)
 	grid-template-rows: 1fr
-	justify-content: center
-	@if $carousel
-		grid-auto-flow: column
+	justify-content: flex-start
 	grid-gap: 24px
 	
 div[class^="barter-list"]
@@ -46,11 +44,11 @@ div[class^="barter-list"]
 		width: 100%
 
 		ul.barter-track
-			+grid(true)
+			+grid()
 			+transition(transform)
 			grid-template-columns: none
 			grid-auto-columns: $item-width-max
-			justify-content: flex-start
+			grid-auto-flow: column
 
 	.barter-carousel-prev,
 	.barter-carousel-next

@@ -41,11 +41,30 @@ Vue.prototype.categories = Vue.observable(new Categories());
 Vue.prototype.barters = Vue.observable(new Barters());
 Vue.prototype.favorites = Favorites;
 
-/* Add mixin for accessing sibling components in a route */
 Vue.mixin({
 	computed: {
-		routeComponents() {
+		/* Access sibling components in a route */
+		$components() {
 			return Vue.observable(this.$route.matched[0].instances);
+		}
+	},
+
+	methods: {
+		/**
+		 * Parse labels object from localization
+		 * 
+		 * @param {String} label
+		 * 
+		 * @returns {Array}
+		 */
+		parseLabels(label, exclude = ["label"]) {
+			return Object.keys(this.$t(label))
+				.filter(label => !exclude.includes(label))
+				.map((value, index) => ({
+					text: this.$t(`${ label }.${ value }`),
+					value,
+					default: index === 0
+				}));
 		}
 	}
 });

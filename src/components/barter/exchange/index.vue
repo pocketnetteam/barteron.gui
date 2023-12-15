@@ -15,7 +15,7 @@
 		<!-- Toggle -->
 		<div class="toggle">
 			<span class="link" @click.prevent="toggle">
-				{{ $t(`toggle.${ show < items.length ? 'show' : 'hide' }_all`) }}
+				{{ $t(`toggleLabels.${ show < items.length ? 'show_all' : 'hide' }`) }}
 			</span>
 		</div>
 
@@ -29,6 +29,7 @@
 				v-if="groupExchange.length"
 				vType="bulma-stroke"
 				class="btn-group"
+				:to="{ name: '3sidedSearch', query: { source: item.hash, target: items[selected].hash } }"
 			>
 				<span>
 					<i class="fa fa-users"></i>

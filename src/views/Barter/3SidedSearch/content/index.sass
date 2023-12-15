@@ -1,0 +1,97 @@
+@import "@/css/vars.sass"
+	
+.group-exchange-holder
+	+resetList()
+
+	> li
+		border-top: 1px solid $beerus
+		display: flex
+		align-items: center
+		justify-content: space-between
+		gap: 195px
+		padding: 48px 0
+
+		&:last-child
+			border-bottom: 1px solid $beerus
+
+		.col
+			margin: 0
+
+			&:first-child
+				width: 100%
+
+		.offers
+			+resetList()
+			display: flex
+			justify-content: space-between
+			position: relative
+			width: 100%
+
+			&::before
+				border: 1px dashed $trunks
+				content: ""
+				position: absolute
+				top: 83px
+				width: 100%
+
+			li
+				flex-shrink: 10
+				position: relative
+
+				&:first-child,
+				&:last-child
+					flex-shrink: 0
+
+				a
+					display: flex
+					flex-direction: column
+					gap: 10px
+					text-decoration: none
+
+					p
+						color: $popo
+						font-size: 1.15em
+
+					img
+						border-radius: 18px
+						display: block
+						object-fit: cover
+						height: 170px
+						width: 184px
+
+				&:last-child
+					.avatar
+						right: auto
+						left: -24px
+
+				.avatar
+					border: 3px solid $gohan
+					cursor: pointer
+					display: flex
+					border-radius: 50%
+					text-decoration: none
+					position: absolute
+					top: 60px
+					right: -24px
+					height: 48px
+					width: 48px
+
+					*
+						border-radius: 50%
+
+					i
+						background-color: var(--color, rgba(255, 179, 25, 1))
+						color: rgba(255, 255, 255, 1)
+						display: flex
+						font-size: .9em
+						font-style: normal
+						line-height: 0
+						align-items: center
+						justify-content: center
+						height: 100%
+						width: 100%
+						
+					img
+							display: block
+							height: 100%
+							width: 100%

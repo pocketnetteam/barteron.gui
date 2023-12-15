@@ -2,7 +2,7 @@ export default {
 	name: "Breadcrumbs",
 
 	props: {
-		parent: String,
+		type: String,
 		target: {
 			type: [Number, String, Boolean],
 			default: true
@@ -42,6 +42,14 @@ export default {
 
 				tree = tree.concat(hierarchy);
 				category = hierarchy = null;
+			}
+			
+			/* When needs custom page */
+			if (this.type === "custom") {
+				tree = tree.concat([{
+					name: this.target,
+					value: this.$t(`pageLabels.${ this.target }`)
+				}]);
 			}
 
 			return tree;

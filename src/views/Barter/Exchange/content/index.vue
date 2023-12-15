@@ -14,11 +14,11 @@
 
 			<div class="row dir-column center">
 				<template v-if="!expanded">
-					<strong class="title">{{ $t('exchange_options.title') }}</strong>
+					<strong class="title">{{ $t('exchangeLabels.title') }}</strong>
 				</template>
 				<template v-else>
-					<strong class="title">{{ $t('exchange_options.label') }}</strong>
-					<p>{{ $t('echange_options_text') }}</p>
+					<strong class="title">{{ $t('exchangeLabels.label') }}</strong>
+					<p>{{ $t('exchangeLabels.text') }}</p>
 				</template>
 			</div>
 
@@ -26,7 +26,7 @@
 				<v-button
 					vType="stroke"
 					:to="{ name: 'profile', params: { id: offer.address } }"
-				>{{ $t('profile.ads') }}</v-button>
+				>{{ $t('profileLabels.ads') }}</v-button>
 				<v-button @click="expand">{{ $t('buttonLabels.find_exchange_options') }}</v-button>
 			</div>
 		</div>
@@ -49,8 +49,8 @@
 		</template>
 
 		<template v-else>
-			<div class="row block">
-				
+			<div class="row center">
+				<p>{{ $t('exchangeLabels.empty') }}</p>
 			</div>
 		</template>
 	</v-content>

@@ -11,13 +11,7 @@ export default {
 	props: {
 		tags: {
 			type: Array,
-			default: () => [
-				"electronics",
-				"belts",
-				"shoes",
-				"beauty_personal_care",
-				"sports"
-			]
+			default: () => []
 		},
 		visible: {
 			type: Number,
@@ -31,10 +25,8 @@ export default {
 			type: String,
 			default: "md"
 		},
-		editable: {
-			type: Boolean,
-			default: false
-		},
+		editable: Boolean,
+		holderClass: String,
 		editText: {
 			type: String,
 			default: "<i class='fa fa-pencil-alt fa-shrink'></i>"

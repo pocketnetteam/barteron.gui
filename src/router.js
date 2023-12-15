@@ -36,6 +36,14 @@ const routes = [
 		}
 	},
 	{
+		path: "/barter/search",
+		name: "3sidedSearch",
+		components: {
+			default: () => import("@/views/Barter/3SidedSearch/index.vue"),
+			content: () => import("@/views/Barter/3SidedSearch/content/index.vue")
+		}
+	},
+	{
 		path: "/barter/:id",
 		name: "barterItem",
 		components: {
@@ -59,27 +67,6 @@ const routes = [
 			default: () => import("@/views/About/index.vue")
 		}
 	},
-	/**
-	 * Apply pid to route
-	 */
-	{
-		path: "/pid/:pid",
-		beforeEnter: (to, from, next) => {
-			if (to?.params?.pid) {
-				const path = atob(to.params.pid);
-
-				/* Apply pid to history state */
-				console.group("Read state from history");
-				console.log(`pid: \n%c${ to.params.pid }`, `color: blue;`);
-				console.log(`path: \n%c${ path }`, `color: blue;`);
-				console.groupEnd();
-
-				next({ path, query: { pid: to.params.pid } });
-			} else {
-				next();
-			}
-		}
-	},
 	{
 		path: "/404",
 		alias: "*",
@@ -90,7 +77,7 @@ const routes = [
 Vue.use(VueRouter);
 
 const router = new VueRouter({
-	/* mode: "history", */
+	mode: "history",
 	duplicateNavigationPolicy: "reload",
 	scrollBehavior(to, from, savedPosition) {
 		if (to.hash) {
@@ -105,13 +92,17 @@ const router = new VueRouter({
 /**
  * Get pid from route
  */
+let historyReady = false;
 router.beforeEach((to, from, next) => {
-	if (!to?.params?.pid && !to?.query?.pid) {
+	if (historyReady) {
 		/* Push to history state */
+		console.log('barteron -> bastyon: ' + to.fullPath)
 		if (Vue.prototype.sdk?.emit) {
 			Vue.prototype.sdk.emit("historychange", { path: to.fullPath });
 		}
 	}
+
+	historyReady = true;
 
 	next();
 });

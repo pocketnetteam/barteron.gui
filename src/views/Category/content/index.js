@@ -1,4 +1,29 @@
+import Vue from "vue";
 import BarterList from "@/components/barter/list/index.vue";
+
+/**
+ * Get items from category
+ * 
+ * @param {Object} request
+ * 
+ * @returns {Promise}
+ */
+const
+	filter = {
+		orderBy: "height", // height | location | price
+		orderDesc: true
+	},
+	requestItems = (request) => {
+		const search = request?.route?.query?.search;
+
+		return Vue.prototype.sdk.getBrtOfferDeals({
+			...filter,
+			...(search && { search }),
+			theirTags: Number.isInteger(+request?.id) ? [+request.id] : [],
+			pageStart: request?.pageStart || 0,
+			pageSize: request?.pageSize || 10
+		});
+	}
 
 export default {
 	name: "Content",
@@ -9,18 +34,20 @@ export default {
 
 	data() {
 		return {
-			bartersView: "tile"
+			bartersView: "tile",
+			items: [],
+			pageStart: 0
 		}
 	},
 
 	computed: {
 		/**
-		 * Make list of filters
+		 * Make list of order by
 		 * 
 		 * @returns {Array}
 		 */
-		filters() {
-			return this.parseLabels("filterLabels");
+		orders() {
+			return this.parseLabels("orderLabels");
 		},
 
 		/**
@@ -35,34 +62,96 @@ export default {
 
 	methods: {
 		/**
-		 * Parse labels object from localization
-		 * 
-		 * @param {String} label
-		 * 
-		 * @returns {Array}
-		 */
-		parseLabels(label) {
-			return Object.keys(this.$t(label)).map((value, index) => {
-				return { text: this.$t(`${ label }.${ value }`), value, default: index === 0 };
-			});
-		},
-
-		/**
-		 * Filter change callback
-		 * 
-		 * @param {Object} item 
-		 */
-		selectFilter(item) {
-			console.log(item)
-		},
-
-		/**
 		 * View change callback
 		 * 
 		 * @param {Object} view 
 		 */
 		selectView(view) {
 			this.bartersView = view?.value;
+		},
+
+		/**
+		 * Order change callback
+		 * 
+		 * @param {Object} order
+		 */
+		async selectOrder(order) {
+			const state = (order?.value || "").split("_");
+
+			filter.orderBy = state[0];
+			filter.orderDesc = state[1] === "desc";
+
+			/* Send request to node */
+			this.items = await requestItems({
+				id: this.$route.params.id,
+				route: this.$route
+			});
+
+			this.pageStart = 0;
+		},
+
+		/**
+		 * Get filters from aside component
+		 * 
+		 * @param {Object} filters
+		 */
+		async applyFilters(filters) {
+			filter = {
+				...filter,
+				...filters
+			}
+
+			/* Send request to node */
+			this.items = await requestItems({
+				id: this.$route.params.id,
+				route: this.$route
+			});
+
+			this.pageStart = 0;
+		},
+
+		/**
+		 * Load more offers
+		 */
+		async loadMore() {
+			/* Send request to node */
+			const items = await requestItems({
+				id: this.$route.params.id,
+				pageStart: ++this.pageStart,
+				route: this.$route
+			});
+
+			this.items = this.items.concat(items);
 		}
+	},
+
+	watch: {
+		/**
+		 * Watch for route change and preload items
+		 * 
+		 * @param {Object} to
+		 * @param {Object} from
+		 */
+		async $route(to, from) {
+			if (to?.name === "category") {
+				/* Send request to node */
+				this.items = await requestItems({
+					id: to.params.id,
+					route: to
+				});
+			}
+		}
+	},
+
+	async beforeRouteEnter (to, from, next) {
+		/* Send request to node */
+		const items = await requestItems({
+			id: to.params.id,
+			route: to
+		});
+
+		next(vm => {
+			vm.items = items;
+		});
 	}
 }

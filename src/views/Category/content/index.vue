@@ -3,23 +3,23 @@
 		<div class="row">
 			<div class="col no-offset">
 				<v-select
-					:dropdown="filters.map((filter, index) => ({
+					:dropdown="orders.map(order => ({
 						text: `
 							<i class='fa icon ${ 
 								(() => {
-									switch (filter.value) {
-										case 'new': return 'fa-sort-amount-up';
-										case 'old': return 'fa-sort-amount-up-alt';
+									switch (order.value) {
+										case 'height_asc': return 'fa-sort-alpha-up-alt';
+										case 'height_desc': return 'fa-sort-alpha-down';
 										case 'price_asc': return 'fa-sort-numeric-down';
-										case 'price_desc': return 'fa-sort-numeric-down-alt';
+										case 'price_desc': return 'fa-sort-numeric-up-alt';
 									}
 								})()
 							}'></i>
-							${ $t(`filterLabels.${ filter.value }`) }
+							${ $t(`orderLabels.${ order.value }`) }
 						`,
-						value: filter.value
+						value: order.value
 					}))"
-					@selected="selectFilter"
+					@selected="selectOrder"
 				/>
 			</div>
 
@@ -44,10 +44,21 @@
 			</div>
 		</div>
 
-		<BarterList
-			:items="barters.generate(8)"
-			:vType="bartersView"
-		/>
+		<div class="row category-holder">
+			<BarterList
+				:items="items"
+				:vType="bartersView"
+				v-if="items?.length"
+			/>
+			<p v-else>{{ $t('categoryLabels.empty') }}</p>
+		</div>
+
+		<div class="row center">
+			<v-button
+				v-if="items?.length && items.length % 10 === 0"
+				@click="loadMore"
+			>{{ $t('buttonLabels.show_more') }}</v-button>
+		</div>
 	</v-content>
 </template>
 

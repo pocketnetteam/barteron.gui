@@ -1,53 +1,46 @@
 {
-	"toggle": {
+	"pageLabels": {
+		"label": "Page",
+		"home": "Home",
+		"createBarter": "Create barter",
+		"editBarter": "Edit barter",
+		"search": "Search results"
+	},
+
+	"toggleLabels": {
+		"label": "Toggle",
+		"show": "Show",
 		"show_all": "Show all",
+		"hide": "Hide",
 		"hide_all": "Hide all"
 	},
 
-	"search": {
+	"searchLabels": {
+		"label": "Search",
 		"global": "Search on Barteron",
 		"category": "Search in {category}",
-		"placeholder": "Search",
 		"found": "{count} {results} has found",
 		"result": "result",
 		"results": "results",
 		"not_found": "Nothing found"
 	},
 
-	"categories": {
-		"root": "Categories",
+	"categoriesLabels": {
+		"label": "Categories",
 		"choose": "Choose a category",
 		"popular": "Most popular categories",
 		"select": "Select"
 	},
 
-	"category": {
+	"categoryLabels": {
 		"label": "Category",
+		"empty": "There is no offers yet:(",
 		"show": "Show",
 		"hide": "Hide"
 	},
 
-	"price": {
-		"label": "Price",
-		"from": "From",
-		"to": "To"
-	},
-
-	"condition": {
-		"label": "Condition",
-		"new": "New",
-		"used": "Used"
-	},
-
-	"type": {
-		"label": "Type",
-		"gaming_notebook": "Gaming notebook",
-		"notebook": "Notebook",
-		"notebook_tablet": "Notebook tablet",
-		"transformer": "Transformer"
-	},
-
-	"steps": {
+	"stepsLabels": {
+		"label": "Steps",
 		"propose": "What you propose",
 		"photos": "Add photos",
 		"get": "What you want to get",
@@ -55,12 +48,12 @@
 		"location": "Location"
 	},
 
-	"rating": {
+	"ratingLabels": {
 		"label": "Rating",
 		"reviews": "Reviews"
 	},
 
-	"profile": {
+	"profileLabels": {
 		"label": "Profile",
 		"edit": "Edit profile",
 		"on_barteron_from": "On Barteron from {date}",
@@ -78,24 +71,6 @@
 		"report_abuse": "Report abuse"
 	},
 
-	"filterLabels": {
-		"new": "New first",
-		"old": "Old first",
-		"price_asc": "Cheap first",
-		"price_desc": "Expensive first"
-	},
-
-	"viewLabels": {
-		"tile": "Tiles",
-		"row": "Rows"
-	},
-
-	"pageLabels": {
-		"home": "Home",
-		"createBarter": "Create barter",
-		"editBarter": "Edit barter"
-	},
-
 	"buttonLabels": {
 		"categories": "Categories",
 		"cancel": "Cancel",
@@ -105,56 +80,92 @@
 		"group_exchange": "Group exchange",
 		"my_announcements": "My announcements",
 		"find_exchange_options": "Find exchange options",
+		"find_exchange": "Find exchange",
 		"offer_an_exchange": "Offer an exchange",
 		"show_more": "Show more",
 		"buy_for": "Buy for {cost} PKOIN",
 		"edit": "Edit",
+		"save": "Save",
 		"withdraw": "Withdraw from publication",
 		"remove": "Remove",
 		"continue_edit": "Continute edit",
 		"ok": "Ok",
 		"yes": "Yes",
 		"no": "No",
-		"unknown": "Unknown"
+		"unknown": "Unknown",
+		"apply": "Apply"
 	},
 
 	"barterLabels": {
-		"to": "Exchange to",
+		"label": "Exchange to",
+		"empty": "No tags added",
 		"free": "For free",
 		"select": "Select item that you want exchange"
 	},
 
-	"exchange": {
-		"empty": "No tags added",
-		"edit": "Edit list",
-		"save": "Save list",
-		"add": "Input tag here",
-		"back": "Back",
-		"insert": "Add tag"
+	"orderLabels": {
+		"label": "Order by",
+		"height_desc": "New first",
+		"height_asc": "Old first",
+		"price_asc": "Cheap first",
+		"price_desc": "Expensive first"
 	},
 
-	"location": {
-		"preferred": "Location for new offers",
-		"static": "Static",
-		"dynamic": "Dynamic",
-		"radius": "Look to offers in radius",
-		"save": "Save"
+	"viewLabels": {
+		"label": "View",
+		"tile": "Tiles",
+		"row": "Rows"
 	},
 
-	"item": {
-		"autorenew": "Autorenew",
-		"edit": "Edit"
+	"priceLabels": {
+		"label": "Price",
+		"from": "From",
+		"to": "To",
+		"under": "Under {to}",
+		"range": "From {from} To {to}",
+		"over": "Over {from}",
+		"no_matter": "No matter"
 	},
 
-	"exchange_options": {
+	"conditionLabels": {
+		"label": "Condition",
+		"new": "New",
+		"used": "Used"
+	},
+
+	"typeLabels": {
+		"label": "Type",
+		"notebook": {
+			"label": "Notebook",
+			"gaming_notebook": "Gaming notebook",
+			"notebook": "Notebook",
+			"notebook_tablet": "Notebook tablet",
+			"transformer": "Transformer"
+		}
+	},
+
+	"exchangeLabels": {
 		"label": "Exchange Options",
 		"title": "We can find exchange options for you",
 		"text": "Offer an exchange if you like the option found. Above are the best options.",
-		"find": "Find exchange"
+		"empty": "We can't find any exchange directions right now:("
 	},
 
-	"dialog": {
-		"checking_connection": "Checking connection. Please wait..",
+	"locationLabels": {
+		"enter_address": "Enter address",
+		"preferred": "Location for new offers",
+		"static": "Static",
+		"dynamic": "Dynamic",
+		"radius": "Look to offers in radius"
+	},
+
+	"itemLabels": {
+		"label": "Offer",
+		"autorenew": "Autorenew"
+	},
+
+	"dialogLabels": {
+		"label": "Dialog",
 
 		"images_imgur": "Sending images to imgur..",
 		"data_node": "Posting data to node, please wait..",
@@ -169,14 +180,16 @@
 		"error#65": "Exceeded limit"
 	},
 
-	"feedbacks": {
+	"feedbackLabels": {
+		"label": "Feedbacks",
 		"title": "Rating",
 		"votes": "{count} votes",
 		"placeholder": "Leave your feedback here",
 		"empty": "There is no feedbacks yet"
 	},
 
-	"metrics": {
+	"metricsLabels": {
+		"label": "Metrics",
 		"km": "km",
 		"number": "#"
 	},
@@ -188,8 +201,6 @@
 	"something": "Something",
 	"for_nothing": "For nothing",
 	"choose_currency_text": "Barteron uses its own cryptocurrency (PKOIN) as the main assessment, you can evaluate your item in any currency convenient for you and find out how much it will be in PKOIN",
-	"exact_address": "Exact address",
-	"city_name": "City name",
 
 	"may_match_exchanges": "May match with your exchanges",
 	"new_from_goods": "New from goods"

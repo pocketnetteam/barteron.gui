@@ -14,7 +14,7 @@
 			<strong class="location">
 				<template>{{ address ?? $t('buttonLabels.unknown') }}</template>
 			</strong>
-			<span class="distance">{{ address ? (radius || 0) + $t('metrics.km') : '~' }}</span>
+			<span class="distance">{{ address ? (radius || 0) + $t('metricsLabels.km') : '~' }}</span>
 		</div>
 
 		<template #after>
@@ -35,7 +35,7 @@
 					<div class="row full-width">
 						<div class="col block no-offset">
 							<!-- Label: Static or dynamic location -->
-							<label for="static" class="v-label">{{ $t('location.preferred') }}</label>
+							<label for="static" class="v-label">{{ $t('locationLabels.preferred') }}</label>
 
 							<!-- vSwitch (Slide) -->
 							<v-switch
@@ -44,14 +44,14 @@
 								vType="slide"
 								:name="['static', 'static']"
 								:checked="mapType"
-								:label="[$t('location.dynamic'), $t('location.static')]"
+								:label="[$t('locationLabels.dynamic'), $t('locationLabels.static')]"
 								:value="['dynamic', 'static']"
 							/>
 						</div>
 
 						<div class="col block no-offset">
 							<!-- Label: Radius -->
-							<label for="radius" class="v-label">{{ $t('location.radius') }}</label>
+							<label for="radius" class="v-label">{{ $t('locationLabels.radius') }}</label>
 
 							<div class="col">
 								<!-- Component: vInput -->
@@ -63,7 +63,7 @@
 									max="9999"
 									:value="account.radius || 0"
 								/>
-								&nbsp;{{ $t('metrics.km') }}
+								&nbsp;{{ $t('metricsLabels.km') }}
 							</div>
 						</div>
 					</div>
@@ -83,7 +83,7 @@
 				<template #footer>
 					<div class="row full-width right">
 						<div class="buttons-holder h-w">
-							<v-button @click="submit">{{ $t('location.save') }}</v-button>
+							<v-button @click="submit">{{ $t('buttonLabels.save') }}</v-button>
 						</div>
 					</div>
 				</template>
