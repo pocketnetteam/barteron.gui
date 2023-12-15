@@ -79,6 +79,7 @@
 		"group_exchange": "Group exchange",
 		"my_announcements": "My announcements",
 		"find_exchange_options": "Find exchange options",
+		"find_exchange": "Find exchange",
 		"offer_an_exchange": "Offer an exchange",
 		"show_more": "Show more",
 		"buy_for": "Buy for {cost} PKOIN",
@@ -163,8 +164,6 @@
 
 	"dialogLabels": {
 		"label": "Dialog",
-
-		"checking_connection": "Checking connection. Please wait..",
 
 		"images_imgur": "Sending images to imgur..",
 		"data_node": "Posting data to node, please wait..",

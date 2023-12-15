@@ -125,7 +125,7 @@
 								<v-button
 									vType="hit-stroke"
 									:to="{ name: 'exchangeOptions', params: { id: item.hash }, query: { expanded: 1 } }"
-								>{{ $t('buttonLabels.find_exchange_options') }}</v-button>
+								>{{ $t('buttonLabels.find_exchange') }}</v-button>
 							</template>
 						</BarterList>
 					</template>
