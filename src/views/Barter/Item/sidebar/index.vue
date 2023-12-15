@@ -28,7 +28,10 @@
 							</template>
 						</v-button>
 
-						<v-button vType="hit">
+						<v-button
+							vType="hit"
+							:to="{ name: 'exchangeOptions', params: { id: item.hash }, query: { expanded: 1 } }"
+						>
 							<i class="fa fa-sync"></i>
 							<span>{{ $t('buttonLabels.find_exchange_options') }}</span>
 						</v-button>
@@ -68,7 +71,7 @@
 					<!-- Edit button -->
 					<template v-if="!instance.editing">
 						<v-button vType="bulma-stroke" @click="instance.edit">
-							{{ $t('buttonsLabels.edit') }}
+							{{ $t('buttonLabels.edit') }}
 						</v-button>
 					</template>
 
