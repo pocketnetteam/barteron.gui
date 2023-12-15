@@ -7,6 +7,8 @@
 			<span class="count" v-if="count">207 ads</span>
 		</h1>
 
+		<p v-if="description">{{ description }}</p>
+
 		<FavoriteCategories :items="favoriteCategories" v-if="favorite" />
 	</div>
 </template>
