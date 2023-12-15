@@ -15,7 +15,7 @@
 			<input
 				type="text"
 				:placeholder="$t(
-					`searchLabels.${ id ? 'category' : 'global' }`,
+					`searchLabels.${ id && id !== 'search' ? 'category' : 'global' }`,
 					{ category: $t(categories.items[id]?.name || 'categoryLabels.label') })
 				"
 				v-model="query"

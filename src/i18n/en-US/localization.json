@@ -3,7 +3,8 @@
 		"label": "Page",
 		"home": "Home",
 		"createBarter": "Create barter",
-		"editBarter": "Edit barter"
+		"editBarter": "Edit barter",
+		"search": "Search results"
 	},
 
 	"toggleLabels": {
@@ -105,8 +106,8 @@
 		"label": "Order by",
 		"height_desc": "New first",
 		"height_asc": "Old first",
-		"price_desc": "Cheap first",
-		"price_asc": "Expensive first"
+		"price_asc": "Cheap first",
+		"price_desc": "Expensive first"
 	},
 
 	"viewLabels": {

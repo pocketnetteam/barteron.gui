@@ -1,6 +1,6 @@
 <template>
 	<div class="category-header">
-		<Breadcrumbs :parent="parent" :target="breadcrumbs" :lastActive="lastActive" v-if="breadcrumbs" />
+		<Breadcrumbs :type="type" :target="breadcrumbs" :lastActive="lastActive" v-if="breadcrumbs" />
 
 		<h1 v-if="title">
 			{{ pageTitle }}

@@ -43,8 +43,8 @@ export default {
 		submit() {
 			this.$router.push({
 				name: "category",
-				params: { id: this.id || "all" },
-				query: { search: this.query }
+				params: { id: this.id || "search" },
+				query: { search: `%${ this.query }%` }
 			}).catch(() => {});
 		}
 	}
