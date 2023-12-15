@@ -31,15 +31,21 @@ export default {
 		 * @param {Number} id
 		 */
 		selected(id) {
-			this.$router.push({ name: "category", params: { id } });
+			this.$router.push({
+				name: "category",
+				params: { id }
+			}).catch(() => {});
 		},
 
+		/**
+		 * Store search string in url query
+		 */
 		submit() {
 			this.$router.push({
 				name: "category",
 				params: { id: this.id || "all" },
 				query: { search: this.query }
-			});
+			}).catch(() => {});
 		}
 	}
 }
