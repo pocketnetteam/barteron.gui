@@ -3,15 +3,15 @@
 		<div class="row">
 			<div class="col no-offset">
 				<v-select
-					:dropdown="orders.map((order, index) => ({
+					:dropdown="orders.map(order => ({
 						text: `
 							<i class='fa icon ${ 
 								(() => {
 									switch (order.value) {
-										case 'height_asc': return 'fa-sort-amount-up-alt';
-										case 'height_desc': return 'fa-sort-amount-up';
-										case 'price_asc': return 'fa-sort-numeric-down-alt';
-										case 'price_desc': return 'fa-sort-numeric-down';
+										case 'height_asc': return 'fa-sort-alpha-up-alt';
+										case 'height_desc': return 'fa-sort-alpha-down';
+										case 'price_asc': return 'fa-sort-numeric-down';
+										case 'price_desc': return 'fa-sort-numeric-up-alt';
 									}
 								})()
 							}'></i>
@@ -56,6 +56,7 @@
 		<div class="row center">
 			<v-button
 				v-if="items?.length && items.length % 10 === 0"
+				@click="loadMore"
 			>{{ $t('buttonLabels.show_more') }}</v-button>
 		</div>
 	</v-content>

@@ -19,7 +19,9 @@ const
 		return Vue.prototype.sdk.getBrtOfferDeals({
 			...filter,
 			...(search && { search }),
-			theirTags: Number.isInteger(+request?.id) ? [+request.id] : []
+			theirTags: Number.isInteger(+request?.id) ? [+request.id] : [],
+			pageStart: request?.pageStart || 0,
+			pageSize: request?.pageSize || 10
 		});
 	}
 
@@ -33,7 +35,8 @@ export default {
 	data() {
 		return {
 			bartersView: "tile",
-			items: []
+			items: [],
+			pageStart: 0
 		}
 	},
 
@@ -59,12 +62,21 @@ export default {
 
 	methods: {
 		/**
+		 * View change callback
+		 * 
+		 * @param {Object} view 
+		 */
+		selectView(view) {
+			this.bartersView = view?.value;
+		},
+
+		/**
 		 * Order change callback
 		 * 
-		 * @param {Object} item 
+		 * @param {Object} order
 		 */
-		async selectOrder(item) {
-			const state = (item?.value || "").split("_");
+		async selectOrder(order) {
+			const state = (order?.value || "").split("_");
 
 			filter.orderBy = state[0];
 			filter.orderDesc = state[1] === "desc";
@@ -74,6 +86,8 @@ export default {
 				id: this.$route.params.id,
 				route: this.$route
 			});
+
+			this.pageStart = 0;
 		},
 
 		/**
@@ -92,15 +106,22 @@ export default {
 				id: this.$route.params.id,
 				route: this.$route
 			});
+
+			this.pageStart = 0;
 		},
 
 		/**
-		 * View change callback
-		 * 
-		 * @param {Object} view 
+		 * Load more offers
 		 */
-		selectView(view) {
-			this.bartersView = view?.value;
+		async loadMore() {
+			/* Send request to node */
+			const items = await requestItems({
+				id: this.$route.params.id,
+				pageStart: ++this.pageStart,
+				route: this.$route
+			});
+
+			this.items = this.items.concat(items);
 		}
 	},
 
