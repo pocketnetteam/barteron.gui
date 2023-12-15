@@ -42,7 +42,7 @@ class Offer {
 					return false;
 				}
 			},
-			time = isMs(data?.time) ? data?.time * 1000 : +new Date,
+			time = isMs(data?.time) ? +new Date : data?.time * 1000,
 			date = new Date(time),
 			till = data?.till || date?.setMonth(date.getMonth() + 1);
 
