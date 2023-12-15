@@ -16,8 +16,10 @@
 				type="text"
 				:placeholder="$t(
 					`searchLabels.${ id ? 'category' : 'global' }`,
-					{ category: $t(categories.items[id]?.name || 'category.label') })
+					{ category: $t(categories.items[id]?.name || 'categoryLabels.label') })
 				"
+				v-model="query"
+				@keyup.enter="submit"
 			>
 		</div>
 		
@@ -25,6 +27,7 @@
 			class="btn-search"
 			vType="light"
 			vSize="md"
+			@click="submit"
 		>
 			<i class="fa fa-search"></i>
 		</v-button>

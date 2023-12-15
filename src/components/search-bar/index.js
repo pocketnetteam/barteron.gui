@@ -7,6 +7,12 @@ export default {
 		CategorySelect
 	},
 
+	data() {
+		return {
+			query: this.$route.query.search || ""
+		}
+	},
+
 	computed: {
 		/**
 		 * Category id
@@ -26,6 +32,14 @@ export default {
 		 */
 		selected(id) {
 			this.$router.push({ name: "category", params: { id } });
+		},
+
+		submit() {
+			this.$router.push({
+				name: "category",
+				params: { id: this.id || "all" },
+				query: { search: this.query }
+			});
 		}
 	}
 }
