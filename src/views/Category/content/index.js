@@ -14,10 +14,12 @@ const
 		orderDesc: true
 	},
 	requestItems = (request) => {
+		const search = request?.route?.query?.search;
+
 		return Vue.prototype.sdk.getBrtOfferDeals({
-			...request,
 			...filter,
-			theirTags: [Number.isInteger(+request.theirTags) && +request.theirTags]
+			...(search && { search }),
+			theirTags: Number.isInteger(+request?.id) ? [+request.id] : []
 		});
 	}
 
@@ -69,7 +71,8 @@ export default {
 
 			/* Send request to node */
 			this.items = await requestItems({
-				theirTags: this.$route.params.id
+				id: this.$route.params.id,
+				route: this.$route
 			});
 		},
 
@@ -86,7 +89,8 @@ export default {
 
 			/* Send request to node */
 			this.items = await requestItems({
-				theirTags: this.$route.params.id
+				id: this.$route.params.id,
+				route: this.$route
 			});
 		},
 
@@ -111,7 +115,8 @@ export default {
 			if (to?.name === "category") {
 				/* Send request to node */
 				this.items = await requestItems({
-					theirTags: to.params.id
+					id: to.params.id,
+					route: to
 				});
 			}
 		}
@@ -120,7 +125,8 @@ export default {
 	async beforeRouteEnter (to, from, next) {
 		/* Send request to node */
 		const items = await requestItems({
-			theirTags: to.params.id
+			id: to.params.id,
+			route: to
 		});
 
 		next(vm => {
