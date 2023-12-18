@@ -2,7 +2,7 @@
 	<div :class="{ [`barter-item-${ vType }`]: true }">
 		<!-- Picture -->
 		<picture v-if="item.images?.length && vType !== 'page'">
-			<router-link :to="{ name: 'barterItem', params: { id: item.hash } }">
+			<router-link :to="offerLink">
 				<span class="state">{{ $t(`conditionLabels.${ !item.used ? 'new' : 'used' }`) }}</span>
 			
 				<!-- Images -->
@@ -135,7 +135,6 @@
 								v-for="(link, index) in exchangeList"
 								:key="index"
 							>
-								{{ link }}
 								<router-link
 									v-if="link.id"
 									:to="{ 'name': 'category', params: { id: link.id } }"

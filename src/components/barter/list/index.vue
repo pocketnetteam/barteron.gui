@@ -17,7 +17,11 @@
 					v-for="(item, index) in items"
 					:key="index"
 				>
-					<BarterItem :item="item" :vType="vType">
+					<BarterItem
+						:item="item"
+						:vType="vType"
+						:customLink="customLink"
+					>
 						<template #favorite v-if="$slots.favorite || $scopedSlots.favorite">
 							<slot name="favorite" :item="item"></slot>
 						</template>

@@ -19,6 +19,10 @@ export default {
 			/* row, tile or item */
 			type: String,
 			default: "tile"
+		},
+		customLink: {
+			type: [String, Object, Function],
+			default: null
 		}
 	},
 
@@ -149,6 +153,21 @@ export default {
 		 */
 		details() {
 			return sdk.barteron.details[this.item.hash];
+		},
+
+		/**
+		 * Customize offer link
+		 * 
+		 * @returns {Object|String}
+		 */
+		offerLink() {
+			if (!this.customLink) {
+				return { name: 'barterItem', params: { id: this.item.hash } };
+			} else if (typeof this.customLink === "function") {
+				return this.customLink(this.item, this);
+			} else {
+				return this.customLink;
+			}
 		}
 	},
 
