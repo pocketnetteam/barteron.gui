@@ -50,7 +50,8 @@ class Offer {
 		Object.defineProperties(this, {
 			sdk: { value: sdk },
 			time: { value: time },
-			till: { value: till }
+			till: { value: till },
+			active: { value: till < +new Date }
 		});
 
 		Vue.set(this.sdk.barteron._offers, this.hash || "draft", this);
