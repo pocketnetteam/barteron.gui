@@ -59,7 +59,16 @@
 						height: 170px
 						width: 184px
 
-				&:last-child
+				&:first-child:not(:last-child),
+				&:last-child:not(:first-child)
+					.avatar
+						top: 60px
+						right: -24px
+						bottom: auto
+						left: auto
+						transform: none
+
+				&:last-child:not(:first-child)
 					.avatar
 						right: auto
 						left: -24px
@@ -71,8 +80,10 @@
 					border-radius: 50%
 					text-decoration: none
 					position: absolute
-					top: 60px
-					right: -24px
+					top: -24px
+					right: auto
+					left: 50%
+					transform: translateX(-50%)
 					height: 48px
 					width: 48px
 

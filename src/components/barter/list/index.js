@@ -16,6 +16,10 @@ export default {
 		vType: {
 			type: String,
 			default: "tile"
+		},
+		customLink: {
+			type: [String, Object, Function],
+			default: null
 		}
 	},
 

@@ -40,6 +40,24 @@ export default {
 		},
 
 		/**
+		 * Active offers list
+		 * 
+		 * @returns {[@Offer, ...]}
+		 */
+		offersActive() {
+			return this.offersList.filter(f => f.active);
+		},
+
+		/**
+		 * Inactive offers list
+		 * 
+		 * @returns {[@Offer, ...]}
+		 */
+		offersInactive() {
+			return this.offersList.filter(f => !f.active);
+		},
+
+		/**
 		 * Active tab param
 		 * 
 		 * @returns {String|undefined}

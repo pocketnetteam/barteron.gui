@@ -668,10 +668,17 @@ class SDK {
 	getBrtOfferComplexDeals(request) {
 		return this.rpc("getbarteroncomplexdeals", {
 			...request,
-			myTags: (request?.myTags || []).map(tag => +tag),
+			myTag: +request?.myTag,
 			theirTags: (request?.theirTags || []).map(tag => +tag)
-		}).then(deals => {
-			return deals?.map(offer => new Offer(this, offer)) || [];
+		}).then(data => {
+			data?.map(match => {
+				if (match.target) {
+					match.target = new Offer(this, match.target);
+					match.intermediates = match?.intermediates.map(offer => new Offer(this, offer)) || [];
+				}
+			});
+
+			return data;
 		});
 	}
 
