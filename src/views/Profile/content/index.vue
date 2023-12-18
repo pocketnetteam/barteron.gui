@@ -36,11 +36,11 @@
 					:tabset="[
 						{
 							tabId: 'active',
-							title: $t('profileLabels.active')
+							title: `${ $t('profileLabels.active') } (${ offersActive.length })`
 						},
 						{
 							tabId: 'inactive',
-							title: $t('profileLabels.inactive')
+							title: `${ $t('profileLabels.inactive') } (${ offersInactive.length })`
 						}
 					]"
 				>
@@ -69,32 +69,11 @@
 					<template #active>
 						<BarterList
 							class="tabcontent-holder"
-							:items="offersList"
+							:items="offersActive"
 							:vType="bartersView"
 						>
-							<!-- 3-dots dropdown -->
-							<template #favorite v-if="isMyProfile">
-								<v-button
-									vType="transparent"
-									vSize="xs"
-								>
-									<i class="fa fa-ellipsis-v"></i>
-									<template #dropdown>
-										<div>
-											123
-										</div>
-									</template>
-								</v-button>
-							</template>
-
 							<!-- Date range, views and favorites -->
 							<template #info="{ item }" v-if="isMyProfile">
-								<!-- <v-switch
-									class="no-padding"
-									type="checkbox"
-									:label="$t('itemLabels.autorenew')"
-								/> -->
-
 								<ul>
 									<li v-if="item?.time">
 										<dl>
@@ -134,9 +113,43 @@
 					<template #inactive>
 						<BarterList
 							class="tabcontent-holder"
-							:items="barters.generate(8)"
+							:items="offersInactive"
 							:vType="bartersView"
-						/>
+						>
+							<!-- Date range, views and favorites -->
+							<template #info="{ item }" v-if="isMyProfile">
+								<ul>
+									<li v-if="item?.time">
+										<dl>
+											<dt><i class="fa fa-calendar"></i></dt>
+											<dd>
+												<time>
+													{{ $d(item.time, 'short') }} -
+													{{ $d(item.till, 'short') }}
+												</time>
+											</dd>
+										</dl>
+									</li>
+								</ul>
+
+								<dl>
+									<!-- <dt><i class="fa fa-eye"></i></dt>
+									<dd>33</dd> -->
+									<dt><i class="fa fa-heart"></i></dt>
+									<dd>99</dd>
+								</dl>
+							</template>
+
+							<!-- Edit and find exchange -->
+							<template #offer="{ item }" v-if="isMyProfile">
+								<v-button
+									:to="{ name: 'createBarter', params: { id: item.hash } }"
+								>{{ $t('buttonLabels.edit') }}</v-button>
+								<v-button
+									vType="hit-stroke"
+								>{{ $t('buttonLabels.renew') }}</v-button>
+							</template>
+						</BarterList>
 					</template>
 				</v-tabs>
 			</template>
