@@ -24,43 +24,59 @@ export default {
 		const
 			data = {},
 			sdk = Vue.prototype.sdk,
-			address = await sdk.getAddress();
+			address = await sdk.getAddress(),
+			account = await sdk.getBrtAccount(address);
 
 		if (address) {
-			const
-				myOffers = await sdk.getBrtOffers(address),
-				exchange = myOffers?.reduce((o, offer) => {
-					if (
-						Number.isInteger(+offer.tag) &&
-						!o.myTags.includes(offer.tag)
-					) {
-						o.myTags = o.myTags.concat(+offer.tag);
-					}
+			const myOffers = await sdk.getBrtOffers(address);
+				/* exchange = myOffers?.reduce((o, offer) => {
+					o.myTags.push(offer.tag);
 
 					offer.tags?.forEach(tag => {
-						if (
-							Number.isInteger(+tag) &&
-							!o.theirTags.includes(tag)
-						) {
-							o.theirTags = o.theirTags.concat(+tag);
+						if (tag === "my_list") {
+							o.theirTags.concat(account?.[0].tags);
+						} else {
+							o.theirTags.push(tag);
 						}
 					});
 	
 					return o;
-				}, {
-					myTags: [],
-					theirTags: [],
-					excludeAddresses: [address]
-				});
+				}, { myTags: [], theirTags: [] });
+
+			data.mayMatchExchanges = await sdk.getBrtOfferDeals(exchange); */
 
 			/* Get potential exchange offers */
 			if (myOffers?.length) {
-				data.mayMatchExchanges = await sdk.getBrtOfferDeals(exchange);
+				data.mayMatchExchanges = await Promise.all(
+					myOffers.map(offer => {
+						return sdk.getBrtOfferComplexDeals({
+							myTag: offer.tag,
+							theirTags: (() => {
+								if (offer.tags?.includes("my_list")) {
+									return account?.[0].tags;
+								} else {
+									return offer.tags;
+								}
+							})(),
+							excludeAddresses: [address]
+						}).then(offers => {
+							if (offers?.[0]?.target) {
+								return offers[0].target.update({ source: offer.hash })
+							} else {
+								return null;
+							}
+						});
+					})
+				).then(results => {
+					return results.filter(result => result);
+				});
 			}
 		}
 		
 		/* Get new offers */
-		data.newFromGoods = await sdk.getBrtOffersFeed();
+		data.newFromGoods = await sdk.getBrtOffersFeed({
+			pageSize: 100
+		});
 
 		/* Pass data to instance */
 		next(vm => {

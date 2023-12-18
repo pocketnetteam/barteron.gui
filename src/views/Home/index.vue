@@ -5,6 +5,7 @@
 			<BarterList
 				:items="mayMatchExchanges"
 				:carousel="true"
+				:customLink="(offer) => ({ name: '3sidedSearch', query: { source: offer.source, target: offer.hash } })"
 			/>
 		</section>
 
@@ -21,7 +22,7 @@
 			/>
 		</section>
 
-		<section>
+		<!-- <section>
 			<Banner>
 				<picture>
 					<img :src="require('@/assets/images/banner.jpeg')" alt="banner">
@@ -34,7 +35,7 @@
 			<BarterList
 				:items="barters.generate(8)"
 			/>
-		</section>
+		</section> -->
 
 		<section>
 			<h1>Viewed</h1>
