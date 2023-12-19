@@ -5,7 +5,7 @@
 			<BarterList
 				:items="mayMatchExchanges"
 				:carousel="true"
-				:customLink="(offer) => ({ name: '3sidedSearch', query: { source: offer.source, target: offer.hash } })"
+				:customLink="(offer) => ({ name: 'ThreeSidedSearch', query: { source: offer.source.hash, target: offer.hash } })"
 			/>
 		</section>
 
