@@ -98,7 +98,8 @@
 	},
 
 	"barterLabels": {
-		"label": "Exchange to",
+		"lanel": "Exchange",
+		"exchange": "Exchange to",
 		"empty": "No tags added",
 		"free": "For free",
 		"select": "Select item that you want exchange"
