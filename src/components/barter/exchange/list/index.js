@@ -18,7 +18,7 @@ export default {
 			default: 5
 		},
 		title: {
-			type: Boolean,
+			type: [Boolean, String],
 			default: true
 		},
 		vSize: {

@@ -5,7 +5,9 @@
 		</div>
 
 		<div class="v-list-holder" :class="holderClass">
-			<strong class="title" v-if="title">{{ $t('barterLabels.label') }}:</strong>
+			<strong class="title" v-if="title">{{
+				typeof title === "string" ? title : `${ $t('barterLabels.exchange') }:`
+			}}</strong>
 
 			<slot v-if="$slots.default || $scopedSlots.default" :instance="instance"></slot>
 
