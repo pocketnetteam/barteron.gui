@@ -37,10 +37,10 @@ const routes = [
 	},
 	{
 		path: "/barter/search",
-		name: "3sidedSearch",
+		name: "ThreeSidedSearch",
 		components: {
-			default: () => import("@/views/Barter/3SidedSearch/index.vue"),
-			content: () => import("@/views/Barter/3SidedSearch/content/index.vue")
+			default: () => import("@/views/Barter/ThreeSidedSearch/index.vue"),
+			content: () => import("@/views/Barter/ThreeSidedSearch/content/index.vue")
 		}
 	},
 	{

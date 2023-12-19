@@ -17,16 +17,19 @@ export default {
 	async beforeRouteEnter (to, from, next) {
 		const
 			sdk = Vue.prototype.sdk,
-			offers = await sdk.getBrtOffersByHashes([to.query?.source, to.query?.target]),
+			source = await sdk.getBrtOffersByHashes([to.query?.source]).then(result => {
+				console.log(result)
+				return result?.pop();
+			}),
 			list = await sdk.getBrtOfferComplexDeals({
-				myTag: offers[0]?.tag,
-				theirTags: [offers[1]?.tag],
-				excludeAddresses: [offers[0]?.address]
+				myTag: source?.tag,
+				theirTags: source?.tags,
+				excludeAddresses: [source?.address]
 			}),
 			deals = list?.reduce((result, match) => {
 				if (match?.intermediates) {
 					match.intermediates.forEach(offer => {
-						offer.update({ source: offers[0], target: match.target });
+						offer.update({ source, target: match.target });
 						result.push(offer);
 					});
 				}
