@@ -22,6 +22,7 @@ class Offer {
 		/* Iterable properties */
 		this.address = data?.address || data?.s1 || "";
 		this.hash = data?.s2 || data?.hash || null;
+		this.firsthash = data?.s2 && data?.hash ? data.hash : null;
 		this.language = data?.language || data?.p?.s1 || "";
 		this.caption = data?.caption || data?.p?.s2 || "";
 		this.description = data?.description || data?.p?.s3 || "";
@@ -44,17 +45,17 @@ class Offer {
 			},
 			time = isMs(data?.time) ? +new Date : data?.time * 1000,
 			date = new Date(time),
-			till = data?.till || date?.setMonth(date.getMonth() + 1);
+			till = data?.till || date.setMonth(date.getMonth() + 1);
 
 		/* Hidden properties */
 		Object.defineProperties(this, {
 			sdk: { value: sdk },
 			time: { value: time },
 			till: { value: till },
-			active: { value: till < +new Date }
+			active: { value: till > +new Date }
 		});
 
-		Vue.set(this.sdk.barteron._offers, this.hash || "draft", this);
+		Vue.set(this.sdk.barteron._offers, this.hash || "draft", this.update({ hash: this.hash || "draft" }));
 	}
 
 	/**
