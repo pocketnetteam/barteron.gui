@@ -31,8 +31,11 @@
 			</div>
 		</div>
 
-		<template v-if="expanded && deals?.length">
-			<div class="row block">
+		<template v-if="expanded">
+			<div
+				class="row block"
+				v-if="deals?.length"
+			>
 				<BarterList
 					:items="deals"
 					vType="row"
@@ -43,15 +46,16 @@
 				</BarterList>
 			</div>
 
+			<div
+				class="row center"
+				v-else
+			>
+				<p>{{ $t('exchangeLabels.empty') }}</p>
+			</div>
+
 			<!-- <div class="row center">
 				<v-button>{{ $t('buttonLabels.show_more') }}</v-button>
 			</div> -->
-		</template>
-
-		<template v-else>
-			<div class="row center">
-				<p>{{ $t('exchangeLabels.empty') }}</p>
-			</div>
 		</template>
 	</v-content>
 </template>
