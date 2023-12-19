@@ -117,7 +117,8 @@ export default {
 					}); */
 
 					/* Second version of search */
-					([].concat(this.root)).forEach(item => this.recursiveSearch(item));
+					this.root.map(r => ({ ...r })).forEach(item => this.recursiveSearch(item));
+
 	
 					setTimeout(() => this.searching = false, 1);
 				}

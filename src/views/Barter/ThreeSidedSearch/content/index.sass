@@ -9,7 +9,7 @@
 		align-items: center
 		justify-content: space-between
 		gap: 195px
-		padding: 48px 0
+		padding: 2*$r 0
 
 		&:last-child
 			border-bottom: 1px solid $beerus
@@ -23,6 +23,7 @@
 		.offers
 			+resetList()
 			display: flex
+			align-items: center
 			justify-content: space-between
 			position: relative
 			width: 100%
@@ -42,8 +43,14 @@
 				&:last-child
 					flex-shrink: 0
 
+					img
+						border: 0
+						height: 160px
+						width: 160px
+
 				a
 					display: flex
+					align-items: center
 					flex-direction: column
 					gap: 10px
 					text-decoration: none
@@ -51,13 +58,18 @@
 					p
 						color: $popo
 						font-size: 1.15em
+						text-align: center
+						text-overflow: ellipsis
+						overflow: hidden
+						white-space: nowrap
 
-					img
+					> img
+						border: 3px solid $gohan
 						border-radius: 18px
 						display: block
 						object-fit: cover
-						height: 170px
-						width: 184px
+						height: 112px
+						width: 112px
 
 				&:first-child:not(:last-child),
 				&:last-child:not(:first-child)
@@ -67,6 +79,8 @@
 						bottom: auto
 						left: auto
 						transform: none
+						height: 48px
+						width: 48px
 
 				&:last-child:not(:first-child)
 					.avatar
@@ -80,12 +94,12 @@
 					border-radius: 50%
 					text-decoration: none
 					position: absolute
-					top: -24px
+					top: -16px
 					right: auto
 					left: 50%
 					transform: translateX(-50%)
-					height: 48px
-					width: 48px
+					height: 32px
+					width: 32px
 
 					*
 						border-radius: 50%

@@ -530,7 +530,7 @@ class SDK {
 			}
 		});
 
-		return this.rpc("getbarteronoffersbyhashes", hashes).then(offers => {
+		return this.rpc("getbarteronoffersbyroottxhashes", hashes).then(offers => {
 			return offers?.map(offer => new Offer(this, offer)) || [];
 		});
 	}

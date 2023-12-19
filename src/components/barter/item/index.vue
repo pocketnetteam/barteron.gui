@@ -88,7 +88,7 @@
 
 			<div class="row to" v-if="item?.tags.length">
 				<ul>
-					<li><span>{{ $t('barterLabels.label') }}: </span></li>
+					<li><span>{{ $t('barterLabels.exchange') }}: </span></li>
 					<li
 						v-for="(link, index) in exchangeList"
 						:key="index"
@@ -130,7 +130,7 @@
 
 					<div class="to" v-if="item?.tags.length">
 						<ul>
-							<li><span>{{ $t('barterLabels.label') }}: </span></li>
+							<li><span>{{ $t('barterLabels.exchange') }}: </span></li>
 							<li
 								v-for="(link, index) in exchangeList"
 								:key="index"
@@ -267,6 +267,13 @@
 						<i class="fa fa-share-alt"></i>
 					</v-button>
 				</div>
+			</div>
+
+			<div class="row block sep">
+				<ExchangeList
+					:title="$t('barterLabels.exchange')"
+					:tags="item?.tags[0] !== 'my_list' ? item?.tags : account?.tags"
+				/>
 			</div>
 
 			<div class="row block sep" v-if="item.description">

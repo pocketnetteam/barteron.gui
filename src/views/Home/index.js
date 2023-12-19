@@ -28,7 +28,8 @@ export default {
 			account = await sdk.getBrtAccount(address);
 
 		if (address) {
-			const myOffers = await sdk.getBrtOffers(address);
+			const myOffers = await sdk.getBrtOffers(address)
+				.then(offers => offers.filter(offer => offer.active));
 				/* exchange = myOffers?.reduce((o, offer) => {
 					o.myTags.push(offer.tag);
 
@@ -61,7 +62,7 @@ export default {
 							excludeAddresses: [address]
 						}).then(offers => {
 							if (offers?.[0]?.target) {
-								return offers[0].target.update({ source: offer.hash })
+								return offers[0].target.update({ source: offer })
 							} else {
 								return null;
 							}
@@ -76,7 +77,7 @@ export default {
 		/* Get new offers */
 		data.newFromGoods = await sdk.getBrtOffersFeed({
 			pageSize: 100
-		});
+		}).then(offers => offers.filter(offer => offer.active));
 
 		/* Pass data to instance */
 		next(vm => {
