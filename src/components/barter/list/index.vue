@@ -6,8 +6,8 @@
 		}"
 	>
 		<div
-			:class="{ [`barter-${ carousel ? 'carousel' : 'list' }-holder`]: true }"
-			ref="holder"
+			class="barter-list-holder"
+			v-if="!carousel"
 		>
 			<ul
 				class="barter-track"
@@ -39,30 +39,39 @@
 		</div>
 
 		<div
-			class="barter-carousel-controls"
-			v-if="carousel"
+			class="barter-carousel-holder"
+			v-else
 		>
-			<div
-				:class="{
-					'barter-carousel-prev': true,
-					'prev-disabled': prevDisabled
-				}"
-				@click="prev"
+			<carousel
+				:perPage="4"
+				:navigationEnabled="true"
 			>
-				<i class="fa fa-angle-left"></i>
-			</div>
-			<div
-				:class="{
-					'barter-carousel-next': true,
-					'next-disabled': nextDisabled
-				}"
-				@click="next"
-			>
-				<i class="fa fa-angle-right"></i>
-			</div>
+				<slide
+					v-for="(item, index) in items"
+					:key="index"
+				>
+					<BarterItem
+						:item="item"
+						:vType="vType"
+						:customLink="customLink"
+					>
+						<template #favorite v-if="$slots.favorite || $scopedSlots.favorite">
+							<slot name="favorite" :item="item"></slot>
+						</template>
+
+						<template #info v-if="$slots.info || $scopedSlots.info">
+							<slot name="info" :item="item"></slot>
+						</template>
+
+						<template #offer v-if="$slots.offer || $scopedSlots.offer">
+							<slot name="offer" :item="item"></slot>
+						</template>
+					</BarterItem>
+				</slide>
+			</carousel>
 		</div>
 	</div>
 </template>
 
-<style scoped lang="sass" src="./index.sass"></style>
+<style lang="sass" src="./index.sass"></style>
 <script src="./index.js"></script>

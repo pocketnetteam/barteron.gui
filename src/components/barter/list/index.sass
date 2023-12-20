@@ -1,19 +1,74 @@
 @import "@/css/vars.sass"
 
-$item-width-min: 31%
 $item-width-max: 294px
 
-@mixin grid($carousel: false)
-	+resetList()
-	display: grid
-	grid-template-columns: repeat(auto-fit, $item-width-max)
-	grid-template-rows: 1fr
-	justify-content: flex-start
-	grid-gap: 24px
-	
-div[class^="barter-list"]
+.barter-carousel-holder
+	.VueCarousel-slide
+		display: flex
+		justify-content: center
+
+	.barter-item-tile
+		max-width: $item-width-max
+
+	.VueCarousel-dot
+		background-color: $beerus !important
+
+	.VueCarousel-dot--active
+		background-color: $bulma !important
+
+	.VueCarousel-navigation
+		/*  VueCarousel-navigation--disabled */
+		.VueCarousel-navigation-button
+			+fontAwesome("")
+			background: $primary
+			border: 1px solid $beerus
+			border-radius: 8px
+			cursor: pointer
+			display: flex
+			align-items: center
+			justify-content: center
+			font-size: 0
+			text-align: center
+			padding: 8px
+			opacity: .8
+			outline: none
+			top: 95px
+			height: 36px
+			width: 36px
+
+			&:not([class*="--disabled"])
+				&:hover
+					&:before
+						color: $blue
+
+			&[class*="--disabled"]
+				cursor: default
+
+				&:before
+					color: $trunks
+
+			&:before
+				+transition()
+				color: $bulma
+				font-size: 1.4rem
+
+		.VueCarousel-navigation-prev
+			&:before
+				content: "\f104"
+
+		.VueCarousel-navigation-next
+			&:before
+				content: "\f105"
+				margin: 0 0 0 3px
+
+.barter-list-holder
 	.barter-track
-		+grid()
+		+resetList()
+		display: grid
+		grid-template-columns: repeat(auto-fit, $item-width-max)
+		grid-template-rows: 1fr
+		justify-content: flex-start
+		grid-gap: 24px
 
 .barter-list-row
 	width: 100%
@@ -33,64 +88,3 @@ div[class^="barter-list"]
 			display: flex
 			flex-direction: column
 			width: 100%
-
-.barter-carousel
-	position: relative
-
-	.barter-carousel-holder
-		border-radius: 11px 11px 0 0
-		overflow: hidden
-		position: relative
-		width: 100%
-
-		ul.barter-track
-			+grid()
-			+transition(transform)
-			grid-template-columns: none
-			grid-auto-columns: $item-width-max
-			grid-auto-flow: column
-
-	.barter-carousel-prev,
-	.barter-carousel-next
-		background: $primary
-		border: 1px solid $beerus
-		border-radius: 8px
-		color: $bulma
-		cursor: pointer
-		font-size: 1.4em
-		text-align: center
-		padding: 8px
-		opacity: .8
-		position: absolute
-		top: 35%
-		height: 36px
-		width: 36px
-		+transition()
-
-		&:hover
-			color: $blue
-			opacity: 1
-		
-		.fa
-			display: block
-			margin-top: -1px
-
-	.barter-carousel-prev
-		margin-left: -18px
-		left: 0
-
-		&.prev-disabled
-			visibility: hidden
-
-		.fa
-			margin-left: -1px
-
-	.barter-carousel-next
-		margin-right: -18px
-		right: 0
-
-		&.next-disabled
-			visibility: hidden
-
-		.fa
-			margin-right: -1px
