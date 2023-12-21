@@ -26,7 +26,7 @@
 					<span>{{ $t('buttonLabels.propose_exchange') }}</span>
 				</v-button>
 
-				<v-button
+				<!-- <v-button
 					v-if="groupExchange.length"
 					vType="bulma-stroke"
 					class="btn-group"
@@ -43,7 +43,7 @@
 							<img :src="imageUrl(item.images[0])" :alt="item.name">
 						</li>
 					</ul>
-				</v-button>
+				</v-button> -->
 			</div>
 		</template>
 
@@ -52,9 +52,9 @@
 				<span>{{ $t('buttonLabels.contact_seller') }}</span>
 			</v-button>
 
-			<v-button vType="roshi">
+			<!-- <v-button vType="roshi">
 				<span>{{ $t('buttonLabels.buy_for', { cost: $n(item.price) }) }}</span>
-			</v-button>
+			</v-button> -->
 		</div>
 	</div>
 </template>
