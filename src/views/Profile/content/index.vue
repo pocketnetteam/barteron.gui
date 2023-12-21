@@ -76,7 +76,7 @@
 							<template #info="{ item }" v-if="isMyProfile">
 								<ul>
 									<li v-if="item?.time">
-										<dl>
+										<dl :class="item.status">
 											<dt><i class="fa fa-calendar"></i></dt>
 											<dd>
 												<time>
@@ -120,7 +120,7 @@
 							<template #info="{ item }" v-if="isMyProfile">
 								<ul>
 									<li v-if="item?.time">
-										<dl>
+										<dl :class="item.status">
 											<dt><i class="fa fa-calendar"></i></dt>
 											<dd>
 												<time>
