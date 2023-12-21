@@ -37,11 +37,7 @@ class Offer {
 			isMs = (timestamp) => {
 				const date = new Date(timestamp);
 
-				if (Math.abs(Date.now() - date) < Math.abs(Date.now() - date * 1000)) {
-					return true;
-				} else {
-					return false;
-				}
+				return isNaN(date) || Math.abs(Date.now() - date) < Math.abs(Date.now() - date * 1000);
 			},
 			time = isMs(data?.time) ? +new Date : data?.time * 1000,
 			date = new Date(time),
@@ -52,10 +48,36 @@ class Offer {
 			sdk: { value: sdk },
 			time: { value: time },
 			till: { value: till },
-			active: { value: till > +new Date }
+			active: {
+				value: (() => {
+					let state = true;
+
+					if (
+						!this.hash ||
+						till < +new Date
+					) state = false;
+
+					return state;
+				})()
+			},
+			status: {
+				value: (() => {
+					const state = [];
+
+					state.unshift("valid");
+					if (!this.hash) state.unshift("draft");
+					if (till < +new Date) state.unshift("outdated");
+
+					return state.shift();
+				})()
+			}
 		});
 
-		Vue.set(this.sdk.barteron._offers, this.hash || "draft", this.update({ hash: this.hash || "draft" }));
+		Vue.set(
+			this.sdk.barteron._offers,
+			this.hash || "draft",
+			this.update({ hash: this.hash || "draft" })
+		);
 	}
 
 	/**
