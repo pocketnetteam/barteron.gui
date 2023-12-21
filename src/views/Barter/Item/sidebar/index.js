@@ -65,10 +65,10 @@ export default {
 	},
 
 	methods: {
-		proposeExchange(offer) {
+		createRoom(offer) {
 			this.sdk.createRoom({
 				name: this.item.caption,
-				members: [this.sdk.address, this.address],
+				members: [this.address],
 				message: `/barter/${ offer.hash }`
 			});
 		}
