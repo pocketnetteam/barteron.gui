@@ -11,5 +11,5 @@
     "develop": true,
     "scope" : "barteron.bastyonapps.com",
     "start_url" : "index.html",
-    "permissions" : ["account", "notifications", "messaging", "payment", "sign", "mobilecamera", "location"]
+    "permissions" : ["account", "notifications", "messaging", "payment", "sign", "mobilecamera", "location", "chat"]
 }
