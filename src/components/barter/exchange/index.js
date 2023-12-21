@@ -45,8 +45,18 @@ export default {
 			}
 		},
 
+		/**
+		 * Propose excange your offer to seller's offer
+		 */
 		proposeExchange() {
 			this.$emit("propose", this.items[this.selected]);
+		},
+
+		/**
+		 * Contact seller
+		 */
+		contactSeller() {
+			this.$emit("contact", this.item);
 		}
 	},
 

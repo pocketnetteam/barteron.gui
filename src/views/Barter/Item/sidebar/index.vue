@@ -52,10 +52,11 @@
 
 				<!-- Someone's offer -->
 				<BarterExchange
-					v-else-if="myOffers.length"
+					v-if="!isMyOffer"
 					:item="item"
 					:items="myOffers"
-					@propose="proposeExchange"
+					@propose="createRoom"
+					@contact="createRoom"
 				/>
 			</div>
 		</div>
