@@ -1,51 +1,57 @@
 <template>
 	<div class="barter-exchange">
-		<strong class="label">{{ $t('barterLabels.select') }}</strong>
-		<ul>
-			<li
-				v-for="(item, index) in items.slice(0, show)" :key="index"
-				:class="{ 'selected': selected === index }"
-				@click="() => selected = index"
-			>
-				<i class="fa fa-check-circle"></i>
-				<img :src="imageUrl(item.images[0])" :alt="item.name">
-			</li>
-		</ul>
+		<template v-if="items.length">
+			<strong class="label">{{ $t('barterLabels.select') }}</strong>
+			<ul>
+				<li
+					v-for="(item, index) in items.slice(0, show)" :key="index"
+					:class="{ 'selected': selected === index }"
+					@click="() => selected = index"
+				>
+					<i class="fa fa-check-circle"></i>
+					<img :src="imageUrl(item.images[0])" :alt="item.name">
+				</li>
+			</ul>
 
-		<!-- Toggle -->
-		<div class="toggle">
-			<span class="link" @click.prevent="toggle">
-				{{ $t(`toggleLabels.${ show < items.length ? 'show_all' : 'hide' }`) }}
-			</span>
-		</div>
-
-		<div class="propose">
-			<v-button @click="proposeExchange">
-				<i class="fa fa-sync"></i>
-				<span>{{ $t('buttonLabels.propose_exchange') }}</span>
-			</v-button>
-
-			<v-button
-				v-if="groupExchange.length"
-				vType="bulma-stroke"
-				class="btn-group"
-				:to="{ name: 'ThreeSidedSearch', query: { source: item.hash, target: items[selected].hash } }"
-			>
-				<span>
-					<i class="fa fa-users"></i>
-					<span>{{ $t('buttonLabels.group_exchange') }}</span>
+			<!-- Toggle -->
+			<div class="toggle">
+				<span class="link" @click.prevent="toggle">
+					{{ $t(`toggleLabels.${ show < items.length ? 'show_all' : 'hide' }`) }}
 				</span>
-				<ul :style="{ '--len': groupExchange.length }">
-					<li
-						v-for="(item, index) in groupExchange" :key="index"
-					>
-						<img :src="imageUrl(item.images[0])" :alt="item.name">
-					</li>
-				</ul>
-			</v-button>
-		</div>
+			</div>
+
+			<div class="propose">
+				<v-button @click="proposeExchange">
+					<i class="fa fa-sync"></i>
+					<span>{{ $t('buttonLabels.propose_exchange') }}</span>
+				</v-button>
+
+				<v-button
+					v-if="groupExchange.length"
+					vType="bulma-stroke"
+					class="btn-group"
+					:to="{ name: 'ThreeSidedSearch', query: { source: item.hash, target: items[selected].hash } }"
+				>
+					<span>
+						<i class="fa fa-users"></i>
+						<span>{{ $t('buttonLabels.group_exchange') }}</span>
+					</span>
+					<ul :style="{ '--len': groupExchange.length }">
+						<li
+							v-for="(item, index) in groupExchange" :key="index"
+						>
+							<img :src="imageUrl(item.images[0])" :alt="item.name">
+						</li>
+					</ul>
+				</v-button>
+			</div>
+		</template>
 
 		<div class="buy">
+			<v-button @click="contactSeller">
+				<span>{{ $t('buttonLabels.contact_seller') }}</span>
+			</v-button>
+
 			<v-button vType="roshi">
 				<span>{{ $t('buttonLabels.buy_for', { cost: $n(item.price) }) }}</span>
 			</v-button>
