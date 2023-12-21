@@ -86,7 +86,7 @@ export default {
 	
 						this.sdk.geoLocation(location)
 							.then(result => {
-								this.$set(this, "addr", { ...this.addr, ...result.address });
+								if (result?.address) this.$set(this, "addr", { ...this.addr, ...result.address });
 							});
 					}
 	

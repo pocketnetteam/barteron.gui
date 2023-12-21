@@ -112,7 +112,7 @@ export default {
 				
 					this.sdk.geoLocation(this.geohash)
 						.then(result => {
-							this.$set(this, "addr", result.address);
+							if (result?.address) this.$set(this, "addr", result.address);
 						});
 				}
 
