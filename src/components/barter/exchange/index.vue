@@ -1,27 +1,36 @@
 <template>
 	<div class="barter-exchange">
 		<template v-if="items.length">
-			<strong class="label">{{ $t('barterLabels.select') }}</strong>
-			<ul>
-				<li
-					v-for="(item, index) in items.slice(0, show)" :key="index"
-					:class="{ 'selected': selected === index }"
-					@click="() => selected = index"
-				>
-					<i class="fa fa-check-circle"></i>
-					<img :src="imageUrl(item.images[0])" :alt="item.name">
-				</li>
-			</ul>
+			<v-lightbox
+				size="md"
+				:visible="lightbox"
+				:title="$t('barterLabels.select')"
+				@onHide="() => lightbox = false"
+			>
+				<ul>
+					<li
+						v-for="(item, index) in items"
+						:key="index"
+						:class="{ 'selected': selected === index }"
+						@click="() => selected = index"
+					>
+						<i class="fa fa-check-circle"></i>
+						<img :src="imageUrl(item.images[0])" :alt="item.name">
+					</li>
+				</ul>
 
-			<!-- Toggle -->
-			<div class="toggle">
-				<span class="link" @click.prevent="toggle">
-					{{ $t(`toggleLabels.${ show < items.length ? 'show_all' : 'hide' }`) }}
-				</span>
-			</div>
+				<div class="propose">
+					<v-button
+						:disabled="!items[selected]"
+						@click="proposeExchange"
+					>
+						<span>{{ $t('buttonLabels.propose_exchange') }}</span>
+					</v-button>
+				</div>
+			</v-lightbox>
 
 			<div class="propose">
-				<v-button @click="proposeExchange">
+				<v-button @click="() => lightbox = true">
 					<i class="fa fa-sync"></i>
 					<span>{{ $t('buttonLabels.propose_exchange') }}</span>
 				</v-button>
