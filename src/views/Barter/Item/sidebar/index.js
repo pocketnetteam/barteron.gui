@@ -69,7 +69,8 @@ export default {
 			this.sdk.createRoom({
 				name: this.item.caption,
 				members: [this.address],
-				message: `/barter/${ offer.hash }`
+				/* message: `https://barteron/barter/${ offer.hash }` */
+				message: `%appURL%/barter/${ offer.hash }`
 			});
 		}
 	},
