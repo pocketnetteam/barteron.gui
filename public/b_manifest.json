@@ -9,7 +9,7 @@
     },
     "author": "PUJjhGLa7KesEa3Ee8K9pi49u1mW9xqQZB",
     "develop": true,
-    "scope" : "barteron.bastyonapps.com",
+    "scope" : "test.barter.pocketnet.app",
     "start_url" : "index.html",
     "icon": "favicon.ico",
     "permissions" : ["account", "notifications", "messaging", "payment", "sign", "mobilecamera", "location", "chat"]

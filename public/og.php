@@ -27,7 +27,7 @@ class OG {
             'title' => $this->project,
             'site_name' => $this->project, 
             'type' => 'website',
-            'image' => "https://{$this->manifest['id']}/{$this->manifest['icon']}",
+            'image' => "https://{$this->manifest['scope']}/{$this->manifest['icon']}",
             'description' => $this->manifest['description'],
         );
 	}
@@ -40,7 +40,7 @@ class OG {
         $uri = trim($_SERVER['REQUEST_URI'], '/');
 
         if (isset($uri)) {
-            list($page, $id) = explode('/', $uri);
+            @list($page, $id) = explode('/', $uri);
 
             if (@$page == 'barter') {
                 $title = false;
