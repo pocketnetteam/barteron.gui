@@ -4,6 +4,7 @@ import router from "./router.js";
 import VueHead from "vue-head";
 import i18n from "./i18n/index.js";
 
+import Manifest from "../public/b_manifest.json";
 import SDK from "@/js/sdk.js";
 import Categories from "@/js/categories.js";
 import Barters from "@/js/barters.js";
@@ -36,6 +37,7 @@ Vue.component("v-tabs", () => import("@/components/v-form/v-tabs/index.vue"));
 Vue.component("v-textarea", () => import("@/components/v-form/v-textarea/index.vue"));
 
 /* Make categories and barters global */
+Vue.prototype.manifest = Manifest;
 Vue.prototype.sdk = Vue.observable(new SDK());
 Vue.prototype.categories = Vue.observable(new Categories());
 Vue.prototype.barters = Vue.observable(new Barters());
