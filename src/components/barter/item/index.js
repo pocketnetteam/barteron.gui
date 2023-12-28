@@ -149,15 +149,6 @@ export default {
 		},
 
 		/**
-		 * Get offer details
-		 * 
-		 * @returns {Object}
-		 */
-		details() {
-			return sdk.barteron.details[this.item.hash];
-		},
-
-		/**
 		 * Customize offer link
 		 * 
 		 * @returns {Object|String}

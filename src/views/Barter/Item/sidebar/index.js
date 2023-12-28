@@ -69,12 +69,13 @@ export default {
 			this.sdk.createRoom({
 				name: this.item.caption,
 				members: [this.address],
-				message: `/barter/${ offer.hash }`
+				message: `https://${ this.manifest.scope }/barter/${ offer.hash }`
 			});
 		}
 	},
 
 	async mounted() {
 		this.myOffers = await this.sdk.getBrtOffers();
+		console.log('manifest', this.manifest, `https://${ this.manifest.scope }/barter/hash`)
 	}
 }

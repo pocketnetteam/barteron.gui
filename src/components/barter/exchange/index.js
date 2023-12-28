@@ -8,8 +8,8 @@ export default {
 
 	data() {
 		return {
-			selected: 0,
-			show: 3,
+			lightbox: false,
+			selected: null,
 			groupExchange: []
 		}
 	},
@@ -35,21 +35,11 @@ export default {
 		},
 
 		/**
-		 * Toggle items to see
-		 */
-		toggle() {
-			if (this.show < this.items.length) {
-				this.show = this.items.length;
-			} else {
-				this.show = 3;
-			}
-		},
-
-		/**
 		 * Propose excange your offer to seller's offer
 		 */
 		proposeExchange() {
 			this.$emit("propose", this.items[this.selected]);
+			this.lightbox = false;
 		},
 
 		/**
@@ -61,9 +51,9 @@ export default {
 	},
 
 	async mounted() {
-		this.groupExchange = await this.sdk.getBrtOfferDeals({
+		/* this.groupExchange = await this.sdk.getBrtOfferDeals({
 			offer: this.item.hash,
 			address: this.sdk.address
-		});
+		}); */
 	}
 }
