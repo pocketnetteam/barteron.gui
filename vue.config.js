@@ -5,6 +5,19 @@ const
 module.exports = defineConfig({
 	outputDir: path.resolve(__dirname, process.env.VUE_APP_EXPORT || "./dist"),
 
+	indexPath: "index.php",
+
+	chainWebpack: config => {
+		if (process.env.NODE_ENV === 'production') {
+			config
+				.plugin('html')
+				.tap(args => {
+					args[0].template = "./public/index.php";
+					return args;
+				});
+		}
+	},
+
 	transpileDependencies: true,
 
 	devServer: {
