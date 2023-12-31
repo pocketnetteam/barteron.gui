@@ -38,12 +38,11 @@
 			<!-- Found -->
 			<div class="found" v-if="query">
 				<p v-if="results.length">{{
-					$t('searchLabels.found', {
-						count: results.length,
-						results: $t(`searchLabels.result${ results.length > 1 ? 's' : '' }`)
+					$tc('searchLabels.result', results.length, {
+						count: results.length
 					})
 				}}</p>
-				<p v-else>{{ $t('searchLabels.not_found') }}</p>
+				<p v-else>{{ $tc('searchLabels.result', 0) }}</p>
 			</div>
 		</template>
 

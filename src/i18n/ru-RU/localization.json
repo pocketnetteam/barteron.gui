@@ -1,0 +1,205 @@
+{
+	"pageLabels": {
+		"label": "Страница",
+		"home": "Домашняя",
+		"createBarter": "Создать обмен",
+		"editBarter": "Редактировать обмен",
+		"search": "Результаты поиска"
+	},
+
+	"toggleLabels": {
+		"label": "Переключение",
+		"show": "Показать",
+		"show_all": "Показать всё",
+		"hide": "Скрыть",
+		"hide_all": "Скрыть всё"
+	},
+
+	"searchLabels": {
+		"label": "Поиск",
+		"global": "Искать на Barteron",
+		"category": "Искать в {category}",
+		"result": "Ничего не найдено | {count} совпадение найдено | {count} совпадений найдено"
+	},
+
+	"categoriesLabels": {
+		"label": "Категории",
+		"choose": "Выбрать категорию",
+		"popular": "Популярные категории",
+		"select": "Выбрать"
+	},
+
+	"categoryLabels": {
+		"label": "Категория",
+		"empty": "Здесь ещё нет обменов:("
+	},
+
+	"stepsLabels": {
+		"label": "Шаги",
+		"propose": "Что вы предлагаете",
+		"photos": "Добавьте фотографии",
+		"get": "Что вы хотите получить",
+		"description": "Описание",
+		"location": "Местоположение"
+	},
+
+	"ratingLabels": {
+		"label": "Рейтинг",
+		"reviews": "Отзывы"
+	},
+
+	"profileLabels": {
+		"label": "Профиль",
+		"edit": "Редактировать профиль",
+		"on_barteron_from": "На Barteron с {date}",
+		"account_confirmed": "Аккаунт подтверждён",
+		"coins": "Коинов",
+		"wallet": "Кошелёк",
+		"settings": "Настройки",
+		"contact_support": "Связаться с поддержкой",
+		"ads": "Объявления",
+		"barters": "Обмены",
+		"favorites": "Избранное",
+		"feedbacks": "Отзывы",
+		"active": "Активные",
+		"inactive": "Неактивные",
+		"report_abuse": "Пожаловаться"
+	},
+
+	"buttonLabels": {
+		"categories": "Категории",
+		"cancel": "Отмена",
+		"preview": "Предпросмотр",
+		"publish": "Опубликовать",
+		"propose_exchange": "Предложить обмен",
+		"group_exchange": "Групповой обмен",
+		"contact_seller": "Связаться с продавцом",
+		"my_announcements": "Мои объявления",
+		"find_exchange_options": "Найти обмены",
+		"find_exchange": "Найти обмены",
+		"offer_an_exchange": "Предложить обмен",
+		"show_more": "Показать ещё",
+		"buy_for": "Купить за {cost} PKOIN",
+		"edit": "Редактировать",
+		"save": "Сохранить",
+		"renew": "Продлить",
+		"withdraw": "Снять с публикации",
+		"remove": "Удалить",
+		"continue_edit": "К редактированию",
+		"ok": "Ok",
+		"yes": "Да",
+		"no": "Нет",
+		"unknown": "Неизвестно",
+		"apply": "Применить"
+	},
+
+	"barterLabels": {
+		"lanel": "Обмен",
+		"exchange": "Меняю на",
+		"empty": "Нет добавленных тегов",
+		"free": "Бесплатно",
+		"select": "Выберите объявление на которое вы хотите обменяться"
+	},
+
+	"orderLabels": {
+		"label": "Сортировать по",
+		"height_desc": "Сначала новые",
+		"height_asc": "Сначала старые",
+		"price_asc": "Сначала дешёвые",
+		"price_desc": "Сначала дорогие"
+	},
+
+	"viewLabels": {
+		"label": "Вид",
+		"tile": "Плитка",
+		"row": "Строки"
+	},
+
+	"priceLabels": {
+		"label": "Цена",
+		"from": "От",
+		"to": "До",
+		"under": "Ниже {to}",
+		"range": "От {from} До {to}",
+		"over": "Свыше {from}",
+		"no_matter": "Неважно"
+	},
+
+	"conditionLabels": {
+		"label": "Состояние",
+		"new": "Новое",
+		"used": "Б/У"
+	},
+
+	"typeLabels": {
+		"label": "Тип",
+		"notebook": {
+			"label": "Ноутбук",
+			"gaming_notebook": "Игровой ноутбук",
+			"notebook": "Ноутбук",
+			"notebook_tablet": "Ноутбук-планшет",
+			"transformer": "Трансформер"
+		}
+	},
+
+	"exchangeLabels": {
+		"label": "Варианты обмена",
+		"title": "Мы можем найти для вас варианты обмена",
+		"text": "Предложите обмен, если найденный вариант вам понравится. Выше представлены лучшие варианты",
+		"empty": "Сейчас мы не можем найти направления обмена:("
+	},
+
+	"locationLabels": {
+		"enter_address": "Введите адрес",
+		"preferred": "Местоположение для новых объявлений",
+		"static": "Статическое",
+		"dynamic": "Динамическое",
+		"radius": "Искать объявления в радиусе"
+	},
+
+	"itemLabels": {
+		"label": "Объявление",
+		"autorenew": "Автопродление"
+	},
+
+	"dialogLabels": {
+		"label": "Диалог",
+
+		"images_imgur": "Отправка изображений в imgur..",
+		"data_node": "Данные отправляются на ноду, пожалуйста, подождите..",
+		"image_error": "Ошибка загрузки изображений",
+		"node_error": "Произошла ошибка на ноде: {error}",
+
+		"error#-26": "Минимальная плата за ретрансляцию не достигнута",
+		"error#-1": "Ошибка загрузки библиотеки SDK.",
+		"error#0": "{details}",
+		"error#21": "Неудачный OpReturn",
+		"error#28": "Слишком много транзакций",
+		"error#65": "Превышен лимит"
+	},
+
+	"feedbackLabels": {
+		"label": "Отзывы",
+		"title": "Рейтинг",
+		"votes": "{count} голосов",
+		"placeholder": "Оставьте свой отзыв",
+		"empty": "Тут ещё нет отзывов"
+	},
+
+	"metricsLabels": {
+		"label": "Метрика",
+		"km": "км",
+		"number": "№"
+	},
+
+	"title": "Заголовок",
+	"upload_image": "Загрузить изображение",
+	"upload_image_text": "В результатах поиска отобразится первая фотография, выберите лучшую. Вы можете загрузить до {count} фотографий в формате {formats}. Максимальный размер фотографии - {size}МБ.",
+	"my_list": "Мой список",
+	"something": "Что-нибудь",
+	"for_nothing": "Бесплатно",
+	"choose_currency_text": "Barteron использует собственную криптовалюту (PKOIN) в качестве основной оценки, вы можете оценить свой товар в любой удобной для вас валюте и узнать сколько он будет стоить в PKOIN",
+
+	"may_match_exchanges": "Может совпадать с вашими обменами",
+	"new_from_goods": "Новинки"
+}

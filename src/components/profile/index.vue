@@ -43,7 +43,7 @@
 			<dl class="list">
 				<dt><i class="fa fa-calendar-day"></i></dt>
 				<dd>{{
-				$t('profileLabels.on_barteron_from', { date: $d(account.regdate, 'middle') })
+				$t('profileLabels.on_barteron_from', { date: $d(account.regdate, 'middle', $i18n.locale) })
 				}}</dd>
 				<dt><i class="fa fa-map-marker-alt"></i></dt>
 				<dd>Astana, Kazakhstan</dd>
