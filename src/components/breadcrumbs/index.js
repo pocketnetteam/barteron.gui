@@ -33,7 +33,6 @@ export default {
 				while(category?.id) {
 					hierarchy.unshift({
 						...category,
-						...(this.$te(category.name) && { value: this.$t(category.name) }),
 						link: { name: "category", params: { id: category.id } }
 					});
 
