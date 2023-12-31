@@ -3,7 +3,7 @@ export default {
 
 	methods: {
 		selectLanguage(item) {
-			console.log(item)
+			this.$root.$i18n.locale = item.value;
 		}
 	}
 }
