@@ -110,14 +110,14 @@ export default {
 	},
 
 	mounted() {
-		/* Request for permissons */
-		this.sdk.requestPermissions(["location"]).then(() => {
-			this.$forceUpdate();
-		});
-		
 		this.mapObject = this.$refs.map.mapObject;
 		
 		if(this.allowSelection) {
+			/* Request for permissons */
+			this.sdk.requestPermissions(["location"]).then(() => {
+				this.$forceUpdate();
+			});
+
 			this.mapObject.on("click", (e) => {
 				if (e.originalEvent.target.matches("div.vue2leaflet-map")) {
 					this.marker = Object.values(e.latlng);
