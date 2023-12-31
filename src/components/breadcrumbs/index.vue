@@ -6,9 +6,9 @@
 				:key="index"
 			>
 				<template v-if="lastActive || index < tree.length - 1">
-					<router-link :to="item.link">{{ item.value }}</router-link>
+					<router-link :to="item.link">{{ $t(item.name) }}</router-link>
 				</template>
-				<template v-else>{{ item.value }}</template>
+				<template v-else>{{ $t(item.name) }}</template>
 			</menuitem>
 		</menu>
 	</nav>
