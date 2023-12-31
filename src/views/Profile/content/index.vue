@@ -80,8 +80,8 @@
 											<dt><i class="fa fa-calendar"></i></dt>
 											<dd>
 												<time>
-													{{ $d(item.time, 'short') }} -
-													{{ $d(item.till, 'short') }}
+													{{ $d(item.time, 'short', $i18n.locale) }} -
+													{{ $d(item.till, 'short', $i18n.locale) }}
 												</time>
 											</dd>
 										</dl>
@@ -124,8 +124,8 @@
 											<dt><i class="fa fa-calendar"></i></dt>
 											<dd>
 												<time>
-													{{ $d(item.time, 'short') }} -
-													{{ $d(item.till, 'short') }}
+													{{ $d(item.time, 'short', $i18n.locale) }} -
+													{{ $d(item.till, 'short', $i18n.locale) }}
 												</time>
 											</dd>
 										</dl>

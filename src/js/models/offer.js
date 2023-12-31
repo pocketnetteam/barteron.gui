@@ -106,7 +106,7 @@ class Offer {
 	set(data) {
 		return this.sdk.setBrtOffer({
 			...this.update(data),
-			price: this.price * 100
+			price: parseInt(this.price * 100)
 		}).then(data => {
 			const
 				txid = (this.hash?.length === 64 ? this.hash : data.transaction),

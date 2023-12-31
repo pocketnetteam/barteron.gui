@@ -19,10 +19,7 @@
 		"label": "Search",
 		"global": "Search on Barteron",
 		"category": "Search in {category}",
-		"found": "{count} {results} has found",
-		"result": "result",
-		"results": "results",
-		"not_found": "Nothing found"
+		"result": "Nothing found | {count} result has found | {count} results has found"
 	},
 
 	"categoriesLabels": {
@@ -34,9 +31,7 @@
 
 	"categoryLabels": {
 		"label": "Category",
-		"empty": "There is no offers yet:(",
-		"show": "Show",
-		"hide": "Hide"
+		"empty": "There is no offers yet:("
 	},
 
 	"stepsLabels": {

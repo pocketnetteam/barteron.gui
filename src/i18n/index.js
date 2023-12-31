@@ -21,6 +21,24 @@ const
 				month: "long",
 				day: "numeric"
 			}
+		},
+
+		"ru-RU": {
+			short: {
+				year: "numeric",
+				month: "numeric",
+				day: "numeric"
+			},
+			middle: {
+				year: "numeric",
+				month: "long",
+				day: "numeric"
+			},
+			long: {
+				year: "numeric",
+				month: "long",
+				day: "numeric"
+			}
 		}
 	},
 
@@ -33,6 +51,19 @@ const
 			currencyNoCents: {
 				style: "currency",
 				currency: "USD",
+				minimumFractionDigits: 0,
+				maximumFractionDigits: 0
+			}
+		},
+
+		"ru-RU": {
+			currency: {
+				style: "currency",
+				currency: "RUB"
+			},
+			currencyNoCents: {
+				style: "currency",
+				currency: "RUB",
 				minimumFractionDigits: 0,
 				maximumFractionDigits: 0
 			}

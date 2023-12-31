@@ -108,7 +108,7 @@
 					<li v-if="item.time">
 						<dl>
 							<dt><i class="fa fa-calendar"></i></dt>
-							<dd><time :class="item.status">{{ $d(item.time, 'middle') }}</time></dd>
+							<dd><time :class="item.status">{{ $d(item.time, 'middle', $i18n.locale) }}</time></dd>
 						</dl>
 					</li>
 					<li v-if="distance > -1">
@@ -170,7 +170,7 @@
 					<slot name="info" v-if="$slots.info"></slot>
 					<ul v-else>
 						<li v-if="item.time">
-							<time :class="item.status">{{ $d(item.time, 'middle') }}</time>
+							<time :class="item.status">{{ $d(item.time, 'middle', $i18n.locale) }}</time>
 						</li>
 						<li v-if="distance > -1">
 							{{ distance }} {{ $t('metricsLabels.km') }}
@@ -249,7 +249,7 @@
 					<ul class="stat">
 						<li v-if="item.time">
 							<i class="fa fa-calendar-day"></i>
-							<time>{{ $d(item.time, 'middle') }}</time>
+							<time>{{ $d(item.time, 'middle', $i18n.locale) }}</time>
 						</li>
 						<li>
 							<i class="fa fa-heart"></i>

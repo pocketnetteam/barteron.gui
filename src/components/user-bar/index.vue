@@ -38,7 +38,7 @@
 			<li>
 				<v-button @click="$event => requestPermissions($event, { name: 'createBarter' })">
 					<i class="fa fa-plus"></i>
-					<span>Create barter</span>
+					<span>{{ $t('pageLabels.createBarter') }}</span>
 				</v-button>
 			</li>
 		</ul>

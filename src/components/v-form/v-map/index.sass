@@ -6,11 +6,9 @@ div[id^="map"]
 	height: var(--height)
 	width: var(--width)
 
-	.leaflet-control-attribution
-		a
-			/* Hide due to these colors associating with down syndrome */
-			svg
-				display: none !important
+	.leaflet-control-attribution a svg,
+	.leaflet-control-container .geosearch
+		display: none !important
 
 	.leaflet-control-geosearch
 			a.leaflet-bar-part

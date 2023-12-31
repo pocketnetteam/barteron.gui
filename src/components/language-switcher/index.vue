@@ -5,8 +5,8 @@
 		vSize="xs"
 		:dropdown="[
 			{ text: 'EN', value: 'en-US', default: true },
-			{ text: 'DE', value: 'de-DE' },
-			{ text: 'IT', value: 'it-IT' },
+			/* { text: 'DE', value: 'de-DE' },
+			{ text: 'IT', value: 'it-IT' }, */
 			{ text: 'RU', value: 'ru-RU' }
 		]"
 		@selected="selectLanguage"
