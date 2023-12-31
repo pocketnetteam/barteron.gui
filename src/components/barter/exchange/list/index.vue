@@ -17,7 +17,7 @@
 					v-for="(id, index) in !editing ? vTags.slice(0, show) : vTags"
 					:key="index"
 				>
-					{{ $te(categories.items[id]?.name) ? $t(categories.items[id]?.name) : $t('buttonLabels.unknown') }}
+					{{ $t(categories.items[id]?.name) || $t('buttonLabels.unknown') }}
 					<i
 						v-if="editing"
 						class="fa fa-times remove"
