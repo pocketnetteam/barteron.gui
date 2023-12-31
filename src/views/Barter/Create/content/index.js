@@ -184,7 +184,7 @@ export default {
 				condition: this.condition,
 				images: Object.values(images),
 				geohash: GeoHash.encodeGeoHash.apply(null, center),
-				price: parseInt(data.pkoin || 0)
+				price: Number(data.pkoin || 0)
 			});
 
 			return { hash, form, photos, center, data, images };
