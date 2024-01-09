@@ -65,17 +65,25 @@ export default {
 	},
 
 	methods: {
+		/**
+		 * Create room and send message
+		 * 
+		 * @param {@Offer} offer
+		 */
 		createRoom(offer) {
 			this.sdk.createRoom({
 				name: this.item.caption,
-				members: [this.address],
-				message: `https://${ this.manifest.scope }/barter/${ offer.hash }`
+				members: [this.address]
+			}).then(chat => {
+				this.sdk.sendMessage({
+					...chat,
+					message: `https://${ this.manifest.scope }/barter/${ offer.hash }`
+				});
 			});
 		}
 	},
 
 	async mounted() {
 		this.myOffers = await this.sdk.getBrtOffers();
-		console.log('manifest', this.manifest, `https://${ this.manifest.scope }/barter/hash`)
 	}
 }
