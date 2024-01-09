@@ -113,12 +113,16 @@ export default {
 		this.mapObject = this.$refs.map.mapObject;
 		
 		if(this.allowSelection) {
-			/* Request for permissons */
-			this.sdk.requestPermissions(["location"]).then(() => {
-				this.$forceUpdate();
-			});
+			this.mapObject.on("click", async (e) => {
+				const isGranted = await this.sdk.checkPermission("location");
 
-			this.mapObject.on("click", (e) => {
+				if (!isGranted) {
+					/* Request for permissons */
+					this.sdk.requestPermissions(["location"]).then(() => {
+						this.$forceUpdate();
+					});
+				}
+
 				if (e.originalEvent.target.matches("div.vue2leaflet-map")) {
 					this.marker = Object.values(e.latlng);
 				}

@@ -273,6 +273,7 @@
 				<ExchangeList
 					:title="$t('barterLabels.exchange')"
 					:tags="item?.tags[0] !== 'my_list' ? item?.tags : account?.tags"
+					:visible="0"
 				/>
 			</div>
 

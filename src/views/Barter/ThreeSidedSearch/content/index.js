@@ -14,6 +14,25 @@ export default {
 		}
 	},
 
+	methods: {
+		/**
+		 * Create room and send message
+		 * 
+		 * @param {@Offer} offer
+		 */
+		createRoom(offer) {
+			this.sdk.createRoom({
+				name: this.$t("buttonLabels.group_exchange"),
+				members: [offer.address, offer.target.address]
+			}).then(chat => {
+				this.sdk.sendMessage({
+					...chat,
+					message: `https://${ this.manifest.scope }/barter/search?source=${ offer.source.hash }&target=${ offer.target.hash }`
+				});
+			});
+		}
+	},
+
 	async beforeRouteEnter (to, from, next) {
 		const
 			sdk = Vue.prototype.sdk,

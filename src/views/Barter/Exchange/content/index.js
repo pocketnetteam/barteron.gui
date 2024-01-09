@@ -35,8 +35,28 @@ export default {
 	},
 
 	methods: {
+		/**
+		 * Show exchange options
+		 */
 		expand() {
 			this.$router.replace({ query: { expanded: 1 } }).catch(() => {});
+		},
+
+		/**
+		 * Create room and send message
+		 * 
+		 * @param {@Offer} offer
+		 */
+		createRoom(offer) {
+			this.sdk.createRoom({
+				name: this.offer.caption,
+				members: [offer.address]
+			}).then(chat => {
+				this.sdk.sendMessage({
+					...chat,
+					message: `https://${ this.manifest.scope }/barter/${ this.offer.hash }`
+				});
+			});
 		}
 	},
 

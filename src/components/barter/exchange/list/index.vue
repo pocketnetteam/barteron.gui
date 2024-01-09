@@ -31,7 +31,7 @@
 				</li>
 
 				<!-- Toggle list -->
-				<li class="toggle" v-if="!editing && vTags.length > visible">
+				<li class="toggle" v-if="visible && !editing && vTags.length > visible">
 					<a
 						class="link"
 						href="#"

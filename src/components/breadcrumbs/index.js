@@ -19,7 +19,6 @@ export default {
 			let tree = [
 				{
 					name: "home",
-					value: this.$t("pageLabels.home"),
 					link: "/"
 				}
 			];
@@ -46,12 +45,24 @@ export default {
 			/* When needs custom page */
 			if (this.type === "custom") {
 				tree = tree.concat([{
-					name: this.target,
-					value: this.$t(`pageLabels.${ this.target }`)
+					name: this.target
 				}]);
 			}
 
 			return tree;
+		}
+	},
+
+	methods: {
+		/**
+		 * Get tree item name
+		 * 
+		 * @param {String} name
+		 * 
+		 * @returns String
+		 */
+		getName(name) {
+			return this.$te(`pageLabels.${ name }`) ? this.$t(`pageLabels.${ name }`) : this.$t(name);
 		}
 	}
 }

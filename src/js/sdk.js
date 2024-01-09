@@ -172,6 +172,7 @@ class SDK {
 	}
 
 	/**
+	 * Create room in chat
 	 * 
 	 * @param {Object} request
 	 * @param {String} request.name
@@ -182,6 +183,20 @@ class SDK {
 	 */
 	createRoom(request) {
 		return this.sdk.helpers.createroom(request);
+	}
+
+	/**
+	 * Send message to chat
+	 * 
+	 * @param {Object} request
+	 * @param {String} request.roomId
+	 * @param {String} request.alias
+	 * @param {String} request.message
+	 * 
+	 * @returns {Promise}
+	 */
+	sendMessage(request) {
+		return this.sdk.helpers.sendmessage(request);
 	}
 
 	imageFromMobileCamera() {
