@@ -47,7 +47,7 @@ export default {
 			id: Math.random().toString(16).slice(2),
 			editing: false,
 			vTags: [].concat(this.tags),
-			show: this.visible
+			show: this.visible || this.tags.length
 		}
 	},
 
