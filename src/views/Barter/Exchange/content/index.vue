@@ -40,8 +40,8 @@
 					:items="deals"
 					vType="row"
 				>
-					<template #offer>
-						<v-button vType="hit">{{ $t('buttonLabels.offer_an_exchange') }}</v-button>
+					<template #offer="{ item }">
+						<v-button @click="createRoom(item)" vType="hit">{{ $t('buttonLabels.offer_an_exchange') }}</v-button>
 					</template>
 				</BarterList>
 			</div>
