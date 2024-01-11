@@ -45,7 +45,7 @@ export default {
 
 				a.push(t);
 				return a;
-			}, []).join(", ");
+			}, []);
 		}
 	},
 
@@ -59,40 +59,24 @@ export default {
 			return Math.random().toString(16).slice(2);
 		},
 
-		dragtoggle(e) {
-			if (this.moving && e?.target.dataset.index) {
-				const 
-					newIndex = e.target.dataset.index,
-					oldIndex = this.files.findIndex(file => file === this.moving);
-
-				this.files.splice(newIndex, 0, this.files.splice(oldIndex, 1)[0]);
-			}
-			this.drag = e?.type === "dragover";
-		},
-
-		dragStart(e) {
-			this.moving = this.files[e.target.dataset.index];
-		},
-
-		dragEnd() {
-			this.moving = null;
-		},
-
 		/**
-		 * Upload image preprocessor
+		 * Prepare image to query
 		 * 
 		 * @param {Event} e
 		 */
-		upload(e) {
-			[...e.target.files].forEach((file, index) => {
+		prepare(e) {
+			[...e.target.files].forEach(file => {
 				const reader = new FileReader();
 
-				reader.onload = (e) => {
+				reader.onload = e => {
 					/* Check if maxLen disabled or files count less than maxLen */
-					if (!this.max || this.files.length < this.max) {
-						this.add({
+					if (
+						(!this.max || this.files.length < this.max) &&
+						new RegExp(`data:(${ this.mimeTypes.join("|") })`).test(e.target.result)
+					) {
+						this.attach({
 							image: e.target.result,
-							file: file
+							file
 						});
 					}
 				}
@@ -104,23 +88,42 @@ export default {
 		},
 
 		/**
-		 * Add image handler
+		 * Get images from Clipboard
+		 * 
+		 * @param {ClipboardEvent} e
+		 */
+		clipboard(e) {
+			const 
+				items = (e.clipboardData || e.originalEvent.clipboardData).items,
+				files = [];
+
+			for (const item of items) {
+				if (item.type.includes('image')) {
+					files.push(item.getAsFile());
+				}
+			}
+
+			this.prepare({ target: { files } });
+		},
+
+		/**
+		 * Attach image to query
 		 * 
 		 * @param {Object|Array} images
 		 * 
 		 * @returns {Vphotos}
 		 */
-		add(images) {
+		attach(images) {
 			if (Array.isArray(images)) {
 				images.forEach(image => {
-					if (!this.files.filter(file => file.image === image)?.length) {
+					if (!this.isExist(image)) {
 						this.files.push({
 							id: `image-${ this.hash() }`,
 							image
 						});
 					}
 				});
-			} else if(!this.files.filter(file => file.image === images)?.length) {
+			} else if (!this.isExist(images.image)) {
 				this.files.push({
 					id: `image-${ this.hash() }`,
 					...images
@@ -131,14 +134,14 @@ export default {
 		},
 
 		/**
-		 * Remove image handler
+		 * Detatch image from query
 		 * 
 		 * @param {Event} e
 		 * @param {Number} index
 		 * 
 		 * @returns {Vphotos}
 		 */
-		remove(e, index) {
+		detatch(e, index) {
 			e?.preventDefault();
 			this.files.splice(index || 0, e === undefined ? this.files.length : 1);
 
@@ -146,14 +149,58 @@ export default {
 		},
 
 		/**
-		 * Make image first
+		 * Make image first in query
 		 * 
-		 * @param {Number} index 
+		 * @param {Number} index
 		 */
 		makeFirst(index) {
 			const item = this.files[index];
-			this.remove(null, index);
+			this.detatch(null, index);
 			this.files = [item].concat(this.files);
+		},
+
+		/**
+		 * Check if image already exists in query
+		 * 
+		 * @param {String} image
+		 * 
+		 * @returns {Object}
+		 */
+		isExist(image) {
+			return this.files.filter(file => file.image === image)?.pop();
+		},
+
+		/**
+		 * Proccess dragStart
+		 * 
+		 * @param {DragEvent} e
+		 */
+		dragStart(e) {
+			this.moving = this.files[e.target.dataset.index];
+		},
+
+		/**
+		 * Process dragMove
+		 * 
+		 * @param {DragEvent} e
+		 */
+		dragToggle(e) {
+			if (this.moving && e?.target.dataset.index) {
+				const 
+					newIndex = e.target.dataset.index,
+					oldIndex = this.files.findIndex(file => file === this.moving);
+
+				this.files.splice(newIndex, 0, this.files.splice(oldIndex, 1)[0]);
+			}
+
+			this.drag = e?.type === "dragover";
+		},
+
+		/**
+		 * Process dragEnd
+		 */
+		dragEnd() {
+			this.moving = null;
 		},
 
 		/**
@@ -164,7 +211,7 @@ export default {
 		},
 
 		/**
-		 * Serialize files for form
+		 * Serialize files to FormData
 		 * 
 		 * @returns {Object}
 		 */
@@ -178,16 +225,21 @@ export default {
 	},
 
 	watch: {
+		/**
+		 * Watch for images property
+		 * 
+		 * @param {Array|Object} images
+		 */
 		images(images) {
-			this.add(images);
+			this.attach(images);
 		}
 	},
 
 	created() {
-		this.add(this.images);
+		this.attach(this.images);
 		
-		document.addEventListener("dragover", e => this.dragtoggle(e));
-		document.addEventListener("dragleave", e => this.dragtoggle(e));
-		document.addEventListener("drop", e => this.dragtoggle(e));
+		document.addEventListener("dragover", e => this.dragToggle(e));
+		document.addEventListener("dragleave", e => this.dragToggle(e));
+		document.addEventListener("drop", e => this.dragToggle(e));
 	},
 }

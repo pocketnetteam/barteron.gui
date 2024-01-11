@@ -4,7 +4,8 @@
 		'no-files': !files.length,
 		'dragover': drag
 		}"
-		@drop="upload"
+		@paste="clipboard"
+		@drop="prepare"
 		@dragstart="dragStart"
 		@dragend="dragEnd"
 	>
@@ -22,17 +23,17 @@
 					:data-index="index"
 				>
 			</picture>
-			<i class="fa fa-times remove" @click="$event => remove($event, index)"></i>
+			<i class="fa fa-times remove" @click="$event => detatch($event, index)"></i>
 		</li>
 
 		<li class="add" v-if="!max || files.length < max">
 			<!-- Hidden input -->
 			<input
 				:multiple="multiple"
-				:accept="mimeTypes"
+				:accept="mimeTypes.join(', ')"
 				type="file"
 				ref="file"
-				@change="upload"
+				@change="prepare"
 			/>
 			<i class="fa fa-plus"></i>
 			<span>{{ $t('upload_image') }}</span>
