@@ -167,9 +167,10 @@
 
 		"images_imgur": "Sending images to imgur..",
 		"data_node": "Posting data to node, please wait..",
+		"offer_renew": "Are you sure you want renew this offer?",
+
 		"image_error": "Image upload error",
 		"node_error": "Node error has occured: {error}",
-
 		"error#-26": "Min relay fee not met",
 		"error#-1": "Error loading sdk library",
 		"error#0": "{details}",
