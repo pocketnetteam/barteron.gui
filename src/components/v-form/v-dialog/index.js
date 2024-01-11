@@ -18,7 +18,7 @@ export default {
 		 * 
 		 * @param {String} [type]
 		 * 
-		 * @returns {Vdialog}
+		 * @returns {Promise}
 		 */
 		view(type, props) {
 			this.iconColor = type;
@@ -35,7 +35,7 @@ export default {
 				case "info": {
 					this.icon = props?.icon || "fa-exclamation-circle";
 					this.buttons = props?.buttons || [
-						{ text: this.$t("buttonLabels.ok"), vType: "blue", vSize: "sm", click: () => this.hide() }
+						{ text: this.$t("buttonLabels.ok"), vType: "blue", vSize: "sm", click: () => this.hide(true) }
 					];
 					break;
 				}
@@ -43,8 +43,8 @@ export default {
 				case "question": {
 					this.icon = props?.icon || "fa-question-circle";
 					this.buttons = props?.buttons || [
-						{ text: this.$t("buttonLabels.no"), vType: "dodoria", vSize: "sm", click: () => this.hide() },
-						{ text: this.$t("buttonLabels.yes"), vType: "blue", vSize: "sm", click: () => this.hide() }
+						{ text: this.$t("buttonLabels.no"), vType: "dodoria", vSize: "sm", click: () => this.hide(false) },
+						{ text: this.$t("buttonLabels.yes"), vType: "blue", vSize: "sm", click: () => this.hide(true) }
 					];
 					break;
 				}
@@ -52,7 +52,7 @@ export default {
 				case "success": {
 					this.icon = props?.icon || "fa-check-circle";
 					this.buttons = props?.buttons || [
-						{ text: this.$t("buttonLabels.ok"), vType: "roshi", vSize: "sm", click: () => this.hide() }
+						{ text: this.$t("buttonLabels.ok"), vType: "roshi", vSize: "sm", click: () => this.hide(true) }
 					];
 					break;
 				}
@@ -60,7 +60,7 @@ export default {
 				case "warn": {
 					this.icon = props?.icon || "fa-exclamation-triangle";
 					this.buttons = props?.buttons || [
-						{ text: this.$t("buttonLabels.ok"), vType: "hit", vSize: "sm", click: () => this.hide() }
+						{ text: this.$t("buttonLabels.ok"), vType: "hit", vSize: "sm", click: () => this.hide(true) }
 					];
 					break;
 				}
@@ -68,15 +68,13 @@ export default {
 				case "error": {
 					this.icon = props?.icon || "fa-times-circle";
 					this.buttons = props?.buttons || [
-						{ text: this.$t("buttonLabels.ok"), vType: "dodoria", vSize: "sm", click: () => this.hide() }
+						{ text: this.$t("buttonLabels.ok"), vType: "dodoria", vSize: "sm", click: () => this.hide(true) }
 					];
 					break;
 				}
 			}
 
-			this.show();
-
-			return this;
+			return this.show();
 		},
 
 		/**
@@ -97,23 +95,26 @@ export default {
 		/**
 		 * Show dialog
 		 * 
-		 * @returns {Vdialog}
+		 * @returns {Promise}
 		 */
 		show() {
 			this.visible = true;
 
-			return this;
+			return new Promise((resolve, reject) => {
+				this.resolve = resolve;
+				this.reject = reject;
+			});
 		},
 
 		/**
 		 * Hide dialog
 		 * 
-		 * @returns {Vdialog}
+		 * @returns {Promise}
 		 */
-		hide() {
+		hide(state) {
 			this.visible = false;
 
-			return this;
+			return this.resolve(state);
 		},
 
 		/**
