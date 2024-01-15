@@ -16,6 +16,8 @@ export default {
 		}
 	},
 
+	inject: ["dialog"],
+
 	computed: {
 		/**
 		 * Get bastyon address
@@ -103,6 +105,15 @@ export default {
 		 */
 		selectView(view) {
 			this.bartersView = view?.value;
+		},
+
+		renewOffer(offer) {
+			console.log(offer)
+			this.dialog.instance
+				.view("question", this.$t("dialogLabels.offer_renew"))
+				.then(state => {
+					console.log(state ? "yes" : "no")
+				});
 		}
 	}
 }
