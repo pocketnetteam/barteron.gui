@@ -167,15 +167,25 @@
 
 		"images_imgur": "Sending images to imgur..",
 		"data_node": "Posting data to node, please wait..",
+		"offer_renew": "Are you sure you want renew this offer?",
+
 		"image_error": "Image upload error",
 		"node_error": "Node error has occured: {error}",
-
 		"error#-26": "Min relay fee not met",
 		"error#-1": "Error loading sdk library",
 		"error#0": "{details}",
 		"error#21": "Failed OpReturn",
 		"error#28": "Too many transactions",
 		"error#65": "Exceeded limit"
+	},
+
+	"photosLabels": {
+		"upload_image": "Upload image",
+		"upload_image_text": "The first photo will be displayed in the offer, select the best one. You can upload up to {count} photos in {formats} format.",
+		"attached": "Image attached",
+		"detatched": "Image detatched",
+		"formatError": "Allowed types is {formats}",
+		"status": "{count} image(s) added, total size - {size}"
 	},
 
 	"feedbackLabels": {
@@ -189,12 +199,19 @@
 	"metricsLabels": {
 		"label": "Metrics",
 		"km": "km",
-		"number": "#"
+		"number": "#",
+		"bytes": "Bytes",
+		"kb": "KB",
+		"mb": "MB",
+		"gb": "GB",
+		"tb": "TB",
+		"pb": "PB",
+		"eb": "EB",
+		"zb": "ZB",
+		"yb": "YB"
 	},
 
 	"title": "Title",
-	"upload_image": "Upload image",
-	"upload_image_text": "The first photo will be displayed in the search results, select the best one. You can upload up to {count} photos in {formats} format. The maximum photo size is {size}MB.",
 	"my_list": "My list",
 	"something": "Something",
 	"for_nothing": "For nothing",

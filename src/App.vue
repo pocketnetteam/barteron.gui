@@ -44,6 +44,19 @@ export default {
 		}
 	},
 
+	provide() {
+		const dialog = {};
+
+		Object.defineProperty(dialog, "instance", {
+				enumerable: true,
+				get: () => this.dialog,
+		});
+
+		return {
+			dialog
+		}
+	},
+
 	computed: {
 		/**
 		 * Watch for loading state

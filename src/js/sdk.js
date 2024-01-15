@@ -142,9 +142,7 @@ class SDK {
 					else if (!target?.[hash]) $.getBrtOffersByHashes([hash]);
 					return target?.[hash];
 				}
-			})
-
-			,
+			}),
 
 			/* Barteron offers details */
 			details: new Proxy(this.barteron._details, {
@@ -165,9 +163,39 @@ class SDK {
 		this.setLastResult("");
 	}
 
+	/**
+	 * Get logged user state
+	 * 
+	 * @returns {Promise}
+	 */
+	isLoggedIn() {
+		return this.sdk.helpers.isloggedin().then(result => {
+			this.lastresult = `isLoggedIn: ${ result }`
+			return result;
+		}).catch(e => this.setLastResult(e))
+	}
+
+	/**
+	 * Open app settings
+	 * 
+	 * @returns {Promise}
+	 */
 	openSettings() {
-		this.sdk.helpers.opensettings().then(() => {
-			this.lastresult = "opensettings: success"
+		return this.sdk.helpers.opensettings().then(() => {
+			this.lastresult = "opensettings: success";
+			return null;
+		}).catch(e => this.setLastResult(e))
+	}
+	
+	/**
+	 * Open registration page
+	 * 
+	 * @returns {Promise}
+	 */
+	openRegistration() {
+		return this.sdk.helpers.openregistration().then(() => {
+			this.lastresult = "openregistration: success";
+			return null;
 		}).catch(e => this.setLastResult(e))
 	}
 
@@ -240,24 +268,31 @@ class SDK {
 	 * Request permissions
 	 * 
 	 * @param {Array} permissions
+	 * @param {Array} allowUnsigned
 	 * 
 	 * @returns {Promise}
 	 */
 	permissionsDialog = {}
-	requestPermissions(permissions) {
-		const hash = this.cyrb53(JSON.stringify(permissions));
-
-		if (!this.permissionsDialog?.[hash]) {
-			this.permissionsDialog[hash] = this.sdk.request.permissions(permissions)
-				.then(result => {
-					this.lastresult = "messaging: granted"
-					return result.reduce((o, p) => ({ ...o, ...p }), {});
-				})
-				.catch(e => this.setLastResult(e))
-				.finally(() => delete this.permissionsDialog[hash])
-		}
-
-		return this.permissionsDialog[hash];
+	requestPermissions(permissions, allowUnsigned = ["location"]) {
+		return this.isLoggedIn().then(state => {
+			if (!state && !permissions.filter(p => allowUnsigned.includes(p)).pop()) {
+				return this.openRegistration();
+			} else {
+				const hash = this.cyrb53(JSON.stringify(permissions));
+	
+				if (!this.permissionsDialog?.[hash]) {
+					this.permissionsDialog[hash] = this.sdk.request.permissions(permissions)
+						.then(result => {
+							this.lastresult = "messaging: granted"
+							return result.reduce((o, p) => ({ ...o, ...p }), {});
+						})
+						.catch(e => this.setLastResult(e))
+						.finally(() => delete this.permissionsDialog[hash])
+				}
+	
+				return this.permissionsDialog[hash];
+			}
+		});
 	}
 
 	/**
@@ -275,7 +310,7 @@ class SDK {
 				return address;
 			}).catch(e => this.setLastResult(e));
 		} else {
-			return Promise.resolve({});
+			return Promise.resolve(null);
 		}
 	}
 
@@ -461,6 +496,8 @@ class SDK {
 	getBrtAccount(address) {
 		address = address || this._address;
 
+		if (!address) return;
+
 		if (!this.barteron._accounts[address]) {
 			new Account(this, { address });
 		}
@@ -580,7 +617,6 @@ class SDK {
 			includeCommentScores: true,
 			...request
 		}).then(details => {
-			console.log(details)
 			request?.offerIds.forEach(hash => {
 				if (!this.empty(details)) {
 					const data = {};

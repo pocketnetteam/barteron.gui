@@ -104,25 +104,25 @@ export default {
 	},
 
 	methods: {
-		setLocation() {
-			this.mapObject.panTo(this.location);
+		async setLocation() {
+			const isGranted = await this.sdk.checkPermission("location");
+
+			if (!isGranted) {
+				/* Request for permissons */
+				this.sdk.requestPermissions(["location"]).then(() => {
+					this.$forceUpdate();
+				});
+			}
+
+			if (this.location?.lat) this.mapObject.panTo(this.location);
 		}
 	},
 
 	mounted() {
 		this.mapObject = this.$refs.map.mapObject;
-		
+
 		if(this.allowSelection) {
-			this.mapObject.on("click", async (e) => {
-				const isGranted = await this.sdk.checkPermission("location");
-
-				if (!isGranted) {
-					/* Request for permissons */
-					this.sdk.requestPermissions(["location"]).then(() => {
-						this.$forceUpdate();
-					});
-				}
-
+			this.mapObject.on("click", e => {
 				if (e.originalEvent.target.matches("div.vue2leaflet-map")) {
 					this.marker = Object.values(e.latlng);
 				}
