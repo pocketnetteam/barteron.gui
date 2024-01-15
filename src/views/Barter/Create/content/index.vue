@@ -40,10 +40,9 @@
 				/>
 
 				<!-- Paragraph: Image upload text -->
-				<p>{{ $t('upload_image_text', {
+				<p>{{ $t('photosLabels.upload_image_text', {
 					count: 10,
-					formats: ["JPEG, PNG"].join(),
-					size: 25
+					formats: ["JPEG, PNG"].join()
 				}) }}</p>
 			</div>
 
