@@ -187,6 +187,14 @@ export default {
 				price: Number(data.pkoin || 0)
 			});
 
+			if (photos.validate()) {
+				photos.$el.classList.add(form.classes.passed);
+				photos.$el.classList.remove(form.classes.rejected);
+			} else {
+				photos.$el.classList.add(form.classes.rejected);
+				photos.$el.classList.remove(form.classes.passed);
+			}
+
 			return { hash, form, photos, center, data, images };
 		},
 
@@ -209,16 +217,8 @@ export default {
 		submit() {
 			const { hash, form, photos, images } = this.serializeForm();
 
-			if (photos.validate()) {
-				photos.$el.classList.add(form.classes.passed);
-				photos.$el.classList.remove(form.classes.rejected);
-			} else {
-				photos.$el.classList.add(form.classes.rejected);
-				photos.$el.classList.remove(form.classes.passed);
-			}
-
 			/* Check all fields validity */
-			if (form.validate()) {
+			if (form.validate() && photos.validate()) {
 				const upload = Object.values(images).filter(image => image.startsWith("data:image"));
 				
 				/* Show dialog */

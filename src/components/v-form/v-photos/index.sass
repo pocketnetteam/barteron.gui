@@ -1,101 +1,115 @@
 @import "@/css/vars.sass"
-	
+
 .photo-uploader
-	+resetList()
-	+transition(color)
-	display: flex
-	align-items: center
-	justify-content: flex-start
-	flex-wrap: wrap
-	gap: 10px
-	margin: 0 0 $r * 3
-	padding: 0
 	position: relative
-	width: 100%
+	margin: 0 0 $r
 
-	&.no-files
+	&.no-files .photo-query
 		min-height: 175px
-
-	&:hover
-		color: $popo
-
-	input
-		cursor: pointer
-		position: absolute
-		top: 0
-		right: 0
-		bottom: 0
-		left: 0
-		opacity: 0
-
-	li
-		cursor: pointer
-
-		&:first-child
-			border-width: 2px
-			border-style: solid
-
-	li,
-	.add
-		border: 1px dashed $trunks
-		border-radius: 12px
-		display: flex
-		flex-direction: column
-		align-items: center
-		justify-content: center
-		position: relative
-		height: 111px
-		width: 178px
-
-	.remove
-		+transition(background-color)
-		background-color: $dodoria
-		border-radius: 50%
-		color: $primary
-		cursor: pointer
-		font-size: 17px
-		display: flex
-		align-items: center
-		justify-content: center
-		padding: $r
-		position: absolute
-		top: -$r
-		right: -$r
-		height: 28px
-		width: 28px
-
-		&:hover
-			background-color: $dodoria-hover
-
-	.img-holder
-		border-radius: 10px
-		overflow: hidden
-		height: 100%
-		width: 100%
-
-		img
-			display: block
-			object-fit: cover
-			height: 100%
-			width: 100%
-
-	.add
-		+transition(background)
-		border-radius: 12px
-		color: $backdrop
-		cursor: pointer
-
-		@at-root .no-files#{&}
-			position: absolute
-			height: 100%
-			width: 100%
-
-		.fa
-			color: inherit
-			display: block
-			font-size: 1.5em
-			text-align: center
-			margin: 0 0 8px
 
 	&.dragover .add
 		background: $lightgray
+
+	ul.photo-query
+		+resetList()
+		+transition(color)
+		display: flex
+		align-items: center
+		justify-content: flex-start
+		flex-wrap: wrap
+		gap: 10px
+		margin: 0
+		padding: 0
+		position: relative
+		width: 100%
+
+		&:hover
+			color: $popo
+
+		input
+			cursor: pointer
+			position: absolute
+			top: 0
+			right: 0
+			bottom: 0
+			left: 0
+			opacity: 0
+
+		li
+			cursor: pointer
+
+			&:first-child
+				border-width: 2px
+				border-style: solid
+
+		li,
+		.add
+			border: 1px dashed $trunks
+			border-radius: 12px
+			display: flex
+			flex-direction: column
+			align-items: center
+			justify-content: center
+			position: relative
+			height: 111px
+			width: 178px
+
+		.remove
+			+transition(background-color)
+			background-color: $dodoria
+			border-radius: 50%
+			color: $primary
+			cursor: pointer
+			font-size: 17px
+			display: flex
+			align-items: center
+			justify-content: center
+			padding: $r
+			position: absolute
+			top: -$r
+			right: -$r
+			height: 28px
+			width: 28px
+
+			&:hover
+				background-color: $dodoria-hover
+
+		.img-holder
+			border-radius: 10px
+			overflow: hidden
+			height: 100%
+			width: 100%
+
+			img
+				display: block
+				object-fit: cover
+				height: 100%
+				width: 100%
+
+		.add
+			+transition(background)
+			border-radius: 12px
+			color: $backdrop
+			cursor: pointer
+
+			@at-root .no-files#{&}
+				position: absolute
+				height: 100%
+				width: 100%
+
+			.fa
+				color: inherit
+				display: block
+				font-size: 1.5em
+				text-align: center
+				margin: 0 0 8px
+
+	ul.log
+		+resetList()
+		position: absolute
+		bottom: 0
+		right: 0
+
+	.status
+		display: block
+		margin: $r * 3 0 0
