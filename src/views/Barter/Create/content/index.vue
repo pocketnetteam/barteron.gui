@@ -100,7 +100,7 @@
 						<template #after="{ instance }">
 							<!-- Favorite tags -->
 							<ul class="favorites">
-								<template v-for="(id, index) in [13587,258850,156282,10906,10866,10864]">
+								<template v-for="(id, index) in [13587,258850,148495,10906,10866,10864]">
 									<li
 										:key="`favorite-${ index }`"
 										v-if="!instance.vTags.includes(id)"
