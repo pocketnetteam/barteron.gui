@@ -83,7 +83,7 @@
 			</div>
 
 			<div class="row title" v-if="item.caption">
-				<span>{{ item.caption }}</span>
+				<router-link :to="offerLink">{{ item.caption }}</router-link>
 			</div>
 
 			<div class="row to" v-if="item?.tags.length">
@@ -126,7 +126,9 @@
 		<template v-if="vType === 'row'">
 			<div class="row">
 				<div>
-					<span class="title" v-if="item.caption">{{ item.caption }}</span>
+					<span class="title" v-if="item.caption">
+						<router-link :to="offerLink">{{ item.caption }}</router-link>
+					</span>
 
 					<div class="to" v-if="item?.tags.length">
 						<ul>
