@@ -16,7 +16,8 @@ export default {
 			files: [],
 			max: parseInt(this.maxLen) || 0,
 			drag: false,
-			moving: null
+			moving: null,
+			log: []
 		}
 	},
 
@@ -204,6 +205,26 @@ export default {
 		},
 
 		/**
+		 * Format bytes
+		 * 
+		 * @param {Number|String} bytes
+		 * @param {Number} decimals
+		 * 
+		 * @returns {String}
+		 */
+		formatBytes(bytes, decimals = 2) {
+			if (!+bytes) return `0 ${ this.$t('metricsLabels.bytes') }`
+
+			const
+				k = 1024,
+				dm = decimals < 0 ? 0 : decimals,
+				sizes = ['bytes', 'kb', 'mb', 'gb', 'tb', 'pb', 'eb', 'zb', 'yb'],
+				i = Math.floor(Math.log(bytes) / Math.log(k));
+
+			return `${ parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) } ${ this.$t(`metricsLabels.${ sizes[i] }`) }`
+		},
+
+		/**
 		 * Check at least one photo attached
 		 */
 		validate() {
@@ -232,6 +253,17 @@ export default {
 		 */
 		images(images) {
 			this.attach(images);
+		},
+
+		/**
+		 * Watch for log events
+		 * 
+		 * @param {String} value
+		 */
+		log(value) {
+			if (this.log.length > 10) {
+				this.log.splice(this.log.length - 10, this.log.length - 10);
+			}
 		}
 	},
 
