@@ -511,7 +511,7 @@ class SDK {
 	 * Set to barteron account
 	 * 
 	 * @param {Object} data
-	 * @param {Array} data.address
+	 * @param {String} data.address
 	 * @param {Array} data.tags
 	 * @param {String} data.geohash
 	 * @param {Number} data.radius
