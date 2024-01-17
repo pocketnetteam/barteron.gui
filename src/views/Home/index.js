@@ -27,6 +27,11 @@ export default {
 			address = await sdk.getAddress(),
 			account = await sdk.getBrtAccount(address);
 
+		if (!account?.[0]) {
+			account[0] = new sdk.models.Account(sdk, { address });
+			sdk.setBrtAccount(account[0]);
+		}
+
 		if (address) {
 			const myOffers = await sdk.getBrtOffers(address)
 				.then(offers => offers.filter(offer => offer.active));

@@ -185,7 +185,7 @@
 		<!-- View: Page -->
 		<template v-if="vType === 'page'">
 			<picture
-				v-if="item.images"
+				v-if="item.images?.length"
 				ref="picture"
 			>
 				<ul class="fade">
