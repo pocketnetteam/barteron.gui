@@ -499,11 +499,11 @@ class SDK {
 		if (!address) return;
 
 		if (!this.barteron._accounts[address]) {
-			new Account(this, { address });
+			new Account({ address });
 		}
 
 		return this.rpc("getbarteronaccounts", [address]).then(accounts => {
-			return accounts?.map(account => new Account(this, account));
+			return accounts?.map(account => new Account(account));
 		});
 	}
 
@@ -537,7 +537,7 @@ class SDK {
 		address = address || this._address;
 
 		return this.rpc("getbarteronoffersbyaddress", address).then(offers => {
-			return offers?.map(offer => new Offer(this, offer)) || [];
+			return offers?.map(offer => new Offer(offer)) || [];
 		});
 	}
 
@@ -583,7 +583,7 @@ class SDK {
 		});
 
 		return this.rpc("getbarteronoffersbyroottxhashes", hashes).then(offers => {
-			return offers?.map(offer => new Offer(this, offer)) || [];
+			return offers?.map(offer => new Offer(offer)) || [];
 		});
 	}
 
@@ -624,7 +624,7 @@ class SDK {
 					/* Map responses with their hashes */
 					for (const key in details) {
 						if (key === "accounts") {
-							data[key] = details[key]?.map(account => new Account(this, account)) || [];
+							data[key] = details[key]?.map(account => new Account(account)) || [];
 						} else {
 							data[key] = details[key]?.filter(f => f.hash === hash) || [];
 						}
@@ -664,7 +664,7 @@ class SDK {
 	 */
 	getBrtOffersFeed(request = {}) {
 		return this.rpc("getbarteronfeed", request).then(feed => {
-			return feed?.map(offer => new Offer(this, offer)) || [];
+			return feed?.map(offer => new Offer(offer)) || [];
 		});
 	}
 
@@ -698,7 +698,7 @@ class SDK {
 			myTags: (request?.myTags || []).map(tag => +tag),
 			theirTags: (request?.theirTags || []).map(tag => +tag)
 		}).then(deals => {
-			return deals?.map(offer => new Offer(this, offer)) || [];
+			return deals?.map(offer => new Offer(offer)) || [];
 		});
 	}
 
@@ -724,8 +724,8 @@ class SDK {
 		}).then(data => {
 			data?.map(match => {
 				if (match.target) {
-					match.target = new Offer(this, match.target);
-					match.intermediates = match?.intermediates.map(offer => new Offer(this, offer)) || [];
+					match.target = new Offer(match.target);
+					match.intermediates = match?.intermediates.map(offer => new Offer(offer)) || [];
 				}
 			});
 

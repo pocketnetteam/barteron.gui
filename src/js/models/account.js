@@ -10,10 +10,9 @@ class Account {
 	 * Initialize model
 	 * 
 	 * @constructor Account
-	 * @param {Class} sdk
 	 * @param {Object} data
 	 */
-	constructor(sdk, data) {
+	constructor(data) {
 		/* Extract JSON values and format object */
 		const { a, g, s, r } = JSON.parse(data?.p?.s4 || '{"a":[],"g":"","s":false,"r":0}');
 		
@@ -31,7 +30,7 @@ class Account {
 
 		/* Hidden properties */
 		Object.defineProperties(this, {
-			sdk: { value: sdk },
+			sdk: { value: Vue.prototype.sdk },
 			regdate: { value: data?.additional?.regdate * 1000 || +new Date },
 			rating: { value: data?.additional?.rating ?? 0 }
 		});
