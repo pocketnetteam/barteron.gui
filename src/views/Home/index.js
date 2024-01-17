@@ -27,29 +27,16 @@ export default {
 			address = await sdk.getAddress(),
 			account = await sdk.getBrtAccount(address);
 
-		if (address && !account?.[0]) {
-			account[0] = new sdk.models.Account({ address });
-			sdk.setBrtAccount(account[0]);
-		}
-
 		if (address) {
+			/* Create barteron account automatically */
+			if (!account?.[0]) {
+				account[0] = new sdk.models.Account({ address });
+				sdk.setBrtAccount(account[0]);
+			}
+			
+			/* Get my offers list */
 			const myOffers = await sdk.getBrtOffers(address)
 				.then(offers => offers.filter(offer => offer.active));
-				/* exchange = myOffers?.reduce((o, offer) => {
-					o.myTags.push(offer.tag);
-
-					offer.tags?.forEach(tag => {
-						if (tag === "my_list") {
-							o.theirTags.concat(account?.[0].tags);
-						} else {
-							o.theirTags.push(tag);
-						}
-					});
-	
-					return o;
-				}, { myTags: [], theirTags: [] });
-
-			data.mayMatchExchanges = await sdk.getBrtOfferDeals(exchange); */
 
 			/* Get potential exchange offers */
 			if (myOffers?.length) {
