@@ -10,10 +10,9 @@ class Offer {
 	 * Initialize model
 	 * 
 	 * @constructor Offer
-	 * @param {Class} sdk
 	 * @param {Object} data
 	 */
-	constructor(sdk, data) {
+	constructor(data) {
 		/* Extract JSON values and format object */
 		const
 			{ t, a, c } = JSON.parse(data?.p?.s4 || '{"t":"","a":[],"c":"new"}'),
@@ -45,7 +44,7 @@ class Offer {
 
 		/* Hidden properties */
 		Object.defineProperties(this, {
-			sdk: { value: sdk },
+			sdk: { value: Vue.prototype.sdk },
 			time: { value: time },
 			till: { value: till },
 			active: {

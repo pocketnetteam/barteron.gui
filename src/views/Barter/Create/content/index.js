@@ -40,7 +40,7 @@ export default {
 		offer() {
 			let offer = this.sdk.barteron.offers[this.$route.params.id];
 
-			if (!offer.hash) offer = new this.sdk.models.Offer(this.sdk);
+			if (!offer.hash) offer = new this.sdk.models.Offer();
 
 			this.fillData(offer);
 

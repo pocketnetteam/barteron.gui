@@ -27,8 +27,8 @@ export default {
 			address = await sdk.getAddress(),
 			account = await sdk.getBrtAccount(address);
 
-		if (!account?.[0]) {
-			account[0] = new sdk.models.Account(sdk, { address });
+		if (address && !account?.[0]) {
+			account[0] = new sdk.models.Account({ address });
 			sdk.setBrtAccount(account[0]);
 		}
 
