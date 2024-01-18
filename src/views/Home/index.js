@@ -30,8 +30,7 @@ export default {
 		if (address) {
 			/* Create barteron account automatically */
 			if (!account?.[0]) {
-				account[0] = new sdk.models.Account({ address });
-				sdk.setBrtAccount(account[0]);
+				account[0] = new sdk.models.Account({ address }).set();
 			}
 			
 			/* Get my offers list */

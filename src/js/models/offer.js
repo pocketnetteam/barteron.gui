@@ -82,12 +82,12 @@ class Offer {
 	/**
 	 * Update model properties
 	 * 
-	 * @param {Object} data
+	 * @param {Object} [data]
 	 * 
 	 * @returns {Offer}
 	 */
 	update(data) {
-		if (Object.keys(data).length) {
+		if (Object.keys(data || {}).length) {
 			/* Iterate given props */
 			for (const p in data) {
 				this[p] = data[p];
