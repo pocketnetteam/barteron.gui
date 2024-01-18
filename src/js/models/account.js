@@ -41,12 +41,12 @@ class Account {
 	/**
 	 * Update model properties
 	 * 
-	 * @param {Object} data
+	 * @param {Object} [data]
 	 * 
 	 * @returns {Account}
 	 */
 	update(data) {
-		if (Object.keys(data).length) {
+		if (Object.keys(data || {}).length) {
 			for (const p in data) {
 				this[p] = data[p];
 			}
@@ -58,16 +58,10 @@ class Account {
 	/**
 	 * Store model data
 	 * 
-	 * @param {Object} data
+	 * @param {Object} [data]
 	 */
-	async set(data) {
-		const result = await this.sdk.requestPermissions(["account"]);
-		
-		if (result?.account) {
-			return this.sdk.setBrtAccount({ ...this.update(data) });
-		} else {
-			return Promise.reject(result);
-		}
+	set(data) {
+		return this.sdk.setBrtAccount({ ...this.update(data) });
 	}
 
 	/**

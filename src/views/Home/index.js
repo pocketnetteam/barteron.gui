@@ -19,37 +19,18 @@ export default {
 		}
 	},
 
-	async beforeRouteEnter (to, from, next) {
+	async beforeRouteEnter(to, from, next) {
 		/* Get account address if granted */
 		const
 			data = {},
 			sdk = Vue.prototype.sdk,
-			address = await sdk.getAddress(),
-			account = await sdk.getBrtAccount(address);
+			address = sdk.address,
+			account = sdk.barteron.accounts[address];
 
-		if (address && !account?.[0]) {
-			account[0] = new sdk.models.Account({ address });
-			sdk.setBrtAccount(account[0]);
-		}
-
-		if (address) {
+		if (address?.length) {
+			/* Get my offers list */
 			const myOffers = await sdk.getBrtOffers(address)
 				.then(offers => offers.filter(offer => offer.active));
-				/* exchange = myOffers?.reduce((o, offer) => {
-					o.myTags.push(offer.tag);
-
-					offer.tags?.forEach(tag => {
-						if (tag === "my_list") {
-							o.theirTags.concat(account?.[0].tags);
-						} else {
-							o.theirTags.push(tag);
-						}
-					});
-	
-					return o;
-				}, { myTags: [], theirTags: [] });
-
-			data.mayMatchExchanges = await sdk.getBrtOfferDeals(exchange); */
 
 			/* Get potential exchange offers */
 			if (myOffers?.length) {
@@ -59,7 +40,7 @@ export default {
 							myTag: offer.tag,
 							theirTags: (() => {
 								if (offer.tags?.includes("my_list")) {
-									return account?.[0].tags;
+									return account?.tags;
 								} else {
 									return offer.tags;
 								}

@@ -7416,11 +7416,6 @@ vue-cli@^2.9.6:
     user-home "^2.0.0"
     validate-npm-package-name "^3.0.0"
 
-vue-head@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.npmjs.org/vue-head/-/vue-head-2.2.0.tgz"
-  integrity sha512-Oss1gakOSPQ4e/XZ0yM7yolnhSDvfDYZbM6CDD3xkCpAyPfTR+Bv3tabgtKE41gHr5GzC/NJh1EwQSu7o05XRw==
-
 vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.npmjs.org/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz"
