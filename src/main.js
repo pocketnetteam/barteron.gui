@@ -1,7 +1,6 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router.js";
-import VueHead from "vue-head";
 import i18n from "./i18n/index.js";
 
 import Manifest from "../public/b_manifest.json";
@@ -71,10 +70,21 @@ Vue.mixin({
 	}
 });
 
-Vue.use(VueHead);
+(async () => {
+	const
+		sdk = Vue.prototype.sdk,
+		address = await sdk.getAddress(),
+		account = await sdk.getBrtAccount(address);
 
-new Vue({
-	router,
-	i18n,
-	render: h => h(App)
-}).$mount("#app");
+	/* Create barteron account automatically */
+	if (address && !account?.[0]) {
+		account[0] = new sdk.models.Account({ address }).set();
+	}
+
+	/* Create Vue app */
+	new Vue({
+		router,
+		i18n,
+		render: h => h(App)
+	}).$mount("#app");
+})();
