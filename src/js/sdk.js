@@ -465,6 +465,7 @@ class SDK {
 	 * 
 	 * @prop {String} method
 	 * @prop {Object} props
+	 * 
 	 * @returns {Promise}
 	 */
 	rpc(method, props) {
