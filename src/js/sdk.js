@@ -255,7 +255,7 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	uploadImagesToImgur(data) {
-		return this.sdk.set.imagesToImgur(images).then(urls => {
+		return this.sdk.set.imagesToImgur(data).then(urls => {
 			this.lastresult = "uploadImageToImgur: success (console.log)"
 			return urls;
 		}).catch(e => this.setLastResult(e))
