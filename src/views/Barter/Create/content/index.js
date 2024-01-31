@@ -225,7 +225,16 @@ export default {
 				form.dialog.view("load", this.$t("dialogLabels.images_imgur"));
 
 				/* Upload images to imgur through bastyon */
-				this.sdk.uploadImagesToImgur(upload)
+				this.sdk.uploadImagesToImgur({
+					images: upload,
+					resize: 1024/* ,
+					watermark: {
+						image: Watermark,
+						opacity: .5,
+						bottom: 10,
+						right: 10
+					} */
+				})
 					.then(urls => {
 						/* Replace data:image with given urls */
 						if (urls?.length) {
@@ -258,7 +267,7 @@ export default {
 						}).catch(e => {
 							/* Show error dialog */
 							const error = this.$t(
-								`dialog.error#${ e?.toString()?.replace(/[^\d-]/g, '') || 0 }`,
+								`dialogLabels.error#${ e?.toString()?.replace(/[^\d-]/g, '') || 0 }`,
 								{ details: e }
 							);
 
