@@ -242,11 +242,19 @@ class SDK {
 	/**
 	 * Upload images to imgur
 	 * 
-	 * @param {Array} images
+	 * @param {Object} data
+	 * @param {Array[String]} data.images
+	 * @param {Number} [data.resize]
+	 * @param {Object} [data.watermark]
+	 * @param {Number} [data.watermark.opacity]
+	 * @param {Number} [data.watermark.top]
+	 * @param {Number} [data.watermark.right]
+	 * @param {Number} [data.watermark.bottom]
+	 * @param {Number} [data.watermark.left]
 	 * 
 	 * @returns {Promise}
 	 */
-	uploadImagesToImgur(images) {
+	uploadImagesToImgur(data) {
 		return this.sdk.set.imagesToImgur(images).then(urls => {
 			this.lastresult = "uploadImageToImgur: success (console.log)"
 			return urls;
