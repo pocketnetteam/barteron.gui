@@ -34,7 +34,7 @@ export default {
 		 * @returns {String}
 		 */
 		shortName() {
-			return this.user?.name?.substring(0, 1).toUpperCase() || "U";
+			return this.user?.name?.substring(0, 1).toUpperCase() || "?";
 		},
 
 		/**

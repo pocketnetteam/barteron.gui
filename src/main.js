@@ -44,7 +44,7 @@ Vue.prototype.favorites = Favorites;
 
 Vue.mixin({
 	computed: {
-		/* Access sibling components in a route */
+		/* Access siblings components in a route */
 		$components() {
 			return Vue.observable(this.$route.matched[0].instances);
 		}
@@ -70,6 +70,9 @@ Vue.mixin({
 	}
 });
 
+/**
+ * StartUp
+ */
 (async () => {
 	const
 		sdk = Vue.prototype.sdk,
@@ -77,8 +80,8 @@ Vue.mixin({
 		account = await sdk.getBrtAccount(address);
 
 	/* Create barteron account automatically */
-	if (address && !account?.[0]) {
-		account[0] = new sdk.models.Account({ address }).set();
+	if (address && account) {
+		if (!account?.[0]) account[0] = new sdk.models.Account({ address }).set();
 	}
 
 	/* Create Vue app */
