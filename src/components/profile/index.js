@@ -1,3 +1,4 @@
+import { GeoHash } from "geohash";
 import NameToHSL from "@/js/nametohsl.js";
 import Score from "@/components/score/index.vue";
 
@@ -16,7 +17,8 @@ export default {
 
 	data() {
 		return {
-			color: new NameToHSL()
+			color: new NameToHSL(),
+			addr: {}
 		}
 	},
 
@@ -36,7 +38,16 @@ export default {
 		 * @returns {String}
 		 */
 		shortName() {
-			return this.user?.name?.substring(0, 1).toUpperCase() || "UN";
+			return this.user?.name?.substring(0, 1).toUpperCase() || "?";
+		},
+
+		/**
+		 * Generate hsl background for user
+		 * 
+		 * @returns {String}
+		 */
+		hslColor() {
+			return `--color: ${ this.color.generateHSL(this.user?.name || "username") }`
 		},
 
 		/**
@@ -49,12 +60,42 @@ export default {
 		},
 
 		/**
-		 * Generate hsl background for user
+		 * Decode offer geohash
 		 * 
-		 * @returns {String}
+		 * @returns {Array|null}
 		 */
-		hslColor() {
-			return `--color: ${ this.color.generateHSL(this.user?.name || "username") }`
+		geohash() {
+			if (this.account.geohash) {
+				const { latitude, longitude } = GeoHash.decodeGeoHash(this.account.geohash);
+				return [latitude[0], longitude[0]];
+			} else {
+				return null;
+			}
+		},
+
+		/**
+		 * Get address from geohash
+		 * 
+		 * @returns {null|String}
+		 */
+		geopos() {
+			if (!this.addr.country) {
+				if (!this.addr.fetching && this.geohash) {
+					this.addr.fetching = true;
+				
+					this.sdk.geoLocation(this.geohash)
+						.then(result => {
+							if (result?.address) this.$set(this, "addr", result.address);
+						});
+				}
+
+				return null;
+			} else {
+				return [
+					this.addr.country,
+					this.addr.city || this.addr.town || this.addr.county
+				].filter(f => f).join(", ");
+			}
 		}
 	}
 }
