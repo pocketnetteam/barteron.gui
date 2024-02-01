@@ -2,13 +2,17 @@
 	<div class="profile">
 		<div class="row author">
 			<div class="col">
-				<router-link class="avatar" :to="{ name: 'profile', params: { id: address } }" v-if="address">
+				<router-link
+					class="avatar"
+					:to="{ name: 'profile', params: { id: address } }"
+					v-if="address"
+				>
 					<i
-						v-if="!user.i"
+						v-if="!user.i.startsWith('http')"
 						:style="hslColor"
 					>{{ shortName }}</i>
 					
-					<picture class="status-online" v-else>
+					<picture v-else>
 						<img :src="user.i" :alt="user.name">
 					</picture>
 				</router-link>

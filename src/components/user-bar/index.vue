@@ -25,7 +25,7 @@
 					@click="$event => requestPermissions($event, { path: `/profile/${ address }` })"
 				>
 					<i
-						v-if="!user?.i"
+						v-if="!user?.i.startsWith('http')"
 						:style="hslColor"
 					>{{ shortName }}</i>
 					
