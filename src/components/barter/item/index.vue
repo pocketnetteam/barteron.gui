@@ -288,8 +288,8 @@
 				<div class="col">
 					<span class="title">Location</span>
 					<ul>
-						<li v-if="address">
-							<address>{{ address }}</address>
+						<li v-if="geopos">
+							<address>{{ geopos }}</address>
 						</li>
 						<li v-if="distance > -1">{{ distance }} {{ $t('metricsLabels.km') }}</li>
 					</ul>
