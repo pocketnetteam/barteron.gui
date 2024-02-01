@@ -103,9 +103,9 @@ export default {
 		/**
 		 * Get address from geohash
 		 * 
-		 * @returns {Object}
+		 * @returns {null|String}
 		 */
-		address() {
+		geopos() {
 			if (!this.addr.country) {
 				if (!this.addr.fetching && this.geohash) {
 					this.addr.fetching = true;

@@ -8,7 +8,7 @@
 					v-if="address"
 				>
 					<i
-						v-if="!user.i.startsWith('http')"
+						v-if="!user?.i?.startsWith('http')"
 						:style="hslColor"
 					>{{ shortName }}</i>
 					
@@ -45,12 +45,17 @@
 		<!-- Profile info -->
 		<div class="row info">
 			<dl class="list">
-				<dt><i class="fa fa-calendar-day"></i></dt>
-				<dd>{{
-				$t('profileLabels.on_barteron_from', { date: $d(account.regdate, 'middle', $i18n.locale) })
-				}}</dd>
-				<dt><i class="fa fa-map-marker-alt"></i></dt>
-				<dd>Astana, Kazakhstan</dd>
+				<template v-if="account.regdate">
+					<dt><i class="fa fa-calendar-day"></i></dt>
+					<dd>{{
+					$t('profileLabels.on_barteron_from', { date: $d(account.regdate, 'middle', $i18n.locale) })
+					}}</dd>
+				</template>
+				
+				<template v-if="geohash">
+					<dt><i class="fa fa-map-marker-alt"></i></dt>
+					<dd>{{ geopos }}</dd>
+				</template>
 			</dl>
 		</div>
 
