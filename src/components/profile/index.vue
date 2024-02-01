@@ -3,12 +3,12 @@
 		<div class="row author">
 			<div class="col">
 				<router-link
-					class="avatar status-online"
+					class="avatar"
 					:to="{ name: 'profile', params: { id: address } }"
 					v-if="address"
 				>
 					<i
-						v-if="!user.i"
+						v-if="!user.i.startsWith('http')"
 						:style="hslColor"
 					>{{ shortName }}</i>
 					
