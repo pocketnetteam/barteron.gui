@@ -47,6 +47,26 @@
 			height: 64px
 			width: 64px
 
+			&[class*="status"]
+				&:before
+					background: $gray
+					border: 2px solid $beerus
+					border-radius: 50%
+					content: ""
+					position: absolute
+					right: -1px
+					bottom: -1px
+					height: 16px
+					width: 16px
+
+				&[class*="online"]
+					&:before
+						background: $roshi
+
+				&[class*="offline"]
+					&:before
+						background: $dodoria
+
 			*
 				border-radius: 50%
 
@@ -63,31 +83,11 @@
 				height: 100%
 				width: 100%
 
-			picture
-				&[class*="status"]
-					&:before
-						background: $gray
-						border: 2px solid $beerus
-						border-radius: 50%
-						content: ""
-						position: absolute
-						right: -1px
-						bottom: -1px
-						height: 16px
-						width: 16px
-
-					&[class*="online"]
-						&:before
-							background: $roshi
-
-					&[class*="offline"]
-						&:before
-							background: $dodoria
-
-				img
-					display: block
-					height: 100%
-					width: 100%
+			picture,
+			img
+				display: block
+				height: 100%
+				width: 100%
 
 		.user
 			width: 100%
