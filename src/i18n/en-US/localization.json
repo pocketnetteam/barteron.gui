@@ -165,9 +165,10 @@
 	"dialogLabels": {
 		"label": "Dialog",
 
-		"images_imgur": "Sending images to imgur..",
+		"images_imgur": "Uploading images..",
 		"data_node": "Posting data to node, please wait..",
 		"offer_renew": "Are you sure you want renew this offer?",
+		"pending_reg": "Please wait until your account being activacted",
 
 		"image_error": "Image upload error",
 		"node_error": "Node error has occured: {error}",

@@ -210,21 +210,17 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	createRoom(request) {
-		return new Promise(async (resolve, reject) => {
-			const isGranted = await this.checkPermission("chat");
-
-			if (!isGranted) {
-				/* Request for permissons */
+		return new Promise((resolve, reject) => {
+			/* Request for permissons */
 				this.requestPermissions(["chat"]).then(result => {
 					if (result) {
-						this.sdk.helpers.createroom(request).then(room => resolve(room));
+						this.sdk.helpers.createroom(request)
+							.then(room => resolve(room))
+							.catch(e => reject(e));
 					} else {
-						reject();
+						reject(result);
 					}
 				});
-			} else {
-				this.sdk.helpers.createroom(request).then(room => resolve(room));
-			}
 		});
 	}
 
@@ -239,21 +235,17 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	sendMessage(request) {
-		return new Promise(async (resolve, reject) => {
-			const isGranted = await this.checkPermission("messaging");
-
-			if (!isGranted) {
-				/* Request for permissons */
+		return new Promise((resolve, reject) => {
+			/* Request for permissons */
 				this.requestPermissions(["messaging"]).then(result => {
 					if (result) {
-						this.sdk.helpers.sendmessage(request).then(message => resolve(message));
+						this.sdk.helpers.sendmessage(request)
+							.then(message => resolve(message))
+							.catch(e => reject(e));
 					} else {
-						reject();
+						reject(result);
 					}
 				});
-			} else {
-				this.sdk.helpers.sendmessage(request).then(message => resolve(message));
-			}
 		});
 	}
 
