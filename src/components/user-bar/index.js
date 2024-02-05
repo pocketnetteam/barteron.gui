@@ -74,10 +74,12 @@ export default {
 					}
 				}
 
-				if (this.user?.name && permissions.every(p => result?.[p]) && to) {
-					this.$router.push(to).catch(() => {});
-				} else {
+				if (this.sdk.address && !this.user?.name) {
 					this.dialog.instance.view("warn", this.$t("dialogLabels.pending_reg"));
+				} else {
+					if (this.user?.name && permissions.every(p => result?.[p]) && to) {
+						this.$router.push(to).catch(() => {});
+					}
 				}
 			});
 
