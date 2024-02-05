@@ -28,8 +28,8 @@ export default {
 				this.sdk.sendMessage({
 					...chat,
 					message: `https://${ this.manifest.scope }/barter/search?source=${ offer.source.hash }&target=${ offer.target.hash }`
-				});
-			});
+				}).catch(() => {});
+			}).catch(() => {});
 		}
 	},
 

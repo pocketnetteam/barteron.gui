@@ -78,8 +78,8 @@ export default {
 				this.sdk.sendMessage({
 					...chat,
 					message: `https://${ this.manifest.scope }/barter/${ offer.hash }`
-				});
-			});
+				}).catch(() => {});
+			}).catch(() => {});
 		}
 	},
 
