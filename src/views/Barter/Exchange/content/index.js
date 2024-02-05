@@ -55,8 +55,8 @@ export default {
 				this.sdk.sendMessage({
 					...chat,
 					message: `https://${ this.manifest.scope }/barter/${ this.offer.hash }`
-				});
-			});
+				}).catch(() => {});
+			}).catch(() => {});
 		}
 	},
 
