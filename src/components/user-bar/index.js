@@ -3,6 +3,8 @@ import NameToHSL from "@/js/nametohsl.js";
 export default {
 	name: "UserBar",
 
+	inject: ["dialog"],
+
 	data() {
 		return {
 			color: new NameToHSL()
@@ -72,8 +74,10 @@ export default {
 					}
 				}
 
-				if (this.sdk.address && permissions.every(p => result?.[p]) && to) {
+				if (this.user?.name && permissions.every(p => result?.[p]) && to) {
 					this.$router.push(to).catch(() => {});
+				} else {
+					this.dialog.instance.view("warn", this.$t("dialogLabels.pending_reg"));
 				}
 			});
 
