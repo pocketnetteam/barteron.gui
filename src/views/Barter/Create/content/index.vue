@@ -66,9 +66,9 @@
 				<!-- Select: Tags (from account) -->
 				<template v-if="getting === 'my_list'">
 					<ExchangeList
-						class="field"
 						key="account"
 						ref="account"
+						holderClass="field"
 						vSize="lg"
 						:tags="account?.tags || []"
 						:title="false"
@@ -91,6 +91,7 @@
 						:tags="tags"
 						:title="false"
 						:editable="true"
+						:editMode="true"
 						@change="(value) => tags = value"
 					>
 						<template #default="{ instance }">
@@ -106,7 +107,7 @@
 										v-if="!instance.vTags.includes(id)"
 										@click="instance.insert(id)"
 									>
-										{{ $te(categories.items[id]?.name) ? $t(categories.items[id]?.name) : $t('buttonLabels.unknown') }}
+										{{ $t(categories.items[id]?.name) || $t('buttonLabels.unknown') }}
 									</li>
 								</template>
 							</ul>
