@@ -72,7 +72,9 @@ export default {
 					}
 				}
 
-				if (permissions.every(p => result?.[p]) && to) this.$router.push(to).catch(() => {});
+				if (this.sdk.address && permissions.every(p => result?.[p]) && to) {
+					this.$router.push(to).catch(() => {});
+				}
 			});
 
 			return false;
