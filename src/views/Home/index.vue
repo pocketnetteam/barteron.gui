@@ -41,6 +41,7 @@
 			<h1>Viewed</h1>
 			<BarterList
 				:items="barters.generate(4)"
+				:carousel="true"
 			/>
 		</section>
 	</div>

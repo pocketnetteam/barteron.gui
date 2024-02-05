@@ -41,12 +41,14 @@
 				</nav>
 			</div> -->
 
-			<div class="bottom">
-				<strong class="logo"><router-link to="/">Barteron</router-link></strong>
-				<p class="copyright">&copy; 2023 Barteron. All rights reserved.</p>
+			<div class="bar">
+				<div class="bar-holder">
+					<strong class="logo"><router-link to="/">Barteron</router-link></strong>
+					<p class="copyright">&copy; 2023 Barteron. All rights reserved.</p>
+				</div>
 
 				<nav>
-					<ul>
+					<!-- <ul>
 						<li>
 							<a href="#" class="twitter">
 								<svg><use href="@/assets/images/social.svg#twitter" /></svg>
@@ -62,7 +64,7 @@
 								<svg><use href="@/assets/images/social.svg#facebook" /></svg>
 							</a>
 						</li>
-					</ul>
+					</ul> -->
 
 					<a href="#" class="scroll-top">
 						<i class="fa fa-angle-up"></i>
