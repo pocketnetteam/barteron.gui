@@ -210,7 +210,22 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	createRoom(request) {
-		return this.sdk.helpers.createroom(request);
+		return new Promise(async (resolve, reject) => {
+			const isGranted = await this.checkPermission("chat");
+
+			if (!isGranted) {
+				/* Request for permissons */
+				this.requestPermissions(["chat"]).then(result => {
+					if (result) {
+						this.sdk.helpers.createroom(request).then(room => resolve(room));
+					} else {
+						reject();
+					}
+				});
+			} else {
+				this.sdk.helpers.createroom(request).then(room => resolve(room));
+			}
+		});
 	}
 
 	/**
@@ -224,7 +239,22 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	sendMessage(request) {
-		return this.sdk.helpers.sendmessage(request);
+		return new Promise(async (resolve, reject) => {
+			const isGranted = await this.checkPermission("messaging");
+
+			if (!isGranted) {
+				/* Request for permissons */
+				this.requestPermissions(["messaging"]).then(result => {
+					if (result) {
+						this.sdk.helpers.sendmessage(request).then(message => resolve(message));
+					} else {
+						reject();
+					}
+				});
+			} else {
+				this.sdk.helpers.sendmessage(request).then(message => resolve(message));
+			}
+		});
 	}
 
 	imageFromMobileCamera() {
