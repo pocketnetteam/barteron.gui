@@ -266,7 +266,7 @@ class SDK {
 	 * 
 	 * @param {String} permission - Permission name
 	 * 
-	 * @returns {Boolean}
+	 * @returns {Promise}
 	 */
 	checkPermission(permission) {
 		return this.sdk.check.permission({ permission });
