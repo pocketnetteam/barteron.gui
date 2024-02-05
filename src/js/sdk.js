@@ -214,7 +214,9 @@ class SDK {
 			/* Request for permissons */
 				this.requestPermissions(["chat"]).then(result => {
 					if (result) {
-						this.sdk.helpers.createroom(request).then(room => resolve(room));
+						this.sdk.helpers.createroom(request)
+							.then(room => resolve(room))
+							.catch(e => reject(e));
 					} else {
 						reject(result);
 					}
@@ -237,7 +239,9 @@ class SDK {
 			/* Request for permissons */
 				this.requestPermissions(["messaging"]).then(result => {
 					if (result) {
-						this.sdk.helpers.sendmessage(request).then(message => resolve(message));
+						this.sdk.helpers.sendmessage(request)
+							.then(message => resolve(message))
+							.catch(e => reject(e));
 					} else {
 						reject(result);
 					}
