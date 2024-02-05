@@ -1,18 +1,22 @@
 <template>
 	<header id="header">
 		<div class="top">
-			<LanguageSwitcher />
-			<MainMenu />
+			<div class="inner">
+				<LanguageSwitcher />
+				<MainMenu />
+			</div>
 		</div>
 		<div class="bottom">
 			<div class="bar">
-				<h1 class="logo">
-					<router-link to="/">Barteron</router-link>
-				</h1>
+				<div class="inner">
+						<h1 class="logo">
+						<router-link to="/">Barteron</router-link>
+					</h1>
 
-				<Location />
-				<SearchBar />
-				<UserBar />
+					<Location />
+					<SearchBar />
+					<UserBar />
+				</div>
 			</div>
 		</div>
 	</header>

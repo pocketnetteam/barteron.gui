@@ -1,4 +1,3 @@
-import Vue from "vue";
 import CategorySelect from "@/components/categories/select/index.vue";
 
 export default {
@@ -26,6 +25,7 @@ export default {
 			default: "md"
 		},
 		editable: Boolean,
+		editMode: Boolean,
 		holderClass: String,
 		editText: {
 			type: String,
@@ -45,7 +45,7 @@ export default {
 		return {
 			instance: this, /* Give instance to slot */
 			id: Math.random().toString(16).slice(2),
-			editing: false,
+			editing: this.editMode,
 			vTags: [].concat(this.tags),
 			show: this.visible || this.tags.length
 		}
@@ -78,7 +78,13 @@ export default {
 		 * Insert tag to list
 		 */
 		insert(id) {
-			if (!this.isExist(id)) this.vTags.push(id);
+			if (!this.isExist(id)) {
+				this.vTags.push(id);
+				
+				if (this.editMode) {
+					this.$emit('change', this.vTags);
+				}
+			}
 		},
 
 		/**
@@ -102,14 +108,14 @@ export default {
 		 */
 		cancel() {
 			this.vTags = [].concat(this.tags);
-			this.editing = false;
+			this.editing = this.editMode;
 		},
 
 		/**
 		 * Save state
 		 */
 		save() {
-			this.editing = false;
+			this.editing = this.editMode;
 			this.$emit('change', this.vTags);
 		}
 	},

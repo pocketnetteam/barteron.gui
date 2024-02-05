@@ -6,7 +6,7 @@
 	.footer-holder
 		color: $dark
 		margin: 0 auto
-		padding: $r * 7 0
+		padding: $r * 3 0
 		max-width: $width
 		width: 100%
 
@@ -48,27 +48,32 @@
 						&:hover
 							opacity: 1
 
-		.bottom
+		.bar
 			display: flex
-			align-items: baseline
+			align-items: center
 
-			.logo
-				display: block
-				height: 14px
-				width: 85px
+			.bar-holder
+				display: flex
+				align-items: baseline
+				gap: $r
 
-				a
-					background: url(@/assets/images/logo-small.svg) no-repeat 50% 50%
+				.logo
 					display: block
-					text-indent: -9999px
-					overflow: hidden
-					height: 100%
-					width: 100%
+					height: 14px
+					width: 85px
 
-			.copyright
-				color: $popo
-				font-size: .85em
-				margin: 0 0 0 $r * 4
+					a
+						background: url(@/assets/images/logo-small.svg) no-repeat 50% 50%
+						display: block
+						text-indent: -9999px
+						overflow: hidden
+						height: 100%
+						width: 100%
+
+				.copyright
+					color: $popo
+					font-size: .85em
+					margin: 0
 
 			nav
 				margin: 0 0 0 auto

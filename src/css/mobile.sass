@@ -1,0 +1,49 @@
+$phones: 500px
+$tablet: 900px
+
+/* Phones */
+@media screen and (max-width: $phones)
+	#app
+		#header
+			.top
+				.inner
+					padding: 0 $r
+					padding-right: $r * 6
+
+			.bar
+				.inner
+					flex-wrap: wrap
+					justify-content: space-between
+					gap: $r
+					padding: 0 $r
+
+				.logo
+					flex-basis: 50%
+
+				.search-bar
+					margin: 0
+
+				.user-bar
+					display: flex
+					justify-content: flex-end
+					width: 100%
+
+		.v-lightbox section
+			max-width: 100%
+
+		.barter-carousel-holder
+			.VueCarousel-inner
+				flex-basis: 312px !important
+
+			.VueCarousel-slide
+				/* flex-basis: 100% */
+
+		#footer
+			.footer-holder
+				.bar
+					gap: $r
+					padding: 0 $r * 2
+
+/* Tablet */
+@media screen and (min-width: $tablet)
+	#header

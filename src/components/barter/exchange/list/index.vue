@@ -26,7 +26,7 @@
 				</li>
 
 				<!-- Empty list -->
-				<li class="empty" v-if="!vTags.length && !editing">
+				<li class="empty" v-if="!vTags.length">
 					{{ $t('barterLabels.empty') }}
 				</li>
 
@@ -58,7 +58,7 @@
 			/>
 
 			<!-- Tags edit -->
-			<div class="edit" v-if="editable">
+			<div class="edit" v-if="editable && !editMode">
 				<slot
 					name="edit"
 					:instance="instance"
