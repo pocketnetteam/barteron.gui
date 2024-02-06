@@ -39,7 +39,7 @@ export default {
 
 	data() {
 		return {
-			permissions: false,
+			loading: true,
 			dialog: null
 		}
 	},
@@ -54,17 +54,6 @@ export default {
 
 		return {
 			dialog
-		}
-	},
-
-	computed: {
-		/**
-		 * Watch for loading state
-		 * 
-		 * @returns {Boolean}
-		 */
-		 loading() {
-			return !this.sdk?.sdk;
 		}
 	},
 
@@ -83,7 +72,17 @@ export default {
 		}
 	},
 
-	mounted() {
+	async mounted() {
+		const
+			address = await this.sdk.getAddress(),
+			profile = await this.sdk.getUserProfile(address),
+			account = await this.sdk.getBrtAccount(address);
+
+		/* Create barteron account automatically */
+		if (address && account) {
+			if (!account?.[0]) account[0] = new this.sdk.models.Account({ address }).set();
+		}
+
 		/* Watch for dialog */
 		const interval = setInterval(() => {
 			if (this.$refs.dialog) {
@@ -101,6 +100,8 @@ export default {
 			console.log('bastyon -> barteron: ' + route)
 			this.$router.push({ path: route, query: { pid: +new Date } });
 		});
+
+		this.loading = false;
 	}
 }
 </script>
