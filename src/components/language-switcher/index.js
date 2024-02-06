@@ -45,6 +45,9 @@ export default {
 	},
 
 	created() {
-		/* this.selectLanguage("ru"); */
+		/* Get locale from bastyon */
+		if (this.sdk.appinfo) {
+			this.selectLanguage(this.sdk.appinfo?.locale);
+		}
 	}
 }
