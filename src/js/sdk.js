@@ -215,8 +215,8 @@ class SDK {
 				this.requestPermissions(["chat"]).then(result => {
 					if (result) {
 						this.sdk.helpers.createroom(request)
-							.then(room => resolve(room))
-							.catch(e => reject(e));
+							.then(resolve)
+							.catch(reject);
 					} else {
 						reject(result);
 					}
@@ -240,8 +240,8 @@ class SDK {
 				this.requestPermissions(["messaging"]).then(result => {
 					if (result) {
 						this.sdk.helpers.sendmessage(request)
-							.then(message => resolve(message))
-							.catch(e => reject(e));
+							.then(resolve)
+							.catch(reject);
 					} else {
 						reject(result);
 					}
@@ -268,6 +268,7 @@ class SDK {
 	 * @param {Array[String]} data.images
 	 * @param {Number} [data.resize]
 	 * @param {Object} [data.watermark]
+	 * @param {String} [data.watermark.image]
 	 * @param {Number} [data.watermark.opacity]
 	 * @param {Number} [data.watermark.top]
 	 * @param {Number} [data.watermark.right]
