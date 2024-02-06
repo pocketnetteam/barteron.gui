@@ -20,6 +20,12 @@ class SDK {
 		Offer
 	}
 
+	_appinfo = null;
+	get appinfo() {
+		if (!this._appinfo) this.getAppInfo();
+		return this._appinfo;
+	}
+
 	_address = "";
 	get address() {
 		if (!this._address) this.getAddress();
@@ -161,6 +167,19 @@ class SDK {
 
 	clearLastResult() {
 		this.setLastResult("");
+	}
+
+	/**
+	 * Get app info
+	 * 
+	 * @returns {Promise}
+	 */
+	getAppInfo() {
+		return this.sdk.get.appinfo().then(info => {
+			this.lastresult = "appinfo: " + info;
+			Vue.set(this, "_appinfo", info);
+			return info;
+		}).catch(e => this.setLastResult(e));
 	}
 
 	/**
