@@ -75,8 +75,11 @@ export default {
 	async mounted() {
 		const
 			address = await this.sdk.getAddress(),
-			profile = await this.sdk.getUserProfile(address),
 			account = await this.sdk.getBrtAccount(address);
+
+		/* Get appInfo and bastyon profile */
+		await this.sdk.getAppInfo();
+		await this.sdk.getUserProfile(address);
 
 		/* Create barteron account automatically */
 		if (address && account) {
