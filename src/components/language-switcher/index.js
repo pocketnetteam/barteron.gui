@@ -1,4 +1,4 @@
-import { localeStore } from '@/stores/locale.js';
+import localeStore from '@/stores/locale.js';
 
 export default {
 	name: "LanguageSwitcher",
@@ -10,18 +10,6 @@ export default {
 		}
 	},
 
-	setup() {
-		const ls = localeStore();
-
-		return {
-			localeStore: {
-				locale: ls.locale,
-				list: ls.list,
-				set: ls.set
-			}
-		}
-	},
-
 	computed: {
 		/**
 		 * Build locales list
@@ -29,7 +17,7 @@ export default {
 		 * @returns {Array}
 		 */
 		localesList() {
-			return (this.list || this.localeStore.list).map(l => ({
+			return (this.list || localeStore.list).map(l => ({
 				text: l.substring(0, 2).toUpperCase(),
 				value: l,
 				default: l === this.$root.$i18n.locale
@@ -53,14 +41,14 @@ export default {
 			})();
 
 			this.$root.$i18n.locale = selected.value;
-			this.localeStore.set(selected.value);
+			localeStore.set(selected.value);
 		}
 	},
 
 	created() {
-		if (this.localeStore?.locale) {
+		if (localeStore?.locale) {
 			/* Get locale from store */
-			this.selectLanguage(this.localeStore.locale);
+			this.selectLanguage(localeStore.locale);
 		} else if (this.sdk.appinfo) {
 			/* Get locale from bastyon */
 			this.selectLanguage(this.sdk.appinfo?.locale);
