@@ -1,5 +1,6 @@
 import Vue from "vue";
 import App from "./App.vue";
+import store from "./stores/store.js";
 import router from "./router.js";
 import i18n from "./i18n/index.js";
 
@@ -75,6 +76,7 @@ Vue.mixin({
  */
 new Vue({
 	router,
+	store,
 	i18n,
 	render: h => h(App)
 }).$mount("#app");
