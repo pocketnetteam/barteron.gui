@@ -20,6 +20,12 @@ class SDK {
 		Offer
 	}
 
+	_appinfo = null;
+	get appinfo() {
+		if (!this._appinfo) this.getAppInfo();
+		return this._appinfo;
+	}
+
 	_address = "";
 	get address() {
 		if (!this._address) this.getAddress();
@@ -164,6 +170,19 @@ class SDK {
 	}
 
 	/**
+	 * Get app info
+	 * 
+	 * @returns {Promise}
+	 */
+	getAppInfo() {
+		return this.sdk.get.appinfo().then(info => {
+			this.lastresult = "appinfo: " + info;
+			Vue.set(this, "_appinfo", info);
+			return info;
+		}).catch(e => this.setLastResult(e));
+	}
+
+	/**
 	 * Get logged user state
 	 * 
 	 * @returns {Promise}
@@ -215,8 +234,8 @@ class SDK {
 				this.requestPermissions(["chat"]).then(result => {
 					if (result) {
 						this.sdk.helpers.createroom(request)
-							.then(room => resolve(room))
-							.catch(e => reject(e));
+							.then(resolve)
+							.catch(reject);
 					} else {
 						reject(result);
 					}
@@ -240,8 +259,8 @@ class SDK {
 				this.requestPermissions(["messaging"]).then(result => {
 					if (result) {
 						this.sdk.helpers.sendmessage(request)
-							.then(message => resolve(message))
-							.catch(e => reject(e));
+							.then(resolve)
+							.catch(reject);
 					} else {
 						reject(result);
 					}
@@ -268,6 +287,7 @@ class SDK {
 	 * @param {Array[String]} data.images
 	 * @param {Number} [data.resize]
 	 * @param {Object} [data.watermark]
+	 * @param {String} [data.watermark.image]
 	 * @param {Number} [data.watermark.opacity]
 	 * @param {Number} [data.watermark.top]
 	 * @param {Number} [data.watermark.right]

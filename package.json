@@ -15,6 +15,7 @@
 		"husky": "^8.0.3",
 		"leaflet": "^1.9.4",
 		"leaflet-geosearch": "^3.8.0",
+		"pinia": "^2.1.7",
 		"prettier": "^2.8.7",
 		"vue": "^2.6.14",
 		"vue-carousel": "^0.18.0",
@@ -23,8 +24,7 @@
 		"vue-loader": "^17.0.1",
 		"vue-router": "^3.0.0",
 		"vue2-leaflet": "^2.7.1",
-		"vue2-leaflet-geosearch": "^1.0.6",
-		"vuex": "^3.1.2"
+		"vue2-leaflet-geosearch": "^1.0.6"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.12.16",

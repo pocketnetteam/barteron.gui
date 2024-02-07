@@ -3,12 +3,8 @@
 		class="language-switcher"
 		vType="light"
 		vSize="xs"
-		:dropdown="[
-			{ text: 'EN', value: 'en-US', default: true },
-			/* { text: 'DE', value: 'de-DE' },
-			{ text: 'IT', value: 'it-IT' }, */
-			{ text: 'RU', value: 'ru-RU' }
-		]"
+		:dropdown="localesList"
+		ref="locale"
 		@selected="selectLanguage"
 	>
 		<span class="value"></span>

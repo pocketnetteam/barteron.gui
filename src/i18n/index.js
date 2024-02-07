@@ -4,6 +4,11 @@ import VueI18n from "vue-i18n";
 Vue.use(VueI18n);
 
 const
+	locales = [
+		"en-US",
+		"ru-RU"
+	],
+
 	dateTimeFormats = {
 		"en-US": {
 			short: {
@@ -96,9 +101,10 @@ export default new VueI18n({
 	locale: process.env.VUE_APP_I18N_LOCALE || "en-US",
 	fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || "en-US",
 	messages: loadLocaleMessages(),
+	fallbackWarn: false,
 	missingWarn: false,
 	dateTimeFormats,
 	numberFormats
 });
 
-export { dateTimeFormats, numberFormats };
+export { locales, dateTimeFormats, numberFormats };
