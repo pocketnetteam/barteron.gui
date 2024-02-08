@@ -99,9 +99,9 @@ export default {
 		}, 100);
 
 		/* Support urls from parent window */
-		this.sdk.on("changeroute", route => {
+		this.sdk.on("changestate", ({ route }) => {
 			console.log('bastyon -> barteron: ' + route)
-			this.$router.push({ path: route, query: { pid: +new Date } });
+			this.$router.push({ path: route });
 		});
 
 		this.loading = false;
