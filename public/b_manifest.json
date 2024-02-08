@@ -12,5 +12,5 @@
     "scope" : "test.barter.pocketnet.app",
     "start_url" : "index.html",
     "icon": "favicon.ico",
-    "permissions" : ["account", "notifications", "chat", "messaging", "payment", "sign", "mobilecamera", "location"]
+    "permissions" : ["account", "notifications", "chat", "messaging", "payment", "sign", "mobilecamera", "geolocation"]
 }
