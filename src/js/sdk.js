@@ -4,6 +4,7 @@ import { OpenStreetMapProvider } from "leaflet-geosearch";
 
 import Account from "@/js/models/account.js";
 import Offer from "@/js/models/offer.js";
+import Comment from "@/js/models/comment.js";
 
 /**
  * Allow work with bastyon
@@ -17,7 +18,8 @@ class SDK {
 
 	models = {
 		Account,
-		Offer
+		Offer,
+		Comment
 	}
 
 	_appinfo = null;
@@ -80,6 +82,7 @@ class SDK {
 		if (!window.BastyonSdk) return;
 
 		this.sdk = new window.BastyonSdk();
+		this.sdk.init();
 
 		this.emit = this.sdk.emit;
 		this.on = this.sdk.on;
@@ -125,7 +128,8 @@ class SDK {
 		this.barteron = {
 			_accounts: {},
 			_offers: {},
-			_details: {}
+			_details: {},
+			_comments: {}
 		};
 
 		/* Observe sub-objects watchers */
@@ -155,6 +159,14 @@ class SDK {
 				get(target, hash) {
 					if (hash !== "draft" && (typeof hash !== "string" || hash?.length < 64)) return this;
 					else if (!target?.[hash]) $.getBrtOffersDetails({ offerIds: [hash] });
+					return target?.[hash];
+				}
+			}),
+
+			/* Barteron offers comments */
+			comments: new Proxy(this.barteron._comments, {
+				get(target, hash) {
+					if (hash !== "draft" && (typeof hash !== "string" || hash?.length < 64)) return this;
 					return target?.[hash];
 				}
 			})
@@ -188,10 +200,10 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	isLoggedIn() {
-		return this.sdk.helpers.isloggedin().then(result => {
+		return this.sdk.helpers.userstate().then(result => {
 			this.lastresult = `isLoggedIn: ${ result }`
 			return result;
-		}).catch(e => this.setLastResult(e))
+		}).catch(e => this.setLastResult(e));
 	}
 
 	/**
@@ -203,7 +215,7 @@ class SDK {
 		return this.sdk.helpers.opensettings().then(() => {
 			this.lastresult = "opensettings: success";
 			return null;
-		}).catch(e => this.setLastResult(e))
+		}).catch(e => this.setLastResult(e));
 	}
 	
 	/**
@@ -212,10 +224,10 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	openRegistration() {
-		return this.sdk.helpers.openregistration().then(() => {
+		return this.sdk.helpers.registration().then(() => {
 			this.lastresult = "openregistration: success";
 			return null;
-		}).catch(e => this.setLastResult(e))
+		}).catch(e => this.setLastResult(e));
 	}
 
 	/**
@@ -224,7 +236,7 @@ class SDK {
 	 * @param {Object} request
 	 * @param {String} request.name
 	 * @param {Array} request.members
-	 * @param {String} request.message
+	 * @param {Boolean} request.equal
 	 * 
 	 * @returns {Promise}
 	 */
@@ -233,7 +245,13 @@ class SDK {
 			/* Request for permissons */
 				this.requestPermissions(["chat"]).then(result => {
 					if (result) {
-						this.sdk.helpers.createroom(request)
+						this.sdk.chat.getOrCreateRoom({
+							users: request.members,
+							parameters: {
+								name: request.name,
+								equal: request.equal
+							}
+						})
 							.then(resolve)
 							.catch(reject);
 					} else {
@@ -244,21 +262,33 @@ class SDK {
 	}
 
 	/**
+	 * Open chat room
+	 * 
+	 * @param {String} roomid
+	 * 
+	 * @returns {Void}
+	 */
+	openRoom(roomId) {
+		return this.sdk.chat.openRoom(roomId);
+	}
+
+	/**
 	 * Send message to chat
 	 * 
 	 * @param {Object} request
-	 * @param {String} request.roomId
-	 * @param {String} request.alias
-	 * @param {String} request.message
+	 * @param {String} request.roomid
+	 * @param {Object} request.content
+	 * @param {Array} request.content.messages
+	 * @param {Array} request.content.images
 	 * 
 	 * @returns {Promise}
 	 */
 	sendMessage(request) {
 		return new Promise((resolve, reject) => {
 			/* Request for permissons */
-				this.requestPermissions(["messaging"]).then(result => {
+				this.requestPermissions(["chat"]).then(result => {
 					if (result) {
-						this.sdk.helpers.sendmessage(request)
+						this.sdk.chat.send(request)
 							.then(resolve)
 							.catch(reject);
 					} else {
@@ -266,6 +296,17 @@ class SDK {
 					}
 				});
 		});
+	}
+
+	/**
+	 * Get applink from local
+	 * 
+	 * @param {String} url
+	 * 
+	 * @returns {String}
+	 */
+	appLink(url) {
+		return this.sdk.get.applink(url);
 	}
 
 	imageFromMobileCamera() {
@@ -283,23 +324,15 @@ class SDK {
 	/**
 	 * Upload images to imgur
 	 * 
-	 * @param {Object} data
+	 * @param {Array} data
 	 * @param {Array[String]} data.images
-	 * @param {Number} [data.resize]
-	 * @param {Object} [data.watermark]
-	 * @param {String} [data.watermark.image]
-	 * @param {Number} [data.watermark.opacity]
-	 * @param {Number} [data.watermark.top]
-	 * @param {Number} [data.watermark.right]
-	 * @param {Number} [data.watermark.bottom]
-	 * @param {Number} [data.watermark.left]
 	 * 
 	 * @returns {Promise}
 	 */
 	uploadImagesToImgur(data) {
-		return this.sdk.set.imagesToImgur(data).then(urls => {
+		return this.sdk.images.upload(data).then(result => {
 			this.lastresult = "uploadImageToImgur: success (console.log)"
-			return urls;
+			return result.map(m => m.url);
 		}).catch(e => this.setLastResult(e))
 	}
 
@@ -311,7 +344,7 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	checkPermission(permission) {
-		return this.sdk.check.permission({ permission });
+		return this.sdk.permissions.check({ permission });
 	}
 
 	/**
@@ -328,19 +361,7 @@ class SDK {
 			if (!state && !permissions.filter(p => allowUnsigned.includes(p)).pop()) {
 				return this.openRegistration();
 			} else {
-				const hash = this.cyrb53(JSON.stringify(permissions));
-	
-				if (!this.permissionsDialog?.[hash]) {
-					this.permissionsDialog[hash] = this.sdk.request.permissions(permissions)
-						.then(result => {
-							this.lastresult = "messaging: granted"
-							return result.reduce((o, p) => ({ ...o, ...p }), {});
-						})
-						.catch(e => this.setLastResult(e))
-						.finally(() => delete this.permissionsDialog[hash])
-				}
-	
-				return this.permissionsDialog[hash];
+				return this.sdk.permissions.request(permissions);
 			}
 		});
 	}
@@ -423,10 +444,12 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	async getLocation() {
-		const isGranted = await this.checkPermission("location");
+		const isGranted = await this.checkPermission("geolocation");
+
+		console.log(isGranted);
 		
 		if (isGranted) {
-			return this.sdk.get.location().then(location => {
+			return this.sdk.get.geolocation().then(location => {
 				this.lastresult = location;
 				Vue.set(this, "_location", location);
 				return this._location;
@@ -570,7 +593,7 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	setBrtAccount(data) {
-		return this.sdk.set.barteron.account(data).then(result => {
+		return this.sdk.barteron.account(data).then(result => {
 			Vue.set(this.barteron._accounts, data.address, { ...this.barteron._accounts?.[data.address], ...data });
 			return result;
 		});
@@ -613,7 +636,7 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	setBrtOffer(data) {
-		return this.sdk.set.barteron.offer({
+		return this.sdk.barteron.offer({
 			...data,
 			...{ hash: data.hash?.length === 64 ? data.hash : null }
 		});
@@ -676,6 +699,8 @@ class SDK {
 					for (const key in details) {
 						if (key === "accounts") {
 							data[key] = details[key]?.map(account => new Account(account)) || [];
+						} else if (key === "comments") {
+							data[key] = details[key]?.filter(f => f.s3 === hash).map(comment => new Comment(comment)) || [];
 						} else {
 							data[key] = details[key]?.filter(f => f.hash === hash) || [];
 						}
@@ -799,9 +824,7 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	setBrtComment(data) {
-		return this.sdk.set.barteron.comment(data).then(result => {
-			return result;
-		});
+		return this.sdk.barteron.comment(data);
 	}
 }
 

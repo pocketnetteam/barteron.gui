@@ -89,22 +89,4 @@ const router = new VueRouter({
 	routes
 });
 
-/**
- * Get pid from route
- */
-let historyReady = false;
-router.beforeEach((to, from, next) => {
-	if (historyReady) {
-		/* Push to history state */
-		console.log('barteron -> bastyon: ' + to.fullPath)
-		if (Vue.prototype.sdk?.emit) {
-			Vue.prototype.sdk.emit("historychange", { path: to.fullPath });
-		}
-	}
-
-	historyReady = true;
-
-	next();
-});
-
 export default router;

@@ -7,14 +7,32 @@
 			<h1>{{ $t('feedbackLabels.title') }} - </h1>
 			<Score
 				:rating="true"
-				:stars="1"
+				:stars="5"
 				:value="3.5"
 			/>
 			<span>{{ $t('feedbackLabels.votes', { count: 207 }) }}</span>
 		</header>
 
 		<main>
-			<v-form v-if="form">
+			<ul class="votes">
+				<template v-if="items.length">
+					<li
+						v-for="(comment, i) in items"
+						:key="i"
+					>
+						<Comment :item="comment" />
+					</li>
+				</template>
+
+				<template v-else>
+					<li>{{ $t('feedbackLabels.empty') }}</li>
+				</template>
+			</ul>
+
+			<v-form
+				ref="form"
+				v-if="form"
+			>
 				<v-textarea
 					ref="feedback"
 					class="field"
@@ -28,25 +46,22 @@
 								vType="transparent"
 								vSize="sm"
 								class="submit"
+								:disabled="loading"
+								@click="submit"
 							>
-								<i class="fa fa-paper-plane"></i>
+								<i
+									class="fa fa-spinner fa-spin"
+									v-if="loading"
+								></i>
+								<i
+									class="fa fa-paper-plane"
+									v-else
+								></i>
 							</v-button>
 						</div>
 					</template>
 				</v-textarea>
 			</v-form>
-
-			<ul class="votes">
-				<template v-if="items.length">
-					<li>
-						
-					</li>
-				</template>
-
-				<template v-else>
-					<li>{{ $t('feedbackLabels.empty') }}</li>
-				</template>
-			</ul>
 		</main>
 	</section>
 </template>

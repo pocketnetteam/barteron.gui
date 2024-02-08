@@ -35,7 +35,6 @@ class Offer {
 		const
 			isMs = (timestamp) => {
 				const date = new Date(timestamp);
-
 				return isNaN(date) || Math.abs(Date.now() - date) < Math.abs(Date.now() - date * 1000);
 			},
 			time = isMs(data?.time) ? +new Date : data?.time * 1000,

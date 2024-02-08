@@ -25,19 +25,22 @@
 			font-size: 1.5em
 
 	.v-form
-		margin-bottom: 1em
-
 		.field
-			.counter
-				right: 2em
+			.text-counter
+				padding-bottom: 2.5em
+
+				&+.counter
+					right: 2.5em
+					padding: .75em
 
 		.buttons
 			padding: .05em
 			position: absolute
-			right: 0
-			bottom: 0
+			right: 1px
+			bottom: 1px
 
 			button
+				font-size: 1.2em
 				color: $gray
 				padding: .45em
 
@@ -46,11 +49,75 @@
 
 	.votes
 		+resetList()
+		margin-bottom: $r * 4
 
-		li
+		> li
 			border-top: 1px solid $beerus
 			margin: 0 0 2*$r
-			padding: 2*$r 0 0
+			padding: 2*$r $r 0
 
 			&:last-child
 				margin-bottom: 0
+
+.comment
+	font-size: .85rem
+	display: flex
+	align-items: center
+	gap: $r * 2
+
+	.comment-left
+		align-self: flex-start
+
+		.avatar
+			display: flex
+			border-radius: 50%
+			text-decoration: none
+			overflow: hidden
+			height: 24px
+			width: 24px
+
+			*
+				border-radius: 50%
+
+			i
+				background-color: var(--color, rgba(255, 179, 25, 1))
+				color: rgba(255, 255, 255, 1)
+				display: flex
+				font-size: .9em
+				font-style: normal
+				line-height: 0
+				align-items: center
+				justify-content: center
+				height: 100%
+				width: 100%
+				
+			img
+					display: block
+					height: 100%
+					width: 100%
+
+	.comment-body
+		color: $popo
+		display: flex
+		flex-direction: column
+		gap: $r
+
+		time
+			color: $trunks
+
+		p
+			color: $popo
+			font-size: .8rem
+			margin: 0
+
+	.comment-right
+		margin-left: auto
+
+		.rating
+			background: $goku
+			border-radius: 12px
+			display: flex
+			align-items: center
+			gap: $r / 2
+			font-size: 1rem
+			padding: $r * 1.15 $r * 1.75

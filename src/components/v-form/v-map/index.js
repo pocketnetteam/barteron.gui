@@ -105,11 +105,12 @@ export default {
 
 	methods: {
 		async setLocation() {
-			const isGranted = await this.sdk.checkPermission("location");
+			const isGranted = await this.sdk.checkPermission("geolocation");
 
 			if (!isGranted) {
 				/* Request for permissons */
-				this.sdk.requestPermissions(["location"]).then(() => {
+				this.sdk.requestPermissions(["geolocation"]).then(() => {
+					console.log('result', 123)
 					this.$forceUpdate();
 				});
 			}

@@ -51,10 +51,13 @@ export default {
 			this.sdk.createRoom({
 				name: this.offer.caption,
 				members: [offer.address]
-			}).then(chat => {
+			}).then(({roomid}) => {
+				this.sdk.openRoom(roomid);
 				this.sdk.sendMessage({
-					...chat,
-					message: `https://${ this.manifest.scope }/barter/${ this.offer.hash }`
+					roomid,
+					content: {
+						messages: [this.sdk.appLink(`barter/${ this.offer.hash }`)]
+					}
 				}).catch(() => {});
 			}).catch(() => {});
 		}
