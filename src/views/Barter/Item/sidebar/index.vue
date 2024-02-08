@@ -1,11 +1,11 @@
 <template>
 	<v-sidebar>
 		<div class="box">
-			<h1 class="title">{{ item.caption }}</h1>
+			<h1 class="title">{{ item?.caption }}</h1>
 			<span class="price">
-				<template v-if="item.price">
+				<template v-if="item?.price">
 					<span class="currency pkoin"></span>
-					{{ $n(item.price) }}
+					{{ $n(item?.price) }}
 				</template>
 				<template v-else>
 					<span class="currency fa fa-gift"></span>
@@ -17,7 +17,7 @@
 				<!-- My offer -->
 				<template v-if="isMyOffer">
 					<div class="buttons">
-						<v-button :to="{ path: `/barter/edit/${ item.hash }`, params: { id: item.hash } }">
+						<v-button :to="{ path: `/barter/edit/${ item?.hash }`, params: { id: item?.hash } }">
 							<template v-if="!isPreview">
 								<i class="fa fa-pen"></i>
 								<span>{{ $t('buttonLabels.edit') }}</span>
@@ -30,7 +30,7 @@
 
 						<v-button
 							vType="hit"
-							:to="{ name: 'exchangeOptions', params: { id: item.hash }, query: { expanded: 1 } }"
+							:to="{ name: 'exchangeOptions', params: { id: item?.hash }, query: { expanded: 1 } }"
 						>
 							<i class="fa fa-sync"></i>
 							<span>{{ $t('buttonLabels.find_exchange_options') }}</span>
@@ -93,7 +93,7 @@
 				<template #after>
 					<dl class="list">
 						<dt>{{ $t('metricsLabels.number') }}</dt>
-						<dd>{{ item.hash }}</dd>
+						<dd>{{ item?.hash }}</dd>
 					</dl>
 
 					<a class="report" href="#"><i class="fa fa-flag"></i> {{ $t('profileLabels.report_abuse') }}</a>
