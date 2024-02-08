@@ -61,23 +61,21 @@ export default {
 		requestPermissions(e, to, permissions = ["account"]) {
 			e.preventDefault();
 			
-			this.sdk.requestPermissions(permissions).then(async result => {
-				if (result?.account) {
-					if (this.address === "%address%") {
-						const
-							address = await this.sdk.getAddress(),	/* Get account address */
-							params = to?.params || to || {};				/* Get route params */
+			this.sdk.requestPermissions(permissions).then(async () => {
+				if (this.address === "%address%") {
+					const
+						address = await this.sdk.getAddress(),	/* Get account address */
+						params = to?.params || to || {};				/* Get route params */
 
-						for (const p in params) {
-							params[p] = params[p].replace("%address%", address);
-						}
+					for (const p in params) {
+						params[p] = params[p].replace("%address%", address);
 					}
 				}
 
 				if (this.sdk.address && !this.user?.name) {
 					this.dialog.instance.view("warn", this.$t("dialogLabels.pending_reg"));
 				} else {
-					if (this.user?.name && permissions.every(p => result?.[p]) && to) {
+					if (this.user?.name && to) {
 						this.$router.push(to).catch(() => {});
 					}
 				}
