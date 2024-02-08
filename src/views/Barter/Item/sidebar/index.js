@@ -42,7 +42,7 @@ export default {
 		 * @returns {String}
 		 */
 		address() {
-			return this.item.address;
+			return this.item?.address;
 		},
 
 		/**
@@ -74,10 +74,13 @@ export default {
 			this.sdk.createRoom({
 				name: this.item.caption,
 				members: [this.address]
-			}).then(chat => {
+			}).then(({roomid}) => {
+				this.sdk.openRoom(roomid);
 				this.sdk.sendMessage({
-					...chat,
-					message: `https://${ this.manifest.scope }/barter/${ offer.hash }`
+					roomid,
+					content: {
+						messages: [this.sdk.appLink(`barter/${ offer.hash }`)]
+					}
 				}).catch(() => {});
 			}).catch(() => {});
 		}

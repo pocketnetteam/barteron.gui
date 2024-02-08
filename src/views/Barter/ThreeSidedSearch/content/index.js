@@ -24,10 +24,13 @@ export default {
 			this.sdk.createRoom({
 				name: this.$t("buttonLabels.group_exchange"),
 				members: [offer.address, offer.target.address]
-			}).then(chat => {
+			}).then(({roomid}) => {
+				this.sdk.openRoom(roomid);
 				this.sdk.sendMessage({
-					...chat,
-					message: `https://${ this.manifest.scope }/barter/search?source=${ offer.source.hash }&target=${ offer.target.hash }`
+					roomid,
+					content: {
+						messages: [this.sdk.appLink(`barter/search?source=${ offer.source.hash }&target=${ offer.target.hash }`)]
+					}
 				}).catch(() => {});
 			}).catch(() => {});
 		}
