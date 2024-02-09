@@ -109,7 +109,7 @@ export default {
 
 		renewOffer(offer) {
 			console.log(offer)
-			this.dialog.instance
+			this.dialog?.instance
 				.view("question", this.$t("dialogLabels.offer_renew"))
 				.then(state => {
 					console.log(state ? "yes" : "no")

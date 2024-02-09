@@ -109,7 +109,7 @@ export default {
 
 				/* Sdk is unavailable */
 				if (!this.sdk.sdk) {
-					this.dialog?.view("error", this.$t("dialogLabels.error#-1"));
+					this.dialog?.instance.view("error", this.$t("dialogLabels.error#-1"));
 				}
 			}
 		}, 100);

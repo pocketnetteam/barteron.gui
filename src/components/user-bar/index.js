@@ -73,7 +73,7 @@ export default {
 				}
 
 				if (this.sdk.address && !this.user?.name) {
-					this.dialog.instance.view("warn", this.$t("dialogLabels.pending_reg"));
+					this.dialog?.instance.view("warn", this.$t("dialogLabels.pending_reg"));
 				} else {
 					if (this.user?.name && to) {
 						this.$router.push(to).catch(() => {});
