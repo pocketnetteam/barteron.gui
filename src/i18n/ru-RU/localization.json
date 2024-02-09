@@ -192,7 +192,7 @@
 	"feedbackLabels": {
 		"label": "Отзывы",
 		"title": "Рейтинг",
-		"votes": "Нет голосов | {count} голос | {count} голосов",
+		"votes": "Нет голосов | {count} голос | {count} голоса | {count} голосов",
 		"placeholder": "Оставьте свой отзыв",
 		"empty": "Тут ещё нет отзывов"
 	},
