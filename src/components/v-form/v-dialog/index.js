@@ -3,6 +3,7 @@ export default {
 
 	data() {
 		return {
+			instance: this,
 			visible: false,
 			icon: false,
 			iconColor: "default",
