@@ -8,7 +8,7 @@
 		<Votes
 			:form="true"
 			:items="details?.comments || []"
-			:offerId="item?.hash"
+			:offer="item"
 		/>
 	</v-content>
 </template>
