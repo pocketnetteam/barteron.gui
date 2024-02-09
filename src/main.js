@@ -67,6 +67,54 @@ Vue.mixin({
 					value,
 					default: index === 0
 				}));
+		},
+
+		/**
+			 * Get absolute path from path
+			 * 
+			 * @param {String} path
+			 * 
+			 * @returns {String}
+			 */
+		imageUrl(path) {
+			if (["http", "data:image"].some(str => path?.startsWith && path.startsWith(str))) {
+				return path;
+			} else {
+				try {
+					return require(`@/assets/images/barter/${ path }`)
+				} catch {
+					return null;
+				}
+			}
+		},
+
+		/**
+		 * Create or open room and send message
+		 * 
+		 * @param {Object} data
+		 * @param {String} data.name
+		 * @param {Array} data.members
+		 * @param {Array} [data.messages]
+		 * @param {Array} [data.images]
+		 * @param {Boolean} [data.openRoom]
+		 */
+		sendMessage(data) {
+			this.sdk.createRoom({
+				name: data.name,
+				members: data.members
+			}).then(({roomid}) => {
+				if (data.openRoom) {
+					this.sdk.openRoom(roomid);
+				}
+
+				this.sdk.sendMessage({
+					roomid,
+					content: {
+						messages: data.messages || [],
+						images: data.images || []
+					}
+				}).catch(() => {});
+			}).catch(() => {});
 		}
 	}
 });
