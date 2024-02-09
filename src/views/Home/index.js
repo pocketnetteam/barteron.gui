@@ -1,4 +1,3 @@
-import Vue from "vue";
 import PopularList from "@/components/categories/popular-list/index.vue";
 import BarterList from "@/components/barter/list/index.vue";
 import Banner from "@/components/banner/index.vue";
