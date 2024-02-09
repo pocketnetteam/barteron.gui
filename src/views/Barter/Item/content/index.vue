@@ -6,9 +6,8 @@
 		/>
 
 		<Votes
+			:item="item"
 			:form="true"
-			:items="details?.comments || []"
-			:offer="item"
 		/>
 	</v-content>
 </template>
