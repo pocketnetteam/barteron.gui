@@ -14,6 +14,10 @@ export default {
 			type: Number,
 			default: null
 		},
+		delimeter: {
+			type: String,
+			default: "."
+		},
 		voteable: Boolean
 	},
 
