@@ -27,11 +27,44 @@ export default {
 
 	data() {
 		return {
-			loading: false
+			loading: false,
+			added: [],
+			score: 0,
+			scores: 0
+		}
+	},
+
+	computed: {
+		/**
+		 * Join all given comments
+		 * 
+		 * @returns {Array[@Comment]}
+		 */
+		comments() {
+			return [].concat(this.items, this.added);
 		}
 	},
 
 	methods: {
+		/**
+		 * Store vote
+		 * 
+		 * @param {Number} score
+		 */
+		vote(score) {
+			this.score = score;
+
+			/* Send vote to node */
+			/* this.sdk.setBrtOfferVote({
+				offerId: this.offerId,
+				address: this.sdk.address,
+				value: this.score.toFixed()
+			}); */
+		},
+
+		/**
+		 * Send comment
+		 */
 		submit() {
 			const
 				form = this.$refs.form,
@@ -41,12 +74,15 @@ export default {
 			if (form.validate()) {
 				this.loading = true;
 
-				new this.sdk.models.Comment({
+				/* Send comment to node */
+				const comment = new this.sdk.models.Comment({
 					postid: this.offerId,
-					message: data.feedback
+					message: data.feedback,
+					info: this.score?.toFixed() || ""
 				}).set().then(() => {
-					this.loading = false;
 					feed.content = "";
+					this.loading = false;
+					this.added.push(comment);
 				});
 			}
 		}
