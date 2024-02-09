@@ -12,7 +12,7 @@
 				$og->check();
 				$og->echotags();
 		?>
-		<link rel="icon" href="<%= BASE_URL %>favicon.ico">
+		<link rel="icon" href="<%= BASE_URL %>b_icon.png">
 		<title><%= htmlWebpackPlugin.options.title %></title>
 		<script src="https://<%= process.env.VUE_APP_SDK %>/js/lib/apps/sdk.js"></script>
 		<link rel="stylesheet" href="https://<%= process.env.VUE_APP_SDK %>/js/lib/apps/style.css">
