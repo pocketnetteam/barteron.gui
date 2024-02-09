@@ -590,24 +590,6 @@ class SDK {
 	}
 
 	/**
-	 * Set to barteron account
-	 * 
-	 * @param {Object} data
-	 * @param {String} data.address
-	 * @param {Array} data.tags
-	 * @param {String} data.geohash
-	 * @param {Number} data.radius
-	 * 
-	 * @returns {Promise}
-	 */
-	setBrtAccount(data) {
-		return this.sdk.barteron.account(data).then(result => {
-			Vue.set(this.barteron._accounts, data.address, { ...this.barteron._accounts?.[data.address], ...data });
-			return result;
-		});
-	}
-
-	/**
 	 * Get barteron offers by address
 	 * 
 	 * @param {String} address
@@ -620,33 +602,6 @@ class SDK {
 
 		return this.rpc("getbarteronoffersbyaddress", address).then(offers => {
 			return offers?.map(offer => new Offer(offer)) || [];
-		});
-	}
-
-	/**
-	 * Set barteron offer
-	 * 
-	 * @param {Object} data
-	 * 
-	 * Base
-	 * 
-	 * @param {String} [data.hash]
-	 * @param {String} data.language
-	 * @param {String} data.caption
-	 * @param {String} data.description
-	 * @param {String} data.tag
-	 * @param {Array} data.tags
-	 * @param {String} data.condition
-	 * @param {Array} data.images
-	 * @param {String} data.geohash
-	 * @param {Number} data.price
-	 * 
-	 * @returns {Promise}
-	 */
-	setBrtOffer(data) {
-		return this.sdk.barteron.offer({
-			...data,
-			...{ hash: data.hash?.length === 64 ? data.hash : null }
 		});
 	}
 
@@ -818,16 +773,82 @@ class SDK {
 	}
 
 	/**
+	 * Set to barteron account
+	 * 
+	 * @param {Object} data
+	 * @param {String} data.address
+	 * @param {Array} data.tags
+	 * @param {String} data.geohash
+	 * @param {Number} data.radius
+	 * 
+	 * @returns {Promise}
+	 */
+	setBrtAccount(data) {
+		return this.sdk.barteron.account(data).then(result => {
+			Vue.set(this.barteron._accounts, data.address, { ...this.barteron._accounts?.[data.address], ...data });
+			return result;
+		});
+	}
+
+	/**
 	 * Set barteron offer
 	 * 
 	 * @param {Object} data
 	 * 
 	 * Base
 	 * 
+	 * @param {String} [data.hash]
+	 * @param {String} data.language
+	 * @param {String} data.caption
+	 * @param {String} data.description
+	 * @param {String} data.tag
+	 * @param {Array} data.tags
+	 * @param {String} data.condition
+	 * @param {Array} data.images
+	 * @param {String} data.geohash
+	 * @param {Number} data.price
+	 * 
+	 * @returns {Promise}
+	 */
+	setBrtOffer(data) {
+		return this.sdk.barteron.offer({
+			...data,
+			...{ hash: data.hash?.length === 64 ? data.hash : null }
+		});
+	}
+
+	/**
+	 * Set barteron offer vote
+	 * 
+	 * @param {Object} data
+	 * 
+	 * Base
+	 * 
+	 * @param {String} data.offerId
+	 * @param {String} data.value
+	 * @param {String} data.address
+	 */
+	setBrtOfferVote(data) {
+		return this.sdk.barteron.vote({
+			share: data.offerId,
+			vsaddress: data.address,
+			value: data.value
+		});
+	}
+
+	/**
+	 * Set barteron offer comment
+	 * 
+	 * @param {Object} data
+	 * 
+	 * Base
+	 * 
+	 * @param {String} data.postid
+	 * @param {Object} data.msg
+	 * @param {String} data.msg.message
+	 * @param {String} data.msg.info
 	 * @param {String} [data.parentid]
 	 * @param {String} [data.answerid]
-	 * @param {String} data.postid
-	 * @param {String} data.message
 	 * 
 	 * @returns {Promise}
 	 */
