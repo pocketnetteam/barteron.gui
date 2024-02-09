@@ -25,7 +25,7 @@
 		>
 			<div class="vote">
 				<Score
-					rating="behind"
+					:rating="'behind'"
 					:stars="1"
 					:value="parseFloat(item.info)"
 				/>
