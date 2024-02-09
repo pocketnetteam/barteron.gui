@@ -122,7 +122,7 @@ class SDK {
 				else if (!target?.[address]) $.getUserProfile(address);
 				return target?.[address];
 			}
-		})
+		});
 
 		/* Inner storage */
 		this.barteron = {
