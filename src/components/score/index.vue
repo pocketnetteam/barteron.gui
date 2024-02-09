@@ -9,7 +9,7 @@
 				[`score-${ rating === true ? 'ahead' : rating }`]: true
 			}"
 			v-if="rating"
-		>{{ (value || score).toFixed(1).split('.').join() }}</span>
+		>{{ (value || score).toFixed(1).split('.').join(delimeter) }}</span>
 
 		<div class="stars">
 			<ul>

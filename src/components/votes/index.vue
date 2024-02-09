@@ -8,18 +8,19 @@
 			<Score
 				:rating="true"
 				:stars="5"
-				:value="scores"
-				:voteable="true"
+				:value="votesAverage"
+				:delimeter="','"
+				:voteable="voteable"
 				@change="vote"
 			/>
-			<span>{{ $t('feedbackLabels.votes', { count: 207 }) }}</span>
+			<span>{{ $tc('feedbackLabels.votes', votes?.length || 0) }}</span>
 		</header>
 
 		<main>
-			<ul class="votes">
-				<template v-if="items.length">
+			<ul class="comments">
+				<template v-if="comments.length">
 					<li
-						v-for="(comment, i) in items"
+						v-for="(comment, i) in comments"
 						:key="i"
 					>
 						<Comment :item="comment" />
@@ -33,7 +34,7 @@
 
 			<v-form
 				ref="form"
-				v-if="form"
+				v-if="form && commentable"
 			>
 				<v-textarea
 					ref="feedback"
@@ -43,6 +44,12 @@
 					:placeholder="$t('feedbackLabels.placeholder')"
 				>
 					<template #after>
+						<Score
+							:rating="'behind'"
+							:stars="1"
+							:value="score"
+							v-if="score"
+						/>
 						<div class="buttons">
 							<v-button
 								vType="transparent"

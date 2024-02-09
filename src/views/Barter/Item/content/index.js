@@ -12,10 +12,6 @@ export default {
 	computed: {
 		item() {
 			return (Number.isInteger(this.$route.params.id) ? this.barters.items : this.sdk.barteron.offers)[this.$route.params.id];
-		},
-
-		details() {
-			return this.sdk.barteron.details[this.item?.hash];
 		}
 	}
 }

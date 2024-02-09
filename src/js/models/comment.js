@@ -19,12 +19,12 @@ class Comment {
 		/* Iterable properties */
 		this.hash = data?.hash || data?.hash || null;
 		this.height = data?.height || 0;
-		this.message = data?.p?.s1 ? message : data?.message || "";
-		this.info = data?.p?.s1 ? info : data?.info || "";
-		this.address = data?.s1 || "";
+		this.type = data?.type || 0;
 		this.postid = data?.s3 || data?.postid || "";
 		this.parentid = data?.parentid || "";
-		this.type = data?.type || 0;
+		this.address = data?.s1 || data?.address || "";
+		this.message = data?.p?.s1 ? message : data?.message || "";
+		this.info = data?.p?.s1 ? info : data?.info || "";
 
 		const
 			isMs = (timestamp) => {

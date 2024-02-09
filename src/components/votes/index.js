@@ -18,31 +18,72 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		items: {
-			type: Array,
-			default: () => []
-		},
-		offerId: String
+		item: Object
 	},
 
 	data() {
 		return {
 			loading: false,
-			added: [],
-			score: 0,
-			scores: 0
+			score: 0
 		}
 	},
 
 	computed: {
 		/**
-		 * Join all given comments
+		 * Get offer details
+		 * 
+		 * @returns {Object}
+		 */
+		details() {
+			return this.sdk.barteron.details[this.item?.hash];
+		},
+
+		/**
+		 * Get offer scores
+		 * 
+		 * @returns {Array}
+		 */
+		votes() {
+			return this.details?.offerScores;
+		},
+
+		/**
+		 * Get offer scores average
+		 * 
+		 * @returns {Number}
+		 */
+		votesAverage() {
+			return this.votes?.reduce((a, v) => {
+				return a += v?.i1;
+			}, 0);
+		},
+
+		/**
+		 * Calc that you are already voted
+		 * 
+		 * @returns {Boolean}
+		 */
+		voteable() {
+			return !this.votes?.filter(f => f.s1 === this.sdk.address).pop();
+		},
+
+		/**
+		 * Get all comments for offer
 		 * 
 		 * @returns {Array[@Comment]}
 		 */
 		comments() {
-			return [].concat(this.items, this.added);
-		}
+			return this.details?.comments || [];
+		},
+
+		/**
+		 * Calc that you are already commented
+		 * 
+		 * @returns {Boolean}
+		 */
+		commentable() {
+			return !this.comments?.filter(f => f.address === this.sdk.address).pop();
+		},
 	},
 
 	methods: {
@@ -55,11 +96,16 @@ export default {
 			this.score = score;
 
 			/* Send vote to node */
-			/* this.sdk.setBrtOfferVote({
-				offerId: this.offerId,
-				address: this.sdk.address,
-				value: this.score.toFixed()
-			}); */
+			this.sdk.setBrtOfferVote({
+				offerId: this.item.hash,
+				address: this.item.address,
+				value: this.score
+			}).then(() => {
+				this.votes?.push({
+					i: score,
+					s1: this.sdk.address
+				});
+			});
 		},
 
 		/**
@@ -76,13 +122,17 @@ export default {
 
 				/* Send comment to node */
 				const comment = new this.sdk.models.Comment({
-					postid: this.offerId,
+					postid: this.item.hash,
+					address: this.sdk.address,
 					message: data.feedback,
 					info: this.score?.toFixed() || ""
-				}).set().then(() => {
+				});
+				
+				comment.set().then(() => {
 					feed.content = "";
+					this.score = 0;
 					this.loading = false;
-					this.added.push(comment);
+					this.comments.push(comment);
 				});
 			}
 		}

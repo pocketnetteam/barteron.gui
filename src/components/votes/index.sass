@@ -25,6 +25,8 @@
 			font-size: 1.5em
 
 	.v-form
+		margin-top: $r * 4
+
 		.field
 			.text-counter
 				padding-bottom: 2.5em
@@ -32,6 +34,12 @@
 				&+.counter
 					right: 2.5em
 					padding: .75em
+
+		.score
+			position: absolute
+			bottom: 1px
+			left: 1px
+			padding: $r
 
 		.buttons
 			padding: .05em
@@ -47,9 +55,8 @@
 				&:hover
 					color: $blue
 
-	.votes
+	.comments
 		+resetList()
-		margin-bottom: $r * 4
 
 		> li
 			border-top: 1px solid $beerus
@@ -59,65 +66,65 @@
 			&:last-child
 				margin-bottom: 0
 
-.comment
-	font-size: .85rem
-	display: flex
-	align-items: center
-	gap: $r * 2
-
-	.comment-left
-		align-self: flex-start
-
-		.avatar
-			display: flex
-			border-radius: 50%
-			text-decoration: none
-			overflow: hidden
-			height: 24px
-			width: 24px
-
-			*
-				border-radius: 50%
-
-			i
-				background-color: var(--color, rgba(255, 179, 25, 1))
-				color: rgba(255, 255, 255, 1)
-				display: flex
-				font-size: .9em
-				font-style: normal
-				line-height: 0
-				align-items: center
-				justify-content: center
-				height: 100%
-				width: 100%
-				
-			img
-					display: block
-					height: 100%
-					width: 100%
-
-	.comment-body
-		color: $popo
-		display: flex
-		flex-direction: column
-		gap: $r
-
-		time
-			color: $trunks
-
-		p
-			color: $popo
-			font-size: .8rem
-			margin: 0
-
-	.comment-right
-		margin-left: auto
-
-		.rating
-			background: $goku
-			border-radius: 12px
+		.comment
+			font-size: .85rem
 			display: flex
 			align-items: center
-			gap: $r / 2
-			font-size: 1rem
-			padding: $r * 1.15 $r * 1.75
+			gap: $r * 2
+
+			.comment-left
+				align-self: flex-start
+
+				.avatar
+					display: flex
+					border-radius: 50%
+					text-decoration: none
+					overflow: hidden
+					height: 24px
+					width: 24px
+
+					*
+						border-radius: 50%
+
+					i
+						background-color: var(--color, rgba(255, 179, 25, 1))
+						color: rgba(255, 255, 255, 1)
+						display: flex
+						font-size: .9em
+						font-style: normal
+						line-height: 0
+						align-items: center
+						justify-content: center
+						height: 100%
+						width: 100%
+						
+					img
+							display: block
+							height: 100%
+							width: 100%
+
+			.comment-body
+				color: $popo
+				display: flex
+				flex-direction: column
+				gap: $r
+
+				time
+					color: $trunks
+
+				p
+					color: $popo
+					font-size: .8rem
+					margin: 0
+
+			.comment-right
+				margin-left: auto
+
+				.vote
+					background: $goku
+					border-radius: 12px
+					display: flex
+					align-items: center
+					gap: $r / 2
+					font-size: 1rem
+					padding: $r * 1.15 $r * 1.75
