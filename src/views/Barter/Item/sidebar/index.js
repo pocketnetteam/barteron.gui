@@ -72,7 +72,7 @@ export default {
 		 */
 		createRoom(offer) {
 			this.sendMessage({
-				name: this.item.caption,
+				name: offer.caption,
 				members: [this.address],
 				messages: [this.sdk.appLink(`barter/${ offer.hash }`)],
 				openRoom: true
