@@ -1,7 +1,7 @@
 <template>
 	<div :class="{
 		score: true,
-		voteable: value === null
+		voteable: voteable && !voted
 	}">
 		<span
 			:class="{
@@ -9,23 +9,23 @@
 				[`score-${ rating === true ? 'ahead' : rating }`]: true
 			}"
 			v-if="rating"
-		>{{ (value ?? score).toFixed(1).split('.').join() }}</span>
+		>{{ (value || score).toFixed(1).split('.').join() }}</span>
 
 		<div class="stars">
 			<ul>
 				<li
 					v-for="index in stars"
-					:key="`bg-${index}`"
+					:key="`bg-${ index }`"
 				><i class="fa fa-star"></i></li>
 			</ul>
 
 			<ul
 				class="padded"
-				:style="{ '--r': value || 0 }"
+				:style="{ '--r': value || score }"
 			>
 				<li
 					v-for="index in stars"
-					:key="`fg-${index}`"
+					:key="`fg-${ index }`"
 					:class="{ voted: index <= score }"
 					@click="change(index)"
 				><i class="fa fa-star"></i></li>
