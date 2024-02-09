@@ -23,12 +23,12 @@
 			class="comment-right"
 			v-if="item.info"
 		>
-			<div class="rating">
+			<div class="vote">
 				<Score
+					rating="behind"
 					:stars="1"
 					:value="parseFloat(item.info)"
 				/>
-				<strong>{{ item.info }}</strong>
 			</div>
 		</div>
 	</article>
