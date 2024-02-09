@@ -192,7 +192,7 @@
 	"feedbackLabels": {
 		"label": "Feedbacks",
 		"title": "Rating",
-		"votes": "{count} votes",
+		"votes": "No votes | {count} vote | {count} votes",
 		"placeholder": "Leave your feedback here",
 		"empty": "There is no feedbacks yet"
 	},
