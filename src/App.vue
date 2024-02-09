@@ -80,7 +80,7 @@ export default {
 			await this.sdk.getUserProfile(address);
 
 			/* Create barteron account automatically */
-			if (address && !account?.[0]) {
+			if (address && account && !account[0]) {
 				account[0] = new this.sdk.models.Account({ address }).set();
 			}
 
