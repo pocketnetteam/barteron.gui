@@ -231,6 +231,17 @@ class SDK {
 	}
 
 	/**
+	 * Get local route from data
+	 * 
+	 * @param {String} route
+	 * 
+	 * @returns {String}
+	 */
+	getRoute(route) {
+		return this.sdk.getroute(route);
+	}
+
+	/**
 	 * Create room in chat
 	 * 
 	 * @param {Object} request
@@ -355,7 +366,6 @@ class SDK {
 	 * 
 	 * @returns {Promise}
 	 */
-	permissionsDialog = {}
 	requestPermissions(permissions, allowUnsigned = ["location"]) {
 		return this.isLoggedIn().then(state => {
 			if (!state && !permissions.filter(p => allowUnsigned.includes(p)).pop()) {
