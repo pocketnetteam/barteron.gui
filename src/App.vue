@@ -61,16 +61,9 @@ export default {
 	},
 
 	provide() {
-		const dialog = {};
-
-		Object.defineProperty(dialog, "instance", {
-				enumerable: true,
-				get: () => this.dialog,
-		});
-
 		return {
-			dialog
-		}
+			dialog: new Proxy({}, { get: () => this.dialog })
+		};
 	},
 
 	methods: {
@@ -96,7 +89,6 @@ export default {
 		/* Get appInfo and bastyon profile */
 		await this.sdk.getAppInfo();
 		await this.sdk.getUserProfile(address);
-		
 
 		/* Create barteron account automatically */
 		if (address && !account?.[0]) {
@@ -115,6 +107,7 @@ export default {
 				clearInterval(interval);
 				this.dialog = this.$refs.dialog;
 
+				/* Sdk is unavailable */
 				if (!this.sdk.sdk) {
 					this.dialog?.view("error", this.$t("dialogLabels.error#-1"));
 				}
