@@ -19,13 +19,16 @@
 			<p>{{ item.message }}</p>
 		</div>
 
-		<div class="comment-right">
+		<div
+			class="comment-right"
+			v-if="item.info"
+		>
 			<div class="rating">
 				<Score
 					:stars="1"
-					:value="3.5"
+					:value="parseFloat(item.info)"
 				/>
-				<strong>3.5</strong>
+				<strong>{{ item.info }}</strong>
 			</div>
 		</div>
 	</article>

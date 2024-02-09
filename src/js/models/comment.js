@@ -14,12 +14,13 @@ class Comment {
 	 */
 	constructor(data) {
 		/* Extract JSON values and format object */
-		const { message } = JSON.parse(data?.p?.s1 || '{"message":""}');
+		const { message, info } = JSON.parse(data?.p?.s1 || '{"message":"", "info":""}');
 		
 		/* Iterable properties */
 		this.hash = data?.hash || data?.hash || null;
 		this.height = data?.height || 0;
-		this.message = data?.p?.s1 ? message : data?.message;
+		this.message = data?.p?.s1 ? message : data?.message || "";
+		this.info = data?.p?.s1 ? info : data?.info || "";
 		this.address = data?.s1 || "";
 		this.postid = data?.s3 || data?.postid || "";
 		this.parentid = data?.parentid || "";
@@ -64,7 +65,16 @@ class Comment {
 	 * @param {Object} [data]
 	 */
 	set(data) {
-		return this.sdk.setBrtComment({ ...this.update(data) });
+		this.update(data);
+
+		return this.sdk.setBrtComment({
+			postid: this.postid,
+			parentid: this.parentid,
+			msgparsed: {
+				message: this.message,
+				info: this.info
+			}
+		});
 	}
 
 	/**

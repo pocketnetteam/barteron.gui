@@ -8,7 +8,9 @@
 			<Score
 				:rating="true"
 				:stars="5"
-				:value="3.5"
+				:value="scores"
+				:voteable="true"
+				@change="vote"
 			/>
 			<span>{{ $t('feedbackLabels.votes', { count: 207 }) }}</span>
 		</header>
