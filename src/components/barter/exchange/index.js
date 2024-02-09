@@ -16,25 +16,6 @@ export default {
 
 	methods: {
 		/**
-		 * Get absolute path from path
-		 * 
-		 * @param {String} path
-		 * 
-		 * @returns {String}
-		 */
-		imageUrl(path) {
-			if (["http", "data:image"].some(str => path?.startsWith(str))) {
-				return path;
-			} else {
-				try {
-					return require(`@/assets/images/barter/${ path }`)
-				} catch {
-					return null;
-				}
-			}
-		},
-
-		/**
 		 * Propose excange your offer to seller's offer
 		 */
 		proposeExchange() {

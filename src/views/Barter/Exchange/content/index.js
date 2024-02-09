@@ -48,18 +48,12 @@ export default {
 		 * @param {@Offer} offer
 		 */
 		createRoom(offer) {
-			this.sdk.createRoom({
+			this.sendMessage({
 				name: this.offer.caption,
-				members: [offer.address]
-			}).then(({roomid}) => {
-				this.sdk.openRoom(roomid);
-				this.sdk.sendMessage({
-					roomid,
-					content: {
-						messages: [this.sdk.appLink(`barter/${ this.offer.hash }`)]
-					}
-				}).catch(() => {});
-			}).catch(() => {});
+				members: [offer.address],
+				messages: [this.sdk.appLink(`barter/${ this.offer.hash }`)],
+				openRoom: true
+			});
 		}
 	},
 

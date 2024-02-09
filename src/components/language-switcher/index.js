@@ -30,8 +30,9 @@ export default {
 		 * Set locale
 		 * 
 		 * @param {String|Object} item
+		 * @param {Boolean} store
 		 */
-		selectLanguage(item) {
+		selectLanguage(item, store) {
 			const selected = (() => {
 				if (item?.value) {
 					return item;
@@ -41,7 +42,7 @@ export default {
 			})();
 
 			this.$root.$i18n.locale = selected.value;
-			localeStore.set(selected.value);
+			if (store) localeStore.set(selected.value);
 		}
 	},
 

@@ -3,19 +3,35 @@
 		<v-dialog ref="dialog" />
 
 		<template v-if="sdk.sdk">
-			<transition type="fade" v-if="loading">
+			<transition
+				type="fade"
+				v-if="loading"
+			>
 				<loader :loading="loading" />
 			</transition>
 
-			<template v-else>
+			<template v-if="!loading">
 				<v-header />
 
 				<section id="main">
 					<router-view />
-					<div id="container" v-if="hasComponents(['aside', 'content', 'sidebar'])">
-						<router-view name="aside" />
-						<router-view name="content" />
-						<router-view name="sidebar" />
+
+					<div
+						id="container"
+						v-if="hasComponents(['aside', 'content', 'sidebar'])"
+					>
+						<router-view
+							name="aside"
+							v-if="hasComponents(['aside'])"
+						/>
+						<router-view
+							name="content"
+							v-if="hasComponents(['content'])"
+						/>
+						<router-view
+							name="sidebar"
+							v-if="hasComponents(['sidebar'])"
+						/>
 					</div>
 				</section>
 
@@ -45,16 +61,9 @@ export default {
 	},
 
 	provide() {
-		const dialog = {};
-
-		Object.defineProperty(dialog, "instance", {
-				enumerable: true,
-				get: () => this.dialog,
-		});
-
 		return {
-			dialog
-		}
+			dialog: new Proxy({}, { get: () => this.dialog })
+		};
 	},
 
 	methods: {
@@ -82,21 +91,9 @@ export default {
 		await this.sdk.getUserProfile(address);
 
 		/* Create barteron account automatically */
-		if (address && account) {
-			if (!account?.[0]) account[0] = new this.sdk.models.Account({ address }).set();
+		if (address && !account?.[0]) {
+			account[0] = new this.sdk.models.Account({ address }).set();
 		}
-
-		/* Watch for dialog */
-		const interval = setInterval(() => {
-			if (this.$refs.dialog) {
-				clearInterval(interval);
-				this.dialog = this.$refs.dialog;
-
-				if (!this.sdk.sdk) {
-					this.dialog?.view("error", this.$t("dialogLabels.error#-1"));
-				}
-			}
-		}, 100);
 
 		/* Support urls from parent window */
 		this.sdk.on("changestate", ({ route }) => {
@@ -104,6 +101,20 @@ export default {
 			this.$router.push({ path: route });
 		});
 
+		/* Watch for dialog */
+		const interval = setInterval(() => {
+			if (this.$refs.dialog) {
+				clearInterval(interval);
+				this.dialog = this.$refs.dialog;
+
+				/* Sdk is unavailable */
+				if (!this.sdk.sdk) {
+					this.dialog?.instance.view("error", this.$t("dialogLabels.error#-1"));
+				}
+			}
+		}, 100);
+
+		/* Hide preloader */
 		this.loading = false;
 	}
 }

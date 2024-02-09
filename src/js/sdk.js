@@ -122,7 +122,7 @@ class SDK {
 				else if (!target?.[address]) $.getUserProfile(address);
 				return target?.[address];
 			}
-		})
+		});
 
 		/* Inner storage */
 		this.barteron = {
@@ -446,8 +446,6 @@ class SDK {
 	async getLocation() {
 		const isGranted = await this.checkPermission("geolocation");
 
-		console.log(isGranted);
-		
 		if (isGranted) {
 			return this.sdk.get.geolocation().then(location => {
 				this.lastresult = location;

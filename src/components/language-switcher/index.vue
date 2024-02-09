@@ -5,7 +5,7 @@
 		vSize="xs"
 		:dropdown="localesList"
 		ref="locale"
-		@selected="selectLanguage"
+		@selected="(item) => selectLanguage(item, true)"
 	>
 		<span class="value"></span>
 	</v-button>

@@ -179,25 +179,6 @@ export default {
 			return arguments[arguments.length - 1];
 		},
 
-		/**
-		 * Get absolute path from path
-		 * 
-		 * @param {String} path
-		 * 
-		 * @returns {String}
-		 */
-		imageUrl(path) {
-			if (["http", "data:image"].some(str => path?.startsWith(str))) {
-				return path;
-			} else {
-				try {
-					return require(`@/assets/images/barter/${ path }`)
-				} catch {
-					return null;
-				}
-			}
-		},
-
 		imageZoom(e) {
 			const
 				picture = this.$refs.picture,
