@@ -68,6 +68,33 @@ export default {
 
 	methods: {
 		/**
+		 * Initialize app
+		 */
+		async setup() {
+			const
+				address = await this.sdk.getAddress(),
+				account = await this.sdk.getBrtAccount(address);
+
+			/* Get appInfo and bastyon profile */
+			await this.sdk.getAppInfo();
+			await this.sdk.getUserProfile(address);
+
+			/* Create barteron account automatically */
+			if (address && !account?.[0]) {
+				account[0] = new this.sdk.models.Account({ address }).set();
+			}
+
+			/* Support urls from parent window */
+			this.sdk.on("changestate", (data) => {
+				console.log('bastyon -> barteron: ' + data, this.sdk.getRoute(data));
+				this.$router.push(this.sdk.getRoute(data));
+			});
+
+			/* Hide preloader */
+			this.loading = false;
+		},
+
+		/**
 		 * Check is components includes given names
 		 * 
 		 * @param {Array} names
@@ -81,26 +108,7 @@ export default {
 		}
 	},
 
-	async mounted() {
-		const
-			address = await this.sdk.getAddress(),
-			account = await this.sdk.getBrtAccount(address);
-
-		/* Get appInfo and bastyon profile */
-		await this.sdk.getAppInfo();
-		await this.sdk.getUserProfile(address);
-
-		/* Create barteron account automatically */
-		if (address && !account?.[0]) {
-			account[0] = new this.sdk.models.Account({ address }).set();
-		}
-
-		/* Support urls from parent window */
-		this.sdk.on("changestate", ({ route }) => {
-			console.log('bastyon -> barteron: ' + route)
-			this.$router.push({ path: route });
-		});
-
+	mounted() {
 		/* Watch for dialog */
 		const interval = setInterval(() => {
 			if (this.$refs.dialog) {
@@ -108,14 +116,13 @@ export default {
 				this.dialog = this.$refs.dialog;
 
 				/* Sdk is unavailable */
-				if (!this.sdk.sdk) {
+				if (!this.sdk?.sdk) {
 					this.dialog?.instance.view("error", this.$t("dialogLabels.error#-1"));
+				} else {
+					this.setup();
 				}
 			}
 		}, 100);
-
-		/* Hide preloader */
-		this.loading = false;
 	}
 }
 </script>
