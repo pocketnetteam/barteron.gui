@@ -22,7 +22,7 @@ export default {
 			type: Array,
 			default: () => []
 		},
-		offerId: String
+		offer: Object
 	},
 
 	data() {
@@ -55,11 +55,11 @@ export default {
 			this.score = score;
 
 			/* Send vote to node */
-			/* this.sdk.setBrtOfferVote({
-				offerId: this.offerId,
-				address: this.sdk.address,
+			this.sdk.setBrtOfferVote({
+				offerId: this.offer.hash,
+				address: this.offer.address,
 				value: this.score.toFixed()
-			}); */
+			});
 		},
 
 		/**
@@ -76,7 +76,7 @@ export default {
 
 				/* Send comment to node */
 				const comment = new this.sdk.models.Comment({
-					postid: this.offerId,
+					postid: this.offer.hash,
 					message: data.feedback,
 					info: this.score?.toFixed() || ""
 				}).set().then(() => {

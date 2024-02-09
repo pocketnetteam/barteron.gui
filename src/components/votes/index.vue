@@ -9,6 +9,7 @@
 				:rating="true"
 				:stars="5"
 				:value="scores"
+				:delimeter="','"
 				:voteable="true"
 				@change="vote"
 			/>
