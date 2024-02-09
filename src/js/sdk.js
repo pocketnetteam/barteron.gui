@@ -665,7 +665,7 @@ class SDK {
 						} else if (key === "comments") {
 							data[key] = details[key]?.filter(f => f.s3 === hash).map(comment => new Comment(comment)) || [];
 						} else {
-							data[key] = details[key]?.filter(f => f.hash === hash) || [];
+							data[key] = details[key]?.filter(f => f.s2 === hash) || [];
 						}
 					}
 
