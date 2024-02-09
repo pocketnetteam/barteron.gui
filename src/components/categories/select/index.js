@@ -251,9 +251,10 @@ export default {
 
 	mounted() {
 		this.root = this.importChildren(
-			Object.keys(this.categories.items || []).filter(
-				id => !this.categories.items[id].parent
-			)
+			Object.entries(this.categories.items || {})
+				.filter(f => !f[1].parent)
+				.sort((a, b) => a[1].order - b[1].order)
+				.map(m => m[0])
 		);
 
 		if (this.value) this.expand(this.value);

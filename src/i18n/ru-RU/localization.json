@@ -19,7 +19,7 @@
 		"label": "Поиск",
 		"global": "Искать на Barteron",
 		"category": "Искать в {category}",
-		"result": "Ничего не найдено | {count} совпадение найдено | {count} совпадений найдено"
+		"result": "Ничего не найдено | {count} совпадение найдено | {count} совпадения найдено | {count} совпадений найдено"
 	},
 
 	"categoriesLabels": {

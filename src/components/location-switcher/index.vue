@@ -33,12 +33,12 @@
 					</div>
 
 					<div class="row full-width">
-						<div class="col block no-offset">
+						<!-- <div class="col block no-offset"> -->
 							<!-- Label: Static or dynamic location -->
-							<label for="static" class="v-label">{{ $t('locationLabels.preferred') }}</label>
+							<!-- <label for="static" class="v-label">{{ $t('locationLabels.preferred') }}</label> -->
 
 							<!-- vSwitch (Slide) -->
-							<v-switch
+							<!-- <v-switch
 								id="static"
 								type="radio"
 								vType="slide"
@@ -46,8 +46,8 @@
 								:checked="mapType"
 								:label="[$t('locationLabels.dynamic'), $t('locationLabels.static')]"
 								:value="['dynamic', 'static']"
-							/>
-						</div>
+							/> -->
+						<!-- </div> -->
 
 						<div class="col block no-offset">
 							<!-- Label: Radius -->
@@ -72,9 +72,10 @@
 						<!-- vMap -->
 						<v-map
 							ref="map"
-							:center="mapType === 'static' ? geohash : (location || undefined)"
+							:center="/* mapType === 'static' ? */ geohash || (location || undefined)"
 							:allowPosition="true"
 							:allowSelection="true"
+							@change="setMarker"
 							v-if="lightbox"
 						/>
 					</div>

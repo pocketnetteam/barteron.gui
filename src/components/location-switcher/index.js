@@ -6,6 +6,7 @@ export default {
 	data() {
 		return {
 			lightbox: false,
+			mapMarker: null,
 			addr: {
 				fetching: false
 			}
@@ -45,12 +46,10 @@ export default {
 		 * 
 		 * @returns {Array|null}
 		 */
-		location: {
-			cache: false,
-			get() {
-				const location = this.sdk.location;
-				return location.latitude ? Object.values(location) : null; 
-			}
+		location() {
+			const location = this.mapMarker || (!this.sdk.empty(this.sdk.location) ? Object.values(this.sdk.location) : null);
+			
+			return Array.isArray(location) && location.length ? location : null;
 		},
 
 		/**
@@ -114,6 +113,16 @@ export default {
 		 */
 		hideLightbox() {
 			this.lightbox = false;
+		},
+
+		/**
+		 * Informing of last marker
+		 * 
+		 * @param {Array} latlng
+		 */
+		setMarker(latlng) {
+			this.mapMarker = latlng;
+			this.addr = {};
 		},
 
 		/**

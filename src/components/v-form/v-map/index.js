@@ -98,7 +98,7 @@ export default {
 			cache: false,
 			get() {
 				const location = Object.values(this.sdk.location);
-				return location.length ? location : null;
+				return !this.sdk.empty(location) ? location : null;
 			}
 		}
 	},
@@ -109,13 +109,15 @@ export default {
 
 			if (!isGranted) {
 				/* Request for permissons */
-				this.sdk.requestPermissions(["geolocation"]).then(() => {
-					console.log('result', 123)
+				await this.sdk.requestPermissions(["geolocation"]).then(() => {
 					this.$forceUpdate();
 				});
 			}
 
-			if (this.location?.lat) this.mapObject.panTo(this.location);
+			if (this.location?.length) {
+				this.mapObject.panTo(this.location);
+				this.$emit("change", this.location);
+			}
 		}
 	},
 
@@ -126,6 +128,7 @@ export default {
 			this.mapObject.on("click", e => {
 				if (e.originalEvent.target.matches("div.vue2leaflet-map")) {
 					this.marker = Object.values(e.latlng);
+					this.$emit("change", Object.values(e.latlng));
 				}
 			});
 		}

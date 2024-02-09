@@ -99,6 +99,10 @@
 								v-if="category.icon"
 							></i>
 							<span>{{ $t(category.name) }}</span>
+							<i
+								class="expand fa fa-chevron-right"
+								v-if="category.children?.length"
+							></i>
 						</v-button>
 					</li>
 				</ul>
