@@ -48,8 +48,6 @@ export default {
 		 */
 		location() {
 			const location = this.mapMarker || (!this.sdk.empty(this.sdk.location) ? Object.values(this.sdk.location) : null);
-
-			console.log(this.mapMarker, this.sdk.location, location)
 			
 			return Array.isArray(location) && location.length ? location : null;
 		},

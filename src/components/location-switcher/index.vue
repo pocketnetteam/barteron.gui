@@ -72,7 +72,7 @@
 						<!-- vMap -->
 						<v-map
 							ref="map"
-							:center="mapType === 'static' ? geohash : (location || undefined)"
+							:center="/* mapType === 'static' ? */ geohash || (location || undefined)"
 							:allowPosition="true"
 							:allowSelection="true"
 							@change="setMarker"
