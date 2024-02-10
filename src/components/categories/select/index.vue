@@ -51,7 +51,7 @@
 			<!-- Loader -->
 			<template v-if="searching">
 				<div class="searching">
-					<Loader type="circular" />
+					<loader type="circular" />
 				</div>
 			</template>
 
