@@ -89,4 +89,11 @@ const router = new VueRouter({
 	routes
 });
 
+router.beforeEach((to, from, next) => {
+	/* Push to history state */
+	console.log('barteron -> bastyon: ' + to.fullPath)
+
+	next();
+});
+
 export default router;

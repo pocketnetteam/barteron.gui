@@ -32,7 +32,7 @@ class Account {
 		Object.defineProperties(this, {
 			sdk: { value: Vue.prototype.sdk },
 			regdate: { value: data?.additional?.regdate * 1000 || +new Date },
-			rating: { value: data?.additional?.rating ?? 0 }
+			rating: { value: (data?.additional?.rating ?? 0) / 10 }
 		});
 
 		Vue.set(this.sdk.barteron._accounts, this.address, this);
