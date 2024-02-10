@@ -6,6 +6,7 @@
 		border-color: $border
 		color: $color
 
+		@at-root .active#{&},
 		&:hover
 			background: $hover
 			border-color: $hover
@@ -22,6 +23,7 @@
 		background: transparent
 		color: $border
 
+		@at-root .active#{&},
 		&:hover
 			background: $hover
 			border-color: $hover
@@ -34,10 +36,12 @@
 	&.v-button-#{$name}-color
 		color: $background
 
+		@at-root .active#{&},
 		&:hover
 			color: $hoverColor
 
 		&.v-button-#{$name}-color-hover
+			@at-root .active#{&},
 			&:hover
 				color: $hover
 

@@ -86,11 +86,14 @@
 				>
 					<!-- Children -->
 					<li
-						v-for="(category, index) in expanded?.children || root"
+						v-for="(category, index) in list"
 						:key="index"
 					>
 						<v-button
-							:class="{ marked: isMarked(category.id) }"
+							:class="{
+								marked: isMarked(category.id),
+								active: expanded?.id === category.id
+							}"
 							vType="beerus-stroke bulma-color"
 							@click="expand(category.id)"
 						>
