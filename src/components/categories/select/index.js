@@ -37,6 +37,17 @@ export default {
 		}
 	},
 
+	computed: {
+		/**
+		 * List of categories
+		 * 
+		 * @returns {Array}
+		 */
+		list() {
+			return this.expanded?.children?.length ? this.expanded.children : this.root;
+		}
+	},
+
 	methods: {
 		/**
 		 * Show
@@ -202,13 +213,26 @@ export default {
 		 * @param {Number|String} id
 		 */
 		expand(id) {
-			const item = this.categories.items[id];
+			const
+				item = this.categories.items[id],
+				parent = this.categories.items[item?.parent];
 
 			if (item?.id) {
 				this.expanded = {
 					...item,
 					history: this.getParents(item, true),
-					children: this.importChildren(item.children || [])
+					children: (() => {
+						if (item.children?.length) {
+							/* If item have children */
+							return this.importChildren(item.children);
+						} else if (parent?.children?.length) {
+							/* If item haven't children, show list from parent */
+							return this.importChildren(parent.children);
+						} else {
+							/* Show root categories */
+							return [...this.root];
+						}
+					})()
 				}
 	
 				this.clear();
