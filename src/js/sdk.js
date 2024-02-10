@@ -366,7 +366,7 @@ class SDK {
 	 * 
 	 * @returns {Promise}
 	 */
-	requestPermissions(permissions, allowUnsigned = ["location"]) {
+	requestPermissions(permissions, allowUnsigned = ["geolocation"]) {
 		return this.isLoggedIn().then(state => {
 			if (!state && !permissions.filter(p => allowUnsigned.includes(p)).pop()) {
 				return this.openRegistration();
