@@ -91,8 +91,7 @@
 					>
 						<v-button
 							:class="{
-								marked: isMarked(category.id),
-								active: expanded?.id === category.id
+								active: expanded?.id ? (expanded?.id === category.id) : isMarked(category.id)
 							}"
 							vType="beerus-stroke bulma-color"
 							@click="expand(category.id)"
