@@ -784,10 +784,7 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	setBrtAccount(data) {
-		return this.sdk.barteron.account(data).then(result => {
-			Vue.set(this.barteron._accounts, data.address, { ...this.barteron._accounts?.[data.address], ...data });
-			return result;
-		});
+		return this.sdk.barteron.account(data).then(result => result);
 	}
 
 	/**
