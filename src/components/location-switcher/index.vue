@@ -12,14 +12,15 @@
 		></i>
 		<div class="info">
 			<strong class="location">
-				<template>{{ address ?? $t('buttonLabels.unknown') }}</template>
+				<template>{{ lastAddr || address || $t('buttonLabels.unknown') }}</template>
 			</strong>
-			<span class="distance">{{ address ? (radius || 0) + $t('metricsLabels.km') : '~' }}</span>
+			<span class="distance">{{ (radius || 10) + $t('metricsLabels.km') }}</span>
 		</div>
 
 		<template #after>
 			<v-lightbox
 				:visible="lightbox"
+				:overlayClick="false"
 				size="md"
 				title="Location"
 				@onHide="hideLightbox"
@@ -28,7 +29,10 @@
 					<div class="row info">
 						<i class="fa fa-map-marker-alt"></i>
 						<span>
-							<template>{{ address ?? $t('buttonLabels.unknown') }}</template>
+							<template v-if="address">{{ address }}</template>
+							<template v-else>
+								<i class="fa fa-spin fa-spinner"></i>
+							</template>
 						</span>
 					</div>
 
@@ -59,9 +63,9 @@
 									id="radius"
 									name="radius"
 									type="number"
-									min="0"
+									min="1"
 									max="9999"
-									:value="account.radius || 0"
+									:value="radius || 10"
 								/>
 								&nbsp;{{ $t('metricsLabels.km') }}
 							</div>

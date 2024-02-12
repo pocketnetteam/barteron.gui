@@ -2,21 +2,6 @@
 	<div :id="id" :style="{ height, width, '--height': height, '--width': width }">
 		<l-map ref="map" :style="{ height }" :zoom="zoom" :center="marker || center">
 			<template v-if="allowPosition">
-				<l-circle
-					:latLng="location || {lat: center?.[0], lng: center?.[1]}"
-					:radius="50"
-					:stroke="false"
-					:fillColor="'#136aec'"
-					:fillOpacity="0.15"
-				/>
-				<l-circle-marker
-					:latLng="location || {lat: center?.[0], lng: center?.[1]}"
-					:radius="9"
-					:color="'#fff'"
-					:fillColor="'#2a93ee'"
-					:fillOpacity="1"
-				/>
-
 				<l-control position="bottomleft">
 					<div class="leaflet-bar">
 						<a
@@ -31,9 +16,26 @@
 				</l-control>
 			</template>
 
-			<template v-if="allowSelection || marker || point">
+			<template v-if="allowSelection">
 				<l-marker :latLng="marker || point" v-if="marker || point" />
 				<l-geosearch :options="geosearchOptions" v-if="allowSelection" />
+			</template>
+
+			<template v-if="!allowSelection && point">
+				<l-circle
+					:latLng="point || {lat: center?.[0], lng: center?.[1]}"
+					:radius="50"
+					:stroke="false"
+					:fillColor="'#136aec'"
+					:fillOpacity="0.15"
+				/>
+				<l-circle-marker
+					:latLng="point || {lat: center?.[0], lng: center?.[1]}"
+					:radius="9"
+					:color="'#fff'"
+					:fillColor="'#2a93ee'"
+					:fillOpacity="1"
+				/>
 			</template>
 
 			<l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>

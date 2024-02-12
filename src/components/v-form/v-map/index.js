@@ -123,14 +123,29 @@ export default {
 
 	mounted() {
 		this.mapObject = this.$refs.map.mapObject;
+		const markerAtCenter = (emit) => {
+			const center = this.mapObject.getCenter();
+			this.marker = Object.values(center);
+			
+			if (emit) {
+				this.$emit("change", this.marker);
+			}
+		}
 
 		if(this.allowSelection) {
-			this.mapObject.on("click", e => {
-				if (e.originalEvent.target.matches("div.vue2leaflet-map")) {
-					this.marker = Object.values(e.latlng);
-					this.$emit("change", Object.values(e.latlng));
-				}
-			});
+			this.mapObject
+				.on("click", e => {
+					if (e.originalEvent.target.matches("div.vue2leaflet-map")) {
+						this.marker = Object.values(e.latlng);
+						this.$emit("change", Object.values(e.latlng));
+					}
+				})
+				.on("move", (e) => {
+					if (e?.originalEvent) markerAtCenter();
+				})
+				.on("moveend", this.debounce(() => markerAtCenter(true), 1000));
+
+			markerAtCenter();
 		}
 	}
 }
