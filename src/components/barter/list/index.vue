@@ -47,10 +47,7 @@
 			class="barter-carousel-holder"
 			v-else
 		>
-			<carousel
-				:perPage="4"
-				:navigationEnabled="true"
-			>
+			<carousel>
 				<slide
 					v-for="(item, index) in list"
 					:key="index"

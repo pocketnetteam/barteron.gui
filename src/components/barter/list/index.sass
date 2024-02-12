@@ -3,68 +3,63 @@
 $item-width-max: 294px
 
 .barter-carousel-holder
-	.VueCarousel-wrapper
-		border-radius: 11px 11px 0 0
-		
-	.VueCarousel-slide
-		// display: flex
-		// justify-content: center
+	.vs-carousel
+		.vs-carousel__wrapper
+			border-radius: 11px 11px 0 0
+	
+		.vs-carousel__slide
+			flex: 0 0 25%
 
-		& > *
-			display: block
-			margin: 0 auto
-			max-width: $item-width-max
+			& > *
+				box-sizing: content-box
+				display: block
+				margin: 0 auto
+				padding: 0 9px
+				max-width: $item-width-max
 
-	.VueCarousel-dot
-		background-color: $beerus !important
+	.vs-carousel__arrows
+		+fontAwesome("")
+		background: $primary
+		border: 1px solid $beerus
+		border-radius: 8px
+		cursor: pointer
+		display: flex
+		align-items: center
+		justify-content: center
+		font-size: 0
+		text-align: center
+		margin: 0
+		padding: 8px
+		opacity: .8
+		outline: none
+		top: 72px
+		height: 36px
+		width: 36px
 
-	.VueCarousel-dot--active
-		background-color: $bulma !important
-
-	.VueCarousel-navigation
-		/*  VueCarousel-navigation--disabled */
-		.VueCarousel-navigation-button
-			+fontAwesome("")
-			background: $primary
-			border: 1px solid $beerus
-			border-radius: 8px
-			cursor: pointer
-			display: flex
-			align-items: center
-			justify-content: center
-			font-size: 0
-			text-align: center
-			padding: 8px
-			opacity: .8
-			outline: none
-			top: 95px
-			height: 36px
-			width: 36px
-
-			&:not([class*="--disabled"])
-				&:hover
-					&:before
-						color: $blue
-
-			&[class*="--disabled"]
-				cursor: default
-
+		&:not(:disabled)
+			&:hover
 				&:before
-					color: $trunks
+					color: $blue
+
+		&:disabled
+			cursor: default
 
 			&:before
-				+transition()
-				color: $bulma
-				font-size: 1.4rem
+				color: $trunks
 
-		.VueCarousel-navigation-prev
-			&:before
-				content: "\f104"
+		&:before
+			+transition()
+			color: $bulma
+			font-size: 1.4rem
 
-		.VueCarousel-navigation-next
-			&:before
-				content: "\f105"
-				margin: 0 0 0 3px
+	.vs-carousel__arrows--left
+		&:before
+			content: "\f104"
+
+	.vs-carousel__arrows--right
+		&:before
+			content: "\f105"
+			margin: 0 0 0 3px
 
 .barter-list-holder
 	.barter-track
