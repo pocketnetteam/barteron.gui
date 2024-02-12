@@ -117,7 +117,7 @@ export default {
 				feed = this.$refs.feedback,
 				data = form.serialize();
 
-			if (form.validate()) {
+			if (form.validate() && !this.loading) {
 				this.loading = true;
 
 				/* Create comment model */
