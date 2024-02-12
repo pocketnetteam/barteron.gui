@@ -13,6 +13,7 @@ export default {
 
 	data() {
 		return {
+			fetching: true,
 			newFromGoods: [],
 			mayMatchExchanges: []
 		}
@@ -22,7 +23,10 @@ export default {
 		/* Get new offers */
 		this.newFromGoods = await this.sdk.getBrtOffersFeed({
 			pageSize: 100
-		}).then(offers => offers.filter(offer => offer.active));
+		}).then(offers => {
+			this.fetching = false;
+			return offers.filter(offer => offer.active);
+		});
 		
 		const
 			address = this.sdk.address,

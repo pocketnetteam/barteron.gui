@@ -14,6 +14,14 @@
 					<div class="curve"></div>
 				</div>
 			</template>
+
+			<template v-if="type === 'offer-tile'">
+				<div class="loader-image"></div>
+				<div class="loader-text loader-text-controls"></div>
+				<div class="loader-text"></div>
+				<div class="loader-text"></div>
+				<div class="loader-text"></div>
+			</template>
 		</div>
 	</div>
 </template>

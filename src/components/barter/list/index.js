@@ -1,10 +1,13 @@
+import Loader from "@/components/loader/index.vue";
 import BarterItem from "../item/index.vue";
-import { Carousel, Slide } from "vue-carousel";
+import { Carousel, Slide } from "vue-snap";
+import "vue-snap/dist/vue-snap.css";
 
 export default {
 	name: "BarterList",
 
 	components: {
+		Loader,
 		BarterItem,
 		Carousel,
 		Slide
@@ -23,6 +26,17 @@ export default {
 		customLink: {
 			type: [String, Object, Function],
 			default: null
+		},
+		loaderState: Boolean,
+		loaderItems: {
+			type: Number,
+			default: 4
+		}
+	},
+
+	computed: {
+		list() {
+			return this.loaderState ? this.loaderItems : this.items;
 		}
 	}
 }

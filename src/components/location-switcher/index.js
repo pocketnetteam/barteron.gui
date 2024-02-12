@@ -9,7 +9,8 @@ export default {
 			mapMarker: null,
 			addr: {
 				fetching: false
-			}
+			},
+			lastAddr: null
 		}
 	},
 
@@ -77,24 +78,31 @@ export default {
 				if (!this.addr?.country) {
 					const location = this.account?.static ? this.geohash : this.location;
 	
-					if (
-						!this.addr.fetching &&
-						location
-					) {
+					if (!this.addr.fetching && location) {
 						this.addr.fetching = true;
 	
 						this.sdk.geoLocation(location)
 							.then(result => {
-								if (result?.address) this.$set(this, "addr", { ...this.addr, ...result.address });
+								if (result?.address) {
+									this.$set(this, "addr", {
+										...this.addr,
+										...result.address,
+										lastUpdate: +new Date
+									});
+								}
 							});
 					}
 	
 					return null;
 				} else {
-					return [
+					const last = [
 						this.addr.country,
 						this.addr.city || this.addr.town || this.addr.county
 					].filter(a => a).join(", ");
+
+					if (!this.lightbox) this.lastAddr = last;
+
+					return last;
 				}
 			}
 		}
@@ -122,7 +130,10 @@ export default {
 		 */
 		setMarker(latlng) {
 			this.mapMarker = latlng;
-			this.addr = {};
+
+			if (+new Date - this.addr.lastUpdate > 1000) {
+				this.addr = {};
+			}
 		},
 
 		/**
@@ -142,7 +153,10 @@ export default {
 				geohash: GeoHash.encodeGeoHash.apply(null, center || this.location),
 				static: data.static === "static",
 				radius: Number(data.radius)
-			}).then(() => this.hideLightbox());
+			});
+
+			this.lastAddr = null;
+			this.hideLightbox();
 		}
 	}
 }

@@ -14,12 +14,15 @@
 			<PopularList :items="favorites" />
 		</section> -->
 
-		<section v-if="newFromGoods?.length">
-			<h1>{{ $t('new_from_goods') }}</h1>
-			<BarterList
-				:items="newFromGoods"
-				:carousel="true"
-			/>
+		<section>
+			<template>
+				<h1>{{ $t('new_from_goods') }}</h1>
+				<BarterList
+					:items="newFromGoods"
+					:loaderState="fetching"
+					:carousel="true"
+				/>
+			</template>
 		</section>
 
 		<!-- <section>

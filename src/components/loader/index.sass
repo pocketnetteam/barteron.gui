@@ -32,8 +32,15 @@ $circular-scale: 1
 		left: 50%
 		top: 50%
 		transform: translate(-50%, -50%)
-		height: 40px
-		width: 40px
+		height: 100%
+		width: 100%
+
+@mixin linear($color1, $color2, $color3, $height: 1rem, $duration: 10s)
+	animation: linear-slide $duration linear forwards infinite
+	background: $color3
+	background: linear-gradient(to right, $color1 8%, $color2 18%, $color3 33%)
+	position: relative
+	height: $height
 
 .overlay
 	display: flex
@@ -116,6 +123,37 @@ $circular-scale: 1
 .type-circular .loader
 	+circular($circular-color1, $circular-color2, $circular-scale)
 
+/* Loader: offer-tile */
+.type-offer-tile .loader
+	width: 100%
+
+	.loader-image
+		+linear($gray, $lightgray, $gray, 180px, 30s)
+		border-radius: 11px
+		margin-bottom: .9em
+
+	.loader-text
+		+linear($gray, $lightgray, $gray, 1rem, 30s)
+		position: relative
+		margin-bottom: .6em
+
+		&::after
+			background: #fff
+			position: absolute
+			top: 0
+			left: 0
+			right: 0
+			height: 100%
+
+	.loader-text-controls
+		&::after
+			content: ""
+			left: 45px
+			right: 17px
+
+	> *:last-child
+		margin-bottom: 0
+
 /* Animation: main */
 
 @keyframes main-curve
@@ -129,3 +167,11 @@ $circular-scale: 1
 
 	100%
 		transform: rotate(360deg)
+
+/* Animation: linear */
+@keyframes linear-slide
+	0%
+		background-position: 0 0
+
+	100%
+		background-position: 10000px 0

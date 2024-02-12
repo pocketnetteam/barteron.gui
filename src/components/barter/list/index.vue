@@ -14,10 +14,15 @@
 				ref="track"
 			>
 				<li
-					v-for="(item, index) in items"
+					v-for="(item, index) in list"
 					:key="index"
 				>
+					<loader
+						type="offer-tile"
+						v-if="loaderState"
+					/>
 					<BarterItem
+						v-else
 						:item="item"
 						:vType="vType"
 						:customLink="customLink"
@@ -42,15 +47,17 @@
 			class="barter-carousel-holder"
 			v-else
 		>
-			<carousel
-				:perPage="4"
-				:navigationEnabled="true"
-			>
+			<carousel>
 				<slide
-					v-for="(item, index) in items"
+					v-for="(item, index) in list"
 					:key="index"
 				>
+					<loader
+						type="offer-tile"
+						v-if="loaderState"
+					/>
 					<BarterItem
+						v-else
 						:item="item"
 						:vType="vType"
 						:customLink="customLink"

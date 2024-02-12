@@ -44,13 +44,13 @@
 <style lang="sass" src="@/css/main.sass"></style>
 <style src="@/assets/font-awesome/css/all.css"></style>
 <script>
-import loader from "@/components/loader/index.vue";
+import Loader from "@/components/loader/index.vue";
 
 export default {
 	name: "Barteron",
 
 	components: {
-		loader
+		Loader
 	},
 
 	data() {
