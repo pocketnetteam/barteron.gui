@@ -93,14 +93,14 @@ export default {
 		 * @param {Number} score
 		 */
 		vote(score) {
-			this.score = score;
-
 			/* Send vote to node */
 			this.sdk.setBrtOfferVote({
 				offerId: this.item.hash,
 				address: this.item.address,
 				value: this.score
 			}).then(() => {
+				this.score = score;
+
 				this.votes?.push({
 					i: score,
 					s1: this.sdk.address
@@ -132,7 +132,7 @@ export default {
 					feed.content = "";
 					this.score = 0;
 					this.loading = false;
-					this.comments.push(comment);
+					this.comments?.push(comment);
 				});
 			}
 		}
