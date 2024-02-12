@@ -93,14 +93,14 @@ export default {
 		 * @param {Number} score
 		 */
 		vote(score) {
-			this.score = score;
-
 			/* Send vote to node */
 			this.sdk.setBrtOfferVote({
 				offerId: this.item.hash,
 				address: this.item.address,
 				value: this.score
 			}).then(() => {
+				this.score = score;
+
 				this.votes?.push({
 					i: score,
 					s1: this.sdk.address
@@ -117,10 +117,10 @@ export default {
 				feed = this.$refs.feedback,
 				data = form.serialize();
 
-			if (form.validate()) {
+			if (form.validate() && !this.loading) {
 				this.loading = true;
 
-				/* Send comment to node */
+				/* Create comment model */
 				const comment = new this.sdk.models.Comment({
 					postid: this.item.hash,
 					address: this.sdk.address,
@@ -128,11 +128,12 @@ export default {
 					info: this.score?.toFixed() || ""
 				});
 				
+				/* Send comment to node and reset fields */
 				comment.set().then(() => {
 					feed.content = "";
 					this.score = 0;
 					this.loading = false;
-					this.comments.push(comment);
+					this.comments?.push(comment);
 				});
 			}
 		}
