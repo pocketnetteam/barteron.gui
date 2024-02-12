@@ -120,7 +120,7 @@ export default {
 			if (form.validate()) {
 				this.loading = true;
 
-				/* Send comment to node */
+				/* Create comment model */
 				const comment = new this.sdk.models.Comment({
 					postid: this.item.hash,
 					address: this.sdk.address,
@@ -128,6 +128,7 @@ export default {
 					info: this.score?.toFixed() || ""
 				});
 				
+				/* Send comment to node and reset fields */
 				comment.set().then(() => {
 					feed.content = "";
 					this.score = 0;
