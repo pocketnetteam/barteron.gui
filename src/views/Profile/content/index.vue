@@ -71,6 +71,8 @@
 							class="tabcontent-holder"
 							:items="offersActive"
 							:vType="bartersView"
+							:loaderState="fetching"
+							:loaderItems="6"
 						>
 							<!-- Date range, views and favorites -->
 							<template #info="{ item }" v-if="isMyProfile">
