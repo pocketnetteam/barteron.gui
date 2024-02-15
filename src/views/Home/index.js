@@ -28,7 +28,7 @@ export default {
 			this.fetching = true;
 
 			this.newFromGoods = await this.sdk.getBrtOffersFeed({
-				localtion: this.account?.geohash || null,
+				location: this.account?.geohash || null,
 				pageSize: 100
 			}).then(offers => {
 				this.fetching = false;
