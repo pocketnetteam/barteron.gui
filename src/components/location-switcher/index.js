@@ -39,9 +39,7 @@ export default {
 		 * @returns {Array|null}
 		 */
 		location() {
-			const location = this.mapMarker || (!this.sdk.empty(this.sdk.location) ? Object.values(this.sdk.location) : null);
-			
-			return Array.isArray(location) && location.length ? location : null;
+			return this.mapMarker || (!this.sdk.empty(this.sdk.location) ? Object.values(this.sdk.location) : this.geohash);
 		},
 
 		/**
@@ -84,10 +82,13 @@ export default {
 
 				return null;
 			} else {
-				return [
+				const position = [
 					this.addr.country,
 					this.addr.city || this.addr.town || this.addr.county
-				].filter(a => a).join(", ");
+				].filter(a => a).join(", ")
+
+				if (!this.lastAddr) this.lastAddr = position;
+				return position;
 			}
 		}
 	},
