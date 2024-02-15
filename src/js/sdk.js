@@ -56,7 +56,7 @@ class SDK {
 	}
 
 	empty(prop) {
-		return prop && !Object.values(prop).length;
+		return prop && (!prop.length || !Object.values(prop).length);
 	}
 
 	cyrb53(str, seed = 0) {
