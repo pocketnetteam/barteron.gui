@@ -16,15 +16,6 @@ export default {
 
 	computed: {
 		/**
-		 * Barteron account
-		 * 
-		 * @returns {@Account}
-		 */
-		account() {
-			return this.sdk.barteron.accounts[this.sdk.address];
-		},
-
-		/**
 		 * Static or dynamic location
 		 * 
 		 * @returns {String}
@@ -59,7 +50,7 @@ export default {
 		 * @returns {Array|null}
 		 */
 		geohash() {
-			if (this.account.geohash) {
+			if (this.account?.geohash) {
 				const { latitude, longitude } = GeoHash.decodeGeoHash(this.account.geohash);
 				return [latitude[0], longitude[0]];
 			} else {
@@ -72,38 +63,31 @@ export default {
 		 * 
 		 * @returns {Object|null}
 		 */
-		address: {
-			cache: false,
-			get() {
-				if (!this.addr?.country) {
-					const location = this.account?.static ? this.geohash : this.location;
-	
-					if (!this.addr.fetching && location) {
-						this.addr.fetching = true;
-	
-						this.sdk.geoLocation(location)
-							.then(result => {
-								if (result?.address) {
-									this.$set(this, "addr", {
-										...this.addr,
-										...result.address,
-										lastUpdate: +new Date
-									});
-								}
-							});
-					}
-	
-					return null;
-				} else {
-					const last = [
-						this.addr.country,
-						this.addr.city || this.addr.town || this.addr.county
-					].filter(a => a).join(", ");
+		address() {
+			if (!this.addr?.country) {
+				const location = /* this.account?.static ? this.geohash : */ this.location;
 
-					if (!this.lightbox) this.lastAddr = last;
+				if (!this.addr.fetching && location) {
+					this.addr.fetching = true;
 
-					return last;
+					this.sdk.geoLocation(location)
+						.then(result => {
+							if (result?.address) {
+								this.$set(this, "addr", {
+									...this.addr,
+									...result.address,
+									fetching: false
+								});
+							}
+						});
 				}
+
+				return null;
+			} else {
+				return [
+					this.addr.country,
+					this.addr.city || this.addr.town || this.addr.county
+				].filter(a => a).join(", ");
 			}
 		}
 	},
@@ -129,9 +113,15 @@ export default {
 		 * @param {Array} latlng
 		 */
 		setMarker(latlng) {
-			this.mapMarker = latlng;
-
-			if (+new Date - this.addr.lastUpdate > 1000) {
+			const
+				aLat = parseInt(this.mapMarker?.[0] || 0),
+				aLon = parseInt(this.mapMarker?.[1] || 0),
+				bLat = parseInt(latlng?.[0] || 0),
+				bLon = parseInt(latlng?.[1] || 0);
+			
+			/* Prevent frequently address request */
+			if (aLat !== bLat || aLon !== bLon) {
+				this.mapMarker = latlng;
 				this.addr = {};
 			}
 		},
@@ -155,8 +145,12 @@ export default {
 				radius: Number(data.radius)
 			});
 
-			this.lastAddr = null;
+			this.lastAddr = this.address;
 			this.hideLightbox();
-		}
+		},
+
+		mounted() {
+			this.lastAddr = this.address;
+		},
 	}
 }

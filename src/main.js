@@ -48,6 +48,24 @@ Vue.mixin({
 		/* Access siblings components in a route */
 		$components() {
 			return Vue.observable(this.$route.matched[0].instances);
+		},
+
+		/**
+		 * Get me
+		 * 
+		 * @returns {Object}
+		 */
+		user() {
+			return this.sdk.accounts[this.sdk.address];
+		},
+
+		/**
+		 * Get my Barteron account
+		 * 
+		 * @returns {@Account}
+		 */
+		account() {
+			return this.sdk.barteron.accounts[this.sdk.address];
 		}
 	},
 
@@ -131,6 +149,20 @@ Vue.mixin({
 					}
 				}).catch(() => {});
 			}).catch(() => {});
+		},
+
+		/**
+		 * Get geohash radius
+		 * 
+		 * @returns {Array}
+		 */
+		getGeoHashRadius() {
+			/* this.range = getHashesNear(
+				{ latitude: 40.455438, longitude: -3.693636 },
+				1,
+				10,
+				"kilometers"
+			) */ // position, precision, radius, units;
 		}
 	}
 });

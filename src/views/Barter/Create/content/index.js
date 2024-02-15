@@ -24,15 +24,6 @@ export default {
 
 	computed: {
 		/**
-		 * Barteron account
-		 * 
-		 * @returns {@Account}
-		 */
-		account() {
-			return this.sdk.barteron.accounts[this.sdk.address];
-		},
-
-		/**
 		 * Get offer data (edit mode)
 		 * 
 		 * @returns {@Offer}
