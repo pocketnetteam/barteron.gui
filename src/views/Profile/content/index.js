@@ -12,6 +12,7 @@ export default {
 	data() {
 		return {
 			offersList: [],
+			fetching: true,
 			bartersView: "tile"
 		}
 	},
@@ -84,9 +85,14 @@ export default {
 		 * 
 		 * @param {String} address 
 		 */
-		async getTabsContent(address) {
+		getTabsContent(address) {
 			/* Get offers list */
-			this.offersList = await this.sdk.getBrtOffers(address);
+			this.fetching = true;
+			
+			this.sdk.getBrtOffers(address).then(offers => {
+				this.offersList = offers;
+				this.fetching = false;
+			});
 		},
 
 		/**

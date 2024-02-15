@@ -1,6 +1,7 @@
 import PopularList from "@/components/categories/popular-list/index.vue";
 import BarterList from "@/components/barter/list/index.vue";
 import Banner from "@/components/banner/index.vue";
+import getHashesNear from "geohashes-near";
 
 export default {
 	name: "Home",
@@ -19,22 +20,26 @@ export default {
 		}
 	},
 
-	async mounted() {
-		/* Get new offers */
-		this.newFromGoods = await this.sdk.getBrtOffersFeed({
-			pageSize: 100
-		}).then(offers => {
-			this.fetching = false;
-			return offers.filter(offer => offer.active);
-		});
-		
-		const
-			address = this.sdk.address,
-			account = this.sdk.barteron.accounts[address];
+	methods: {
+		/**
+		 * Get offers feed
+		 */
+		async getOffersFeed() {
+			this.fetching = true;
 
-			if (address?.length) {
+			this.newFromGoods = await this.sdk.getBrtOffersFeed({
+				localtion: this.account?.geohash || null,
+				pageSize: 100
+			}).then(offers => {
+				this.fetching = false;
+				return offers.filter(offer => offer.active);
+			});
+		},
+
+		async getComplexDeals() {
+			if (this.address?.length) {
 				/* Get my offers list */
-				const myOffers = await this.sdk.getBrtOffers(address)
+				const myOffers = await this.sdk.getBrtOffers(this.address)
 					.then(offers => offers.filter(offer => offer.active));
 	
 				/* Get potential exchange offers */
@@ -45,12 +50,12 @@ export default {
 								myTag: offer.tag,
 								theirTags: (() => {
 									if (offer.tags?.includes("my_list")) {
-										return account?.tags;
+										return this.account?.tags;
 									} else {
 										return offer.tags;
 									}
 								})(),
-								excludeAddresses: [address]
+								excludeAddresses: [this.address]
 							}).then(offers => {
 								if (offers?.[0]?.target) {
 									return offers[0].target.update({ source: offer })
@@ -64,5 +69,17 @@ export default {
 					});
 				}
 			}
+		}
+	},
+
+	watch: {
+		"account.geohash"() {
+			this.getOffersFeed();
+		}
+	},
+
+	mounted() {
+		this.getOffersFeed();
+		this.getComplexDeals();
 	}
 }

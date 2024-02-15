@@ -145,7 +145,7 @@ export default {
 				})
 				.on("moveend", this.debounce(() => markerAtCenter(true), 1000));
 
-			markerAtCenter();
+			markerAtCenter(true);
 		}
 	}
 }

@@ -8,13 +8,13 @@
 		@click="showLightbox"
 	>
 		<i
-			:class="`fa fa-map-marker-alt${ !address ? ' slash' : '' }`"
+			:class="`fa fa-map-marker-alt${ !lastAddr ? ' slash' : '' }`"
 		></i>
 		<div class="info">
 			<strong class="location">
-				<template>{{ lastAddr || address || $t('buttonLabels.unknown') }}</template>
+				<template>{{ lastAddr || $t('buttonLabels.unknown') }}</template>
 			</strong>
-			<span class="distance">{{ (radius || 10) + $t('metricsLabels.km') }}</span>
+			<!-- <span class="distance">{{ (radius || 10) + $t('metricsLabels.km') }}</span> -->
 		</div>
 
 		<template #after>
@@ -29,10 +29,8 @@
 					<div class="row info">
 						<i class="fa fa-map-marker-alt"></i>
 						<span>
-							<template v-if="address">{{ address }}</template>
-							<template v-else>
-								<i class="fa fa-spin fa-spinner"></i>
-							</template>
+							<template v-if="!address"><i class="fa fa-spin fa-spinner"></i></template>
+							<template v-else>{{ address || $t('buttonLabels.unknown') }}</template>
 						</span>
 					</div>
 
@@ -53,13 +51,13 @@
 							/> -->
 						<!-- </div> -->
 
-						<div class="col block no-offset">
+						<!-- <div class="col block no-offset"> -->
 							<!-- Label: Radius -->
-							<label for="radius" class="v-label">{{ $t('locationLabels.radius') }}</label>
+							<!-- <label for="radius" class="v-label">{{ $t('locationLabels.radius') }}</label> -->
 
-							<div class="col">
+							<!-- <div class="col"> -->
 								<!-- Component: vInput -->
-								<v-input
+								<!-- <v-input
 									id="radius"
 									name="radius"
 									type="number"
@@ -69,7 +67,7 @@
 								/>
 								&nbsp;{{ $t('metricsLabels.km') }}
 							</div>
-						</div>
+						</div> -->
 					</div>
 
 					<div class="row">
