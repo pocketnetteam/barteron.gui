@@ -21,13 +21,13 @@
 
 		<div
 			class="comment-right"
-			v-if="item.info"
+			v-if="score"
 		>
 			<div class="vote">
 				<Score
 					:rating="'behind'"
 					:stars="1"
-					:value="parseFloat(item.info)"
+					:value="score"
 				/>
 			</div>
 		</div>
@@ -94,6 +94,15 @@ export default {
 		 */
 		hslColor() {
 			return `--color: ${ this.color.generateHSL(this.user?.name || "User") }`
+		},
+
+		/**
+		 * Get score
+		 * 
+		 * @returns {Number}
+		 */
+		score() {
+			return parseFloat(this.item?.info);
 		}
 	}
 }
