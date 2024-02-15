@@ -50,6 +50,11 @@ Vue.mixin({
 			return Vue.observable(this.$route.matched[0].instances);
 		},
 
+		/* Get bastyon address */
+		address() {
+			return this.sdk.address;
+		},
+
 		/**
 		 * Get me
 		 * 
