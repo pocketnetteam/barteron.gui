@@ -55,8 +55,27 @@ class SDK {
 		return this._currency;
 	}
 
+	/**
+	 * Check if Array/Object is empty
+	 * 
+	 * @param {*} prop
+	 * 
+	 * @returns {*}
+	 */
 	empty(prop) {
-		return prop && (!prop.length || !Object.values(prop).length);
+		return prop && !(Array.isArray(prop) ? prop : !Object.values(prop)).length;
+	}
+
+	/**
+	 * If empty return reference
+	 * 
+	 * @param {*} prop
+	 * @param {*} reference
+	 * 
+	 * @returns {*}
+	 */
+	ifEmpty(prop, reference) {
+		return this.empty(prop) ? reference : prop;
 	}
 
 	cyrb53(str, seed = 0) {
@@ -459,7 +478,8 @@ class SDK {
 		if (isGranted) {
 			return this.sdk.get.geolocation().then(location => {
 				this.lastresult = location;
-				Vue.set(this, "_location", location);
+				const latlng = Object.values(location);
+				Vue.set(this, "_location", latlng);
 				return this._location;
 			}).catch(e => this.setLastResult(e))
 		} else {
