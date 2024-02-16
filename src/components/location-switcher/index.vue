@@ -77,6 +77,8 @@
 							:center="/* mapType === 'static' ? */ geohash || (location || undefined)"
 							:allowPosition="true"
 							:allowSelection="true"
+							:zoom="account?.radius || undefined"
+							@scale="x => mapZoom = x"
 							@change="setMarker"
 							v-if="lightbox"
 						/>

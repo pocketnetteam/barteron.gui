@@ -75,6 +75,9 @@ Vue.mixin({
 	},
 
 	methods: {
+		/* empty: this.sdk.empty,
+		ifEmpty: this.sdk.ifEmpty, */
+
 		/**
 		 * 
 		 * @param {Function} fn
@@ -157,17 +160,50 @@ Vue.mixin({
 		},
 
 		/**
+		 * Truncate geohash depends on zoom
+		 * 
+		 * @param {String} hash
+		 * @param {Number} zoom
+		 * 
+		 * @returns {String}
+		 */
+		truncateGeoHash(hash = "", zoom) {
+			const
+				min = 3, /* Min geohash chars length */
+				max = 18, /* Max possible zoom value */
+				len = Math.ceil(hash.length / max * (zoom < max ? max : zoom));
+
+			return hash.slice(
+				0,
+				len < hash.length ? (len < min ? min : len) : hash.length
+			);
+		},
+
+		/**
 		 * Get geohash radius
 		 * 
-		 * @returns {Array}
+		 * @param {Object} data
+		 * @param {Number} data.latitude
+		 * @param {Number} data.longitude
+		 * @param {Number} [data.precision]
+		 * @param {Number} [data.radius]
+		 * @param {Number} [data.units]
+		 * 
+		 * @returns {String}
 		 */
-		getGeoHashRadius() {
+		getGeoHashRadius({
+			latitude,
+			longitude,
+			precision,
+			radius,
+			units
+		}) {
 			/* this.range = getHashesNear(
-				{ latitude: 40.455438, longitude: -3.693636 },
-				1,
-				10,
-				"kilometers"
-			) */ // position, precision, radius, units;
+				{ latitude, longitude },
+				precision || 1,
+				radius || 1,
+				units || "kilometers"
+			) */;
 		}
 	}
 });

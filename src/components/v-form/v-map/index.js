@@ -97,8 +97,7 @@ export default {
 		location: {
 			cache: false,
 			get() {
-				const location = Object.values(this.sdk.location);
-				return !this.sdk.empty(location) ? location : null;
+				return this.sdk.ifEmpty(this.sdk.location, undefined);
 			}
 		}
 	},
@@ -124,10 +123,14 @@ export default {
 	mounted() {
 		this.mapObject = this.$refs.map.mapObject;
 		const markerAtCenter = (emit) => {
-			const center = this.mapObject.getCenter();
+			const
+				center = this.mapObject.getCenter(),
+				zoom = this.mapObject.getZoom();
+			
 			this.marker = Object.values(center);
 			
 			if (emit) {
+				this.$emit("scale", zoom);
 				this.$emit("change", this.marker);
 			}
 		}
