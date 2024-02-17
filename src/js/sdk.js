@@ -63,7 +63,7 @@ class SDK {
 	 * @returns {*}
 	 */
 	empty(prop) {
-		return prop && !(Array.isArray(prop) ? prop : !Object.values(prop)).length;
+		return !prop || prop && !(Array.isArray(prop) ? prop : !Object.values(prop)).length;
 	}
 
 	/**

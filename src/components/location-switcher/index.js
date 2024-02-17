@@ -90,7 +90,7 @@ export default {
 				return null;
 			} else {
 				const position = (() => {
-					if (this.mapZoom < 5) {
+					if (this.mapZoom && this.mapZoom < 5) {
 						return [ this.addr.country ];
 					} else {
 						return [
@@ -103,6 +103,13 @@ export default {
 				if (!this.lastAddr) this.lastAddr = position;
 				return position;
 			}
+		},
+
+		/**
+		 * Get latest address for top button
+		 */
+		latestAddress() {
+			return this.lastAddr || this.address;
 		}
 	},
 

@@ -12,7 +12,7 @@
 		></i>
 		<div class="info">
 			<strong class="location">
-				<template>{{ lastAddr || $t('buttonLabels.unknown') }}</template>
+				<template>{{ latestAddress || $t('buttonLabels.unknown') }}</template>
 			</strong>
 			<!-- <span class="distance">{{ (radius || 10) + $t('metricsLabels.km') }}</span> -->
 		</div>
