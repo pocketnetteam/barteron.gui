@@ -19,6 +19,7 @@ const
 		return Vue.prototype.sdk.getBrtOfferDeals({
 			...filter,
 			...(search && { search }),
+			location: (this.account?.geohash || "") + "%",
 			theirTags: Number.isInteger(+request?.id) ? [+request.id] : [],
 			pageStart: request?.pageStart || 0,
 			pageSize: request?.pageSize || 10

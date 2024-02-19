@@ -7,10 +7,12 @@ export default {
 		return {
 			lightbox: false,
 			mapMarker: null,
+			mapZoom: null,
 			addr: {
 				fetching: false
 			},
-			lastAddr: null
+			lastAddr: null,
+			saveDisabled: true
 		}
 	},
 
@@ -39,9 +41,13 @@ export default {
 		 * @returns {Array|null}
 		 */
 		location() {
-			const location = this.mapMarker || (!this.sdk.empty(this.sdk.location) ? Object.values(this.sdk.location) : null);
-			
-			return Array.isArray(location) && location.length ? location : null;
+			if (!this.sdk.empty(this.mapMarker)) {
+				return this.mapMarker;
+			} /* else if (!this.sdk.empty(this.sdk.location)) {
+				return Object.values(this.sdk.location);
+			} */ else {
+				return this.geohash;
+			}
 		},
 
 		/**
@@ -67,7 +73,7 @@ export default {
 			if (!this.addr?.country) {
 				const location = /* this.account?.static ? this.geohash : */ this.location;
 
-				if (!this.addr.fetching && location) {
+				if (!this.addr.fetching && !this.sdk.empty(location)) {
 					this.addr.fetching = true;
 
 					this.sdk.geoLocation(location)
@@ -84,11 +90,27 @@ export default {
 
 				return null;
 			} else {
-				return [
-					this.addr.country,
-					this.addr.city || this.addr.town || this.addr.county
-				].filter(a => a).join(", ");
+				const position = (() => {
+					if (this.mapZoom && this.mapZoom < 5) {
+						return [ this.addr.country ];
+					} else {
+						return [
+							this.addr.country,
+							this.addr.city || this.addr.town || this.addr.county
+						]
+					}
+				})().filter(a => a).join(", ")
+
+				if (!this.lastAddr) this.lastAddr = position;
+				return position;
 			}
+		},
+
+		/**
+		 * Get latest address for top button
+		 */
+		latestAddress() {
+			return this.lastAddr || this.address;
 		}
 	},
 
@@ -116,14 +138,30 @@ export default {
 			const
 				aLat = parseInt(this.mapMarker?.[0] || 0),
 				aLon = parseInt(this.mapMarker?.[1] || 0),
-				bLat = parseInt(latlng?.[0] || 0),
-				bLon = parseInt(latlng?.[1] || 0);
+				bLat = parseInt(latlng[0] || 0),
+				bLon = parseInt(latlng[1] || 0);
 			
 			/* Prevent frequently address request */
 			if (aLat !== bLat || aLon !== bLon) {
 				this.mapMarker = latlng;
 				this.addr = {};
+
+				this.debounce(() => {
+					if (this.lightbox) this.saveDisabled = false;
+				}, 1000);
 			}
+		},
+
+		/**
+		 * Reset account location
+		 */
+		reset() {
+			this.account.update({
+				geohash: null
+			});
+
+			this.mapMarker = null;
+			this.saveDisabled = false;
 		},
 
 		/**
@@ -131,16 +169,21 @@ export default {
 		 */
 		submit() {
 			const
-				data = this.$refs.form.serialize(),
 				center = [
 					"marker",
 					"point",
 					"center"
-				].map(p => this.$refs.map?.[p]).filter(p => p).shift();
+				].map(p => this.$refs.map?.[p]).filter(p => p).shift(),
+				hash = GeoHash.encodeGeoHash.apply(null, center || this.location),
+				zoom = this.mapZoom,
+				data = {
+					radius: zoom,
+					...this.$refs.form.serialize()
+				};
 
 			/* Update account with data */
 			this.account.set({
-				geohash: GeoHash.encodeGeoHash.apply(null, center || this.location),
+				geohash: this.truncateGeoHash(hash, zoom),
 				static: data.static === "static",
 				radius: Number(data.radius)
 			});

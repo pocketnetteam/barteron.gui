@@ -82,8 +82,7 @@ export default {
 		 * @returns {Array|null}
 		 */
 		location() {
-			const location = Object.values(this.sdk.location);
-			return location.length ? location : undefined;
+			return this.sdk.ifEmpty(this.sdk.location, undefined);
 		},
 
 		/**

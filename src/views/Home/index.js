@@ -1,7 +1,6 @@
 import PopularList from "@/components/categories/popular-list/index.vue";
 import BarterList from "@/components/barter/list/index.vue";
 import Banner from "@/components/banner/index.vue";
-import getHashesNear from "geohashes-near";
 
 export default {
 	name: "Home",
@@ -28,7 +27,7 @@ export default {
 			this.fetching = true;
 
 			this.newFromGoods = await this.sdk.getBrtOffersFeed({
-				localtion: this.account?.geohash || null,
+				location: (this.account?.geohash || "") + "%",
 				pageSize: 100
 			}).then(offers => {
 				this.fetching = false;
@@ -47,6 +46,7 @@ export default {
 					this.mayMatchExchanges = await Promise.all(
 						myOffers.map(offer => {
 							return this.sdk.getBrtOfferComplexDeals({
+								location: (this.account?.geohash || "") + "%",
 								myTag: offer.tag,
 								theirTags: (() => {
 									if (offer.tags?.includes("my_list")) {
@@ -75,6 +75,7 @@ export default {
 	watch: {
 		"account.geohash"() {
 			this.getOffersFeed();
+			this.getComplexDeals();
 		}
 	},
 

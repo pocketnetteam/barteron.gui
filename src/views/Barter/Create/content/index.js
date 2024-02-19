@@ -44,8 +44,7 @@ export default {
 		 * @returns {Array|null}
 		 */
 		location() {
-			const location = this.sdk.location;
-			return location.latitude ? Object.values(location) : null; 
+			return this.sdk.ifEmpty(this.sdk.location, undefined);
 		},
 
 		/**
