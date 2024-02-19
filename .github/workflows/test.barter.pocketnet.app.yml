@@ -18,7 +18,7 @@ jobs:
           node-version: 16
       - name: Prepare
         run: |
-          npm install yarn
+          npm install --global yarn
           yarn install
           yarn build
       - name: Copy
