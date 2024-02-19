@@ -18,8 +18,8 @@ jobs:
           node-version: 16
       - name: Prepare
         run: |
-          npm i
-          npm run build
+          yarn install
+          yarn build
       - name: Copy
         run: |
           rm -rf /docker/barter/*
