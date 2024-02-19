@@ -11,7 +11,8 @@ export default {
 			addr: {
 				fetching: false
 			},
-			lastAddr: null
+			lastAddr: null,
+			saveDisabled: true
 		}
 	},
 
@@ -42,9 +43,9 @@ export default {
 		location() {
 			if (!this.sdk.empty(this.mapMarker)) {
 				return this.mapMarker;
-			} else if (!this.sdk.empty(this.sdk.location)) {
+			} /* else if (!this.sdk.empty(this.sdk.location)) {
 				return Object.values(this.sdk.location);
-			} else {
+			} */ else {
 				return this.geohash;
 			}
 		},
@@ -144,7 +145,23 @@ export default {
 			if (aLat !== bLat || aLon !== bLon) {
 				this.mapMarker = latlng;
 				this.addr = {};
+
+				this.debounce(() => {
+					if (this.lightbox) this.saveDisabled = false;
+				}, 1000);
 			}
+		},
+
+		/**
+		 * Reset account location
+		 */
+		reset() {
+			this.account.update({
+				geohash: null
+			});
+
+			this.mapMarker = null;
+			this.saveDisabled = false;
 		},
 
 		/**

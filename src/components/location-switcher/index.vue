@@ -8,11 +8,11 @@
 		@click="showLightbox"
 	>
 		<i
-			:class="`fa fa-map-marker-alt${ !lastAddr ? ' slash' : '' }`"
+			:class="`fa fa-map-marker-alt${ !account?.geohash ? ' slash' : '' }`"
 		></i>
 		<div class="info">
 			<strong class="location">
-				<template>{{ latestAddress || $t('buttonLabels.unknown') }}</template>
+				<template>{{ account?.geohash ? lastAddr : $t('buttonLabels.unknown') }}</template>
 			</strong>
 			<!-- <span class="distance">{{ (radius || 10) + $t('metricsLabels.km') }}</span> -->
 		</div>
@@ -87,8 +87,15 @@
 
 				<template #footer>
 					<div class="row full-width right">
-						<div class="buttons-holder h-w">
-							<v-button @click="submit">{{ $t('buttonLabels.save') }}</v-button>
+						<div class="buttons-holder">
+							<v-button
+								:disabled="!account?.geohash"
+								@click="reset"
+							>{{ $t('buttonLabels.reset') }}</v-button>
+							<v-button
+								:disabled="saveDisabled"
+								@click="submit"
+							>{{ $t('buttonLabels.save') }}</v-button>
 						</div>
 					</div>
 				</template>

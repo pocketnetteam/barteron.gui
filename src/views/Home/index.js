@@ -27,7 +27,7 @@ export default {
 			this.fetching = true;
 
 			this.newFromGoods = await this.sdk.getBrtOffersFeed({
-				location: (this.account?.geohash || "").slice(0, 5) + "%",
+				location: (this.account?.geohash || "") + "%",
 				pageSize: 100
 			}).then(offers => {
 				this.fetching = false;
@@ -46,6 +46,7 @@ export default {
 					this.mayMatchExchanges = await Promise.all(
 						myOffers.map(offer => {
 							return this.sdk.getBrtOfferComplexDeals({
+								location: (this.account?.geohash || "") + "%",
 								myTag: offer.tag,
 								theirTags: (() => {
 									if (offer.tags?.includes("my_list")) {
@@ -73,8 +74,8 @@ export default {
 
 	watch: {
 		"account.geohash"() {
-			console.log(123)
 			this.getOffersFeed();
+			this.getComplexDeals();
 		}
 	},
 
