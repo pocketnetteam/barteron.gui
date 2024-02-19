@@ -148,7 +148,7 @@ export default {
 
 				this.debounce(() => {
 					if (this.lightbox) this.saveDisabled = false;
-				}, 1000);
+				}, 1000)();
 			}
 		},
 
