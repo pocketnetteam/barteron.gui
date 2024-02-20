@@ -10,7 +10,7 @@
 
 			<ul>
 				<li
-					v-for="(tab, i) in tabset"
+					v-for="(tab, i) in tabs"
 					:key="i"
 					:class="{ 'active': (active || selected) === tab.tabId }"
 				>
@@ -29,7 +29,7 @@
 		
 		<div :id="active" class="tabcontent">
 			<template
-				v-for="tab in tabset"
+				v-for="tab in tabs"
 			>
 				<slot
 					:name="tab.tabId"
