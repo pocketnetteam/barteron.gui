@@ -7,7 +7,6 @@ import i18n from "./i18n/index.js";
 import Manifest from "../public/b_manifest.json";
 import SDK from "@/js/sdk.js";
 import Categories from "@/js/categories.js";
-import Barters from "@/js/barters.js";
 import Favorites from "@/data/favorites.json";
 
 Vue.config.productionTip = false;
@@ -40,7 +39,6 @@ Vue.component("v-textarea", () => import("@/components/v-form/v-textarea/index.v
 Vue.prototype.manifest = Manifest;
 Vue.prototype.sdk = Vue.observable(new SDK());
 Vue.prototype.categories = Vue.observable(new Categories());
-Vue.prototype.barters = Vue.observable(new Barters());
 Vue.prototype.favorites = Favorites;
 
 Vue.mixin({
@@ -75,7 +73,7 @@ Vue.mixin({
 	},
 
 	methods: {
-		/* empty: this.sdk.empty,
+		/* isEmpty: this.sdk.empty,
 		ifEmpty: this.sdk.ifEmpty, */
 
 		/**
