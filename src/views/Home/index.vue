@@ -41,7 +41,7 @@
 		</section> -->
 
 		<section v-if="viewedList?.length">
-			<h1>Viewed</h1>
+			<h1>{{ $t('profileLabels.viewed') }}</h1>
 			<BarterList
 				:items="viewedList"
 				:carousel="true"
