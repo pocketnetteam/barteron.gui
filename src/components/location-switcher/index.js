@@ -183,12 +183,13 @@ export default {
 
 			/* Update account with data */
 			this.account.set({
-				geohash: this.truncateGeoHash(hash, zoom),
+				geohash: this.mapMarker ? this.truncateGeoHash(hash, zoom) : null,
 				static: data.static === "static",
 				radius: Number(data.radius)
 			});
 
 			this.lastAddr = this.address;
+			this.saveDisabled = true;
 			this.hideLightbox();
 		},
 
