@@ -15,7 +15,8 @@
 				},
 				{
 					tabId: 'favorites',
-					title: `<i class='fa fa-heart'></i> ${ $t('profileLabels.favorites') }`,
+					title: `<i class='fa fa-heart'></i> ${ $t('profileLabels.favorites') } (${ favoriteList.length })`,
+					visible: isMyProfile,
 					active: activeTab === '#favorites'
 				},
 				{
@@ -90,12 +91,12 @@
 									</li>
 								</ul>
 
-								<dl>
-									<!-- <dt><i class="fa fa-eye"></i></dt>
-									<dd>33</dd> -->
+								<!-- <dl>
+									<dt><i class="fa fa-eye"></i></dt>
+									<dd>33</dd>
 									<dt><i class="fa fa-heart"></i></dt>
 									<dd>99</dd>
-								</dl>
+								</dl> -->
 							</template>
 
 							<!-- Edit and find exchange -->
@@ -134,12 +135,12 @@
 									</li>
 								</ul>
 
-								<dl>
-									<!-- <dt><i class="fa fa-eye"></i></dt>
-									<dd>33</dd> -->
+								<!-- <dl>
+									<dt><i class="fa fa-eye"></i></dt>
+									<dd>33</dd>
 									<dt><i class="fa fa-heart"></i></dt>
 									<dd>99</dd>
-								</dl>
+								</dl> -->
 							</template>
 
 							<!-- Edit and find exchange -->
@@ -166,9 +167,13 @@
 
 			<!-- Tab: Favorites -->
 			<template #favorites v-if="isMyProfile">
-				<div class="tabcontent-holder">
-					Favorites
-				</div>
+				<BarterList
+					class="tabcontent-holder"
+					:items="favoriteList"
+					:vType="bartersView"
+					:loaderState="fetching"
+					:loaderItems="6"
+				></BarterList>
 			</template>
 
 			<!-- Tab: Feedbacks -->

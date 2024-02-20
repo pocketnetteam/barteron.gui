@@ -1,4 +1,3 @@
-import viewed from "@/stores/viewed.js";
 import ViewedStore from "@/stores/viewed.js";
 
 export default {

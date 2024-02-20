@@ -1,5 +1,6 @@
 import BarterList from "@/components/barter/list/index.vue";
 import Votes from "@/components/votes/index.vue";
+import LikeStore from "@/stores/like.js";
 
 export default {
 	name: "Content",
@@ -12,6 +13,7 @@ export default {
 	data() {
 		return {
 			offersList: [],
+			favoriteList: [],
 			fetching: true,
 			bartersView: "tile"
 		}
@@ -26,11 +28,7 @@ export default {
 		 * @returns {String}
 		 */
 		address() {
-			const address = this.$route.params.id || this.sdk.address;
-
-			this.getTabsContent(address);
-
-			return address;
+			return this.$route.params.id || this.sdk.address;
 		},
 
 		/**
@@ -93,6 +91,16 @@ export default {
 				this.offersList = offers;
 				this.fetching = false;
 			});
+
+			if (this.isMyProfile && LikeStore.like?.length) {
+				this.sdk.getBrtOffersByHashes(LikeStore.like).then(offers => {
+					this.favoriteList = LikeStore.like.map(hash => {
+						const index = offers.findIndex(offer => offer?.hash === hash);
+	
+						return offers[index];
+					});
+				});
+			}
 		},
 
 		/**
@@ -114,12 +122,15 @@ export default {
 		},
 
 		renewOffer(offer) {
-			console.log(offer)
 			this.dialog?.instance
 				.view("question", this.$t("dialogLabels.offer_renew"))
 				.then(state => {
 					console.log(state ? "yes" : "no")
 				});
 		}
+	},
+	
+	mounted() {
+		this.getTabsContent(this.address);
 	}
 }
