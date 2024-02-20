@@ -78,7 +78,13 @@ export default {
 		 */
 		async getViewed() {
 			if (ViewedStore.viewed?.length) {
-				this.viewedList = await this.sdk.getBrtOffersByHashes(ViewedStore.viewed);
+				const viewed = await this.sdk.getBrtOffersByHashes(ViewedStore.viewed);
+				
+				this.viewedList = ViewedStore.viewed.map(hash => {
+					const index = viewed.findIndex(offer => offer?.hash === hash);
+
+					return viewed[index];
+				});
 			}
 		}
 	},

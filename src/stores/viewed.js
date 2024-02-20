@@ -16,8 +16,6 @@ const
 				}
 
 				this.viewed = [id, ...this.viewed.slice(0, 3)];
-
-				console.log(id, this.viewed)
 				
 				Pinia.set(storageId, this.viewed);
 			}
