@@ -62,7 +62,7 @@
 		</div>
 
 		<div class="box">
-			<Profile :address="address" />
+			<Profile :hash="address" />
 			<ExchangeList
 				:tags="account?.tags || []"
 				:editable="isMyOffer"
