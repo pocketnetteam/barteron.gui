@@ -10,7 +10,7 @@ export default {
 	},
 
 	props: {
-		address: {
+		hash: {
 			type: String
 		}
 	},
@@ -29,7 +29,7 @@ export default {
 		 * @returns {Object}
 		 */
 		user() {
-			return this.sdk.accounts[this.address];
+			return this.sdk.accounts[this.hash];
 		},
 
 		/**
@@ -56,7 +56,7 @@ export default {
 		 * @returns {@Account}
 		 */
 		account() {
-			return this.sdk.barteron.accounts[this.address];
+			return this.sdk.barteron.accounts[this.hash];
 		},
 
 		/**

@@ -4,8 +4,8 @@
 			<div class="col">
 				<router-link
 					class="avatar"
-					:to="{ name: 'profile', params: { id: address } }"
-					v-if="address"
+					:to="{ name: 'profile', params: { id: hash } }"
+					v-if="hash"
 				>
 					<i
 						v-if="!user?.i?.startsWith('http')"
