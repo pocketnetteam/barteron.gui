@@ -78,7 +78,14 @@
 
 				<span class="favorite">
 					<slot name="favorite" v-if="$slots.favorite"></slot>
-					<i class="fa fa-heart" v-else></i>
+					<i
+						:class="{
+							'fa fa-heart': true,
+							'active': hasLike
+						}"
+						@click="setLike"
+						v-else
+					></i>
 				</span>
 			</div>
 
@@ -163,7 +170,13 @@
 
 			<div class="row offer">
 				<div class="favorite">
-					<i class="fa fa-heart"></i>
+					<i
+						:class="{
+							'fa fa-heart': true,
+							'active': hasLike
+						}"
+						@click="setLike"
+					></i>
 				</div>
 
 				<slot name="offer"></slot>
@@ -253,16 +266,22 @@
 							<i class="fa fa-calendar-day"></i>
 							<time>{{ $d(item.time, 'middle', $i18n.locale) }}</time>
 						</li>
-						<li>
+						<!-- <li>
 							<i class="fa fa-heart"></i>
 							<span class="count">32</span>
-						</li>
+						</li> -->
 					</ul>
 				</div>
 
 				<div class="col buttons">
 					<v-button vType="stroke bulma-color bulma-color-hover">
-						<i class="fa fa-heart"></i>
+						<i
+							:class="{
+								'fa fa-heart': true,
+								'active': hasLike
+							}"
+							@click="setLike"
+						></i>
 					</v-button>
 
 					<v-button vType="stroke bulma-color bulma-color-hover">

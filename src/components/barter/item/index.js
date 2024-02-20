@@ -2,6 +2,7 @@ import { GeoHash } from "geohash";
 import ImageLoad from "@/components/image-load/index.vue";
 import Loader from "@/components/loader/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
+import LikeStore from "@/stores/like.js";
 
 export default {
 	name: "BarterItem",
@@ -160,10 +161,26 @@ export default {
 			} else {
 				return this.customLink;
 			}
+		},
+
+		/**
+		 * Get like state
+		 * 
+		 * @returns {Boolean}
+		 */
+		hasLike() {
+			return LikeStore.hasLike(this.item?.hash);
 		}
 	},
 
 	methods: {
+		/**
+		 * Set like state
+		 */
+		setLike() {
+			LikeStore.set(this.item?.hash);
+		},
+
 		/**
 		 * Check return alternative if empty
 		 * 

@@ -164,8 +164,12 @@ div[class^="barter-item-"]
 			cursor: pointer
 			margin: 0
 
-			&:hover
+			&:hover,
+			&.active
 				color: $bulma
+
+			&.active:hover
+				color: $gray
 
 	.title
 		color: $popo
