@@ -3,7 +3,7 @@ import { locales } from "@/i18n/index.js";
 
 const
 	storageId = "locale",
-	localeStore = Pinia.defineStore(storageId, {
+	LocaleStore = Pinia.defineStore(storageId, {
 		state: () => ({
 			locale: Pinia.get(storageId, "")
 		}),
@@ -20,4 +20,4 @@ const
 		}
 	});
 
-export default localeStore();
+export default LocaleStore();
