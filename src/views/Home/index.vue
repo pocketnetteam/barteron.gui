@@ -40,10 +40,10 @@
 			/>
 		</section> -->
 
-		<section>
+		<section v-if="viewedList?.length">
 			<h1>Viewed</h1>
 			<BarterList
-				:items="barters.generate(4)"
+				:items="viewedList"
 				:carousel="true"
 			/>
 		</section>

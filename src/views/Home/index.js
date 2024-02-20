@@ -1,6 +1,7 @@
 import PopularList from "@/components/categories/popular-list/index.vue";
 import BarterList from "@/components/barter/list/index.vue";
 import Banner from "@/components/banner/index.vue";
+import ViewedStore from "@/stores/viewed.js";
 
 export default {
 	name: "Home",
@@ -15,7 +16,8 @@ export default {
 		return {
 			fetching: true,
 			newFromGoods: [],
-			mayMatchExchanges: []
+			mayMatchExchanges: [],
+			viewedList: []
 		}
 	},
 
@@ -69,6 +71,15 @@ export default {
 					});
 				}
 			}
+		},
+
+		/**
+		 * Get viewed list
+		 */
+		async getViewed() {
+			if (ViewedStore.viewed?.length) {
+				this.viewedList = await this.sdk.getBrtOffersByHashes(ViewedStore.viewed);
+			}
 		}
 	},
 
@@ -82,5 +93,6 @@ export default {
 	mounted() {
 		this.getOffersFeed();
 		this.getComplexDeals();
+		this.getViewed();
 	}
 }
