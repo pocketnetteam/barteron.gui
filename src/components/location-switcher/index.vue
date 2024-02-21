@@ -91,7 +91,7 @@
 							<v-button
 								:disabled="!account?.geohash"
 								@click="reset"
-							>{{ $t('buttonLabels.reset') }}</v-button>
+							>{{ $t('buttonLabels.all_regions') }}</v-button>
 							<v-button
 								:disabled="saveDisabled"
 								@click="submit"
