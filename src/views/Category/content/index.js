@@ -19,7 +19,7 @@ const
 		return Vue.prototype.sdk.getBrtOfferDeals({
 			...filter,
 			...(search && { search }),
-			location: (this.account?.geohash || "") + "%",
+			location: (request?.location || "") + "%",
 			theirTags: Number.isInteger(+request?.id) ? [+request.id] : [],
 			pageStart: request?.pageStart || 0,
 			pageSize: request?.pageSize || 10
@@ -85,7 +85,8 @@ export default {
 			/* Send request to node */
 			this.items = await requestItems({
 				id: this.$route.params.id,
-				route: this.$route
+				route: this.$route,
+				location: this.account?.geohash
 			});
 
 			this.pageStart = 0;
@@ -105,7 +106,8 @@ export default {
 			/* Send request to node */
 			this.items = await requestItems({
 				id: this.$route.params.id,
-				route: this.$route
+				route: this.$route,
+				location: this.account?.geohash
 			});
 
 			this.pageStart = 0;
@@ -119,7 +121,8 @@ export default {
 			const items = await requestItems({
 				id: this.$route.params.id,
 				pageStart: ++this.pageStart,
-				route: this.$route
+				route: this.$route,
+				location: this.account?.geohash
 			});
 
 			this.items = this.items.concat(items);
@@ -138,7 +141,8 @@ export default {
 				/* Send request to node */
 				this.items = await requestItems({
 					id: to.params.id,
-					route: to
+					route: to,
+					location: this.account?.geohash
 				});
 			}
 		}
@@ -146,10 +150,13 @@ export default {
 
 	async beforeRouteEnter (to, from, next) {
 		/* Send request to node */
-		const items = await requestItems({
-			id: to.params.id,
-			route: to
-		});
+		const
+			sdk = Vue.prototype.sdk,
+			items = await requestItems({
+				id: to.params.id,
+				route: to,
+				location: sdk.barteron.accounts[sdk.address]?.geohash
+			});
 
 		next(vm => {
 			vm.items = items;
