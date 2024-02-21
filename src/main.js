@@ -169,7 +169,7 @@ Vue.mixin({
 			const
 				min = 3, /* Min geohash chars length */
 				max = 18, /* Max possible zoom value */
-				len = Math.ceil(hash.length / max * (zoom < max ? max : zoom));
+				len = Math.ceil(hash.length / max * zoom);
 
 			return hash.slice(
 				0,
