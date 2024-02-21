@@ -1,21 +1,15 @@
-$phones: 500px
-$tablet: 900px
+$phones: 480px
+$tablet: 800px
 
 /* Phones */
 @media screen and (max-width: $phones)
 	#app
 		#header
-			.top
-				.inner
-					padding: 0 $r
-					padding-right: $r * 6
-
 			.bar
 				.inner
 					flex-wrap: wrap
 					justify-content: space-between
 					gap: $r
-					padding: 0 $r
 
 				.logo
 					flex-basis: 50%
@@ -38,12 +32,15 @@ $tablet: 900px
 			.vs-carousel__arrows
 				display: none
 
-		#footer
-			.footer-holder
-				.bar
-					gap: $r
-					padding: 0 $r * 2
-
 /* Tablet */
-@media screen and (min-width: $tablet)
-	#header
+@media screen and (min-width: $phones) and (max-width: $tablet)
+	#app
+		.v-lightbox section
+			max-width: 100%
+
+		.vs-carousel
+			.vs-carousel__slide
+				flex: 0 0 33.33%
+
+			.vs-carousel__arrows
+				display: none
