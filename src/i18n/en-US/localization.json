@@ -31,7 +31,8 @@
 
 	"categoryLabels": {
 		"label": "Category",
-		"empty": "There is no offers yet:("
+		"empty": "There is no offers yet:(",
+		"empty_details": "Try to set {all_regions} in your location, or chose another city"
 	},
 
 	"stepsLabels": {
@@ -53,7 +54,7 @@
 		"edit": "Edit profile",
 		"on_barteron_from": "On Barteron from {date}",
 		"account_confirmed": "Account confirmed",
-		"coins": "Coins",
+		"coins": "PKOIN",
 		"wallet": "Wallet",
 		"settings": "Settings",
 		"contact_support": "Contact support",
@@ -83,7 +84,7 @@
 		"buy_for": "Buy for {cost} PKOIN",
 		"edit": "Edit",
 		"save": "Save",
-		"reset": "Reset",
+		"all_regions": "All regions",
 		"renew": "Renew",
 		"withdraw": "Withdraw from publication",
 		"remove": "Remove",

@@ -31,7 +31,8 @@
 
 	"categoryLabels": {
 		"label": "Категория",
-		"empty": "Здесь ещё нет обменов:("
+		"empty": "Здесь ещё нет предложений:(",
+		"empty_details": "Попробуйте выбрать {all_regions} в местоположении или выберите другой город"
 	},
 
 	"stepsLabels": {
@@ -53,7 +54,7 @@
 		"edit": "Редактировать профиль",
 		"on_barteron_from": "На Barteron с {date}",
 		"account_confirmed": "Аккаунт подтверждён",
-		"coins": "Коинов",
+		"coins": "PKOIN",
 		"wallet": "Кошелёк",
 		"settings": "Настройки",
 		"contact_support": "Связаться с поддержкой",
@@ -83,7 +84,7 @@
 		"buy_for": "Купить за {cost} PKOIN",
 		"edit": "Редактировать",
 		"save": "Сохранить",
-		"reset": "Сбросить",
+		"all_regions": "Все регионы",
 		"renew": "Продлить",
 		"withdraw": "Снять с публикации",
 		"remove": "Удалить",
