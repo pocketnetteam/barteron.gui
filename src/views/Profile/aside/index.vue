@@ -59,12 +59,12 @@
 		</div>
 
 		<!-- Settings -->
-		<div class="settings">
+		<!-- <div class="settings">
 			<ul class="list">
-				<!-- <li><a href="#" class="link"><i class="fa fa-cog"></i> {{ $t('profileLabels.settings') }}</a></li> -->
+				<li><a href="#" class="link"><i class="fa fa-cog"></i> {{ $t('profileLabels.settings') }}</a></li>
 				<li><a href="#" class="link"><i class="fa fa-question-circle"></i> {{ $t('profileLabels.contact_support') }}</a></li>
 			</ul>
-		</div>
+		</div> -->
 	</v-aside>
 </template>
 

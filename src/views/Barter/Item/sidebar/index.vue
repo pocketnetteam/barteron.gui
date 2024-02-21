@@ -6,6 +6,7 @@
 				<template v-if="item?.price">
 					<span class="currency pkoin"></span>
 					{{ $n(item?.price) }}
+					{{ $t('profileLabels.coins') }}
 				</template>
 				<template v-else>
 					<span class="currency fa fa-gift"></span>
@@ -96,7 +97,7 @@
 						<dd>{{ item?.hash }}</dd>
 					</dl>
 
-					<a class="report" href="#"><i class="fa fa-flag"></i> {{ $t('profileLabels.report_abuse') }}</a>
+					<!-- <a class="report" href="#"><i class="fa fa-flag"></i> {{ $t('profileLabels.report_abuse') }}</a> -->
 				</template>
 			</ExchangeList>
 		</div>
