@@ -164,12 +164,14 @@ div[class^="barter-item-"]
 			cursor: pointer
 			margin: 0
 
-			&:hover,
-			&.active
+			&:hover
 				color: $bulma
 
-			&.active:hover
-				color: $gray
+			&.active
+				color: $dodoria
+
+				&:hover
+					color: $dodoria-hover
 
 	.title
 		color: $popo
@@ -381,6 +383,9 @@ div[class^="barter-item-"]
 					.v-button
 						padding: $r / 1.5
 						min-width: 36px
+
+					.fa-heart.active
+						color: $dodoria
 
 			.description
 				color: $popo

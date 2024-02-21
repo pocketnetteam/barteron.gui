@@ -3,7 +3,10 @@
 		<!-- Picture -->
 		<picture v-if="item.images?.length && vType !== 'page'">
 			<router-link :to="offerLink">
-				<span class="state">{{ $t(`conditionLabels.${ !item.used ? 'new' : 'used' }`) }}</span>
+				<span
+					class="state"
+					v-if="item.used"
+				>{{ $t('conditionLabels.used') }}</span>
 			
 				<!-- Images -->
 				<template>
@@ -69,6 +72,7 @@
 					<template v-if="item.price">
 						<span class="currency pkoin"></span>
 						{{ $n(item.price) }}
+						{{ $t('profileLabels.coins') }}
 					</template>
 					<template v-else>
 						<span class="currency fa fa-gift"></span>
@@ -159,6 +163,7 @@
 						<template v-if="item.price">
 							<span class="currency pkoin"></span>
 							{{ $n(item.price) }}
+							{{ $t('profileLabels.coins') }}
 						</template>
 						<template v-else>
 							<span class="currency fa fa-gift"></span>
