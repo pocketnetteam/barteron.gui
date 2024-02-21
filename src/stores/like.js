@@ -19,10 +19,10 @@ const
 
 				if (index > -1) {
 					this.like.splice(index, 1);
+				} else {
+					this.like.push(id);
 				}
 
-				this.like = [id, ...this.like];
-				
 				Pinia.set(storageId, this.like);
 			}
 		}
