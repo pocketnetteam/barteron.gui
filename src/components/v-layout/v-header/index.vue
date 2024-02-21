@@ -3,7 +3,7 @@
 		<div class="top">
 			<div class="inner">
 				<LanguageSwitcher />
-				<MainMenu />
+				<!-- <MainMenu /> -->
 			</div>
 		</div>
 		<div class="bottom">
