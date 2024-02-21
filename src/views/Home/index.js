@@ -86,6 +86,15 @@ export default {
 					return viewed[index];
 				});
 			}
+		},
+
+		/**
+		 * Reset account location
+		 */
+		reset() {
+			this.account.set({
+				geohash: null
+			});
 		}
 	},
 

@@ -16,12 +16,24 @@
 
 		<section>
 			<template>
-				<h1>{{ $t('new_from_goods') }}</h1>
+				<h1 v-if="fetching || newFromGoods.length">{{ $t('new_from_goods') }}</h1>
 				<BarterList
 					:items="newFromGoods"
 					:loaderState="fetching"
 					:carousel="true"
 				/>
+				<template v-if="!fetching && !newFromGoods.length">
+					<p>{{ $t('categoryLabels.empty') }}</p>
+					<i18n
+						path="categoryLabels.empty_details"
+						tag="p"
+					>
+						<v-button
+							place="all_regions"
+							@click="reset"
+						>{{ $t('buttonLabels.all_regions') }}</v-button>
+					</i18n>
+				</template>
 			</template>
 		</section>
 
