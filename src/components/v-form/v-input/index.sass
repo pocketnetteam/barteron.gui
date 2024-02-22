@@ -39,6 +39,76 @@
 			&:focus
 				outline-color: $blue
 
+		&.v-input-range
+			display: flex
+			align-items: center
+
+			input
+				-webkit-appearance: none
+				appearance: none 
+				cursor: pointer
+				outline: none
+				border-radius: 15px
+				background: $beerus
+				margin: 13px $r
+				padding: 0
+				height: 6px
+				width: 100%
+
+				&:focus
+					outline-color: none
+				
+				&::-webkit-slider-thumb
+					-webkit-appearance: none
+					appearance: none 
+					background-color: $piccolo
+					border-radius: 50%
+					border: none
+					transition: .2s ease-in-out
+					height: 15px
+					width: 15px
+
+				&::-moz-range-thumb
+					background-color: $piccolo
+					border-radius: 50%
+					border: none
+					transition: .2s ease-in-out
+					height: 15px
+					width: 15px
+
+				&::-webkit-slider-thumb:hover
+					box-shadow: 0 0 0 10px rgba($piccolo-hover, .1)
+
+				&:active::-webkit-slider-thumb
+					box-shadow: 0 0 0 13px rgba($piccolo-hover, .2)
+
+				&:focus::-webkit-slider-thumb
+					box-shadow: 0 0 0 13px rgba($piccolo-hover, .2)
+
+
+				&::-moz-range-thumb:hover
+					box-shadow: 0 0 0 10px rgba($piccolo-hover, .1)
+
+				&:active::-moz-range-thumb
+					box-shadow: 0 0 0 13px rgba($piccolo-hover, .2)
+
+				&:focus::-moz-range-thumb
+					box-shadow: 0 0 0 13px rgba($piccolo-hover, .2)
+
+			.controls
+				display: flex
+				flex-direction: column
+
+				button
+					background: none
+					border: 0
+					color: $trunks
+					padding: 0 $r
+					transition: .2s ease-in-out
+
+					&:hover
+						color: $popo
+
 	/* Size */
 	&.v-input-xs
 		border-radius: .25rem

@@ -6,6 +6,7 @@ export default {
 		name: { type: [String, Array], default: () => [] },
 		type: { type: [String, Array], default: () => [] },
 		readonly: { type: [String, Array], default: () => [] },
+		step: { type: [Number, String, Array], default: () => [] },
 		min: { type: [Number, String, Array], default: () => [] },
 		max: { type: [Number, String, Array], default: () => [] },
 		placeholder: { type: [String, Array], default: () => [] },
@@ -96,6 +97,30 @@ export default {
 				case "minmax": return "number";
 				default: return type;
 			}
+		},
+
+		/**
+		 * Increment input value
+		 */
+		increment(index) {
+			const
+				step = Number(this.attrs[index]?.step || 1),
+				input = this.inputs[index];
+
+			this.attrs[index].value = Number(input.value) + step;
+			input.dispatchEvent(new Event("change"));
+		},
+
+		/**
+		 * Decrement input value
+		 */
+		decrement(index) {
+			const
+				step = (this.attrs[index]?.step || 1),
+				input = this.inputs[index];
+
+			this.attrs[index].value = Number(input.value) - step;
+			input.dispatchEvent(new Event("change"));
 		}
 	},
 
