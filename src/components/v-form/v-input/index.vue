@@ -14,20 +14,26 @@
 			<input
 				ref="fields"
 				v-bind="attr"
-				v-model="attr.value"
+				v-model="attrs[index].value"
 				v-on="vEvents"
 			/>
 			<template v-if="attr.type === 'range' && !$slots[`input${ index }After`]">
 				<div class="controls">
 					<button
 						class="increment"
-						@click="increment(index)"
+						@click.prevent="increment(index)"
+						@mousedown="mouseDown(() => increment(index), 100)"
+						@mouseup="mouseUp"
+						@mouseleave="mouseUp"
 					>
 						<i class="fa fa-chevron-up"></i>
 					</button>
 					<button
 						class="decrement"
-						@click="decrement(index)"
+						@click.prevent="decrement(index)"
+						@mousedown.prevent="mouseDown(() => decrement(index), 100)"
+						@mouseup="mouseUp"
+						@mouseleave="mouseUp"
 					>
 						<i class="fa fa-chevron-down"></i>
 					</button>

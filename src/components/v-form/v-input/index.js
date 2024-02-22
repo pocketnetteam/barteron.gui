@@ -1,3 +1,5 @@
+import Vue from "vue";
+
 export default {
 	name: "Vinput",
 
@@ -20,7 +22,8 @@ export default {
 	data() {
 		return {
 			inputs: [],
-			exclude: ["vEvents", "vSize"]
+			exclude: ["vEvents", "vSize"],
+			counter: null
 		}
 	},
 
@@ -33,9 +36,8 @@ export default {
 		attrs() {
 			const data = Object.keys(this.$props).filter(e => !this.exclude.includes(e));
 
-			return this.getAttrs(
-				data,
-				data.map(prop => this.$props[prop])
+			return Vue.observable(
+				this.getAttrs(data, data.map(prop => this.$props[prop]))
 			);
 		}
 	},
@@ -104,11 +106,15 @@ export default {
 		 */
 		increment(index) {
 			const
+				max = (this.attrs[index]?.max || null),
 				step = Number(this.attrs[index]?.step || 1),
 				input = this.inputs[index];
 
-			this.attrs[index].value = Number(input.value) + step;
-			input.dispatchEvent(new Event("change"));
+			if (max && this.attrs[index].value < max) {
+				this.attrs[index].value += step;
+				input.value = this.attrs[index].value;
+				input.dispatchEvent(new Event("change"));
+			}
 		},
 
 		/**
@@ -116,11 +122,34 @@ export default {
 		 */
 		decrement(index) {
 			const
+				min = (this.attrs[index]?.min || 0),
 				step = (this.attrs[index]?.step || 1),
 				input = this.inputs[index];
 
-			this.attrs[index].value = Number(input.value) - step;
-			input.dispatchEvent(new Event("change"));
+			if (this.attrs[index].value > min) {
+				this.attrs[index].value -= step;
+				input.value = this.attrs[index].value;
+				input.dispatchEvent(new Event("change"));
+			}
+		},
+
+		/**
+		 * MouseDown handler
+		 * 
+		 * @param {Function} fn
+		 * @param {Number} fr
+		 */
+		mouseDown(fn, fr) {
+			clearInterval(this.counter);
+			this.counter = setInterval(fn, fr || 100);
+		},
+
+		/**
+		 * MouseDown handler
+		 */
+		mouseUp() {
+			clearInterval(this.counter);
+			this.counter = null;
 		}
 	},
 
