@@ -37,7 +37,7 @@ export default {
 		},
 		height: {
 			type: String,
-			default: "260px"
+			default: "350px"
 		},
 		width: {
 			type: String,
@@ -70,6 +70,10 @@ export default {
 		zoom: {
 			type: Number,
 			default: 15
+		},
+		radius: {
+			type: Number,
+			default: 10
 		}
 	},
 
@@ -84,7 +88,8 @@ export default {
 				autoClose: true,
 				searchLabel: this.$t("locationLabels.enter_address")
 			},
-			marker: this.point
+			marker: this.point,
+			zoomValue: this.zoom
 		}
 	},
 
@@ -123,14 +128,13 @@ export default {
 	mounted() {
 		this.mapObject = this.$refs.map.mapObject;
 		const markerAtCenter = (emit) => {
-			const
-				center = this.mapObject.getCenter(),
-				zoom = this.mapObject.getZoom();
-			
-			this.marker = Object.values(center);
+			this.zoomValue = this.mapObject.getZoom()
+			this.marker = Object.values(
+				this.mapObject.getCenter()
+			);
 			
 			if (emit) {
-				this.$emit("scale", zoom);
+				this.$emit("scale", this.zoomValue);
 				this.$emit("change", this.marker);
 			}
 		}

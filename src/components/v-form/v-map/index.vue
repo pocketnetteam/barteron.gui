@@ -16,9 +16,16 @@
 				</l-control>
 			</template>
 
-			<template v-if="allowSelection">
-				<l-marker :latLng="marker || point" v-if="marker || point" />
-				<l-geosearch :options="geosearchOptions" v-if="allowSelection" />
+			<template v-if="allowSelection && (marker || point)">
+				<l-marker :latLng="marker || point" />
+				<l-circle
+					:latLng="marker || point"
+					:radius="radius * 1000"
+					:stroke="false"
+					:fillColor="'#136aec'"
+					:fillOpacity="0.15"
+				/>
+				<l-geosearch :options="geosearchOptions" />
 			</template>
 
 			<template v-if="!allowSelection && point">
