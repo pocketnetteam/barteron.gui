@@ -44,8 +44,7 @@ Vue.prototype.manifest = Manifest;
 Vue.prototype.sdk = Vue.observable(new SDK());
 Vue.prototype.categories = Vue.observable(new Categories());
 Vue.prototype.favorites = Favorites;
-
-Vue.mixin({
+Vue.prototype.shared = Vue.observable({
 	computed: {
 		/* Access siblings components in a route */
 		$components() {
@@ -174,26 +173,6 @@ Vue.mixin({
 		},
 
 		/**
-		 * Truncate geohash depends on zoom
-		 * 
-		 * @param {String} hash
-		 * @param {Number} zoom
-		 * 
-		 * @returns {String}
-		 */
-		truncateGeoHash(hash = "", zoom) {
-			const
-				min = 3, /* Min geohash chars length */
-				max = 18, /* Max possible zoom value */
-				len = Math.floor(hash.length / max * zoom);
-
-			return hash.slice(
-				0,
-				len < hash.length ? (len < min ? min : len) : hash.length
-			);
-		},
-
-		/**
 		 * Get geohash radius
 		 * 
 		 * @param {Object} data
@@ -231,6 +210,8 @@ Vue.mixin({
 		}
 	}
 });
+
+Vue.mixin(Vue.prototype.shared);
 
 /**
  * StartUp
