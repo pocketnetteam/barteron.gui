@@ -82,7 +82,8 @@ Vue.prototype.shared = Vue.observable({
 		locationStore() {
 			return Vue.observable({
 				...LocationStore.location,
-				set: LocationStore.set
+				set: LocationStore.set,
+				reset: LocationStore.reset
 			});
 		}
 	},
