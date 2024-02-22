@@ -85,7 +85,7 @@
 							:allowSelection="true"
 							:zoom="locationStore.zoom || undefined"
 							:radius="radius || undefined"
-							@scale="x => mapZoom = x"
+							@scale="x => zoom = x"
 							@change="setMarker"
 							v-if="lightbox"
 						/>

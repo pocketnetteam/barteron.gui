@@ -7,7 +7,7 @@ export default {
 		return {
 			lightbox: false,
 			mapMarker: null,
-			mapZoom: null,
+			zoom: null,
 			radius: 0,
 			addr: {
 				fetching: false
@@ -69,7 +69,7 @@ export default {
 					this.addr.fetching = true;
 
 					this.sdk.geoLocation(location, {
-						"zoom": this.mapZoom || 18,
+						"zoom": this.zoom || 18,
 						"accept-language": this.$root.$i18n.locale
 					})
 						.then(result => {
@@ -150,6 +150,7 @@ export default {
 
 			this.mapMarker = null;
 			this.saveDisabled = false;
+			this.hideLightbox();
 		},
 
 		/**
@@ -171,9 +172,10 @@ export default {
 				geohash,
 				near: this.getGeoHashRadius({
 					geohash,
-					radius: this.radius
+					radius: this.radius,
+					precision: 5
 				}),
-				zoom: this.mapZoom,
+				zoom: this.zoom,
 				radius: this.radius
 			});
 
