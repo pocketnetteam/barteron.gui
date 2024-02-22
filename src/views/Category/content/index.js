@@ -14,12 +14,25 @@ const
 		orderDesc: true
 	},
 	requestItems = (request) => {
-		const search = request?.route?.query?.search;
+		const
+			mixin = Vue.prototype.shared,
+			search = request?.route?.query?.search,
+			location = (() => {
+				const geohash = mixin.computed.locationStore().geohash;
+
+				if (geohash) {
+					return mixin.methods.getGeoHashRadius({
+						geohash
+					});
+				} else {
+					return [];
+				}
+			})();
 
 		return Vue.prototype.sdk.getBrtOfferDeals({
 			...filter,
 			...(search && { search }),
-			location: (request?.location || "") + "%",
+			location,
 			theirTags: Number.isInteger(+request?.id) ? [+request.id] : [],
 			pageStart: request?.pageStart || 0,
 			pageSize: request?.pageSize || 10
@@ -85,8 +98,7 @@ export default {
 			/* Send request to node */
 			this.items = await requestItems({
 				id: this.$route.params.id,
-				route: this.$route,
-				location: this.account?.geohash
+				route: this.$route
 			});
 
 			this.pageStart = 0;
@@ -106,8 +118,7 @@ export default {
 			/* Send request to node */
 			this.items = await requestItems({
 				id: this.$route.params.id,
-				route: this.$route,
-				location: this.account?.geohash
+				route: this.$route
 			});
 
 			this.pageStart = 0;
@@ -121,8 +132,7 @@ export default {
 			const items = await requestItems({
 				id: this.$route.params.id,
 				pageStart: ++this.pageStart,
-				route: this.$route,
-				location: this.account?.geohash
+				route: this.$route
 			});
 
 			this.items = this.items.concat(items);
@@ -141,22 +151,25 @@ export default {
 				/* Send request to node */
 				this.items = await requestItems({
 					id: to.params.id,
-					route: to,
-					location: this.account?.geohash
+					route: to
 				});
 			}
+		},
+
+		async "LocationStore.geohash"() {
+			this.items = await requestItems({
+				id: this.$route.params.id,
+				route: this.$route
+			});
 		}
 	},
 
 	async beforeRouteEnter (to, from, next) {
 		/* Send request to node */
-		const
-			sdk = Vue.prototype.sdk,
-			items = await requestItems({
-				id: to.params.id,
-				route: to,
-				location: sdk.barteron.accounts[sdk.address]?.geohash
-			});
+		const items = await requestItems({
+			id: to.params.id,
+			route: to
+		});
 
 		next(vm => {
 			vm.items = items;
