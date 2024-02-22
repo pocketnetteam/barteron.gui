@@ -16,23 +16,12 @@ const
 	requestItems = (request) => {
 		const
 			mixin = Vue.prototype.shared,
-			search = request?.route?.query?.search,
-			location = (() => {
-				const geohash = mixin.computed.locationStore().geohash;
-
-				if (geohash) {
-					return mixin.methods.getGeoHashRadius({
-						geohash
-					});
-				} else {
-					return [];
-				}
-			})();
+			search = request?.route?.query?.search;
 
 		return Vue.prototype.sdk.getBrtOfferDeals({
 			...filter,
 			...(search && { search }),
-			location,
+			location: mixin.computed.locationStore().near || [],
 			theirTags: Number.isInteger(+request?.id) ? [+request.id] : [],
 			pageStart: request?.pageStart || 0,
 			pageSize: request?.pageSize || 10

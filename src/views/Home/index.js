@@ -29,9 +29,7 @@ export default {
 			this.fetching = true;
 
 			this.newFromGoods = await this.sdk.getBrtOffersFeed({
-				location: this.getGeoHashRadius({
-					geohash: this.locationStore.geohash
-				}),
+				location: this.locationStore.near || [],
 				pageSize: 100
 			}).then(offers => {
 				this.fetching = false;
@@ -50,9 +48,7 @@ export default {
 					this.mayMatchExchanges = await Promise.all(
 						myOffers.map(offer => {
 							return this.sdk.getBrtOfferComplexDeals({
-								location: this.getGeoHashRadius({
-									geohash: this.locationStore.geohash
-								}),
+								location: this.locationStore.near || [],
 								myTag: offer.tag,
 								theirTags: (() => {
 									if (offer.tags?.includes("my_list")) {
@@ -96,11 +92,7 @@ export default {
 		 * Reset account location
 		 */
 		reset() {
-			this.locationStore.set({
-				geohash: null,
-				radius: null,
-				zoom: null
-			});
+			this.locationStore.reset();
 		}
 	},
 
