@@ -72,7 +72,7 @@
 					<template v-if="item.price">
 						<span class="currency pkoin"></span>
 						{{ $n(item.price) }}
-						{{ $t('profileLabels.coins') }}
+						<span>{{ $t('profileLabels.coins') }}</span>
 					</template>
 					<template v-else>
 						<span class="currency fa fa-gift"></span>
@@ -163,7 +163,7 @@
 						<template v-if="item.price">
 							<span class="currency pkoin"></span>
 							{{ $n(item.price) }}
-							{{ $t('profileLabels.coins') }}
+							<span>{{ $t('profileLabels.coins') }}</span>
 						</template>
 						<template v-else>
 							<span class="currency fa fa-gift"></span>

@@ -6,7 +6,7 @@
 				<template v-if="item?.price">
 					<span class="currency pkoin"></span>
 					{{ $n(item?.price) }}
-					{{ $t('profileLabels.coins') }}
+					<span>{{ $t('profileLabels.coins') }}</span>
 				</template>
 				<template v-else>
 					<span class="currency fa fa-gift"></span>
@@ -68,6 +68,7 @@
 				:tags="account?.tags || []"
 				:editable="isMyOffer"
 				@change="(tags) => account.set({ tags })"
+				v-if="isMyOffer"
 			>
 				<template #edit="{ instance }">
 					<!-- Edit button -->
