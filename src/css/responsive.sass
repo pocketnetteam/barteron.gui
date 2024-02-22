@@ -1,5 +1,21 @@
-$phones: 480px
-$tablet: 800px
+/* General */
+#app
+	#header
+		padding-top: calc(var(--app-margin-top) + 48px)
+
+	#header,
+	#main,
+	#footer .footer-holder
+		box-sizing: content-box
+		padding-right: $r
+		padding-left: $r
+		max-width: $width
+
+/* Tablet and Phones */
+@media screen and (min-width: $tablet)
+	#app
+		.v-lightbox section
+			max-width: 100%
 
 /* Phones */
 @media screen and (max-width: $phones)
@@ -38,9 +54,3 @@ $tablet: 800px
 
 			.vs-carousel__arrows
 				display: none
-
-/* Tablet and less */
-@media screen and (min-width: $tablet)
-	#app
-		.v-lightbox section
-			max-width: 100%
