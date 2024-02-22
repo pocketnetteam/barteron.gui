@@ -19,6 +19,7 @@
 				active
 			}"
 			:disabled="disabled"
+			:title="title"
 			ref="button"
 			@mousedown="animateRipple"
 			@mousedown.native="animateRipple"

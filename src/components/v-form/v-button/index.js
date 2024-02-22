@@ -5,6 +5,7 @@ export default {
 
 	props: {
 		disabled: [String, Boolean],
+		title: String,
 		vAlign: String,	/* right */
 		vType: String,	/* ghost, stroke, bulma, gray */
 		vSize: String,	/* xs, sm, md, lg, xl */
