@@ -8,6 +8,7 @@ export default {
 			lightbox: false,
 			mapMarker: null,
 			mapZoom: null,
+			radius: 0,
 			addr: {
 				fetching: false
 			},
@@ -27,15 +28,6 @@ export default {
 		},
 
 		/**
-		 * Get radius of search
-		 * 
-		 * @returns {Number}
-		 */
-		radius() {
-			return this.account.radius;
-		},
-
-		/**
 		 * Get my location
 		 * 
 		 * @returns {Array|null}
@@ -43,10 +35,10 @@ export default {
 		location() {
 			if (!this.sdk.empty(this.mapMarker)) {
 				return this.mapMarker;
-			} /* else if (!this.sdk.empty(this.sdk.location)) {
-				return Object.values(this.sdk.location);
-			} */ else {
+			} else if (this.locationStore.geohash) {
 				return this.geohash;
+			} else {
+				return undefined;
 			}
 		},
 
@@ -56,8 +48,8 @@ export default {
 		 * @returns {Array|null}
 		 */
 		geohash() {
-			if (this.account?.geohash) {
-				const { latitude, longitude } = GeoHash.decodeGeoHash(this.account.geohash);
+			if (this.locationStore.geohash) {
+				const { latitude, longitude } = GeoHash.decodeGeoHash(this.locationStore.geohash);
 				return [latitude[0], longitude[0]];
 			} else {
 				return null;
@@ -76,7 +68,10 @@ export default {
 				if (!this.addr.fetching && !this.sdk.empty(location)) {
 					this.addr.fetching = true;
 
-					this.sdk.geoLocation(location)
+					this.sdk.geoLocation(location, {
+						"zoom": this.mapZoom || 18,
+						"accept-language": this.$root.$i18n.locale
+					})
 						.then(result => {
 							if (result?.address) {
 								this.$set(this, "addr", {
@@ -90,16 +85,10 @@ export default {
 
 				return null;
 			} else {
-				const position = (() => {
-					if (this.mapZoom && this.mapZoom < 5) {
-						return [ this.addr.country ];
-					} else {
-						return [
-							this.addr.country,
-							this.addr.city || this.addr.town || this.addr.county
-						]
-					}
-				})().filter(a => a).join(", ")
+				const position = [
+					this.addr.country,
+					this.addr.city || this.addr.town || this.addr.county
+				].filter(a => a).join(", ")
 
 				if (!this.lastAddr) this.lastAddr = position;
 				return position;
@@ -120,6 +109,7 @@ export default {
 		 */
 		showLightbox() {
 			this.lightbox = true;
+			this.radius = this.locationStore.radius ?? 10;
 		},
 
 		/**
@@ -156,8 +146,10 @@ export default {
 		 * Reset account location
 		 */
 		reset() {
-			this.account.update({
-				geohash: null
+			this.locationStore.set({
+				geohash: null,
+				radius: null,
+				zoom: null
 			});
 
 			this.mapMarker = null;
@@ -176,16 +168,13 @@ export default {
 				].map(p => this.$refs.map?.[p]).filter(p => p).shift(),
 				hash = GeoHash.encodeGeoHash.apply(null, center || this.location),
 				zoom = this.mapZoom,
-				data = {
-					radius: zoom,
-					...this.$refs.form.serialize()
-				};
+				data = this.$refs.form.serialize();
 
 			/* Update account with data */
-			this.account.set({
-				geohash: this.mapMarker ? this.truncateGeoHash(hash, zoom) : null,
-				static: data.static === "static",
-				radius: Number(data.radius)
+			this.locationStore.set({
+				geohash: this.mapMarker ? hash : null,
+				zoom: zoom,
+				radius: 1
 			});
 
 			this.lastAddr = this.address;

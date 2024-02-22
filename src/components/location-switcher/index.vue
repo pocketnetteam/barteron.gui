@@ -5,14 +5,16 @@
 			'lightbox-open': lightbox
 		}"
 		vType="stroke"
+		:title="locationStore.geohash ? lastAddr : ''"
 		@click="showLightbox"
 	>
 		<i
-			:class="`fa fa-map-marker-alt${ !account?.geohash ? ' slash' : '' }`"
+			:class="`fa fa-map-marker-alt${ !locationStore.geohash ? ' slash' : '' }`"
 		></i>
 		<div class="info">
 			<strong class="location">
-				<template>{{ account?.geohash ? lastAddr : $t('buttonLabels.unknown') }}</template>
+				<template v-if="locationStore.geohash && !lastAddr"><i class="fa fa-spin fa-spinner"></i></template>
+				<template v-else>{{ locationStore.geohash ? lastAddr : $t('buttonLabels.unknown') }}</template>
 			</strong>
 			<!-- <span class="distance">{{ (radius || 10) + $t('metricsLabels.km') }}</span> -->
 		</div>
@@ -21,7 +23,7 @@
 			<v-lightbox
 				:visible="lightbox"
 				:overlayClick="false"
-				size="md"
+				size="xl"
 				title="Location"
 				@onHide="hideLightbox"
 			>
@@ -51,33 +53,38 @@
 							/> -->
 						<!-- </div> -->
 
-						<!-- <div class="col block no-offset"> -->
+						<div class="col block full-width no-offset">
 							<!-- Label: Radius -->
-							<!-- <label for="radius" class="v-label">{{ $t('locationLabels.radius') }}</label> -->
+							<label for="radius" class="v-label">{{ $t('locationLabels.radius') }}</label>
 
-							<!-- <div class="col"> -->
+							<div class="col range">
 								<!-- Component: vInput -->
-								<!-- <v-input
+								<v-input
 									id="radius"
 									name="radius"
-									type="number"
+									type="range"
 									min="1"
-									max="9999"
-									:value="radius || 10"
+									max="6000"
+									:value="locationStore.radius ?? 10"
+									:vEvents="{
+										change: (e) => radius = Number(e.target.value),
+										input: (e) => radius = Number(e.target.value)
+									}"
 								/>
-								&nbsp;{{ $t('metricsLabels.km') }}
+								<span class="value">{{ `${ radius } ${ $t('metricsLabels.km') }` }}</span>
 							</div>
-						</div> -->
+						</div>
 					</div>
 
 					<div class="row">
 						<!-- vMap -->
 						<v-map
 							ref="map"
-							:center="/* mapType === 'static' ? */ geohash || (location || undefined)"
+							:center="location"
 							:allowPosition="true"
 							:allowSelection="true"
-							:zoom="account?.radius || undefined"
+							:zoom="locationStore.zoom || undefined"
+							:radius="radius || undefined"
 							@scale="x => mapZoom = x"
 							@change="setMarker"
 							v-if="lightbox"
@@ -89,7 +96,7 @@
 					<div class="row full-width right">
 						<div class="buttons-holder">
 							<v-button
-								:disabled="!account?.geohash"
+								:disabled="!locationStore.geohash"
 								@click="reset"
 							>{{ $t('buttonLabels.all_regions') }}</v-button>
 							<v-button
