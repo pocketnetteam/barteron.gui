@@ -22,9 +22,6 @@ $tablet: 800px
 					justify-content: flex-end
 					width: 100%
 
-		.v-lightbox section
-			max-width: 100%
-
 		.vs-carousel
 			.vs-carousel__slide
 				flex: 0 0 50%
@@ -35,12 +32,15 @@ $tablet: 800px
 /* Tablet */
 @media screen and (min-width: $phones) and (max-width: $tablet)
 	#app
-		.v-lightbox section
-			max-width: 100%
-
 		.vs-carousel
 			.vs-carousel__slide
 				flex: 0 0 33.33%
 
 			.vs-carousel__arrows
 				display: none
+
+/* Tablet and less */
+@media screen and (min-width: $tablet)
+	#app
+		.v-lightbox section
+			max-width: 100%
