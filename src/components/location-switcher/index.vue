@@ -65,7 +65,7 @@
 									type="range"
 									min="1"
 									max="6000"
-									:value="locationStore.radius ?? 10"
+									:value="radius"
 									:vEvents="{
 										change: (e) => radius = Number(e.target.value),
 										input: (e) => radius = Number(e.target.value)

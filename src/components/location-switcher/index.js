@@ -146,11 +146,7 @@ export default {
 		 * Reset account location
 		 */
 		reset() {
-			this.locationStore.set({
-				geohash: null,
-				radius: null,
-				zoom: null
-			});
+			this.locationStore.reset();
 
 			this.mapMarker = null;
 			this.saveDisabled = false;
@@ -173,8 +169,11 @@ export default {
 			/* Update account with data */
 			this.locationStore.set({
 				geohash: this.mapMarker ? hash : null,
+				near: this.getGeoHashRadius({
+					geohash: hash
+				}),
 				zoom: zoom,
-				radius: 1
+				radius: this.radius
 			});
 
 			this.lastAddr = this.address;
