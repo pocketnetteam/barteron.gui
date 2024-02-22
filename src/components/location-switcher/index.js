@@ -126,10 +126,10 @@ export default {
 		 */
 		setMarker(latlng) {
 			const
-				aLat = parseInt(this.mapMarker?.[0] || 0),
-				aLon = parseInt(this.mapMarker?.[1] || 0),
-				bLat = parseInt(latlng[0] || 0),
-				bLon = parseInt(latlng[1] || 0);
+				aLat = Number(this.mapMarker?.[0] || 0),
+				aLon = Number(this.mapMarker?.[1] || 0),
+				bLat = Number(latlng[0] || 0),
+				bLon = Number(latlng[1] || 0);
 			
 			/* Prevent frequently address request */
 			if (aLat !== bLat || aLon !== bLon) {
@@ -162,22 +162,22 @@ export default {
 					"point",
 					"center"
 				].map(p => this.$refs.map?.[p]).filter(p => p).shift(),
-				hash = GeoHash.encodeGeoHash.apply(null, center || this.location),
-				zoom = this.mapZoom,
-				data = this.$refs.form.serialize();
+				geohash = GeoHash.encodeGeoHash.apply(null, center || this.location);
+
+			this.saveDisabled = true;
 
 			/* Update account with data */
 			this.locationStore.set({
-				geohash: this.mapMarker ? hash : null,
+				geohash,
 				near: this.getGeoHashRadius({
-					geohash: hash
+					geohash,
+					radius: this.radius
 				}),
-				zoom: zoom,
+				zoom: this.mapZoom,
 				radius: this.radius
 			});
 
 			this.lastAddr = this.address;
-			this.saveDisabled = true;
 			this.hideLightbox();
 		},
 
