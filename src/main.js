@@ -9,6 +9,10 @@ import SDK from "@/js/sdk.js";
 import Categories from "@/js/categories.js";
 import Favorites from "@/data/favorites.json";
 
+import { GeoHash } from "geohash";
+import getHashesNear from "geohashes-near";
+import LocationStore from "@/stores/location.js";
+
 Vue.config.productionTip = false;
 
 /* Register layout components */
@@ -69,6 +73,18 @@ Vue.mixin({
 		 */
 		account() {
 			return this.sdk.barteron.accounts[this.sdk.address];
+		},
+
+		/**
+		 * Get my geoposition
+		 * 
+		 * @returns {Object}
+		 */
+		locationStore() {
+			return Vue.observable({
+				...LocationStore.location,
+				set: LocationStore.set
+			});
 		}
 	},
 
@@ -169,7 +185,7 @@ Vue.mixin({
 			const
 				min = 3, /* Min geohash chars length */
 				max = 18, /* Max possible zoom value */
-				len = Math.ceil(hash.length / max * zoom);
+				len = Math.floor(hash.length / max * zoom);
 
 			return hash.slice(
 				0,
@@ -181,6 +197,7 @@ Vue.mixin({
 		 * Get geohash radius
 		 * 
 		 * @param {Object} data
+		 * @param {String} data.geohash or
 		 * @param {Number} data.latitude
 		 * @param {Number} data.longitude
 		 * @param {Number} [data.precision]
@@ -190,18 +207,27 @@ Vue.mixin({
 		 * @returns {String}
 		 */
 		getGeoHashRadius({
+			geohash,
 			latitude,
 			longitude,
 			precision,
 			radius,
 			units
 		}) {
-			/* this.range = getHashesNear(
+			if (geohash) {
+				const result = GeoHash.decodeGeoHash(geohash);
+				latitude = result.latitude[0];
+				longitude = result.longitude[0];
+			}
+
+			if (!latitude || !longitude) return [];
+
+			return getHashesNear(
 				{ latitude, longitude },
-				precision || 1,
-				radius || 1,
+				precision || 5,
+				radius || 10,
 				units || "kilometers"
-			) */;
+			);
 		}
 	}
 });
