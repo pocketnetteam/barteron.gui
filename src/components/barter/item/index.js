@@ -43,7 +43,7 @@ export default {
 		 * 
 		 * @returns {@Account}
 		 */
-		account() {
+		ownerAccount() {
 			return this.sdk.barteron.accounts[this.item.address];
 		},
 		
@@ -56,7 +56,7 @@ export default {
 			let ids = this.item.tags;
 
 			if (ids.includes("my_list")) {
-				ids = this.account?.tags || [];
+				ids = this.ownerAccount?.tags || [];
 			} else if (ids.includes("for_nothing")) {
 				ids = [{ value: this.$t("barterLabels.free") }];
 			}
@@ -78,12 +78,19 @@ export default {
 		},
 
 		/**
-		 * Get my location
+		 * Get user location
 		 * 
 		 * @returns {Array|null}
 		 */
 		location() {
-			return this.sdk.ifEmpty(this.sdk.location, undefined);
+			const geohash = this.account?.geohash;
+
+			if (geohash) {
+				const { latitude, longitude } = GeoHash.decodeGeoHash(geohash);
+				return [latitude[0], longitude[0]];
+			} else {
+				return null;
+			}
 		},
 
 		/**
