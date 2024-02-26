@@ -1,11 +1,5 @@
 <template>
 	<header id="header">
-		<div class="top">
-			<div class="inner">
-				<LanguageSwitcher />
-				<!-- <MainMenu /> -->
-			</div>
-		</div>
 		<div class="bottom">
 			<div class="bar">
 				<div class="inner">

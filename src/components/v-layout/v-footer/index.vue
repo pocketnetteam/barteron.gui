@@ -66,6 +66,8 @@
 						</li>
 					</ul> -->
 
+					<LanguageSwitcher />
+
 					<a href="#" class="scroll-top">
 						<i class="fa fa-angle-up"></i>
 					</a>
