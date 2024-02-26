@@ -73,7 +73,7 @@ export default {
 		},
 		radius: {
 			type: Number,
-			default: 10
+			default: 1
 		}
 	},
 
