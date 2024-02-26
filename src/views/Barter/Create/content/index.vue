@@ -101,13 +101,14 @@
 						<template #after="{ instance }">
 							<!-- Favorite tags -->
 							<ul class="favorites">
-								<template v-for="(id, index) in [13587,258850,148495,10906,10866,10864]">
+								<template v-for="(id, index) in [13587,26395,6,9,12576,10,11]">
 									<li
 										:key="`favorite-${ index }`"
 										v-if="!instance.vTags.includes(id)"
 										@click="instance.insert(id)"
 									>
 										{{ $t(categories.items[id]?.name) || $t('buttonLabels.unknown') }}
+										<i class="fa fa-plus"></i>
 									</li>
 								</template>
 							</ul>
