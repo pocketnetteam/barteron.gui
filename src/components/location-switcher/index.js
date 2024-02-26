@@ -19,15 +19,6 @@ export default {
 
 	computed: {
 		/**
-		 * Static or dynamic location
-		 * 
-		 * @returns {String}
-		 */
-		mapType() {
-			return this.account.static ? "static" : "dynamic";
-		},
-
-		/**
 		 * Get my location
 		 * 
 		 * @returns {Array|null}
@@ -110,6 +101,7 @@ export default {
 		showLightbox() {
 			this.lightbox = true;
 			this.radius = this.locationStore.radius ?? 10;
+			this.$refs.map.mapObject._onResize();
 		},
 
 		/**
@@ -124,22 +116,24 @@ export default {
 		 * 
 		 * @param {Array} latlng
 		 */
-		setMarker(latlng) {
+		setMarker(latlng, e) {
 			const
 				aLat = Number(this.mapMarker?.[0] || 0),
 				aLon = Number(this.mapMarker?.[1] || 0),
 				bLat = Number(latlng[0] || 0),
 				bLon = Number(latlng[1] || 0);
+
+			console.log(e, e?.type)
 			
 			/* Prevent frequently address request */
 			if (aLat !== bLat || aLon !== bLon) {
 				this.mapMarker = latlng;
 				this.addr = {};
-
-				this.debounce(() => {
-					if (this.lightbox) this.saveDisabled = false;
-				}, 1000)();
 			}
+
+			this.debounce(() => {
+				if (this.lightbox) this.saveDisabled = false;
+			}, 1000)();
 		},
 
 		/**

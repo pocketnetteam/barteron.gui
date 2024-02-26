@@ -22,7 +22,6 @@
 		<template #after>
 			<v-lightbox
 				:visible="lightbox"
-				:overlayClick="false"
 				size="xl"
 				title="Location"
 				@onHide="hideLightbox"
@@ -37,22 +36,6 @@
 					</div>
 
 					<div class="row full-width">
-						<!-- <div class="col block no-offset"> -->
-							<!-- Label: Static or dynamic location -->
-							<!-- <label for="static" class="v-label">{{ $t('locationLabels.preferred') }}</label> -->
-
-							<!-- vSwitch (Slide) -->
-							<!-- <v-switch
-								id="static"
-								type="radio"
-								vType="slide"
-								:name="['static', 'static']"
-								:checked="mapType"
-								:label="[$t('locationLabels.dynamic'), $t('locationLabels.static')]"
-								:value="['dynamic', 'static']"
-							/> -->
-						<!-- </div> -->
-
 						<div class="col block full-width no-offset">
 							<!-- Label: Radius -->
 							<label for="radius" class="v-label">{{ $t('locationLabels.radius') }}</label>
@@ -87,7 +70,6 @@
 							:radius="radius || undefined"
 							@scale="x => zoom = x"
 							@change="setMarker"
-							v-if="lightbox"
 						/>
 					</div>
 				</v-form>
