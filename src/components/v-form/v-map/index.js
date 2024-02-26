@@ -89,7 +89,7 @@ export default {
 				searchLabel: this.$t("locationLabels.enter_address")
 			},
 			marker: this.point,
-			zoomValue: this.zoom
+			scale: this.zoom
 		}
 	},
 
@@ -127,15 +127,15 @@ export default {
 
 	mounted() {
 		this.mapObject = this.$refs.map.mapObject;
-		const markerAtCenter = (emit) => {
-			this.zoomValue = this.mapObject.getZoom()
+		const markerAtCenter = (emit, event) => {
+			this.scale = this.mapObject.getZoom();
 			this.marker = Object.values(
 				this.mapObject.getCenter()
 			);
 			
 			if (emit) {
-				this.$emit("scale", this.zoomValue);
-				this.$emit("change", this.marker);
+				this.$emit("scale", this.scale, event);
+				this.$emit("change", this.marker, event);
 			}
 		}
 
@@ -147,10 +147,12 @@ export default {
 						this.$emit("change", Object.values(e.latlng));
 					}
 				})
-				.on("move", (e) => {
-					if (e?.originalEvent) markerAtCenter();
+				.on("move", e => {
+					if (e?.originalEvent) markerAtCenter(false, e);
 				})
-				.on("moveend", this.debounce(() => markerAtCenter(true), 1000));
+				.on("moveend", e => {
+					this.debounce(() => markerAtCenter(true, e), 1000)();
+				});
 
 			markerAtCenter(true);
 		}
