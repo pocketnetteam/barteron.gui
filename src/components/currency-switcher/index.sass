@@ -1,0 +1,20 @@
+@import "@/css/vars.sass"
+
+.currency-switcher
+	display: flex
+	align-items: center
+	justify-content: space-between
+	gap: $r / 2
+	max-width: calc(#{$sidebar-width} - 26px)
+
+	/deep/ .v-button
+		background: none !important
+		font-size: ($r / 2) * 3
+		padding: ($r / 2) * 3 $r
+
+		.text
+			gap: $r
+
+	/deep/ .v-button-dropdown
+		font-size: ($r / 2) * 3 !important
+		right: 0
