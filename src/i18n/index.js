@@ -9,6 +9,13 @@ const
 		"ru-RU"
 	],
 
+	currencies = [
+		"USD",
+		"EUR",
+		"RUB",
+		"BYR"
+	],
+
 	dateTimeFormats = {
 		"en-US": {
 			short: {
@@ -139,4 +146,4 @@ export default new VueI18n({
 	pluralizationRules
 });
 
-export { locales, dateTimeFormats, numberFormats };
+export { locales, currencies, dateTimeFormats, numberFormats };
