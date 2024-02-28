@@ -137,7 +137,7 @@ Vue.prototype.shared = Vue.observable({
 				return path;
 			} else {
 				try {
-					return require(`@/assets/images/barter/${ path }`)
+					return require(`@/assets/images/${ path }`)
 				} catch {
 					return null;
 				}
