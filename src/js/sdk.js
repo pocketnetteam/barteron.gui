@@ -1,6 +1,6 @@
 import Vue from "vue";
-import { numberFormats } from "@/i18n/index.js";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
+import { currencies } from "@/i18n/index.js";
 
 import Account from "@/js/models/account.js";
 import Offer from "@/js/models/offer.js";
@@ -52,6 +52,7 @@ class SDK {
 	_currency = {};
 	get currency() {
 		if (this.empty(this._currency)) this.getCurrency();
+
 		return this._currency;
 	}
 
@@ -63,7 +64,7 @@ class SDK {
 	 * @returns {*}
 	 */
 	empty(prop) {
-		return !prop || prop && !(Array.isArray(prop) ? prop : !Object.values(prop)).length;
+		return !prop || prop && !Object.entries(prop).length;
 	}
 
 	/**
@@ -492,15 +493,13 @@ class SDK {
 	 * Currency from min-api
 	 */
 	getCurrency() {
-		const currencies = Object.keys(numberFormats).reduce((a, locale) => {
-			return a.concat(a, [numberFormats[locale].currency.currency.toUpperCase()]);
-		}, []);
+		this._currency.pending = true;
 
 		return fetch(`
 			https://min-api.cryptocompare.com/data/price?
 			${ new URLSearchParams({
 				fsym: "PKOIN",
-				tsyms: /* currencies */["USD", "EUR", "RUB"]
+				tsyms: currencies
 			}).toString() }
 		`)
 			.then(result => result.json())
