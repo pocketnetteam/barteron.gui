@@ -1,6 +1,7 @@
 import BarterExchange from "@/components/barter/exchange/index.vue";
 import Profile from "@/components/profile/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
+import CurrencySwitcher from "@/components/currency-switcher/index.vue";
 
 export default {
 	name: "Sidebar",
@@ -8,7 +9,8 @@ export default {
 	components: {
 		BarterExchange,
 		Profile,
-		ExchangeList
+		ExchangeList,
+		CurrencySwitcher
 	},
 
 	data() {

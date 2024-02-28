@@ -2,11 +2,16 @@
 	<v-sidebar>
 		<div class="box">
 			<h1 class="title">{{ item?.caption }}</h1>
-			<span class="price">
+			<span class="price row">
 				<template v-if="item?.price">
-					<span class="currency pkoin"></span>
-					{{ $n(item?.price) }}
-					<span>{{ $t('profileLabels.coins') }}</span>
+					<span class="col">
+						<span class="currency pkoin"></span>
+						<span class="amount">{{ $n(item?.price) }}</span>
+						<span>{{ $t('profileLabels.coins') }}</span>
+					</span>
+					<span class="col">
+						<CurrencySwitcher :amount="item?.price" />
+					</span>
 				</template>
 				<template v-else>
 					<span class="currency fa fa-gift"></span>

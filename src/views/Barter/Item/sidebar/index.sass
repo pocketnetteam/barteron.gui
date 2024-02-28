@@ -10,23 +10,33 @@
 	.price
 		font-size: 20px
 		display: flex
+		flex-wrap: wrap
+		gap: $r
 		align-items: center
+		justify-content: space-between
 		margin: 0 0 $r * 2
 
+		.col
+			margin: 0
+
+		.amount
+			display: block
+			font-weight: normal
+			overflow: hidden
+			text-overflow: ellipsis
+
 		.currency
-			background-color: $blue-hover
 			border-radius: 4px
-			color: $goku
+			color: $blue-hover
 			display: flex
 			align-items: center
 			justify-content: center
-			margin: 0 $r 0 0
-			padding: 2px
+			margin: 0 $r / 2 0 0
 			overflow: hidden
-			height: 1.15em
-			width: 1.65em
+			height: 1.05em
+			width: 1.05em
 
-			~ span
+			~ span + span
 				font-size: $r
 				padding: $r
 
