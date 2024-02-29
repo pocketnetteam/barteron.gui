@@ -499,7 +499,7 @@ class SDK {
 			https://min-api.cryptocompare.com/data/price?
 			${ new URLSearchParams({
 				fsym: "PKOIN",
-				tsyms: currencies
+				tsyms: currencies.map(currency => currency)
 			}).toString() }
 		`)
 			.then(result => result.json())

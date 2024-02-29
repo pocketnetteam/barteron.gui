@@ -9,13 +9,6 @@ const
 		"ru-RU"
 	],
 
-	currencies = [
-		"USD",
-		"EUR",
-		"RUB",
-		"BYR"
-	],
-
 	dateTimeFormats = {
 		"en-US": {
 			short: {
@@ -81,6 +74,57 @@ const
 			}
 		}
 	},
+
+	currencies = new (class {
+		data = {
+			"en-US_1": { code: "USD", graphem: "$" },
+			"en-US_2": { code: "EUR", graphem: "€" },
+			"ru-RU_1": { code: "RUB", graphem: "₽" },
+			"ru-RU_2": { code: "BYN", graphem: "Br" },
+			"ru-RU_3": { code: "KZT", graphem: "₸" }
+		};
+
+		/**
+		 * Get map of codes
+		 * 
+		 * @returns {Array}
+		 */
+		map(fn) {
+			return Object.entries(this.data).map(e => fn(e[1].code));
+		}
+		
+		/**
+		 * Get map of objects
+		 * 
+		 * @returns {Array[Object]}
+		 */
+		list(fn) {
+			return Object.entries(this.data).map(e => fn(e[1]));
+		}
+
+		/**
+		 * Sort data by locale
+		 * 
+		 * @returns {Array[Object]}
+		 */
+		sort(locale) {
+			return Object.keys(this.data).sort((a, b) => {
+				if (
+					a.includes(locale) &&
+					b.includes(locale) &&
+					a > b
+				) {
+					return 1;
+				}
+
+				if (a.includes(locale)) {
+					return -1;
+				}
+				
+				return 0;
+			}).map(k => this.data[k]);
+		}
+	}),
 
 	pluralizationRules = {
 		/**
