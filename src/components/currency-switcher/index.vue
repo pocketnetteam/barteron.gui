@@ -7,7 +7,11 @@
 		@selected="(item) => selectCurrency(item, true)"
 	>
 		<template #before>
-			<span class="amount">({{ converted ?? '...' }})</span>
+			<span
+				class="currency graphem"
+				:class="`graphem-${ currency?.value.toLowerCase() }`"
+			>{{ currency?.graphem ?? '?' }}</span>
+			<span class="amount">{{ converted ?? '...' }}</span>
 		</template>
 		
 		<span class="value"></span>

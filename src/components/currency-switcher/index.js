@@ -21,10 +21,11 @@ export default {
 		 * @returns {Array}
 		 */
 		currenciesList() {
-			return currencies.map(currency => ({
-				text: currency,
-				value: currency,
-				default: currency === (this.currency || numberFormats[this.$root.$i18n.locale]?.currency.currency)
+			return currencies.sort(this.$root.$i18n.locale).map(currency => ({
+				text: currency.code,
+				value: currency.code,
+				graphem: currency.graphem,
+				default: currency.code === (this.currency?.value || numberFormats[this.$root.$i18n.locale]?.currency.currency)
 			}));
 		},
 
@@ -36,7 +37,7 @@ export default {
 		converted() {
 			const
 				currency = this.sdk.currency,
-				result = (((this.amount * currency[this.currency]) * 100) / 100);
+				result = (((this.amount * currency[this.currency?.value]) * 100) / 100);
 
 			return !Number.isNaN(result) ? result.toFixed(2) : null;
 		}
@@ -58,7 +59,7 @@ export default {
 				}
 			})();
 
-			this.currency = selected.value;
+			this.currency = selected;
 			if (store) CurrencyStore.set(selected.value);
 		}
 	},
