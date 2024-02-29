@@ -83,7 +83,7 @@ export default {
 		 * @returns {Array|null}
 		 */
 		location() {
-			const geohash = this.account?.geohash;
+			const geohash = this.locationStore.geohash;
 
 			if (geohash) {
 				const { latitude, longitude } = GeoHash.decodeGeoHash(geohash);

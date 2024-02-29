@@ -122,8 +122,6 @@ export default {
 				aLon = Number(this.mapMarker?.[1] || 0),
 				bLat = Number(latlng[0] || 0),
 				bLon = Number(latlng[1] || 0);
-
-			console.log(e, e?.type)
 			
 			/* Prevent frequently address request */
 			if (aLat !== bLat || aLon !== bLon) {
