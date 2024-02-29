@@ -68,7 +68,7 @@
 					<ExchangeList
 						key="account"
 						ref="account"
-						holderClass="field"
+						holderClass="field-novalidate"
 						vSize="lg"
 						:tags="account?.tags || []"
 						:title="false"
@@ -86,7 +86,7 @@
 					<ExchangeList
 						key="something"
 						ref="something"
-						holderClass="field"
+						holderClass="field-novalidate"
 						vSize="lg"
 						:tags="tags"
 						:title="false"

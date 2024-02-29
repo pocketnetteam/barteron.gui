@@ -162,7 +162,8 @@ export default {
 					"center"
 				].map(p => this.$refs.map[p]).filter(p => p).shift(),
 				data = form.serialize(),
-				images = photos.serialize();
+				images = photos.serialize(),
+				tags = this.getting === "something" ? data.tags.split(",").map(tag => Number(tag)) : [this.getting];
 
 			/* Fill offer data */
 			this.offer.update({
@@ -171,7 +172,7 @@ export default {
 				caption: data.title,
 				description: data.description,
 				tag: Number(data.category),
-				tags: this.getting === "something" ? data.tags.split(",").map(tag => Number(tag)) : [this.getting],
+				tags: !tags.length ? tags : [99],
 				condition: this.condition,
 				images: Object.values(images),
 				geohash: GeoHash.encodeGeoHash.apply(null, center),
