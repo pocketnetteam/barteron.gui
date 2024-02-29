@@ -2,7 +2,7 @@
 	<v-button
 		class="language-switcher"
 		vType="light"
-		vSize="xs"
+		vSize="md"
 		:dropdown="localesList"
 		ref="locale"
 		@selected="(item) => selectLanguage(item, true)"
