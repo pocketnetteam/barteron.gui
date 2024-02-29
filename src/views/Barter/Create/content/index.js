@@ -2,6 +2,8 @@ import { GeoHash } from "geohash";
 import BarterList from "@/components/barter/list/index.vue";
 import Category from "@/components/categories/field/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
+import { currencies, numberFormats } from "@/i18n/index.js";
+import CurrencyStore from "@/stores/currency.js";
 
 export default {
 	name: "Content",
@@ -65,11 +67,10 @@ export default {
 		 * Format currencies to list
 		 */
 		currencies() {
-			const currencies = this.sdk.currency;
-
-			return Object.keys(currencies).map(key => ({
-				text: key,
-				value: key.toLocaleLowerCase()
+			return currencies.sort(this.$root.$i18n.locale).map(currency => ({
+				text: currency.code,
+				value: currency.code,
+				selected: currency.code === (CurrencyStore.currency || numberFormats[this.$root.$i18n.locale]?.currency.currency)
 			}));
 		}
 	},

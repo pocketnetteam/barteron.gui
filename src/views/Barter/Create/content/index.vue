@@ -185,6 +185,7 @@
 					ref="map"
 					:center="geohash || location || undefined"
 					:point="geohash || undefined"
+					:radius="0"
 					:allowPosition="true"
 					:allowSelection="true"
 				/>
