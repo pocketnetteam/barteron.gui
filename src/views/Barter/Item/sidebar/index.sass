@@ -11,12 +11,13 @@
 		font-size: 20px
 		display: flex
 		flex-wrap: wrap
-		gap: $r
 		align-items: center
 		justify-content: space-between
-		margin: 0 0 $r * 2
+		margin: 0 0 $r / 2
 
 		.col
+			flex-basis: 100%
+			gap: $r / 2
 			margin: 0
 
 		.amount
@@ -31,13 +32,13 @@
 			display: flex
 			align-items: center
 			justify-content: center
-			margin: 0 $r / 2 0 0
 			overflow: hidden
 			height: 1.05em
 			width: 1.05em
 
 			~ span + span
-				font-size: $r
+				color: $backdrop
+				font-size: ($r / 2) * 3
 				padding: $r
 
 			&.pkoin::after
@@ -47,6 +48,9 @@
 				display: block
 				height: 100%
 				width: 100%
+
+			&.graphem-byn
+				letter-spacing: -2px
 
 		font-weight: 700
 
