@@ -26,7 +26,7 @@
 				</li>
 
 				<!-- Empty list -->
-				<li class="empty" v-if="!vTags.length && !editMode">
+				<li class="empty" v-if="!vTags.length && !editable">
 					{{ $t('barterLabels.empty') }}
 				</li>
 
