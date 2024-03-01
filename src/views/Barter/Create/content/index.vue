@@ -20,7 +20,7 @@
 				<!-- Select: Category -->
 				<Category
 					ref="category"
-					class="field"
+					class="field-novalidate"
 					:value="offer.tag"
 				/>
 			</div>
