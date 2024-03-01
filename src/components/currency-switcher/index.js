@@ -68,6 +68,8 @@ export default {
 		if (CurrencyStore?.currency) {
 			/* Get currency from store */
 			this.selectCurrency(CurrencyStore.currency);
+		} else {
+			this.selectCurrency(this.currenciesList[0]);
 		}
 	}
 }
