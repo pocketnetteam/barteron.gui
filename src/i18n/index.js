@@ -81,7 +81,8 @@ const
 			"en-US_2": { code: "EUR", graphem: "€" },
 			"ru-RU_1": { code: "RUB", graphem: "₽" },
 			"ru-RU_2": { code: "BYN", graphem: "Br" },
-			"ru-RU_3": { code: "KZT", graphem: "₸" }
+			"ru-RU_3": { code: "UAH", graphem: "₴" },
+			"ru-RU_4": { code: "KZT", graphem: "₸" }
 		};
 
 		/**
