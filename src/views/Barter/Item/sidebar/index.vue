@@ -15,7 +15,7 @@
 				</template>
 				<template v-else>
 					<span class="currency fa fa-gift"></span>
-					{{ $t('barterLabels.free') }}
+					<span class="amount">{{ $t('barterLabels.free') }}</span>
 				</template>
 			</span>
 
