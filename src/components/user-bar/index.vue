@@ -2,21 +2,7 @@
 	<div class="user-bar">
 		<ul>
 			<li>
-				<a
-					class="link"
-					@click="$event => requestPermissions($event, { path: `/profile/${ address }#favorites` })"
-				>
-					<i class="fa fa-heart"></i>
-			</a>
-			</li>
-
-			<li>
-				<a
-					class="link"
-					@click="$event => requestPermissions($event, { path: `/profile/${ address }#feedbacks` })"
-				>
-					<i class="fa fa-comment"></i>
-			</a>
+				<CurrencySwitcher />
 			</li>
 
 			<li>

@@ -3,23 +3,27 @@
 .currency-switcher
 	display: flex
 	align-items: center
-	justify-content: space-between
 	gap: $r / 2
+	flex-basis: 100%
 	margin: 0 0 -5px
 	max-width: calc(#{$sidebar-width} - 26px)
 
 	/deep/
 		.amount,
-		.v-button,
-		.v-button-dropdown
+		.amount ~ span,
 			font-size: 12px !important
+
+		.amount ~ span
+			padding: $r / 2 !important
 
 	/deep/ .v-button
 		background: none !important
+		font-weight: bold
 		padding: ($r / 2) * 3 $r
 
 		.text
 			gap: $r
 
 	/deep/ .v-button-dropdown
+		font-weight: bold
 		right: 0

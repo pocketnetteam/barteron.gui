@@ -21,6 +21,7 @@
 			:disabled="disabled"
 			:title="title"
 			ref="button"
+			v-if="!hideButton"
 			@mousedown="animateRipple"
 			@mousedown.native="animateRipple"
 			@touch:start="animateRipple"
@@ -55,7 +56,7 @@
 			</transition-group>
 		</component>
 
-		<div class="v-button-dropdown" v-if="hasDropdown">
+		<div class="v-button-dropdown" v-if="hasDropdown && !hideButton">
 			<slot name="dropdown" v-if="$slots.dropdown"></slot>
 			
 			<ul v-else>

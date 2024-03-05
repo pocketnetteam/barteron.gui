@@ -25,6 +25,14 @@ export default {
 		dropdownItemKey: {
 			type: String,
 			default: "text"
+		},
+		hideButton: {
+			type: Boolean,
+			default: false
+		},
+		rippleEffect: {
+			type: Boolean,
+			default: true
 		}
 	},
 
@@ -77,7 +85,7 @@ export default {
 		 * @param {Object|String}
 		 */
 		setValue(item) {
-			if (item) {
+			if (item && !this.hideButton) {
 				/* Set value in valueSelector */
 				this.value.innerHTML = item[this.dropdownItemKey] || item.text || item;
 			}
@@ -89,6 +97,8 @@ export default {
 		 * @param {Event} e
 		 */
 		animateRipple(e) {
+			if (!this.rippleEffect) return;
+
 			const 
 				el = this.$refs.button.$el || this.$refs.button,
 				pos = el?.getBoundingClientRect();

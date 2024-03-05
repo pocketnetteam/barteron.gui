@@ -10,7 +10,10 @@
 						<span>{{ $t('profileLabels.coins') }}</span>
 					</span>
 					<span class="col">
-						<CurrencySwitcher :amount="item?.price" />
+						<CurrencySwitcher
+							:amount="item?.price"
+							:hideButton="true"
+						/>
 					</span>
 				</template>
 				<template v-else>

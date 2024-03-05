@@ -91,6 +91,14 @@
 						v-else
 					></i>
 				</span>
+
+				<div class="currency-holder">
+					<CurrencySwitcher
+						:switcher="false"
+						:amount="item?.price"
+						:hideButton="true"
+					/>
+				</div>
 			</div>
 
 			<div class="row title" v-if="item.caption">

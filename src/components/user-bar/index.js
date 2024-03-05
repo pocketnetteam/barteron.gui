@@ -1,7 +1,12 @@
 import NameToHSL from "@/js/nametohsl.js";
+import CurrencySwitcher from "@/components/currency-switcher/index.vue";
 
 export default {
 	name: "UserBar",
+
+	components: {
+		CurrencySwitcher
+	},
 
 	inject: ["dialog"],
 

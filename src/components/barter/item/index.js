@@ -2,6 +2,7 @@ import { GeoHash } from "geohash";
 import ImageLoad from "@/components/image-load/index.vue";
 import Loader from "@/components/loader/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
+import CurrencySwitcher from "@/components/currency-switcher/index.vue";
 import LikeStore from "@/stores/like.js";
 
 export default {
@@ -10,7 +11,8 @@ export default {
 	components: {
 		ImageLoad,
 		Loader,
-		ExchangeList
+		ExchangeList,
+		CurrencySwitcher
 	},
 
 	props: {

@@ -5,7 +5,10 @@ export default {
 	name: "CurrencySwitcher",
 
 	props: {
-		amount: Number
+		amount: Number,
+		switcher: Boolean,
+		hideButton: Boolean,
+		vSize: String
 	},
 
 	data() {
@@ -71,5 +74,10 @@ export default {
 		} else {
 			this.selectCurrency(this.currenciesList[0]);
 		}
+
+		/* Subscribe to store event to get actual price */
+		CurrencyStore.$subscribe(() => {
+			this.selectCurrency(CurrencyStore.currency);
+		});
 	}
 }
