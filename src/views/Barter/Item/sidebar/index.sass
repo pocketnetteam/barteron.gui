@@ -38,7 +38,7 @@
 
 			~ span + span
 				color: $backdrop
-				font-size: ($r / 2) * 3
+				font-size: 13px
 				padding: $r / 2
 
 			&.pkoin::after
@@ -53,6 +53,12 @@
 				letter-spacing: -2px
 
 		font-weight: 700
+
+		.currency-switcher
+			.currency
+				~ .amount,
+				~ span + span
+					font-size: 13px !important
 
 	.profile
 		.info
