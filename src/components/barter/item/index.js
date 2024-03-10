@@ -1,4 +1,3 @@
-import { GeoHash } from "geohash";
 import ImageLoad from "@/components/image-load/index.vue";
 import Loader from "@/components/loader/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
@@ -33,6 +32,7 @@ export default {
 
 	data() {
 		return {
+			map: null,
 			hover: 0,
 			active: 0,
 			addr: {}
@@ -87,12 +87,7 @@ export default {
 		location() {
 			const geohash = this.locationStore.geohash;
 
-			if (geohash) {
-				const { latitude, longitude } = GeoHash.decodeGeoHash(geohash);
-				return [latitude[0], longitude[0]];
-			} else {
-				return null;
-			}
+			this.decodeGeoHash(geohash);
 		},
 
 		/**
@@ -101,12 +96,7 @@ export default {
 		 * @returns {Array|null}
 		 */
 		geohash() {
-			if (this.item.geohash) {
-				const { latitude, longitude } = GeoHash.decodeGeoHash(this.item.geohash);
-				return [latitude[0], longitude[0]];
-			} else {
-				return null;
-			}
+			return this.decodeGeoHash(this.item.geohash);
 		},
 
 		/**
@@ -232,6 +222,26 @@ export default {
 				holder.classList.remove("zoom");
 				holder.removeAttribute("style");
 			}
+		},
+
+		/**
+		 * Get offers feed
+		 */
+		async getOffersFeed() {
+			this.map.offersNear = await this.getOffersFeedList(
+				this.getGeoHashRadius({
+					geohash: this.item.geohash,
+					radius: 10,
+					precision: 5
+				})
+			);
 		}
+	},
+
+	mounted() {
+		this.$2watch("$refs.map").then(map => {
+			this.map = map;
+			this.getOffersFeed();
+		});
 	}
 }

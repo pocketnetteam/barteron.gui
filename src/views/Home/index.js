@@ -26,17 +26,12 @@ export default {
 		 * Get offers feed
 		 */
 		async getOffersFeed() {
-			this.fetching = true;
-
-			this.newFromGoods = await this.sdk.getBrtOffersFeed({
-				location: this.locationStore.near || [],
-				pageSize: 100
-			}).then(offers => {
-				this.fetching = false;
-				return offers.filter(offer => offer.active);
-			});
+			this.newFromGoods = await this.getOffersFeedList();
 		},
 
+		/**
+		 * Get complex deals
+		 */
 		async getComplexDeals() {
 			if (this.address?.length) {
 				/* Get my offers list */

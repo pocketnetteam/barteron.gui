@@ -331,6 +331,7 @@
 			<div class="row" v-if="item.geohash">
 				<!-- Component: Map -->
 				<v-map
+					ref="map"
 					:center="geohash"
 					:point="geohash"
 					:allowPosition="true"

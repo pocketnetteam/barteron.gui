@@ -1,11 +1,10 @@
-import { GeoHash } from "geohash";
-
 export default {
 	name: "Location",
 
 	data() {
 		return {
 			lightbox: false,
+			map: null,
 			mapMarker: null,
 			zoom: null,
 			radius: 0,
@@ -13,6 +12,7 @@ export default {
 				fetching: false
 			},
 			lastAddr: null,
+			nearbyDisabled: true,
 			saveDisabled: true
 		}
 	},
@@ -39,12 +39,7 @@ export default {
 		 * @returns {Array|null}
 		 */
 		geohash() {
-			if (this.locationStore.geohash) {
-				const { latitude, longitude } = GeoHash.decodeGeoHash(this.locationStore.geohash);
-				return [latitude[0], longitude[0]];
-			} else {
-				return null;
-			}
+			return this.decodeGeoHash(this.locationStore.geohash);
 		},
 
 		/**
@@ -101,7 +96,7 @@ export default {
 		showLightbox() {
 			this.lightbox = true;
 			this.radius = this.locationStore.radius ?? 10;
-			this.$refs.map.mapObject._onResize();
+			this.map.mapObject._onResize();
 		},
 
 		/**
@@ -122,16 +117,41 @@ export default {
 				aLon = Number(this.mapMarker?.[1] || 0),
 				bLat = Number(latlng[0] || 0),
 				bLon = Number(latlng[1] || 0);
-			
+
+				
 			/* Prevent frequently address request */
 			if (aLat !== bLat || aLon !== bLon) {
 				this.mapMarker = latlng;
 				this.addr = {};
+				this.nearbyDisabled = false;
 			}
 
 			this.debounce(() => {
 				if (this.lightbox) this.saveDisabled = false;
 			}, 1000)();
+		},
+
+		/**
+		 * Show nearby offers on the map
+		 */
+		showNearby() {
+			const
+				center = [
+					"marker",
+					"point",
+					"center"
+				].map(p => this.map?.[p]).filter(p => p).shift(),
+				geohash = this.encodeGeoHash(center || this.location);
+				
+			this.getOffersFeed(
+				this.getGeoHashRadius({
+					geohash,
+					radius: this.radius,
+					precision: 5
+				})
+			);
+
+			this.nearbyDisabled = true;
 		},
 
 		/**
@@ -142,6 +162,7 @@ export default {
 
 			this.mapMarker = null;
 			this.saveDisabled = false;
+			this.nearbyDisabled = false;
 			this.hideLightbox();
 		},
 
@@ -154,8 +175,8 @@ export default {
 					"marker",
 					"point",
 					"center"
-				].map(p => this.$refs.map?.[p]).filter(p => p).shift(),
-				geohash = GeoHash.encodeGeoHash.apply(null, center || this.location);
+				].map(p => this.map?.[p]).filter(p => p).shift(),
+				geohash = this.encodeGeoHash(center || this.location);
 
 			this.saveDisabled = true;
 
@@ -175,8 +196,23 @@ export default {
 			this.hideLightbox();
 		},
 
-		mounted() {
-			this.lastAddr = this.address;
-		},
+		/**
+		 * Get offers feed
+		 */
+		async getOffersFeed(location) {
+			this.map.offersNear = await this.getOffersFeedList(location);
+		}
+	},
+
+	mounted() {
+		this.lastAddr = this.address;
+
+		this.$2watch("$refs.map").then(map => {
+			this.map = map;
+
+			if (this.locationStore.near) {
+				this.getOffersFeed();
+			}
+		});
 	}
 }

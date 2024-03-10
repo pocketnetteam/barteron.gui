@@ -1,6 +1,22 @@
 <template>
 	<div :id="id" :style="{ height, width, '--height': height, '--width': width }">
 		<l-map ref="map" :style="{ height }" :zoom="zoom" :center="marker || center">
+			<!-- Offers near -->
+			<template>
+				<l-marker v-for="offer in offersNear"
+					:lat-lng="decodeGeoHash(offer.geohash)"
+					:key="offer.hash"
+					:icon="offerIcon"
+				>
+					<l-popup>
+						<BarterItem
+							:item="offer"
+						/>
+					</l-popup>
+				</l-marker>
+			</template>
+
+			<!-- Find my location -->
 			<template v-if="allowPosition">
 				<l-control position="bottomleft">
 					<div class="leaflet-bar">
@@ -16,6 +32,7 @@
 				</l-control>
 			</template>
 
+			<!-- Pin marker -->
 			<template v-if="allowSelection && (marker || point)">
 				<l-marker :latLng="marker || point" />
 				<l-circle
@@ -28,6 +45,7 @@
 				<l-geosearch :options="geosearchOptions" />
 			</template>
 
+			<!-- Circle marker -->
 			<template v-if="!allowSelection && point">
 				<l-circle
 					:latLng="point || {lat: center?.[0], lng: center?.[1]}"

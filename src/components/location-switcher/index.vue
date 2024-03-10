@@ -57,6 +57,13 @@
 								<span class="value">{{ `${ radius } ${ $t('metricsLabels.km') }` }}</span>
 							</div>
 						</div>
+
+						<div class="col block no-offset">
+							<v-button
+								:disabled="nearbyDisabled"
+								@click="showNearby"
+							>{{ $t('buttonLabels.show_nearby_on_map') }}</v-button>
+						</div>
 					</div>
 
 					<div class="row">

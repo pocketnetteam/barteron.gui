@@ -28,10 +28,11 @@
 						path="categoryLabels.empty_details"
 						tag="p"
 					>
-						<v-button
-							place="all_regions"
-							@click="reset"
-						>{{ $t('buttonLabels.all_regions') }}</v-button>
+						<template #all_regions>
+							<v-button
+								@click="reset"
+							>{{ $t('buttonLabels.all_regions') }}</v-button>
+						</template>
 					</i18n>
 				</template>
 			</template>

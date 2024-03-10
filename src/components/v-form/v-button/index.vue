@@ -1,8 +1,8 @@
 <template>
 	<div
 		:class="{
-			'v-button-holder': true,
-			'has-dropdown': hasDropdown,
+			'v-button-holder': !hideButton,
+			'has-dropdown': hasDropdown && !hideButton,
 			'dropdown-open': active
 		}"
 	>

@@ -1,14 +1,17 @@
+import L from "leaflet";
+import { Icon } from "leaflet";
+import { OpenStreetMapProvider } from "leaflet-geosearch";
 import {
 	LMap,
 	LTileLayer,
 	LMarker,
+	LPopup,
 	LCircle,
 	LCircleMarker,
 	LControl
 } from "vue2-leaflet";
-import { Icon } from "leaflet";
-import { OpenStreetMapProvider } from "leaflet-geosearch";
 import LGeosearch from "vue2-leaflet-geosearch";
+import BarterItem from "@/components/barter/item/index.vue";
 
 delete Icon.Default.prototype._getIconUrl;
 Icon.Default.mergeOptions({
@@ -17,6 +20,8 @@ Icon.Default.mergeOptions({
 	shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
 });
 
+const offerIcon = require("@/assets/images/offer.png");
+
 export default {
 	name: "Vmap",
 
@@ -24,10 +29,12 @@ export default {
 		LMap,
 		LTileLayer,
 		LMarker,
+		LPopup,
 		LCircle,
 		LCircleMarker,
 		LControl,
-		LGeosearch
+		LGeosearch,
+		BarterItem
 	},
 
 	props: {
@@ -81,6 +88,12 @@ export default {
 		this.provider = new OpenStreetMapProvider();
 
 		return {
+			offerIcon: L.icon({
+				iconUrl: offerIcon,
+				iconSize: [32, 37],
+				iconAnchor: [16, 37]
+			}),
+			offersNear: [],
 			mapObject: {},
 			geosearchOptions: {
 				provider: this.provider,
@@ -138,6 +151,18 @@ export default {
 				this.$emit("change", this.marker, event);
 			}
 		}
+
+		/* this.mapObject
+			.on("mousemove", e => {
+				this.lastMousePos = e.originalEvent;
+			})
+			.on("zoom", () => {
+				if (this.lastMousePos) {
+					const latLng = this.mapObject.mouseEventToLatLng(this.lastMousePos);
+					this.mapObject.setView(latLng, this.mapObject.getZoom());
+				}
+				console.log(this.mapObject)
+			}); */
 
 		if(this.allowSelection) {
 			this.mapObject

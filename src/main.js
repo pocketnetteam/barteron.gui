@@ -12,6 +12,7 @@ import Favorites from "@/data/favorites.json";
 import { GeoHash } from "geohash";
 import getHashesNear from "geohashes-near";
 import LocationStore from "@/stores/location.js";
+import { Promise } from "core-js";
 
 Vue.config.productionTip = false;
 
@@ -106,6 +107,31 @@ Vue.prototype.shared = Vue.observable({
 				clearTimeout(timer);
 				timer = setTimeout(() => fn.apply(this, args), timeout);
 			};
+		},
+
+		/**
+		 * Vue2 watch
+		 * 
+		 * @param {String} prop
+		 * @param {Function} fn
+		 * 
+		 * @returns {Promise}
+		 */
+		$2watch(prop, fn) {
+			return new Promise(resolve => {
+				const
+					value = () => new Function("_", `return _.${ prop }`)(this),
+					oldVal = { ...value() },
+					interval = setInterval(() => {
+						const newVal = value();
+
+						if (newVal) {
+							clearInterval(interval);
+							resolve(newVal);
+							if (typeof fn === "function") fn(newVal, oldVal);
+						}
+					}, 100);
+			});
 		},
 
 		/**
@@ -208,6 +234,44 @@ Vue.prototype.shared = Vue.observable({
 				radius || 10,
 				units || "kilometers"
 			);
+		},
+
+		/**
+		 * Encode geohash
+		 * 
+		 * @param {Array} latlng
+		 */
+		encodeGeoHash(latlng) {
+			return GeoHash.encodeGeoHash.apply(null, latlng);
+		},
+
+		/**
+		 * Decode geohash
+		 * 
+		 * @returns {Array|null}
+		 */
+		decodeGeoHash(geohash) {
+			if (geohash) {
+				const { latitude, longitude } = GeoHash.decodeGeoHash(geohash);
+				return [latitude[0], longitude[0]];
+			} else {
+				return null;
+			}
+		},
+
+		/**
+		 * Get offers feed
+		 */
+		getOffersFeedList(location) {
+			this.fetching = true;
+
+			return this.sdk.getBrtOffersFeed({
+				location: location || this.locationStore.near || [],
+				pageSize: 100
+			}).then(offers => {
+				this.fetching = false;
+				return offers.filter(offer => offer.active);
+			});
 		}
 	}
 });
