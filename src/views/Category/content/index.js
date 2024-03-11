@@ -8,25 +8,25 @@ import BarterList from "@/components/barter/list/index.vue";
  * 
  * @returns {Promise}
  */
-const
-	filter = {
-		orderBy: "height", // height | location | price
-		orderDesc: true
-	},
-	requestItems = (request) => {
-		const
-			mixin = Vue.prototype.shared,
-			search = request?.route?.query?.search;
+let filter = {
+	orderBy: "height", // height | location | price
+	orderDesc: true
+};
 
-		return Vue.prototype.sdk.getBrtOfferDeals({
-			...filter,
-			...(search && { search }),
-			location: mixin.computed.locationStore().near || [],
-			theirTags: Number.isInteger(+request?.id) ? [+request.id] : [],
-			pageStart: request?.pageStart || 0,
-			pageSize: request?.pageSize || 10
-		});
-	}
+const requestItems = (request) => {
+	const
+		mixin = Vue.prototype.shared,
+		search = request?.route?.query?.search;
+
+	return Vue.prototype.sdk.getBrtOfferDeals({
+		...filter,
+		...(search && { search }),
+		location: mixin.computed.locationStore().near || [],
+		theirTags: Number.isInteger(+request?.id) ? [+request.id] : [],
+		pageStart: request?.pageStart || 0,
+		pageSize: request?.pageSize || 10
+	});
+};
 
 export default {
 	name: "Content",
