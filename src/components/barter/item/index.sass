@@ -5,8 +5,6 @@ div[class^="barter-item-"]
 	display: inline-flex
 	flex-direction: column
 	font-size: 1em
-	position: relative
-	z-index: 10
 	width: 100%
 
 	.title
@@ -193,15 +191,41 @@ div[class^="barter-item-"]
 		color: $popo
 		font-weight: 700
 
+		a
+			display: block
+			overflow: hidden
+			text-overflow: ellipsis
+			white-space: nowrap
+			width: 100%
+
 	.to,
 	.info
 		font-size: .86em
 		line-height: 1.2
 
 	.to
+		position: relative
+		width: 100%
+
 		ul
 			+resetList()
 			color: $bulma
+			text-overflow: ellipsis
+			white-space: nowrap
+			overflow: hidden
+			padding-right: calc(15px * var(--len, 0))
+			width: 100%
+
+			&::after
+				background: $bulma
+				border-radius: 50%
+				color: $primary
+				content: var(--count)
+				padding: .25em .28em
+				position: absolute
+				top: 50%
+				right: 0
+				transform: translateY(-50%)
 
 			li
 				display: inline
@@ -283,12 +307,14 @@ div[class^="barter-item-"]
 			margin: 0 0 .85em
 
 		.to
+			display: inline-flex
+			width: auto
+
 			ul
-				display: flex
-				flex-wrap: wrap
+				width: auto
 
 				li
-					white-space: pre
+					white-space: nowrap
 
 		.info
 			justify-content: flex-end
@@ -306,7 +332,7 @@ div[class^="barter-item-"]
 		.thumbnails
 			+resetList()
 
-		picture
+		> picture
 			border-radius: 11px
 			margin: 0
 			flex-shrink: 0
@@ -314,61 +340,61 @@ div[class^="barter-item-"]
 			height: auto
 			width: 100%
 
-		.fade
-			border-radius: 11px
-			position: relative
-			overflow: hidden
-			height: 355px
+			.fade
+				border-radius: 11px
+				position: relative
+				overflow: hidden
+				height: 355px
 
-			li
-				+transition(opacity)
-				position: absolute
-				top: 0
-				left: 0
-				opacity: 0
-				height: 100%
-				width: 100%
+				li
+					+transition(opacity)
+					position: absolute
+					top: 0
+					left: 0
+					opacity: 0
+					height: 100%
+					width: 100%
 
-				&.active
-					position: relative
-					opacity: 1
-					z-index: 1
+					&.active
+						position: relative
+						opacity: 1
+						z-index: 1
 
-				&.zoom
-					background: var(--url) 50% 50% no-repeat
-					background-size: cover
-				
-					.image img
-						opacity: 0
+					&.zoom
+						background: var(--url) 50% 50% no-repeat
+						background-size: cover
+					
+						.image img
+							opacity: 0
 
-				.image
-					height: 355px
+					.image
+						height: 355px
+
+						img
+							+unselectable()
+							object-fit: cover
+
+			.thumbnails
+				display: flex
+				gap: 10px
+				margin: 1.15em 0 0
+
+				li
+					+transition(border-color)
+					border: 1px solid transparent
+					border-radius: 12px
+					overflow: hidden
+					height: 64px
+					width: 64px
+
+					&.active
+						border-color: $piccolo
+						padding: 3px
 
 					img
-						+unselectable()
-						object-fit: cover
+						border-radius: 10px
 
-		.thumbnails
-			display: flex
-			gap: 10px
-			margin: 1.15em 0 0
-
-			li
-				+transition(border-color)
-				border: 1px solid transparent
-				border-radius: 12px
-				overflow: hidden
-				height: 64px
-				width: 64px
-
-				&.active
-					border-color: $piccolo
-					padding: 3px
-
-				img
-					border-radius: 10px
-
-		.row
+		> .row
 			color: $trunks
 			margin-bottom: $r * 2.3
 
@@ -407,7 +433,7 @@ div[class^="barter-item-"]
 				color: $popo
 				white-space: pre-wrap
 
-		.info
+		> .info
 			font-size: 1em
 
 			.col
