@@ -73,40 +73,34 @@ div[id^="map"]
 			+transition()
 
 		&.marker-cluster-small
-			background-color: rgba($blue, .6)
-
-			div
-				background-color: rgba($blue, .6)
-
-			&:hover
-				background-color: rgba($blue-hover, .6)
-
-				div
-					background-color: rgba($blue-hover, .6)
-
-		&.marker-cluster-medium
-			background-color: rgba($whis, .6)
-
-			div
+			&.marker-cluster,
+			&.marker-cluster div
 				background-color: rgba($whis, .6)
 
 			&:hover
-				background-color: rgba($whis-hover, .6)
-
-				div
+				&.marker-cluster,
+				&.marker-cluster div
 					background-color: rgba($whis-hover, .6)
 
-		&.marker-cluster-large
-			background-color: rgba($frieza, .6)
-
-			div
-				background-color: rgba($frieza, .6)
+		&.marker-cluster-medium
+			&.marker-cluster,
+			&.marker-cluster div
+				background-color: rgba($dodoria, .6)
 
 			&:hover
-				background-color: rgba($frieza-hover, .6)
+				&.marker-cluster,
+				&.marker-cluster div
+					background-color: rgba($dodoria-hover, .6)
 
-				div
-					background-color: rgba($frieza-hover, .6)
+		&.marker-cluster-large
+			&.marker-cluster,
+			&.marker-cluster div
+				background-color: rgba($nappa, .6)
+
+			&:hover
+				&.marker-cluster,
+				&.marker-cluster div
+					background-color: rgba($nappa-hover, .6)
 
 	.leaflet-popup
 		.leaflet-popup-content
