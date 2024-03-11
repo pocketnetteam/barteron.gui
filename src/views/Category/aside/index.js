@@ -36,8 +36,8 @@ export default {
 			const
 				inputs = this.$refs.price?.inputs,
 				opt = typeof e === "string" && e.split("-"),
-				min = opt ? (+opt[0] || "") : (+inputs[0].value || ""),
-				max = opt ? (+opt[1] || "") : (+inputs[1].value || "");
+				min = opt ? (+opt[0] || null) : (+inputs[0].value || null),
+				max = opt ? (+opt[1] || null) : (+inputs[1].value || null);
 
 			this.filters.priceMin = min;
 			this.filters.priceMax = max;
@@ -57,10 +57,14 @@ export default {
 		 * Send filters data to content component
 		 */
 		applyFilters() {
+			const
+				min = this.filters.priceMin,
+				max = this.filters.priceMax;
+
 			this.$components.content.applyFilters({
 				...this.filters,
-				priceMin: +this.filters.priceMin,
-				priceMax: +this.filters.priceMax
+				priceMin: min ? min * 100 : min,
+				priceMax: max ? max * 100 : max
 			});
 
 			this.applyDisabled = true;
