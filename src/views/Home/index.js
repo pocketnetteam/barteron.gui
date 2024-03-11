@@ -79,7 +79,7 @@ export default {
 					const index = viewed.findIndex(offer => offer?.hash === hash);
 
 					return viewed[index];
-				});
+				}).filter(offer => offer);
 			}
 		},
 
