@@ -112,10 +112,12 @@ export default {
 				if (!this.addr.fetching && this.geohash) {
 					this.addr.fetching = true;
 				
-					this.sdk.geoLocation(this.geohash)
-						.then(result => {
-							if (result?.address) this.$set(this, "addr", result.address);
-						});
+					this.sdk.geoLocation(this.geohash, {
+						"zoom": this.zoom || 18,
+						"accept-language": this.$root.$i18n.locale
+					}).then(result => {
+						if (result?.address) this.$set(this, "addr", result.address);
+					});
 				}
 
 				return null;
