@@ -45,7 +45,7 @@
 			</div>
 		</v-details>
 
-		<v-details
+		<!-- <v-details
 			:title="$t('conditionLabels.label')"
 			:open="true"
 		>
@@ -58,7 +58,7 @@
 				:value="condition.map(item => item.value)"
 				@change="changeCondition"
 			/>
-		</v-details>
+		</v-details> -->
 
 		<!-- <v-details
 			:title="$t('typeLabels.label')"

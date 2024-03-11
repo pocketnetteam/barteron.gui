@@ -47,11 +47,11 @@ export default {
 			}
 		},
 
-		changeCondition(value, e) {
+		/* changeCondition(value, e) {
 			this.filters.condition = this.$refs.condition.inputs
 				.map(field => field.checked && field.value)
 				.filter(field => field);
-		},
+		}, */
 
 		/**
 		 * Send filters data to content component
