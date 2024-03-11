@@ -1,4 +1,3 @@
-import L from "leaflet";
 import { Icon } from "leaflet";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
 import {
@@ -8,8 +7,10 @@ import {
 	LPopup,
 	LCircle,
 	LCircleMarker,
-	LControl
+	LControl,
+	LIcon
 } from "vue2-leaflet";
+import Vue2LeafletMarkerCluster from "vue2-leaflet-markercluster";
 import LGeosearch from "vue2-leaflet-geosearch";
 import BarterItem from "@/components/barter/item/index.vue";
 
@@ -20,8 +21,6 @@ Icon.Default.mergeOptions({
 	shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
 });
 
-const offerIcon = require("@/assets/images/offer.png");
-
 export default {
 	name: "Vmap",
 
@@ -29,10 +28,12 @@ export default {
 		LMap,
 		LTileLayer,
 		LMarker,
+		LMarkerCluster: Vue2LeafletMarkerCluster,
 		LPopup,
 		LCircle,
 		LCircleMarker,
 		LControl,
+		LIcon,
 		LGeosearch,
 		BarterItem
 	},
@@ -66,6 +67,10 @@ export default {
 			type: Array,
 			default: null
 		},
+		offers: {
+			type: Array,
+			default: () => []
+		},
 		allowPosition: {
 			type: Boolean,
 			default: false
@@ -88,11 +93,9 @@ export default {
 		this.provider = new OpenStreetMapProvider();
 
 		return {
-			offerIcon: L.icon({
-				iconUrl: offerIcon,
-				iconSize: [32, 37],
-				iconAnchor: [16, 37]
-			}),
+			offerIcon: this.imageUrl("offer.png"),
+			offerIconActive: this.imageUrl("offer-active.png"),
+			iconSize: [32, 37],
 			offersNear: [],
 			mapObject: {},
 			geosearchOptions: {

@@ -50,8 +50,8 @@
 									max="6000"
 									:value="radius"
 									:vEvents="{
-										change: (e) => radius = Number(e.target.value),
-										input: (e) => radius = Number(e.target.value)
+										change: changeRadius,
+										input: changeRadius
 									}"
 								/>
 								<span class="value">{{ `${ radius } ${ $t('metricsLabels.km') }` }}</span>
@@ -75,6 +75,7 @@
 							:allowSelection="true"
 							:zoom="locationStore.zoom || undefined"
 							:radius="radius || undefined"
+							:offers="offersNear"
 							@scale="x => zoom = x"
 							@change="setMarker"
 						/>

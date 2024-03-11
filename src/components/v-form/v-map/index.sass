@@ -1,4 +1,6 @@
 @import "@/css/vars.sass"
+@import "~leaflet.markercluster/dist/MarkerCluster.css"
+@import "~leaflet.markercluster/dist/MarkerCluster.Default.css"
 	
 div[id^="map"]
 	box-sizing: content-box
@@ -63,6 +65,48 @@ div[id^="map"]
 						top: 0
 						right: 8px
 						left: 0
+
+	.leaflet-marker-icon
+		&.marker-cluster
+		&.marker-cluster div
+			color: $white
+			+transition()
+
+		&.marker-cluster-small
+			background-color: rgba($blue, .6)
+
+			div
+				background-color: rgba($blue, .6)
+
+			&:hover
+				background-color: rgba($blue-hover, .6)
+
+				div
+					background-color: rgba($blue-hover, .6)
+
+		&.marker-cluster-medium
+			background-color: rgba($whis, .6)
+
+			div
+				background-color: rgba($whis, .6)
+
+			&:hover
+				background-color: rgba($whis-hover, .6)
+
+				div
+					background-color: rgba($whis-hover, .6)
+
+		&.marker-cluster-large
+			background-color: rgba($frieza, .6)
+
+			div
+				background-color: rgba($frieza, .6)
+
+			&:hover
+				background-color: rgba($frieza-hover, .6)
+
+				div
+					background-color: rgba($frieza-hover, .6)
 
 	.leaflet-popup
 		.leaflet-popup-content

@@ -333,8 +333,9 @@
 				<v-map
 					ref="map"
 					:center="geohash"
-					:point="geohash"
 					:allowPosition="true"
+					:zoom="18"
+					:offers="offersNear"
 				/>
 			</div>
 		</template>

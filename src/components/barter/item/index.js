@@ -4,6 +4,8 @@ import ExchangeList from "@/components/barter/exchange/list/index.vue";
 import CurrencySwitcher from "@/components/currency-switcher/index.vue";
 import LikeStore from "@/stores/like.js";
 
+const offerIcon = require("@/assets/images/offer-active.png");
+
 export default {
 	name: "BarterItem",
 
@@ -33,6 +35,7 @@ export default {
 	data() {
 		return {
 			map: null,
+			offersNear: [],
 			hover: 0,
 			active: 0,
 			addr: {}
@@ -228,20 +231,30 @@ export default {
 		 * Get offers feed
 		 */
 		async getOffersFeed() {
-			this.map.offersNear = await this.getOffersFeedList(
+			const offers = await this.getOffersFeedList(
 				this.getGeoHashRadius({
 					geohash: this.item.geohash,
 					radius: 10,
 					precision: 5
 				})
-			);
+			)
+			
+			this.offersNear = offers.map(offer => {
+				if (this.vType === "page" && offer.hash === this.item.hash) {
+					offer.current = true;
+				}
+
+				return offer;
+			});
 		}
 	},
 
 	mounted() {
-		this.$2watch("$refs.map").then(map => {
-			this.map = map;
-			this.getOffersFeed();
-		});
+		if (this.vType === "page") {
+			this.$2watch("$refs.map").then(map => {
+				this.map = map;
+				this.getOffersFeed();
+			});
+		}
 	}
 }

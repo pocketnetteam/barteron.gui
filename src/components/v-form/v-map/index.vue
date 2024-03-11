@@ -2,18 +2,24 @@
 	<div :id="id" :style="{ height, width, '--height': height, '--width': width }">
 		<l-map ref="map" :style="{ height }" :zoom="zoom" :center="marker || center">
 			<!-- Offers near -->
-			<template>
-				<l-marker v-for="offer in offersNear"
-					:lat-lng="decodeGeoHash(offer.geohash)"
-					:key="offer.hash"
-					:icon="offerIcon"
-				>
-					<l-popup>
-						<BarterItem
-							:item="offer"
-						/>
-					</l-popup>
-				</l-marker>
+			<template v-if="offers.length">
+				<l-marker-cluster>
+					<l-marker v-for="offer in offers"
+						:lat-lng="decodeGeoHash(offer.geohash)"
+						:key="offer.hash"
+					>
+						<l-icon
+							:icon-size="iconSize"
+							:icon-url="offer?.current ? offerIconActive : offerIcon"
+						>
+						</l-icon>
+						<l-popup>
+							<BarterItem
+								:item="offer"
+							/>
+						</l-popup>
+					</l-marker>
+				</l-marker-cluster>
 			</template>
 
 			<!-- Find my location -->

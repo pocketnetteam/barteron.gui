@@ -8,6 +8,7 @@ export default {
 			mapMarker: null,
 			zoom: null,
 			radius: 0,
+			offersNear: [],
 			addr: {
 				fetching: false
 			},
@@ -132,6 +133,16 @@ export default {
 		},
 
 		/**
+		 * Handle radius change
+		 * 
+		 * @param {Event} e
+		 */
+		changeRadius(e) {
+			this.radius = Number(e.target.value);
+			this.nearbyDisabled = false;
+		},
+
+		/**
 		 * Show nearby offers on the map
 		 */
 		showNearby() {
@@ -200,7 +211,7 @@ export default {
 		 * Get offers feed
 		 */
 		async getOffersFeed(location) {
-			this.map.offersNear = await this.getOffersFeedList(location);
+			this.offersNear = await this.getOffersFeedList(location);
 		}
 	},
 
@@ -209,10 +220,7 @@ export default {
 
 		this.$2watch("$refs.map").then(map => {
 			this.map = map;
-
-			if (this.locationStore.near) {
-				this.getOffersFeed();
-			}
+			this.getOffersFeed();
 		});
 	}
 }
