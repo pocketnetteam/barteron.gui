@@ -47,13 +47,22 @@ $columnWidth: 250px
 								&::before
 									color: $gohan
 
-			.v-button
-				.text
-					justify-content: flex-start
+				.v-button
+					.text
+						justify-content: flex-start
 
-					.expand
-						font-size: 0.9rem
-						margin-left: auto
+						.expand
+							font-size: 0.9rem
+							margin-left: auto
+
+						.icon-pkoin
+							+transition()
+							background-color: $bulma
+
+				&.active .v-button,
+				.v-button:hover
+					.icon-pkoin
+						background-color: $gohan
 
 	.v-button
 		.text,

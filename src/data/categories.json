@@ -352,12 +352,61 @@
 		"children": [],
 		"order": 44
 	},
+	"12": {
+		"name": "gold_silver",
+		"icon": "fa-coins",
+		"id": 12,
+		"parent": null,
+		"children": [
+			13,
+			14,
+			15,
+			16
+		],
+		"order": 45
+	},
+	"13": {
+		"name": "gold_silver_coins",
+		"id": 13,
+		"parent": 12,
+		"children": [],
+		"order": 46
+	},
+	"14": {
+		"name": "gold_silver_ingots",
+		"id": 14,
+		"parent": 12,
+		"children": [],
+		"order": 47
+	},
+	"15": {
+		"name": "gold_silver_jewelry",
+		"id": 15,
+		"parent": 12,
+		"children": [],
+		"order": 48
+	},
+	"16": {
+		"name": "silver_plate",
+		"id": 16,
+		"parent": 12,
+		"children": [],
+		"order": 49
+	},
+	"17": {
+		"name": "pkoin",
+		"icon": "icon-pkoin",
+		"id": 17,
+		"parent": null,
+		"children": [],
+		"order": 50
+	},
 	"99": {
 		"name": "everything_else",
 		"icon": "fa-project-diagram",
 		"id": 99,
 		"parent": null,
 		"children": [],
-		"order": 45
+		"order": 51
 	}
 }
