@@ -144,7 +144,10 @@
 					</template>
 
 					<template #input1After>
-						<span class="icon pkoin">PKOIN</span>
+						<span class="icon">
+							<i class="icon-pkoin"></i>
+							PKOIN
+						</span>
 					</template>
 				</v-input>
 			</div>
