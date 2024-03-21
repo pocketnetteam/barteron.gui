@@ -6,15 +6,16 @@ $item-width-max: 294px
 	.vs-carousel
 		.vs-carousel__wrapper
 			border-radius: 11px 11px 0 0
+			gap: 9px
 	
 		.vs-carousel__slide
-			flex: 0 0 25%
+			flex: 0 0 calc( 25% - 7px ) // Gap - 2px
+			width: calc( 25% - 7px ) // Gap - 2px
 
 			& > *
 				box-sizing: content-box
 				display: block
 				margin: 0 auto
-				padding: 0 9px
 				max-width: $item-width-max
 
 	.vs-carousel__arrows

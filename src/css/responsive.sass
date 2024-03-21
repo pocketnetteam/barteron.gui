@@ -1,5 +1,8 @@
 /* General */
 #app
+	padding-right: 50px
+	min-width: 340px
+
 	#header
 		padding-top: calc(var(--app-margin-top) + 55px)
 
@@ -12,14 +15,10 @@
 		max-width: $width
 
 /* Tablet and Phones */
-@media screen and (min-width: $tablet)
+@media screen and (max-width: $tablet)
 	#app
-		.v-lightbox section
-			max-width: 100%
+		padding-right: 0
 
-/* Phones */
-@media screen and (max-width: $phones)
-	#app
 		#header
 			.bar
 				.inner
@@ -38,9 +37,16 @@
 					justify-content: flex-end
 					width: 100%
 
+		.v-lightbox section
+			max-width: 100%
+
+/* Phones */
+@media screen and (max-width: $phones)
+	#app
 		.vs-carousel
 			.vs-carousel__slide
-				flex: 0 0 50%
+				flex: 0 0 calc( 50% - 7px ) // Gap - 2px
+				width: calc( 50% - 7px ) // Gap - 2px
 
 			.vs-carousel__arrows
 				display: none
@@ -50,7 +56,8 @@
 	#app
 		.vs-carousel
 			.vs-carousel__slide
-				flex: 0 0 33.33%
+				flex: 0 0 calc( 33.33% - 7px ) // Gap - 2px
+				width: calc( 33.33% - 7px ) // Gap - 2px
 
 			.vs-carousel__arrows
 				display: none
