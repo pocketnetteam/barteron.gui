@@ -210,7 +210,7 @@ Vue.prototype.shared = Vue.observable({
 		 * @param {Number} [data.radius]
 		 * @param {Number} [data.units]
 		 * 
-		 * @returns {String}
+		 * @returns {Array}
 		 */
 		getGeoHashRadius({
 			geohash,
