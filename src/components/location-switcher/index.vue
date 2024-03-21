@@ -23,7 +23,7 @@
 			<v-lightbox
 				:visible="lightbox"
 				size="xl"
-				title="Location"
+				:title="$t('stepsLabels.location')"
 				@onHide="hideLightbox"
 			>
 				<v-form ref="form">
