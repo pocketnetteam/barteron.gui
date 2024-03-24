@@ -401,12 +401,20 @@
 		"children": [],
 		"order": 50
 	},
+	"18": {
+		"name": "cooperative/community",
+		"icon": "fa-users",
+		"id": 18,
+		"parent": null,
+		"children": [],
+		"order": 51
+	},
 	"99": {
 		"name": "everything_else",
 		"icon": "fa-project-diagram",
 		"id": 99,
 		"parent": null,
 		"children": [],
-		"order": 51
+		"order": 52
 	}
 }
