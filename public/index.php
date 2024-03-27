@@ -7,12 +7,12 @@
 		<?php
 				require_once("og.php"); 
 
-				$og = new OG($_GET, "http://proxy:8898/");
+				$og = new OG($_GET, "http://127.0.0.1:8898/");
 
 				$og->check();
 				$og->echotags();
 		?>
-		<link rel="icon" href="<%= BASE_URL %>b_icon.png">
+		<link rel="icon" href="<?php echo "https://{$og->manifest['scope']}/{$og->manifest['icon']}"; ?>">
 		<title><%= htmlWebpackPlugin.options.title %></title>
 		<script src="https://<%= process.env.VUE_APP_SDK %>/js/lib/apps/sdk.js"></script>
 		<link rel="stylesheet" href="https://<%= process.env.VUE_APP_SDK %>/js/lib/apps/style.css">

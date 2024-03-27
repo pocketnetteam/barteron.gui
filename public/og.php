@@ -26,7 +26,6 @@ class OG {
 		$this->project = $project ?? $this->manifest['name'];
 		$this->domain = $domain ?? $this->manifest['id'];
 
-
 		$this->defaultOg = array(
 			'title' => $this->project,
 			'site_name' => $this->project, 
@@ -48,39 +47,86 @@ class OG {
 		if (isset($uri)) {
 			@list($page, $id) = explode('/', $uri);
 
-			if (@$page == 'barter') {
-				$title = false;
-				$description = false;
-				$images = false;
-				$result = $this->rpc->brtoffersbyhashes(array($this->clean($id)));
+			if ($id && substr($id, 0, strlen('search')) == 'search') {
+				@list($page, $id) = explode('?', $id);
+				parse_str($id, $id);
+			}
 
-				if ($result != false){
-					$offer = $result[0];
+			switch(@$page) {
+				case 'barter': {
+					$title = false;
+					$description = false;
+					$images = false;
+					$result = $this->rpc->brtoffersbyhashes(array($this->clean($id)));
 
-					$title = urldecode($offer->p->s2);
-					$description = urldecode($offer->p->s3);
-					$images = json_decode($offer->p->s5);
+					if ($result != false){
+						$offer = $result[0];
 
-					if($title) $this->currentOg['title'] = $title;
-					if($description) $this->currentOg['description'] = $description;
-					if($images) $this->currentOg['image'] = urldecode($images[0]);
+						$title = urldecode($offer->p->s2);
+						$description = urldecode($offer->p->s3);
+						$images = json_decode($offer->p->s5);
+
+						if($title) $this->currentOg['title'] = $title;
+						if($description) $this->currentOg['description'] = $description;
+						if($images) $this->currentOg['image'] = urldecode($images[0]);
+					}
+
+					break;
 				}
-			} else if (@$page == 'profile') {
-				$title = false;
-				$description = false;
-				$image = false;
-				$result = $this->rpc->getuserprofile($this->clean($id));
 
-				if ($result != false){
-					$profile = $result[0];
+				case 'search': {
+					$title = false;
+					$description = false;
+					$images = false;
+					$offers = $this->rpc->brtoffersbyhashes(array_filter([
+						@$id['source'] ? $id['source'] : null,
+						@$id['target'] ? $id['target'] : null
+					]));
 
-					$title = urldecode($profile->name);
-					$description = urldecode("$title's profile on {$this->project}");
-					$image = urldecode($profile->i);
-					
-					if($title) $this->currentOg['title'] = $title;
-					if($description) $this->currentOg['description'] = $description;
-					if($image) $this->currentOg['image'] = $image;
+					if ($offers != false){
+						$source = @$offers[0];
+						$target = @$offers[1];
+
+						if (@$source) {
+							$srcTitle = urldecode($source->p->s2);
+							$srcImage = json_decode($source->p->s5);
+						}
+
+						if (@$target) {
+							$trgTitle = urldecode($target->p->s2);
+						}
+
+						if (@$srcTitle && @$trgTitle) {
+							$this->currentOg['title'] = "Exchange {$srcTitle} to {$trgTitle}";
+							$this->currentOg['description'] = "I proposing exchange {$srcTitle} to {$trgTitle}";
+						} else if (@$srcTitle) {
+							$this->currentOg['title'] = "Exchange proposals of {$srcTitle}";
+							$this->currentOg['description'] = "Exchange list of {$srcTitle}";
+						}
+
+						if (@$srcImage) $this->currentOg['image'] = urldecode($srcImage[0]);
+					}
+
+					break;
+				}
+
+				case 'profile': {
+					$title = false;
+					$description = false;
+					$image = false;
+					$result = $this->rpc->getuserprofile($this->clean($id));
+
+					if ($result != false){
+						$profile = $result[0];
+
+						$title = urldecode($profile->name);
+						$description = urldecode("$title's profile on {$this->project}");
+						$image = urldecode($profile->i);
+						
+						if($title) $this->currentOg['title'] = $title;
+						if($description) $this->currentOg['description'] = $description;
+						if($image) $this->currentOg['image'] = $image;
+					}
 				}
 			}
 		}
@@ -109,7 +155,6 @@ class OG {
 		$value = stripslashes($value);
 		$value = strip_tags($value);
 		$value = htmlspecialchars($value);
-
 		
 		return $value;
 	}

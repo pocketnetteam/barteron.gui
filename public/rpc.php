@@ -76,8 +76,15 @@ class RPC {
 	public function brtoffersbyhashes($hashes){
 		$action = 'getbarteronoffersbyroottxhashes';
 		$params = array($hashes);
+		$offers = $this->send($action, $params);
 
-		return $this->send($action, $params);
+		if ($offers) {
+			usort($offers, function($a, $b) use ($hashes) {
+				return array_search($a->s2, $hashes) - array_search($b->s2, $hashes);
+			});
+		}
+
+		return $offers;
 	}
 
 	public function getuserprofile($address){
