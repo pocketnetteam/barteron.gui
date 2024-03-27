@@ -94,11 +94,7 @@ export default {
 
 			if (this.isMyProfile && LikeStore.like?.length) {
 				this.sdk.getBrtOffersByHashes(LikeStore.like).then(offers => {
-					this.favoriteList = LikeStore.like.map(hash => {
-						const index = offers.findIndex(offer => offer?.hash === hash);
-	
-						return offers[index];
-					});
+					this.favoriteList = offers;
 				});
 			}
 		},

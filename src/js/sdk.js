@@ -639,7 +639,10 @@ class SDK {
 		});
 
 		return this.rpc("getbarteronoffersbyroottxhashes", hashes).then(offers => {
-			return offers?.map(offer => new Offer(offer)) || [];
+			/* Sort to get offers in same order as requested */
+			return offers
+				?.sort((a, b) => hashes.indexOf(a.s2) - hashes.indexOf(b.s2))
+				?.map(offer => new Offer(offer)) || [];
 		});
 	}
 
