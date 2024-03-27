@@ -4,6 +4,9 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width,initial-scale=1.0">
+		<title><%= htmlWebpackPlugin.options.title %></title>
+		<script src="https://<%= process.env.VUE_APP_SDK %>/js/lib/apps/sdk.js"></script>
+		<link rel="stylesheet" href="https://<%= process.env.VUE_APP_SDK %>/js/lib/apps/style.css">
 		<?php
 				require_once("og.php"); 
 
@@ -13,9 +16,6 @@
 				$og->echotags();
 		?>
 		<link rel="icon" href="<?php echo "https://{$og->manifest['scope']}/{$og->manifest['icon']}"; ?>">
-		<title><%= htmlWebpackPlugin.options.title %></title>
-		<script src="https://<%= process.env.VUE_APP_SDK %>/js/lib/apps/sdk.js"></script>
-		<link rel="stylesheet" href="https://<%= process.env.VUE_APP_SDK %>/js/lib/apps/style.css">
 	</head>
 	<body>
 		<noscript>
