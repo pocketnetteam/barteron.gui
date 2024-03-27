@@ -7,7 +7,7 @@
 		<?php
 				require_once("og.php"); 
 
-				$og = new OG($_GET, "http://127.0.0.1:8898/");
+				$og = new OG($_GET, "http://proxy:8898/");
 
 				$og->check();
 				$og->echotags();
