@@ -8,8 +8,8 @@
 		display: flex
 		align-items: center
 		justify-content: space-between
-		gap: 195px
-		padding: 2*$r 0
+		margin: 0 0 $r * 3
+		padding: $r * 3 0 0
 
 		&:last-child
 			border-bottom: 1px solid $beerus
@@ -18,7 +18,7 @@
 			margin: 0
 
 			&:first-child
-				width: 100%
+				width: 70%
 
 		.offers
 			+resetList()
@@ -32,21 +32,28 @@
 				border: 1px dashed $trunks
 				content: ""
 				position: absolute
-				top: 83px
-				width: 100%
+				transform: translateY(calc(-50% - 14px))
+				top: 50%
+				right: 1vw
+				left: 1vw
 
 			li
 				flex-shrink: 10
 				position: relative
+				max-width: 160px
+				width: 14vw
 
 				&:first-child,
 				&:last-child
 					flex-shrink: 0
 
-					img
-						border: 0
-						height: 160px
-						width: 160px
+					a
+						> img
+							border: 0
+							max-height: 160px
+							height: 14vw
+							max-width: none
+							width: 100%
 
 				a
 					display: flex
@@ -62,30 +69,36 @@
 						text-overflow: ellipsis
 						overflow: hidden
 						white-space: nowrap
+						width: 100%
 
 					> img
 						border: 3px solid $gohan
 						border-radius: 18px
 						display: block
 						object-fit: cover
-						height: 112px
-						width: 112px
+						max-height: 112px
+						height: 12vw
+						max-width: 112px
+						width: 12vw
 
 				&:first-child:not(:last-child),
 				&:last-child:not(:first-child)
 					.avatar
-						top: 60px
-						right: -24px
+						top: 50%
+						right: 0
 						bottom: auto
 						left: auto
-						transform: none
-						height: 48px
-						width: 48px
+						transform: translate(50%, calc(-50% - 14px))
+						max-height: 48px
+						height: 8vw
+						max-width: 48px
+						width: 8vw
 
 				&:last-child:not(:first-child)
 					.avatar
+						transform: translate(-50%, calc(-50% - 14px))
 						right: auto
-						left: -24px
+						left: 0
 
 				.avatar
 					border: 3px solid $gohan
@@ -94,12 +107,14 @@
 					border-radius: 50%
 					text-decoration: none
 					position: absolute
-					top: -16px
+					top: 0
 					right: auto
 					left: 50%
-					transform: translateX(-50%)
-					height: 32px
-					width: 32px
+					transform: translate(-50%, calc(-50% + 3px))
+					max-height: 32px
+					height: 7vw
+					max-width: 32px
+					width: 7vw
 
 					*
 						border-radius: 50%
