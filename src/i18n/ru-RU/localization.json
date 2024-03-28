@@ -126,7 +126,7 @@
 		"under": "Ниже {to}",
 		"range": "От {from} До {to}",
 		"over": "Свыше {from}",
-		"no_matter": "Неважно"
+		"no_matter": "Не важно"
 	},
 
 	"conditionLabels": {
