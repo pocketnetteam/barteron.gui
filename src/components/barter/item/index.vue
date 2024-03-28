@@ -125,9 +125,9 @@
 				<slot name="info" v-if="$slots.info"></slot>
 				<ul v-else>
 					<li v-if="item.time">
-						<dl>
+						<dl :class="item.status">
 							<dt><i class="fa fa-calendar"></i></dt>
-							<dd><time :class="item.status">{{ $d(item.time, 'middle', $i18n.locale) }}</time></dd>
+							<dd><time>{{ $d(item.time, 'middle', $i18n.locale) }}</time></dd>
 						</dl>
 					</li>
 					<li v-if="distance > -1">
