@@ -13,7 +13,8 @@
 							:icon-url="offer?.current ? offerIconActive : offerIcon"
 						>
 						</l-icon>
-						<l-popup>
+						<l-tooltip v-if="!offer.current">{{ offer.caption }}</l-tooltip>
+						<l-popup v-if="!offer.current">
 							<BarterItem
 								:item="offer"
 							/>
