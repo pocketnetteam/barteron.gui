@@ -1,6 +1,21 @@
 @import "@/css/vars.sass"
 	
 #sidebar
+	+transition(right)
+	background: $primary
+	border-radius: 12px
 	flex-shrink: 0
-	margin: 0 0 0 $r * 4
+	margin: 0 0 0 16px
+	position: relative
 	width: $sidebar-width
+	z-index: 1
+
+	.side-toggle
+		border-radius: 6px 0 0 6px
+		box-shadow: -2px 0 6px -3px $backdrop
+		right: auto
+		left: 0
+		transform: translateX(-100%)
+
+	> *:last-child
+		margin-bottom: 0

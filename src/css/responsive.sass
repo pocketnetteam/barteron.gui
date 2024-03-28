@@ -14,6 +14,11 @@
 		padding-left: $r
 		max-width: $width
 
+	#aside,
+	#sidebar
+		.side-toggle
+			display: none
+
 /* Tablet and Phones */
 @media screen and (max-width: $tablet)
 	#app
@@ -36,6 +41,39 @@
 					display: flex
 					justify-content: flex-end
 					width: 100%
+
+		#aside,
+		#sidebar
+			box-shadow: 1px 1px 6px $backdrop
+			padding: $r
+			position: fixed
+			z-index: 100000
+
+			.side-toggle
+				display: block
+
+		#aside
+			left: -$sidebar-width
+
+			&.active
+				left: $r
+
+		#sidebar
+			right: -$sidebar-width
+
+			&.active
+				right: $r
+
+		#container
+			&:has(#aside)
+				padding-left: $r * 3
+
+			&:has(#sidebar)
+				padding-right: $r * 3
+
+			#content.shrink-right
+				margin: 0
+				width: 100%
 
 		.v-lightbox section
 			max-width: 100%

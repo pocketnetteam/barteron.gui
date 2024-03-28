@@ -1,6 +1,17 @@
 @import "@/css/vars.sass"
 
 #aside
+	+transition(left)
+	background: $primary
+	border-radius: 12px
 	flex-shrink: 0
 	margin: 0 16px 0 0
+	position: relative
 	width: $sidebar-width
+	z-index: 1
+
+	.side-toggle
+		box-shadow: 2px 0 6px -3px $backdrop
+
+	> *:last-child
+		margin-bottom: 0
