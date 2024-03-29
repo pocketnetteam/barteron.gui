@@ -273,9 +273,12 @@
 			</picture>
 
 			<div class="row d-sep sided">
-				<div class="col no-offset">
+				<div class="col no-offset wrap">
 					<ul class="stat">
-						<li v-if="item.time">
+						<li
+							v-if="item.time"
+							:class="item.status"
+						>
 							<i class="fa fa-calendar-day"></i>
 							<time>{{ $d(item.time, 'middle', $i18n.locale) }}</time>
 						</li>
@@ -284,6 +287,14 @@
 							<span class="count">32</span>
 						</li> -->
 					</ul>
+
+					<div
+						v-if="item.status === 'outdated'"
+						:class="`warn ${ item.status }`"
+					>
+						<i class="fa fa-exclamation-triangle"></i>
+						<p>{{ $t('barterLabels.outdated') }}</p>
+					</div>
 				</div>
 
 				<div class="col buttons">
@@ -306,8 +317,8 @@
 			<div class="row block sep">
 				<ExchangeList
 					:title="$t('barterLabels.exchange')"
-					:tags="item?.tags?.[0] !== 'my_list' ? item?.tags : ownerAccount?.tags"
-					:visible="0"
+					:tags="exchangeList.map(l => l.id)"
+					:visible="0 /* Means show all items without toggle */"
 				/>
 			</div>
 
