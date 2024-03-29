@@ -131,6 +131,9 @@ span.link
 	&:not(:last-child)
 		margin: 0 0 $r * 3 0
 
+	&.wrap
+		flex-wrap: wrap
+
 	&.no-offset
 		margin: 0
 
@@ -197,11 +200,11 @@ span.link
 	cursor: pointer
 	font-size: $r * 3
 	text-align: center
-	padding: $r / 2 0
 	position: absolute
 	top: $r * 2
 	right: 0
 	transform: translateX(100%)
 
 	i
+		padding: $r / 2 0
 		width: 20px
