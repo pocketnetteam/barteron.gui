@@ -52,13 +52,17 @@
 			</ul>
 
 			<CategorySelect
+				v-if="editable"
 				ref="categorySelect"
 				:marked="vTags"
 				@selected="insert"
 			/>
 
 			<!-- Tags edit -->
-			<div class="edit" v-if="editable && !editMode">
+			<div
+				v-if="editable && !editMode"
+				class="edit"
+			>
 				<slot
 					name="edit"
 					:instance="instance"
@@ -74,7 +78,10 @@
 					/>
 
 					<!-- Cancel and Save buttons -->
-					<div class="buttons-holder" v-else>
+					<div
+						v-else
+						class="buttons-holder"
+					>
 						<v-button
 							vType="chi-chi"
 							:vHtml="cancelText"
