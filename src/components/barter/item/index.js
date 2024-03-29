@@ -4,8 +4,6 @@ import ExchangeList from "@/components/barter/exchange/list/index.vue";
 import CurrencySwitcher from "@/components/currency-switcher/index.vue";
 import LikeStore from "@/stores/like.js";
 
-const offerIcon = require("@/assets/images/offer-active.png");
-
 export default {
 	name: "BarterItem",
 
@@ -60,9 +58,9 @@ export default {
 		exchangeList() {
 			let ids = this.item.tags;
 
-			if (ids.includes("my_list")) {
+			if (ids?.includes("my_list")) {
 				ids = this.ownerAccount?.tags || [];
-			} else if (ids.includes("for_nothing")) {
+			} else if (ids?.includes("for_nothing")) {
 				ids = [{ value: this.$t("barterLabels.free") }];
 			}
 
@@ -77,8 +75,8 @@ export default {
 					}
 				}).filter(c => c.id),
 
-				/* Alternative */
-				[{ value: this.$t("buttonLabels.unknown") }]
+				/* Default if empty */
+				[{ id: 99, value: this.$t("everything_else") }]
 			);
 		},
 
