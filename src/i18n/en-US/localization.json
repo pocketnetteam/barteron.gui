@@ -102,7 +102,8 @@
 		"exchange": "Exchange to",
 		"empty": "No tags added",
 		"free": "For free",
-		"select": "Select item that you want exchange"
+		"select": "Select item that you want exchange",
+		"outdated": "This offer publication date has expired"
 	},
 
 	"orderLabels": {
