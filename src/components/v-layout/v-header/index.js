@@ -11,9 +11,5 @@ export default {
 		Location,
 		SearchBar,
 		UserBar
-	},
-
-	data() {
-		return {}
 	}
 }

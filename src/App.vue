@@ -11,7 +11,7 @@
 			</transition>
 
 			<template v-if="!loading">
-				<v-header />
+				<v-header :class="{ 'header-hidden': !isHeaderVisible }" />
 
 				<section id="main">
 					<router-view />
@@ -56,7 +56,9 @@ export default {
 	data() {
 		return {
 			loading: true,
-			dialog: null
+			dialog: null,
+			lastScrollPosition: 0,
+			isHeaderVisible: true
 		}
 	},
 
@@ -105,6 +107,24 @@ export default {
 			return Object.keys(this.$route.matched?.[0]?.components ?? {}).some(name => {
 				return names.includes(name);
 			});
+		},
+
+		/**
+		 * Handle header visibility
+		 */
+		 handleScroll() {
+			const currentScrollPosition = document.body.scrollTop;
+			console.log(currentScrollPosition)
+
+			if (currentScrollPosition > this.lastScrollPosition) {
+				// Scrolling down, hide header
+				this.isHeaderVisible = false;
+			} else {
+				// Scrolling up, show header
+				this.isHeaderVisible = true;
+			}
+			
+			this.lastScrollPosition = currentScrollPosition;
 		}
 	},
 
@@ -123,6 +143,12 @@ export default {
 				}
 			}
 		}, 100);
+
+		document.body.addEventListener("scroll", this.handleScroll, { passive: true });
+	},
+
+	destroyed() {
+		document.body.removeEventListener("scroll", this.handleScroll);
 	}
 }
 </script>
