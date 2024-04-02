@@ -135,6 +135,17 @@ Vue.prototype.shared = Vue.observable({
 		},
 
 		/**
+		 * Scroll To
+		 * 
+		 * @param {String} el
+		 */
+		scrollToElement(el) {
+			const scrollTarget = document.querySelector(el);
+
+			scrollTarget.scrollIntoView({ behavior: "smooth" });
+		},
+
+		/**
 		 * Parse labels object from localization
 		 * 
 		 * @param {String} label

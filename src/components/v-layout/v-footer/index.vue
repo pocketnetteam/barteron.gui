@@ -68,7 +68,11 @@
 
 					<LanguageSwitcher />
 
-					<a href="#" class="scroll-top">
+					<a
+						href="#"
+						class="scroll-top"
+						@click="scrollToElement('#app')"
+					>
 						<i class="fa fa-angle-up"></i>
 					</a>
 				</nav>
