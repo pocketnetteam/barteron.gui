@@ -22,6 +22,7 @@
 					type="minmax"
 					vSize="lg"
 					:vEvents="{
+						keydown: onKeyDown,
 						change: changePrice,
 						input: changePrice
 					}"
@@ -33,6 +34,7 @@
 					type="radio"
 					name="price"
 					:value="['-10', '10-50', '50-100', '100-', '-']"
+					:checked="priceVariant"
 					:label="[
 						$t('priceLabels.under', { to: 10 }),
 						$t('priceLabels.range', { from: 10, to: 50 }),
@@ -40,7 +42,7 @@
 						$t('priceLabels.over', { from: 100 }),
 						$t('priceLabels.no_matter')
 					]"
-					@change="changePrice"
+					@change="changePriceVariant"
 				/>
 			</div>
 		</v-details>
