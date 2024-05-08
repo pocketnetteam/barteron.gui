@@ -184,6 +184,20 @@ export default {
 		},
 
 		/**
+		 * Share item
+		 */
+		shareItem() {
+			const data = {
+				path: `barter/${ this.item.hash }`,
+				sharing: {
+					title: this.$t("itemLabels.label"),
+					text: { body: this.item.caption }
+				}
+			};
+			this.sdk.share(data);
+		},
+
+		/**
 		 * Check return alternative if empty
 		 * 
 		 * @returns {*}

@@ -309,7 +309,7 @@
 					</v-button>
 
 					<v-button vType="stroke bulma-color bulma-color-hover">
-						<i class="fa fa-share-alt"></i>
+						<i class="fa fa-share-alt" @click="shareItem"></i>
 					</v-button>
 				</div>
 			</div>

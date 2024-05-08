@@ -340,6 +340,24 @@ class SDK {
 		return this.sdk.get.applink(url);
 	}
 
+	/**
+	 * Share resource
+	 * 
+	 * @param {Object} data
+	 * @param {String} data.path
+	 * @param {Object} data.sharing
+	 * @param {String} data.sharing.title
+	 * @param {Object} data.sharing.text
+	 * @param {String} data.sharing.text.body
+	 * 
+	 * @returns {Void}
+	 */
+	share(data) {
+		return this.sdk.helpers.share(data).then(() => {
+			this.lastresult = "share: success"
+		}).catch(e => this.setLastResult(e));
+	}
+
 	imageFromMobileCamera() {
 		this.sdk.get.imageFromMobileCamera().then(images => {
 			this.lastresult = "imageFromMobileCamera: success (console.log)"
