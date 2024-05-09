@@ -169,7 +169,7 @@
 				<div class="pricing">
 					<span class="price">
 						<template v-if="item.price">
-							<span class="currency pkoin"></span>
+							<span class="currency icon-pkoin"></span>
 							{{ $n(item.price) }}
 							<span>{{ $t('profileLabels.coins') }}</span>
 						</template>
@@ -178,6 +178,14 @@
 							{{ $t('barterLabels.free') }}
 						</template>
 					</span>
+
+					<div class="currency-holder">
+						<CurrencySwitcher
+							:switcher="false"
+							:amount="item?.price"
+							:hideButton="true"
+						/>
+					</div>
 				</div>
 			</div>
 
