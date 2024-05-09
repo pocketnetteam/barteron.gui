@@ -47,5 +47,16 @@ export default {
 				query: { search: `%${ this.query }%` }
 			}).catch(() => {});
 		}
+	},
+
+	watch: {
+		query: {
+			handler() {
+				const queryReset = (!this.query && this.$route.query.search);
+				if (queryReset) {
+					this.submit()
+				}
+			}
+		}
 	}
 }
