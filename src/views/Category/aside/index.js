@@ -10,6 +10,9 @@ export default {
 	data() {
 		return {
 			applyDisabled: true,
+			priceVariant: '-',
+			lastPriceInputId: null,
+			preventFiltersWatcher: false,
 			filters: {
 				priceMin: "",
 				priceMax: "",
@@ -29,21 +32,51 @@ export default {
 	},
 
 	methods: {
+		updatePriceVariant() {
+			const 
+				min = this.filters.priceMin || '',
+				max = this.filters.priceMax || '';
+
+			this.priceVariant = `${min}-${max}`;
+		},
+
 		/**
 		 * Make price fields related
 		 */
 		changePrice(e) {
+			this.lastPriceInputId = e.target.id;
+
 			const
 				inputs = this.$refs.price?.inputs,
+				minInput = inputs[0].value,
+				maxInput = inputs[1].value;
+			
+			let
+				min = (minInput != null && minInput != '') ? +minInput : null,
+				max = (maxInput != null && maxInput != '') ? +maxInput : null;
+			
+			this.filters.priceMin = min;
+			this.filters.priceMax = max;
+
+			this.updatePriceVariant();
+		},
+
+		changePriceVariant(e) {
+			const
 				opt = typeof e === "string" && e.split("-"),
-				min = opt ? (+opt[0] || null) : (+inputs[0].value || null),
-				max = opt ? (+opt[1] || null) : (+inputs[1].value || null);
+				min = +opt[0] || null,
+				max = +opt[1] || null;
 
 			this.filters.priceMin = min;
 			this.filters.priceMax = max;
 
-			if (min && max && min > max) {
-				this.filters.priceMax = min;
+			this.lastPriceInputId = null;
+		},
+
+		onKeyDown(e) {
+			const filtersChanged = !this.applyDisabled;
+			if (e?.keyCode === 13 && filtersChanged) {
+				this.applyFilters();
 			}
 		},
 
@@ -57,9 +90,29 @@ export default {
 		 * Send filters data to content component
 		 */
 		applyFilters() {
-			const
+			let
 				min = this.filters.priceMin,
 				max = this.filters.priceMax;
+
+			min = (typeof min === 'number' && min > 0) ? min : null;
+			max = (typeof max === 'number' && max > 0) ? max : null;
+	
+			const needAdjustOfPriceValue = min && max && min > max && this.lastPriceInputId;
+			if (needAdjustOfPriceValue) {
+				if (this.lastPriceInputId == 'price_min') {
+					max = min;
+				} else if (this.lastPriceInputId == 'price_max') {
+					min = max;
+				}
+				this.lastPriceInputId = null;
+
+				this.preventFiltersWatcher = true;
+
+				this.filters.priceMin = min;
+				this.filters.priceMax = max;
+			}
+
+			this.updatePriceVariant();
 
 			this.$components.content.applyFilters({
 				...this.filters,
@@ -75,8 +128,12 @@ export default {
 		filters: {
 			deep: true,
 			handler() {
-				this.applyDisabled = false;
+				if (!this.preventFiltersWatcher) {
+					this.applyDisabled = false;
+				}
+				this.preventFiltersWatcher = false;
 			}
+
 		}
 	}
 }
