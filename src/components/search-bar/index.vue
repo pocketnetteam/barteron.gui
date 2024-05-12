@@ -24,6 +24,16 @@
 		</div>
 		
 		<v-button
+			class="btn-reset"
+			vType="light"
+			vSize="md"
+			v-show="query"
+			@click="query = ''"
+		>
+			<i class="fa fa-times"></i>
+		</v-button>
+
+		<v-button
 			class="btn-search"
 			vType="light"
 			vSize="md"

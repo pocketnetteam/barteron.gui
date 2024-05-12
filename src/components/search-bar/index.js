@@ -44,8 +44,19 @@ export default {
 			this.$router.push({
 				name: "category",
 				params: { id: this.id || "search" },
-				query: { search: `%${ this.query }%` }
+				query: { search: this.query }
 			}).catch(() => {});
+		}
+	},
+
+	watch: {
+		query: {
+			handler() {
+				const queryReset = (!this.query && this.$route.query.search);
+				if (queryReset) {
+					this.submit()
+				}
+			}
 		}
 	}
 }
