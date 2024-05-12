@@ -63,7 +63,14 @@ export default {
 					a.push(
 						/* Generate sw keys */
 						Object.keys(sw).reduce((o, k) => {
-							if (k === "type") o[k] = sw[k][i] ?? sw[k][sw[k].length - 1];
+							if (k === "type" || k === "name") o[k] = sw[k][i] ?? sw[k][sw[k].length - 1];
+							else if (k === "id") {
+								const idData = {};
+								["name", "type"].forEach(key => {
+									idData[key] = sw[key][i] ?? sw[key][sw[key].length - 1];
+								})
+								o[k] = `${idData["name"]}-${idData["type"]}-${i}`;
+							}
 							else o[k] = sw[k][i] ?? null
 	
 							return o;

@@ -53,6 +53,7 @@
 				<!-- vSwitch: My list, Something, For nothing -->
 				<v-switch
 					type="radio"
+					name="getting"
 					:checked="getting"
 					:value="['my_list', 'something', 'for_nothing']"
 					:label="[$t('my_list'), $t('something'), $t('for_nothing')]"
