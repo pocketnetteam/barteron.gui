@@ -20,7 +20,7 @@ const requestItems = (request) => {
 
 	return Vue.prototype.sdk.getBrtOfferDeals({
 		...filter,
-		...(search && { search }),
+		...(search && { search: `%${ search }%` }),
 		location: mixin.computed.locationStore().near || [],
 		theirTags: Number.isInteger(+request?.id) ? [+request.id] : [],
 		pageStart: request?.pageStart || 0,
