@@ -121,12 +121,17 @@ export default {
 			this.dialog?.instance
 				.view("question", this.$t("dialogLabels.offer_renew"))
 				.then(state => {
-					console.log(state ? "yes" : "no")
+					console.log(state ? "yes" : "no", offer)
 				});
 		}
 	},
-	
-	mounted() {
-		this.getTabsContent(this.address);
+
+	watch: {
+		address: {
+			immediate: true,
+			handler() {
+				this.getTabsContent(this.address);
+			}
+		}
 	}
 }
