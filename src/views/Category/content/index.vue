@@ -55,7 +55,7 @@
 
 		<div class="row center">
 			<v-button
-				v-if="items?.length && items.length % 10 === 0"
+				v-if="items?.length && !(items.length < (pageStart + 1) * pageSize)"
 				@click="loadMore"
 			>{{ $t('buttonLabels.show_more') }}</v-button>
 		</div>
