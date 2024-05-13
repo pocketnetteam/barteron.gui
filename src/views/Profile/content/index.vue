@@ -102,8 +102,9 @@
 							<!-- Edit and find exchange -->
 							<template #offer="{ item }" v-if="isMyProfile">
 								<v-button
-									:to="{ name: 'createBarter', params: { id: item.hash } }"
+									:to="{ name: 'createBarter', params: { id: item.hash, from: $route.path } }"
 								>{{ $t('buttonLabels.edit') }}</v-button>
+
 								<v-button
 									vType="hit-stroke"
 									:to="{ name: 'exchangeOptions', params: { id: item.hash }, query: { expanded: 1 } }"
@@ -146,8 +147,9 @@
 							<!-- Edit and find exchange -->
 							<template #offer="{ item }" v-if="isMyProfile">
 								<v-button
-									:to="{ name: 'createBarter', params: { id: item.hash } }"
+									:to="{ name: 'createBarter', params: { id: item.hash, from: $route.path } }"
 								>{{ $t('buttonLabels.edit') }}</v-button>
+
 								<v-button
 									vType="hit-stroke"
 									@click="renewOffer(item)"

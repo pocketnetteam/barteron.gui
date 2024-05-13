@@ -67,6 +67,8 @@ export default {
 			e.preventDefault();
 			
 			this.sdk.requestPermissions(permissions).then(async () => {
+				to.params = { ...to.params || {}, from: this.$route.path };
+
 				if (this.address === "%address%") {
 					const
 						address = await this.sdk.getAddress(),	/* Get account address */

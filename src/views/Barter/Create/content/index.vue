@@ -200,7 +200,10 @@
 
 			<div class="row full-width">
 				<!-- vButton: Cancel -->
-				<v-button vType="bulma-stroke">{{ $t('buttonLabels.cancel') }}</v-button>
+				<v-button
+					vType="bulma-stroke"
+					@click="cancel"
+				>{{ $t('buttonLabels.cancel') }}</v-button>
 
 				<div class="buttons-holder h-w">
 					<!-- vButton: Preview -->

@@ -26,7 +26,7 @@
 				<!-- My offer -->
 				<template v-if="isMyOffer">
 					<div class="buttons">
-						<v-button :to="{ path: `/barter/edit/${ item?.hash }`, params: { id: item?.hash } }">
+						<v-button :to="{ name: 'createBarter', params: { id: item?.hash, from: $route.params.from } }">
 							<template v-if="!isPreview">
 								<i class="fa fa-pen"></i>
 								<span>{{ $t('buttonLabels.edit') }}</span>

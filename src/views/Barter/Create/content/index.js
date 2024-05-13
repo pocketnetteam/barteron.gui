@@ -191,6 +191,17 @@ export default {
 		},
 
 		/**
+		 * Cancel an offer
+		 */
+		cancel() {
+			if (this.$route.params.from) {
+				this.$router.push({ path: this.$route.params.from });
+			} else {
+				this.$router.push({ name: "home" });
+			}
+		},
+
+		/**
 		 * Preview an offer
 		 */
 		preview() {
@@ -198,7 +209,7 @@ export default {
 
 			this.$router.push({
 				name: "barterItem",
-				params: { id: this.offer.hash },
+				params: { id: this.offer.hash, from: this.$route.params.from },
 				query: { preview: 1 }
 			});
 		},
