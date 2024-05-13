@@ -31,7 +31,7 @@
 
 	"categoryLabels": {
 		"label": "Category",
-		"empty": "There is no offers yet:(",
+		"empty": "No offers found :(",
 		"empty_details": "Try to set {all_regions} in your location, or chose another city"
 	},
 
