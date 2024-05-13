@@ -8,10 +8,14 @@
 			<SubCategories :items="subCategories" />
 		</v-details>
 
-		<v-details
-			:title="$t('priceLabels.label')"
-			:open="true"
-		>
+		<v-details :open="true">
+			<template #title>
+				<strong class="summary">
+					<i class="icon-pkoin"></i>
+					{{ $t('priceLabels.label') }}
+				</strong>
+			</template>
+
 			<div class="row">
 				<v-input
 					:id="['price_min', 'price_max']"

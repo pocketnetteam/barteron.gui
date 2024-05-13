@@ -5,6 +5,7 @@
 				v-for="(step, key) in steps"
 				:key="key"
 			>
+				<i :class="`fa fa-circle`"></i>
 				<a :href="`#${ key }`">{{ step.text }}</a>
 			</menuitem>
 		</menu>
