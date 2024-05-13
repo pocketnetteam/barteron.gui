@@ -38,6 +38,13 @@ export default {
 		},
 
 		/**
+		 * Reset search query
+		 */
+		reset() {
+			this.query = "";
+		},
+
+		/**
 		 * Store search string in url query
 		 */
 		submit() {

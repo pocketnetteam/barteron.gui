@@ -25,10 +25,10 @@
 		
 		<v-button
 			class="btn-reset"
-			vType="light"
+			vType="transparent light-color"
 			vSize="md"
 			v-show="query"
-			@click="query = ''"
+			@click="reset"
 		>
 			<i class="fa fa-times"></i>
 		</v-button>
