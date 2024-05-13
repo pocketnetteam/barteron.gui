@@ -74,32 +74,9 @@
 			<Profile :hash="address" />
 			<ExchangeList
 				:tags="account?.tags || []"
-				:editable="isMyOffer"
 				@change="(tags) => account.set({ tags })"
 				v-if="isMyOffer"
 			>
-				<template #edit="{ instance }">
-					<!-- Edit button -->
-					<template v-if="!instance.editing">
-						<v-button vType="bulma-stroke" @click="instance.edit">
-							{{ $t('buttonLabels.edit') }}
-						</v-button>
-					</template>
-
-					<!-- Cancel and Save buttons -->
-					<template v-else>
-						<div class="buttons-holder">
-							<v-button vType="chi-chi" @click="instance.cancel">
-								{{ $t('buttonLabels.cancel') }}
-							</v-button>
-
-							<v-button @click="instance.save">
-								{{ $t('buttonLabels.save') }}
-							</v-button>
-						</div>
-					</template>
-				</template>
-				
 				<template #after>
 					<dl class="list">
 						<dt>{{ $t('metricsLabels.number') }}</dt>
