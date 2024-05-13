@@ -13,6 +13,8 @@ let filter = {
 	orderDesc: true
 };
 
+const defaultPageSize = 10;
+
 const requestItems = (request) => {
 	const
 		mixin = Vue.prototype.shared,
@@ -24,7 +26,7 @@ const requestItems = (request) => {
 		location: mixin.computed.locationStore().near || [],
 		theirTags: Number.isInteger(+request?.id) ? [+request.id] : [],
 		pageStart: request?.pageStart || 0,
-		pageSize: request?.pageSize || 10
+		pageSize: request?.pageSize || defaultPageSize
 	});
 };
 
@@ -44,6 +46,15 @@ export default {
 	},
 
 	computed: {
+		/**
+		 * Make page size
+		 * 
+		 * @returns {Number}
+		 */
+		pageSize() {
+			return defaultPageSize;
+		},
+
 		/**
 		 * Make list of order by
 		 * 
@@ -120,10 +131,11 @@ export default {
 			/* Send request to node */
 			const items = await requestItems({
 				id: this.$route.params.id,
-				pageStart: ++this.pageStart,
+				pageStart: (this.pageStart + 1),
 				route: this.$route
 			});
 
+			this.pageStart++;
 			this.items = this.items.concat(items);
 		}
 	},
