@@ -120,7 +120,10 @@
 
 			<div class="row block" v-if="getting !== 'for_nothing'">
 				<!-- Label: Currency text -->
-				<label for="currency" class="v-label">{{ $t('choose_currency_text') }}</label>
+				<label for="currency" class="v-label">
+					<i class="fa fa-info-circle"></i>
+					{{ $t('choose_currency_text') }}
+				</label>
 
 				<!-- Input: Currency exchange to PKOIN -->
 				<v-input

@@ -221,7 +221,7 @@
 	"my_list": "My list",
 	"something": "Something",
 	"for_nothing": "For nothing",
-	"choose_currency_text": "Approximate Value",
+	"choose_currency_text": "The price in currency will be updating automatically at the current PKOIN rate",
 
 	"may_match_exchanges": "May match with your exchanges",
 	"new_from_goods": "New from goods"

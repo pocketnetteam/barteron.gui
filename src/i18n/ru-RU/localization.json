@@ -221,7 +221,7 @@
 	"my_list": "Мой список",
 	"something": "Что-нибудь",
 	"for_nothing": "Бесплатно",
-	"choose_currency_text": "Примерная Цена",
+	"choose_currency_text": "Цена в валюте будет обновляться автоматически по текущему курсу PKOIN",
 
 	"may_match_exchanges": "Может совпадать с вашими обменами",
 	"new_from_goods": "Новинки"
