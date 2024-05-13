@@ -194,12 +194,18 @@
 		"status": "{count} image(s) added, total size - {size}"
 	},
 
-	"feedbackLabels": {
-		"label": "Feedbacks",
+	"voteLabels": {
+		"label": "Votes",
 		"title": "Rating",
 		"votes": "No votes | {count} vote | {count} votes",
 		"placeholder": "Leave your feedback here",
-		"empty": "There is no feedbacks yet"
+		"empty": "There is no sotes yet"
+	},
+
+	"feedbackLabels": {
+		"title": "Leave your feedback here",
+		"caption": "Type your caption here",
+		"message": "Type your message here"
 	},
 
 	"metricsLabels": {
