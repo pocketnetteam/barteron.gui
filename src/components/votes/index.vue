@@ -1,7 +1,7 @@
 <template>
 	<section :class="{
 		'row block t-sep': form,
-		'feedbacks': true
+		'votes': true
 	}">
 		<header v-if="header">
 			<h1>{{ $t('voteLabels.title') }} - </h1>
@@ -37,9 +37,9 @@
 				v-if="form && commentable"
 			>
 				<v-textarea
-					ref="feedback"
+					ref="vote"
 					class="field"
-					name="feedback"
+					name="vote"
 					length="9000"
 					:placeholder="$t('voteLabels.placeholder')"
 				>

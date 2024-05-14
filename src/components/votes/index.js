@@ -114,7 +114,7 @@ export default {
 		submit() {
 			const
 				form = this.$refs.form,
-				feed = this.$refs.feedback,
+				feed = this.$refs.vote,
 				data = form.serialize();
 
 			if (form.validate() && !this.loading) {
@@ -124,7 +124,7 @@ export default {
 				const comment = new this.sdk.models.Comment({
 					postid: this.item.hash,
 					address: this.sdk.address,
-					message: data.feedback,
+					message: data.vote,
 					info: this.score?.toFixed() || ""
 				});
 				

@@ -21,7 +21,7 @@
 				},
 				{
 					tabId: 'feedbacks',
-					title: `<i class='fa fa-comments'></i> ${ $t('profileLabels.feedbacks') }`,
+					title: `<i class='fa fa-comments'></i> ${ $t('profileLabels.votes') }`,
 					active: activeTab === '#feedbacks'
 				}
 			]"
