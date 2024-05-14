@@ -66,6 +66,8 @@
 						</li>
 					</ul> -->
 
+					<Feedback />
+
 					<LanguageSwitcher />
 
 					<a

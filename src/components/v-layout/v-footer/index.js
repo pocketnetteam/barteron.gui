@@ -1,9 +1,11 @@
+import Feedback from "@/components/feedback/index.vue";
 import LanguageSwitcher from "@/components/language-switcher/index.vue";
 
 export default {
 	name: "Footer",
 
 	components: {
+		Feedback,
 		LanguageSwitcher
 	},
 

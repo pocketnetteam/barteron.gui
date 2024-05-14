@@ -16,12 +16,16 @@
 			>
 				<template>
 					<div class="title">
-						<h1>{{ title }}</h1>
-						<i
-							class="fa fa-times v-lightbox-close"
+							<h1>{{ title }}</h1>
+
+							<v-button
+							class="v-lightbox-close"
+							vType="light"
 							@click="hide"
 							v-if="close"
-						></i>
+							>
+							<i class="fa fa-times"></i>
+						</v-button>
 					</div>
 				</template>
 				<slot name="header" v-if="$slots.header"></slot>

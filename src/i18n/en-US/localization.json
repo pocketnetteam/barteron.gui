@@ -94,7 +94,8 @@
 		"yes": "Yes",
 		"no": "No",
 		"unknown": "Unknown",
-		"apply": "Apply"
+		"apply": "Apply",
+		"submit": "Submit"
 	},
 
 	"barterLabels": {
@@ -174,7 +175,6 @@
 		"data_node": "Posting data to node, please wait..",
 		"offer_renew": "Are you sure you want renew this offer?",
 		"pending_reg": "Please wait until your account being activacted",
-		"submit_form": "Submitting, please wait..",
 
 		"image_error": "Image upload error",
 		"node_error": "Node error has occured: {error}",
@@ -205,8 +205,11 @@
 
 	"feedbackLabels": {
 		"title": "Leave your feedback here",
-		"caption": "Type your caption here",
-		"message": "Type your message here"
+		"name": "Type your name here",
+		"email": "Type your email here",
+		"message": "Type your message here",
+		"submit_form": "Submitting, please wait..",
+		"submit_success": "Your request has been successfully submitted"
 	},
 
 	"metricsLabels": {
