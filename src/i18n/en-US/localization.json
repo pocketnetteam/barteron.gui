@@ -174,6 +174,7 @@
 		"data_node": "Posting data to node, please wait..",
 		"offer_renew": "Are you sure you want renew this offer?",
 		"pending_reg": "Please wait until your account being activacted",
+		"submit_form": "Submitting, please wait..",
 
 		"image_error": "Image upload error",
 		"node_error": "Node error has occured: {error}",
