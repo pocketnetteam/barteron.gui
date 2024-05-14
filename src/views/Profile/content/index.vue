@@ -20,9 +20,9 @@
 					active: activeTab === '#favorites'
 				},
 				{
-					tabId: 'feedbacks',
-					title: `<i class='fa fa-comments'></i> ${ $t('profileLabels.votes') }`,
-					active: activeTab === '#feedbacks'
+					tabId: 'votes',
+					title: `<i class='fa fa-comment'></i> ${ $t('profileLabels.votes') }`,
+					active: activeTab === '#votes'
 				}
 			]"
 			vType="pills"
@@ -178,8 +178,8 @@
 				></BarterList>
 			</template>
 
-			<!-- Tab: Feedbacks -->
-			<template #feedbacks>
+			<!-- Tab: Votes -->
+			<template #votes>
 				<Votes class="tabcontent-holder" />
 			</template>
 		</v-tabs>
