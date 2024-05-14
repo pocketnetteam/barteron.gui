@@ -198,8 +198,8 @@
 		"label": "Votes",
 		"title": "Rating",
 		"votes": "No votes | {count} vote | {count} votes",
-		"placeholder": "Leave your feedback here",
-		"empty": "There is no votes yet"
+		"placeholder": "Leave your comment here",
+		"empty": "There is no comments yet"
 	},
 
 	"feedbackLabels": {
