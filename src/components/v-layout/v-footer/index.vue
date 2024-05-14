@@ -44,7 +44,7 @@
 			<div class="bar">
 				<div class="bar-holder">
 					<strong class="logo"><router-link to="/">Barteron</router-link></strong>
-					<p class="copyright">&copy; 2023 Barteron. All rights reserved.</p>
+					<p class="copyright">&copy; {{ getYear }} Barteron. All rights reserved.</p>
 				</div>
 
 				<nav>
