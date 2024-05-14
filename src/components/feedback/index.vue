@@ -11,6 +11,7 @@
 			size="md"
 			:close="false"
 			:visible="lightbox"
+			:overlayClick="!loading"
 			@onHide="() => lightbox = false"
 		>
 			<template #header>
