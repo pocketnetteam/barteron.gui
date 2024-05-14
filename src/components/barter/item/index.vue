@@ -144,7 +144,7 @@
 		<!-- View: Row -->
 		<template v-if="vType === 'row'">
 			<div class="row">
-				<div>
+				<div class="row-holder">
 					<span class="title" v-if="item.caption">
 						<router-link :to="offerLink">{{ item.caption }}</router-link>
 					</span>
