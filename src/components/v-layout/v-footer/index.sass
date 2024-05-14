@@ -96,6 +96,7 @@
 							width: 21px
 
 				.scroll-top
+					+transition(color)
 					color: $backdrop
 					display: flex
 					align-items: center
@@ -104,6 +105,9 @@
 					text-decoration: none
 					height: 20px
 					width: 21px
+
+					&:hover
+						color: $popo
 
 			nav,
 			nav > ul
