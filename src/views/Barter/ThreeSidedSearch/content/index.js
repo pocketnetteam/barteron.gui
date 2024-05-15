@@ -36,7 +36,7 @@ export default {
 			source = await sdk.getBrtOffersByHashes([to.query?.source]).then(result => result?.pop()),
 			deals = await sdk.getBrtOfferComplexDeals({
 				myTag: source?.tag,
-				theirTags: source?.tags,
+				theirTags: sdk.getTheirTags(source),
 				excludeAddresses: [source?.address]
 			}).then(offers => {
 				return offers?.reduce((result, match) => {

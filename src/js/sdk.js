@@ -579,6 +579,31 @@ class SDK {
 	}
 
 	/**
+	 * Get their tags value from offer
+	 * 
+	 * @param {Object} offer
+	 * 
+	 * @returns {Array}
+	 */
+	getTheirTags(offer) {
+		let result = [];
+
+		const
+			tags = offer?.tags,
+			isMyList = tags?.includes("my_list"),
+			isForNothing = tags?.includes("for_nothing");
+
+		if(isMyList) {
+			const account = this.barteron.accounts[offer?.address];
+			result = account?.tags;
+		} else if(!isForNothing) {
+			result = tags;
+		}
+
+		return result;
+	}
+
+	/**
 	 * RPC requests
 	 * 
 	 * @prop {String} method

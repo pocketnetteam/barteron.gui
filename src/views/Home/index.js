@@ -45,13 +45,7 @@ export default {
 							return this.sdk.getBrtOfferComplexDeals({
 								location: this.locationStore.near || [],
 								myTag: offer.tag,
-								theirTags: (() => {
-									if (offer.tags?.includes("my_list")) {
-										return this.account?.tags;
-									} else {
-										return offer.tags;
-									}
-								})(),
+								theirTags: this.sdk.getTheirTags(offer),
 								excludeAddresses: [this.address]
 							}).then(offers => {
 								if (offers?.[0]?.target) {
