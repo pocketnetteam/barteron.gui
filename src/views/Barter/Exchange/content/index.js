@@ -63,7 +63,7 @@ export default {
 			offer = sdk.barteron.offers[to.params?.id],
 			deals = await sdk.getBrtOfferDeals({
 				myTags: [offer?.tag],
-				theirTags: sdk.getTheirTags(offer),
+				theirTags: await sdk.getTheirTags(offer),
 				excludeAddresses: [offer?.address]
 			});
 

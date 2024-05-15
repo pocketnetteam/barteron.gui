@@ -585,7 +585,7 @@ class SDK {
 	 * 
 	 * @returns {Array}
 	 */
-	getTheirTags(offer) {
+	async getTheirTags(offer) {
 		let result = [];
 
 		const
@@ -594,7 +594,7 @@ class SDK {
 			isForNothing = tags?.includes("for_nothing");
 
 		if(isMyList) {
-			const account = this.barteron.accounts[offer?.address];
+			const account = await this.getBrtAccount(offer?.address);
 			result = account?.tags;
 		} else if(!isForNothing) {
 			result = tags;
