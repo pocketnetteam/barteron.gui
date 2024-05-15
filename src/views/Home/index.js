@@ -41,17 +41,11 @@ export default {
 				/* Get potential exchange offers */
 				if (myOffers?.length) {
 					this.mayMatchExchanges = await Promise.all(
-						myOffers.map(offer => {
+						myOffers.map(async offer => {
 							return this.sdk.getBrtOfferComplexDeals({
 								location: this.locationStore.near || [],
 								myTag: offer.tag,
-								theirTags: (() => {
-									if (offer.tags?.includes("my_list")) {
-										return this.account?.tags;
-									} else {
-										return offer.tags;
-									}
-								})(),
+								theirTags: await this.sdk.getTheirTags(offer),
 								excludeAddresses: [this.address]
 							}).then(offers => {
 								if (offers?.[0]?.target) {
