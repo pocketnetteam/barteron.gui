@@ -2,7 +2,7 @@
 	<v-content>
 		<ul
 			class="group-exchange-holder"
-			v-if="deals.length"
+			v-if="deals && deals.length"
 		>
 			<li
 				class="row"
