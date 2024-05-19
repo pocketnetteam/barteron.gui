@@ -46,9 +46,6 @@
 <script>
 import Loader from "@/components/loader/index.vue";
 
-
-const maxScrollPositionWithoutHeaderHiding = 35;
-
 export default {
 	name: "Barteron",
 
@@ -60,6 +57,7 @@ export default {
 		return {
 			loading: true,
 			dialog: null,
+			minHeaderScrollPosition: 35,
 			lastScrollPosition: 0,
 			isHeaderVisible: true
 		}
@@ -122,7 +120,7 @@ export default {
 				isScrollDown = currentScrollPosition > this.lastScrollPosition,
 				scrollBottom = e.scrollHeight - (e.scrollTop + e.clientHeight);
 
-			if (isScrollDown && currentScrollPosition > maxScrollPositionWithoutHeaderHiding) {
+			if (isScrollDown && currentScrollPosition > this.minHeaderScrollPosition) {
 				// Scrolling down, hide header
 				this.isHeaderVisible = false;
 			} else if(!isScrollDown && scrollBottom > 0) {
