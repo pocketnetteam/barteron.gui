@@ -10,6 +10,7 @@
 					ref="caption"
 					class="field"
 					name="title"
+					id="propose"
 					:placeholder="$t('title')"
 					:value="offer.caption"
 					vSize="lg"
@@ -32,6 +33,7 @@
 				<!-- vPhotos -->
 				<v-photos
 					ref="photos"
+					id="photos"
 					class="field"
 					multiple="multiple"
 					accept="jpeg, png"
@@ -46,7 +48,7 @@
 				}) }}</p>
 			</div>
 
-			<div class="row block">
+			<div id="get" class="row block">
 				<!-- Title: What you want to get -->
 				<strong class="title">{{ $t('stepsLabels.get') }}</strong>
 
@@ -176,6 +178,7 @@
 				<!-- vTextarea -->
 				<v-textarea
 					ref="description"
+					id="description"
 					class="field"
 					name="description"
 					length="9000"
@@ -189,6 +192,7 @@
 
 				<!-- vMap -->
 				<v-map
+					id="location"
 					ref="map"
 					:center="geohash || location || undefined"
 					:point="geohash || undefined"

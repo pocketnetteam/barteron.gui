@@ -219,10 +219,45 @@ export default {
 		 * Submit form data
 		 */
 		submit() {
-			const { hash, form, photos, images } = this.serializeForm();
+			const
+				{ hash, form, photos, images } = this.serializeForm(),
+				formValid = form.validate(),
+				photosValid = photos.validate();
+
+			/* Set items state in aside */
+			this.$components.aside.steps.forEach(step => {
+				const
+					getField = (cb) => {
+						return form.valid[
+							form.valid.findIndex(index => cb(index.field))
+						];
+					},
+
+					valid = () => {
+						switch (step.value) {
+							case "photos": {
+								return photosValid;
+							}
+
+							case "get": {
+								return getField(f => f.name === "tags")?.valid;
+							}
+
+							case "location": {
+								return true;
+							}
+
+							default: {
+								return getField(f => f.id === step.value)?.valid;
+							}
+						}
+					};
+
+				this.$components.aside.setStep(step.value, { valid: valid() });
+			});
 
 			/* Check all fields validity */
-			if (form.validate() && photos.validate()) {
+			if (formValid && photosValid) {
 				const upload = Object.values(images).filter(image => image.startsWith("data:image"));
 				
 				/* Show dialog */
@@ -283,15 +318,35 @@ export default {
 						form.dialog.view("error", this.$t('dialogLabels.image_error', { error }));
 					});
 			} else {
-				const 
-					className = form.classes.rejected,
-					items = document.getElementsByClassName(className),
-					target = Array.from(items)[0];
-				
-				if(target) {
-					this.scrollToElement(target, { block: "center" });
-				}
+				const field = (() => {
+					if (!formValid) {
+						const input = form.valid.filter(f => !f.valid)[0].field;
+
+						if (input.name === "tags" && !photosValid) {
+							/* Scroll to photos section if tags is invalid */
+							return this.$refs.photos.$el;
+						} else if (input.type === "hidden") {
+							/* Scroll to input parent if rejected is hidden */
+							return input.parentNode;
+						}
+
+						return input;
+					} else {
+						return this.$refs.photos.$el;
+					}
+				})();
+
+				this.scrollTo(field);
 			}
+		},
+
+		/**
+		 * Scroll view to element
+		 * 
+		 * @param {HTMLElement} target
+		 */
+		scrollTo(target) {
+			this.scrollToElement(target, { block: "center" });
 		}
 	},
 
