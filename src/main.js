@@ -138,11 +138,18 @@ Vue.prototype.shared = Vue.observable({
 		 * Scroll To
 		 * 
 		 * @param {String} el
+		 * @param {Object} [options]
 		 */
-		scrollToElement(el) {
-			const scrollTarget = document.querySelector(el);
+		scrollToElement(el, options) {
+			const scrollTarget = (() => {
+				if (el?.scrollIntoView) {
+					return el;
+				} else {
+					return document.querySelector(el);
+				}
+			})();
 
-			scrollTarget.scrollIntoView({ behavior: "smooth" });
+			scrollTarget.scrollIntoView({ behavior: "smooth", ...options });
 		},
 
 		/**

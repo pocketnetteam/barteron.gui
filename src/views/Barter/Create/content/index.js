@@ -288,7 +288,7 @@ export default {
 					target = Array.from(items)[0];
 				
 				if(target) {
-					target.scrollIntoView({ block: "center", behavior: "smooth" });
+					this.scrollToElement(target, { block: "center" });
 				}
 			}
 		}
