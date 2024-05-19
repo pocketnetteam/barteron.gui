@@ -228,7 +228,11 @@ export default {
 		 * Check at least one photo attached
 		 */
 		validate() {
-			return this.files.length;
+			if (!this.max) {
+				return this.files.length;
+			} else {
+				return this.files.length && this.files.length < this.max;
+			}
 		},
 
 		/**
