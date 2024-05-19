@@ -281,6 +281,15 @@ export default {
 						/* Show error dialog */
 						form.dialog.view("error", this.$t('dialogLabels.image_error', { error }));
 					});
+			} else {
+				const 
+					className = form.classes.rejected,
+					items = document.getElementsByClassName(className),
+					target = Array.from(items)[0];
+				
+				if(target) {
+					target.scrollIntoView({ block: "center", behavior: "smooth" });
+				}
 			}
 		}
 	},
