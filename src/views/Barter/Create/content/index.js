@@ -179,6 +179,7 @@ export default {
 				price: Number(data.pkoin || 0)
 			});
 
+			/* Add/remove passed/rejected classes to photos uploader */
 			if (photos.validate()) {
 				photos.$el.classList.add(form.classes.passed);
 				photos.$el.classList.remove(form.classes.rejected);
