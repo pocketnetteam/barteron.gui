@@ -92,6 +92,9 @@
 			color: $backdrop
 			cursor: pointer
 
+			@at-root .rejected#{&}
+				border-color: transparent
+
 			@at-root .no-files#{&}
 				position: absolute
 				height: 100%
