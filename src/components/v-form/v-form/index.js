@@ -79,7 +79,7 @@ export default {
 				});
 			});
 
-			return !Object.values(this.valid).includes(false);
+			return !this.valid.includes(false);
 		},
 
 		/**

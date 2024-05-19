@@ -46,6 +46,9 @@
 <script>
 import Loader from "@/components/loader/index.vue";
 
+
+const maxScrollPositionWithoutHeaderHiding = 35;
+
 export default {
 	name: "Barteron",
 
@@ -113,13 +116,16 @@ export default {
 		 * Handle header visibility
 		 */
 		 handleScroll() {
-			const currentScrollPosition = document.body.scrollTop;
-			console.log(currentScrollPosition)
+			const
+				e = document.body,
+				currentScrollPosition = e.scrollTop,
+				isScrollDown = currentScrollPosition > this.lastScrollPosition,
+				scrollBottom = e.scrollHeight - (e.scrollTop + e.clientHeight);
 
-			if (currentScrollPosition > this.lastScrollPosition) {
+			if (isScrollDown && currentScrollPosition > maxScrollPositionWithoutHeaderHiding) {
 				// Scrolling down, hide header
 				this.isHeaderVisible = false;
-			} else {
+			} else if(!isScrollDown && scrollBottom > 0) {
 				// Scrolling up, show header
 				this.isHeaderVisible = true;
 			}
