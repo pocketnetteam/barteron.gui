@@ -20,7 +20,7 @@ export default {
 				"input[name], textarea[name]": {
 					empty: true, /* Validate for emptity */
 					regex: false, /* Validate with regex */
-					value: "value" /* Check field prop */
+					prop: "value" /* Check field prop */
 				}
 			})
 		}
@@ -53,33 +53,35 @@ export default {
 				Array.from(
 					form.querySelectorAll(fields)
 				).forEach(field => {
-					const parent = field.closest(this.classes.parent), valid = {};
+					const
+						parent = field.closest(this.classes.parent),
+						valid = {};
 
 					if (parent) {
 						parent.classList.remove(this.classes.passed, this.classes.rejected);
 
 						/* Rules */
 						if (rule.empty) {
-							valid.empty = rule.empty && !!field[rule.value];
+							valid.empty = rule.empty && !!field[rule.prop];
 						}
 	
 						if (rule.regex) {
-							valid.regex = rule.regex && !!(new RegExp(rule.regex)).test(field[rule.value]);
+							valid.regex = rule.regex && !!(new RegExp(rule.regex)).test(field[rule.prop]);
 						}
 	
 						/* Add class to parent */
 						if (Object.values(valid).includes(false)) {
 							parent.classList.add(this.classes.rejected);
-							this.valid.push(false);
+							this.valid.push({ field, valid: false });
 						} else {
 							parent.classList.add(this.classes.passed);
-							this.valid.push(true);
+							this.valid.push({ field, valid: true });
 						}
 					}
 				});
 			});
 
-			return !this.valid.includes(false);
+			return !this.valid.some(field => field.valid === false);
 		},
 
 		/**
