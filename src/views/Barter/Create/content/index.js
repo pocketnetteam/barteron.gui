@@ -192,6 +192,47 @@ export default {
 		},
 
 		/**
+		 * Set steps state at aside
+		 * 
+		 * @param {Object} scope
+		 * @param {Object} scope.form
+		 * @param {Boolean} scope.formValid
+		 * @param {Boolean} scope.photosValid
+		 */
+		stepState(scope) {
+			this.$components.aside.steps.forEach(step => {
+				const
+					getField = (cb) => {
+						return scope.form.valid[
+							scope.form.valid.findIndex(index => cb(index.field))
+						];
+					},
+
+					getValid = () => {
+						switch (step.value) {
+							case "photos": {
+								return scope.photosValid;
+							}
+
+							case "get": {
+								return getField(f => f.name === "tags")?.valid;
+							}
+
+							case "location": {
+								return true;
+							}
+
+							default: {
+								return getField(f => f.id === step.value)?.valid;
+							}
+						}
+					};
+
+				this.$components.aside.setStep(step.value, { valid: getValid() });
+			});
+		},
+
+		/**
 		 * Cancel an offer
 		 */
 		cancel() {
@@ -224,36 +265,11 @@ export default {
 				formValid = form.validate(),
 				photosValid = photos.validate();
 
-			/* Set steps state at aside */
-			this.$components.aside.steps.forEach(step => {
-				const
-					getField = (cb) => {
-						return form.valid[
-							form.valid.findIndex(index => cb(index.field))
-						];
-					},
-
-					getValid = () => {
-						switch (step.value) {
-							case "photos": {
-								return photosValid;
-							}
-
-							case "get": {
-								return getField(f => f.name === "tags")?.valid;
-							}
-
-							case "location": {
-								return true;
-							}
-
-							default: {
-								return getField(f => f.id === step.value)?.valid;
-							}
-						}
-					};
-
-				this.$components.aside.setStep(step.value, { valid: getValid() });
+			/* Set steps validity at aside */
+			this.stepState({
+				form,
+				formValid,
+				photosValid
 			});
 
 			/* Check all fields validity */
