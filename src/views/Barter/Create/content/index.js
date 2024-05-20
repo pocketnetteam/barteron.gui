@@ -306,16 +306,16 @@ export default {
 						}).catch(e => {
 							/* Show error dialog */
 							const error = this.$t(
-								`dialogLabels.error#${ e?.toString()?.replace(/[^\d-]/g, '') || 0 }`,
+								`dialogLabels.error#${ e?.toString()?.replace(/[^\d-]/g, "") || 0 }`,
 								{ details: e }
 							);
 
-							form.dialog.view("error", this.$t('dialogLabels.node_error', { error }));
+							form.dialog.view("error", this.$t("dialogLabels.node_error", { error }));
 						});
 					})
 					.catch(error => {
 						/* Show error dialog */
-						form.dialog.view("error", this.$t('dialogLabels.image_error', { error }));
+						form.dialog.view("error", this.$t("dialogLabels.image_error", { error }));
 					});
 			} else {
 				const field = (() => {
