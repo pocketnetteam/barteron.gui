@@ -224,7 +224,7 @@ export default {
 				formValid = form.validate(),
 				photosValid = photos.validate();
 
-			/* Set items state in aside */
+			/* Set steps state at aside */
 			this.$components.aside.steps.forEach(step => {
 				const
 					getField = (cb) => {
