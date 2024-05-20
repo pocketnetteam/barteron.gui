@@ -318,6 +318,7 @@ export default {
 						form.dialog.view("error", this.$t("dialogLabels.image_error", { error }));
 					});
 			} else {
+				/* Scroll view to first rejected input */
 				const field = (() => {
 					if (!formValid) {
 						const input = form.valid.filter(f => !f.valid)[0].field;
