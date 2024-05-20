@@ -233,7 +233,7 @@ export default {
 						];
 					},
 
-					valid = () => {
+					getValid = () => {
 						switch (step.value) {
 							case "photos": {
 								return photosValid;
@@ -253,7 +253,7 @@ export default {
 						}
 					};
 
-				this.$components.aside.setStep(step.value, { valid: valid() });
+				this.$components.aside.setStep(step.value, { valid: getValid() });
 			});
 
 			/* Check all fields validity */
