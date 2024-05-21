@@ -13,6 +13,12 @@ const
 		},
 		
 		actions: {
+			fetch() {
+				Pinia.getPrefix().then(() => {
+					this.locale = Pinia.get(storageId, "");
+				});
+			},
+
 			set(locale) {
 				this.locale = locale;
 				Pinia.set(storageId, locale);
@@ -20,4 +26,7 @@ const
 		}
 	});
 
-export default LocaleStore();
+const store = LocaleStore();
+store.fetch();
+	
+export default store;

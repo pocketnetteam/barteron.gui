@@ -14,6 +14,12 @@ const
 		},
 		
 		actions: {
+			fetch() {
+				Pinia.getPrefix().then(() => {
+					this.like = Pinia.get(storageId, []);
+				});
+			},
+
 			set(id) {
 				const index = this.like.findIndex(offer => offer === id);
 
@@ -28,4 +34,7 @@ const
 		}
 	});
 
-export default LikeStore();
+const store = LikeStore();
+store.fetch();
+
+export default store;

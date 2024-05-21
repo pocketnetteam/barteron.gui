@@ -8,6 +8,12 @@ const
 		}),
 		
 		actions: {
+			fetch() {
+				Pinia.getPrefix().then(() => {
+					this.currency = Pinia.get(storageId, "");
+				});
+			},
+
 			set(currency) {
 				this.currency = currency;
 				Pinia.set(storageId, currency);
@@ -15,4 +21,7 @@ const
 		}
 	});
 
-export default CurrencyStore();
+	const store = CurrencyStore();
+	store.fetch();
+	
+export default store;

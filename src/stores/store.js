@@ -1,11 +1,50 @@
 import Vue from "vue";
 import { createPinia, defineStore } from "pinia";
+import SDK from "@/js/sdk.js";
 
 const pinia = createPinia();
 
 class Pinia {
 	instance = pinia;
 	defineStore = defineStore;
+
+	prefix = "";
+
+	/**
+	 * Get prefix for storage
+	 * 
+	 * @returns {Promise}
+	 */
+	getPrefix() {
+		return new Promise((resolve) => {
+			if (!Vue.prototype?.sdk?.address) {
+				const sdk = new SDK();
+
+				sdk.getAddress().then(address => {
+					this.prefix = address;
+					resolve(this.prefix);
+				});
+			} else {
+				this.prefix = Vue.prototype.sdk.address;
+				resolve(this.prefix);
+			}
+		});
+	}
+
+	/**
+	 * Wrap id witin prefix
+	 * 
+	 * @param {String} id
+	 * 
+	 * @returns {Promise}
+	 */
+	parseId(id) {
+		if (!this.prefix) {
+			return id;
+		} else {
+			return `${ this.prefix }_${ id }`
+		}
+	}
 
 	/**
 	 * Get data from localStorage
@@ -16,8 +55,7 @@ class Pinia {
 	 * @returns {Object}
 	 */
 	get(id, value) {
-		const item = localStorage.getItem(id);
-
+		const item = localStorage.getItem(this.parseId(id));
 		return item ? JSON.parse(item) : value;
 	}
 
@@ -30,7 +68,7 @@ class Pinia {
 	 * @returns {*}
 	 */
 	set(id, item) {
-		return localStorage.setItem(id, JSON.stringify(item));
+		return localStorage.setItem(this.parseId(id), JSON.stringify(item));
 	}
 }
 

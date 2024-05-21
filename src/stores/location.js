@@ -1,4 +1,3 @@
-import Vue from "vue";
 import Pinia from "@/stores/store.js";
 
 const
@@ -14,6 +13,17 @@ const
 		}),
 		
 		actions: {
+			fetch() {
+				Pinia.getPrefix().then(() => {
+					this.location = Pinia.get(storageId, {
+						geohash: null,
+						near: null,
+						radius: null,
+						zoom: null
+					});
+				});
+			},
+
 			set(data) {
 				this.location = data;
 
@@ -34,4 +44,7 @@ const
 		}
 	});
 
-export default LocationStore();
+const store = LocationStore();
+store.fetch();
+
+export default store;

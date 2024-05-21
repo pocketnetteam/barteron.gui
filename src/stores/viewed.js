@@ -8,7 +8,15 @@ const
 		}),
 		
 		actions: {
+			fetch() {
+				Pinia.getPrefix().then(() => {
+					this.viewed = Pinia.get(storageId, []);
+				});
+			},
+
 			set(id) {
+				if (id === "draft") return;
+				
 				const index = this.viewed.findIndex(offer => offer === id);
 
 				if (index > -1) {
@@ -22,4 +30,7 @@ const
 		}
 	});
 
-export default ViewedStore();
+const store = ViewedStore();
+store.fetch();
+	
+export default store;
