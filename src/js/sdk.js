@@ -604,6 +604,16 @@ class SDK {
 	}
 
 	/**
+	 * Route changed
+	 * 
+	 * @param {Object} to
+	 * @param {Object} from
+	 */
+	routeChanged(to, from) {
+		this.sdk.onChangeState()
+	}
+
+	/**
 	 * RPC requests
 	 * 
 	 * @prop {String} method
