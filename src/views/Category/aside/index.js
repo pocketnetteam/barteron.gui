@@ -32,6 +32,18 @@ export default {
 	},
 
 	methods: {
+		setupFilters() {
+			const source = this.$components.content.getFilters();
+
+			this.preventFiltersWatcher = true;
+
+			this.filters.priceMin = (typeof source.priceMin === 'number') ? source.priceMin / 100 : null;
+			this.filters.priceMax = (typeof source.priceMax === 'number') ? source.priceMax / 100 : null;
+			this.updatePriceVariant();
+
+			this.filters.condition = source.condition;
+		},
+
 		updatePriceVariant() {
 			const 
 				min = this.filters.priceMin || '',
@@ -122,6 +134,10 @@ export default {
 
 			this.applyDisabled = true;
 		}
+	},
+
+	mounted() {
+		this.setupFilters()
 	},
 
 	watch: {
