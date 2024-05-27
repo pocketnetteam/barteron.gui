@@ -13,7 +13,7 @@ let filter = {
 	orderDesc: true
 };
 
-const defaultPageSize = 10;
+const defaultPageSize = 12;
 
 const requestItems = (request) => {
 	const
@@ -90,18 +90,47 @@ export default {
 		 * @param {Object} order
 		 */
 		async selectOrder(order) {
+			this.setOrderInFilter(order);
+			await this.loadFirstPage();
+		},
+
+		/**
+		 * Set order value in filter
+		 * 
+		 * @param {Object} order
+		 */
+		setOrderInFilter(order) {
 			const state = (order?.value || "").split("_");
 
 			filter.orderBy = state[0];
 			filter.orderDesc = state[1] === "desc";
+		},
 
-			/* Send request to node */
-			this.items = await requestItems({
-				id: this.$route.params.id,
-				route: this.$route
-			});
+		/**
+		 * Get order value from filter
+		 * 
+		 * @returns {String}
+		 */
+		getOrderFromFilter() {
+			const
+				orderBy = filter.orderBy ?? 'height',
+				orderArrow = filter.orderDesc ? 'desc' : 'asc';
+				
+			return `${orderBy}_${orderArrow}`;
+		},
 
-			this.pageStart = 0;
+		/**
+		 * Set order value in element
+		 */
+		setOrderValue() {
+			const
+				targetValue = this.getOrderFromFilter(),
+				items = this.$refs.order.items,
+				targetItem = items.filter(item => item.value === targetValue)[0];
+
+			if (targetItem) {
+				this.$refs.order.setValue(targetItem);
+			}
 		},
 
 		/**
@@ -115,13 +144,36 @@ export default {
 				...filters
 			}
 
-			/* Send request to node */
-			this.items = await requestItems({
-				id: this.$route.params.id,
-				route: this.$route
-			});
+			await this.loadFirstPage();
+		},
 
+		/**
+		 * Current filters
+		 * 
+		 * @returns {Object}
+		 */
+		getFilters() {
+			return filter;
+		},
+
+		/**
+		 * Load first page
+		 * 
+		 * @param {Object} request 
+		 */
+		async loadFirstPage(inputRoute) {
+			
 			this.pageStart = 0;
+
+			const 
+				route = inputRoute ?? this.$route,
+				data = {
+					id: route.params.id,
+					route,
+					pageStart: this.pageStart
+				};
+
+			this.items = await requestItems(data);
 		},
 
 		/**
@@ -149,31 +201,22 @@ export default {
 		 */
 		async $route(to, from) {
 			if (to?.name === "category") {
-				/* Send request to node */
-				this.items = await requestItems({
-					id: to.params.id,
-					route: to
-				});
+				await this.loadFirstPage(to);
 			}
 		},
 
 		async "LocationStore.geohash"() {
-			this.items = await requestItems({
-				id: this.$route.params.id,
-				route: this.$route
-			});
+			await this.loadFirstPage();
 		}
 	},
 
-	async beforeRouteEnter (to, from, next) {
-		/* Send request to node */
-		const items = await requestItems({
-			id: to.params.id,
-			route: to
-		});
+	mounted() {
+		this.setOrderValue();
+	},
 
-		next(vm => {
-			vm.items = items;
+	beforeRouteEnter (to, from, next) {
+		next(async vm => {
+			await vm.loadFirstPage(to);
 		});
-	}
+	}	
 }

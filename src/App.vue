@@ -111,6 +111,15 @@ export default {
 		},
 
 		/**
+		 * Show header if needed
+		 */
+		 showHeaderIfNeeded() {
+			if (!this.isHeaderVisible && document.body.scrollTop == 0) {
+				this.isHeaderVisible = true;
+			}
+		},
+
+		/**
 		 * Handle header visibility
 		 */
 		 handleScroll() {
@@ -149,6 +158,10 @@ export default {
 		}, 100);
 
 		document.body.addEventListener("scroll", this.handleScroll, { passive: true });
+	},
+
+	updated() {
+		this.showHeaderIfNeeded();
 	},
 
 	destroyed() {

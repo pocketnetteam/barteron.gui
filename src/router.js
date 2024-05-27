@@ -82,8 +82,13 @@ const router = new VueRouter({
 	scrollBehavior(to, from, savedPosition) {
 		if (to.hash) {
 			return {selector: to.hash}
+		} else if(savedPosition) {
+			return savedPosition;
 		} else {
-			return {x: 0, y: 0}
+			Vue.nextTick(() => {
+				const mixin = Vue.prototype.shared;
+				mixin.methods.scrollToElement('#app', {behavior: 'instant'});
+			})
 		}
 	},
 	routes

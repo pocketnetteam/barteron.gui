@@ -3,6 +3,7 @@
 		<div class="row">
 			<div class="col no-offset">
 				<v-select
+					ref="order"
 					:dropdown="orders.map(order => ({
 						text: `
 							<i class='fa icon ${ 
