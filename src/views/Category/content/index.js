@@ -125,7 +125,7 @@ export default {
 		setOrderValue() {
 			const
 				targetValue = this.getOrderFromFilter(),
-				items = this.$refs.order.items,
+				items = this.$refs.order?.items || [],
 				targetItem = items.filter(item => item.value === targetValue)[0];
 
 			if (targetItem) {
@@ -211,7 +211,9 @@ export default {
 	},
 
 	mounted() {
-		this.setOrderValue();
+		this.$2watch("$refs.order").then(() => {
+			this.setOrderValue();
+		});
 	},
 
 	beforeRouteEnter (to, from, next) {
