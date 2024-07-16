@@ -97,9 +97,15 @@ class SDK {
 	}
 
 	constructor() {
-		const $ = this;
-
+		if (SDK._instance) {
+			return SDK._instance;
+		}
+		
 		if (!window.BastyonSdk) return;
+
+		SDK._instance = this;
+
+		const $ = this;
 
 		this.sdk = new window.BastyonSdk();
 		this.sdk.init();
@@ -601,16 +607,6 @@ class SDK {
 		}
 
 		return result;
-	}
-
-	/**
-	 * Route changed
-	 * 
-	 * @param {Object} to
-	 * @param {Object} from
-	 */
-	routeChanged(to, from) {
-		this.sdk.onChangeState()
 	}
 
 	/**

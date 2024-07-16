@@ -101,8 +101,4 @@ router.beforeEach((to, from, next) => {
 	next();
 });
 
-router.afterEach((to, from) => {
-	Vue.prototype.sdk.routeChanged(to, from)
-});
-
 export default router;
