@@ -48,7 +48,7 @@ export default {
 		 * Store search string in url query
 		 */
 		submit() {
-			this.$router.push({
+			this.$router.replace({
 				name: "category",
 				params: { id: this.id || "search" },
 				query: { search: this.query }

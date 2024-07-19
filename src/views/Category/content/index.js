@@ -1,204 +1,130 @@
-import Vue from "vue";
+import Loader from "@/components/loader/index.vue";
 import BarterList from "@/components/barter/list/index.vue";
+import { useOfferStore } from "@/stores/offer.js";
+import { mapState, mapWritableState, mapActions } from "pinia";
 
-/**
- * Get items from category
- * 
- * @param {Object} request
- * 
- * @returns {Promise}
- */
-let filter = {
-	orderBy: "height", // height | location | price
-	orderDesc: true
-};
-
-const defaultPageSize = 12;
-
-const requestItems = (request) => {
+const setValueToVSelect = (el, value) => {
 	const
-		mixin = Vue.prototype.shared,
-		search = request?.route?.query?.search;
+		items = el?.items || [],
+		targetItem = items.filter(item => item.value === value)[0];
 
-	return Vue.prototype.sdk.getBrtOfferDeals({
-		...filter,
-		...(search && { search: `%${ search }%` }),
-		location: mixin.computed.locationStore().near || [],
-		theirTags: Number.isInteger(+request?.id) ? [+request.id] : [],
-		pageStart: request?.pageStart || 0,
-		pageSize: request?.pageSize || defaultPageSize
-	});
-};
+	if (targetItem) {
+		el.setValue(targetItem);
+	}
+}
 
 export default {
 	name: "Content",
 
 	components: {
+		Loader,
 		BarterList
 	},
 
-	data() {
-		return {
-			bartersView: "tile",
-			items: [],
-			pageStart: 0
-		}
-	},
-
 	computed: {
-		/**
-		 * Make page size
-		 * 
-		 * @returns {Number}
-		 */
-		pageSize() {
-			return defaultPageSize;
-		},
+		...mapState(useOfferStore, [
+			'items',
+			'pageStart',
+			'isLoading',
+			'bartersView',
+		]),
 
-		/**
-		 * Make list of order by
-		 * 
-		 * @returns {Array}
-		 */
+		...mapWritableState(useOfferStore, [
+			'scrollOffset',
+			'currentError',
+		]),
+
+		...mapState(useOfferStore, [
+			'pageSize',
+		]),
+
 		orders() {
 			return this.parseLabels("orderLabels");
 		},
 
-		/**
-		 * Make list of view
-		 * 
-		 * @returns {Array}
-		 */
 		views() {
 			return this.parseLabels("viewLabels");
-		}
+		},
+
 	},
 
 	methods: {
-		/**
-		 * View change callback
-		 * 
-		 * @param {Object} view 
-		 */
-		selectView(view) {
-			this.bartersView = view?.value;
+		...mapActions(useOfferStore, [
+			'loadFirstPage',
+			'loadMore',
+			'changeOrder',
+			'changeView',
+			'changeFilters',
+			'getFilters'
+		]),
+
+		showMoreEvent() {
+			this.loadMore(this.$route);
 		},
 
-		/**
-		 * Order change callback
-		 * 
-		 * @param {Object} order
-		 */
-		async selectOrder(order) {
-			this.setOrderInFilter(order);
-			await this.loadFirstPage();
+		selectOrderEvent(newValue) {
+			const newOrder = this.getOrderFromString(newValue?.value);
+			this.changeOrder(newOrder, this.$route);
 		},
 
-		/**
-		 * Set order value in filter
-		 * 
-		 * @param {Object} order
-		 */
-		setOrderInFilter(order) {
-			const state = (order?.value || "").split("_");
-
-			filter.orderBy = state[0];
-			filter.orderDesc = state[1] === "desc";
+		selectViewEvent(newValue) {
+			this.changeView(newValue?.value);
 		},
 
-		/**
-		 * Get order value from filter
-		 * 
-		 * @returns {String}
-		 */
-		getOrderFromFilter() {
+		applyFilters(newValue) {
+			this.changeFilters(newValue, this.$route)
+		},
+
+		getOrderFromString(value) {
+			const state = (value || "").split("_");
+
+			return {
+				orderBy: state[0] ?? "height",
+				orderDesc: state[1] === "desc"
+			};
+		},
+
+		getOrderStringFromFilter() {
 			const
-				orderBy = filter.orderBy ?? 'height',
-				orderArrow = filter.orderDesc ? 'desc' : 'asc';
+				filters = this.getFilters(),
+				orderBy = filters.orderBy ?? 'height',
+				orderArrow = filters.orderDesc ? 'desc' : 'asc';
 				
 			return `${orderBy}_${orderArrow}`;
 		},
 
-		/**
-		 * Set order value in element
-		 */
-		setOrderValue() {
-			const
-				targetValue = this.getOrderFromFilter(),
-				items = this.$refs.order?.items || [],
-				targetItem = items.filter(item => item.value === targetValue)[0];
+		setOrderValueToElement() {
+			const value = this.getOrderStringFromFilter();
+			setValueToVSelect(this.$refs.order, value);
+		},
 
-			if (targetItem) {
-				this.$refs.order.setValue(targetItem);
+		setBartersViewToElement() {
+			setValueToVSelect(this.$refs.bartersView, this.bartersView);
+		},
+
+		setScrollOffsetIfNeeded() {
+			if (this.scrollOffset) {
+				document.body.scrollTo({
+					top: this.scrollOffset.y,
+					left: this.scrollOffset.x,
+					behavior: "instant",
+				});
+				this.scrollOffset = null;
 			}
 		},
 
-		/**
-		 * Get filters from aside component
-		 * 
-		 * @param {Object} filters
-		 */
-		async applyFilters(filters) {
-			filter = {
-				...filter,
-				...filters
-			}
-
-			await this.loadFirstPage();
+		showError(e) {
+			// TODO: вынести в mixin получение номера ошибки (есть дублирование)
+			const message = this.$t(
+				`dialogLabels.error#${ e?.toString()?.replace(/[^\d-]/g, "") || 0 }`,
+				{ details: e }
+			);
+			this.$refs.dialog.view("error", message);
 		},
 
-		/**
-		 * Current filters
-		 * 
-		 * @returns {Object}
-		 */
-		getFilters() {
-			return filter;
-		},
-
-		/**
-		 * Load first page
-		 * 
-		 * @param {Object} request 
-		 */
-		async loadFirstPage(inputRoute) {
-			
-			this.pageStart = 0;
-
-			const 
-				route = inputRoute ?? this.$route,
-				data = {
-					id: route.params.id,
-					route,
-					pageStart: this.pageStart
-				};
-
-			this.items = await requestItems(data);
-		},
-
-		/**
-		 * Load more offers
-		 */
-		async loadMore() {
-			/* Send request to node */
-			const items = await requestItems({
-				id: this.$route.params.id,
-				pageStart: (this.pageStart + 1),
-				route: this.$route
-			});
-
-			this.pageStart++;
-			this.items = this.items.concat(items);
-		}
 	},
 
 	watch: {
-		/**
-		 * Watch for route change and preload items
-		 * 
-		 * @param {Object} to
-		 * @param {Object} from
-		 */
 		async $route(to, from) {
 			if (to?.name === "category") {
 				await this.loadFirstPage(to);
@@ -206,19 +132,47 @@ export default {
 		},
 
 		async "LocationStore.geohash"() {
-			await this.loadFirstPage();
-		}
+			await this.loadFirstPage(this.$route);
+		},
+
+		currentError() {
+			if (this.currentError) {
+				this.showError(this.currentError)
+				this.currentError = null;
+			}
+		},
 	},
 
 	mounted() {
 		this.$2watch("$refs.order").then(() => {
-			this.setOrderValue();
+			this.setOrderValueToElement();
 		});
+
+		this.$2watch("$refs.bartersView").then(() => {
+			this.setBartersViewToElement();
+		});
+
+		this.setScrollOffsetIfNeeded();
 	},
 
 	beforeRouteEnter (to, from, next) {
 		next(async vm => {
-			await vm.loadFirstPage(to);
+			const
+				isListEmpty = (vm.items.length == 0),
+				isReturnFromOffer = (from.name == 'barterItem');
+
+			if (isListEmpty || !(isReturnFromOffer)) {
+				await vm.loadFirstPage(to);
+			}
 		});
-	}	
+	},
+
+	beforeRouteLeave(to, from, next) {
+		const isEnterToOffer = (to.name == 'barterItem');
+		if (isEnterToOffer) {
+			const el = document.body;
+			this.scrollOffset = {x: el.scrollLeft, y: el.scrollTop};
+		}
+		next();
+	},
 }

@@ -20,12 +20,13 @@
 						`,
 						value: order.value
 					}))"
-					@selected="selectOrder"
+					@selected="selectOrderEvent"
 				/>
 			</div>
 
 			<div class="col right">
 				<v-select
+					ref="bartersView"
 					:dropdown="views.map(view => ({
 						text: `
 							<i class='fa icon ${ 
@@ -40,7 +41,7 @@
 						`,
 						value: view.value
 					}))"
-					@selected="selectView"
+					@selected="selectViewEvent"
 				/>
 			</div>
 		</div>
@@ -51,15 +52,25 @@
 				:vType="bartersView"
 				v-if="items?.length"
 			/>
+			<loader 
+				v-else-if="items?.length == 0 && isLoading" 
+				type="circular" 
+			/>
 			<p v-else>{{ $t('categoryLabels.empty') }}</p>
 		</div>
 
 		<div class="row center">
 			<v-button
-				v-if="items?.length && !(items.length < (pageStart + 1) * pageSize)"
-				@click="loadMore"
+				v-if="!isLoading && items?.length && !(items.length < (pageStart + 1) * pageSize)"
+				@click="showMoreEvent"
 			>{{ $t('buttonLabels.show_more') }}</v-button>
+			<loader 
+				v-else-if="items?.length && isLoading" 
+				type="circular" 
+			/>
 		</div>
+
+		<v-dialog ref="dialog" />
 	</v-content>
 </template>
 
