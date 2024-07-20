@@ -61,7 +61,7 @@
 
 		<div class="row center">
 			<v-button
-				v-if="!isLoading && items?.length && !(items.length < (pageStart + 1) * pageSize)"
+				v-if="!(isLoading) && items?.length && !(allItemsAreLoaded)"
 				@click="showMoreEvent"
 			>{{ $t('buttonLabels.show_more') }}</v-button>
 			<loader 

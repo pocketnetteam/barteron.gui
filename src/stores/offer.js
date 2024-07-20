@@ -3,8 +3,7 @@ import Vue from "vue";
 
 const 
     defaultPageSize = 24,
-    storageId = "offer",
-    subStorageId = (key) => `${storageId}_${key}`;
+    storageId = "offer";
 
 export const useOfferStore = Pinia.defineStore(storageId, {
         state: () => ({
@@ -27,12 +26,32 @@ export const useOfferStore = Pinia.defineStore(storageId, {
         actions: {
             fetch() {
 				Pinia.getPrefix().then(() => {
-					this.bartersView = Pinia.get(subStorageId('bartersView'), 'tile');
-
-                    const order = Pinia.get(subStorageId('order'), {});
-                    this.setOrderInFilter(order);
+                    const data = Pinia.get(storageId, {});
+                    this.restoreState(data);
 				});
 			},
+
+            restoreState(data) {
+                if (data?.bartersView) {
+                    this.bartersView = data.bartersView;
+                };
+
+                if (data?.order) {
+                    this.setOrderInFilter(data.order);
+                };
+            },
+
+            saveState() {
+                const data = {
+                    bartersView: this.bartersView,
+                    order: {
+                        orderBy: this.filters.orderBy,
+                        orderDesc: this.filters.orderDesc
+                    },
+                };
+
+                Pinia.set(storageId, data);
+            },
 
             _requestItems(request) {
                 const
@@ -92,17 +111,22 @@ export const useOfferStore = Pinia.defineStore(storageId, {
             },
 
             async changeOrder(newValue, route) {
-                Pinia.set(subStorageId('order'), newValue);
                 this.setOrderInFilter(newValue);
+                this.saveState();
+                
                 await this.loadFirstPage(route);
             },
 
             changeView(newValue) {
                 this.bartersView = newValue;
-                Pinia.set(subStorageId('bartersView'), this.bartersView);
+                this.saveState();
             },
 
             setOrderInFilter(newValue) {
+                this.updateFiltersFromValue(newValue);
+            },
+
+            updateFiltersFromValue(newValue) {
                 this.filters = {
                     ...this.filters,
                     ...newValue
@@ -110,11 +134,7 @@ export const useOfferStore = Pinia.defineStore(storageId, {
             },
 
             async changeFilters(inputFilters, route) {
-                this.filters = {
-                    ...this.filters,
-                    ...inputFilters
-                };
-
+                this.updateFiltersFromValue(inputFilters);
                 await this.loadFirstPage(route);
             },
 

@@ -3,7 +3,7 @@ import BarterList from "@/components/barter/list/index.vue";
 import { useOfferStore } from "@/stores/offer.js";
 import { mapState, mapWritableState, mapActions } from "pinia";
 
-const setValueToVSelect = (el, value) => {
+function setValueToVSelect(el, value) {
 	const
 		items = el?.items || [],
 		targetItem = items.filter(item => item.value === value)[0];
@@ -11,6 +11,15 @@ const setValueToVSelect = (el, value) => {
 	if (targetItem) {
 		el.setValue(targetItem);
 	}
+}
+
+function getOrderFromString(value) {
+	const state = (value || "").split("_");
+
+	return {
+		orderBy: state[0] ?? "height",
+		orderDesc: state[1] === "desc"
+	};
 }
 
 export default {
@@ -46,6 +55,10 @@ export default {
 			return this.parseLabels("viewLabels");
 		},
 
+		allItemsAreLoaded() {
+			return (this.items.length < (this.pageStart + 1) * this.pageSize)
+		},
+
 	},
 
 	methods: {
@@ -63,7 +76,7 @@ export default {
 		},
 
 		selectOrderEvent(newValue) {
-			const newOrder = this.getOrderFromString(newValue?.value);
+			const newOrder = getOrderFromString(newValue?.value);
 			this.changeOrder(newOrder, this.$route);
 		},
 
@@ -73,15 +86,6 @@ export default {
 
 		applyFilters(newValue) {
 			this.changeFilters(newValue, this.$route)
-		},
-
-		getOrderFromString(value) {
-			const state = (value || "").split("_");
-
-			return {
-				orderBy: state[0] ?? "height",
-				orderDesc: state[1] === "desc"
-			};
 		},
 
 		getOrderStringFromFilter() {
@@ -159,9 +163,10 @@ export default {
 		next(async vm => {
 			const
 				isListEmpty = (vm.items.length == 0),
-				isReturnFromOffer = (from.name == 'barterItem');
+				isReturnFromOffer = (from.name == 'barterItem'),
+				needReloadOffers = (isListEmpty || !(isReturnFromOffer));
 
-			if (isListEmpty || !(isReturnFromOffer)) {
+			if (needReloadOffers) {
 				await vm.loadFirstPage(to);
 			}
 		});
