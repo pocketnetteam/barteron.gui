@@ -8,6 +8,7 @@ const
 export const useOfferStore = Pinia.defineStore(storageId, {
         state: () => ({
             items: [],
+            itemsRoute: null,
             pageStart: 0,
             isLoading: false,
             filters: {
@@ -81,6 +82,7 @@ export const useOfferStore = Pinia.defineStore(storageId, {
                 try {
                     this.isLoading = true;
                     this.items = await this._requestItems(data);
+                    this.itemsRoute = route;
                 } catch (e) {
                     console.error(e);
                     this.currentError = e;
@@ -99,6 +101,7 @@ export const useOfferStore = Pinia.defineStore(storageId, {
                 try {
                     this.isLoading = true;
                     const items = await this._requestItems(data);
+                    this.itemsRoute = route;
 
                     this.pageStart++;
                     this.items = this.items.concat(items);

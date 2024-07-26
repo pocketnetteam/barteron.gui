@@ -57,6 +57,10 @@ export default {
 	},
 
 	watch: {
+		async $route(to, from) {
+			this.query = to.query.search || ""
+		},
+
 		query: {
 			handler() {
 				const queryReset = (!this.query && this.$route.query.search);

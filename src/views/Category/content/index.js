@@ -33,6 +33,7 @@ export default {
 	computed: {
 		...mapState(useOfferStore, [
 			'items',
+			'itemsRoute',
 			'pageStart',
 			'isLoading',
 			'bartersView',
@@ -214,7 +215,10 @@ export default {
 		next(async vm => {
 			const
 				isListEmpty = (vm.items.length == 0),
-				isReturnFromOffer = (from.name == 'barterItem'),
+				isReturnFromOffer = (
+					from.name == 'barterItem' 
+					&& to.fullPath === vm.itemsRoute.fullPath
+				),
 				needReloadOffers = (isListEmpty || !(isReturnFromOffer));
 
 			if (needReloadOffers) {
