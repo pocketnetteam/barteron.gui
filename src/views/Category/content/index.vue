@@ -60,10 +60,11 @@
 		</div>
 
 		<div class="row center">
-			<v-button
+			<div 
 				v-if="!(isLoading) && items?.length && !(allItemsAreLoaded)"
-				@click="showMoreEvent"
-			>{{ $t('buttonLabels.show_more') }}</v-button>
+				v-intersection="showMoreEvent" 
+				style="width: 100%; height: 20px;"
+	        />
 			<loader 
 				v-else-if="items?.length && isLoading" 
 				type="circular" 

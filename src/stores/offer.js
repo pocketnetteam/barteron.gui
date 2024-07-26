@@ -2,7 +2,7 @@ import Pinia from "@/stores/store.js";
 import Vue from "vue";
 
 const 
-    defaultPageSize = 24,
+    defaultPageSize = 12,
     storageId = "offer";
 
 export const useOfferStore = Pinia.defineStore(storageId, {

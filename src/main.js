@@ -14,7 +14,12 @@ import getHashesNear from "geohashes-near";
 import LocationStore from "@/stores/location.js";
 import { Promise } from "core-js";
 
+import vIntersection from "@/directives/v-intersection";
+
 Vue.config.productionTip = false;
+
+/* Register directives */
+Vue.directive("intersection", vIntersection);
 
 /* Register layout components */
 Vue.component("v-header", () => import("@/components/v-layout/v-header/index.vue"));
