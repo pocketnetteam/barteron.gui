@@ -217,7 +217,7 @@ export default {
 				isListEmpty = (vm.items.length == 0),
 				isReturnFromOffer = (
 					from.name == 'barterItem' 
-					&& to.fullPath === vm.itemsRoute.fullPath
+					&& to.fullPath === vm.itemsRoute?.fullPath
 				),
 				needReloadOffers = (isListEmpty || !(isReturnFromOffer));
 
