@@ -130,7 +130,7 @@ Vue.prototype.shared = Vue.observable({
 							resolve(newVal);
 							if (typeof fn === "function") fn(newVal, oldVal);
 						}
-					}, 100);
+					}, 10);
 			});
 		},
 
