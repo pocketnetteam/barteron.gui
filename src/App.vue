@@ -11,7 +11,10 @@
 			</transition>
 
 			<template v-if="!loading">
-				<v-header :class="{ 'header-hidden': !isHeaderVisible }" />
+				<v-header 
+					ref="header" 
+					:class="{ 'header-hidden': !isHeaderVisible }" 
+				/>
 
 				<section id="main">
 					<router-view />
@@ -59,6 +62,7 @@ export default {
 			dialog: null,
 			minHeaderScrollPosition: 35,
 			lastScrollPosition: 0,
+			lastRoute: null,
 			isHeaderVisible: true
 		}
 	},
@@ -115,7 +119,28 @@ export default {
 		 */
 		 showHeaderIfNeeded() {
 			if (!this.isHeaderVisible && document.body.scrollTop == 0) {
-				this.isHeaderVisible = true;
+				this.setHeaderVisibility(true, { animation: false });
+			}
+		},
+
+		/**
+		 * Sets visibility of the header
+		 * 
+		 * @param {Boolean} value
+		 * @param {Object} options
+		 */
+		setHeaderVisibility(value, options = {}) {
+			if (this.isHeaderVisible != value) {
+				const
+					el = this.$refs.header?.$el,
+					disableAnimation = !(options && options.animation);
+
+				if (el && disableAnimation) {
+					el.style.transitionDuration = '0s';
+					setTimeout(() => el.style.removeProperty('transition-duration'));
+				}
+
+				this.isHeaderVisible = value;
 			}
 		},
 
@@ -124,19 +149,20 @@ export default {
 		 */
 		 handleScroll() {
 			const
+				currentRoute = this.$route,
+				animation = (this.lastRoute === currentRoute),
 				e = document.body,
 				currentScrollPosition = e.scrollTop,
 				isScrollDown = currentScrollPosition > this.lastScrollPosition,
 				scrollBottom = e.scrollHeight - (e.scrollTop + e.clientHeight);
 
 			if (isScrollDown && currentScrollPosition > this.minHeaderScrollPosition) {
-				// Scrolling down, hide header
-				this.isHeaderVisible = false;
+				this.setHeaderVisibility(false, { animation });
 			} else if(!isScrollDown && scrollBottom > 0) {
-				// Scrolling up, show header
-				this.isHeaderVisible = true;
+				this.setHeaderVisibility(true, { animation });
 			}
 			
+			this.lastRoute = currentRoute;
 			this.lastScrollPosition = currentScrollPosition;
 		}
 	},
