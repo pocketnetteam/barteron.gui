@@ -84,6 +84,12 @@
 					</ExchangeList>
 				</template>
 
+				<!-- Label: My list text -->
+				<label v-if="getting === 'my_list'" class="v-label">
+					<i class="fa fa-info-circle"></i>
+					{{ $t('my_list_text') }}
+				</label>							
+
 				<!-- Select: Tags (editable) -->
 				<template v-if="getting === 'something'">
 					<ExchangeList
@@ -121,12 +127,6 @@
 			</div>
 
 			<div class="row block" v-if="getting !== 'for_nothing'">
-				<!-- Label: Currency text -->
-				<label for="currency" class="v-label">
-					<i class="fa fa-info-circle"></i>
-					{{ $t('choose_currency_text') }}
-				</label>
-
 				<!-- Input: Currency exchange to PKOIN -->
 				<v-input
 					ref="price"
@@ -156,6 +156,12 @@
 						</span>
 					</template>
 				</v-input>
+
+				<!-- Label: Currency text -->
+				<label for="currency" class="v-label">
+					<i class="fa fa-info-circle"></i>
+					{{ $t('choose_currency_text') }}
+				</label>
 			</div>
 
 			<div class="row block sep">
