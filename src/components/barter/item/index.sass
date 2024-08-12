@@ -342,7 +342,8 @@ div[class^="barter-item-"]
 				border-radius: 11px
 				position: relative
 				overflow: hidden
-				height: 355px
+				height: 460px
+				background-color: $beerus
 
 				li
 					+transition(opacity)
@@ -366,11 +367,11 @@ div[class^="barter-item-"]
 							opacity: 0
 
 					.image
-						height: 355px
+						height: 460px
 
 						img
 							+unselectable()
-							object-fit: cover
+							object-fit: contain
 
 			.thumbnails
 				display: flex
