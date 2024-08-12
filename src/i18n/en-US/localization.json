@@ -231,6 +231,7 @@
 	"my_list": "My list",
 	"something": "Something",
 	"for_nothing": "For nothing",
+	"my_list_text": "Use this option when you need to specify the same exchange list for offers. The list can also be edited in your profile",
 	"choose_currency_text": "The price in currency will be updating automatically at the current PKOIN rate",
 
 	"may_match_exchanges": "May match with your exchanges",
