@@ -17,6 +17,8 @@ const
 			fetch() {
 				Pinia.getPrefix().then(() => {
 					this.like = Pinia.get(storageId, []);
+				}).catch(e => { 
+					console.error(e);
 				});
 			},
 

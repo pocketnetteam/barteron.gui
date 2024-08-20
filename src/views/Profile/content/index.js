@@ -132,7 +132,9 @@ export default {
 		 */
 		updatePath(tab) {
 			this.activeTab = tab;
-			this.$router.replace({ path: `/profile/${ this.address }`, hash: `#${ tab }` }).catch(() => {});
+			this.$router.replace({ path: `/profile/${ this.address }`, hash: `#${ tab }` }).catch(e => {
+				this.showError(e);
+			});
 		},
 
 		/**
@@ -167,13 +169,7 @@ export default {
 		 * @param {Object} e
 		 */
 		showError(e) {
-			// TODO: вынести в mixin получение номера ошибки (есть дублирование)
-			const message = this.$t(
-				`dialogLabels.error#${ e?.toString()?.replace(/[^\d-]/g, "") || 0 }`,
-				{ details: e }
-			);
-
-			this.dialog?.instance.view("error", message);
+			this.dialog?.instance.view("error", this.sdk.errorMessage(e));
 		},
 	},
 

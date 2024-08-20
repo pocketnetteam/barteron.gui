@@ -29,7 +29,9 @@ export const useOfferStore = Pinia.defineStore(storageId, {
 				Pinia.getPrefix().then(() => {
                     const data = Pinia.get(storageId, {});
                     this.restoreState(data);
-				});
+				}).catch(e => { 
+                    console.error(e);
+                });
 			},
 
             restoreState(data) {

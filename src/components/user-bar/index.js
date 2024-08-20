@@ -83,12 +83,25 @@ export default {
 					this.dialog?.instance.view("warn", this.$t("dialogLabels.pending_reg"));
 				} else {
 					if (this.user?.name && to) {
-						this.$router.push(to).catch(() => {});
+						this.$router.push(to).catch(e => {
+							this.showError(e);
+						});
 					}
 				}
+			}).catch(e => {
+				this.showError(e);
 			});
 
 			return false;
-		}
+		},
+
+		/**
+		 * Show error
+		 * 
+		 * @param {Object} e
+		 */
+		showError(e) {
+			this.dialog?.instance.view("error", this.sdk.errorMessage(e));
+		},
 	}
 }

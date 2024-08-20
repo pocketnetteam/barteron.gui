@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
-import { currencies } from "@/i18n/index.js";
+import VueI18n, { currencies } from "@/i18n/index.js";
 
 import Account from "@/js/models/account.js";
 import Offer from "@/js/models/offer.js";
@@ -54,6 +54,23 @@ class SDK {
 		if (this.empty(this._currency)) this.getCurrency();
 
 		return this._currency;
+	}
+
+	/**
+	 * Get error message
+	 * 
+	 * @param {Object} error
+	 * 
+	 * @returns {String}
+	 */
+	errorMessage(error) {
+		const
+			key = (code) => `dialogLabels.error#${ code }`,
+			defaultCode = 0,
+			parsedCode = `${ error?.toString()?.replace(/[^\d-]/g, "") || defaultCode }`,
+			code = VueI18n.te(key(parsedCode)) ? parsedCode : defaultCode;
+
+		return VueI18n.t(key(code), {details: error});
 	}
 
 	/**

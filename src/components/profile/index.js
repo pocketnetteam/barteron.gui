@@ -86,6 +86,10 @@ export default {
 					this.sdk.geoLocation(this.geohash)
 						.then(result => {
 							if (result?.address) this.$set(this, "addr", result.address);
+						}).catch(e => { 
+							console.error(e);
+						}).finally(() => {
+							this.addr.fetching = false;
 						});
 				}
 
