@@ -133,6 +133,8 @@ export default {
 				/* Request for permissons */
 				await this.sdk.requestPermissions(["geolocation"]).then(() => {
 					this.$forceUpdate();
+				}).catch(e => { 
+					console.error(e);
 				});
 			}
 

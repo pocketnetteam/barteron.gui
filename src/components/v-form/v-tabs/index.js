@@ -32,7 +32,7 @@ export default {
 		 * @returns {Array}
 		 */
 		tabs() {
-			return this.tabset.filter(tab => tab.hasOwnProperty("visble") ? tab.visible : true);
+			return this.tabset.filter(tab => tab.hasOwnProperty("visible") ? tab.visible : true);
 		},
 
 		/**
@@ -41,7 +41,7 @@ export default {
 		 * @returns {Array}
 		 */
 		selected() {
-			return this.tabset.filter(t => t.active)[0]?.tabId || this.tabset[0]?.tabId;
+			return this.tabs.filter(t => t.active)[0]?.tabId || this.tabs[0]?.tabId;
 		}
 	},
 
@@ -54,7 +54,7 @@ export default {
 		 */
 		change(e, index) {
 			e.preventDefault();
-			const active = this.tabset[index].tabId;
+			const active = this.tabs[index].tabId;
 			if (!this.hashTabs) this.active = active;
 			this.$emit("change", active);
 		}

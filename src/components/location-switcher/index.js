@@ -67,6 +67,10 @@ export default {
 									fetching: false
 								});
 							}
+						}).catch(e => { 
+							console.error(e);
+						}).finally(() => {
+							this.addr.fetching = false;
 						});
 				}
 
@@ -221,6 +225,8 @@ export default {
 		this.$2watch("$refs.map").then(map => {
 			this.map = map;
 			this.getOffersFeed();
+		}).catch(e => { 
+			console.error(e);
 		});
 	}
 }

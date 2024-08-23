@@ -6,23 +6,26 @@
 				{
 					tabId: 'ads',
 					title: `<i class='fa fa-list'></i> ${ $t('profileLabels.ads') } (${ offersList.length })`,
-					active: activeTab === '#ads'
+					active: initialActiveTab === 'ads',
 				},
+				/* // TODO: barters
 				{
 					tabId: 'barters',
 					title: `<i class='fa fa-sync-alt'></i> ${ $t('profileLabels.barters') } (0)`,
-					active: activeTab === '#barters'
+					visible: isMyProfile,
+					active: initialActiveTab === 'barters',
 				},
+				*/
 				{
 					tabId: 'favorites',
 					title: `<i class='fa fa-heart'></i> ${ $t('profileLabels.favorites') } (${ favoriteList.length })`,
 					visible: isMyProfile,
-					active: activeTab === '#favorites'
+					active: initialActiveTab === 'favorites',
 				},
 				{
 					tabId: 'votes',
 					title: `<i class='fa fa-comment'></i> ${ $t('profileLabels.votes') }`,
-					active: activeTab === '#votes'
+					active: initialActiveTab === 'votes',
 				}
 			]"
 			vType="pills"
@@ -37,13 +40,16 @@
 					:tabset="[
 						{
 							tabId: 'active',
-							title: `${ $t('profileLabels.active') } (${ offersActive.length })`
+							title: `${ $t('profileLabels.active') } (${ offersActive.length })`,
+							active: initialActiveInnerAdsTab === 'active',
 						},
 						{
 							tabId: 'inactive',
-							title: `${ $t('profileLabels.inactive') } (${ offersInactive.length })`
+							title: `${ $t('profileLabels.inactive') } (${ offersInactive.length })`,
+							active: initialActiveInnerAdsTab === 'inactive',
 						}
 					]"
+					@change="updateActiveInnerAdsTab"
 				>
 					<!-- After tabset -->
 					<template #after>
@@ -60,7 +66,8 @@
 									}'></i>
 									${ $t(`viewLabels.${ view.value }`) }
 								`,
-								value: view.value
+								value: view.value,
+								selected: view.selected,
 							}))"
 							@selected="selectView"
 						/>
@@ -161,11 +168,13 @@
 			</template>
 
 			<!-- Tab: Barters -->
+			<!-- TODO: barters
 			<template #barters v-if="isMyProfile">
 				<div class="tabcontent-holder">
 					Barters
 				</div>
 			</template>
+			-->
 
 			<!-- Tab: Favorites -->
 			<template #favorites v-if="isMyProfile">

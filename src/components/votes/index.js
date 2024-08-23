@@ -28,6 +28,8 @@ export default {
 		}
 	},
 
+	inject: ["dialog"],
+
 	computed: {
 		/**
 		 * Get offer details
@@ -105,6 +107,8 @@ export default {
 					i: score,
 					s1: this.sdk.address
 				});
+			}).catch(e => {
+				this.showError(e);
 			});
 		},
 
@@ -132,10 +136,22 @@ export default {
 				comment.set().then(() => {
 					feed.content = "";
 					this.score = 0;
-					this.loading = false;
 					this.comments?.push(comment);
+				}).catch(e => { 
+					this.showError(e);
+				}).finally(() => {
+					this.loading = false;
 				});
 			}
-		}
+		},
+
+		/**
+		 * Show error
+		 * 
+		 * @param {Object} e
+		 */
+		showError(e) {
+			this.dialog?.instance.view("error", this.sdk.errorMessage(e));
+		},
 	}
 }

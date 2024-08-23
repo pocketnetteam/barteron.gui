@@ -14,6 +14,8 @@ export default {
 		}
 	},
 
+	inject: ["dialog"],
+
 	computed: {
 		/**
 		 * Get offer by id
@@ -39,7 +41,9 @@ export default {
 		 * Show exchange options
 		 */
 		expand() {
-			this.$router.replace({ query: { expanded: 1 } }).catch(() => {});
+			this.$router.replace({ query: { expanded: 1 } }).catch(e => {
+				this.showError(e);
+			});
 		},
 
 		/**
@@ -54,7 +58,16 @@ export default {
 				messages: [this.sdk.appLink(`barter/${ this.offer.hash }`)],
 				openRoom: true
 			});
-		}
+		},
+
+		/**
+		 * Show error
+		 * 
+		 * @param {Object} e
+		 */
+		showError(e) {
+			this.dialog?.instance.view("error", this.sdk.errorMessage(e));
+		},
 	},
 
 	async beforeRouteEnter (to, from, next) {

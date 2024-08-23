@@ -115,6 +115,10 @@ export default {
 						"accept-language": this.$root.$i18n.locale
 					}).then(result => {
 						if (result?.address) this.$set(this, "addr", result.address);
+					}).catch(e => { 
+						console.error(e);
+					}).finally(() => {
+						this.addr.fetching = false;
 					});
 				}
 
@@ -268,6 +272,8 @@ export default {
 			this.$2watch("$refs.map").then(map => {
 				this.map = map;
 				this.getOffersFeed();
+			}).catch(e => { 
+				console.error(e);
 			});
 		}
 	}

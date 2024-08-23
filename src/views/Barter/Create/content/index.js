@@ -321,11 +321,7 @@ export default {
 							}
 						}).catch(e => {
 							/* Show error dialog */
-							const error = this.$t(
-								`dialogLabels.error#${ e?.toString()?.replace(/[^\d-]/g, "") || 0 }`,
-								{ details: e }
-							);
-
+							const error = this.sdk.errorMessage(e);
 							form.dialog.view("error", this.$t("dialogLabels.node_error", { error }));
 						});
 					})
