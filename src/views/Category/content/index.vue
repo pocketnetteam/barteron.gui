@@ -70,8 +70,6 @@
 				type="circular" 
 			/>
 		</div>
-
-		<v-dialog ref="dialog" />
 	</v-content>
 </template>
 

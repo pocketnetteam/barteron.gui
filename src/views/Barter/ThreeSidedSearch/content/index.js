@@ -31,10 +31,15 @@ export default {
 	},
 
 	async beforeRouteEnter (to, from, next) {
+
+		let deals = [];
+
+		try {
+
 		const
 			sdk = Vue.prototype.sdk,
 			source = await sdk.getBrtOffersByHashes([to.query?.source]).then(result => result?.pop()),
-			deals = await sdk.getBrtOfferComplexDeals({
+			dealsResult = await sdk.getBrtOfferComplexDeals({
 				myTag: source?.tag,
 				theirTags: await sdk.getTheirTags(source),
 				excludeAddresses: [source?.address]
@@ -50,6 +55,12 @@ export default {
 					return result;
 				}, []);
 			});
+
+			deals = dealsResult;
+
+		} catch (e) {
+			console.error(e);
+		}
 
 		/* Pass data to instance */
 		next(vm => {

@@ -21,6 +21,8 @@ const
 						radius: null,
 						zoom: null
 					});
+				}).catch(e => { 
+					console.error(e);
 				});
 			},
 

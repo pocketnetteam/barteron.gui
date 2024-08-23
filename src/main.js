@@ -218,8 +218,13 @@ Vue.prototype.shared = Vue.observable({
 						messages: data.messages || [],
 						images: data.images || []
 					}
-				}).catch(() => {});
-			}).catch(() => {});
+				}).catch(e => { 
+					console.error(e);
+				});
+
+			}).catch(e => { 
+				console.error(e);
+			});
 		},
 
 		/**
@@ -294,6 +299,8 @@ Vue.prototype.shared = Vue.observable({
 			}).then(offers => {
 				this.fetching = false;
 				return offers.filter(offer => offer.active);
+			}).catch(e => { 
+				console.error(e);
 			});
 		}
 	}

@@ -36,7 +36,8 @@ export default {
 			if (this.address?.length) {
 				/* Get my offers list */
 				const myOffers = await this.sdk.getBrtOffers(this.address)
-					.then(offers => offers.filter(offer => offer.active));
+					.then(offers => offers.filter(offer => offer.active))
+					.catch(e => console.error(e));
 	
 				/* Get potential exchange offers */
 				if (myOffers?.length) {
@@ -57,6 +58,8 @@ export default {
 						})
 					).then(results => {
 						return results.filter(result => result);
+					}).catch(e => { 
+						console.error(e);
 					});
 				}
 			}
@@ -69,6 +72,8 @@ export default {
 			if (ViewedStore.viewed?.length) {
 				this.sdk.getBrtOffersByHashes(ViewedStore.viewed).then(offers => {
 					this.viewedList = offers;
+				}).catch(e => { 
+					console.error(e);
 				});
 			}
 		},

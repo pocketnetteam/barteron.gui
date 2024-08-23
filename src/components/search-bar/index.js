@@ -13,6 +13,8 @@ export default {
 		}
 	},
 
+	inject: ["dialog"],
+
 	computed: {
 		/**
 		 * Category id
@@ -34,7 +36,9 @@ export default {
 			this.$router.push({
 				name: "category",
 				params: { id }
-			}).catch(() => {});
+			}).catch(e => {
+				this.showError(e);
+			});
 		},
 
 		/**
@@ -52,8 +56,19 @@ export default {
 				name: "category",
 				params: { id: this.id || "search" },
 				query: { search: this.query }
-			}).catch(() => {});
-		}
+			}).catch(e => {
+				this.showError(e);
+			});
+		},
+
+		/**
+		 * Show error
+		 * 
+		 * @param {Object} e
+		 */
+		showError(e) {
+			this.dialog?.instance.view("error", this.sdk.errorMessage(e));
+		},
 	},
 
 	watch: {

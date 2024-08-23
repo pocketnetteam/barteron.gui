@@ -50,6 +50,8 @@ export const useProfileStore = Pinia.defineStore(storageId, {
                 } else {
                     Pinia.getPrefix().then(() => {
                         clbk();
+                    }).catch(e => { 
+                        console.error(e);
                     });
                 }
 			},

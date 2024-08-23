@@ -11,6 +11,8 @@ const
 			fetch() {
 				Pinia.getPrefix().then(() => {
 					this.viewed = Pinia.get(storageId, []);
+				}).catch(e => { 
+					console.error(e);
 				});
 			},
 

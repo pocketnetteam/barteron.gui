@@ -30,6 +30,8 @@ export default {
 		BarterList
 	},
 
+	inject: ["dialog"],
+
 	computed: {
 		...mapState(useOfferStore, [
 			'items',
@@ -158,14 +160,8 @@ export default {
 		 * @param {Object} e
 		 */
 		showError(e) {
-			// TODO: вынести в mixin получение номера ошибки (есть дублирование)
-			const message = this.$t(
-				`dialogLabels.error#${ e?.toString()?.replace(/[^\d-]/g, "") || 0 }`,
-				{ details: e }
-			);
-			this.$refs.dialog.view("error", message);
+			this.dialog?.instance.view("error", this.sdk.errorMessage(e));
 		},
-
 	},
 
 	watch: {
@@ -202,10 +198,14 @@ export default {
 	mounted() {
 		this.$2watch("$refs.order").then(() => {
 			this.setOrderValueToElement();
+		}).catch(e => { 
+			console.error(e);
 		});
 
 		this.$2watch("$refs.bartersView").then(() => {
 			this.setBartersViewToElement();
+		}).catch(e => { 
+			console.error(e);
 		});
 
 		this.setScrollOffsetIfNeeded();
