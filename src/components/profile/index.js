@@ -97,7 +97,7 @@ export default {
 			} else {
 				return [
 					this.addr.country,
-					this.addr.city || this.addr.town || this.addr.state || this.addr.country
+					this.addr.city || this.addr.town || this.addr.state || this.addr.county
 				].filter(f => f).join(", ");
 			}
 		}
