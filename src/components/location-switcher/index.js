@@ -78,7 +78,7 @@ export default {
 			} else {
 				const position = [
 					this.addr.country,
-					this.addr.city || this.addr.town || this.addr.county
+					this.addr.city || this.addr.town || this.addr.state || this.addr.country
 				].filter(a => a).join(", ")
 
 				if (!this.lastAddr) this.lastAddr = position;
