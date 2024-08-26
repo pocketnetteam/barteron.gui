@@ -381,16 +381,46 @@ class SDK {
 		}).catch(e => this.setLastResult(e));
 	}
 
+	/**
+	 * Get image from mobile camera
+	 * 
+	 * @returns {Promise}
+	 */
 	imageFromMobileCamera() {
-		this.sdk.get.imageFromMobileCamera().then(images => {
+		return this.sdk.get.imageFromMobileCamera().then(images => {
 			this.lastresult = "imageFromMobileCamera: success (console.log)"
-		}).catch(e => this.setLastResult(e))
+		}).catch(e => this.setLastResult(e));
 	}
 
-	alertMessage() {
-		this.sdk.helpers.alert("Test message").then(() => {
+	/**
+	 * Show alert message
+	 * 
+	 * @returns {Promise}
+	 */
+	alertMessage(message) {
+		return this.sdk.helpers.alert(message).then(() => {
 			this.lastresult = "alert: success"
-		}).catch(e => this.setLastResult(e))
+		}).catch(e => this.setLastResult(e));
+	}
+
+	/**
+	 * Get action
+	 * 
+	 * @param {String} pid - Offer Id
+	 * 
+	 * @returns {Promise}
+	 */
+	getAction(pid) {
+		return this.sdk.get.action(pid);
+	}
+
+	/**
+	 * Get actions
+	 * 
+	 * @returns {Promise}
+	 */
+	getActions() {
+		return this.sdk.get.actions();
 	}
 
 	/**

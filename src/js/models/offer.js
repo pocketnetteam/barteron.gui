@@ -110,6 +110,11 @@ class Offer {
 				txid = (this.hash?.length === 64 ? this.hash : data.transaction),
 				hash = this.hash;
 
+			/* Get action status */
+			this.sdk.getAction(txid).then(action => {
+				console.log(action)
+			});
+
 			/* Create new key in storage when hash had changed */
 			if (txid && hash && txid !== hash) {
 				this.update({ hash: txid });
