@@ -111,7 +111,7 @@ class Offer {
 				hash = this.hash;
 
 			/* Get action status */
-			this.sdk.getAction(txid).then(action => {
+			this.sdk.getAction({ id: txid }).then(action => {
 				console.log(action)
 			});
 

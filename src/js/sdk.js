@@ -406,21 +406,23 @@ class SDK {
 	/**
 	 * Get action
 	 * 
-	 * @param {String} pid - Offer Id
+	 * @param {Object} data
 	 * 
 	 * @returns {Promise}
 	 */
-	getAction(pid) {
-		return this.sdk.get.action(pid);
+	getAction(data) {
+		return this.sdk.get.action(data);
 	}
 
 	/**
 	 * Get actions
 	 * 
+	 * @param {Object} data
+	 * 
 	 * @returns {Promise}
 	 */
-	getActions() {
-		return this.sdk.get.actions();
+	getActions(data) {
+		return this.sdk.get.actions(data);
 	}
 
 	/**
