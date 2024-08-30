@@ -159,7 +159,7 @@
 
 								<v-button
 									vType="hit-stroke"
-									@click="renewOffer(item)"
+									@click="renewOfferEvent(item)"
 								>{{ $t('buttonLabels.renew') }}</v-button>
 							</template>
 						</BarterList>
