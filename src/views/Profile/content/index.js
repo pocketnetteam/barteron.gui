@@ -104,7 +104,7 @@ export default {
 		 * 
 		 * @param {String} address 
 		 */
-		getTabsContent(address) {
+		getTabsContent(address, options = { favorites: true }) {
 			/* Get offers list */
 			this.fetching = true;
 			
@@ -116,7 +116,7 @@ export default {
 				this.fetching = false;
 			});
 
-			if (this.isMyProfile && LikeStore.like?.length) {
+			if (options?.favorites && this.isMyProfile && LikeStore.like?.length) {
 				this.sdk.getBrtOffersByHashes(LikeStore.like).then(offers => {
 					this.favoriteList = offers;
 				}).catch(e => {
@@ -155,12 +155,35 @@ export default {
 			this.bartersView = view?.value;
 		},
 
-		renewOffer(offer) {
+		renewOfferEvent(offer) {
 			this.dialog?.instance
 				.view("question", this.$t("dialogLabels.offer_renew"))
 				.then(state => {
-					console.log(state ? "yes" : "no", offer)
+					if (state) {
+						this.renewOffer(offer);
+					}
 				});
+		},
+
+		renewOffer(offer) {
+			this.dialog?.instance.view("load", this.$t("dialogLabels.data_node"));
+
+			const newOffer = new this.sdk.models.Offer({ 
+				...offer,
+				time: null,
+				till: null,
+			});
+
+			newOffer.set().then((data) => {
+				if (data.transaction) {
+					this.dialog?.instance.hide();
+					this.getTabsContent(this.address, { favorites: false });
+				} else {
+					throw new Error('data.transaction is null');
+				}
+			}).catch(e => {
+				this.showError(e);
+			})
 		},
 
 		/**
