@@ -161,7 +161,7 @@ export default {
 		 */
 		offerLink() {
 			if (!this.customLink) {
-				return { name: 'barterItem', params: { id: this.item.hash } };
+				return { name: "barterItem", params: { id: this.item.hash } };
 			} else if (typeof this.customLink === "function") {
 				return this.customLink(this.item, this);
 			} else {
@@ -176,6 +176,15 @@ export default {
 		 */
 		hasLike() {
 			return LikeStore.hasLike(this.item?.hash);
+		},
+
+		/**
+		 * Show is offer has published
+		 * 
+		 * @returns {Boolean}
+		 */
+		hasRelay() {
+			return this.item.relay;
 		}
 	},
 

@@ -32,6 +32,10 @@ class Offer {
 		this.geohash = data?.geohash || data?.p?.s6 || "";
 		this.price = (data?.price || data?.p?.i1 / 100 || 0);
 
+		if (Vue.prototype.sdk.barteron._offers[this.hash]) {
+			return Vue.prototype.sdk.barteron._offers[this.hash];
+		}
+
 		const
 			isMs = (timestamp) => {
 				const date = timestamp ? new Date(timestamp) : NaN;
@@ -46,6 +50,7 @@ class Offer {
 			sdk: { value: Vue.prototype.sdk },
 			time: { value: time },
 			till: { value: till },
+			relay: { value: true },
 			active: {
 				value: (() => {
 					let state = true;
@@ -71,11 +76,26 @@ class Offer {
 			}
 		});
 
+		/* Initialize access */
 		Vue.set(
 			this.sdk.barteron._offers,
 			this.hash || "draft",
 			this.update({ hash: this.hash || "draft" })
 		);
+
+		this.action();
+	}
+
+	action() {
+		/* Get action status */
+		this.sdk.on("action", action => {
+			if (
+				this.hash === "draft" ||
+				this.hash !== action.inputs?.[0]?.txid
+			) return;
+			
+			this.relay = action?.relay || false;
+		});
 	}
 
 	/**
@@ -109,11 +129,6 @@ class Offer {
 			const
 				txid = (this.hash?.length === 64 ? this.hash : data.transaction),
 				hash = this.hash;
-
-			/* Get action status */
-			this.sdk.getAction({ id: txid }).then(action => {
-				console.log(action)
-			});
 
 			/* Create new key in storage when hash had changed */
 			if (txid && hash && txid !== hash) {
