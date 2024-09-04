@@ -165,7 +165,8 @@
 
 	"itemLabels": {
 		"label": "Объявление",
-		"autorenew": "Автопродление"
+		"autorenew": "Автопродление",
+		"relay": "Объявление публикуется"
 	},
 
 	"dialogLabels": {

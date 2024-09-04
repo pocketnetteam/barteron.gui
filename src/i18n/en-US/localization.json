@@ -165,7 +165,8 @@
 
 	"itemLabels": {
 		"label": "Offer",
-		"autorenew": "Autorenew"
+		"autorenew": "Autorenew",
+		"relay": "Offer is publishing"
 	},
 
 	"dialogLabels": {
