@@ -53,14 +53,11 @@ class Offer {
 			relay: { value: true },
 			active: {
 				value: (() => {
-					let state = true;
-
-					if (
-						!this.hash ||
+					return (
+						!this.relay ||
+						this.hash ||
 						till < +new Date
-					) state = false;
-
-					return state;
+					);
 				})()
 			},
 			status: {
