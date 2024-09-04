@@ -97,8 +97,10 @@
 			& ~ .v-button-dropdown
 				right: 0
 
-		&:disabled
+		&:disabled,
+		&[disabled]
 			background: $darkgray !important
+			border: $darkgray !important
 			color: $gray !important
 			cursor: default
 

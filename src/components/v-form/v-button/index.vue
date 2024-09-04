@@ -10,7 +10,7 @@
 
 		<component
 			:is="type"
-			:to="to"
+			:to="!disabled ? to : {}"
 			:class="{
 				'v-button': true,
 				'v-button-right': vAlign === 'right',

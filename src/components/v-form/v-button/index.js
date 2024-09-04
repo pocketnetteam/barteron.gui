@@ -1,5 +1,3 @@
-import Vue from "vue";
-
 export default {
 	name: "Vbutton",
 
@@ -97,7 +95,7 @@ export default {
 		 * @param {Event} e
 		 */
 		animateRipple(e) {
-			if (!this.rippleEffect) return;
+			if (!this.rippleEffect || this.disabled) return;
 
 			const 
 				el = this.$refs.button.$el || this.$refs.button,
