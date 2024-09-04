@@ -122,28 +122,41 @@
 			</div>
 
 			<div class="row info" v-if="item.time || item.geohash">
-				<slot name="info" v-if="$slots.info"></slot>
+				<slot name="info" v-if="$slots.info && !item.relay"></slot>
 				<ul v-else>
-					<li v-if="item.time">
-						<dl :class="item.status">
-							<dt><i class="fa fa-calendar"></i></dt>
-							<dd><time>{{ $d(item.time, 'middle', $i18n.locale) }}</time></dd>
-						</dl>
-					</li>
-					<li v-if="distance > -1">
-						{{ distance }} {{ $t('metricsLabels.km') }}
-					</li>
+					<template v-if="item.relay">
+						<!-- Relay -->
+						<li>
+							<dl>
+								<dt><i class="fa fa-spinner fa-spin"></i></dt>
+								<dd>{{ $t('itemLabels.relay') }}</dd>
+							</dl>
+						</li>
+					</template>
+
+					<template v-else>
+						<!-- Date/Distance -->
+						<li v-if="item.time">
+							<dl :class="item.status">
+								<dt><i class="fa fa-calendar"></i></dt>
+								<dd><time>{{ $d(item.time, 'middle', $i18n.locale) }}</time></dd>
+							</dl>
+						</li>
+						<li v-if="distance > -1">
+							{{ distance }} {{ $t('metricsLabels.km') }}
+						</li>
+					</template>
 				</ul>
 			</div>
 
-			<div class="row offer" v-if="$slots.offer">
+			<div class="row offer" v-if="$slots.offer && !item.relay">
 				<slot name="offer"></slot>
 			</div>
 		</template>
 
 		<!-- View: Row -->
 		<template v-if="vType === 'row'">
-			<div class="row">
+			<div class="row descr">
 				<div class="row-holder">
 					<span class="title" v-if="item.caption">
 						<router-link :to="offerLink">{{ item.caption }}</router-link>
@@ -203,14 +216,27 @@
 				<slot name="offer"></slot>
 
 				<div class="info" v-if="item.time || item.geohash">
-					<slot name="info" v-if="$slots.info"></slot>
+					<slot name="info" v-if="$slots.info && !item.relay"></slot>
 					<ul v-else>
-						<li v-if="item.time">
-							<time :class="item.status">{{ $d(item.time, 'middle', $i18n.locale) }}</time>
-						</li>
-						<li v-if="distance > -1">
-							{{ distance }} {{ $t('metricsLabels.km') }}
-						</li>
+						<template v-if="item.relay">
+							<!-- Relay -->
+							<li>
+								<dl>
+									<dt><i class="fa fa-spinner fa-spin"></i></dt>
+									<dd>{{ $t('itemLabels.relay') }}</dd>
+								</dl>
+							</li>
+						</template>
+						
+						<template v-else>
+							<!-- Date/Distance -->
+							<li v-if="item.time">
+								<time :class="item.status">{{ $d(item.time, 'middle', $i18n.locale) }}</time>
+							</li>
+							<li v-if="distance > -1">
+								{{ distance }} {{ $t('metricsLabels.km') }}
+							</li>
+						</template>
 					</ul>
 				</div>
 			</div>

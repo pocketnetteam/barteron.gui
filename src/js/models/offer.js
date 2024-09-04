@@ -94,7 +94,7 @@ class Offer {
 				this.hash !== action.inputs?.[0]?.txid
 			) return;
 			
-			this.relay = action?.relay || false;
+			Vue.set(this.sdk.barteron._offers, this.hash, { relay: action?.relay || false });
 		});
 	}
 
