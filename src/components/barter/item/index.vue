@@ -23,7 +23,7 @@
 								<!-- Image -->
 								<template #image>
 									<img
-										:src="imageUrl(item.images[0])"
+										:src="imageUrl(item.images?.[0])"
 										:alt="item.caption"
 									>
 								</template>
@@ -162,7 +162,7 @@
 						<router-link :to="offerLink">{{ item.caption }}</router-link>
 					</span>
 
-					<div class="to" v-if="item?.tags.length">
+					<div class="to" v-if="item?.tags?.length">
 						<ul :style="exchangeList.length > 2 ? `--count: '+${ exchangeList.length - 2 }'; --len: ${ exchangeList.length.toString().length + 1 }` : ''">
 							<li><span>{{ $t('barterLabels.exchange') }}: </span></li>
 							<li
