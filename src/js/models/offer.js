@@ -32,7 +32,7 @@ class Offer {
 		this.geohash = data?.geohash || data?.p?.s6 || "";
 		this.price = (data?.price || data?.p?.i1 / 100 || 0);
 
-		if (Vue.prototype.sdk.barteron._offers[this.hash]) {
+		if (Vue.prototype.sdk.barteron._offers[this.hash] instanceof Offer) {
 			return Vue.prototype.sdk.barteron._offers[this.hash];
 		}
 
@@ -50,13 +50,12 @@ class Offer {
 			sdk: { value: Vue.prototype.sdk },
 			time: { value: time },
 			till: { value: till },
-			relay: { value: true },
+			relay: { value: false },
 			active: {
 				value: (() => {
 					return (
-						!this.relay ||
-						this.hash ||
-						till < +new Date
+						!this.relay &&
+						till > +new Date
 					);
 				})()
 			},
@@ -65,8 +64,14 @@ class Offer {
 					const state = [];
 
 					state.unshift("valid");
-					if (!this.hash) state.unshift("draft");
-					if (till < +new Date) state.unshift("outdated");
+
+					if (!this.hash || this.hash === "draft") {
+						state.unshift("draft");
+					}
+
+					if (till < +new Date) {
+						state.unshift("outdated");
+					}
 
 					return state.shift();
 				})()
