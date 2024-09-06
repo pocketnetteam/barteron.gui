@@ -28,12 +28,12 @@ export default {
 
 	computed: {
 		/**
-		 * Get only visible tabs
+		 * Get only accessible tabs
 		 * 
 		 * @returns {Array}
 		 */
 		tabs() {
-			return this.tabset.filter(tab => tab.hasOwnProperty("visible") ? tab.visible : true);
+			return this.tabset.filter(tab => tab?.visible ? tab.visible : true);
 		},
 
 		/**
@@ -42,7 +42,7 @@ export default {
 		 * @returns {Array}
 		 */
 		selected() {
-			return this.tabs.filter(t => t.active)[0]?.tabId || this.tabs[0]?.tabId;
+			return this.tabs.filter(t => t.active && !t.disabled)[0]?.tabId || this.tabs[0]?.tabId;
 		}
 	},
 
