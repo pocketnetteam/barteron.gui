@@ -32,6 +32,8 @@ class Offer {
 		this.geohash = data?.geohash || data?.p?.s6 || "";
 		this.price = (data?.price || data?.p?.i1 / 100 || 0);
 
+		this.relay = false;
+
 		if (Vue.prototype.sdk.barteron._offers[this.hash] instanceof Offer) {
 			return Vue.prototype.sdk.barteron._offers[this.hash];
 		}
@@ -50,7 +52,6 @@ class Offer {
 			sdk: { value: Vue.prototype.sdk },
 			time: { value: time },
 			till: { value: till },
-			relay: { value: false },
 			active: {
 				value: (() => {
 					return (
