@@ -421,8 +421,8 @@ class SDK {
 	 * 
 	 * @returns {Promise}
 	 */
-	getActions(data) {
-		return this.sdk.get.actions(data);
+	getActions() {
+		return this.sdk.get.actions();
 	}
 
 	/**
