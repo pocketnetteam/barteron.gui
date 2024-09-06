@@ -104,17 +104,28 @@ export default {
 		 * 
 		 * @param {String} address 
 		 */
-		getTabsContent(address, options = { favorites: true }) {
-			/* Get offers list */
+		async getTabsContent(address, options = { favorites: true }) {
 			this.fetching = true;
+
+			var requests = [
+				/* Get published offers */
+				this.sdk.getBrtOffers(address),
+
+				/* Get pending offers */
+				this.sdk.getActions()
+			], offers;
+
+			requests = requests.map(r => r.catch(e => undefined));
+			offers = await Promise.all(requests);
 			
-			this.sdk.getBrtOffers(address).then(offers => {
-				this.offersList = offers;
-			}).catch(e => {
-				this.showError(e);
-			}).finally(() => {
-				this.fetching = false;
-			});
+			/* Mix published and pending offers */
+			this.offersList = offers.reduce((list, res) => {
+				return [ ...list, ...(res || []) ];
+			}, []);
+
+			console.log(offers, this.offersList);
+			
+			this.fetching = false;
 
 			if (options?.favorites && this.isMyProfile && LikeStore.like?.length) {
 				this.sdk.getBrtOffersByHashes(LikeStore.like).then(offers => {
