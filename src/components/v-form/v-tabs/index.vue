@@ -12,7 +12,10 @@
 				<li
 					v-for="(tab, i) in tabs"
 					:key="i"
-					:class="{ 'active': (active || selected) === tab.tabId }"
+					:class="{
+						'active': (active || selected) === tab.tabId,
+						'disabled': tab.disabled
+					}"
 				>
 					<a
 						:href="`#${ tab.tabId }`"

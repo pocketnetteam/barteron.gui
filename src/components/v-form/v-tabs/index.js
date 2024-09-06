@@ -7,7 +7,8 @@ export default {
 				tabId: "tab-1",
 				title: "Tab 1",
 				visible: true,
-				active: true
+				active: true,
+				disabled: false
 			} */
 		],
 		vType: String,
@@ -54,8 +55,12 @@ export default {
 		 */
 		change(e, index) {
 			e.preventDefault();
+
 			const active = this.tabs[index].tabId;
+
+			if (this.tabs[index].disabled) return;
 			if (!this.hashTabs) this.active = active;
+
 			this.$emit("change", active);
 		}
 	}
