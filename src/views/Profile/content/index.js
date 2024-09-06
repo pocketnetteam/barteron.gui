@@ -122,8 +122,6 @@ export default {
 			this.offersList = offers.reduce((list, res) => {
 				return [ ...list, ...(res || []) ];
 			}, []);
-
-			console.log(offers, this.offersList);
 			
 			this.fetching = false;
 
@@ -208,7 +206,7 @@ export default {
 	},
 
 	watch: {
-		address: {
+		/* address: {
 			immediate: true,
 			handler() {
 				const store = useProfileStore();
@@ -216,6 +214,13 @@ export default {
 
 				this.getTabsContent(this.address);
 			}
+		}, */
+
+		offersInactive: {
+			handler(n, o) {
+				console.log(n, o)
+			},
+			deep: true
 		},
 
 		offersList() {
@@ -230,5 +235,14 @@ export default {
 				}
 			}
 		}
+	},
+
+	beforeRouteEnter (to, from, next) {
+		next(async vm => {
+			const store = useProfileStore();
+			store.setAddress(vm.address);
+
+			vm.getTabsContent(vm.address);
+		});
 	}
 }

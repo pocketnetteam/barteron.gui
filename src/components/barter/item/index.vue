@@ -126,6 +126,8 @@
 				<ul v-else>
 					<template v-if="item.relay">
 						<!-- Relay -->
+						<li>relay: {{ item.relay }}</li>
+						<li>active: {{ item.active }}</li>
 						<li>
 							<dl>
 								<dt><i class="fa fa-spinner fa-spin"></i></dt>

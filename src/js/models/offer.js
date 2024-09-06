@@ -32,8 +32,6 @@ class Offer {
 		this.geohash = data?.geohash || data?.p?.s6 || "";
 		this.price = (data?.price || data?.p?.i1 / 100 || 0);
 
-		this.relay = false;
-
 		if (Vue.prototype.sdk.barteron._offers[this.hash] instanceof Offer) {
 			return Vue.prototype.sdk.barteron._offers[this.hash];
 		}
@@ -51,33 +49,10 @@ class Offer {
 		Object.defineProperties(this, {
 			sdk: { value: Vue.prototype.sdk },
 			time: { value: time },
-			till: { value: till },
-			active: {
-				value: (() => {
-					return (
-						!this.relay &&
-						till > +new Date
-					);
-				})()
-			},
-			status: {
-				value: (() => {
-					const state = [];
-
-					state.unshift("valid");
-
-					if (!this.hash || this.hash === "draft") {
-						state.unshift("draft");
-					}
-
-					if (till < +new Date) {
-						state.unshift("outdated");
-					}
-
-					return state.shift();
-				})()
-			}
+			till: { value: till }
 		});
+
+		this.relay = data?.relay || false;
 
 		/* Initialize access */
 		Vue.set(
@@ -89,15 +64,53 @@ class Offer {
 		this.action();
 	}
 
+	/**
+	 * Is offer active computed property
+	 * 
+	 * @returns {Boolean}
+	 */
+	get active() {
+		return (
+			!this.relay &&
+			this.till > +new Date
+		);
+	}
+
+	/**
+	 * Offer status computed property
+	 * 
+	 * @returns {String}
+	 */
+	get status() {
+		const state = [];
+
+		state.unshift("valid");
+
+		if (!this.hash || this.hash === "draft") {
+			state.unshift("draft");
+		}
+
+		if (this.till < +new Date) {
+			state.unshift("outdated");
+		}
+
+		return state.shift();
+	}
+
+	/**
+	 * Watch action status
+	 */
 	action() {
-		/* Get action status */
 		this.sdk.on("action", action => {
 			if (
 				this.hash === "draft" ||
 				this.hash !== action.inputs?.[0]?.txid
 			) return;
 			
-			Vue.set(this.sdk.barteron._offers, this.hash, { relay: action?.relay || false });
+			this.relay = !!action?.relay && !action?.completed;
+			Vue.set(this.sdk.barteron._offers, this.hash, { relay: !!action?.relay && !action?.completed });
+
+			console.log(this.hash, action, { relay: this.relay, active: this.active })
 		});
 	}
 

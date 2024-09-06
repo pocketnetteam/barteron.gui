@@ -422,7 +422,9 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	getActions() {
-		return this.sdk.get.actions();
+		return this.sdk.get.actions().then(actions => {
+			return actions?.map(action => new Offer({ ...action.expObject, relay: true })) || [];
+		});
 	}
 
 	/**
