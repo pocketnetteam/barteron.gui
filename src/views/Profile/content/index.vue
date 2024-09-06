@@ -42,11 +42,13 @@
 							tabId: 'active',
 							title: `${ $t('profileLabels.active') } (${ offersActive.length })`,
 							active: initialActiveInnerAdsTab === 'active',
+							disabled: !offersActive.length
 						},
 						{
 							tabId: 'inactive',
 							title: `${ $t('profileLabels.inactive') } (${ offersInactive.length })`,
 							active: initialActiveInnerAdsTab === 'inactive',
+							disabled: !offersInactive.length
 						}
 					]"
 					@change="updateActiveInnerAdsTab"
