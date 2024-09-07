@@ -175,6 +175,8 @@
 		"images_imgur": "Uploading images..",
 		"data_node": "Posting data to node, please wait..",
 		"offer_renew": "Are you sure you want renew this offer?",
+		"offer_withdraw": "Are you sure you want withdraw this offer?",
+		"offer_delete": "Are you sure you want remove this offer?",
 		"pending_reg": "Please wait until your account being activacted",
 
 		"image_error": "Image upload error",
