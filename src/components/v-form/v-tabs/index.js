@@ -33,7 +33,7 @@ export default {
 		 * @returns {Array}
 		 */
 		tabs() {
-			return this.tabset.filter(tab => tab?.visible ? tab.visible : true);
+			return this.tabset.filter(tab => tab.hasOwnProperty("visible") ? tab.visible : true);
 		},
 
 		/**
