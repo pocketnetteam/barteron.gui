@@ -102,40 +102,37 @@ export default {
 				text = cdata.getData("text"),
 				files = [];
 
-			console.log(items, text)
-
-			for (const item of items) {
-				/* Parse raw data */
-				if (item.type.includes("image")) {
-					try {
+			if (items.length) {
+				for (const item of items) {
+					/* Parse raw data */
+					if (item.type.includes("image")) {
 						files.push(item.getAsFile());
-						this.log.add("Added image as raw", "success");
-					} catch {
-						this.log.add("Error pasting image", "error");
+					}
+	
+					/* Parse url */
+					if (item.type.includes("text") && text.includes("http")) {
+						fetch(text)
+							.then(response => {
+								if (!response.ok) {
+									this.log.add(this.$t("photosLabels.error_connection"), "error");
+								}
+	
+								return response.text();
+							})
+							.then(data => {
+								files.push(data);
+							})
+							.catch(() => {
+								this.log.add("Error fetching url", "error");
+							});
 					}
 				}
-
-				/* Parse url */
-				if (item.type.includes("text") && text.includes("http")) {
-					fetch(text)
-						.then(response => {
-							if (!response.ok) {
-								this.log.add("Network response was not ok", "error");
-							}
-
-							return response.text();
-						})
-						.then(data => {
-							files.push(data);
-							this.log.add("Added image by url", "success");
-						})
-						.catch(() => {
-							this.log.add("Error fetching url", "error");
-						});
-				}
+	
+				if (files.length) this.prepare({ target: { files } });
+				else this.log.add(this.$t("photosLabels.error_paste"), "error");
+			} else {
+				this.log.add(this.$t("photosLabels.error_paste"), "error");
 			}
-
-			this.prepare({ target: { files } });
 		},
 
 		/**
@@ -153,6 +150,8 @@ export default {
 							id: `image-${ this.hash() }`,
 							image
 						});
+
+						this.log.add(this.$t("photosLabels.attached"), "success");
 					}
 				});
 			} else if (!this.isExist(images.image)) {
@@ -160,6 +159,8 @@ export default {
 					id: `image-${ this.hash() }`,
 					...images
 				});
+
+				this.log.add(this.$t("photosLabels.attached"), "success");
 			}
 
 			return this;
@@ -176,6 +177,7 @@ export default {
 		detatch(e, index) {
 			e?.preventDefault();
 			this.files.splice(index || 0, e === undefined ? this.files.length : 1);
+			if (e) this.log.add(this.$t("photosLabels.detatched"));
 
 			return this;
 		},
@@ -302,7 +304,7 @@ export default {
 
 	created() {
 		/* Define log methods */
-		this.log.add = (text, type) => {
+		this.log.add = (text, type = "normal") => {
 			const timestamp = +new Date();
 
 			this.log.push({
