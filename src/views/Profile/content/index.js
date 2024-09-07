@@ -35,7 +35,7 @@ export default {
 		 * @returns {String}
 		 */
 		address() {
-			return this.$route.params.id || this.sdk.address;
+			return this.$route.params.id;
 		},
 
 		/**
@@ -53,7 +53,9 @@ export default {
 		 * @returns {[@Offer, ...]}
 		 */
 		offersActive() {
-			return this.offersList.filter(f => f.active);
+			return this.offersList
+				.map(hash => this.sdk.barteron.offers[hash])
+				.filter(f => f.active);
 		},
 
 		/**
@@ -62,7 +64,9 @@ export default {
 		 * @returns {[@Offer, ...]}
 		 */
 		offersInactive() {
-			return this.offersList.filter(f => !f.active);
+			return this.offersList
+				.map(hash => this.sdk.barteron.offers[hash])
+				.filter(f => !f.active);
 		},
 
 		/**
@@ -112,15 +116,18 @@ export default {
 				this.sdk.getBrtOffers(address),
 
 				/* Get pending offers */
-				this.sdk.getActions()
+				(this.isMyProfile ? this.sdk.getActions() : null)
 			], offers;
 
-			requests = requests.map(r => r.catch(e => undefined));
+			requests = requests
+				.filter(r => r)
+				.map(r => r.catch(e => undefined));
+			
 			offers = await Promise.all(requests);
 			
 			/* Mix published and pending offers */
 			this.offersList = offers.reduce((list, res) => {
-				return [ ...list, ...(res || []) ];
+				return [ ...list, ...(res || []).map(offer => offer.hash) ];
 			}, []);
 			
 			this.fetching = false;
@@ -206,7 +213,7 @@ export default {
 	},
 
 	watch: {
-		/* address: {
+		address: {
 			immediate: true,
 			handler() {
 				const store = useProfileStore();
@@ -214,17 +221,11 @@ export default {
 
 				this.getTabsContent(this.address);
 			}
-		}, */
-
-		offersInactive: {
-			handler(n, o) {
-				console.log(n, o)
-			},
-			deep: true
 		},
 
 		offersList() {
 			const canToggleTabWithoutExtraSavingState = !(this.isMyProfile);
+
 			if (canToggleTabWithoutExtraSavingState) {
 				const 
 					onlyInactiveOffers = (this.offersActive.length == 0 && this.offersInactive.length > 0),
@@ -239,10 +240,13 @@ export default {
 
 	beforeRouteEnter (to, from, next) {
 		next(async vm => {
-			const store = useProfileStore();
-			store.setAddress(vm.address);
+			const 
+				store = useProfileStore(),
+				address = to?.params?.id;
+			
+			store.setAddress(address);
 
-			vm.getTabsContent(vm.address);
+			vm.getTabsContent(address);
 		});
 	}
 }

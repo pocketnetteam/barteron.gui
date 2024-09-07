@@ -109,8 +109,6 @@ class Offer {
 			
 			this.relay = !!action?.relay && !action?.completed;
 			Vue.set(this.sdk.barteron._offers, this.hash, { relay: !!action?.relay && !action?.completed });
-
-			console.log(this.hash, action, { relay: this.relay, active: this.active })
 		});
 	}
 

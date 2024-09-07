@@ -48,6 +48,7 @@
 							tabId: 'inactive',
 							title: `${ $t('profileLabels.inactive') } (${ offersInactive.length })`,
 							active: initialActiveInnerAdsTab === 'inactive',
+							visible: isMyProfile,
 							disabled: !offersInactive.length
 						}
 					]"
