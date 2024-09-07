@@ -423,7 +423,12 @@ class SDK {
 	 */
 	getActions() {
 		return this.sdk.get.actions().then(actions => {
-			return actions?.map(action => new Offer({ ...action.expObject, relay: true })) || [];
+			return actions?.map(action => {
+				return new Offer({
+					...action.expObject,
+					relay: !!action?.relay && !action?.completed
+				})
+			}) || [];
 		});
 	}
 
