@@ -194,6 +194,9 @@
 		"upload_image_text": "The first photo will be displayed in the offer, select the best one. You can upload up to {count} photos in {formats} format.",
 		"attached": "Image attached",
 		"detatched": "Image detatched",
+		"error_paste": "Error pasting image",
+		"error_connection": "Connection failed",
+		"error_url": "Error fetching url",
 		"formatError": "Allowed types is {formats}",
 		"status": "{count} image - {size} | {count} images - {size}"
 	},
