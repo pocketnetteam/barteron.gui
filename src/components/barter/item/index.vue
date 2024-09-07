@@ -365,7 +365,7 @@
 
 			<div class="row info" v-if="geohash">
 				<div class="col">
-					<span class="title">Location</span>
+					<span class="title">{{ $t('stepsLabels.location') }}</span>
 					<ul>
 						<li v-if="geopos">
 							<address>{{ geopos }}</address>
