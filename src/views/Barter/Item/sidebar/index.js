@@ -19,6 +19,8 @@ export default {
 		}
 	},
 
+	inject: ["dialog"],
+
 	computed: {
 		/**
 		 * Getting preview flag
@@ -79,6 +81,31 @@ export default {
 				messages: [this.sdk.appLink(`barter/${ offer.hash }`)],
 				openRoom: true
 			});
+		},
+
+		/**
+		 * Withdraw of Remove an Offer Dialog
+		 * 
+		 * @param {Boolean} remove
+		 */
+		withdrawOrRemoveEvent(remove = false) {
+			console.log(this.dialog)
+			this.dialog?.instance
+				.view("question", this.$t(`dialogLabels.offer_${ remove ? 'delete' : 'withdraw' }`))
+				.then(state => {
+					if (state) {
+						this.withdrawOrRemove(remove);
+					}
+				});
+		},
+
+		/**
+		 * Withdraw of Remove an Offer
+		 * 
+		 * @param {Boolean} remove
+		 */
+		withdrawOrRemove(remove = false) {
+
 		}
 	},
 
