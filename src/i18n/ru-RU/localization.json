@@ -195,7 +195,7 @@
 		"attached": "Изображение добавлено",
 		"detatched": "Изображение удалено",
 		"formatError": "Разрешённые форматы: {formats}",
-		"status": "{count} изображение(й) добавлено, общий размер - {size}"
+		"status": "{count} изображение - {size} | {count} изображений - {size}"
 	},
 
 	"voteLabels": {

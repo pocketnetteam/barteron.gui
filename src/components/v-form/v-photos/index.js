@@ -17,7 +17,9 @@ export default {
 			max: parseInt(this.maxLen) || 0,
 			drag: false,
 			moving: null,
-			log: []
+			log: [],
+			logLength: 5,
+			logDisappear: 5000
 		}
 	},
 
@@ -94,13 +96,42 @@ export default {
 		 * @param {ClipboardEvent} e
 		 */
 		clipboard(e) {
-			const 
-				items = (e.clipboardData || e.originalEvent.clipboardData).items,
+			const
+				cdata = e.clipboardData || e.originalEvent.clipboardData,
+				items = cdata.items,
+				text = cdata.getData("text"),
 				files = [];
 
+			console.log(items, text)
+
 			for (const item of items) {
-				if (item.type.includes('image')) {
-					files.push(item.getAsFile());
+				/* Parse raw data */
+				if (item.type.includes("image")) {
+					try {
+						files.push(item.getAsFile());
+						this.log.add("Added image as raw", "success");
+					} catch {
+						this.log.add("Error pasting image", "error");
+					}
+				}
+
+				/* Parse url */
+				if (item.type.includes("text") && text.includes("http")) {
+					fetch(text)
+						.then(response => {
+							if (!response.ok) {
+								this.log.add("Network response was not ok", "error");
+							}
+
+							return response.text();
+						})
+						.then(data => {
+							files.push(data);
+							this.log.add("Added image by url", "success");
+						})
+						.catch(() => {
+							this.log.add("Error fetching url", "error");
+						});
 				}
 			}
 
@@ -261,19 +292,39 @@ export default {
 
 		/**
 		 * Watch for log events
-		 * 
-		 * @param {String} value
 		 */
-		log(value) {
-			if (this.log.length > 10) {
-				this.log.splice(this.log.length - 10, this.log.length - 10);
+		log() {
+			if (this.log.length > this.logLength) {
+				this.log.splice(this.log.length - this.logLength, this.log.length - this.logLength);
 			}
 		}
 	},
 
 	created() {
+		/* Define log methods */
+		this.log.add = (text, type) => {
+			const timestamp = +new Date();
+
+			this.log.push({
+				text,
+				type,
+				timestamp
+			});
+
+			setTimeout(() => {
+				const index = this.log.findIndex(i => i.timestamp === timestamp);
+				if (index > -1) this.log.remove(index);
+			}, this.logDisappear);
+		}
+
+		this.log.remove = (index) => {
+			this.log.splice(index, 1);
+		}
+
+		/* Add images from properties */
 		this.attach(this.images);
 		
+		/* Add event listeners */
 		document.addEventListener("dragover", e => this.dragToggle(e));
 		document.addEventListener("dragleave", e => this.dragToggle(e));
 		document.addEventListener("drop", e => this.dragToggle(e));

@@ -109,9 +109,25 @@
 
 	ul.log
 		+resetList()
+		background: $background-gray-focus
+		border-radius: 3px 0 12px
+		margin: 2px
+		padding: $r
 		position: absolute
 		bottom: 0
 		right: 0
+
+		&:empty
+			display: none
+
+		li
+			color: $primary
+
+			&.item-error
+				color: $dodoria
+
+			&.item-success
+				color: $roshi
 
 	.status
 		display: block

@@ -195,7 +195,7 @@
 		"attached": "Image attached",
 		"detatched": "Image detatched",
 		"formatError": "Allowed types is {formats}",
-		"status": "{count} image(s) added, total size - {size}"
+		"status": "{count} image - {size} | {count} images - {size}"
 	},
 
 	"voteLabels": {

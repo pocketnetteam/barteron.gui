@@ -47,14 +47,18 @@
 			tag="ul"
 			class="log"
 		>
-			<li v-for="item in log">{{ item }}</li>
+			<li
+				v-for="(item, i) in log"
+				:key="i"
+				:class="`log item-${ item.type }`"
+			>{{ item.text }}</li>
 		</transition-group>
 
 		<span
 			class="status"
 			v-if="files.length"
 		>{{
-			$t('photosLabels.status', {
+			$tc('photosLabels.status', files.length || 0, {
 				count: files.length,
 				size: formatBytes(files.reduce((i, f) => {
 					i += f.image.length;
