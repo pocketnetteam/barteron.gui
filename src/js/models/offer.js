@@ -102,13 +102,13 @@ class Offer {
 	 */
 	action() {
 		this.sdk.on("action", action => {
-			if (
-				this.hash === "draft" ||
-				this.hash !== action.inputs?.[0]?.txid
-			) return;
-			
-			this.relay = !!action?.relay && !action?.completed;
-			Vue.set(this.sdk.barteron._offers, this.hash, { relay: !!action?.relay && !action?.completed });
+			if (this.hash === action.inputs?.[0]?.txid) {
+				Vue.set(
+					this.sdk.barteron._offers[this.hash],
+					"relay",
+					!!action?.relay && !action?.completed
+				);
+			}
 		});
 	}
 
