@@ -55,7 +55,17 @@ export default {
 		offersActive() {
 			return this.offersList
 				.map(hash => this.sdk.barteron.offers[hash])
-				.filter(f => f.active);
+				.filter(f => f.active)
+				.sort(a, b => {
+					/* Offers with relay first */
+					if (a?.relay && !b?.relay) {
+						return -1;
+					} else if (!a?.relay && b?.relay) {
+						return 1;
+					}
+
+					return 0;
+				});
 		},
 
 		/**
@@ -124,6 +134,8 @@ export default {
 				.map(r => r.catch(e => undefined));
 			
 			offers = await Promise.all(requests);
+
+			console.log(offers)
 			
 			/* Mix published and pending offers */
 			this.offersList = offers.reduce((list, res) => {
