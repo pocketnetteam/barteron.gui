@@ -126,10 +126,8 @@
 				<ul v-else>
 					<template v-if="item.relay">
 						<!-- Relay -->
-						<li>relay: {{ item.relay }}</li>
-						<li>active: {{ item.active }}</li>
 						<li>
-							<dl>
+							<dl class="draft">
 								<dt><i class="fa fa-spinner fa-spin"></i></dt>
 								<dd>{{ $t('itemLabels.relay') }}</dd>
 							</dl>
@@ -223,7 +221,7 @@
 						<template v-if="item.relay">
 							<!-- Relay -->
 							<li>
-								<dl>
+								<dl class="draft">
 									<dt><i class="fa fa-spinner fa-spin"></i></dt>
 									<dd>{{ $t('itemLabels.relay') }}</dd>
 								</dl>
