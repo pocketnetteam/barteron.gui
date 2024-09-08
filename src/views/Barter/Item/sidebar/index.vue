@@ -48,7 +48,7 @@
 						<template v-if="!isPreview">
 							<v-button
 								vType="bulma-stroke"
-								@click="withdrawOrRemoveEvent(false)"
+								@click="withdrawOrRemoveEvent(item, false)"
 							>
 								<i class="fa fa-undo"></i>
 								<span>{{ $t('buttonLabels.withdraw') }}</span>
@@ -56,7 +56,7 @@
 
 							<v-button
 								vType="dodoria-stroke"
-								@click="withdrawOrRemoveEvent(true)"
+								@click="withdrawOrRemoveEvent(item, true)"
 							>
 								<i class="fa fa-trash"></i>
 								<span>{{ $t('buttonLabels.remove') }}</span>
