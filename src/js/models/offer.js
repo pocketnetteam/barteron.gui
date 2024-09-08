@@ -32,10 +32,6 @@ class Offer {
 		this.geohash = data?.geohash || data?.p?.s6 || "";
 		this.price = (data?.price || data?.p?.i1 / 100 || 0);
 
-		if (Vue.prototype.sdk.barteron._offers[this.hash] instanceof Offer) {
-			return Vue.prototype.sdk.barteron._offers[this.hash];
-		}
-
 		const
 			isMs = (timestamp) => {
 				const date = timestamp ? new Date(timestamp) : NaN;
@@ -54,6 +50,11 @@ class Offer {
 
 		this.relay = data?.relay || false;
 
+		/* If already exists */
+		if (this.sdk.barteron._offers[this.hash] instanceof Offer) {
+			return this.sdk.barteron._offers[this.hash].update(this);
+		}
+
 		/* Initialize access */
 		Vue.set(
 			this.sdk.barteron._offers,
@@ -61,6 +62,7 @@ class Offer {
 			this.update({ hash: this.hash || "draft" })
 		);
 
+		/* Watch for action */
 		this.action();
 	}
 
@@ -70,10 +72,7 @@ class Offer {
 	 * @returns {Boolean}
 	 */
 	get active() {
-		return (
-			!this.relay &&
-			this.till > +new Date
-		);
+		return this.till > +new Date;
 	}
 
 	/**
