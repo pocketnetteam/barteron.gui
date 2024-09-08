@@ -86,15 +86,15 @@ export default {
 		/**
 		 * Withdraw of Remove an Offer Dialog
 		 * 
+		 * @param {@Offer} offer
 		 * @param {Boolean} remove
 		 */
-		withdrawOrRemoveEvent(remove = false) {
-			console.log(this.dialog)
+		withdrawOrRemoveEvent(offer, remove = false) {
 			this.dialog?.instance
 				.view("question", this.$t(`dialogLabels.offer_${ remove ? 'delete' : 'withdraw' }`))
 				.then(state => {
 					if (state) {
-						this.withdrawOrRemove(remove);
+						this.withdrawOrRemove(offer, remove);
 					}
 				});
 		},
@@ -102,10 +102,47 @@ export default {
 		/**
 		 * Withdraw of Remove an Offer
 		 * 
+		 * @param {@Offer} offer
 		 * @param {Boolean} remove
 		 */
-		withdrawOrRemove(remove = false) {
+		withdrawOrRemove(offer, remove = false) {
+			if (!remove) {
+				this.dialog?.instance.view("load", this.$t("dialogLabels.data_node"));
+		
+				offer.set({
+					published: 0
+				}).then((data) => {
+					if (data.transaction) {
+						this.dialog?.instance.hide();
+						this.natigateToProfile();
+					} else {
+						this.showError(this.$t("dialogLabels.node_error"));
+					}
+				}).catch(e => {
+					this.showError(e);
+				});
+			}
+		},
 
+		/**
+		 * Navigate to profile
+		 */
+		natigateToProfile() {
+			this.$router.replace({
+				path: `/profile/${ this.sdk.address }`,
+				hash: `#ads`
+			}).catch(e => {
+				this.showError(e);
+			});
+		},
+
+		/**
+		 * Show error
+		 * 
+		 * @param {Object} e
+		 */
+		showError(e) {
+			this.dialog?.instance.view("error", e);
 		}
 	},
 
