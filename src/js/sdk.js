@@ -426,6 +426,7 @@ class SDK {
 			return actions?.map(action => {
 				return new Offer({
 					...action.expObject,
+					hash: action?.inputs?.[0]?.txid,
 					relay: !!action?.relay && !action?.completed
 				})
 			}) || [];
