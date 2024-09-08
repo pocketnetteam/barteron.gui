@@ -198,7 +198,7 @@
 		"error_connection": "Connection failed",
 		"error_url": "Error fetching url",
 		"formatError": "Allowed types is {formats}",
-		"status": "{count} image - {size} | {count} images - {size}"
+		"status": "No images | {count} image - {size} | {count} images - {size}"
 	},
 
 	"voteLabels": {

@@ -198,7 +198,7 @@
 		"error_connection": "Ошибка подключения",
 		"error_url": "Ошибка получения url",
 		"formatError": "Разрешённые форматы: {formats}",
-		"status": "{count} изображение - {size} | {count} изображений - {size}"
+		"status": "Нет изображений | {count} изображение - {size} | {count} изображения - {size} | {count} изображений - {size}"
 	},
 
 	"voteLabels": {
