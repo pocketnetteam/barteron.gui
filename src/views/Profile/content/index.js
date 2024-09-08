@@ -160,7 +160,10 @@ export default {
 		 */
 		updatePath(tab) {
 			this.activeTab = tab;
-			this.$router.replace({ path: `/profile/${ this.address }`, hash: `#${ tab }` }).catch(e => {
+			this.$router.replace({
+				path: `/profile/${ this.address }`,
+				hash: `#${ tab }`
+			}).catch(e => {
 				this.showError(e);
 			});
 		},
@@ -196,22 +199,25 @@ export default {
 		renewOffer(offer) {
 			this.dialog?.instance.view("load", this.$t("dialogLabels.data_node"));
 
-			const newOffer = new this.sdk.models.Offer({ 
+			/* const newOffer = new this.sdk.models.Offer({ 
 				...offer,
 				time: null,
 				till: null,
-			});
+			}); */
 
-			newOffer.set().then((data) => {
+			offer.set({
+				time: null,
+				till: null
+			}).then((data) => {
 				if (data.transaction) {
 					this.dialog?.instance.hide();
 					this.getTabsContent(this.address, { favorites: false });
 				} else {
-					throw new Error('data.transaction is null');
+					this.showError(this.$t("dialogLabels.node_error"));
 				}
 			}).catch(e => {
 				this.showError(e);
-			})
+			});
 		},
 
 		/**
@@ -220,8 +226,8 @@ export default {
 		 * @param {Object} e
 		 */
 		showError(e) {
-			this.dialog?.instance.view("error", this.sdk.errorMessage(e));
-		},
+			this.dialog?.instance.view("error", e);
+		}
 	},
 
 	watch: {
