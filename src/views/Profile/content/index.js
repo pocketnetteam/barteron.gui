@@ -56,7 +56,7 @@ export default {
 			return this.offersList
 				.map(hash => this.sdk.barteron.offers[hash])
 				.filter(f => f.active)
-				.sort(a, b => {
+				.sort((a, b) => {
 					/* Offers with relay first */
 					if (a?.relay && !b?.relay) {
 						return -1;
