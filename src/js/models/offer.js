@@ -15,7 +15,7 @@ class Offer {
 	constructor(data) {
 		/* Extract JSON values and format object */
 		const
-			{ t, a, c } = JSON.parse(data?.p?.s4 || '{"t":"","a":[],"c":"new"}'),
+			{ t, a, c, p } = JSON.parse(data?.p?.s4 || '{"t":"","a":[],"c":"new","p":1}'),
 			images = JSON.parse(data?.p?.s5 || "[]");
 		
 		/* Iterable properties */
@@ -31,6 +31,7 @@ class Offer {
 		this.images = data?.images || images;
 		this.geohash = data?.geohash || data?.p?.s6 || "";
 		this.price = (data?.price || data?.p?.i1 / 100 || 0);
+		this.published = (data?.published || p || 1);
 
 		const
 			isMs = (timestamp) => {
@@ -72,7 +73,10 @@ class Offer {
 	 * @returns {Boolean}
 	 */
 	get active() {
-		return this.till > +new Date;
+		return (
+			this.published &&
+			this.till > +new Date
+		);
 	}
 
 	/**
