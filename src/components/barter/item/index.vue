@@ -215,7 +215,7 @@
 					></i>
 				</div>
 
-				<slot name="offer"></slot>
+				<slot name="offer" $slots.offer && !item.relay></slot>
 
 				<div class="info" v-if="item.time || item.geohash">
 					<slot name="info" v-if="$slots.info && !item.relay"></slot>
