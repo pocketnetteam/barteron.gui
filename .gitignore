@@ -22,3 +22,6 @@ pnpm-debug.log*
 *.sln
 *.sw?
 .nvmrc
+yarn.lock
+.gitignore
+package-lock.json
