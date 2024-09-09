@@ -22,6 +22,7 @@ class Offer {
 		this.address = data?.address || data?.s1 || "";
 		this.hash = data?.s2 || data?.hash || null;
 		this.firsthash = data?.s2 && data?.hash ? data.hash : null;
+		this.prevhash = data?.prevhash || null;
 		this.language = data?.language || data?.p?.s1 || "";
 		this.caption = data?.caption || data?.p?.s2 || "";
 		this.description = data?.description || data?.p?.s3 || "";
@@ -31,7 +32,7 @@ class Offer {
 		this.images = data?.images || images;
 		this.geohash = data?.geohash || data?.p?.s6 || "";
 		this.price = (data?.price || data?.p?.i1 / 100 || 0);
-		this.published = (data?.published || p || 1);
+		this.published = (data?.published ?? p ?? 1);
 
 		const
 			isMs = (timestamp) => {
@@ -105,7 +106,7 @@ class Offer {
 	 */
 	action() {
 		this.sdk.on("action", action => {
-			if (this.hash === action.inputs?.[0]?.txid) {
+			if (this.hash === action.transaction) {
 				Vue.set(
 					this.sdk.barteron._offers[this.hash],
 					"relay",
@@ -142,9 +143,9 @@ class Offer {
 		return this.sdk.setBrtOffer({
 			...this.update(data),
 			price: parseInt(this.price * 100)
-		}).then(data => {
+		}).then(action => {
 			const
-				txid = (this.hash?.length === 64 ? this.hash : data.transaction),
+				txid = (this.hash?.length === 64 ? this.hash : action.transaction),
 				hash = this.hash;
 
 			/* Create new key in storage when hash had changed */
@@ -155,7 +156,7 @@ class Offer {
 				Vue.delete(this.sdk.barteron._offers, hash);
 			}
 
-			return data;
+			return action;
 		});
 	}
 
