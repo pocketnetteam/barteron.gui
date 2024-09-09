@@ -2,7 +2,7 @@
 	<div :class="{ [`barter-item-${ vType }`]: true }">
 		<!-- Picture -->
 		<picture v-if="item.images?.length && vType !== 'page'">
-			<router-link :to="offerLink">
+			<router-link :to="!item.relay ? offerLink : {}">
 				<span
 					class="state"
 					v-if="item.used"
@@ -149,7 +149,7 @@
 				</ul>
 			</div>
 
-			<div class="row offer" v-if="$slots.offer && !item.relay">
+			<div class="row offer" v-if="$slots.offer">
 				<slot name="offer"></slot>
 			</div>
 		</template>
@@ -213,7 +213,7 @@
 					></i>
 				</div>
 
-				<slot name="offer" $slots.offer && !item.relay></slot>
+				<slot name="offer" v-if="$slots.offer"></slot>
 
 				<div class="info" v-if="item.time || item.geohash">
 					<slot name="info" v-if="$slots.info && !item.relay"></slot>
