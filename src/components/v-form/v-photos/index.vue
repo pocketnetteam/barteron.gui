@@ -60,10 +60,9 @@
 		>{{
 			$tc('photosLabels.status', files.length || 0, {
 				count: files.length,
-				size: formatBytes(files.reduce((i, f) => {
-					i += f.image.length;
-					return i;
-				}, 0))
+				size: filesSizeCalculated
+					? formatBytes(files.reduce((i, f) => i + (f.fileSize || 0), 0))
+					: $t('photosLabels.size_is_calculated').toLowerCase()
 			})
 		}}</span>
 	</div>
