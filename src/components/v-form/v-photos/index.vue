@@ -7,7 +7,6 @@
 		<ul
 			class="photo-query"
 			@paste="clipboard"
-			@drop="prepare"
 			@dragstart="dragStart"
 			@dragend="dragEnd"
 		>

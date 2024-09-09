@@ -143,7 +143,7 @@ export default {
 		 * 
 		 * @returns {Vphotos}
 		 */
-		attach(images) {
+		attach(images, options = { disableLog: false }) {
 			if (Array.isArray(images)) {
 				images.forEach(image => {
 					if (!this.isExist(image)) {
@@ -152,7 +152,9 @@ export default {
 							image
 						});
 
-						this.log.add(this.$t("photosLabels.attached"), "success");
+						if (!options?.disableLog) {
+							this.log.add(this.$t("photosLabels.attached"), "success");
+						}
 					}
 				});
 			} else if (!this.isExist(images.image)) {
@@ -161,7 +163,9 @@ export default {
 					...images
 				});
 
-				this.log.add(this.$t("photosLabels.attached"), "success");
+				if (!options?.disableLog) {
+					this.log.add(this.$t("photosLabels.attached"), "success");
+				}
 			}
 
 			return this;
@@ -211,7 +215,11 @@ export default {
 		 * @param {DragEvent} e
 		 */
 		dragStart(e) {
-			this.moving = this.files[e.target.dataset.index];
+			const 
+				listElement= e.target.parentNode,
+				index = Array.prototype.indexOf.call(listElement.childNodes, e.target)
+			
+			this.moving = this.files[index];
 		},
 
 		/**
@@ -219,7 +227,11 @@ export default {
 		 * 
 		 * @param {DragEvent} e
 		 */
-		dragToggle(e) {
+		dragToggle(e, options = { preventDefault: false }) {
+			if (options?.preventDefault) {
+				e.preventDefault()
+			}
+
 			if (this.moving && e?.target.dataset.index) {
 				const 
 					newIndex = e.target.dataset.index,
@@ -365,10 +377,10 @@ export default {
 		}
 
 		/* Add images from properties */
-		this.attach(this.images);
+		this.attach(this.images, { disableLog: true });
 		
 		/* Add event listeners */
-		document.addEventListener("dragover", e => this.dragToggle(e));
+		document.addEventListener("dragover", e => this.dragToggle(e, { preventDefault: true }));
 		document.addEventListener("dragleave", e => this.dragToggle(e));
 		document.addEventListener("drop", e => this.dragToggle(e));
 	},
