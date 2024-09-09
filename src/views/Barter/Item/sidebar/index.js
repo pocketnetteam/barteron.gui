@@ -116,7 +116,10 @@ export default {
 						this.dialog?.instance.hide();
 						this.natigateToProfile();
 					} else {
-						this.showError(this.$t("dialogLabels.node_error"));
+						this.showError(
+							this.$t("dialogLabels.node_error"),
+							{ error: this.errorMessage(data.error?.code) }
+						);
 					}
 				}).catch(e => {
 					this.showError(e);

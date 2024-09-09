@@ -55,7 +55,7 @@ export default {
 		offersActive() {
 			return this.offersList
 				.map(hash => this.sdk.barteron.offers[hash])
-				.filter(f => f.active)
+				.filter(f => f.active || f.relay)
 				.sort((a, b) => {
 					/* Offers with relay first */
 					if (a?.relay && !b?.relay) {
@@ -76,7 +76,7 @@ export default {
 		offersInactive() {
 			return this.offersList
 				.map(hash => this.sdk.barteron.offers[hash])
-				.filter(f => !f.active);
+				.filter(f => !f.active && !f.relay);
 		},
 
 		/**
@@ -121,7 +121,7 @@ export default {
 		async getTabsContent(address, options = { favorites: true }) {
 			this.fetching = true;
 
-			var requests = [
+			let requests = [
 				/* Get published offers */
 				this.sdk.getBrtOffers(address),
 
@@ -131,16 +131,30 @@ export default {
 
 			requests = requests
 				.filter(r => r)
-				.map(r => r.catch(e => undefined));
+				.map(r => r.catch(e => console.error(e)));
 			
 			offers = await Promise.all(requests);
 
-			console.log(offers)
-			
+			/*
+			 * Avoid duplicates from published and pending
+			 * create exchange list to replace old with new
+			 */
+			let hashes = offers[1].map(offer => offer.prevhash);
+
 			/* Mix published and pending offers */
-			this.offersList = offers.reduce((list, res) => {
-				return [ ...list, ...(res || []).map(offer => offer.hash) ];
-			}, []);
+			this.offersList = offers[0].map(offer => {
+				if (hashes.includes(offer.hash)) {
+					const index = hashes.indexOf(offer.hash);
+
+					/* Replace old offer with new */
+					offer = offers[1][index];
+					
+					/* Remove offer form pending list */
+					offers[1].splice(index, 1);
+				}
+
+				return offer.hash;
+			}).concat(offers[1]);
 			
 			this.fetching = false;
 
@@ -206,14 +220,18 @@ export default {
 			}); */
 
 			offer.set({
+				published: 1,
 				time: null,
 				till: null
-			}).then((data) => {
+			}).then(data => {
 				if (data.transaction) {
 					this.dialog?.instance.hide();
 					this.getTabsContent(this.address, { favorites: false });
 				} else {
-					this.showError(this.$t("dialogLabels.node_error"));
+					this.showError(
+						this.$t("dialogLabels.node_error"),
+						{ error: this.errorMessage(data.error?.code) }
+					);
 				}
 			}).catch(e => {
 				this.showError(e);
