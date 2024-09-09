@@ -14,6 +14,7 @@ export default {
 	data() {
 		return {
 			files: [],
+			filesSizeCalculated: false,
 			max: parseInt(this.maxLen) || 0,
 			drag: false,
 			moving: null,
@@ -290,6 +291,46 @@ export default {
 		 */
 		images(images) {
 			this.attach(images);
+		},
+
+		/**
+		 * Watch for files property
+		 * 
+		 * @param {Array|Object} files
+		 */
+		files() {
+			const promises = this.files.filter(item => !(item.fileSize)).map(item => {
+
+				return new Promise((resolve) => {
+
+					const isImageData = (item.image.indexOf('data:') == 0)
+					if (isImageData) {
+						item.fileSize = item.image.length
+						resolve()
+					} else {
+
+						fetch(item.image, {method: 'HEAD'}).then((response) => {
+							if (response.ok) {
+								item.fileSize = parseInt(response.headers.get('content-length'))
+							} else {
+								this.log.add(this.$t("photosLabels.error_connection"), "error");
+							}
+						}).catch(() => {
+							this.log.add("Error fetching url", "error");
+						}).finally(() => {
+							resolve()
+						})
+					}
+				})
+			})
+
+			this.filesSizeCalculated = false
+
+			Promise.all(promises).catch(e => { 
+				console.error(e);
+			}).finally(() => {
+				this.filesSizeCalculated = true
+			});
 		},
 
 		/**
