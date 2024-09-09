@@ -62,9 +62,9 @@ export default {
 						return -1;
 					} else if (!a?.relay && b?.relay) {
 						return 1;
+					} else {
+						return (b?.time || 0) - (a?.time || 0)
 					}
-
-					return 0;
 				});
 		},
 
@@ -76,7 +76,8 @@ export default {
 		offersInactive() {
 			return this.offersList
 				.map(hash => this.sdk.barteron.offers[hash])
-				.filter(f => !f.active);
+				.filter(f => !f.active)
+				.sort((a, b) => (b?.time || 0) - (a?.time || 0));
 		},
 
 		/**
