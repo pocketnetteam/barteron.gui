@@ -64,6 +64,19 @@ export default {
 		},
 
 		/**
+		 * Drop event handler
+		 * 
+		 * @param {DragEvent} e
+		 */
+		drop(e) {
+			const files = e.dataTransfer?.files
+			if (files?.length) {
+				this.prepare({ target: { files } });
+				e.preventDefault()
+			}
+		},
+
+		/**
 		 * Prepare image to query
 		 * 
 		 * @param {Event} e
