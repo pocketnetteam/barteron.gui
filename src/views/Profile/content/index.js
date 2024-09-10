@@ -120,48 +120,48 @@ export default {
 		 * @param {String} address 
 		 */
 		async getTabsContent(address, options = { favorites: true }) {
+			/* Start fetching */
 			this.fetching = true;
 
-			let requests = [
-				/* Get published offers */
-				this.sdk.getBrtOffers(address),
+			const [ published = [], pending = [] ] = await Promise.all(
+				[
+					/* Get published offers */
+					this.sdk.getBrtOffers(address),
 
-				/* Get pending offers */
-				(this.isMyProfile ? this.sdk.getActions() : null)
-			], offers;
-
-			requests = requests
-				.filter(r => r)
-				.map(r => r.catch(e => console.error(e)));
-			
-			offers = await Promise.all(requests);
-
-			/*
-			 * Avoid duplicates from published and pending
-			 * create exchange list to replace old with new
-			 */
-			let hashes = offers[1].map(offer => offer.prevhash);
+					/* Get pending offers */
+					(this.isMyProfile ? this.sdk.getActions() : null)
+				]
+					.filter(r => r)
+					.map(r => r.catch(e => console.error(e)))
+			);
 
 			/* Mix published and pending offers */
-			this.offersList = offers[0].map(offer => {
-				if (hashes.includes(offer.hash)) {
-					const index = hashes.indexOf(offer.hash);
+			this.offersList = published.map(offer => {
+				/**
+				 * Avoid duplicates from published and pending
+				 * using "prevhash" key that appears in actions
+				 * just replace offers in published with pending
+				 */
+				const index = pending.findIndex(o => o.prevhash === offer.hash);
 
+				if (index > -1) {
 					/* Replace old offer with new */
-					offer = offers[1][index];
+					offer = pending[index];
 					
 					/* Remove offer form pending list */
-					offers[1].splice(index, 1);
+					pending.splice(index, 1);
 				}
 
 				return offer.hash;
-			}).concat(offers[1]);
+			}).concat(pending.map(o => o.hash));
 			
+			/* End fetching */
 			this.fetching = false;
 
+			/* Get favorited offers */
 			if (options?.favorites && this.isMyProfile && LikeStore.like?.length) {
 				this.sdk.getBrtOffersByHashes(LikeStore.like).then(offers => {
-					this.favoriteList = offers;
+					this.favoriteList = offers.map(offer => this.sdk.barteron.offers[offer.hash]);
 				}).catch(e => {
 					this.showError(e);
 				});
@@ -221,7 +221,7 @@ export default {
 			}); */
 
 			offer.set({
-				published: 1,
+				published: "published",
 				time: null,
 				till: null
 			}).then(data => {
