@@ -15,7 +15,7 @@ class Offer {
 	constructor(data) {
 		/* Extract JSON values and format object */
 		const
-			{ t, a, c, p } = JSON.parse(data?.p?.s4 || '{"t":"","a":[],"c":"new","p":1}'),
+			{ t, a, c, p } = JSON.parse(data?.p?.s4 || '{"t":"","a":[],"c":"new","p":"publish"}'),
 			images = JSON.parse(data?.p?.s5 || "[]");
 		
 		/* Iterable properties */
@@ -32,7 +32,7 @@ class Offer {
 		this.images = data?.images || images;
 		this.geohash = data?.geohash || data?.p?.s6 || "";
 		this.price = (data?.price || data?.p?.i1 / 100 || 0);
-		this.published = (data?.published ?? p ?? 1);
+		this.published = (data?.published ?? p ?? "published"); // published, withdrawed, removed
 
 		const
 			isMs = (timestamp) => {
@@ -75,7 +75,7 @@ class Offer {
 	 */
 	get active() {
 		return (
-			this.published &&
+			this.published == "published" &&
 			this.till > +new Date
 		);
 	}
@@ -96,6 +96,24 @@ class Offer {
 
 		if (this.till < +new Date) {
 			state.unshift("outdated");
+		}
+
+		if (this.relay) {
+			switch(this.published) {
+				case "withdrawed": {
+					state.unshift("withdrawed");
+					break;
+				}
+	
+				case "removed": {
+					state.unshift("removed");
+					break;
+				}
+	
+				default: {
+					state.unshift("relay");
+				}
+			}
 		}
 
 		return state.shift();
