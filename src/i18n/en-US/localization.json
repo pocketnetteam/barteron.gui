@@ -166,7 +166,7 @@
 	"itemLabels": {
 		"label": "Offer",
 		"autorenew": "Autorenew",
-		"relay": "Offer is publishing",
+		"published": "Offer is publishing",
 		"withdrawed": "Offer is withdrawing",
 		"removed": "Offer is removing"
 	},
