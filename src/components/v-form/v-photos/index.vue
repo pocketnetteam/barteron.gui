@@ -48,9 +48,9 @@
 			class="log"
 		>
 			<li
-				v-for="(item, i) in log"
-				:key="i"
-				:class="`log item-${ item.type }`"
+				v-for="item in log"
+				:key="item.timestamp"
+				:class="`log item-${ item.type } list-${ files.length ? 'filled' : 'empty'}`"
 			>{{ item.text }}</li>
 		</transition-group>
 
