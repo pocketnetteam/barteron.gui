@@ -181,6 +181,7 @@ export default {
 		 */
 		detatch(e, index) {
 			e?.preventDefault();
+			e?.stopPropagation();
 			this.files.splice(index || 0, e === undefined ? this.files.length : 1);
 			if (e) this.log.add(this.$t("photosLabels.detatched"));
 
