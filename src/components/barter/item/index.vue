@@ -1,5 +1,8 @@
 <template>
-	<div :class="{ [`barter-item-${ vType }`]: true }">
+	<div :class="{
+		[`barter-item-${ vType }`]: true,
+		'barter-item-relay': item.relay
+	}">
 		<!-- Picture -->
 		<picture v-if="item.images?.length && vType !== 'page'">
 			<router-link :to="!item.relay ? offerLink : {}">
@@ -127,9 +130,9 @@
 					<template v-if="item.relay">
 						<!-- Relay -->
 						<li>
-							<dl class="draft">
+							<dl :class="item.status">
 								<dt><i class="fa fa-spinner fa-spin"></i></dt>
-								<dd>{{ $t('itemLabels.relay') }}</dd>
+								<dd>{{ $t(`itemLabels.${ item.published }`) }}</dd>
 							</dl>
 						</li>
 					</template>
@@ -221,9 +224,9 @@
 						<template v-if="item.relay">
 							<!-- Relay -->
 							<li>
-								<dl class="draft">
+								<dl :class="item.status">
 									<dt><i class="fa fa-spinner fa-spin"></i></dt>
-									<dd>{{ $t('itemLabels.relay') }}</dd>
+									<dd>{{ $t(`itemLabels.${ item.published }`) }}</dd>
 								</dl>
 							</li>
 						</template>
