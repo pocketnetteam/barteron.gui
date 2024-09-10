@@ -110,7 +110,7 @@ export default {
 				this.dialog?.instance.view("load", this.$t("dialogLabels.data_node"));
 		
 				offer.set({
-					published: 0
+					published: "withdrawed"
 				}).then((data) => {
 					if (data.transaction) {
 						this.dialog?.instance.hide();
