@@ -47,16 +47,25 @@
 
 						<template v-if="!isPreview">
 							<v-button
+								v-if="item.published === 'published'"
 								vType="bulma-stroke"
-								@click="withdrawOrRemoveEvent(item, false)"
+								@click="withdrawOfferDialog(item, false)"
 							>
 								<i class="fa fa-undo"></i>
 								<span>{{ $t('buttonLabels.withdraw') }}</span>
 							</v-button>
+							<v-button
+								v-else
+								vType="hit-stroke"
+								@click="renewOfferDialog(item)"
+							>
+								<i class="fa fa-redo"></i>
+								<span>{{ $t('buttonLabels.renew') }}</span>
+							</v-button>
 
 							<v-button
 								vType="dodoria-stroke"
-								@click="withdrawOrRemoveEvent(item, true)"
+								@click="withdrawOfferDialog(item, true)"
 							>
 								<i class="fa fa-trash"></i>
 								<span>{{ $t('buttonLabels.remove') }}</span>

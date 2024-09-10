@@ -199,53 +199,6 @@ export default {
 		 */
 		selectView(view) {
 			this.bartersView = view?.value;
-		},
-
-		renewOfferEvent(offer) {
-			this.dialog?.instance
-				.view("question", this.$t("dialogLabels.offer_renew"))
-				.then(state => {
-					if (state) {
-						this.renewOffer(offer);
-					}
-				});
-		},
-
-		renewOffer(offer) {
-			this.dialog?.instance.view("load", this.$t("dialogLabels.data_node"));
-
-			/* const newOffer = new this.sdk.models.Offer({ 
-				...offer,
-				time: null,
-				till: null,
-			}); */
-
-			offer.set({
-				published: "published",
-				time: null,
-				till: null
-			}).then(data => {
-				if (data.transaction) {
-					this.dialog?.instance.hide();
-					this.getTabsContent(this.address, { favorites: false });
-				} else {
-					this.showError(
-						this.$t("dialogLabels.node_error"),
-						{ error: this.errorMessage(data.error?.code) }
-					);
-				}
-			}).catch(e => {
-				this.showError(e);
-			});
-		},
-
-		/**
-		 * Show error
-		 * 
-		 * @param {Object} e
-		 */
-		showError(e) {
-			this.dialog?.instance.view("error", e);
 		}
 	},
 

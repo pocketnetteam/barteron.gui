@@ -166,7 +166,7 @@
 								<v-button
 									vType="hit-stroke"
 									:disabled="item.relay"
-									@click="renewOfferEvent(item)"
+									@click="renewOfferDialog(item)"
 								>{{ $t('buttonLabels.renew') }}</v-button>
 							</template>
 						</BarterList>

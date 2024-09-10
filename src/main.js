@@ -302,6 +302,121 @@ Vue.prototype.shared = Vue.observable({
 			}).catch(e => { 
 				console.error(e);
 			});
+		},
+
+		/**
+		 * Withdraw of Remove an Offer Dialog
+		 * 
+		 * @param {@Offer} offer
+		 * @param {Boolean} remove
+		 */
+		withdrawOfferDialog(offer, remove = false) {
+			this.dialog?.instance
+				.view("question", this.$t(`dialogLabels.offer_${ remove ? 'delete' : 'withdraw' }`))
+				.then(state => {
+					if (state) {
+						this.withdrawOffer(offer, remove);
+					}
+				});
+		},
+
+		/**
+		 * Withdraw of Remove an Offer
+		 * 
+		 * @param {@Offer} offer
+		 * @param {Boolean} remove
+		 */
+		withdrawOffer(offer, remove = false) {
+			if (!remove) {
+				this.dialog?.instance.view("load", this.$t("dialogLabels.data_node"));
+		
+				offer.set({
+					published: "withdrawed"
+				}).then((data) => {
+					if (data.transaction) {
+						this.dialog?.instance.hide();
+
+						/* Navigate to profile */
+						this.$router.replace({
+							path: `/profile/${ this.sdk.address }`,
+							hash: `#ads`
+						}).catch(e => {
+							this.showError(e);
+						});
+					} else {
+						this.showError(
+							this.$t("dialogLabels.node_error", {
+								error: this.sdk.errorMessage(data.error?.code)
+							})
+						);
+					}
+				}).catch(e => {
+					this.$t("dialogLabels.node_error", {
+						error: this.sdk.errorMessage(e)
+					})
+				});
+			}
+		},
+
+		/**
+		 * Renew Offer Dialog
+		 * 
+		 * @param {@Offer} offer
+		 */
+		renewOfferDialog(offer) {
+			this.dialog?.instance
+				.view("question", this.$t("dialogLabels.offer_renew"))
+				.then(state => {
+					if (state) {
+						this.renewOffer(offer);
+					}
+				});
+		},
+
+		/**
+		 * Renew an Offer
+		 * 
+		 * @param {@Offer} offer
+		 */
+		renewOffer(offer) {
+			this.dialog?.instance.view("load", this.$t("dialogLabels.data_node"));
+
+			offer.set({
+				published: "published"
+			}).then(data => {
+				if (data.transaction) {
+					this.dialog?.instance.hide();
+
+					/* Navigate to profile */
+					this.$router.replace({
+						path: `/profile/${ this.sdk.address }`,
+						hash: `#ads`
+					}).catch(e => {
+						this.showError(e);
+					});
+				} else {
+					this.showError(
+						this.$t("dialogLabels.node_error", {
+							error: this.sdk.errorMessage(data.error?.code)
+						})
+					);
+				}
+			}).catch(e => {
+				this.showError(
+					this.$t("dialogLabels.node_error", {
+						error: this.sdk.errorMessage(e)
+					})
+				);
+			});
+		},
+
+		/**
+		 * Show error
+		 * 
+		 * @param {Object} e
+		 */
+		showError(e) {
+			this.dialog?.instance.view("error", e);
 		}
 	}
 });
