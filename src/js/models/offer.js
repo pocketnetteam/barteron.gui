@@ -111,7 +111,7 @@ class Offer {
 				}
 	
 				default: {
-					state.unshift("relay");
+					state.unshift("published");
 				}
 			}
 		}

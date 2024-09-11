@@ -308,7 +308,8 @@ export default {
 						/* Send request to create or update(hash) an offer */
 						this.offer.set({
 							hash,
-							images: Object.values(images)
+							images: Object.values(images),
+							published: "published"
 						}).then((data) => {
 							if (data.transaction) {
 								form.dialog.hide();
