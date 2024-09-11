@@ -1,6 +1,6 @@
 <template>
 	<div :id="id" :style="{ height, width, '--height': height, '--width': width }">
-		<l-map ref="map" :style="{ height }" :zoom="zoom" :center="marker || center">
+		<l-map ref="map" :style="{ height }" :zoom="zoom" :max-zoom="maxZoom" :center="marker || center">
 			<!-- Offers near -->
 			<template v-if="offers.length">
 				<l-marker-cluster>
