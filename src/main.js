@@ -108,10 +108,14 @@ Vue.prototype.shared = Vue.observable({
 		debounce(fn, timeout = 300) {
 			let timer;
 			
-			return (...args) => {
+			const debounced = (...args) => {
 				clearTimeout(timer);
 				timer = setTimeout(() => fn.apply(this, args), timeout);
 			};
+
+			debounced.cancel = () => clearTimeout(timer);
+
+			return debounced;
 		},
 
 		/**
