@@ -1,5 +1,14 @@
 @import "@/css/vars.sass"
 
+.list-enter-active,
+.list-leave-active
+	transition: all 0.3s ease
+
+.list-enter,
+.list-leave-to
+	opacity: 0;
+	transform: translateX(30px)
+
 .photo-uploader
 	position: relative
 	margin: 0 0 $r
@@ -109,22 +118,30 @@
 
 	ul.log
 		+resetList()
-		background: $overlay-half
-		border-radius: 3px 3px 12px
-		margin: 2px
-		padding: $r
+		display: flex
+		flex-direction: column
+		margin: 4px
 		position: absolute
 		bottom: 0
 		right: 0
+		max-width: 250px
 
 		&:empty
 			display: none
 
 		li
 			color: $primary
+			background: $overlay-half
+			margin-top: 4px
+			padding: $r
+			border-radius: 3px
+			word-wrap: break-word
 
-			/* &.item-error
-				color: $dodoria */
+			&:last-child.list-empty
+				border-radius: 3px 3px 12px
+
+			&.item-error
+				background: $dodoria
 
 			/* &.item-success
 				color: $roshi */

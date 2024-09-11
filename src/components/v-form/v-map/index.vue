@@ -1,6 +1,16 @@
 <template>
-	<div :id="id" :style="{ height, width, '--height': height, '--width': width }">
-		<l-map ref="map" :style="{ height }" :zoom="zoom" :max-zoom="maxZoom" :center="marker || center">
+	<div
+		:id="id"
+		:style="{ height, width, '--height': height, '--width': width }"
+	>
+		<l-map
+			ref="map"
+			:style="{ height }"
+			:zoom="zoom"
+			:max-zoom="maxZoom"
+			:center="marker || center"
+			@ready="() => toggleWheel()"
+		>
 			<!-- Offers near -->
 			<template v-if="offers.length">
 				<l-marker-cluster>

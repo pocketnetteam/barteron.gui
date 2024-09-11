@@ -146,6 +146,10 @@ export default {
 				this.mapObject.panTo(this.location);
 				this.$emit("change", this.location);
 			}
+		},
+
+		toggleWheel(enable) {
+			this.mapObject.scrollWheelZoom[enable ? "enable" : "disable"]()
 		}
 	},
 
@@ -180,6 +184,8 @@ export default {
 			this.cancelMoveEndHandler = debouncedMoveEndHandler.cancel;
 	
 			this.mapObject
+				.on("focus", () => this.toggleWheel(true))
+				.on("blur", () => this.toggleWheel(false))
 				.on("click", e => {
 					if (e.originalEvent.target.matches("div.vue2leaflet-map")) {
 						this.marker = Object.values(e.latlng);
