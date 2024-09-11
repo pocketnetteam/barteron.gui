@@ -7,6 +7,7 @@
 			ref="map"
 			:style="{ height }"
 			:zoom="zoom"
+			:max-zoom="maxZoom"
 			:center="marker || center"
 			@ready="() => toggleWheel()"
 		>

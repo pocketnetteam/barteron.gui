@@ -85,6 +85,10 @@ export default {
 			type: Number,
 			default: 15
 		},
+		maxZoom: {
+			type: Number,
+			default: 18
+		},
 		radius: {
 			type: Number,
 			default: 1
@@ -176,6 +180,9 @@ export default {
 			}); */
 
 		if(this.allowSelection) {
+			const debouncedMoveEndHandler = this.debounce((e) => markerAtCenter(true, e), 1000);
+			this.cancelMoveEndHandler = debouncedMoveEndHandler.cancel;
+	
 			this.mapObject
 				.on("focus", () => this.toggleWheel(true))
 				.on("blur", () => this.toggleWheel(false))
@@ -189,10 +196,14 @@ export default {
 					if (e?.originalEvent) markerAtCenter(false, e);
 				})
 				.on("moveend", e => {
-					this.debounce(() => markerAtCenter(true, e), 1000)();
+					debouncedMoveEndHandler(e);
 				});
 
 			markerAtCenter(true);
 		}
-	}
+	},
+
+	beforeDestroy() {
+		this.cancelMoveEndHandler?.()
+	},
 }
