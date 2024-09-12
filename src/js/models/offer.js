@@ -156,6 +156,8 @@ class Offer {
 	 * Store model data
 	 * 
 	 * @param {Object} data
+	 * 
+	 * @returns {Promise}
 	 */
 	set(data) {
 		return this.sdk.setBrtOffer({
@@ -176,6 +178,15 @@ class Offer {
 
 			return action;
 		});
+	}
+
+	/**
+	 * Remove an Offer from node
+	 * 
+	 * @returns {Promise}
+	 */
+	remove() {
+		return this.sdk.delBrtOffer(this);
 	}
 
 	/**
