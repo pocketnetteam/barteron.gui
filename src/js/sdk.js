@@ -423,13 +423,35 @@ class SDK {
 	 */
 	getActions() {
 		return this.sdk.get.actions().then(actions => {
-			return actions?.map(action => {
-				return new Offer({
-					...action.expObject,
-					hash: action.transaction,
-					prevhash: action.expObject.hash,
-					relay: !action?.completed
-				})
+			return actions?.map(async action => {
+				if (action.expObject?.type !== "contentDelete") {
+					return new Offer({
+						/* Normal Offer action */
+						...action.expObject,
+						price: action.expObject?.price / 100,
+						hash: action.transaction,
+						prevhash: action.expObject?.hash,
+						relay: !action?.completed
+					})
+				} else {
+					/* Deleted Offer action */
+					const txid = action.expObject?.txidEdit;
+					
+					if (!this.barteron.offers[txid]) {
+						await this.getBrtOffersByHashes([txid]);
+					}
+
+					const offer = new Offer({
+						...this.barteron.offers[txid],
+						hash: action.transaction,
+						prevhash: txid,
+						published: "removed",
+						relay: !action?.completed
+					})
+
+					console.log(action, offer)
+					return offer
+				}
 			}) || [];
 		});
 	}
@@ -941,6 +963,15 @@ class SDK {
 			...data,
 			...{ hash: data.hash?.length === 64 ? data.hash : null }
 		});
+	}
+
+	/**
+	 * Remove an Offer
+	 * 
+	 * @param {String} param0
+	 */
+	delBrtOffer({ hash }) {
+		return this.sdk.barteron.removeOffer({ hash });
 	}
 
 	/**
