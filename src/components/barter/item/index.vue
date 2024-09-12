@@ -108,7 +108,7 @@
 				<router-link :to="offerLink">{{ item.caption }}</router-link>
 			</div>
 
-			<div class="row to" v-if="item?.tags.length">
+			<div class="row to" v-if="item?.tags?.length">
 				<ul :style="exchangeList.length > 2 ? `--count: '+${ exchangeList.length - 2 }'; --len: ${ exchangeList.length.toString().length + 1 }` : ''">
 					<li><span>{{ $t('barterLabels.exchange') }}: </span></li>
 					<li
