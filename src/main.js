@@ -331,35 +331,31 @@ Vue.prototype.shared = Vue.observable({
 		 * @param {Boolean} remove
 		 */
 		withdrawOffer(offer, remove = false) {
+			this.dialog?.instance.view("load", this.$t("dialogLabels.data_node"));
 			if (!remove) {
-				this.dialog?.instance.view("load", this.$t("dialogLabels.data_node"));
-		
-				offer.set({
-					published: "withdrawed"
-				}).then((data) => {
-					if (data.transaction) {
-						this.dialog?.instance.hide();
-
-						/* Navigate to profile */
-						this.$router.replace({
-							path: `/profile/${ this.sdk.address }`,
-							hash: `#ads`
-						}).catch(e => {
-							this.showError(e);
-						});
-					} else {
-						this.showError(
-							this.$t("dialogLabels.node_error", {
-								error: this.sdk.errorMessage(data.error?.code)
-							})
-						);
-					}
-				}).catch(e => {
-					this.$t("dialogLabels.node_error", {
-						error: this.sdk.errorMessage(e)
-					})
-				});
+				this.withdrawOfferHandler( offer.set({ published: "withdrawed" }) );
+			} else {
+				this.withdrawOfferHandler( offer.remove() );
 			}
+		},
+
+		withdrawOfferHandler(promise) {
+			promise.then(action => {
+				if (action.transaction) {
+					this.dialog?.instance.hide();
+					this.navigateToProfile();
+				} else {
+					this.showError(
+						this.$t("dialogLabels.node_error", {
+							error: this.sdk.errorMessage(action.error?.code)
+						})
+					);
+				}
+			}).catch(e => {
+				this.$t("dialogLabels.node_error", {
+					error: this.sdk.errorMessage(e)
+				})
+			});
 		},
 
 		/**
@@ -387,21 +383,14 @@ Vue.prototype.shared = Vue.observable({
 
 			offer.set({
 				published: "published"
-			}).then(data => {
-				if (data.transaction) {
+			}).then(action => {
+				if (action.transaction) {
 					this.dialog?.instance.hide();
-
-					/* Navigate to profile */
-					this.$router.replace({
-						path: `/profile/${ this.sdk.address }`,
-						hash: `#ads`
-					}).catch(e => {
-						this.showError(e);
-					});
+					this.navigateToProfile();
 				} else {
 					this.showError(
 						this.$t("dialogLabels.node_error", {
-							error: this.sdk.errorMessage(data.error?.code)
+							error: this.sdk.errorMessage(action.error?.code)
 						})
 					);
 				}
@@ -411,6 +400,21 @@ Vue.prototype.shared = Vue.observable({
 						error: this.sdk.errorMessage(e)
 					})
 				);
+			});
+		},
+
+		/**
+		 * Navigate to Profile
+		 * 
+		 * @returns {Promise}
+		 */
+		navigateToProfile() {
+			/* Navigate to profile */
+			return this.$router.replace({
+				path: `/profile/${ this.sdk.address }`,
+				hash: `#ads`
+			}).catch(e => {
+				this.showError(e);
 			});
 		},
 
