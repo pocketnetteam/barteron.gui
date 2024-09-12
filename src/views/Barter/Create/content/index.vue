@@ -42,10 +42,19 @@
 				/>
 
 				<!-- Paragraph: Image upload text -->
-				<p>{{ $t('photosLabels.upload_image_text', {
-					count: 10,
-					formats: ["JPEG, PNG"].join()
-				}) }}</p>
+				<p>
+					{{
+						$t('photosLabels.upload_image_text', {
+							count: 10,
+							formats: ["JPEG, PNG"].join()
+						})
+					}}
+				</p>
+
+				<p>
+					<i class="fa fa-info-circle"></i>
+					The price in currency will be updating automatically at the current PKOIN rate
+				</p>
 			</div>
 
 			<div id="get" class="row block">
