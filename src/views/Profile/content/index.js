@@ -174,13 +174,15 @@ export default {
 		 * @param {String} tab
 		 */
 		updatePath(tab) {
-			this.activeTab = tab;
-			this.$router.replace({
-				path: `/profile/${ this.address }`,
-				hash: `#${ tab }`
-			}).catch(e => {
-				this.showError(e);
-			});
+			if (this.activeTab != tab) {
+				this.activeTab = tab;
+				this.$router.replace({
+					path: `/profile/${ this.address }`,
+					hash: `#${ tab }`
+				}).catch(e => {
+					this.showError(e);
+				});
+			}
 		},
 
 		/**
