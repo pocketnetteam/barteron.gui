@@ -17,7 +17,7 @@
 						<dd>{{ $t('profileLabels.account_confirmed') }}</dd>
 					</dl>
 
-					<a class="ask" href="#"><i class="fa fa-question"></i></a>
+					<!-- <a class="ask" href="#"><i class="fa fa-question"></i></a> -->
 				</template>
 			</Profile>
 		</div>
