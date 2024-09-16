@@ -6,7 +6,6 @@ const
 		state: () => ({
 			location: Pinia.get(storageId, {
 				geohash: null,
-				near: null,
 				radius: null,
 				zoom: null
 			})
@@ -17,7 +16,6 @@ const
 				Pinia.getPrefix().then(() => {
 					this.location = Pinia.get(storageId, {
 						geohash: null,
-						near: null,
 						radius: null,
 						zoom: null
 					});
@@ -38,7 +36,6 @@ const
 			reset() {
 				this.set({
 					geohash: null,
-					near: null,
 					radius: null,
 					zoom: null
 				});
