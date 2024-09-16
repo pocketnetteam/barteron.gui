@@ -258,13 +258,11 @@ export default {
 		 * Get offers feed
 		 */
 		async getOffersFeed() {
-			const offers = await this.getOffersFeedList(
-				this.getGeoHashRadius({
-					geohash: this.item.geohash,
-					radius: 10,
-					precision: 5
-				})
-			)
+			const
+				center = this.item.geohash,
+				radius = this.defaultRadius;
+
+			const offers = await this.getOffersFeedList(center, radius);
 			
 			this.offersNear = offers.map(offer => {
 				if (this.vType === "page" && offer.hash === this.item.hash) {

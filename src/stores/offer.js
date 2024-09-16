@@ -64,7 +64,7 @@ export const useOfferStore = Pinia.defineStore(storageId, {
                 return Vue.prototype.sdk.getBrtOfferDeals({
                     ...this.filters,
                     ...(search && { search: `%${ search }%` }),
-                    location: mixin.computed.locationStore().near || [],
+                    location: mixin.methods.getStoredLocation() || [],
                     theirTags: Number.isInteger(+request?.id) ? [+request.id] : [],
                     pageStart: request?.pageStart || 0,
                     pageSize: request?.pageSize || this.pageSize
