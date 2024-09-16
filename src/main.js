@@ -81,6 +81,24 @@ Vue.prototype.shared = Vue.observable({
 		},
 
 		/**
+		 * Get default value of location radius in kilometers
+		 * 
+		 * @returns {Number}
+		 */
+		defaultRadius() {
+			return 10;
+		},
+
+		/**
+		 * Get max value of location radius in kilometers
+		 * 
+		 * @returns {Number}
+		 */
+		maxRadius() {
+			return 6000;
+		},
+
+		/**
 		 * Get my geoposition
 		 * 
 		 * @returns {Object}
@@ -238,7 +256,6 @@ Vue.prototype.shared = Vue.observable({
 		 * @param {String} data.geohash or
 		 * @param {Number} data.latitude
 		 * @param {Number} data.longitude
-		 * @param {Number} [data.precision]
 		 * @param {Number} [data.radius]
 		 * @param {Number} [data.units]
 		 * 
@@ -248,7 +265,6 @@ Vue.prototype.shared = Vue.observable({
 			geohash,
 			latitude,
 			longitude,
-			precision,
 			radius,
 			units
 		}) {
@@ -260,12 +276,55 @@ Vue.prototype.shared = Vue.observable({
 
 			if (!latitude || !longitude) return [];
 
+			radius = radius || this.defaultRadius;
+
+			const { precision, baseCellLength } = this.getGeohashPrecision(radius);
+
 			return getHashesNear(
 				{ latitude, longitude },
-				precision || 5,
-				radius || 10,
+				precision,
+				radius + baseCellLength * Math.sqrt(2) / 2,
 				units || "kilometers"
 			);
+		},
+
+		/**
+		 * Get geohash precision by radius and base cell length
+		 * 
+		 * @param {Number} radius
+		 * 
+		 * @returns {Object}
+		 */
+		getGeohashPrecision(radius) {
+			const geohashPrecisionOfStandardCellSizesInKm = [
+				{ p: 1, w: 5000,  h: 5000  },
+				{ p: 2, w: 1250,  h: 625   },
+				{ p: 3, w: 156,   h: 156   },
+				{ p: 4, w: 39.1,  h: 19.5  },
+				{ p: 5, w: 4.89,  h: 4.89  },
+				{ p: 6, w: 1.22,  h: 0.61  },
+				{ p: 7, w: 0.153, h: 0.153 },
+				{ p: 8, w: 0.0382, h: 0.0191 },
+			];
+
+			const
+				precisionsCount = geohashPrecisionOfStandardCellSizesInKm.length,
+				baseCellLength = radius * Math.sqrt(2) * 0.999999;
+
+			const items = geohashPrecisionOfStandardCellSizesInKm.filter((item, index) => {
+				const
+					itemLength = Math.max(item.w, item.h),
+					isLast = (index == (precisionsCount - 1));
+
+				return itemLength <= baseCellLength || isLast;
+			});
+
+			const result = items[0].p;
+
+			return {
+				precision: result,
+				baseCellLength,
+			};
 		},
 
 		/**
@@ -292,19 +351,103 @@ Vue.prototype.shared = Vue.observable({
 		},
 
 		/**
+		 * Get stored location
+		 * 
+		 * @returns {Array|null}
+		 */
+		getStoredLocation() {
+			const { geohash, radius } = LocationStore.location;
+			return geohash ? this.getGeoHashRadius({ geohash, radius }) : null;
+		},
+
+		/**
+		 * Checking if the offer is inside the circle
+		 * 
+		 * @param {Object} offer
+		 * @param {Objec} circle
+		 * 
+		 * @returns {Boolean}
+		 */
+		isOfferInCircle(offer, circle) {
+			let result = true;
+			if (circle && offer.geohash) {
+				const
+					[offerLat, offerLon] = this.decodeGeoHash(offer.geohash),
+					distance = this.getDistanceBetweenPointsInKm(
+						circle.lat,
+						circle.lon,
+						offerLat,
+						offerLon
+					);
+				result = (distance <= circle.radius);
+			}
+			return result;
+		},
+
+		/**
+		 * Get distance between two points in kilometers
+		 * 
+		 * @param {Number} lat1
+		 * @param {Number} lon1
+		 * @param {Number} lat2
+		 * @param {Number} lon2
+		 * 
+		 * @returns {Number}
+		 */
+		getDistanceBetweenPointsInKm(lat1, lon1, lat2, lon2) {
+			const
+				earthRadiusKm = 6371,
+				radPerDeg = 0.017453292519943295,
+				deg2Rad = (deg) => deg * radPerDeg;
+		  
+			const
+				dLat = deg2Rad(lat2-lat1),
+				dLon = deg2Rad(lon2-lon1);
+		  
+			lat1 = deg2Rad(lat1);
+			lat2 = deg2Rad(lat2);
+		  
+			const
+				a = Math.sin(dLat/2) * Math.sin(dLat/2)
+					+ Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2),
+				c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+			return earthRadiusKm * c;
+		},
+
+		/**
 		 * Get offers feed
 		 */
-		getOffersFeedList(location) {
+		getOffersFeedList(center, radius) {
+			const location = center
+				? this.getGeoHashRadius({ geohash: center, radius })
+				: (this.getStoredLocation() || []);
+			
+			const
+				circleCenter = center || LocationStore.location.geohash,
+				circleRadius = (center ? radius : LocationStore.location.radius) || this.defaultRadius;
+
+			let circle = null;
+			if (circleCenter) {
+				const [lat, lon] = this.decodeGeoHash(circleCenter);
+				circle = {
+					lat,
+					lon,
+					radius: circleRadius
+				};
+			};
+
 			this.fetching = true;
 
 			return this.sdk.getBrtOffersFeed({
-				location: location || this.locationStore.near || [],
+				location,
 				pageSize: 100
 			}).then(offers => {
-				this.fetching = false;
-				return offers.filter(offer => offer.active);
+				return offers.filter(offer => offer.active && this.isOfferInCircle(offer, circle));
 			}).catch(e => { 
 				console.error(e);
+			}).finally(() => {
+				this.fetching = false;
 			});
 		},
 

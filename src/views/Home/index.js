@@ -44,7 +44,7 @@ export default {
 					this.mayMatchExchanges = await Promise.all(
 						myOffers.map(async offer => {
 							return this.sdk.getBrtOfferComplexDeals({
-								location: this.locationStore.near || [],
+								location: this.getStoredLocation() || [],
 								myTag: offer.tag,
 								theirTags: await this.sdk.getTheirTags(offer),
 								excludeAddresses: [this.address]

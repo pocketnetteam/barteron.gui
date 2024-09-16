@@ -100,7 +100,7 @@ export default {
 		 */
 		showLightbox() {
 			this.lightbox = true;
-			this.radius = this.locationStore.radius ?? 10;
+			this.radius = this.locationStore.radius ?? this.defaultRadius;
 			this.map.mapObject._onResize();
 		},
 
@@ -133,7 +133,7 @@ export default {
 
 			this.debounce(() => {
 				if (this.lightbox) this.saveDisabled = false;
-			}, 1000)();
+			}, 300)();
 		},
 
 		/**
@@ -144,6 +144,7 @@ export default {
 		changeRadius(e) {
 			this.radius = Number(e.target.value);
 			this.nearbyDisabled = false;
+			this.saveDisabled = false;
 		},
 
 		/**
@@ -158,13 +159,7 @@ export default {
 				].map(p => this.map?.[p]).filter(p => p).shift(),
 				geohash = this.encodeGeoHash(center || this.location);
 				
-			this.getOffersFeed(
-				this.getGeoHashRadius({
-					geohash,
-					radius: this.radius,
-					precision: 5
-				})
-			);
+			this.getOffersFeed(geohash, this.radius);
 
 			this.nearbyDisabled = true;
 		},
@@ -198,11 +193,6 @@ export default {
 			/* Update account with data */
 			this.locationStore.set({
 				geohash,
-				near: this.getGeoHashRadius({
-					geohash,
-					radius: this.radius,
-					precision: 5
-				}),
 				zoom: this.zoom,
 				radius: this.radius
 			});
@@ -214,8 +204,8 @@ export default {
 		/**
 		 * Get offers feed
 		 */
-		async getOffersFeed(location) {
-			this.offersNear = await this.getOffersFeedList(location);
+		async getOffersFeed(center, radius) {
+			this.offersNear = await this.getOffersFeedList(center, radius);
 		}
 	},
 
