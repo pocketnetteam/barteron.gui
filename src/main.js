@@ -278,12 +278,12 @@ Vue.prototype.shared = Vue.observable({
 
 			radius = radius || this.defaultRadius;
 
-			const { precision, baseCellLength } = this.getGeohashPrecision(radius);
+			const { precision, geohashCellLength } = this.getGeohashPrecision(radius);
 
 			return getHashesNear(
 				{ latitude, longitude },
 				precision,
-				radius + baseCellLength * Math.sqrt(2) / 2,
+				radius + geohashCellLength * Math.sqrt(2) / 2,
 				units || "kilometers"
 			);
 		},
@@ -309,21 +309,26 @@ Vue.prototype.shared = Vue.observable({
 
 			const
 				precisionsCount = geohashPrecisionOfStandardCellSizesInKm.length,
-				baseCellLength = radius * Math.sqrt(2) * 0.999999;
+				baseCellLength = radius * Math.sqrt(2) * 0.999999,
+				getGeohashCellLength = (item) => Math.max(item.w, item.h);
 
 			const items = geohashPrecisionOfStandardCellSizesInKm.filter((item, index) => {
 				const
-					itemLength = Math.max(item.w, item.h),
+					itemLength = getGeohashCellLength(item),
 					isLast = (index == (precisionsCount - 1));
 
 				return itemLength <= baseCellLength || isLast;
 			});
 
-			const result = items[0].p;
+			const
+				target = items[0],
+				precision = target.p,
+				geohashCellLength = getGeohashCellLength(target);
+
 
 			return {
-				precision: result,
-				baseCellLength,
+				precision,
+				geohashCellLength,
 			};
 		},
 
