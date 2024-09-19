@@ -2,7 +2,7 @@
 
 class API {
 
-    protected $api = 'https://pocketnet.app:8899/';
+    protected $api = 'https://2.pocketnet.app:8899/';
 
 	public function __construct ($proxypath)
 	{
