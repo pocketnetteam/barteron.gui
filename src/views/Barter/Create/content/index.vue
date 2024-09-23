@@ -50,11 +50,6 @@
 						})
 					}}
 				</p>
-
-				<p>
-					<i class="fa fa-info-circle"></i>
-					The price in currency will be updating automatically at the current PKOIN rate
-				</p>
 			</div>
 
 			<div id="get" class="row block">

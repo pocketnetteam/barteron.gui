@@ -16,7 +16,7 @@
 				<template v-if="locationStore.geohash && !lastAddr"><i class="fa fa-spin fa-spinner"></i></template>
 				<template v-else>{{ locationStore.geohash ? lastAddr : $t('buttonLabels.unknown') }}</template>
 			</strong>
-			<!-- <span class="distance">{{ (radius || 10) + $t('metricsLabels.km') }}</span> -->
+			<!-- <span class="distance">{{ (radius || defaultRadius) + $t('metricsLabels.km') }}</span> -->
 		</div>
 
 		<template #after>
@@ -47,7 +47,7 @@
 									name="radius"
 									type="range"
 									min="1"
-									max="6000"
+									:max="maxRadius"
 									:value="radius"
 									:vEvents="{
 										change: changeRadius,

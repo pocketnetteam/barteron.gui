@@ -8,7 +8,7 @@
 			</dd>
 		</dl>
 
-		<v-button>{{ $t('profileLabels.wallet') }}</v-button>
+		<!-- <v-button>{{ $t('profileLabels.wallet') }}</v-button> -->
 	</div>
 </template>
 

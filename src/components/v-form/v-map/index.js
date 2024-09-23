@@ -180,7 +180,7 @@ export default {
 			}); */
 
 		if(this.allowSelection) {
-			const debouncedMoveEndHandler = this.debounce((e) => markerAtCenter(true, e), 1000);
+			const debouncedMoveEndHandler = this.debounce((e) => markerAtCenter(true, e), 300);
 			this.cancelMoveEndHandler = debouncedMoveEndHandler.cancel;
 	
 			this.mapObject
