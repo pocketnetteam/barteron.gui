@@ -168,6 +168,15 @@ export default {
 	},
 
 	mounted() {
+		/* Check if we in bastyon, redirect if needed */
+		if (
+			this?.sdk &&
+			!this.sdk.inBastyon() &&
+			this.manifest?.id
+		) {
+			window.location.href = `https://bastyon.com/application?id=${ this.manifest.id }`;
+		}
+
 		/* Watch for dialog */
 		const interval = setInterval(() => {
 			if (this.$refs.dialog) {
