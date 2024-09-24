@@ -478,7 +478,7 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	checkPermission(permission) {
-		return this.sdk.permissions.check({ permission });
+		return this.sdk?.permissions.check({ permission });
 	}
 
 	/**

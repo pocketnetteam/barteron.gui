@@ -21,6 +21,7 @@
 						<l-icon
 							:icon-size="iconSize"
 							:icon-url="offer?.current ? offerIconActive : offerIcon"
+							:icon-anchor="iconAnchor"
 						>
 						</l-icon>
 						<l-tooltip v-if="!offer.current">{{ offer.caption }}</l-tooltip>
