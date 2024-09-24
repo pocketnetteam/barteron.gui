@@ -117,6 +117,19 @@ export default {
 
 	computed: {
 		/**
+		 * Get icon anchor
+		 * 
+		 * @returns {Array}
+		 */
+		iconAnchor() {
+			const
+				dx = (this.iconSize?.[0] || 0) / 2,
+				dy = (this.iconSize?.[1] || 0);
+
+			return [dx, dy];
+		},
+
+		/**
 		 * Get my location
 		 * 
 		 * @returns {Array|null}
