@@ -449,8 +449,7 @@ class SDK {
 						relay: !action?.completed
 					})
 
-					console.log(action, offer)
-					return offer
+					return offer;
 				}
 			}) || [];
 		});
@@ -570,6 +569,15 @@ class SDK {
 		this.sdk.payment(data).then(data => {
 			this.lastresult = JSON.stringify(data, null, "\t")
 		}).catch(e => this.setLastResult(e));
+	}
+
+	/**
+	 * Check is app launched in bastyon
+	 * 
+	 * @returns {Boolean}
+	 */
+	inBastyon() {
+		return this.sdk.inbastyon();
 	}
 
 	/**
