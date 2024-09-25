@@ -52,13 +52,21 @@ export default {
 		 * Store search string in url query
 		 */
 		submit() {
-			this.$router.replace({
-				name: "category",
-				params: { id: this.id || "search" },
-				query: { search: this.query }
-			}).catch(e => {
-				this.showError(e);
-			});
+			const
+				to = {
+					name: "category",
+					params: { id: this.id || "search" },
+					query: { search: this.query }
+				},
+				from = this.$route,
+				needReplace = !(this.routesAreEqual(to, from, ['name', 'params', 'query']));
+
+			
+			if (needReplace) {
+				this.$router.replace(to).catch(e => {
+					this.showError(e);
+				});
+			};
 		},
 
 		/**
