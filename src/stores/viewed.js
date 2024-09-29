@@ -2,6 +2,7 @@ import Pinia from "@/stores/store.js";
 
 const
 	storageId = "viewed",
+	maxCount = 10,
 	ViewedStore = Pinia.defineStore(storageId, {
 		state: () => ({
 			viewed: Pinia.get(storageId, [])
@@ -25,10 +26,35 @@ const
 					this.viewed.splice(index, 1);
 				}
 
-				this.viewed = [id, ...this.viewed.slice(0, 3)];
+				this.viewed = [id, ...this.viewed.slice(0, maxCount - 1)];
 				
 				Pinia.set(storageId, this.viewed);
-			}
+			},
+
+			update(sourceHashes) {
+				sourceHashes = (sourceHashes || []);
+				const removingItems = this.viewed.filter(item => !(sourceHashes.includes(item)));
+				if (removingItems.length) {
+					removingItems.forEach(item => {
+						this.remove(item, { isMultiple: true });
+					})
+					Pinia.set(storageId, this.viewed);
+				}
+			},
+
+			remove(id, options = { isMultiple: false }) {
+				const
+					index = this.viewed.findIndex(item => item === id),
+					needRemove = (index > -1),
+					needSave = !(options?.isMultiple);
+
+				if (needRemove) {
+					this.viewed.splice(index, 1);
+					if (needSave) {
+						Pinia.set(storageId, this.viewed);
+					}
+				}
+			},
 		}
 	});
 

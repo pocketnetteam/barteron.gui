@@ -113,13 +113,13 @@
 							<template #offer="{ item }" v-if="isMyProfile">
 								<v-button
 									:to="{ name: 'createBarter', params: { id: item.hash, from: $route.path } }"
-									:disabled="item.relay"
+									:disabled="item.relay || item.status === 'removed'"
 								>{{ $t('buttonLabels.edit') }}</v-button>
 
 								<v-button
 									vType="hit-stroke"
 									:to="{ name: 'exchangeOptions', params: { id: item.hash }, query: { expanded: 1 } }"
-									:disabled="item.relay"
+									:disabled="item.relay || item.status === 'removed'"
 								>{{ $t('buttonLabels.find_exchange') }}</v-button>
 							</template>
 						</BarterList>
@@ -160,12 +160,12 @@
 							<template #offer="{ item }" v-if="isMyProfile">
 								<v-button
 									:to="{ name: 'createBarter', params: { id: item.hash, from: $route.path } }"
-									:disabled="item.relay"
+									:disabled="item.relay || item.status === 'removed'"
 								>{{ $t('buttonLabels.edit') }}</v-button>
 
 								<v-button
 									vType="hit-stroke"
-									:disabled="item.relay"
+									:disabled="item.relay || item.status === 'removed'"
 									@click="renewOfferDialog(item)"
 								>{{ $t('buttonLabels.renew') }}</v-button>
 							</template>

@@ -6,6 +6,13 @@ import Account from "@/js/models/account.js";
 import Offer from "@/js/models/offer.js";
 import Comment from "@/js/models/comment.js";
 
+const TX_TYPES = {
+	contentDelete: {
+		code: 207,
+		name: 'contentDelete',
+	},
+};
+
 /**
  * Allow work with bastyon
  * 
@@ -423,8 +430,12 @@ class SDK {
 	 */
 	getActions() {
 		return this.sdk.get.actions().then(actions => {
-			return actions?.map(async action => {
-				if (action.expObject?.type !== "contentDelete") {
+			return Promise.all(
+				(actions || [])
+					.filter(action => this.isOfferAction(action))
+					.map(async action => {
+
+				if (action.expObject?.type !== TX_TYPES.contentDelete.name) {
 					return new Offer({
 						/* Normal Offer action */
 						...action.expObject,
@@ -451,8 +462,32 @@ class SDK {
 
 					return offer;
 				}
-			}) || [];
+			}) || []);
 		});
+	}
+
+	/**
+	 * Checking for offer action
+	 * 
+	 * @param {Object} action
+	 * 
+	 * @returns {Boolean}
+	 */
+	isOfferAction(action) {
+		const
+			expObject = action.expObject || {},
+			keys = Object.keys(expObject),
+			createOrEditOfferKeys = 'address,hash,language,caption,description,tag,condition,geohash'.split(','),
+			deleteOfferKeys = 'txidEdit,type'.split(',');
+		
+		const
+			isCreateOrEditOfferAction = (createOrEditOfferKeys.filter(item => !(keys.includes(item))).length == 0),
+			isDeleteOfferAction = (
+				deleteOfferKeys.filter(item => !(keys.includes(item))).length == 0 
+				&& expObject.type === TX_TYPES.contentDelete.name
+			);
+
+		return (isCreateOrEditOfferAction || isDeleteOfferAction);
 	}
 
 	/**
@@ -775,13 +810,14 @@ class SDK {
 	getBrtOffersByHashes(hashes = []) {
 		hashes.forEach(hash => {
 			if (!this.barteron._offers[hash]) {
-				new Offer(this, { hash });
+				new Offer({ hash });
 			}
 		});
 
 		return this.rpc("getbarteronoffersbyroottxhashes", hashes).then(offers => {
 			/* Sort to get offers in same order as requested */
 			return (offers || [])
+				.filter(offer => offer?.type !== TX_TYPES.contentDelete.code)
 				.sort((a, b) => hashes.indexOf(a.s2) - hashes.indexOf(b.s2))
 				.map(offer => new Offer(offer));
 		});

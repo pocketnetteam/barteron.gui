@@ -142,7 +142,7 @@ export default {
 				 * using "prevhash" key that appears in actions
 				 * just replace offers in published with pending
 				 */
-				const index = pending.findIndex(o => o.prevhash === offer.hash);
+				const index = pending.findIndex(o => o.firsthash === offer.hash || o.prevhash === offer.hash);
 
 				if (index > -1) {
 					/* Replace old offer with new */
@@ -161,6 +161,8 @@ export default {
 			/* Get favorited offers */
 			if (options?.favorites && this.isMyProfile && LikeStore.like?.length) {
 				this.sdk.getBrtOffersByHashes(LikeStore.like).then(offers => {
+					const sourceHashes = offers.map(item => item?.hash).filter(item => item);
+					LikeStore.update(sourceHashes);
 					this.favoriteList = offers.map(offer => this.sdk.barteron.offers[offer.hash]);
 				}).catch(e => {
 					this.showError(e);

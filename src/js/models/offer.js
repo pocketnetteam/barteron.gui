@@ -114,6 +114,10 @@ class Offer {
 					state.unshift("published");
 				}
 			}
+		} else {
+			if (this.published === "removed") {
+				state.unshift("removed");
+			}
 		}
 
 		return state.shift();
