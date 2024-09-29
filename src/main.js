@@ -567,6 +567,21 @@ Vue.prototype.shared = Vue.observable({
 		},
 
 		/**
+		 * Checks if routes are equal
+		 * 
+		 * @param {Object} route1
+		 * @param {Object} route2
+		 * @param {Array} keys
+		 * 
+		 * @returns {Boolean}
+		 */
+		routesAreEqual(route1, route2, keys) {
+			return keys.reduce((result, item) => {
+				return result = result && JSON.stringify(route1[item]) === JSON.stringify(route2[item]);
+			}, true);
+		},
+
+		/**
 		 * Show error
 		 * 
 		 * @param {Object} e
