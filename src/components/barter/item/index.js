@@ -185,7 +185,16 @@ export default {
 		 */
 		hasRelay() {
 			return this.item.relay;
-		}
+		},
+
+		/**
+		 * Checking removed status
+		 * 
+		 * @returns {Boolean}
+		 */
+		isRemoved() {
+			return this.item.status === "removed";
+		},
 	},
 
 	methods: {
@@ -193,21 +202,25 @@ export default {
 		 * Set like state
 		 */
 		setLike() {
-			LikeStore.set(this.item?.hash);
+			if (!(this.hasRelay || this.isRemoved)) {
+				LikeStore.set(this.item?.hash);
+			}
 		},
 
 		/**
 		 * Share item
 		 */
 		shareItem() {
-			const data = {
-				path: `barter/${ this.item.hash }`,
-				sharing: {
-					title: this.$t("itemLabels.label"),
-					text: { body: this.item.caption }
-				}
-			};
-			this.sdk.share(data);
+			if (!(this.hasRelay || this.isRemoved)) {
+				const data = {
+					path: `barter/${ this.item.hash }`,
+					sharing: {
+						title: this.$t("itemLabels.label"),
+						text: { body: this.item.caption }
+					}
+				};
+				this.sdk.share(data);
+			}
 		},
 
 		/**

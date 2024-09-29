@@ -68,13 +68,19 @@ export default {
 		/**
 		 * Get viewed list
 		 */
-		getViewed() {
-			if (ViewedStore.viewed?.length) {
-				this.sdk.getBrtOffersByHashes(ViewedStore.viewed).then(offers => {
+		async getViewed() {
+			const hashes = ViewedStore.viewed;
+			if (hashes?.length) {
+				let offers = [];
+				try {
+					offers = await this.sdk.getBrtOffersByHashes(hashes);
+					const sourceHashes = offers.map(item => item?.hash).filter(item => item);
+					ViewedStore.update(sourceHashes);
+				} catch (e) {
+					console.error(e)
+				} finally {
 					this.viewedList = offers;
-				}).catch(e => { 
-					console.error(e);
-				});
+				}
 			}
 		},
 

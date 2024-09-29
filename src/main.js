@@ -500,9 +500,11 @@ Vue.prototype.shared = Vue.observable({
 					);
 				}
 			}).catch(e => {
-				this.$t("dialogLabels.node_error", {
-					error: this.sdk.errorMessage(e)
-				})
+				this.showError(
+					this.$t("dialogLabels.node_error", {
+						error: this.sdk.errorMessage(e)
+					})
+				);
 			});
 		},
 
@@ -557,13 +559,19 @@ Vue.prototype.shared = Vue.observable({
 		 * @returns {Promise}
 		 */
 		navigateToProfile() {
-			/* Navigate to profile */
-			return this.$router.replace({
-				path: `/profile/${ this.sdk.address }`,
-				hash: `#ads`
-			}).catch(e => {
-				this.showError(e);
-			});
+			const 
+				to = {
+					path: `/profile/${ this.sdk.address }`,
+					hash: `#ads`
+				},
+				from = this.$route,
+				needReplace = !(this.routesAreEqual(to, from, ['path', 'hash']));
+			
+			if (needReplace) {
+				return this.$router.replace(to).catch(e => {
+					this.showError(e);
+				});
+			}
 		},
 
 		/**

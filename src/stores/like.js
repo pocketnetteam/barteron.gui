@@ -32,7 +32,32 @@ const
 				}
 
 				Pinia.set(storageId, this.like);
-			}
+			},
+
+			update(sourceHashes) {
+				sourceHashes = (sourceHashes || []);
+				const removingItems = this.like.filter(item => !(sourceHashes.includes(item)));
+				if (removingItems.length) {
+					removingItems.forEach(item => {
+						this.remove(item, { isMultiple: true });
+					})
+					Pinia.set(storageId, this.like);
+				}
+			},
+
+			remove(id, options = { isMultiple: false }) {
+				const
+					index = this.like.findIndex(item => item === id),
+					needRemove = (index > -1),
+					needSave = !(options?.isMultiple);
+
+				if (needRemove) {
+					this.like.splice(index, 1);
+					if (needSave) {
+						Pinia.set(storageId, this.like);
+					}
+				}
+			},
 		}
 	});
 

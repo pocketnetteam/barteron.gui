@@ -1,11 +1,11 @@
 <template>
 	<div :class="{
 		[`barter-item-${ vType }`]: true,
-		'barter-item-relay': item.relay
+		'barter-item-relay': hasRelay
 	}">
 		<!-- Picture -->
 		<picture v-if="item.images?.length && vType !== 'page'">
-			<router-link :to="!item.relay ? offerLink : {}">
+			<router-link :to="!(hasRelay || isRemoved) ? offerLink : {}">
 				<span
 					class="state"
 					v-if="item.used"
@@ -125,9 +125,9 @@
 			</div>
 
 			<div class="row info" v-if="item.time || item.geohash">
-				<slot name="info" v-if="$slots.info && !item.relay"></slot>
+				<slot name="info" v-if="$slots.info && !(hasRelay || isRemoved)"></slot>
 				<ul v-else>
-					<template v-if="item.relay">
+					<template v-if="hasRelay">
 						<!-- Relay -->
 						<li>
 							<dl :class="item.status">
@@ -219,9 +219,9 @@
 				<slot name="offer" v-if="$slots.offer"></slot>
 
 				<div class="info" v-if="item.time || item.geohash">
-					<slot name="info" v-if="$slots.info && !item.relay"></slot>
+					<slot name="info" v-if="$slots.info && !(hasRelay || isRemoved)"></slot>
 					<ul v-else>
-						<template v-if="item.relay">
+						<template v-if="hasRelay">
 							<!-- Relay -->
 							<li>
 								<dl :class="item.status">
