@@ -193,7 +193,7 @@ export default {
 		 * @returns {Boolean}
 		 */
 		isRemoved() {
-			return this.item.status === 'removed';
+			return this.item.status === "removed";
 		},
 	},
 
