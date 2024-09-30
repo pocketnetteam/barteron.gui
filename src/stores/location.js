@@ -2,7 +2,7 @@ import Pinia from "@/stores/store.js";
 
 const
 	storageId = "location",
-	LocationStore = Pinia.defineStore(storageId, {
+	storage = Pinia.defineStore(storageId, {
 		state: () => ({
 			location: Pinia.get(storageId, {
 				geohash: null,
@@ -41,9 +41,8 @@ const
 				});
 			}
 		}
-	});
-
-const store = LocationStore();
-store.fetch();
+	}),
+	store = storage();
+	store.fetch();
 
 export default store;

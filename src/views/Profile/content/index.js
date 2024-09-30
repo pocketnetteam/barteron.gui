@@ -1,7 +1,7 @@
 import BarterList from "@/components/barter/list/index.vue";
 import Votes from "@/components/votes/index.vue";
 import LikeStore from "@/stores/like.js";
-import { useProfileStore } from "@/stores/profile.js";
+import profileStore from "@/stores/profile.js";
 import { mapWritableState } from "pinia";
 
 export default {
@@ -23,7 +23,7 @@ export default {
 	inject: ["dialog"],
 
 	computed: {
-		...mapWritableState(useProfileStore, [
+		...mapWritableState(profileStore, [
 			'bartersView',
 			'activeTab',
 			'activeInnerAdsTab',
@@ -210,9 +210,7 @@ export default {
 		address: {
 			immediate: true,
 			handler() {
-				const store = useProfileStore();
-				store.setAddress(this.address);
-
+				profileStore.setAddress(this.address);
 				this.getTabsContent(this.address);
 			}
 		},
@@ -234,12 +232,9 @@ export default {
 
 	beforeRouteEnter (to, from, next) {
 		next(async vm => {
-			const 
-				store = useProfileStore(),
-				address = to?.params?.id;
+			const address = to?.params?.id;
 			
-			store.setAddress(address);
-
+			profileStore.setAddress(address);
 			vm.getTabsContent(address);
 		});
 	}

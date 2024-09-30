@@ -3,9 +3,8 @@ import Vue from "vue";
 
 const 
     defaultPageSize = 12,
-    storageId = "offer";
-
-export const useOfferStore = Pinia.defineStore(storageId, {
+    storageId = "offer",
+    storage = Pinia.defineStore(storageId, {
         state: () => ({
             items: [],
             itemsRoute: null,
@@ -148,7 +147,8 @@ export const useOfferStore = Pinia.defineStore(storageId, {
             },
 
         }
-    });
+    }),
+    store = storage();
+    store.fetch();
 
-const store = useOfferStore();
-store.fetch();
+export default store;

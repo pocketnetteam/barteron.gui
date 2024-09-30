@@ -2,7 +2,7 @@ import Pinia from "@/stores/store.js";
 
 const
 	storageId = "currency",
-	CurrencyStore = Pinia.defineStore(storageId, {
+	storage = Pinia.defineStore(storageId, {
 		state: () => ({
 			currency: Pinia.get(storageId, "")
 		}),
@@ -21,9 +21,8 @@ const
 				Pinia.set(storageId, currency);
 			}
 		}
-	});
-
-	const store = CurrencyStore();
+	}),
+	store = storage();
 	store.fetch();
-	
+
 export default store;

@@ -6,7 +6,7 @@ const storageId = "profile";
 let watcherDisabled = false;
 let currentAddress = null;
 
-export const useProfileStore = Pinia.defineStore(storageId, {
+const storage = Pinia.defineStore(storageId, {
         state: () => ({
             bartersView: 'tile',
             activeTab: null,
@@ -82,7 +82,7 @@ export const useProfileStore = Pinia.defineStore(storageId, {
         }
     });
 
-const store = useProfileStore();
+const store = storage();
 
 store.$subscribe((mutation, state) => {
     if (store.isMyProfile() && !(watcherDisabled)) {
@@ -90,3 +90,5 @@ store.$subscribe((mutation, state) => {
     }
     watcherDisabled = false;
 });
+
+export default store;

@@ -3,7 +3,7 @@ import Pinia from "@/stores/store.js";
 const
 	storageId = "viewed",
 	maxCount = 10,
-	ViewedStore = Pinia.defineStore(storageId, {
+	storage = Pinia.defineStore(storageId, {
 		state: () => ({
 			viewed: Pinia.get(storageId, [])
 		}),
@@ -56,9 +56,8 @@ const
 				}
 			},
 		}
-	});
-
-const store = ViewedStore();
-store.fetch();
+	}),
+	store = storage();
+	store.fetch();
 	
 export default store;

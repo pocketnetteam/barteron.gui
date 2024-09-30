@@ -2,7 +2,7 @@ import Pinia from "@/stores/store.js";
 
 const
 	storageId = "like",
-	LikeStore = Pinia.defineStore(storageId, {
+	storage = Pinia.defineStore(storageId, {
 		state: () => ({
 			like: Pinia.get(storageId, [])
 		}),
@@ -59,9 +59,8 @@ const
 				}
 			},
 		}
-	});
-
-const store = LikeStore();
-store.fetch();
+	}),
+	store = storage();
+	store.fetch();
 
 export default store;
