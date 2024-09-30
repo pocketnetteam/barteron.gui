@@ -83,7 +83,7 @@ export default {
 		 * @param {Object|String}
 		 */
 		setValue(item) {
-			if (item && !this.hideButton) {
+			if (item && this.value) {
 				/* Set value in valueSelector */
 				this.value.innerHTML = item[this.dropdownItemKey] || item.text || item;
 			}

@@ -19,7 +19,7 @@
 			<span v-if="hideButton">{{ currency?.value }}</span>
 		</template>
 		
-		<span class="value"></span>
+		<span class="value">{{ currency?.text }}</span>
 	</v-button>
 </template>
 
