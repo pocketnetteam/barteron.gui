@@ -6,13 +6,6 @@ import Account from "@/js/models/account.js";
 import Offer from "@/js/models/offer.js";
 import Comment from "@/js/models/comment.js";
 
-const TX_TYPES = {
-	contentDelete: {
-		code: 207,
-		name: 'contentDelete',
-	},
-};
-
 /**
  * Allow work with bastyon
  * 
@@ -27,7 +20,14 @@ class SDK {
 		Account,
 		Offer,
 		Comment
-	}
+	};
+
+	txTypes = {
+		contentDelete: {
+			code: 207,
+			name: 'contentDelete',
+		}
+	};
 
 	_appinfo = null;
 	get appinfo() {
@@ -435,7 +435,7 @@ class SDK {
 					.filter(action => this.isOfferAction(action))
 					.map(async action => {
 
-				if (action.expObject?.type !== TX_TYPES.contentDelete.name) {
+				if (action.expObject?.type !== this.txTypes.contentDelete.name) {
 					return new Offer({
 						/* Normal Offer action */
 						...action.expObject,
@@ -484,7 +484,7 @@ class SDK {
 			isCreateOrEditOfferAction = (createOrEditOfferKeys.filter(item => !(keys.includes(item))).length == 0),
 			isDeleteOfferAction = (
 				deleteOfferKeys.filter(item => !(keys.includes(item))).length == 0 
-				&& expObject.type === TX_TYPES.contentDelete.name
+				&& expObject.type === this.txTypes.contentDelete.name
 			);
 
 		return (isCreateOrEditOfferAction || isDeleteOfferAction);
@@ -817,7 +817,7 @@ class SDK {
 		return this.rpc("getbarteronoffersbyroottxhashes", hashes).then(offers => {
 			/* Sort to get offers in same order as requested */
 			return (offers || [])
-				.filter(offer => offer?.type !== TX_TYPES.contentDelete.code)
+				.filter(offer => offer?.type !== this.txTypes.contentDelete.code)
 				.sort((a, b) => hashes.indexOf(a.s2) - hashes.indexOf(b.s2))
 				.map(offer => new Offer(offer));
 		});
