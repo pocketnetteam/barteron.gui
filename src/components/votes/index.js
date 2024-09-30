@@ -99,7 +99,7 @@ export default {
 			this.sdk.setBrtOfferVote({
 				offerId: this.item.hash,
 				address: this.item.address,
-				value: this.score
+				value: score
 			}).then(() => {
 				this.score = score;
 
