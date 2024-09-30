@@ -319,6 +319,9 @@ export default {
 										id: hash?.length < 64 ? data.transaction : hash
 									}
 								});
+							} else {
+								const error = this.sdk.errorMessage(data.error?.code);
+								form.dialog.view("error", this.$t("dialogLabels.node_error", { error }));
 							}
 						}).catch(e => {
 							/* Show error dialog */

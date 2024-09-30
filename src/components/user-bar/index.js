@@ -94,14 +94,5 @@ export default {
 
 			return false;
 		},
-
-		/**
-		 * Show error
-		 * 
-		 * @param {Object} e
-		 */
-		showError(e) {
-			this.dialog?.instance.view("error", this.sdk.errorMessage(e));
-		},
 	}
 }
