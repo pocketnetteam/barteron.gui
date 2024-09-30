@@ -67,17 +67,31 @@ class SDK {
 	 * Get error message
 	 * 
 	 * @param {Object} error
+	 * @param {Object} options
 	 * 
 	 * @returns {String}
 	 */
-	errorMessage(error) {
-		const
-			key = (code) => `dialogLabels.error#${ code }`,
-			defaultCode = 0,
-			parsedCode = `${ error?.toString()?.replace(/[^\d-]/g, "") || defaultCode }`,
-			code = VueI18n.te(key(parsedCode)) ? parsedCode : defaultCode;
+	errorMessage(
+		error, 
+		options = {
+			key: null,
+			details: null,
+		}
+	) {
+		let key = options?.key
+		if (!key) {
+			const
+				getKey = (code) => `dialogLabels.error#${ code }`,
+				defaultCode = 0,
+				parsedCode = `${ error?.toString()?.replace(/[^\d-]/g, "") || defaultCode }`,
+				resultCode = VueI18n.te(getKey(parsedCode)) ? parsedCode : defaultCode;
+			
+			key = getKey(resultCode);
+		}
 
-		return VueI18n.t(key(code), {details: error});
+		const details = options?.details || error?.message || error?.toString();
+
+		return VueI18n.t(key, { error: details });
 	}
 
 	/**
