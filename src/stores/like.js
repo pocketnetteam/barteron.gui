@@ -63,4 +63,7 @@ const
 	store = storage();
 	store.fetch();
 
-export default store;
+export {
+	store as default,
+	storage as useLikeStore
+};

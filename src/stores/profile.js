@@ -84,11 +84,15 @@ const storage = Pinia.defineStore(storageId, {
 
 const store = storage();
 
-store.$subscribe((mutation, state) => {
+store.$subscribe(() => {
     if (store.isMyProfile() && !(watcherDisabled)) {
         store.saveState();
     }
+
     watcherDisabled = false;
 });
 
-export default store;
+export {
+    store as default,
+    storage as useProfileStore
+};

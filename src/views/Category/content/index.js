@@ -1,6 +1,6 @@
 import Loader from "@/components/loader/index.vue";
 import BarterList from "@/components/barter/list/index.vue";
-import offerStore from "@/stores/offer.js";
+import { useOfferStore } from "@/stores/offer.js";
 import { mapState, mapWritableState, mapActions } from "pinia";
 
 function setValueToVSelect(el, value) {
@@ -33,7 +33,7 @@ export default {
 	inject: ["dialog"],
 
 	computed: {
-		...mapState(offerStore, [
+		...mapState(useOfferStore, [
 			'items',
 			'itemsRoute',
 			'pageStart',
@@ -41,12 +41,12 @@ export default {
 			'bartersView',
 		]),
 
-		...mapWritableState(offerStore, [
+		...mapWritableState(useOfferStore, [
 			'scrollOffset',
 			'currentError',
 		]),
 
-		...mapState(offerStore, [
+		...mapState(useOfferStore, [
 			'pageSize',
 		]),
 
@@ -80,7 +80,7 @@ export default {
 	},
 
 	methods: {
-		...mapActions(offerStore, [
+		...mapActions(useOfferStore, [
 			'loadFirstPage',
 			'loadMore',
 			'changeOrder',
@@ -171,7 +171,7 @@ export default {
 		 * @param {Object} to
 		 * @param {Object} from
 		 */
-		async $route(to, from) {
+		async $route(to) {
 			if (to?.name === "category") {
 				await this.loadFirstPage(to);
 			}
