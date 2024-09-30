@@ -59,15 +59,6 @@ export default {
 				openRoom: true
 			});
 		},
-
-		/**
-		 * Show error
-		 * 
-		 * @param {Object} e
-		 */
-		showError(e) {
-			this.dialog?.instance.view("error", this.sdk.errorMessage(e));
-		},
 	},
 
 	async beforeRouteEnter (to, from, next) {

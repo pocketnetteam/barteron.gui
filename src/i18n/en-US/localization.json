@@ -185,7 +185,7 @@
 		"node_error": "Node error has occured: {error}",
 		"error#-26": "Min relay fee not met",
 		"error#-1": "Error loading sdk library",
-		"error#0": "{details}",
+		"error#0": "{error}",
 		"error#21": "Failed OpReturn",
 		"error#28": "Too many transactions",
 		"error#65": "Exceeded limit"
