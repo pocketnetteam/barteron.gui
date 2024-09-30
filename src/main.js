@@ -493,18 +493,13 @@ Vue.prototype.shared = Vue.observable({
 					this.dialog?.instance.hide();
 					this.navigateToProfile();
 				} else {
-					this.showError(
-						this.$t("dialogLabels.node_error", {
-							error: this.sdk.errorMessage(action.error?.code)
-						})
-					);
+					const details = action.error?.code 
+						? this.sdk.errorMessage(action.error?.code)
+						: null;
+					this.showError(null, { key: "dialogLabels.node_error", details })
 				}
 			}).catch(e => {
-				this.showError(
-					this.$t("dialogLabels.node_error", {
-						error: this.sdk.errorMessage(e)
-					})
-				);
+				this.showError(e, { key: "dialogLabels.node_error" })
 			});
 		},
 
@@ -538,18 +533,13 @@ Vue.prototype.shared = Vue.observable({
 					this.dialog?.instance.hide();
 					this.navigateToProfile();
 				} else {
-					this.showError(
-						this.$t("dialogLabels.node_error", {
-							error: this.sdk.errorMessage(action.error?.code)
-						})
-					);
+					const details = action.error?.code 
+						? this.sdk.errorMessage(action.error?.code)
+						: null;
+					this.showError(null, { key: "dialogLabels.node_error", details })
 				}
 			}).catch(e => {
-				this.showError(
-					this.$t("dialogLabels.node_error", {
-						error: this.sdk.errorMessage(e)
-					})
-				);
+				this.showError(e, { key: "dialogLabels.node_error" })
 			});
 		},
 
@@ -594,8 +584,8 @@ Vue.prototype.shared = Vue.observable({
 		 * 
 		 * @param {Object} e
 		 */
-		showError(e) {
-			this.dialog?.instance.view("error", e);
+		showError(e, options) {
+			this.dialog?.instance.view("error", this.sdk.errorMessage(e, options));
 		}
 	}
 });

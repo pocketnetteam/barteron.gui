@@ -61,21 +61,11 @@ export default {
 				from = this.$route,
 				needReplace = !(this.routesAreEqual(to, from, ['name', 'params', 'query']));
 
-			
 			if (needReplace) {
 				this.$router.replace(to).catch(e => {
 					this.showError(e);
 				});
 			};
-		},
-
-		/**
-		 * Show error
-		 * 
-		 * @param {Object} e
-		 */
-		showError(e) {
-			this.dialog?.instance.view("error", this.sdk.errorMessage(e));
 		},
 	},
 
