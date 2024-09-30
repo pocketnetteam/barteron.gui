@@ -1,12 +1,12 @@
 import Pinia from "@/stores/store.js";
 import Vue from "vue";
 
-const storageId = "profile";
-
 let watcherDisabled = false;
 let currentAddress = null;
 
-const storage = Pinia.defineStore(storageId, {
+const
+    storageId = "profile",
+    storage = Pinia.defineStore(storageId, {
         state: () => ({
             bartersView: 'tile',
             activeTab: null,
