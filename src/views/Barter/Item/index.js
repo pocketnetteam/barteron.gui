@@ -1,4 +1,4 @@
-import ViewedStore from "@/stores/viewed.js";
+import viewedStore from "@/stores/viewed.js";
 
 export default {
 	name: "BarterItem",
@@ -9,7 +9,7 @@ export default {
 
 			/* Add offer to viewed list */
 			if (offer?.hash) {
-				ViewedStore.set(offer.hash);
+				viewedStore.set(offer.hash);
 			}
 
 			return offer;
