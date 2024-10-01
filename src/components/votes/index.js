@@ -66,7 +66,7 @@ export default {
 		 * @returns {Boolean}
 		 */
 		voteable() {
-			return !this.votes?.filter(f => f.s1 === this.sdk.address).pop();
+			return this.item.address !== this.sdk.address;
 		},
 
 		/**

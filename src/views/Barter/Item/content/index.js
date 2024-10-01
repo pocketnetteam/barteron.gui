@@ -10,8 +10,22 @@ export default {
 	},
 
 	computed: {
+		/**
+		 * Get offer
+		 * 
+		 * @returns {Object|undefined}
+		 */
 		item() {
 			return this.sdk.barteron.offers[this.$route.params.id];
+		},
+
+		/**
+		 * Show is this offer is owner's
+		 * 
+		 * @returns {Boolean}
+		 */
+		isMyOffer() {
+			return this.item.address === this.sdk.address;
 		}
 	}
 }
