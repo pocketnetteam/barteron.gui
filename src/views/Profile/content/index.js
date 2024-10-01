@@ -1,11 +1,14 @@
 import BarterList from "@/components/barter/list/index.vue";
 import Votes from "@/components/votes/index.vue";
-import LikeStore from "@/stores/like.js";
+import likeStore from "@/stores/like.js";
 import {
 	default as profileStore,
 	useProfileStore
 } from "@/stores/profile.js";
-import { mapWritableState } from "pinia";
+import {
+	mapWritableState, 
+	MutationType as StorageStateMutationType
+} from "pinia";
 
 export default {
 	name: "Content",
@@ -122,7 +125,7 @@ export default {
 		 * 
 		 * @param {String} address 
 		 */
-		async getTabsContent(address, options = { favorites: true }) {
+		async getTabsContent(address) {
 			/* Start fetching */
 			this.fetching = true;
 
@@ -162,10 +165,18 @@ export default {
 			this.fetching = false;
 
 			/* Get favorited offers */
-			if (options?.favorites && this.isMyProfile && LikeStore.like?.length) {
-				this.sdk.getBrtOffersByHashes(LikeStore.like).then(offers => {
+			this.updateFavoriteList();
+		},
+
+		/**
+		 * Update favorite list
+		 */
+		updateFavoriteList() {
+			if (this.isMyProfile) {
+				const storedHashes = likeStore.like || [];
+				this.sdk.getBrtOffersByHashes(storedHashes).then(offers => {
 					const sourceHashes = offers.map(item => item?.hash).filter(item => item);
-					LikeStore.update(sourceHashes);
+					likeStore.updateInPatchMode(sourceHashes);
 					this.favoriteList = offers.map(offer => this.sdk.barteron.offers[offer.hash]);
 				}).catch(e => {
 					this.showError(e);
@@ -231,6 +242,14 @@ export default {
 				}
 			}
 		}
+	},
+
+	mounted() {
+		likeStore.$subscribe((mutation) => {
+			if (mutation.type === StorageStateMutationType.direct) {
+				this.updateFavoriteList();
+			}
+		});
 	},
 
 	beforeRouteEnter (to, from, next) {

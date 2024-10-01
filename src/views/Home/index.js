@@ -1,7 +1,7 @@
 import PopularList from "@/components/categories/popular-list/index.vue";
 import BarterList from "@/components/barter/list/index.vue";
 import Banner from "@/components/banner/index.vue";
-import ViewedStore from "@/stores/viewed.js";
+import viewedStore from "@/stores/viewed.js";
 
 export default {
 	name: "Home",
@@ -69,13 +69,13 @@ export default {
 		 * Get viewed list
 		 */
 		async getViewed() {
-			const hashes = ViewedStore.viewed;
+			const hashes = viewedStore.viewed;
 			if (hashes?.length) {
 				let offers = [];
 				try {
 					offers = await this.sdk.getBrtOffersByHashes(hashes);
 					const sourceHashes = offers.map(item => item?.hash).filter(item => item);
-					ViewedStore.update(sourceHashes);
+					viewedStore.updateInPatchMode(sourceHashes);
 				} catch (e) {
 					console.error(e)
 				} finally {
