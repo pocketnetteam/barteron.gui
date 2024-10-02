@@ -3,8 +3,17 @@
 		'row block t-sep': form,
 		'votes': true
 	}">
+
+		<header v-if="offerInfo">
+			<h1 class="title">
+				<router-link :to="{ name: 'barterItem', params: { id: this.item.hash } }">
+					{{ item.caption }}
+				</router-link>
+			</h1>
+		</header>
+
 		<header v-if="header">
-			<h1>{{ $t('voteLabels.title') }} - </h1>
+			<h1 v-if="!compact">{{ $t('voteLabels.title') }} - </h1>
 			<Score
 				:rating="true"
 				:stars="5"
