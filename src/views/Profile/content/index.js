@@ -87,6 +87,19 @@ export default {
 		},
 
 		/**
+		 * Offers list for votes tab
+		 * 
+		 * @returns {[@Offer, ...]}
+		 */
+		offersVoteList() {
+			return [...this.offersActive, ...this.offersInactive]
+				.filter(item => {
+					const details = this.sdk.barteron.details[item?.hash];
+					return (details?.offerScores?.length || details?.comments?.length);
+				});
+		},
+
+		/**
 		 * Active tab param
 		 * 
 		 * @returns {String|undefined}

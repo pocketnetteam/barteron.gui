@@ -10,6 +10,14 @@ export default {
 	},
 
 	props: {
+		offerInfo: {
+			type: Boolean,
+			default: false
+		},
+		compact: {
+			type: Boolean,
+			default: false
+		},
 		header: {
 			type: Boolean,
 			default: true
@@ -18,7 +26,10 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		item: Object
+		item: {
+			type: Object,
+			default: () => ({})
+		},
 	},
 
 	data() {
@@ -57,7 +68,7 @@ export default {
 		votesAverage() {
 			return this.votes?.reduce((a, v) => {
 				return a += v?.i1;
-			}, 0);
+			}, 0) / (this.votes?.length || 1);
 		},
 
 		/**
@@ -66,7 +77,7 @@ export default {
 		 * @returns {Boolean}
 		 */
 		voteable() {
-			return this.item.address !== this.sdk.address;
+			return this.item.address !== this.sdk.address && this.form;
 		},
 
 		/**

@@ -196,7 +196,16 @@
 
 			<!-- Tab: Votes -->
 			<template #votes>
-				<Votes class="tabcontent-holder" />
+				<Votes
+					v-for="(item, index) in offersVoteList"
+					:key="index"
+					:item="item"
+					:offerInfo="true"
+					:compact="true"
+					:header="true"
+					:form="false"
+					class="tabcontent-holder" 
+				/>
 			</template>
 		</v-tabs>
 	</v-content>
