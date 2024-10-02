@@ -152,7 +152,7 @@
 		"label": "Exchange Options",
 		"title": "We can find exchange options for you",
 		"text": "Offer an exchange if you like the option found. Below are the best options.",
-		"empty": "We can't find any exchange options right now:("
+		"empty": "We can't find any exchange options right now :("
 	},
 
 	"locationLabels": {
