@@ -1,30 +1,48 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100&display=swap');
 	
-$theme: light !default
 $phones: 480px
 $tablet: 767px
 $width: 1248px
 $sidebar-width: 260px
 $r: .5em
 
-@if $theme == light
-	$ghost: rgb(224, 244, 255)			!global
-	$beerus: rgb(235, 235, 235)			!global
-	$beerus-hover: rgb(216, 216, 216)	!global
-	$goku: rgb(245, 245, 245)			!global
-	$gohan: rgb(255, 255, 255)			!global
-	$bulma: rgb(3, 71, 120)				!global
-	$bulma-hover: rgb(15, 82, 139)		!global
-@else
-	$ghost: rgb(12, 65, 94)				!global
-	$beerus: rgb(46, 46, 46)			!global
-	$beerus-hover: rgb(65, 65, 65)		!global
-	$goku: rgb(11, 11, 11)				!global
-	$gohan: rgb(31, 31, 31)				!global
-	$bulma: rgb(255, 255, 255)			!global
-	$bulma-hover: rgb(243, 244, 236)	!global
+/* Light theme */
+#app
+	--piccolo: rgb(3, 143, 220)
+	--piccolo-hover: rgb(0, 144, 224)
+	--ghost: rgb(31, 175, 255)
+	--beerus: rgb(235, 235, 235)
+	--beerus-hover: rgb(216, 216, 216)
+	--goku: rgb(245, 245, 245)
+	--gohan: rgb(255, 255, 255)
+	--bulma: rgb(3, 71, 120)
+	--bulma-hover: rgb(15, 82, 139)
+
+/* Dark theme */
+#app.dark
+	--piccolo: rgb(0, 164, 255)
+	--piccolo-hover: rgb(31, 175, 255)
+	--ghost: rgb(12, 65, 94)
+	--beerus: rgb(68, 68, 68)
+	--beerus-hover: rgb(58, 58, 58)
+	--goku: rgb(11, 11, 11)
+	--gohan: rgb(31, 31, 31)
+	--bulma: rgb(243, 244, 236)
+	--bulma-hover: rgb(255, 255, 255)
+
+$piccolo: var(--piccolo)
+$piccolo-hover: var(--piccolo-hover)
+$ghost: var(--ghost)
+$beerus: var(--beerus)
+$beerus-hover: var(--beerus-hover)
+$goku: var(--goku)
+$gohan: var(--gohan)
+$bulma: var(--bulma)
+$bulma-hover: var(--bulma-hover)
 
 $primary: $gohan
+$blue: $piccolo
+$blue-hover: $piccolo-hover
 
 $white: rgb(255, 255, 255)
 $trunks: rgb(153, 156, 160)
@@ -34,13 +52,9 @@ $lightgray: rgb(199, 200, 217)
 $gray: rgb(142, 144, 166)
 $satgray: rgb(127, 127, 127)
 $darkgray: rgba(0, 0, 0, 0.08)
-$blue: rgb(0, 133, 207)
-$blue-hover: rgb(0, 164, 255)
 $dark: rgb(10, 20, 47)
+$black: rgb(18, 18, 18)
 $backdrop: rgba(0, 0, 0, 0.56)
-
-$piccolo: rgb(0, 144, 224)
-$piccolo-hover: rgb(0, 164, 255)
 
 $hit: rgb(223, 124, 5)
 $hit-hover: rgb(242, 135, 5)
