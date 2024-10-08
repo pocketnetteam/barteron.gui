@@ -6,6 +6,8 @@ const pinia = createPinia();
 
 class Pinia {
 	instance = pinia;
+	sdk = new SDK();
+	vue = Vue;
 	defineStore = defineStore;
 
 	prefix = "";
@@ -18,9 +20,7 @@ class Pinia {
 	getPrefix() {
 		return new Promise((resolve) => {
 			if (!Vue.prototype?.sdk?.address) {
-				const sdk = new SDK();
-
-				sdk.getAddress().then(address => {
+				this.sdk.getAddress().then(address => {
 					this.prefix = address;
 					resolve(this.prefix);
 				});

@@ -3,8 +3,6 @@ import ThemeStore from "@/stores/theme.js";
 export default {
 	name: "ThemeSwitcher",
 
-	inject: ["switchTheme"],
-
 	data() {
 		return {
 			themes: {
@@ -53,7 +51,6 @@ export default {
 		 */
 		selectTheme(theme) {
 			this.theme = theme?.value || theme;
-			this.switchTheme(this.theme);
 		},
 
 		/**
@@ -68,21 +65,6 @@ export default {
 	},
 
 	created() {
-		if (ThemeStore?.theme) {
-			/* Get theme from store */
-			this.selectTheme(ThemeStore.theme);
-		} else if (this.sdk.appinfo?.theme) {
-			console.log(this.sdk.appinfo?.theme)
-			/* Get theme from bastyon */
-			const theme = (() => {
-				switch (this.sdk.appinfo.theme.color) {
-					case "#ffffff": return "light";
-					// case "#1e2235": return "navy";
-					default: return "dark";
-				}
-			})();
-
-			this.selectTheme(theme);
-		}
+		this.selectTheme(ThemeStore.theme);
 	}
 }

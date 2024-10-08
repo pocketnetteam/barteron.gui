@@ -4,7 +4,23 @@ const
 	storageId = "theme",
 	storage = Pinia.defineStore(storageId, {
 		state: () => ({
-			theme: Pinia.get(storageId, "")
+			theme: (() => {
+				let value = Pinia.get(storageId, "");
+				
+				if (!value) {
+					value = (async () => {
+						const appinfo = await Pinia.sdk.getAppInfo();
+
+						switch (appinfo.theme.color) {
+							case "#ffffff": return "light";
+							// case "#1e2235": return "navy";
+							default: return "dark";
+						}
+					})();
+				}
+
+				return value;
+			})()
 		}),
 		
 		actions: {

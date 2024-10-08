@@ -34,20 +34,20 @@ export default {
 
 	computed: {
 		...mapState(useOfferStore, [
-			'items',
-			'itemsRoute',
-			'pageStart',
-			'isLoading',
-			'bartersView',
+			"items",
+			"itemsRoute",
+			"pageStart",
+			"isLoading",
+			"bartersView",
 		]),
 
 		...mapWritableState(useOfferStore, [
-			'scrollOffset',
-			'currentError',
+			"scrollOffset",
+			"currentError",
 		]),
 
 		...mapState(useOfferStore, [
-			'pageSize',
+			"pageSize",
 		]),
 
 		/**
@@ -81,12 +81,12 @@ export default {
 
 	methods: {
 		...mapActions(useOfferStore, [
-			'loadFirstPage',
-			'loadMore',
-			'changeOrder',
-			'changeView',
-			'changeFilters',
-			'getFilters'
+			"loadFirstPage",
+			"loadMore",
+			"changeOrder",
+			"changeView",
+			"changeFilters",
+			"getFilters"
 		]),
 
 		showMoreEvent() {
@@ -119,8 +119,8 @@ export default {
 		getOrderStringFromFilter() {
 			const
 				filters = this.getFilters(),
-				orderBy = filters.orderBy ?? 'height',
-				orderArrow = filters.orderDesc ? 'desc' : 'asc';
+				orderBy = filters.orderBy ?? "height",
+				orderArrow = filters.orderDesc ? "desc" : "asc";
 				
 			return `${orderBy}_${orderArrow}`;
 		},
@@ -207,7 +207,7 @@ export default {
 			const
 				isListEmpty = (vm.items.length == 0),
 				isReturnFromOffer = (
-					from.name == 'barterItem' 
+					from.name == "barterItem" 
 					&& to.fullPath === vm.itemsRoute?.fullPath
 				),
 				needReloadOffers = (isListEmpty || !(isReturnFromOffer));
@@ -219,7 +219,7 @@ export default {
 	},
 
 	beforeRouteLeave(to, from, next) {
-		const isEnterToOffer = (to.name == 'barterItem');
+		const isEnterToOffer = (to.name == "barterItem");
 		if (isEnterToOffer) {
 			const el = document.body;
 			this.scrollOffset = {x: el.scrollLeft, y: el.scrollTop};

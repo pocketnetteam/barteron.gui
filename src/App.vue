@@ -50,6 +50,8 @@
 <style lang="sass" src="@/css/main.sass"></style>
 <style src="@/assets/font-awesome/css/all.css"></style>
 <script>
+import { mapState } from "pinia";
+import { useThemeStore } from "@/stores/theme.js";
 import Loader from "@/components/loader/index.vue";
 
 export default {
@@ -59,6 +61,10 @@ export default {
 		Loader
 	},
 
+	computed: {
+		...mapState(useThemeStore, ["theme"])
+	},
+
 	data() {
 		return {
 			loading: true,
@@ -66,15 +72,13 @@ export default {
 			minHeaderScrollPosition: 35,
 			lastScrollPosition: 0,
 			lastRoute: null,
-			isHeaderVisible: true,
-			theme: "light"
+			isHeaderVisible: true
 		}
 	},
 
 	provide() {
 		return {
-			dialog: new Proxy({}, { get: () => this.dialog }),
-			switchTheme: (theme) => this.theme = theme
+			dialog: new Proxy({}, { get: () => this.dialog })
 		};
 	},
 
