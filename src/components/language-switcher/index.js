@@ -27,12 +27,11 @@ export default {
 
 	methods: {
 		/**
-		 * Set locale
+		 * Select locale
 		 * 
 		 * @param {String|Object} item
-		 * @param {Boolean} store
 		 */
-		selectLanguage(item, store) {
+		selectLanguage(item) {
 			const selected = (() => {
 				if (item?.value) {
 					return item;
@@ -42,7 +41,16 @@ export default {
 			})();
 
 			this.$root.$i18n.locale = selected.value;
-			if (store) LocaleStore.set(selected.value);
+		},
+
+		/**
+		 * Set locale
+		 * 
+		 * @param {String|Object} item
+		 */
+		changeLanguage(item) {
+			this.selectLanguage(item);
+			LocaleStore.set(this.$root.$i18n.locale);
 		}
 	},
 
@@ -50,7 +58,7 @@ export default {
 		if (LocaleStore?.locale) {
 			/* Get locale from store */
 			this.selectLanguage(LocaleStore.locale);
-		} else if (this.sdk.appinfo) {
+		} else if (this.sdk.appinfo?.locale) {
 			/* Get locale from bastyon */
 			this.selectLanguage(this.sdk.appinfo?.locale);
 		}
