@@ -1,4 +1,4 @@
-/* import ThemeStore from "@/stores/locale.js"; */
+import ThemeStore from "@/stores/theme.js";
 
 export default {
 	name: "ThemeSwitcher",
@@ -31,7 +31,7 @@ export default {
 			return Object.keys(this.themes).map(value => ({
 				...this.themes[value],
 				value,
-				default: this.theme === value
+				selected: this.theme === value
 			}));
 		},
 
@@ -49,21 +49,40 @@ export default {
 		/**
 		 * Select theme
 		 * 
-		 * @param {Object} theme
+		 * @param {Object|String} theme
 		 */
 		selectTheme(theme) {
-			this.theme = theme.value;
-			this.switchTheme(theme.value);
+			this.theme = theme?.value || theme;
+			this.switchTheme(this.theme);
+		},
+
+		/**
+		 * Set theme
+		 * 
+		 * @param {Object} theme
+		 */
+		changeTheme(theme) {
+			this.selectTheme(theme);
+			ThemeStore.set(this.theme);
 		}
 	},
 
 	created() {
-		// if (ThemeStore?.theme) {
-		// 	/* Get theme from store */
-		// 	this.selectLanguage(ThemeStore.theme);
-		// } else if (this.sdk.appinfo) {
-		// 	/* Get theme from bastyon */
-		// 	this.switchTheme(this.sdk.appinfo?.theme);
-		// }
+		if (ThemeStore?.theme) {
+			/* Get theme from store */
+			this.selectTheme(ThemeStore.theme);
+		} else if (this.sdk.appinfo?.theme) {
+			console.log(this.sdk.appinfo?.theme)
+			/* Get theme from bastyon */
+			const theme = (() => {
+				switch (this.sdk.appinfo.theme.color) {
+					case "#ffffff": return "light";
+					// case "#1e2235": return "navy";
+					default: return "dark";
+				}
+			})();
+
+			this.selectTheme(theme);
+		}
 	}
 }
