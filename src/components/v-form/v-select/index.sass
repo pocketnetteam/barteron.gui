@@ -27,7 +27,7 @@
 		background: $primary
 		border: 1px solid $beerus
 		border-radius: 10px
-		color: $backdrop
+		color: $popo
 		cursor: pointer
 		display: inline-flex
 		align-items: center
@@ -97,7 +97,7 @@
 				min-width: unset
 
 		& ~ .v-select-dropdown
-			background: rgba(255, 255, 255, 1)
+			background: $gohan
 			border-radius: 12px
 			box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.16), 0 0 1px rgba(0, 0, 0, 0.4)
 			display: none
@@ -121,11 +121,9 @@
 					align-items: center
 					justify-content: flex-start
 					padding: .8em .75em
-					+transition(color)
 
 					& > *
 						color: $bulma
-						+transition(color)
 
 					&:hover
 						background: $background-gray-focus
@@ -133,7 +131,6 @@
 
 						& > *
 							color: $blue
-							+transition(color)
 
 					&.hidden
 						display: none

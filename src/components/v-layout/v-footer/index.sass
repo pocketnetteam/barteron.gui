@@ -64,7 +64,11 @@
 					width: 85px
 
 					a
-						background: url(@/assets/images/logo-small.svg) no-repeat 50% 50%
+						background-color: $popo
+						mask-image: url(@/assets/images/logo-small.svg)
+						mask-repeat: no-repeat
+						mask-position: center
+						mask-size: contain
 						display: block
 						text-indent: -9999px
 						overflow: hidden
@@ -97,7 +101,7 @@
 
 				.scroll-top
 					+transition(color)
-					color: $backdrop
+					color: $popo
 					display: flex
 					align-items: center
 					justify-content: center
