@@ -70,6 +70,8 @@
 
 					<LanguageSwitcher />
 
+					<ThemeSwitcher />
+
 					<a
 						href="#"
 						class="scroll-top"

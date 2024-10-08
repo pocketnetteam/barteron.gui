@@ -1,12 +1,14 @@
 import Feedback from "@/components/feedback/index.vue";
 import LanguageSwitcher from "@/components/language-switcher/index.vue";
+import ThemeSwitcher from "@/components/theme-switcher/index.vue";
 
 export default {
 	name: "Footer",
 
 	components: {
 		Feedback,
-		LanguageSwitcher
+		LanguageSwitcher,
+		ThemeSwitcher
 	},
 
 	computed: {

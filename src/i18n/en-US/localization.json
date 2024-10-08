@@ -221,6 +221,11 @@
 		"submit_success": "Your request has been successfully submitted"
 	},
 
+	"themeLabels": {
+		"light": "Light",
+		"dark": "Dark"
+	},
+
 	"metricsLabels": {
 		"label": "Metrics",
 		"km": "km",

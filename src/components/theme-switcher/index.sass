@@ -1,0 +1,16 @@
+@import "@/css/vars.sass"
+
+.theme-switcher
+	display: inline-flex
+	font-weight: bold
+
+	/deep/ .v-select
+		background: none
+		border-color: transparent
+
+	/deep/ .v-select ~ .v-select-dropdown
+		top: auto
+		bottom: 45px
+
+	/deep/ .v-dropdown-arrow
+		display: none

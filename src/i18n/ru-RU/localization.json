@@ -221,6 +221,11 @@
 		"submit_success": "Ваш запрос успешно отправлен"
 	},
 
+	"themeLabels": {
+		"light": "Светлая",
+		"dark": "Тёмная"
+	},
+
 	"metricsLabels": {
 		"label": "Метрика",
 		"km": "км",

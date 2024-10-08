@@ -1,5 +1,8 @@
 <template>
-	<div id="app">
+	<div
+		id="app"
+		:class="theme"
+	>
 		<v-dialog ref="dialog" />
 
 		<template v-if="sdk.sdk">
@@ -63,13 +66,15 @@ export default {
 			minHeaderScrollPosition: 35,
 			lastScrollPosition: 0,
 			lastRoute: null,
-			isHeaderVisible: true
+			isHeaderVisible: true,
+			theme: "light"
 		}
 	},
 
 	provide() {
 		return {
-			dialog: new Proxy({}, { get: () => this.dialog })
+			dialog: new Proxy({}, { get: () => this.dialog }),
+			switchTheme: (theme) => this.theme = theme
 		};
 	},
 
