@@ -6,7 +6,7 @@
 
 .list-enter,
 .list-leave-to
-	opacity: 0;
+	opacity: 0
 	transform: translateX(30px)
 
 .photo-uploader
@@ -17,7 +17,7 @@
 		min-height: 175px
 
 	&.dragover .add
-		background: $lightgray
+		background: $overlay-half
 
 	ul.photo-query
 		+resetList()
@@ -98,7 +98,7 @@
 		.add
 			+transition(background)
 			border-radius: 12px
-			color: $backdrop
+			color: $popo
 			cursor: pointer
 
 			@at-root .rejected#{&}
@@ -130,7 +130,7 @@
 			display: none
 
 		li
-			color: $primary
+			color: $popo
 			background: $overlay-half
 			margin-top: 4px
 			padding: $r
