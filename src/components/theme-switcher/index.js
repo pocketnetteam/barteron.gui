@@ -6,6 +6,10 @@ export default {
 	data() {
 		return {
 			themes: {
+				"inherit": {
+					text: "theme_inherit",
+					icon: "fa-palette"
+				},
 				"light": {
 					text: "theme_light",
 					icon: "fa-sun"
