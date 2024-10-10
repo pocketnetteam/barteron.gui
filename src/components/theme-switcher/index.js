@@ -1,4 +1,8 @@
-import ThemeStore from "@/stores/theme.js";
+import { mapState } from "pinia";
+import {
+	default as ThemeStore,
+	useThemeStore
+} from "@/stores/theme.js";
 
 export default {
 	name: "ThemeSwitcher",
@@ -8,22 +12,33 @@ export default {
 			themes: {
 				"inherit": {
 					text: "theme_inherit",
-					icon: "fa-palette"
+					icon: "fa-palette",
+					selected: (value) => {
+						return (
+							this.theme === value ||
+							this.theme?.includes && this.theme?.includes("inherit")
+						);
+					}
 				},
 				"light": {
 					text: "theme_light",
+					icon: "fa-sun"
+				},
+				"navy": {
+					text: "theme_navy",
 					icon: "fa-sun"
 				},
 				"dark": {
 					text: "theme_dark",
 					icon: "fa-moon"
 				}
-			},
-			theme: "light"
+			}
 		}
 	},
 
 	computed: {
+		...mapState(useThemeStore, ["theme"]),
+
 		/**
 		 * Create list of themes
 		 * 
@@ -33,42 +48,27 @@ export default {
 			return Object.keys(this.themes).map(value => ({
 				...this.themes[value],
 				value,
-				selected: this.theme === value
-			}));
-		},
+				selected: (() => {
+					const item = this.themes[value];
 
-		/**
-		 * Get current theme
-		 * 
-		 * @returns {Object}
-		 */
-		currentTheme() {
-			return this.themes[this.theme];
+					if (typeof item?.selected === "function") {
+						return item.selected(value);
+					} else {
+						return this.theme === value;
+					}
+				})()
+			}));
 		}
 	},
 
 	methods: {
-		/**
-		 * Select theme
-		 * 
-		 * @param {Object|String} theme
-		 */
-		selectTheme(theme) {
-			this.theme = theme?.value || theme;
-		},
-
 		/**
 		 * Set theme
 		 * 
 		 * @param {Object} theme
 		 */
 		changeTheme(theme) {
-			this.selectTheme(theme);
-			ThemeStore.set(this.theme);
+			ThemeStore.set(theme?.value);
 		}
-	},
-
-	created() {
-		this.selectTheme(ThemeStore.theme);
 	}
 }

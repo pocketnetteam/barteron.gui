@@ -224,6 +224,7 @@
 	"themeLabels": {
 		"inherit": "Inherit",
 		"light": "Light",
+		"navy": "Navy",
 		"dark": "Dark"
 	},
 

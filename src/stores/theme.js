@@ -9,30 +9,30 @@ const
 		
 		actions: {
 			fetch() {
-				Pinia.getPrefix().then(async () => {
-					this.theme = Pinia.get(storageId, "inherit");
-					this.apply(this.theme);
+				Pinia.getPrefix().then(() => {
+					this.apply(Pinia.get(storageId, "inherit"));
 				}).catch(e => { 
 					console.error(e);
 				});
 			},
 
-			apply(theme) {
+			async apply(theme) {
 				if (!theme || theme === "inherit") {
-					this.theme = (async () => {
-						const theme = await (async () => {
-							if (Pinia.sdk._appinfo) {
-								return Pinia.sdk.appinfo.theme;
-							} else {
-								const result = await Pinia.sdk.getAppInfo();
-								return result.theme;
-							}
-						})();
+					const theme = await new Promise(resolve => {
+						if (Pinia.sdk._appinfo) {
+							resolve(Pinia.sdk.appinfo.theme);
+						} else {
+							Pinia.sdk.getAppInfo().then(info => {
+								resolve(info.theme);
+							});
+						}
+					});
 
+					this.theme = (() => {
 						switch (theme.color) {
-							case "#ffffff": return "light";
-							// case "#1e2235": return "navy";
-							default: return "dark";
+							case "#ffffff": return "inherit light";
+							case "#1e2235": return "inherit navy";
+							default: return "inherit dark";
 						}
 					})();
 				} else {
