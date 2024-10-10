@@ -26,7 +26,7 @@ export default {
 				},
 				"navy": {
 					text: "theme_navy",
-					icon: "fa-sun"
+					icon: "fa-moon"
 				},
 				"dark": {
 					text: "theme_dark",
