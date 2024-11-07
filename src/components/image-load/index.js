@@ -30,8 +30,8 @@ export default {
 			if (src) {
 				const image = new Image();
 
-				if (url.includes("bastyon.com:8092")) {
-					url = url.replace("bastyon.com", "pocketnet.app");
+				if (src?.includes("bastyon.com:8092")) {
+					src = src.replace("bastyon.com", "pocketnet.app");
 				}
 
 				image.src = src;
