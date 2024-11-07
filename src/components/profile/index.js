@@ -41,6 +41,17 @@ export default {
 			return this.user?.name?.substring(0, 1).toUpperCase() || "?";
 		},
 
+		/* Get user's avatar */
+		avatar() {
+			let url = this.user?.i;
+
+			if (url?.includes("bastyon.com:8092")) {
+				url = url.replace("bastyon.com", "pocketnet.app");
+			}
+
+			return url;
+		},
+
 		/**
 		 * Generate hsl background for user
 		 * 

@@ -8,12 +8,12 @@
 					v-if="hash"
 				>
 					<i
-						v-if="!user?.i?.startsWith('http')"
+						v-if="!avatar?.startsWith('http')"
 						:style="hslColor"
 					>{{ shortName }}</i>
 					
 					<picture v-else>
-						<img :src="user.i" :alt="user.name">
+						<img :src="avatar" :alt="user.name">
 					</picture>
 				</router-link>
 			</div>
