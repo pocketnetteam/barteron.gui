@@ -18,7 +18,7 @@ export default {
 		 * @returns {String}
 		 */
 		extractUrl(url) {
-			return url?.includes("url") ? url.match(/url\((.+)\)/)?.[1] : url;
+			const src = url?.includes("url") ? url.match(/url\((.+)\)/)?.[1] : url;
 		},
 
 		/**
@@ -29,10 +29,6 @@ export default {
 		loadImage(src) {
 			if (src) {
 				const image = new Image();
-
-				if (src?.includes("bastyon.com:8092")) {
-					src = src.replace("bastyon.com", "pocketnet.app");
-				}
 
 				image.src = src;
 
@@ -70,6 +66,10 @@ export default {
 				});
 			}
 		}, false);
+
+		if (img.src?.includes("bastyon.com:8092")) {
+			img.src = img.src.replace("bastyon.com", "pocketnet.app");
+		}
 
 		this.loadImage(img.src);
 	}
