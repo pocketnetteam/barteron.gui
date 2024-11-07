@@ -318,21 +318,21 @@ class SDK {
 	createRoom(request) {
 		return new Promise((resolve, reject) => {
 			/* Request for permissons */
-				this.requestPermissions(["chat"]).then(result => {
-					if (result) {
-						this.sdk.chat.getOrCreateRoom({
-							users: request.members,
-							parameters: {
-								name: request.name,
-								equal: request.equal
-							}
-						})
-							.then(resolve)
-							.catch(reject);
-					} else {
-						reject(result);
-					}
-				});
+			this.requestPermissions(["chat"]).then(result => {
+				if (result) {
+					this.sdk.chat.getOrCreateRoom({
+						users: request.members,
+						parameters: {
+							name: request.name,
+							equal: request.equal
+						}
+					})
+						.then(resolve)
+						.catch(reject);
+				} else {
+					reject(result);
+				}
+			});
 		});
 	}
 
