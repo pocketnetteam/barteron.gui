@@ -67,10 +67,6 @@ export default {
 			}
 		}, false);
 
-		if (img.src?.includes("bastyon.com:8092")) {
-			img.src = img.src.replace("bastyon.com", "pocketnet.app");
-		}
-
 		this.loadImage(img.src);
 	}
 }

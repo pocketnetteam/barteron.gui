@@ -4,7 +4,7 @@
 		'barter-item-relay': hasRelay
 	}">
 		<!-- Picture -->
-		<picture v-if="item.images?.length && vType !== 'page'">
+		<picture v-if="images?.length && vType !== 'page'">
 			<router-link :to="!(hasRelay || isRemoved) ? offerLink : {}">
 				<span
 					class="state"
@@ -15,7 +15,7 @@
 				<template>
 					<ul class="slide">
 						<li
-							v-for="(image, index) in item.images"
+							v-for="(image, index) in images"
 							:key="index"
 							:class="{ 'hover': hover === index }"
 							@mouseenter="() => hover = index"
@@ -26,7 +26,7 @@
 								<!-- Image -->
 								<template #image>
 									<img
-										:src="imageUrl(item.images?.[0])"
+										:src="imageUrl(images?.[0])"
 										:alt="item.caption"
 									>
 								</template>
@@ -54,10 +54,10 @@
 					</ul>
 					<ul
 						class="bullets"
-						v-if="item.images?.length > 1"
+						v-if="images?.length > 1"
 					>
 						<li
-							v-for="(image, index) in item.images"
+							v-for="(image, index) in images"
 							:key="index"
 							:class="{ 'hover': hover === index }"
 							@mouseenter="() => hover = index"
@@ -248,12 +248,12 @@
 		<!-- View: Page -->
 		<template v-if="vType === 'page'">
 			<picture
-				v-if="item.images?.length"
+				v-if="images?.length"
 				ref="picture"
 			>
 				<ul class="fade">
 					<li
-						v-for="(image, index) in item.images"
+						v-for="(image, index) in images"
 						:key="index"
 						:class="{ 'active': active === index }"
 						@mouseenter="imageZoom"
@@ -265,7 +265,7 @@
 							<!-- Image -->
 							<template #image>
 								<img
-									:src="imageUrl(item.images[0])"
+									:src="imageUrl(images[0])"
 									:alt="item.caption"
 								>
 							</template>
@@ -293,10 +293,10 @@
 				</ul>
 				<ul
 					class="thumbnails"
-					v-if="item.images?.length > 1"
+					v-if="images?.length > 1"
 				>
 					<li
-						v-for="(image, index) in item.images"
+						v-for="(image, index) in images"
 						:key="index"
 						:class="{ 'active': active === index }"
 						@click="() => active = index"

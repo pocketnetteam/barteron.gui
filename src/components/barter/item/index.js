@@ -169,6 +169,17 @@ export default {
 			}
 		},
 
+		/* Get offer images */
+		images() {
+			return (this.item.images || []).map(url => {
+				if (url?.includes("bastyon.com:8092")) {
+					url = url.replace("bastyon.com", "pocketnet.app");
+				}
+
+				return url;
+			});
+		},
+
 		/**
 		 * Get like state
 		 * 
