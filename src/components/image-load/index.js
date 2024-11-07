@@ -18,7 +18,7 @@ export default {
 		 * @returns {String}
 		 */
 		extractUrl(url) {
-			const src = url?.includes("url") ? url.match(/url\((.+)\)/)?.[1] : url;
+			return url?.includes("url") ? url.match(/url\((.+)\)/)?.[1] : url;
 		},
 
 		/**
