@@ -260,7 +260,10 @@ export default {
 		 * Select item
 		 */
 		select() {
-			this.$emit('selected', this.expanded?.id);
+			const needSelect = this.expanded && !(this.isMarked(this.expanded?.id));
+			if (needSelect) {
+				this.$emit('selected', this.expanded?.id);
+			}
 			this.hide();
 			this.expanded = false;
 		},
