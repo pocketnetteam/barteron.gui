@@ -1,7 +1,5 @@
 import Loader from "@/components/loader/index.vue";
 
-var debouncedSearch;
-
 export default {
 	name: "Select",
 
@@ -119,7 +117,7 @@ export default {
 					this.input = this.$refs.search?.inputs?.[0];
 					this.query = (this.input?.value || "").toLowerCase();
 		
-					debouncedSearch();
+					this.debouncedSearch();
 			}
 		},
 
@@ -156,7 +154,7 @@ export default {
 		 * @returns {Void}
 		 */
 		clearEvent() {
-			debouncedSearch?.cancel();
+			this.debouncedSearch.cancel();
 			this.clear();
 			this.input?.focus?.();
 		},
@@ -292,6 +290,8 @@ export default {
 	},
 
 	mounted() {
+		this.debouncedSearch = this.debounce(() => this.search(), 500);
+
 		this.root = this.importChildren(
 			Object.entries(this.categories.items || {})
 				.filter(f => !f[1].parent)
@@ -300,12 +300,9 @@ export default {
 		);
 
 		if (this.value) this.expand(this.value);
-
-		debouncedSearch = this.debounce(() => this.search(), 500);
 	},
 
 	beforeDestroy() {
-		debouncedSearch?.cancel();
-		debouncedSearch = null;
+		this.debouncedSearch.cancel();
 	},
 }
