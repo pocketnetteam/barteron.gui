@@ -256,9 +256,7 @@
 						v-for="(image, index) in images"
 						:key="index"
 						:class="{ 'active': active === index }"
-						@mouseenter="imageZoom"
-						@mousemove="imageZoom"
-						@mouseleave="imageZoom"
+						@click="imageClick(index)"
 					>
 						<!-- First image -->
 						<image-load v-if="index === 0">
