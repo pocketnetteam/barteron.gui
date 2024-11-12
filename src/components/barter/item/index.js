@@ -2,6 +2,11 @@ import ImageLoad from "@/components/image-load/index.vue";
 import Loader from "@/components/loader/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
 import CurrencySwitcher from "@/components/currency-switcher/index.vue";
+import Caption from "@/components/barter/item/caption/index.vue";
+import Price from "@/components/barter/item/price/index.vue";
+import MyOptions from "@/components/barter/item/my-options/index.vue";
+import BarterExchange from "@/components/barter/exchange/index.vue";
+import Profile from "@/components/profile/index.vue";
 import LikeStore from "@/stores/like.js";
 import PhotoSwipe from "photoswipe";
 import "photoswipe/style.css";
@@ -13,9 +18,16 @@ export default {
 		ImageLoad,
 		Loader,
 		ExchangeList,
+		Caption,
+		Price,
+		MyOptions,
+		BarterExchange,
+		Profile,
 		CurrencySwitcher
 	},
 
+	inject: ["dialog"],
+	
 	props: {
 		item: {
 			type: Object,
@@ -44,12 +56,30 @@ export default {
 
 	computed: {
 		/**
+		 * Get author address
+		 * 
+		 * @returns {String}
+		 */
+		address() {
+			return this.item.address;
+		},
+
+		/**
+		 * Show is this offer is owner's
+		 * 
+		 * @returns {Boolean}
+		 */
+		isMyOffer() {
+			return this.address === this.sdk.address;
+		},
+
+		/**
 		 * Get owner account
 		 * 
 		 * @returns {@Account}
 		 */
 		ownerAccount() {
-			return this.sdk.barteron.accounts[this.item.address];
+			return this.sdk.barteron.accounts[this.address];
 		},
 		
 		/**

@@ -1,7 +1,9 @@
 import BarterExchange from "@/components/barter/exchange/index.vue";
 import Profile from "@/components/profile/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
-import CurrencySwitcher from "@/components/currency-switcher/index.vue";
+import Caption from "@/components/barter/item/caption/index.vue";
+import Price from "@/components/barter/item/price/index.vue";
+import MyOptions from "@/components/barter/item/my-options/index.vue";
 
 export default {
 	name: "Sidebar",
@@ -10,27 +12,14 @@ export default {
 		BarterExchange,
 		Profile,
 		ExchangeList,
-		CurrencySwitcher
-	},
-
-	data() {
-		return {
-			myOffers: []
-		}
+		Caption,
+		Price,
+		MyOptions
 	},
 
 	inject: ["dialog"],
 
 	computed: {
-		/**
-		 * Getting preview flag
-		 * 
-		 * @returns {Boolean}
-		 */
-		isPreview() {
-			return this.$route.query.preview && this.isMyOffer;
-		},
-
 		/**
 		 * Get offer data
 		 * 
@@ -67,24 +56,4 @@ export default {
 			return this.sdk.barteron.accounts[this.address];
 		}
 	},
-
-	methods: {
-		/**
-		 * Create room and send message
-		 * 
-		 * @param {@Offer} offer
-		 */
-		createRoom(offer) {
-			this.sendMessage({
-				name: offer.caption,
-				members: [this.address],
-				messages: [this.sdk.appLink(`barter/${ offer.hash }`)],
-				openRoom: true
-			});
-		}
-	},
-
-	async mounted() {
-		this.myOffers = await this.sdk.getBrtOffers();
-	}
 }

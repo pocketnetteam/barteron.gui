@@ -3,23 +3,48 @@ export default {
 
 	props: {
 		item: Object,
-		items: []
 	},
 
 	data() {
 		return {
 			lightbox: false,
 			selected: null,
+			items: [],
 			groupExchange: []
 		}
 	},
 
+	computed: {
+		/**
+		 * Get author address
+		 * 
+		 * @returns {String}
+		 */
+		address() {
+			return this.item?.address;
+		},
+	},
+
 	methods: {
+		/**
+		 * Create room and send message
+		 * 
+		 * @param {@Offer} offer
+		 */
+		createRoom(offer) {
+			this.sendMessage({
+				name: offer.caption,
+				members: [this.address],
+				messages: [this.sdk.appLink(`barter/${ offer.hash }`)],
+				openRoom: true
+			});
+		},
+
 		/**
 		 * Propose excange your offer to seller's offer
 		 */
 		proposeExchange() {
-			this.$emit("propose", this.items[this.selected]);
+			this.createRoom(this.items[this.selected]);
 			this.lightbox = false;
 		},
 
@@ -27,7 +52,7 @@ export default {
 		 * Contact seller
 		 */
 		contactSeller() {
-			this.$emit("contact", this.item);
+			this.createRoom(this.item);
 		}
 	},
 
@@ -36,5 +61,7 @@ export default {
 			offer: this.item.hash,
 			address: this.sdk.address
 		}); */
+
+		this.items = await this.sdk.getBrtOffers();
 	}
 }

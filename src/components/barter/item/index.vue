@@ -349,6 +349,12 @@
 				</div>
 			</div>
 
+			<!-- without sidebar -->
+			<div class="row block sep no-sidebar">
+				<Caption :item="item"/>
+				<Price :item="item"/>
+			</div>
+
 			<div class="row block sep">
 				<ExchangeList
 					:title="$t('barterLabels.exchange')"
@@ -374,7 +380,7 @@
 				</div>
 			</div>
 
-			<div class="row" v-if="item.geohash">
+			<div class="row sep" v-if="item.geohash">
 				<!-- Component: Map -->
 				<v-map
 					ref="map"
@@ -382,6 +388,43 @@
 					:allowPosition="true"
 					:zoom="18"
 					:offers="offersNear"
+				/>
+			</div>
+
+			<!-- without sidebar -->
+			<div class="row block sep no-sidebar"
+				v-if="!isMyOffer"
+			>
+				<Profile :hash="address" />
+				<ExchangeList
+					v-if="isMyOffer"
+					:tags="ownerAccount?.tags || []"
+					@change="(tags) => ownerAccount.set({ tags })"
+				>
+					<template #after>
+						<dl class="list">
+							<dt>{{ $t('metricsLabels.number') }}</dt>
+							<dd>{{ item?.hash }}</dd>
+						</dl>
+					</template>
+				</ExchangeList>
+			</div>
+
+			<!-- without sidebar -->
+			<div class="row block no-sidebar">
+				<!-- My offer -->
+				<MyOptions
+					v-if="isMyOffer"
+					:item="item"
+					@withdrawOffer="withdrawOfferDialog(item, false)"
+					@renewOffer="renewOfferDialog(item)"
+					@removeOffer="withdrawOfferDialog(item, true)"
+				/>
+
+				<!-- Someone's offer -->
+				<BarterExchange
+					v-if="!isMyOffer"
+					:item="item"
 				/>
 			</div>
 		</template>

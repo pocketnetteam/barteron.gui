@@ -15,7 +15,11 @@
 
 	#aside,
 	#sidebar
-		.side-toggle
+		.side-toggle /* TODO: remove side-toggle */
+			display: none
+	
+	.barter-item-page
+		.no-sidebar
 			display: none
 
 /* Tablet and Phones */
@@ -43,33 +47,13 @@
 
 		#aside,
 		#sidebar
-			box-shadow: 1px 1px 6px $backdrop
-			padding: $r
-			position: fixed
-			z-index: 100000
+			display: none
 
-			.side-toggle
+		.barter-item-page
+			.no-sidebar
 				display: block
 
-		#aside
-			left: -$sidebar-width
-
-			&.active
-				left: $r
-
-		#sidebar
-			right: -$sidebar-width
-
-			&.active
-				right: $r
-
 		#container
-			&:has(#aside)
-				padding-left: $r * 3
-
-			&:has(#sidebar)
-				padding-right: $r * 3
-
 			#content.shrink-right
 				margin: 0
 				width: 100%
