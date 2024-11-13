@@ -380,7 +380,7 @@
 				</div>
 			</div>
 
-			<div class="row sep" v-if="item.geohash">
+			<div class="row" v-if="item.geohash">
 				<!-- Component: Map -->
 				<v-map
 					ref="map"
@@ -392,22 +392,11 @@
 			</div>
 
 			<!-- without sidebar -->
-			<div class="row block sep no-sidebar"
-				v-if="!isMyOffer"
-			>
+			<div class="row block sep no-sidebar"/>
+
+			<!-- without sidebar -->
+			<div class="row block sep no-sidebar" v-if="!isMyOffer">
 				<Profile :hash="address" />
-				<ExchangeList
-					v-if="isMyOffer"
-					:tags="ownerAccount?.tags || []"
-					@change="(tags) => ownerAccount.set({ tags })"
-				>
-					<template #after>
-						<dl class="list">
-							<dt>{{ $t('metricsLabels.number') }}</dt>
-							<dd>{{ item?.hash }}</dd>
-						</dl>
-					</template>
-				</ExchangeList>
 			</div>
 
 			<!-- without sidebar -->
