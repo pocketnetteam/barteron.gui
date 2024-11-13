@@ -212,14 +212,15 @@
 				/>
 			</div>
 
-			<div class="row full-width">
+			<div class="row full-width wrap">
 				<!-- vButton: Cancel -->
 				<v-button
+					class="row"
 					vType="bulma-stroke"
 					@click="cancel"
 				>{{ $t('buttonLabels.cancel') }}</v-button>
 
-				<div class="buttons-holder h-w">
+				<div class="buttons-holder min-h-w">
 					<!-- vButton: Preview -->
 					<v-button
 						vType="bulma-stroke"
