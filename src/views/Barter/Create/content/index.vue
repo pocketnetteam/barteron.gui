@@ -212,10 +212,9 @@
 				/>
 			</div>
 
-			<div class="row full-width wrap">
+			<div id="offer-options" class="row full-width wrap">
 				<!-- vButton: Cancel -->
 				<v-button
-					class="row"
 					vType="bulma-stroke"
 					@click="cancel"
 				>{{ $t('buttonLabels.cancel') }}</v-button>
