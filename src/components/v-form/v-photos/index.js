@@ -316,6 +316,7 @@ export default {
 		 * @param {Array|Object} images
 		 */
 		images(images) {
+			this.files = [];
 			this.attach(images);
 		},
 
