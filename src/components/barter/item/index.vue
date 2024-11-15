@@ -256,9 +256,7 @@
 						v-for="(image, index) in images"
 						:key="index"
 						:class="{ 'active': active === index }"
-						@mouseenter="imageZoom"
-						@mousemove="imageZoom"
-						@mouseleave="imageZoom"
+						@click="imageClick(index)"
 					>
 						<!-- First image -->
 						<image-load v-if="index === 0">
@@ -351,6 +349,12 @@
 				</div>
 			</div>
 
+			<!-- without sidebar -->
+			<div class="row block sep no-sidebar">
+				<Caption :item="item"/>
+				<Price :item="item"/>
+			</div>
+
 			<div class="row block sep">
 				<ExchangeList
 					:title="$t('barterLabels.exchange')"
@@ -384,6 +388,32 @@
 					:allowPosition="true"
 					:zoom="18"
 					:offers="offersNear"
+				/>
+			</div>
+
+			<!-- without sidebar -->
+			<div class="row block sep no-sidebar"/>
+
+			<!-- without sidebar -->
+			<div class="row block sep no-sidebar" v-if="!isMyOffer">
+				<Profile :hash="address" />
+			</div>
+
+			<!-- without sidebar -->
+			<div class="row block no-sidebar">
+				<!-- My offer -->
+				<MyOptions
+					v-if="isMyOffer"
+					:item="item"
+					@withdrawOffer="withdrawOfferDialog(item, false)"
+					@renewOffer="renewOfferDialog(item)"
+					@removeOffer="withdrawOfferDialog(item, true)"
+				/>
+
+				<!-- Someone's offer -->
+				<BarterExchange
+					v-if="!isMyOffer"
+					:item="item"
 				/>
 			</div>
 		</template>

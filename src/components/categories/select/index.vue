@@ -17,26 +17,25 @@
 					:placeholder="$t('searchLabels.label')"
 					:value="query"
 					:vEvents="{
-						keydown: search,
-						change: change,
-						input: change
+						keydown: searchEvent,
+						change: searchEvent,
+						input: searchEvent
 					}"
 				>
-					<template #input0After>
+					<template #input0After v-if="query">
 						<i
 							:class="{
 								'action fa': true,
-								'fa-search': !changed,
-								'fa-times': changed
+								'fa-times': true
 							}"
-							@click="search"
+							@click="clearEvent"
 						></i>
 					</template>
 				</v-input>
 			</div>
 
 			<!-- Found -->
-			<div class="found" v-if="query">
+			<div class="found" v-if="query && changed">
 				<p v-if="results.length">{{
 					$tc('searchLabels.result', results.length, {
 						count: results.length
@@ -154,7 +153,6 @@
 			<div class="row full-width right">
 				<div class="buttons-holder h-w">
 					<v-button
-						:disabled="!expanded || isMarked(expanded.id)"
 						@click="select"
 					>{{ $t('categoriesLabels.select') }}</v-button>
 				</div>

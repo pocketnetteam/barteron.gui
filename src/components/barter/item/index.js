@@ -2,7 +2,14 @@ import ImageLoad from "@/components/image-load/index.vue";
 import Loader from "@/components/loader/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
 import CurrencySwitcher from "@/components/currency-switcher/index.vue";
+import Caption from "@/components/barter/item/caption/index.vue";
+import Price from "@/components/barter/item/price/index.vue";
+import MyOptions from "@/components/barter/item/my-options/index.vue";
+import BarterExchange from "@/components/barter/exchange/index.vue";
+import Profile from "@/components/profile/index.vue";
 import LikeStore from "@/stores/like.js";
+import PhotoSwipe from "photoswipe";
+import "photoswipe/style.css";
 
 export default {
 	name: "BarterItem",
@@ -11,9 +18,16 @@ export default {
 		ImageLoad,
 		Loader,
 		ExchangeList,
+		Caption,
+		Price,
+		MyOptions,
+		BarterExchange,
+		Profile,
 		CurrencySwitcher
 	},
 
+	inject: ["dialog"],
+	
 	props: {
 		item: {
 			type: Object,
@@ -42,12 +56,30 @@ export default {
 
 	computed: {
 		/**
+		 * Get author address
+		 * 
+		 * @returns {String}
+		 */
+		address() {
+			return this.item.address;
+		},
+
+		/**
+		 * Show is this offer is owner's
+		 * 
+		 * @returns {Boolean}
+		 */
+		isMyOffer() {
+			return this.address === this.sdk.address;
+		},
+
+		/**
 		 * Get owner account
 		 * 
 		 * @returns {@Account}
 		 */
 		ownerAccount() {
-			return this.sdk.barteron.accounts[this.item.address];
+			return this.sdk.barteron.accounts[this.address];
 		},
 		
 		/**
@@ -248,34 +280,42 @@ export default {
 			return arguments[arguments.length - 1];
 		},
 
-		imageZoom(e) {
-			const
-				picture = this.$refs.picture,
-				holder = picture.querySelector("li.active"),
-				image = holder?.querySelector("img");
+		imageClick(index) {
+			const options = {
+				index,
+				initialZoomLevel: 'fit',
+				secondaryZoomLevel: 2,
+				maxZoomLevel: 4,
+				wheelToZoom: true,
+				showHideAnimationType: 'fade'
+			};
 
-			if (!image?.src) return;
+			const promises = this.images.map(item => {
+				return new Promise(resolve => {
+					let image = new Image();
+					image.onload = () => resolve(image);
+					image.onerror = () => resolve(image);
+					image.src = item;
+				})
+			});
 
-			if (e.type !== "mouseleave") {
-				holder.classList.add("zoom");
-				holder.style.setProperty("--url", `url(${ image.src })`);
+			Promise.allSettled(promises).then(results => {
+				options.dataSource = results
+					.map(item => item.value)
+					.filter(image => image)
+					.map(image => {
+						return {
+							src:    image.src,
+							width:  image.width,
+							height: image.height
+						}
+					});
 
-				/* Move */
-				const
-					rect = e.target.getBoundingClientRect(),
-					xPos = e.clientX - rect.left,
-					yPos = e.clientY - rect.top,
-					xPercent = `${ xPos / (holder.clientWidth / 100) }%`,
-					yPercent = `${ yPos / (holder.clientHeight / 100) }%`;
- 
-				Object.assign(holder.style, {
-					backgroundPosition: `${ xPercent } ${ yPercent }`,
-					backgroundSize: `${ (image.offsetWidth / 100) * 120 }px`
-				});
-			} else if(e.type === "mouseleave") {
-				holder.classList.remove("zoom");
-				holder.removeAttribute("style");
-			}
+				const gallery = new PhotoSwipe(options);
+				gallery.init();
+			}).catch(e => {
+				console.error(e);
+			});
 		},
 
 		/**
