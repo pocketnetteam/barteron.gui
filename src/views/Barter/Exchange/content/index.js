@@ -63,13 +63,34 @@ export default {
 
 	async beforeRouteEnter (to, from, next) {
 		const
-			sdk = Vue.prototype.sdk,
-			offer = sdk.barteron.offers[to.params?.id],
-			deals = await sdk.getBrtOfferDeals({
-				myTags: [offer?.tag],
-				theirTags: await sdk.getTheirTags(offer),
-				excludeAddresses: [offer?.address]
-			});
+			hash = to.params?.id,
+			sdk = Vue.prototype.sdk;
+		
+		let
+			deals = [],
+			offer = sdk.barteron.offers[hash];
+		
+		const isLoaded = (offer) => (offer && offer?.tag);
+
+		if (!(isLoaded(offer))) {
+			try {
+				offer = await sdk.getBrtOffersByHashes([hash]).then(result => result?.pop());
+			} catch (e) {
+				console.error(e);
+			}
+		}
+
+		if (isLoaded(offer)) {
+			try {
+				deals = await sdk.getBrtOfferDeals({
+					myTags: [offer?.tag],
+					theirTags: await sdk.getTheirTags(offer),
+					excludeAddresses: [offer?.address]
+				});				
+			} catch (e) {
+				console.error(e);
+			}
+		}
 
 		/* Pass data to instance */
 		next(vm => vm.deals = deals);
