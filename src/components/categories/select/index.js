@@ -33,6 +33,7 @@ export default {
 			query: "",
 			changed: false,
 			searching: false,
+			debouncedSearch: "",
 			results: []
 		}
 	},
