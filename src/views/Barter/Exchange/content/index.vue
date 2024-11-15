@@ -1,5 +1,5 @@
 <template>
-	<v-content class="shrink">
+	<v-content>
 		<div class="my-barter-holder">
 			<div class="row center">
 				<div :class="{
