@@ -1,5 +1,23 @@
 @import "@/css/vars.sass"
 
+.pswp__top-bar
+	left: 55px
+	right: 55px
+	width: auto
+
+.pswp__button--arrow--prev
+	left: 55px
+
+.pswp__button--arrow--next
+	right: 55px
+
+.pswp
+	img
+		object-fit: contain
+
+.pswp__img--placeholder
+    display: none !important
+
 div[class^="barter-item-"]
 	cursor: default
 	display: inline-flex
@@ -355,7 +373,8 @@ div[class^="barter-item-"]
 				border-radius: 11px
 				position: relative
 				overflow: hidden
-				height: 460px
+				aspect-ratio: 2
+				width: 100%
 				background-color: $beerus
 
 				li
@@ -366,6 +385,9 @@ div[class^="barter-item-"]
 					opacity: 0
 					height: 100%
 					width: 100%
+
+					&:hover
+						cursor: zoom-in
 
 					&.active
 						position: relative
@@ -380,8 +402,6 @@ div[class^="barter-item-"]
 							opacity: 0
 
 					.image
-						height: 460px
-
 						img
 							+unselectable()
 							object-fit: contain
@@ -390,6 +410,7 @@ div[class^="barter-item-"]
 				display: flex
 				gap: 10px
 				margin: 1.15em 0 0
+				overflow: auto
 
 				li
 					+transition(border-color)
@@ -398,6 +419,7 @@ div[class^="barter-item-"]
 					overflow: hidden
 					height: 64px
 					width: 64px
+					flex-shrink: 0
 
 					&.active
 						border-color: $piccolo
