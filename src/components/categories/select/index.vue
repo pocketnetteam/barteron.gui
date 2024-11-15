@@ -153,7 +153,6 @@
 			<div class="row full-width right">
 				<div class="buttons-holder h-w">
 					<v-button
-						:disabled="!expanded || isMarked(expanded.id)"
 						@click="select"
 					>{{ $t('categoriesLabels.select') }}</v-button>
 				</div>
