@@ -186,6 +186,8 @@
 		"error#-26": "Min relay fee not met",
 		"error#-1": "Error loading sdk library",
 		"error#0": "{error}",
+		"error#4": "You have already rated this offer earlier",
+		"error#5": "You can't add a rating to your own offer",
 		"error#21": "Failed OpReturn",
 		"error#28": "Too many transactions",
 		"error#65": "Exceeded limit"
