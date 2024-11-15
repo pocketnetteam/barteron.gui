@@ -1,5 +1,7 @@
 import Loader from "@/components/loader/index.vue";
 
+var debouncedSearch;
+
 export default {
 	name: "Select",
 
@@ -102,40 +104,61 @@ export default {
 		},
 
 		/**
+		 * Search in categories event
+		 * 
+		 * @param {Event} e
+		 * 
+		 * @returns {Void}
+		 */
+		searchEvent(e) {
+			if (e?.keyCode === 13) e.preventDefault();
+			if (
+				e?.type === "click" 
+				|| e?.type === "input" 
+			) {
+					this.input = this.$refs.search?.inputs?.[0];
+					this.query = (this.input?.value || "").toLowerCase();
+		
+					debouncedSearch();
+			}
+		},
+
+		/**
 		 * Search in categories
 		 * 
 		 * @returns {Void}
 		 */
-		search(e) {
-			if (e?.keyCode === 13) e.preventDefault();
-			if (e?.type === "click" || e?.type === "keydown" && e?.keyCode === 13) {
-				if (this.changed) return this.clear();
+		search() {
+			// this.searching = true;
+			this.results = [];
 
-				this.input = this.$refs.search?.inputs?.[0];
-				this.query = (this.input?.value || "").toLowerCase();
-				this.searching = true;
-				this.changed = true;
-				this.results = [];
-	
-				if (this.query?.length) {
-					/* Fist version of search */
-					/*this.importChildren(Object.keys(this.categories.items)).forEach(item => {
-						const value = this.$t(item.name).toLowerCase();
-	
-						if (value.includes(this.query)) {
-							this.results.push({ ...item, history: this.getParents(item) });
-						}
-					}); */
+			if (this.query?.length) {
+				/* Fist version of search */
+				/*this.importChildren(Object.keys(this.categories.items)).forEach(item => {
+					const value = this.$t(item.name).toLowerCase();
 
-					/* Second version of search */
-					this.root.map(r => ({ ...r })).forEach(item => this.recursiveSearch(item));
+					if (value.includes(this.query)) {
+						this.results.push({ ...item, history: this.getParents(item) });
+					}
+				}); */
 
-	
-					setTimeout(() => this.searching = false, 1);
-				}
-	
-				if (this.input) this.input.blur();
-			}
+				/* Second version of search */
+				this.root.map(r => ({ ...r })).forEach(item => this.recursiveSearch(item));
+			} 
+			
+			this.changed = this.query?.length;
+			// setTimeout(() => this.searching = false, 1);
+		},
+
+		/**
+		 * Clear search field
+		 * 
+		 * @returns {Void}
+		 */
+		clearEvent() {
+			debouncedSearch?.cancel();
+			this.clear();
+			this.input?.focus?.();
 		},
 
 		/**
@@ -197,14 +220,6 @@ export default {
 			this.results = [];
 
 			return this;
-		},
-
-		/**
-		 * Input change event
-		 */
-		change() {
-			this.input = this.$refs.search?.inputs?.[0];
-			this.changed = this.input?.value?.length && this.query === this.input?.value.toLowerCase();
 		},
 
 		/**
@@ -282,5 +297,12 @@ export default {
 		);
 
 		if (this.value) this.expand(this.value);
-	}
+
+		debouncedSearch = this.debounce(() => this.search(), 500);
+	},
+
+	beforeDestroy() {
+		debouncedSearch?.cancel();
+		debouncedSearch = null;
+	},
 }
