@@ -1,0 +1,51 @@
+@import "@/css/vars.sass"
+
+.select-offer-dialog
+	ul
+		+resetList()
+		display: flex
+		justify-content: center
+		flex-wrap: wrap
+		gap: 12px
+
+		li
+			border: 1px solid transparent
+			border-radius: 12px
+			position: relative
+			width: 140px
+			height: 140px
+
+			i.fa
+				display: none
+
+			img
+				+unselectable()
+				border-radius: 12px
+				object-fit: cover
+				height: 100%
+				width: 100%
+
+			&.selected
+				border: 2px solid $piccolo
+
+				i.fa
+					background: $gohan
+					border: 1px solid $gohan
+					border-radius: 50%
+					color: $piccolo
+					display: block
+					font-size: 20px
+					position: absolute
+					top: 6px
+					right: 6px
+					height: 20px
+					width: 20px
+
+					&::before
+						position: relative
+						top: -1px
+						left: -1px
+
+
+				img
+					padding: 3px

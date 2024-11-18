@@ -1,5 +1,12 @@
+import SelectOfferDialog from "@/views/Barter/SelectOfferDialog/index.vue";
+import Vue from 'vue';
+
 export default {
 	name: "BarterExchange",
+
+	components: {
+		SelectOfferDialog,
+	},
 
 	props: {
 		item: Object,
@@ -7,12 +14,13 @@ export default {
 
 	data() {
 		return {
-			lightbox: false,
 			selected: null,
 			items: [],
-			groupExchange: []
+			// groupExchange: []
 		}
 	},
+
+	inject: ['lightboxContainer'],
 
 	computed: {
 		/**
@@ -41,11 +49,32 @@ export default {
 		},
 
 		/**
-		 * Propose excange your offer to seller's offer
+		 * Select your offer to propose exchange seller's offer
+		 */
+		selectOffer() {
+			var ComponentClass = Vue.extend(SelectOfferDialog);
+			var instance = new ComponentClass({
+				propsData: {
+					item: this.item,
+					items: this.items,
+				}
+			});
+			
+			instance.$on('onSelect', vm => {
+				this.selected = vm.selected;
+				this.proposeExchange();
+			});
+
+			instance.$mount();
+			this.lightboxContainer().appendChild(instance.$el);
+			instance.show();
+		},
+
+		/**
+		 * Propose exchange your offer to seller's offer
 		 */
 		proposeExchange() {
 			this.createRoom(this.items[this.selected]);
-			this.lightbox = false;
 		},
 
 		/**
@@ -62,6 +91,10 @@ export default {
 			address: this.sdk.address
 		}); */
 
-		this.items = await this.sdk.getBrtOffers();
+		try {
+			this.items = await this.sdk.getBrtOffers();
+		} catch (e) {
+			console.log(e);
+		}
 	}
 }
