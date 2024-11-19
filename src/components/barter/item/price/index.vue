@@ -1,7 +1,7 @@
 <template>
 	<span class="price row">
 		<template v-if="item?.price">
-			<span class="col">
+			<span id="pkoin-price" class="col">
 				<span class="currency icon-pkoin"></span>
 				<span class="amount">{{ $n(item?.price) }}</span>
 				<span>{{ $t('profileLabels.coins') }}</span>

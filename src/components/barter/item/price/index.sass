@@ -1,50 +1,56 @@
 @import "@/css/vars.sass"
 
-.price
-	font-size: 20px
-	display: flex
-	flex-wrap: wrap
-	align-items: center
-	gap: 0 $r
-	margin: 0 0 $r
-	color: var(--popo)
+#sidebar
+	.price
+		font-size: 20px
 
-	.col
-		flex-basis: 100%
-		gap: $r / 2
-		margin: 0
-
-	.amount
-		display: block
-		font-weight: normal
-		overflow: hidden
-		text-overflow: ellipsis
-
-	.currency
-		border-radius: 4px
-		color: $blue-hover
+#sidebar,
+.no-sidebar
+	.price
 		display: flex
+		flex-wrap: wrap
 		align-items: center
-		justify-content: center
-		overflow: hidden
-		height: 1.05em
-		width: 1.05em
+		gap: 0 $r
+		margin: 0 0 $r
+		color: var(--popo)
 
-		&.icon-pkoin
-			background-color: $blue-hover
+		.col,
+		#pkoin-price
+			flex-basis: 100%
+			gap: $r / 2
+			margin: 0
 
-		~ span + span
-			color: $trunks
-			font-size: 13px
-			padding: $r / 2
+		.amount
+			display: block
+			font-weight: normal
+			overflow: hidden
+			text-overflow: ellipsis
 
-		&.graphem-byn
-			letter-spacing: -2px
-
-	font-weight: 700
-
-	.currency-switcher
 		.currency
-			~ .amount,
+			border-radius: 4px
+			color: $blue-hover
+			display: flex
+			align-items: center
+			justify-content: center
+			overflow: hidden
+			height: 1.05em
+			width: 1.05em
+
+			&.icon-pkoin
+				background-color: $blue-hover
+
 			~ span + span
-				font-size: 13px !important
+				color: $trunks
+				font-size: 13px
+				padding: $r / 2
+
+			&.graphem-byn
+				letter-spacing: -2px
+
+		font-weight: 700
+
+		.currency-switcher
+			.currency
+				~ .amount,
+				~ span + span
+					font-size: 13px !important

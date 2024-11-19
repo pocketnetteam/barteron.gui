@@ -3,53 +3,6 @@
 .barter-exchange
 	width: 100%
 	
-	ul
-		+resetList()
-		display: grid
-		grid-template-columns: repeat(3, 1fr)
-		gap: 8px
-		margin: 0 0 $r * 1.5
-
-		li
-			border: 1px solid transparent
-			border-radius: 12px
-			position: relative
-			height: 160px
-			width: 160px
-
-			i.fa
-				display: none
-
-			img
-				+unselectable()
-				border-radius: 12px
-				object-fit: cover
-				height: 100%
-				width: 100%
-
-			&.selected
-				border: 1px solid $piccolo
-
-				i.fa
-					background: $gohan
-					border: 1px solid $gohan
-					border-radius: 50%
-					color: $piccolo
-					display: block
-					font-size: 19px
-					position: absolute
-					top: 6px
-					right: 6px
-					height: 20px
-					width: 20px
-
-					&::before
-						position: relative
-						top: -1px
-
-				img
-					padding: 3px
-
 	.toggle
 		margin: 0 0 $r * 2
 
