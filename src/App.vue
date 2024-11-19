@@ -4,6 +4,7 @@
 		:class="theme"
 	>
 		<v-dialog ref="dialog" />
+		<div ref="lightboxContainer"></div>
 
 		<template v-if="sdk.sdk">
 			<transition
@@ -69,6 +70,7 @@ export default {
 		return {
 			loading: true,
 			dialog: null,
+			lightboxContainer: null,
 			minHeaderScrollPosition: 35,
 			lastScrollPosition: 0,
 			lastRoute: null,
@@ -78,7 +80,8 @@ export default {
 
 	provide() {
 		return {
-			dialog: new Proxy({}, { get: () => this.dialog })
+			dialog: new Proxy({}, { get: () => this.dialog }),
+			lightboxContainer: () => this.lightboxContainer,
 		};
 	},
 
@@ -200,6 +203,12 @@ export default {
 				}
 			}
 		}, 100);
+
+		this.$2watch("$refs.lightboxContainer").then(ref => {
+			this.lightboxContainer = ref;
+		}).catch(e => {
+			console.error(e);
+		});
 
 		document.body.addEventListener("scroll", this.handleScroll, { passive: true });
 	},
