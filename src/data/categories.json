@@ -401,13 +401,21 @@
 		"children": [],
 		"order": 50
 	},
+	"19": {
+		"name": "cryptocurrencies",
+		"icon": "icon-cryptocurrencies",
+		"id": 19,
+		"parent": null,
+		"children": [],
+		"order": 51
+	},
 	"18": {
 		"name": "cooperative/community",
 		"icon": "fa-users",
 		"id": 18,
 		"parent": null,
 		"children": [],
-		"order": 51
+		"order": 52
 	},
 	"99": {
 		"name": "everything_else",
@@ -415,6 +423,6 @@
 		"id": 99,
 		"parent": null,
 		"children": [],
-		"order": 52
+		"order": 53
 	}
 }
