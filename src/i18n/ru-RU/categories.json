@@ -36,6 +36,7 @@
 	"movies_tv": "Фильмы и телевидение",
 	"music": "Музыка",
 	"clothing_shoes_accessories": "Одежда, обувь и аксессуары",
+	"cosmetics_perfumery_hygiene": "Косметика, парфюмерия, гигиена",
 	"home_garden": "Дом и сад",
 	"crafts": "Ремесла",
 	"cell_phones_accessories": "Сотовые телефоны и аксессуары",
@@ -50,5 +51,6 @@
 	"gold_silver_jewelry": "Золотые и серебряные драгоценности",
 	"silver_plate": "Столовое серебро",
 	"pkoin": "Покеткоины",
+	"cryptocurrencies": "Криптовалюты",
 	"cooperative/community": "Кооператив/Община"
 }
