@@ -17,7 +17,11 @@
 					</ul>
 				</div>
 				<div class="col">
-					<v-button @click="proposeExchange(deal)">{{ $t('buttonLabels.offer_an_exchange') }}</v-button>
+					<v-button 
+						:disabled="isLoading"
+						@click="proposeExchange(deal)"
+					>{{ $t('buttonLabels.offer_an_exchange') }}
+					</v-button>
 				</div>
 			</li>
 		</ul>
