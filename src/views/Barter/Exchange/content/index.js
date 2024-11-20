@@ -10,6 +10,7 @@ export default {
 
 	data() {
 		return {
+			isLoading: false,
 			deals: []
 		}
 	},
@@ -47,16 +48,39 @@ export default {
 		},
 
 		/**
+		 * Propose exchange your offer to seller's offer
+		 * 
+		 * @param {@Offer} offer
+		 */
+		proposeExchange(offer) {
+			this.dialog?.instance
+				.view("question", this.$t("dialogLabels.contact_seller"))
+				.then(state => {
+					if (state) {
+						this.createRoom(offer);
+					}
+				});
+		},
+
+		/**
 		 * Create room and send message
 		 * 
 		 * @param {@Offer} offer
 		 */
 		createRoom(offer) {
+			this.isLoading = true;
+			this.dialog?.instance.view("load", this.$t("dialogLabels.opening_room"));
 			this.sendMessage({
 				name: this.offer.caption,
 				members: [offer.address],
 				messages: [this.sdk.appLink(`barter/${ this.offer.hash }`)],
 				openRoom: true
+			}).then(() => {
+				this.dialog?.instance.hide();
+			}).catch(e => {
+				this.showError(e);
+			}).finally(() => {
+				this.isLoading = false;
 			});
 		},
 	},

@@ -180,6 +180,9 @@
 		"offer_withdraw": "Are you sure you want withdraw this offer?",
 		"offer_delete": "Are you sure you want remove this offer?",
 		"pending_reg": "Please wait until your account being activacted",
+		"contact_seller": "Do you want to contact the seller?",
+		"contact_sellers": "Do you want to contact the sellers?",
+		"opening_room": "The chat is opening. Please wait.",
 
 		"image_error": "Image upload error",
 		"node_error": "Node error has occured: {error}",

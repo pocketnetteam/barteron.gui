@@ -41,7 +41,7 @@
 					vType="row"
 				>
 					<template #offer="{ item }">
-						<v-button @click="createRoom(item)" vType="hit">{{ $t('buttonLabels.offer_an_exchange') }}</v-button>
+						<v-button @click="proposeExchange(item)" vType="hit">{{ $t('buttonLabels.offer_an_exchange') }}</v-button>
 					</template>
 				</BarterList>
 			</div>

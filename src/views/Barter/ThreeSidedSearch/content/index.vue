@@ -17,7 +17,7 @@
 					</ul>
 				</div>
 				<div class="col">
-					<v-button @click="createRoom(deal)">{{ $t('buttonLabels.offer_an_exchange') }}</v-button>
+					<v-button @click="proposeExchange(deal)">{{ $t('buttonLabels.offer_an_exchange') }}</v-button>
 				</div>
 			</li>
 		</ul>

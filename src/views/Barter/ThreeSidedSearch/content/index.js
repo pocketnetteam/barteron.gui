@@ -10,22 +10,48 @@ export default {
 
 	data() {
 		return {
+			isLoading: false,
 			deals: []
 		}
 	},
 
+	inject: ["dialog"],
+
 	methods: {
+		/**
+		 * Propose exchange your offer to sellers' offers
+		 * 
+		 * @param {@ComplexDeal} deal
+		 */
+		proposeExchange(deal) {
+			this.dialog?.instance
+				.view("question", this.$t("dialogLabels.contact_sellers"))
+				.then(state => {
+					if (state) {
+						this.createRoom(deal);
+					}
+				});
+		},
+
 		/**
 		 * Create room and send message
 		 * 
-		 * @param {@Offer} offer
+		 * @param {@ComplexDeal} deal
 		 */
-		createRoom(offer) {
+		createRoom(deal) {
+			this.isLoading = true;
+			this.dialog?.instance.view("load", this.$t("dialogLabels.opening_room"));
 			this.sendMessage({
 				name: this.$t("buttonLabels.group_exchange"),
-				members: [offer.address, offer.target.address],
-				messages: [this.sdk.appLink(`barter/search?source=${ offer.source.hash }&target=${ offer.target.hash }`)],
+				members: [deal.address, deal.target.address],
+				messages: [this.sdk.appLink(`barter/search?source=${ deal.source.hash }&target=${ deal.target.hash }`)],
 				openRoom: true
+			}).then(() => {
+				this.dialog?.instance.hide();
+			}).catch(e => {
+				this.showError(e);
+			}).finally(() => {
+				this.isLoading = false;
 			});
 		}
 	},

@@ -224,29 +224,26 @@ Vue.prototype.shared = Vue.observable({
 		 * @param {Array} [data.messages]
 		 * @param {Array} [data.images]
 		 * @param {Boolean} [data.openRoom]
+		 * 
+		 * @returns {Promise}
 		 */
 		sendMessage(data) {
-			this.sdk.createRoom({
+			return this.sdk.createRoom({
 				name: data.name,
 				members: data.members
 			}).then(({roomid}) => {
-				if (data.openRoom) {
-					this.sdk.openRoom(roomid);
-				}
-
-				this.sdk.sendMessage({
+				return data.openRoom ?
+					this.sdk.openRoom(roomid).then(() => roomid)
+					: roomid;
+			}).then(roomid => {
+				return this.sdk.sendMessageInRoom({
 					roomid,
 					content: {
 						messages: data.messages || [],
 						images: data.images || []
 					}
-				}).catch(e => { 
-					console.error(e);
 				});
-
-			}).catch(e => { 
-				console.error(e);
-			});
+			})
 		},
 
 		/**

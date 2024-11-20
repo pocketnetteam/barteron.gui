@@ -358,7 +358,7 @@ class SDK {
 	 * 
 	 * @returns {Promise}
 	 */
-	sendMessage(request) {
+	sendMessageInRoom(request) {
 		return new Promise((resolve, reject) => {
 			/* Request for permissons */
 				this.requestPermissions(["chat"]).then(result => {
@@ -367,7 +367,8 @@ class SDK {
 							.then(resolve)
 							.catch(reject);
 					} else {
-						reject(result);
+						let error = new Error('Error occurred while requesting permission "chat"');
+						reject(error);
 					}
 				});
 		});
