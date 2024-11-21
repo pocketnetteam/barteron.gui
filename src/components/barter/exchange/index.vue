@@ -3,7 +3,10 @@
 		<template v-if="items.length">
 
 			<div class="propose">
-				<v-button @click="selectOffer">
+				<v-button 
+					:disabled="isLoading"
+					@click="selectOffer"
+				>
 					<i class="fa fa-sync"></i>
 					<span>{{ $t('buttonLabels.propose_exchange') }}</span>
 				</v-button>
@@ -30,8 +33,10 @@
 		</template>
 
 		<div class="buy">
-			<v-button @click="contactSeller">
-				<span>{{ $t('buttonLabels.contact_seller') }}</span>
+			<v-button 
+				:disabled="isLoading"
+				@click="contactSeller"
+			><span>{{ $t('buttonLabels.contact_seller') }}</span>
 			</v-button>
 
 			<!-- <v-button vType="roshi">
