@@ -327,8 +327,8 @@ class SDK {
 							equal: request.equal
 						}
 					})
-						.then(resolve)
-						.catch(reject);
+					.then(resolve)
+					.catch(reject);
 				} else {
 					reject(result);
 				}
@@ -341,7 +341,7 @@ class SDK {
 	 * 
 	 * @param {String} roomid
 	 * 
-	 * @returns {Void}
+	 * @returns {Promise}
 	 */
 	openRoom(roomId) {
 		return this.sdk.chat.openRoom(roomId);
@@ -358,16 +358,18 @@ class SDK {
 	 * 
 	 * @returns {Promise}
 	 */
-	sendMessage(request) {
+	sendMessageInRoom(request) {
 		return new Promise((resolve, reject) => {
 			/* Request for permissons */
-				this.requestPermissions(["chat"]).then(result => {
+				const items = ["chat"];
+				this.requestPermissions(items).then(result => {
 					if (result) {
 						this.sdk.chat.send(request)
 							.then(resolve)
 							.catch(reject);
 					} else {
-						reject(result);
+						let error = new Error(`Error occurred while requesting permission(s): ${items.join(', ')}`);
+						reject(error);
 					}
 				});
 		});
