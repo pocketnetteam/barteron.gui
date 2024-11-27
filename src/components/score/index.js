@@ -14,9 +14,17 @@ export default {
 			type: Number,
 			default: null
 		},
+		starsValue: {
+			type: Number,
+			default: null
+		},
 		delimeter: {
 			type: String,
 			default: "."
+		},
+		relayMode: {
+			type: Boolean,
+			default: false
 		},
 		voteable: Boolean
 	},

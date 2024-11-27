@@ -12,20 +12,34 @@
 			</h1>
 		</header>
 
-		<header v-if="header">
+		<header v-if="detailsAreLoading">
+			<h1>{{ $t('voteLabels.label') }}</h1>
+			<loader type="circular" />
+		</header>
+
+		<header v-if="header && !detailsAreLoading">
 			<h1 v-if="!compact">{{ $t('voteLabels.title') }} - </h1>
 			<Score
 				:rating="true"
 				:stars="5"
-				:value="votesAverage"
+				:value="offerScoresAverage()"
+				:starsValue="hasRelayOfferScore() ? score : null"
 				:delimeter="','"
-				:voteable="voteable"
+				:relayMode="true"
+				:voteable="voteable()"
 				@change="vote"
 			/>
-			<span>{{ $tc('voteLabels.votes', votes?.length || 0) }}</span>
+			<i 
+				v-if="hasRelayOfferScore()" 
+				class="vote-relay fa fa-spinner fa-spin"
+				:title="$t('voteLabels.voteIsPublishing')"
+			></i>
+			<span>{{ $tc('voteLabels.votes', offerScoresCount()) }}</span>
+			<div v-if="hasRejectedOfferScore()" class="vote-rejected">{{ $t('voteLabels.voteNotPublished') }}</div>
+			<div v-if="hasRejectedComment()" class="comment-rejected">{{ $t('voteLabels.commentNotPublished') }}</div>
 		</header>
 
-		<main>
+		<main v-if="!detailsAreLoading">
 			<ul class="comments">
 				<template v-if="comments.length">
 					<li
@@ -43,7 +57,7 @@
 
 			<v-form
 				ref="form"
-				v-if="form && commentable"
+				v-if="commentable()"
 			>
 				<v-textarea
 					ref="vote"
@@ -64,12 +78,12 @@
 								vType="transparent"
 								vSize="sm"
 								class="submit"
-								:disabled="loading"
+								:disabled="isLoading"
 								@click="submit"
 							>
 								<i
 									class="fa fa-spinner fa-spin"
-									v-if="loading"
+									v-if="isLoading"
 								></i>
 								<i
 									class="fa fa-paper-plane"

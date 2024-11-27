@@ -4,6 +4,7 @@ import VueI18n, { currencies } from "@/i18n/index.js";
 
 import Account from "@/js/models/account.js";
 import Offer from "@/js/models/offer.js";
+import OfferScore from "@/js/models/offerScore.js";
 import Comment from "@/js/models/comment.js";
 
 /**
@@ -19,6 +20,7 @@ class SDK {
 	models = {
 		Account,
 		Offer,
+		OfferScore,
 		Comment
 	};
 
@@ -193,6 +195,7 @@ class SDK {
 			_accounts: {},
 			_offers: {},
 			_details: {},
+			_offerScores: {},
 			_comments: {}
 		};
 
@@ -222,7 +225,19 @@ class SDK {
 			details: new Proxy(this.barteron._details, {
 				get(target, hash) {
 					if (hash !== "draft" && (typeof hash !== "string" || hash?.length < 64)) return this;
-					else if (!target?.[hash]) $.getBrtOffersDetails({ offerIds: [hash] });
+					else if (!target?.[hash]) { 
+						const test = $.getBrtOffersDetails({ offerIds: [hash] });
+						console.log('$.getBrtOffersDetails = ', test);
+						return test;
+					};
+					return target?.[hash];
+				}
+			}),
+
+			/* Barteron offers scores */
+			offerScores: new Proxy(this.barteron._offerScores, {
+				get(target, hash) {
+					if (hash !== "draft" && (typeof hash !== "string" || hash?.length < 64)) return this;
 					return target?.[hash];
 				}
 			}),
@@ -438,46 +453,45 @@ class SDK {
 	}
 
 	/**
-	 * Get actions
-	 * 
-	 * @param {Object} data
+	 * Get offer actions
 	 * 
 	 * @returns {Promise}
 	 */
-	getActions() {
+	getOfferActions() {
 		return this.sdk.get.actions().then(actions => {
 			return Promise.all(
 				(actions || [])
 					.filter(action => this.isOfferAction(action))
 					.map(async action => {
 
-				if (action.expObject?.type !== this.txTypes.contentDelete.name) {
-					return new Offer({
-						/* Normal Offer action */
-						...action.expObject,
-						price: action.expObject?.price / 100,
-						hash: action.transaction,
-						prevhash: action.expObject?.hash,
-						relay: !action?.completed
-					})
-				} else {
-					/* Deleted Offer action */
-					const txid = action.expObject?.txidEdit;
-					
-					if (!this.barteron.offers[txid]) {
-						await this.getBrtOffersByHashes([txid]);
-					}
+						if (action.expObject?.type !== this.txTypes.contentDelete.name) {
+							return new Offer({
+								/* Normal Offer action */
+								...action.expObject,
+								price: action.expObject?.price / 100,
+								hash: action.transaction,
+								prevhash: action.expObject?.hash,
+								relay: !action?.completed
+							})
+						} else {
+							/* Deleted Offer action */
+							const txid = action.expObject?.txidEdit;
+							
+							if (!this.barteron.offers[txid]) {
+								await this.getBrtOffersByHashes([txid]);
+							}
 
-					const offer = new Offer({
-						...this.barteron.offers[txid],
-						hash: action.transaction,
-						prevhash: txid,
-						published: "removed",
-						relay: !action?.completed
-					})
+							const offer = new Offer({
+								...this.barteron.offers[txid],
+								hash: action.transaction,
+								prevhash: txid,
+								published: "removed",
+								relay: !action?.completed
+							})
 
-					return offer;
-				}
+							return offer;
+						}
+
 			}) || []);
 		});
 	}
@@ -504,6 +518,30 @@ class SDK {
 			);
 
 		return (isCreateOrEditOfferAction || isDeleteOfferAction);
+	}
+
+	/**
+	 * Get feedback actions
+	 * 
+	 * @returns {Promise}
+	 */
+	getFeedbackActions() {
+		return this.sdk.get.actions().then(actions => {
+			console.log(')))))))))))))) sdk.get.actions()', actions);
+			return (actions || []).filter(item => this.isFeedbackAction(item));
+		});
+	}
+
+	/**
+	 * Checking for feedback action
+	 * 
+	 * @param {Object} action
+	 * 
+	 * @returns {Boolean}
+	 */
+	isFeedbackAction(action) {
+		const type = action.expObject?.type;
+		return (type === "comment" || type === "upvoteShare");
 	}
 
 	/**
@@ -877,18 +915,26 @@ class SDK {
 					for (const key in details) {
 						if (key === "accounts") {
 							data[key] = details[key]?.map(account => new Account(account)) || [];
+						} else if (key === "offerScores") {
+							data[key] = details[key]?.filter(f => f.s2 === hash).map(item => new OfferScore(item)) || [];
 						} else if (key === "comments") {
-							data[key] = details[key]?.filter(f => f.s3 === hash).map(comment => new Comment(comment)) || [];
+							data[key] = details[key]?.filter(f => f.s3 === hash).map(item => new Comment(item)) || [];
 						} else {
 							data[key] = details[key]?.filter(f => f.s2 === hash) || [];
 						}
 					}
+
+					console.log('rpc details', details);
+					console.log('rpc data', data);
+					
 
 					Vue.set(this.barteron._details, hash, data);
 				}
 			});
 
 			return details;
+		}).catch(e => {
+			console.error(e);
 		});
 	}
 
