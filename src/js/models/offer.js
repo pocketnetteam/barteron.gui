@@ -41,7 +41,7 @@ class Offer {
 			},
 			time = isMs(data?.time) ? +new Date : data?.time * 1000,
 			date = new Date(time),
-			till = data?.till || date.setMonth(date.getMonth() + 1);
+			till = data?.till || date.setFullYear(date.getFullYear() + 1);
 
 		/* Hidden properties */
 		Object.defineProperties(this, {
