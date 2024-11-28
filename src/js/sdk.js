@@ -152,6 +152,7 @@ class SDK {
 
 		this.emit = this.sdk.emit;
 		this.on = this.sdk.on;
+		this.off = this.sdk.off;
 
 		this.on("action", d => {
 			const action = JSON.stringify(d);
@@ -224,12 +225,10 @@ class SDK {
 			/* Barteron offers details */
 			details: new Proxy(this.barteron._details, {
 				get(target, hash) {
+					console.log('!!!!!!!!!!!!!!!!!!!!!!!! hash = ', hash);
+					
 					if (hash !== "draft" && (typeof hash !== "string" || hash?.length < 64)) return this;
-					else if (!target?.[hash]) { 
-						const test = $.getBrtOffersDetails({ offerIds: [hash] });
-						console.log('$.getBrtOffersDetails = ', test);
-						return test;
-					};
+					else if (!target?.[hash]) $.getBrtOffersDetails({ offerIds: [hash] });
 					return target?.[hash];
 				}
 			}),
@@ -521,25 +520,25 @@ class SDK {
 	}
 
 	/**
-	 * Get feedback actions
+	 * Get vote actions
 	 * 
 	 * @returns {Promise}
 	 */
-	getFeedbackActions() {
+	getVoteActions() {
 		return this.sdk.get.actions().then(actions => {
 			console.log(')))))))))))))) sdk.get.actions()', actions);
-			return (actions || []).filter(item => this.isFeedbackAction(item));
+			return (actions || []).filter(item => this.isVoteAction(item));
 		});
 	}
 
 	/**
-	 * Checking for feedback action
+	 * Checking for vote action
 	 * 
 	 * @param {Object} action
 	 * 
 	 * @returns {Boolean}
 	 */
-	isFeedbackAction(action) {
+	isVoteAction(action) {
 		const type = action.expObject?.type;
 		return (type === "comment" || type === "upvoteShare");
 	}

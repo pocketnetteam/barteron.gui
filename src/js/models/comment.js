@@ -44,7 +44,7 @@ class Comment {
 		this.completed = data?.completed || !(this.relay || this.rejected);
 
 		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		// this.relay = true;
+		// this.relay = false;
 		// this.rejected = true;
 		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -74,11 +74,18 @@ class Comment {
 				console.log('this.sdk.on(action)', action);
 				const
 					target = this.sdk.barteron._comments[this.hash],
+					// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 					props = {
 						relay: !(action?.completed || action?.rejected),
 						completed: action?.completed,
 						rejected: action?.rejected,
 					};
+
+					// props = {
+					// 	relay: false,
+					// 	completed: false,
+					// 	rejected: true,
+					// };
 				
 				Object.entries(props).forEach(([key, value]) => {
 					Vue.set(target, key, value);

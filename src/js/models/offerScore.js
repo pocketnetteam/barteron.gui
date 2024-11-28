@@ -69,11 +69,19 @@ class OfferScore {
 				console.log('this.sdk.on(action)', action);
 				const
 					target = this.sdk.barteron._offerScores[this.hash],
+					// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 					props = {
 						relay: !(action?.completed || action?.rejected),
 						completed: action?.completed,
 						rejected: action?.rejected,
 					};
+
+					// props = {
+					// 	relay: false,
+					// 	completed: false,
+					// 	rejected: true,
+					// };
+
 				
 				Object.entries(props).forEach(([key, value]) => {
 					Vue.set(target, key, value);

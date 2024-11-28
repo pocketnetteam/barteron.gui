@@ -12,18 +12,13 @@
 			</h1>
 		</header>
 
-		<header v-if="detailsAreLoading">
-			<h1>{{ $t('voteLabels.label') }}</h1>
-			<loader type="circular" />
-		</header>
-
-		<header v-if="header && !detailsAreLoading">
+		<header v-if="header">
 			<h1 v-if="!compact">{{ $t('voteLabels.title') }} - </h1>
 			<Score
 				:rating="true"
 				:stars="5"
-				:value="offerScoresAverage()"
-				:starsValue="hasRelayOfferScore() ? score : null"
+				:value="completedOfferScoresAverage()"
+				:starsValue="starsValue()"
 				:delimeter="','"
 				:relayMode="true"
 				:voteable="voteable()"
@@ -39,11 +34,11 @@
 			<div v-if="hasRejectedComment()" class="comment-rejected">{{ $t('voteLabels.commentNotPublished') }}</div>
 		</header>
 
-		<main v-if="!detailsAreLoading">
+		<main>
 			<ul class="comments">
-				<template v-if="comments.length">
+				<template v-if="unrejectedComments().length">
 					<li
-						v-for="(comment, i) in comments"
+						v-for="(comment, i) in unrejectedComments()"
 						:key="i"
 					>
 						<Comment :item="comment" />
@@ -65,6 +60,7 @@
 					name="vote"
 					length="9000"
 					:placeholder="$t('voteLabels.placeholder')"
+					:readonly="isCommentLoading"
 				>
 					<template #after>
 						<Score
@@ -78,12 +74,12 @@
 								vType="transparent"
 								vSize="sm"
 								class="submit"
-								:disabled="isLoading"
+								:disabled="isCommentLoading"
 								@click="submit"
 							>
 								<i
 									class="fa fa-spinner fa-spin"
-									v-if="isLoading"
+									v-if="isCommentLoading"
 								></i>
 								<i
 									class="fa fa-paper-plane"
