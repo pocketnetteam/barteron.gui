@@ -22,6 +22,7 @@
 				:delimeter="','"
 				:relayMode="true"
 				:voteable="voteable()"
+				:rejected="hasRejectedOfferScore()"
 				@change="vote"
 			/>
 			<i 

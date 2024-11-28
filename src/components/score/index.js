@@ -26,6 +26,10 @@ export default {
 			type: Boolean,
 			default: false
 		},
+		rejected: {
+			type: Boolean,
+			default: false
+		},
 		voteable: Boolean
 	},
 
@@ -43,6 +47,19 @@ export default {
 				this.voted = true;
 
 				this.$emit("change", this.score);
+			}
+		},
+
+		reset() {
+			this.score = 0;
+			this.voted = false;
+		}
+	},
+
+	watch: {
+		rejected(newValue) {
+			if (newValue) {
+				this.reset();
 			}
 		}
 	}
