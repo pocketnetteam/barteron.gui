@@ -52,5 +52,8 @@
 	"silver_plate": "Столовое серебро",
 	"pkoin": "Покеткоины",
 	"cryptocurrencies": "Криптовалюты",
-	"cooperative/community": "Кооператив/Община"
+	"cooperative/community": "Кооператив/Община",
+	"delivery": "Доставка",
+	"pickup_point": "Пункт выдачи",
+	"courier": "Курьер"
 }

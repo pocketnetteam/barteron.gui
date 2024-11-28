@@ -425,12 +425,39 @@
 		"children": [],
 		"order": 5200
 	},
+	"96": {
+		"name": "delivery",
+		"icon": "fa-box-open",
+		"id": 96,
+		"parent": null,
+		"children": [
+			97,
+			98
+		],
+		"order": 5300
+	},
+	"97": {
+		"name": "pickup_point",
+		"icon": "fa-store-alt",
+		"id": 97,
+		"parent": 96,
+		"children": [],
+		"order": 5400
+	},
+	"98": {
+		"name": "courier",
+		"icon": "fa-truck",
+		"id": 98,
+		"parent": 96,
+		"children": [],
+		"order": 5500
+	},
 	"99": {
 		"name": "everything_else",
 		"icon": "fa-project-diagram",
 		"id": 99,
 		"parent": null,
 		"children": [],
-		"order": 5300
+		"order": 5600
 	}
 }

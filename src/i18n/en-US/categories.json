@@ -52,5 +52,8 @@
 	"silver_plate": "Silverware",
 	"pkoin": "Pocketcoins",
 	"cryptocurrencies": "Cryptocurrencies",
-	"cooperative/community": "Cooperative/Community"
+	"cooperative/community": "Cooperative/Community",
+	"delivery": "Delivery",
+	"pickup_point": "Pickup point",
+	"courier": "Courier"
 }
