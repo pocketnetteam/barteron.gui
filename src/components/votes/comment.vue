@@ -14,7 +14,14 @@
 		</div>
 
 		<div class="comment-body">
-			<strong class="username">{{ user.name }}</strong>
+			<div class="username-container">
+				<strong class="username">{{ user.name }}</strong>
+				<i 
+					v-if="item.relay" 
+					class="comment-relay fa fa-spinner fa-spin"
+					:title="$t('voteLabels.commentIsPublishing')"
+				></i>
+			</div>
 			<time :datetime="datetime">{{ $d(item.time, 'middle', $i18n.locale) }}</time>
 			<p>{{ item.message }}</p>
 		</div>

@@ -4,7 +4,7 @@ export default {
 	props: {
 		id: String,
 		name: String,
-		readonly: String,
+		readonly: Boolean,
 		placeholder: String,
 		value: String,
 		resize: String,

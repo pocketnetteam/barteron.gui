@@ -9,7 +9,7 @@
 				[`score-${ rating === true ? 'ahead' : rating }`]: true
 			}"
 			v-if="rating"
-		>{{ (value || score).toFixed(1).split('.').join(delimeter) }}</span>
+		>{{ (value || (relayMode ? 0 : score)).toFixed(1).split('.').join(delimeter) }}</span>
 
 		<div class="stars">
 			<ul>
@@ -21,12 +21,12 @@
 
 			<ul
 				class="padded"
-				:style="{ '--r': value || score }"
+				:style="{ '--r': starsValue || value || score }"
 			>
 				<li
 					v-for="index in stars"
 					:key="`fg-${ index }`"
-					:class="{ voted: index <= score }"
+					:class="{ voted: index <= (starsValue || score) }"
 					@click="change(index)"
 				><i class="fa fa-star"></i></li>
 			</ul>
