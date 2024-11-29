@@ -225,8 +225,6 @@ class SDK {
 			/* Barteron offers details */
 			details: new Proxy(this.barteron._details, {
 				get(target, hash) {
-					console.log('!!!!!!!!!!!!!!!!!!!!!!!! hash = ', hash);
-					
 					if (hash !== "draft" && (typeof hash !== "string" || hash?.length < 64)) return this;
 					else if (!target?.[hash]) $.getBrtOffersDetails({ offerIds: [hash] });
 					return target?.[hash];
@@ -526,7 +524,6 @@ class SDK {
 	 */
 	getVoteActions() {
 		return this.sdk.get.actions().then(actions => {
-			console.log(')))))))))))))) sdk.get.actions()', actions);
 			return (actions || []).filter(item => this.isVoteAction(item));
 		});
 	}
@@ -922,10 +919,6 @@ class SDK {
 							data[key] = details[key]?.filter(f => f.s2 === hash) || [];
 						}
 					}
-
-					console.log('rpc details', details);
-					console.log('rpc data', data);
-					
 
 					Vue.set(this.barteron._details, hash, data);
 				}

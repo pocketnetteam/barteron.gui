@@ -38,11 +38,6 @@ class OfferScore {
 		this.rejected = data?.rejected || false;
 		this.completed = data?.completed || !(this.relay || this.rejected);
 
-		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		// this.relay = true;
-		// this.rejected = true;
-		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 		this.actionHandler = null;
 
 		if (!(this.hash)) {
@@ -54,8 +49,6 @@ class OfferScore {
 			return this.sdk.barteron._offerScores[this.hash].update(this);
 		} else {
 			Vue.set(this.sdk.barteron._offerScores, this.hash, this);
-			console.log('Vue.set(this.sdk.barteron._offerScores, this.hash, this)', this.sdk.barteron._offerScores, this.hash, this);
-
 			this.action();
 		}
 	}
@@ -66,23 +59,14 @@ class OfferScore {
 	action() {
 		this.actionHandler = (action) => {
 			if (this.hash === action.transaction) {
-				console.log('this.sdk.on(action)', action);
 				const
 					target = this.sdk.barteron._offerScores[this.hash],
-					// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 					props = {
 						relay: !(action?.completed || action?.rejected),
 						completed: action?.completed,
 						rejected: action?.rejected,
 					};
 
-					// props = {
-					// 	relay: false,
-					// 	completed: false,
-					// 	rejected: true,
-					// };
-
-				
 				Object.entries(props).forEach(([key, value]) => {
 					Vue.set(target, key, value);
 				});

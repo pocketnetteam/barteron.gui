@@ -37,9 +37,9 @@
 
 		<main>
 			<ul class="comments">
-				<template v-if="unrejectedComments().length">
+				<template v-if="validComments().length">
 					<li
-						v-for="(comment, i) in unrejectedComments()"
+						v-for="(comment, i) in validComments()"
 						:key="i"
 					>
 						<Comment :item="comment" />

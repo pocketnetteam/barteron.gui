@@ -43,11 +43,6 @@ class Comment {
 		this.rejected = data?.rejected || false;
 		this.completed = data?.completed || !(this.relay || this.rejected);
 
-		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		// this.relay = false;
-		// this.rejected = true;
-		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 		this.actionHandler = null;
 
 		if (!(this.hash)) {
@@ -59,8 +54,6 @@ class Comment {
 			return this.sdk.barteron._comments[this.hash].update(this);
 		} else {
 			Vue.set(this.sdk.barteron._comments, this.hash, this);
-			console.log('Vue.set(this.sdk.barteron._comments, this.hash, this)', this.sdk.barteron._comments, this.hash, this);
-
 			this.action();
 		}
 	}
@@ -71,22 +64,14 @@ class Comment {
 	action() {
 		this.actionHandler = (action) => {
 			if (this.hash === action.transaction) {
-				console.log('this.sdk.on(action)', action);
 				const
 					target = this.sdk.barteron._comments[this.hash],
-					// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 					props = {
 						relay: !(action?.completed || action?.rejected),
 						completed: action?.completed,
 						rejected: action?.rejected,
 					};
 
-					// props = {
-					// 	relay: false,
-					// 	completed: false,
-					// 	rejected: true,
-					// };
-				
 				Object.entries(props).forEach(([key, value]) => {
 					Vue.set(target, key, value);
 				});

@@ -36,12 +36,9 @@ export default {
 
 	data() {
 		return {
-			// detailsAreLoading: false,
 			isOfferScoreLoading: false,
 			isCommentLoading: false,
 			score: 0,
-			// offerScores: [],
-			// comments: [],
 		}
 	},
 
@@ -59,74 +56,12 @@ export default {
 		comments() {
 			return this.details?.comments || [];
 		},
-
 	},
 
 	methods: {
-		// loadData() {
-			// const details = 
-			// console.log('typeof details = ', typeof details);
-			// console.log('details = ', details);
-			
-			
-			// if (details instanceof Promise) {
-			// 	this.detailsAreLoading = true;
-			// 	console.log('[[[[[[[[[[[[ start promise');
-			// 	details.then((rawData) => {
-			// 		console.log('[[[[[[[[[[[[ rawData', rawData);
-					
-			// 		const loadedDetails = this.sdk.barteron.details[this.item?.hash];
-			// 		this.loadVoteItems(loadedDetails);
-			// 	}).catch(e => {
-			// 		console.error(e);
-			// 	}).finally(() => {
-			// 		this.detailsAreLoading = false;
-			// 	});
-			// } else {
-			// 	this.loadVoteItems(details);
-			// }
-
-
-
-
-			// this.loadVoteItems();
-
-		// },
-
-		// loadVoteItems(details) {
-		// 	console.log('loadVoteItems(details)', details);
-			
-		// 	this.offerScores = details?.offerScores || [];
-		// 	this.comments = details?.comments || [];
-
-		// 	console.log('loaded offerScores', this.offerScores);
-		// 	console.log('loaded comments', this.comments);
-
-		// 	this.addPendingActions();
-		// },
-
-		// loadVoteItems() {
-		// 	console.log('loadVoteItems()');
-			
-		// 	this.offerScores = this.details?.offerScores || [];
-		// 	this.comments = this.details?.comments || [];
-
-		// 	console.log('loaded offerScores', this.offerScores);
-		// 	console.log('loaded comments', this.comments);
-
-		// 	this.addPendingActions();
-		// },
-
-		// detailsAreLoading() {
-		// 	return !(this.details.hasOwnProperty("offerScores") 
-		// 		&& this.details.hasOwnProperty("comments"));
-		// },
-
 		addPendingActions() {
 			this.sdk.getVoteActions().then(actions => {
 				(actions || []).forEach(action => {
-					console.log('before create vote element, action = ', action);
-					
 					const
 						forThisOffer = (
 							(action.expObject.type === "upvoteShare" 
@@ -142,11 +77,9 @@ export default {
 							const element = this.createRelayOfferScore(action);
 							this.score = element.value;
 							this.offerScores.push(element);
-							console.log('after create OfferScore, action = ', action);
 						} else if (action.expObject.type === "comment" && !(this.hasRelayComment())) {
 							const element = this.createRelayComment(action);
 							this.comments.push(element);
-							console.log('after create Comment, action = ', action);
 						}
 					}
 				});
@@ -158,7 +91,7 @@ export default {
 			return new this.sdk.models.OfferScore({
 				hash: action.transaction,
 				offerId: action.expObject.share,
-				address: this.sdk.address, //action.expObject.vsaddress,
+				address: this.sdk.address,
 				value: action.expObject.value,
 				relay: true,
 			});
@@ -192,10 +125,7 @@ export default {
 					address: this.item.address,
 					value: score
 				}).then((action) => {
-					console.log('setBrtOfferVote action', action);
-	
 					const element = this.createRelayOfferScore(action);
-					
 					this.offerScores.push(element);
 				}).catch(e => {
 					this.score = 0;
@@ -219,7 +149,6 @@ export default {
 				this.isCommentLoading = true;
 				this.removeRejectedComments();
 
-				/* Send comment to node */
 				this.sdk.setBrtComment({
 					postid: this.item.hash,
 					msgparsed: {
@@ -227,12 +156,8 @@ export default {
 						info: this.score?.toFixed() || ""
 					}
 				}).then((action) => {
-					console.log('=================== comment action', action);
-
 					const element = this.createRelayComment(action);
-					console.log('=================== comment element', element);
 					feed.content = "";
-					// this.score = 0;
 					this.comments.push(element);
 				}).catch(e => { 
 					this.showError(e);
@@ -293,7 +218,7 @@ export default {
 					|| this.isOfferScoreLoading);
 		},
 
-		unrejectedComments() {
+		validComments() {
 			return this.comments.filter(f => !(f.rejected));
 		},
 
@@ -321,31 +246,7 @@ export default {
 	},
 
 	mounted() {
-
 		this.restoreScoreValueIfNeeded();
 		this.addPendingActions();
-
-		// this.detailsAreLoading = true;
-
-		// this.loadData();
-		// this.sdk.on("action", action => console.log('this.sdk.on action', action));
 	},
-
-	// watch: {
-	// 	details(newValue) {
-
-	// 		console.log("watch =======================================");
-			
-	// 		console.log(newValue.hasOwnProperty("offerScores"));
-	// 		console.log(newValue.hasOwnProperty("comments"));
-			
-
-	// 		// this.detailsAreLoading = false;
-	// 	}
-	// }
-
-	// TODO: add text for all error code !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-
 }
