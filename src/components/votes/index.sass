@@ -4,6 +4,7 @@
 	header
 		display: flex
 		flex-wrap: wrap
+		align-items: center
 		gap: $r
 		color: $trunks
 		font-size: 1.15em
@@ -23,6 +24,15 @@
 
 		.rating
 			font-size: 1.5em
+		
+		.vote-relay
+			color: $hit
+			font-size: 1.2em
+		
+		.vote-rejected,
+		.comment-rejected
+			color: $dodoria
+			width: 100%
 
 	.v-form
 		margin-top: $r * 4
@@ -67,7 +77,7 @@
 				margin-bottom: 0
 
 		.comment
-			font-size: .85rem
+			font-size: 1rem
 			display: flex
 			align-items: center
 			gap: $r * 2
@@ -109,13 +119,25 @@
 				flex-direction: column
 				gap: $r
 
+				.username-container
+					display: flex
+					flex-wrap: wrap
+					align-items: center
+					gap: $r
+
+					.comment-relay
+						color: $hit
+						font-size: 1.2em
+
 				time
 					color: $trunks
+					font-size: .85rem
 
 				p
 					color: $popo
-					font-size: .8rem
+					font-size: 1rem
 					margin: 0
+					white-space: pre-line
 
 			.comment-right
 				margin-left: auto

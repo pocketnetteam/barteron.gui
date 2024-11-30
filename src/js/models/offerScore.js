@@ -1,11 +1,11 @@
 import Vue from "vue";
 
 /**
- * Comment object model
+ * Offer score object model
  * 
- * @class Comment
+ * @class OfferScore
  */
-class Comment {
+class OfferScore {
 	/**
 	 * Initialize model
 	 * 
@@ -13,18 +13,13 @@ class Comment {
 	 * @param {Object} data
 	 */
 	constructor(data) {
-		/* Extract JSON values and format object */
-		const { message, info } = JSON.parse(data?.p?.s1 || '{"message":"", "info":""}');
-		
 		/* Iterable properties */
-		this.hash = data?.hash || data?.hash || null;
+		this.hash = data?.hash;
 		this.height = data?.height || 0;
 		this.type = data?.type || 0;
-		this.postid = data?.s3 || data?.postid || "";
-		this.parentid = data?.parentid || "";
 		this.address = data?.s1 || data?.address || "";
-		this.message = data?.p?.s1 ? message : data?.message || "";
-		this.info = data?.p?.s1 ? info : data?.info || "";
+        this.offerId = data?.s2 || data?.offerId || "";
+		this.value = data?.i1 ? +data?.i1 : data?.value || "";
 
 		const
 			isMs = (timestamp) => {
@@ -46,14 +41,14 @@ class Comment {
 		this.actionHandler = null;
 
 		if (!(this.hash)) {
-			throw new Error('Comment item hash is undefined');
+			throw new Error('Offer score item hash is undefined');
 		}
 
-		const alreadyExists = (this.sdk.barteron._comments[this.hash] instanceof Comment);
+		const alreadyExists = (this.sdk.barteron._offerScores[this.hash] instanceof OfferScore);
 		if (alreadyExists) {
-			return this.sdk.barteron._comments[this.hash].update(this);
+			return this.sdk.barteron._offerScores[this.hash].update(this);
 		} else {
-			Vue.set(this.sdk.barteron._comments, this.hash, this);
+			Vue.set(this.sdk.barteron._offerScores, this.hash, this);
 			this.action();
 		}
 	}
@@ -65,7 +60,7 @@ class Comment {
 		this.actionHandler = (action) => {
 			if (this.hash === action.transaction) {
 				const
-					target = this.sdk.barteron._comments[this.hash],
+					target = this.sdk.barteron._offerScores[this.hash],
 					props = {
 						relay: !(action?.completed || action?.rejected),
 						completed: action?.completed,
@@ -104,8 +99,8 @@ class Comment {
 	destroy() {
 		this.sdk.off("action", this.actionHandler);
 		this.actionHandler = null;
-		Vue.delete(this.sdk.barteron._comments, this.hash);
+		Vue.delete(this.sdk.barteron._offerScores, this.hash);
 	}
 };
 
-export default Comment;
+export default OfferScore;
