@@ -17,19 +17,29 @@
 			<Score
 				:rating="true"
 				:stars="5"
-				:value="votesAverage"
+				:value="completedOfferScoresAverage()"
+				:starsValue="starsValue()"
 				:delimeter="','"
-				:voteable="voteable"
+				:relayMode="true"
+				:voteable="voteable()"
+				:rejected="hasRejectedOfferScore()"
 				@change="vote"
 			/>
-			<span>{{ $tc('voteLabels.votes', votes?.length || 0) }}</span>
+			<i 
+				v-if="hasRelayOfferScore()" 
+				class="vote-relay fa fa-spinner fa-spin"
+				:title="$t('voteLabels.voteIsPublishing')"
+			></i>
+			<span>{{ $tc('voteLabels.votes', offerScoresCount()) }}</span>
+			<div v-if="hasRejectedOfferScore()" class="vote-rejected">{{ $t('voteLabels.voteNotPublished') }}</div>
+			<div v-if="hasRejectedComment()" class="comment-rejected">{{ $t('voteLabels.commentNotPublished') }}</div>
 		</header>
 
 		<main>
 			<ul class="comments">
-				<template v-if="comments.length">
+				<template v-if="validComments().length">
 					<li
-						v-for="(comment, i) in comments"
+						v-for="(comment, i) in validComments()"
 						:key="i"
 					>
 						<Comment :item="comment" />
@@ -43,7 +53,7 @@
 
 			<v-form
 				ref="form"
-				v-if="form && commentable"
+				v-if="commentable()"
 			>
 				<v-textarea
 					ref="vote"
@@ -51,6 +61,7 @@
 					name="vote"
 					length="9000"
 					:placeholder="$t('voteLabels.placeholder')"
+					:readonly="isCommentLoading"
 				>
 					<template #after>
 						<Score
@@ -64,12 +75,12 @@
 								vType="transparent"
 								vSize="sm"
 								class="submit"
-								:disabled="loading"
+								:disabled="isCommentLoading"
 								@click="submit"
 							>
 								<i
 									class="fa fa-spinner fa-spin"
-									v-if="loading"
+									v-if="isCommentLoading"
 								></i>
 								<i
 									class="fa fa-paper-plane"

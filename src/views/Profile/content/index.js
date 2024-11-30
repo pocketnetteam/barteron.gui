@@ -148,7 +148,7 @@ export default {
 					this.sdk.getBrtOffers(address),
 
 					/* Get pending offers */
-					(this.isMyProfile ? this.sdk.getActions() : null)
+					(this.isMyProfile ? this.sdk.getOfferActions() : null)
 				]
 					.filter(r => r)
 					.map(r => r.catch(e => console.error(e)))
