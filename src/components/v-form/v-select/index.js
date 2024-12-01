@@ -160,6 +160,21 @@ export default {
 
 			/* Emit item clicked */
 			this.$emit("selected", item, index, this);
+		},
+
+		/**
+		 * Updating button title (in case of locale change)
+		 * 
+		 * @returns {Void}
+		 */
+		updateButton() {
+			this.$nextTick(() => {
+				const items = this.$props.dropdown || [];
+				const currentItem = items.filter(f => f.selected).pop();
+				if (currentItem) {
+					this.setValue(currentItem);
+				}
+			});
 		}
 	},
 
