@@ -2,6 +2,7 @@
 	<div class="feedback">
 		<v-button
 			vType="light"
+			vSize="md"
 			@click="() => lightbox = true"
 		>
 			<i class="fa fa-comments"></i>
