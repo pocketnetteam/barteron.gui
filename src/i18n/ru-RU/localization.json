@@ -237,6 +237,10 @@
 		"dark": "Тёмная"
 	},
 
+	"localeLabels": {
+		"inherit": "Системный"
+	},
+
 	"metricsLabels": {
 		"label": "Метрика",
 		"km": "км",

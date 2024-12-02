@@ -3,6 +3,10 @@ import {
 	default as ThemeStore,
 	useThemeStore
 } from "@/stores/theme.js";
+import {
+	default as LocaleStore,
+	useLocaleStore
+} from "@/stores/locale.js";
 
 export default {
 	name: "ThemeSwitcher",
@@ -39,6 +43,8 @@ export default {
 	computed: {
 		...mapState(useThemeStore, ["theme"]),
 
+		...mapState(useLocaleStore, ["locale"]),
+
 		/**
 		 * Create list of themes
 		 * 
@@ -69,6 +75,12 @@ export default {
 		 */
 		changeTheme(theme) {
 			ThemeStore.set(theme?.value);
+		},
+	},
+
+	watch: {
+		locale() {
+			this.$refs.theme?.updateButton();
 		}
 	}
 }

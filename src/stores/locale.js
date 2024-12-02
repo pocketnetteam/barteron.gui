@@ -3,19 +3,21 @@ import { locales } from "@/i18n/index.js";
 
 const
 	storageId = "locale",
+	inheritLocale = "inherit",
 	storage = Pinia.defineStore(storageId, {
 		state: () => ({
-			locale: Pinia.get(storageId, "")
+			locale: inheritLocale
 		}),
 
 		getters: {
-			list: () => locales,
+			list: () => [inheritLocale, ...locales],
+			inheritLocale: () => inheritLocale
 		},
 		
 		actions: {
 			fetch() {
 				Pinia.getPrefix().then(() => {
-					this.locale = Pinia.get(storageId, "");
+					this.locale = Pinia.get(storageId, inheritLocale);
 				}).catch(e => { 
 					console.error(e);
 				});

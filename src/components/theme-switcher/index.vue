@@ -10,6 +10,7 @@
 			${ $t(`themeLabels.${ theme.value }`) }
 			`
 		}))"
+		ref="theme"
 		@selected="changeTheme"
 	/>
 </template>

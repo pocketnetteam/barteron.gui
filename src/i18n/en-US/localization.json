@@ -237,6 +237,10 @@
 		"dark": "Dark"
 	},
 
+	"localeLabels": {
+		"inherit": "Inherit"
+	},
+
 	"metricsLabels": {
 		"label": "Metrics",
 		"km": "km",
