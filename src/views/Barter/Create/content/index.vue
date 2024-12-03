@@ -203,6 +203,7 @@
 				<!-- vMap -->
 				<v-map
 					id="location"
+					class="map"
 					ref="map"
 					:center="geohash || location || undefined"
 					:point="geohash || undefined"
