@@ -101,7 +101,6 @@ export default {
 		showLightbox() {
 			this.lightbox = true;
 			this.radius = this.locationStore.radius ?? this.defaultRadius;
-			this.map.mapObject._onResize();
 		},
 
 		/**

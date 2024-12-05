@@ -46,8 +46,6 @@ export default {
 
 	data() {
 		return {
-			map: null,
-			offersNear: [],
 			hover: 0,
 			active: 0,
 			addr: {}
@@ -317,35 +315,5 @@ export default {
 				console.error(e);
 			});
 		},
-
-		/**
-		 * Get offers feed
-		 */
-		async getOffersFeed() {
-			const
-				center = this.item.geohash,
-				radius = this.defaultRadius;
-
-			const offers = await this.getOffersFeedList(center, radius);
-			
-			this.offersNear = offers.map(offer => {
-				if (this.vType === "page" && offer.hash === this.item.hash) {
-					offer.current = true;
-				}
-
-				return offer;
-			});
-		}
 	},
-
-	mounted() {
-		if (this.vType === "page") {
-			this.$2watch("$refs.map").then(map => {
-				this.map = map;
-				this.getOffersFeed();
-			}).catch(e => { 
-				console.error(e);
-			});
-		}
-	}
 }

@@ -65,21 +65,13 @@ export default {
 			type: Array,
 			default: () => [55.751244, 37.618423]
 		},
-		point: {
-			type: Array,
-			default: null
-		},
 		offers: {
 			type: Array,
 			default: () => []
 		},
-		allowPosition: {
-			type: Boolean,
-			default: false
-		},
-		allowSelection: {
-			type: Boolean,
-			default: false
+		mapMode: {
+			type: String,
+			default: "input"
 		},
 		zoom: {
 			type: Number,
@@ -89,10 +81,6 @@ export default {
 			type: Number,
 			default: 18
 		},
-		radius: {
-			type: Number,
-			default: 1
-		}
 	},
 
 	data() {
@@ -104,18 +92,47 @@ export default {
 			iconSize: [32, 37],
 			offersNear: [],
 			mapObject: {},
+			resizeObserver: null,
 			geosearchOptions: {
 				provider: this.provider,
 				style: "bar",
 				autoClose: true,
 				searchLabel: this.$t("locationLabels.enter_address")
 			},
-			marker: this.point,
+			addressSearchEnabled: false,
+			marker: (this.isInputMode ? this.center : null),
 			scale: this.zoom
 		}
 	},
 
 	computed: {
+		/**
+		 * Checking that the map mode is search
+		 * 
+		 * @returns {Boolean}
+		 */
+		isSearchMode() {
+			return this.mapMode === "search";
+		},
+
+		/**
+		 * Checking that the map mode is view
+		 * 
+		 * @returns {Boolean}
+		 */
+		isViewMode() {
+			return this.mapMode === "view";
+		},
+
+		/**
+		 * Checking that the map mode is input
+		 * 
+		 * @returns {Boolean}
+		 */
+		isInputMode() {
+			return this.mapMode === "input";
+		},
+
 		/**
 		 * Get icon anchor
 		 * 
@@ -143,6 +160,89 @@ export default {
 	},
 
 	methods: {
+		observeResize() {
+			const map = this.$refs.map;
+			this.resizeObserver = new ResizeObserver(() => {
+				this.mapObject.invalidateSize();
+			});
+			this.resizeObserver.observe(map.$el);
+		},
+
+		toggleAddressSearch(event, options = { forcedValue: null }) {
+			const
+				parent = this.$refs.map.$el,
+				el = parent.querySelector("div.leaflet-control-geosearch.bar form");
+
+			if (el) {
+				this.addressSearchEnabled = options?.forcedValue ?? !(this.addressSearchEnabled);
+				el.style.visibility = this.addressSearchEnabled ? "visible" : "hidden" ;
+			}
+		},
+
+		setupHandlers() {
+			this.toggleWheel(false);
+
+			this.mapObject
+				.on("focus", () => this.toggleWheel(true))
+				.on("blur", () => this.toggleWheel(false));
+
+			if(this.isInputMode) {
+				this.setupInputModeHandlers();
+			} else if (this.isSearchMode) {
+				this.setupSearchModeHandlers();
+			};
+
+			/* this.mapObject
+				.on("mousemove", e => {
+					this.lastMousePos = e.originalEvent;
+				})
+				.on("zoom", () => {
+					if (this.lastMousePos) {
+						const latLng = this.mapObject.mouseEventToLatLng(this.lastMousePos);
+						this.mapObject.setView(latLng, this.mapObject.getZoom());
+					}
+					console.log(this.mapObject)
+				}); */
+	
+		},
+
+		setupInputModeHandlers() {
+			const markerAtCenter = (emit, event) => {
+				this.scale = this.mapObject.getZoom();
+				this.marker = Object.values(
+					this.mapObject.getCenter()
+				);
+				
+				if (emit) {
+					this.$emit("scale", this.scale, event);
+					this.$emit("change", this.marker, event);
+				}
+			}
+
+			const debouncedMoveEndHandler = this.debounce((e) => markerAtCenter(true, e), 300);
+			this.cancelMoveEndHandler = debouncedMoveEndHandler.cancel;
+	
+			this.mapObject
+				.on("click", e => {
+					if (e.originalEvent.target.matches("div.vue2leaflet-map")) {
+						this.marker = Object.values(e.latlng);
+						this.$emit("change", Object.values(e.latlng));
+					}
+				})
+				.on("move", e => {
+					if (e?.originalEvent) markerAtCenter(false, e);
+				})
+				.on("moveend", e => {
+					debouncedMoveEndHandler(e);
+				});
+
+			markerAtCenter(true);
+		},
+
+		setupSearchModeHandlers() {
+
+		},
+
 		async setLocation() {
 			const isGranted = await this.sdk.checkPermission("geolocation");
 
@@ -163,60 +263,26 @@ export default {
 
 		toggleWheel(enable) {
 			this.mapObject.scrollWheelZoom[enable ? "enable" : "disable"]()
+		},
+
+		searchOffersEvent(e) {
+
 		}
 	},
 
 	mounted() {
-		this.mapObject = this.$refs.map.mapObject;
-		const markerAtCenter = (emit, event) => {
-			this.scale = this.mapObject.getZoom();
-			this.marker = Object.values(
-				this.mapObject.getCenter()
-			);
-			
-			if (emit) {
-				this.$emit("scale", this.scale, event);
-				this.$emit("change", this.marker, event);
-			}
-		}
-
-		/* this.mapObject
-			.on("mousemove", e => {
-				this.lastMousePos = e.originalEvent;
-			})
-			.on("zoom", () => {
-				if (this.lastMousePos) {
-					const latLng = this.mapObject.mouseEventToLatLng(this.lastMousePos);
-					this.mapObject.setView(latLng, this.mapObject.getZoom());
-				}
-				console.log(this.mapObject)
-			}); */
-
-		if(this.allowSelection) {
-			const debouncedMoveEndHandler = this.debounce((e) => markerAtCenter(true, e), 300);
-			this.cancelMoveEndHandler = debouncedMoveEndHandler.cancel;
-	
-			this.mapObject
-				.on("focus", () => this.toggleWheel(true))
-				.on("blur", () => this.toggleWheel(false))
-				.on("click", e => {
-					if (e.originalEvent.target.matches("div.vue2leaflet-map")) {
-						this.marker = Object.values(e.latlng);
-						this.$emit("change", Object.values(e.latlng));
-					}
-				})
-				.on("move", e => {
-					if (e?.originalEvent) markerAtCenter(false, e);
-				})
-				.on("moveend", e => {
-					debouncedMoveEndHandler(e);
-				});
-
-			markerAtCenter(true);
-		}
+		this.$2watch("$refs.map").then(() => {
+			this.mapObject = this.$refs.map.mapObject;
+			this.observeResize();
+			this.toggleAddressSearch(null, { forcedValue: this.isInputMode });
+			this.setupHandlers();
+		}).catch(e => { 
+			console.error(e);
+		});
 	},
 
 	beforeDestroy() {
-		this.cancelMoveEndHandler?.()
+		this.resizeObserver?.disconnect();
+		this.cancelMoveEndHandler?.();
 	},
 }

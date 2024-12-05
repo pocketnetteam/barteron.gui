@@ -35,46 +35,14 @@
 						</span>
 					</div>
 
-					<div class="row full-width">
-						<div class="col block full-width no-offset">
-							<!-- Label: Radius -->
-							<label for="radius" class="v-label">{{ $t('locationLabels.radius') }}</label>
-
-							<div class="col range">
-								<!-- Component: vInput -->
-								<v-input
-									id="radius"
-									name="radius"
-									type="range"
-									min="1"
-									:max="maxRadius"
-									:value="radius"
-									:vEvents="{
-										change: changeRadius,
-										input: changeRadius
-									}"
-								/>
-								<span class="value">{{ `${ radius } ${ $t('metricsLabels.km') }` }}</span>
-							</div>
-						</div>
-
-						<div class="col block no-offset">
-							<v-button
-								:disabled="nearbyDisabled"
-								@click="showNearby"
-							>{{ $t('buttonLabels.show_nearby_on_map') }}</v-button>
-						</div>
-					</div>
-
 					<div class="row">
 						<!-- vMap -->
 						<v-map
 							ref="map"
+							mapMode="search"
+							height="450px"
 							:center="location"
-							:allowPosition="true"
-							:allowSelection="true"
 							:zoom="locationStore.zoom || undefined"
-							:radius="radius || undefined"
 							:offers="offersNear"
 							@scale="x => zoom = x"
 							@change="setMarker"

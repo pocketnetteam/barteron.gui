@@ -9,7 +9,6 @@
 			:zoom="zoom"
 			:max-zoom="maxZoom"
 			:center="marker || center"
-			@ready="() => toggleWheel()"
 		>
 			<!-- Offers near -->
 			<template v-if="offers.length">
@@ -20,12 +19,12 @@
 					>
 						<l-icon
 							:icon-size="iconSize"
-							:icon-url="offer?.current ? offerIconActive : offerIcon"
+							:icon-url="isViewMode ? offerIconActive : offerIcon"
 							:icon-anchor="iconAnchor"
 						>
 						</l-icon>
-						<l-tooltip v-if="!offer.current">{{ offer.caption }}</l-tooltip>
-						<l-popup v-if="!offer.current">
+						<l-tooltip v-if="!(isViewMode)">{{ offer.caption }}</l-tooltip>
+						<l-popup v-if="!(isViewMode)">
 							<BarterItem
 								:item="offer"
 							/>
@@ -35,9 +34,17 @@
 			</template>
 
 			<!-- Find my location -->
-			<template v-if="allowPosition">
+			<template v-if="(isSearchMode || isInputMode)">
 				<l-control position="bottomleft">
 					<div class="leaflet-bar">
+						<a
+							class="leaflet-control-location"
+							href="#"
+							role="button"
+							@click.prevent="toggleAddressSearch"
+						>
+							<i class="fa fa-search"></i>
+						</a>
 						<a
 							class="leaflet-control-location"
 							href="#"
@@ -51,38 +58,27 @@
 			</template>
 
 			<!-- Pin marker -->
-			<template v-if="allowSelection && (marker || point)">
-				<l-marker :latLng="marker || point" />
-				<l-circle
-					:latLng="marker || point"
-					:radius="radius * 1000"
-					:stroke="false"
-					:fillColor="'#136aec'"
-					:fillOpacity="0.15"
-				/>
+			<template v-if="(isSearchMode || isInputMode)">
+				<l-marker v-if="isInputMode && marker" :latLng="marker" />
 				<l-geosearch :options="geosearchOptions" />
-			</template>
-
-			<!-- Circle marker -->
-			<template v-if="!allowSelection && point">
-				<l-circle
-					:latLng="point || {lat: center?.[0], lng: center?.[1]}"
-					:radius="50"
-					:stroke="false"
-					:fillColor="'#136aec'"
-					:fillOpacity="0.15"
-				/>
-				<l-circle-marker
-					:latLng="point || {lat: center?.[0], lng: center?.[1]}"
-					:radius="9"
-					:color="'#fff'"
-					:fillColor="'#2a93ee'"
-					:fillOpacity="1"
-				/>
 			</template>
 
 			<l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
 		</l-map>
+		<div 
+			v-if="mapMode === 'search'" 
+			class="offers-search-container"
+		>
+			<v-button 
+				class="offers-search-button"
+				vSize="sm"
+				:rippleEffect="false"
+				@click="searchOffersEvent"
+			>
+				<i class="fa fa-search"></i>
+				<span>{{ $t('buttonLabels.search_in_visible_area') }}</span>
+			</v-button>
+		</div>
 	</div>
 </template>
 

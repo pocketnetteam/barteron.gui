@@ -1,13 +1,28 @@
 @import "@/css/vars.sass"
 @import "~leaflet.markercluster/dist/MarkerCluster.css"
 @import "~leaflet.markercluster/dist/MarkerCluster.Default.css"
-	
+
 div[class="map"],
 div[id^="map"]
 	box-sizing: content-box
 	overflow: hidden
 	height: var(--height)
 	width: var(--width)
+	position: relative
+
+	.offers-search-container
+		position: absolute
+		z-index: 1000
+		right: 10px
+		left: 55px
+		bottom: 21px
+		display: flex
+		justify-content: center
+
+		.offers-search-button
+			.v-button
+				background: $blue
+				opacity: 0.75
 
 	.leaflet-control-attribution a svg,
 	.leaflet-control-container .geosearch
@@ -53,7 +68,7 @@ div[id^="map"]
 				+scrollbar()
 				border: 0
 				padding-right: 8px
-				max-height: calc(var(--height) - 62px)
+				max-height: calc(var(--height) - 112px)
 				width: 100%
 
 				&:not(:empty)
@@ -67,6 +82,24 @@ div[id^="map"]
 						top: 0
 						right: 8px
 						left: 0
+
+	.leaflet-left
+		&.leaflet-bottom
+			.leaflet-control
+				margin-bottom: 20px
+
+				.leaflet-bar
+					display: flex
+					flex-direction: column
+					gap: $r * 2
+					border: none
+
+					a
+						width: 34px
+						height: 34px
+						border: 2px solid rgba(0, 0, 0, 0.2)
+						background-clip: padding-box
+						border-radius: 4px
 
 	.leaflet-marker-icon
 		&.marker-cluster
