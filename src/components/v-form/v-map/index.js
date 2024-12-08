@@ -81,6 +81,10 @@ export default {
 			type: Number,
 			default: 18
 		},
+		mapActionData: {
+			type: Object,
+			default: () => ({})
+		}
 	},
 
 	data() {
@@ -90,7 +94,6 @@ export default {
 			offerIcon: this.imageUrl("offer.png"),
 			offerIconActive: this.imageUrl("offer-active.png"),
 			iconSize: [32, 37],
-			offersNear: [],
 			mapObject: {},
 			resizeObserver: null,
 			geosearchOptions: {
@@ -101,7 +104,14 @@ export default {
 			},
 			addressSearchEnabled: false,
 			marker: (this.isInputMode ? this.center : null),
-			scale: this.zoom
+			scale: this.zoom,
+			mapState: "",
+			isLoading: false,
+			offersSearchButton: false,
+			offersLoadMoreButton: false,
+			loadingError: false,
+			loadingErrorMessage: "",
+			foundOffers: [],
 		}
 	},
 
@@ -131,6 +141,15 @@ export default {
 		 */
 		isInputMode() {
 			return this.mapMode === "input";
+		},
+
+		/**
+		 * Get offers to show
+		 * 
+		 * @returns {Array}
+		 */
+		shownOffers() {
+			return this.isSearchMode ? this.foundOffers : this.offers;
 		},
 
 		/**
@@ -180,13 +199,10 @@ export default {
 		},
 
 		setupHandlers() {
-			this.toggleWheel(false);
 
-			this.mapObject
-				.on("focus", () => this.toggleWheel(true))
-				.on("blur", () => this.toggleWheel(false));
-
-			if(this.isInputMode) {
+			if (this.isViewMode) {
+				this.setupViewModeHandlers();
+			} else if(this.isInputMode) {
 				this.setupInputModeHandlers();
 			} else if (this.isSearchMode) {
 				this.setupSearchModeHandlers();
@@ -206,7 +222,13 @@ export default {
 	
 		},
 
+		setupViewModeHandlers() {
+			this.setToggleWheelByFocus();
+		},
+
 		setupInputModeHandlers() {
+			this.setToggleWheelByFocus();
+
 			const markerAtCenter = (emit, event) => {
 				this.scale = this.mapObject.getZoom();
 				this.marker = Object.values(
@@ -239,8 +261,180 @@ export default {
 			markerAtCenter(true);
 		},
 
-		setupSearchModeHandlers() {
+		// setupSearchModeHandlers() {
+		// 	const toggleOffersSearchButton = (value, emit, event) => {
+		// 		console.log('toggleOffersSearchButton',value,event);
 
+		// 		if (event.type === "movestart") {
+		// 			this.mapObject.off("moveend");
+		// 			this.cancelMoveEndHandler?.();
+		// 			this.mapObject.on("moveend", e => debouncedMoveEndHandler(e));
+		// 		} else if (event.type === "moveend") {
+		// 			this.mapObject.off("moveend");
+		// 		}
+
+		// 		this.offersSearchButton = value;
+
+		// 		this.scale = this.mapObject.getZoom();
+		// 		const currentCenter = Object.values(
+		// 			this.mapObject.getCenter()
+		// 		);
+
+		// 		if (emit) {
+		// 			this.$emit("scale", this.scale, event);
+		// 			this.$emit("change", currentCenter, event);
+		// 		}
+		// 	};
+			
+		// 	const debouncedMoveEndHandler = this.debounce((e) => toggleOffersSearchButton(true, true, e), 750);
+		// 	this.cancelMoveEndHandler = debouncedMoveEndHandler.cancel;
+	
+		// 	this.mapObject.on("movestart", e => toggleOffersSearchButton(false, false, e));
+		// },
+
+		setupSearchModeHandlers() {
+			this.mapObject.on("movestart", e => this.$emit("mapAction", "moveMap"));
+			// this.mapObject.on("moveend", e => { console.log(this.mapObject.getBounds()) });
+		},
+
+		setToggleWheelByFocus() {
+			this.toggleWheel(false);
+
+			this.mapObject
+				.on("focus", () => this.toggleWheel(true))
+				.on("blur", () => this.toggleWheel(false));
+		},
+
+		setupData() {
+			if (this.isSearchMode) {
+				this.changeStateTo("initialState");
+			}
+		},
+
+		changeStateTo(newState) {
+			this.mapState = newState;
+
+			if (this.isSearchMode) {
+
+				this.isLoading = false;
+				this.offersSearchButton = false;
+				this.offersLoadMoreButton = false;
+				this.loadingError = false;
+
+				switch (this.mapState) {
+					case "initialState":
+						this.offersSearchButton = true;
+						break;
+						
+					case "readyForSearch":
+						this.offersSearchButton = true;
+						break;
+
+					case "isLoading":
+						this.isLoading = true;
+						break;
+					
+					case "fullyLoaded":
+						break;
+
+					case "partiallyLoaded":
+						this.offersLoadMoreButton = true;
+						break;
+
+					case "loadingError":
+						this.loadingError = true;
+						break;
+	
+					default:
+						break;
+				}
+			}
+		},
+
+		mapActionDataChanged() {
+			if (this.isSearchMode) {
+
+				const res = this.mapActionData;
+
+				const
+					loadingStarted = res.isLoading,
+					mapMoved = !(res.isLoading || res.offers || res.error),
+					loadingCompleted = !(res.isLoading) && res.offers,
+					loadingFailed = !(res.isLoading) && res.error;
+				
+				switch (this.mapState) {
+
+					case "initialState":
+						if (loadingStarted) {
+							this.changeStateTo("isLoading");
+						}
+						break;
+
+					case "readyForSearch":
+
+						if (loadingStarted) {
+							this.changeStateTo("isLoading");
+						} else if (loadingCompleted) {
+							this.showLoadedOffers();
+						}
+						break;
+
+					case "isLoading":
+
+						if (mapMoved) {
+							this.changeStateTo("readyForSearch");
+						} else if (loadingCompleted) {
+							this.showLoadedOffers();
+							if (res.nextPageExists) {
+								this.changeStateTo("partiallyLoaded");
+							} else {
+								this.changeStateTo("fullyLoaded");
+							}
+						} else if (loadingFailed) {
+							this.loadingErrorMessage = res.error?.message;
+							this.changeStateTo("loadingError");
+						}
+						break;
+					
+					case "fullyLoaded":
+
+						if (mapMoved) {
+							this.changeStateTo("readyForSearch");
+						}
+						break;
+
+					case "partiallyLoaded":
+
+						if (mapMoved) {
+							this.changeStateTo("readyForSearch");
+						} else if (loadingStarted) {
+							this.changeStateTo("isLoading");
+						}
+						break;
+
+					case "loadingError":
+
+						if (mapMoved) {
+							this.changeStateTo("readyForSearch");
+						}						
+						break;
+	
+					default:
+						break;
+				}
+
+			}
+		},
+
+		showLoadedOffers() {
+			if (this.isSearchMode) {
+				const res = this.mapActionData;
+				if (res.isNextPage) {
+					this.foundOffers = this.foundOffers.concat(res.offers);
+				} else {
+					this.foundOffers = res.offers;
+				}
+			}
 		},
 
 		async setLocation() {
@@ -266,7 +460,11 @@ export default {
 		},
 
 		searchOffersEvent(e) {
+			this.$emit("mapAction", "loadData");
+		},
 
+		loadMoreOffersEvent(e) {
+			this.$emit("mapAction", "loadNextPage");
 		}
 	},
 
@@ -276,12 +474,23 @@ export default {
 			this.observeResize();
 			this.toggleAddressSearch(null, { forcedValue: this.isInputMode });
 			this.setupHandlers();
+			this.setupData();
 		}).catch(e => { 
 			console.error(e);
 		});
 	},
 
+	watch: {
+		mapActionData: {
+			deep: true,
+			handler() {
+				this.mapActionDataChanged();
+			}
+		}
+	},
+
 	beforeDestroy() {
+		this.mapObject.off();
 		this.resizeObserver?.disconnect();
 		this.cancelMoveEndHandler?.();
 	},

@@ -6,6 +6,7 @@ import Account from "@/js/models/account.js";
 import Offer from "@/js/models/offer.js";
 import OfferScore from "@/js/models/offerScore.js";
 import Comment from "@/js/models/comment.js";
+import AppErrors from "@/js/appErrors.js";
 
 /**
  * Allow work with bastyon
@@ -16,6 +17,11 @@ class SDK {
 	lastresult = "";
 	emitted = [];
 	localstorage = "";
+	requestServiceData = {
+		ids: {
+			getBrtOffersFeed: 0,
+		},
+	};
 
 	models = {
 		Account,
@@ -63,6 +69,17 @@ class SDK {
 		if (this.empty(this._currency)) this.getCurrency();
 
 		return this._currency;
+	}
+
+	/**
+	 * Get language by locale
+	 * 
+	 * @param {String} locale
+	 * 
+	 * @returns {String}
+	 */
+	getLanguageByLocale(locale) {
+		return String(locale || "").substring(0, 2);
 	}
 
 	/**
@@ -955,7 +972,29 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	getBrtOffersFeed(request = {}) {
+		const
+			checkingData = request.checkingData,
+			requestName = "getBrtOffersFeed";
+
+		delete request.checkingData;
+
 		return this.rpc("getbarteronfeed", request).then(feed => {
+
+			if (checkingData?.checkRequestId) {
+				const 
+					ids = this.requestServiceData.ids,
+					requestId = checkingData?.requestId,
+					needReject = (requestId !== ids[requestName]);
+				
+				if (needReject) {
+					throw new AppErrors.RequestIdError(
+						requestName, 
+						requestId, 
+						ids.getBrtOffersFeed
+					);
+				}
+			}
+
 			return feed?.map(offer => new Offer(offer)) || [];
 		});
 	}

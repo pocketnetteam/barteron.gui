@@ -1,3 +1,5 @@
+import AppErrors from "@/js/appErrors.js";
+
 export default {
 	name: "Location",
 
@@ -9,6 +11,12 @@ export default {
 			zoom: null,
 			radius: 0,
 			offersNear: [],
+			offersRequestData: {
+				pageSize: 100,
+				pageStart: 0,
+				isLoading: false,
+			},
+			mapActionData: {},
 			addr: {
 				fetching: false
 			},
@@ -57,7 +65,7 @@ export default {
 
 					this.sdk.geoLocation(location, {
 						"zoom": this.zoom || 18,
-						"accept-language": this.$root.$i18n.locale
+						"accept-language": this.sdk.getLanguageByLocale(this.$root.$i18n.locale)
 					})
 						.then(result => {
 							if (result?.address) {
@@ -146,22 +154,22 @@ export default {
 			this.saveDisabled = false;
 		},
 
-		/**
-		 * Show nearby offers on the map
-		 */
-		showNearby() {
-			const
-				center = [
-					"marker",
-					"point",
-					"center"
-				].map(p => this.map?.[p]).filter(p => p).shift(),
-				geohash = this.encodeGeoHash(center || this.location);
+		// /**
+		//  * Show nearby offers on the map
+		//  */
+		// showNearby() {
+		// 	const
+		// 		center = [
+		// 			"marker",
+		// 			"point",
+		// 			"center"
+		// 		].map(p => this.map?.[p]).filter(p => p).shift(),
+		// 		geohash = this.encodeGeoHash(center || this.location);
 				
-			this.getOffersFeed(geohash, this.radius);
+		// 	this.getOffersFeed(geohash, this.radius);
 
-			this.nearbyDisabled = true;
-		},
+		// 	this.nearbyDisabled = true;
+		// },
 
 		/**
 		 * Reset account location
@@ -200,11 +208,75 @@ export default {
 			this.hideLightbox();
 		},
 
-		/**
-		 * Get offers feed
-		 */
-		async getOffersFeed(center, radius) {
-			this.offersNear = await this.getOffersFeedList(center, radius);
+		// /**
+		//  * Get offers feed
+		//  */
+		// async getOffersFeed(center, radius) {
+		// 	this.offersNear = await this.getOffersFeedList(center, radius);
+		// },
+
+		mapAction(actionName) {
+
+			this.offersRequestData.actionName = actionName;
+
+			const geohashItems = []; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+			if (actionName === "loadData" || actionName === "loadNextPage") {
+
+				let pageStart = (actionName === "loadNextPage") ? (this.offersRequestData.pageStart + 1) : 0;
+
+				const ids = this.sdk.requestServiceData.ids;
+				ids.getBrtOffersFeed += 1;
+
+				const request = {
+					location: geohashItems,
+					pageSize: this.offersRequestData.pageSize,
+					pageStart: pageStart,
+					checkingData: {
+						requestId: ids.getBrtOffersFeed,
+						checkRequestId: true,
+					}
+				}
+
+				this.offersRequestData.isLoading = true;
+
+				this.setMapActionData();
+
+				this.sdk.getBrtOffersFeed(
+					request
+				).then(offers => {
+					this.offersRequestData.pageStart = pageStart;
+					this.offersRequestData.isLoading = false;
+					this.setMapActionData(offers);
+				}).catch(e => { 
+					const
+						requestRejected = (e instanceof AppErrors.RequestIdError),
+						needHandleError = !(requestRejected);
+
+					if (needHandleError) {
+						console.error(e);
+						this.offersRequestData.isLoading = false;
+						this.setMapActionData(null, e);
+					} else {
+						console.info(`Location component, mapAction ${actionName}:`, e.message);
+					}
+				});				
+			} else if (actionName === "moveMap") {
+				this.offersRequestData.isLoading = false;
+				this.setMapActionData();
+			}
+
+		},
+
+		setMapActionData(offers, error) {
+			this.mapActionData = {
+				actionName: this.offersRequestData.actionName,
+				isLoading: this.offersRequestData.isLoading,
+				nextPageExists: (offers?.length === this.offersRequestData.pageSize),
+				isNextPage: (offers?.length && this.offersRequestData.pageStart > 0),
+				offers,
+				error
+			}
 		}
 	},
 
@@ -213,7 +285,6 @@ export default {
 
 		this.$2watch("$refs.map").then(map => {
 			this.map = map;
-			this.getOffersFeed();
 		}).catch(e => { 
 			console.error(e);
 		});

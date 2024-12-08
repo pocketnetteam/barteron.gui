@@ -17,12 +17,39 @@ div[id^="map"]
 		left: 55px
 		bottom: 21px
 		display: flex
+		flex-direction: column
 		justify-content: center
+		align-items: center
 
 		.offers-search-button
 			.v-button
 				background: $blue
-				opacity: 0.75
+				opacity: 0.9
+		
+		.offers-load-more-button
+			.v-button
+				background: $roshi
+				opacity: 0.9
+
+		.offers-loading
+			width: 30px
+			height: 30px
+			padding: 2px
+			background: rgba(255,255,255,0.5)
+			border-radius: 4px
+
+			.fa-spinner
+				color: $hit
+				font-size: 26px
+			
+		.offers-loading-error
+			padding: 8px
+			border-radius: 8px
+			background: $primary
+			opacity: 0.9
+
+			.error-message
+				color: $dodoria
 
 	.leaflet-control-attribution a svg,
 	.leaflet-control-container .geosearch

@@ -11,9 +11,9 @@
 			:center="marker || center"
 		>
 			<!-- Offers near -->
-			<template v-if="offers.length">
+			<template v-if="shownOffers.length">
 				<l-marker-cluster>
-					<l-marker v-for="offer in offers"
+					<l-marker v-for="offer in shownOffers"
 						:lat-lng="decodeGeoHash(offer.geohash)"
 						:key="offer.hash"
 					>
@@ -66,10 +66,17 @@
 			<l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
 		</l-map>
 		<div 
-			v-if="mapMode === 'search'" 
+			v-if="isSearchMode" 
 			class="offers-search-container"
 		>
+			<div
+				v-if="loadingError && loadingErrorMessage"
+				class="offers-loading-error"
+			>
+				<p class="error-message"> {{ loadingErrorMessage }} </p>
+			</div>
 			<v-button 
+				v-if="offersSearchButton"
 				class="offers-search-button"
 				vSize="sm"
 				:rippleEffect="false"
@@ -78,6 +85,22 @@
 				<i class="fa fa-search"></i>
 				<span>{{ $t('buttonLabels.search_in_visible_area') }}</span>
 			</v-button>
+			<v-button 
+				v-if="offersLoadMoreButton"
+				class="offers-load-more-button"
+				vSize="sm"
+				:rippleEffect="false"
+				@click="loadMoreOffersEvent"
+			>
+				<i class="fa fa-plus-circle"></i>
+				<span>{{ $t('buttonLabels.show_more') }}</span>
+			</v-button>
+			<div
+				v-if="isLoading"
+				class="offers-loading"
+			>
+				<i class="fa fa-spinner fa-spin"></i>
+			</div>
 		</div>
 	</div>
 </template>

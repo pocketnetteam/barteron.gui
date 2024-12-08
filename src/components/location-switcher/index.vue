@@ -4,7 +4,7 @@
 			'location-switcher': true,
 			'lightbox-open': lightbox
 		}"
-		vType="stroke"
+		vType="light"
 		:title="locationStore.geohash ? lastAddr : ''"
 		@click="showLightbox"
 	>
@@ -14,7 +14,7 @@
 		<div class="info">
 			<strong class="location">
 				<template v-if="locationStore.geohash && !lastAddr"><i class="fa fa-spin fa-spinner"></i></template>
-				<template v-else>{{ locationStore.geohash ? lastAddr : $t('buttonLabels.unknown') }}</template>
+				<template v-else>{{ locationStore.geohash ? lastAddr : $t('buttonLabels.set_location') }}</template>
 			</strong>
 			<!-- <span class="distance">{{ (radius || defaultRadius) + $t('metricsLabels.km') }}</span> -->
 		</div>
@@ -40,12 +40,13 @@
 						<v-map
 							ref="map"
 							mapMode="search"
-							height="450px"
+							height="55vh"
 							:center="location"
 							:zoom="locationStore.zoom || undefined"
-							:offers="offersNear"
+							:mapActionData="mapActionData"
 							@scale="x => zoom = x"
 							@change="setMarker"
+							@mapAction="mapAction"
 						/>
 					</div>
 				</v-form>
