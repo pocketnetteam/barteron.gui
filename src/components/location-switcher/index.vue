@@ -16,7 +16,6 @@
 				<template v-if="locationStore.geohash && !lastAddr"><i class="fa fa-spin fa-spinner"></i></template>
 				<template v-else>{{ locationStore.geohash ? lastAddr : $t('buttonLabels.set_location') }}</template>
 			</strong>
-			<!-- <span class="distance">{{ (radius || defaultRadius) + $t('metricsLabels.km') }}</span> -->
 		</div>
 
 		<template #after>
@@ -45,7 +44,7 @@
 							:zoom="locationStore.zoom || undefined"
 							:mapActionData="mapActionData"
 							@scale="x => zoom = x"
-							@change="setMarker"
+							@change="setCenter"
 							@mapAction="mapAction"
 						/>
 					</div>
@@ -59,7 +58,7 @@
 								@click="reset"
 							>{{ $t('buttonLabels.all_regions') }}</v-button>
 							<v-button
-								:disabled="saveDisabled"
+								:disabled="saveDisabled || !(location)"
 								@click="submit"
 							>{{ $t('buttonLabels.save') }}</v-button>
 						</div>

@@ -112,6 +112,7 @@ export default {
 			loadingError: false,
 			loadingErrorMessage: "",
 			foundOffers: [],
+			cancelMoveEndHandler: null,
 		}
 	},
 
@@ -261,40 +262,26 @@ export default {
 			markerAtCenter(true);
 		},
 
-		// setupSearchModeHandlers() {
-		// 	const toggleOffersSearchButton = (value, emit, event) => {
-		// 		console.log('toggleOffersSearchButton',value,event);
-
-		// 		if (event.type === "movestart") {
-		// 			this.mapObject.off("moveend");
-		// 			this.cancelMoveEndHandler?.();
-		// 			this.mapObject.on("moveend", e => debouncedMoveEndHandler(e));
-		// 		} else if (event.type === "moveend") {
-		// 			this.mapObject.off("moveend");
-		// 		}
-
-		// 		this.offersSearchButton = value;
-
-		// 		this.scale = this.mapObject.getZoom();
-		// 		const currentCenter = Object.values(
-		// 			this.mapObject.getCenter()
-		// 		);
-
-		// 		if (emit) {
-		// 			this.$emit("scale", this.scale, event);
-		// 			this.$emit("change", currentCenter, event);
-		// 		}
-		// 	};
-			
-		// 	const debouncedMoveEndHandler = this.debounce((e) => toggleOffersSearchButton(true, true, e), 750);
-		// 	this.cancelMoveEndHandler = debouncedMoveEndHandler.cancel;
-	
-		// 	this.mapObject.on("movestart", e => toggleOffersSearchButton(false, false, e));
-		// },
-
 		setupSearchModeHandlers() {
-			this.mapObject.on("movestart", e => this.$emit("mapAction", "moveMap"));
-			// this.mapObject.on("moveend", e => { console.log(this.mapObject.getBounds()) });
+			
+			const moveEndHandler = (e) => {
+				this.scale = this.mapObject.getZoom();
+				const center = Object.values(
+					this.mapObject.getCenter()
+				);
+
+				this.$emit("scale", this.scale, e);
+				this.$emit("change", center, e);
+			};
+
+			this.mapObject.on("movestart", e => {
+				this.$emit("mapAction", "moveMap");
+
+				this.mapObject.off("moveend"); // prevent double moveend event bug
+				this.mapObject.on("moveend", e => moveEndHandler(e));
+			});
+
+			moveEndHandler(null);
 		},
 
 		setToggleWheelByFocus() {

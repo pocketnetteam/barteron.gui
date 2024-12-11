@@ -79,7 +79,7 @@ class SDK {
 	 * @returns {String}
 	 */
 	getLanguageByLocale(locale) {
-		return String(locale || "").substring(0, 2);
+		return String(locale || "").split("-").shift();
 	}
 
 	/**

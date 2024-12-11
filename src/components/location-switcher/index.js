@@ -1,4 +1,6 @@
 import AppErrors from "@/js/appErrors.js";
+import { LatLng } from "leaflet";
+import { bboxes, decode_bbox } from "ngeohash";
 
 export default {
 	name: "Location",
@@ -7,13 +9,12 @@ export default {
 		return {
 			lightbox: false,
 			map: null,
-			mapMarker: null,
+			center: null,
 			zoom: null,
-			radius: 0,
-			offersNear: [],
 			offersRequestData: {
 				pageSize: 100,
 				pageStart: 0,
+				topHeight: null,
 				isLoading: false,
 			},
 			mapActionData: {},
@@ -21,7 +22,7 @@ export default {
 				fetching: false
 			},
 			lastAddr: null,
-			nearbyDisabled: true,
+			debouncedAddressResetHandler: null,
 			saveDisabled: true
 		}
 	},
@@ -33,8 +34,8 @@ export default {
 		 * @returns {Array|null}
 		 */
 		location() {
-			if (!this.sdk.empty(this.mapMarker)) {
-				return this.mapMarker;
+			if (!this.sdk.empty(this.center)) {
+				return this.center;
 			} else if (this.locationStore.geohash) {
 				return this.geohash;
 			} else {
@@ -108,7 +109,6 @@ export default {
 		 */
 		showLightbox() {
 			this.lightbox = true;
-			this.radius = this.locationStore.radius ?? this.defaultRadius;
 		},
 
 		/**
@@ -119,23 +119,32 @@ export default {
 		},
 
 		/**
-		 * Informing of last marker
+		 * Hide lightbox
+		 */
+		setupAddressResetHandler() {
+			this.debouncedAddressResetHandler = this.debounce(() => {
+				this.addr = {};
+			}, 1500);
+		},
+
+		/**
+		 * Informing of last center
 		 * 
 		 * @param {Array} latlng
 		 */
-		setMarker(latlng, e) {
+		setCenter(latlng, e) {
 			const
-				aLat = Number(this.mapMarker?.[0] || 0),
-				aLon = Number(this.mapMarker?.[1] || 0),
+				aLat = Number(this.center?.[0] || 0),
+				aLon = Number(this.center?.[1] || 0),
 				bLat = Number(latlng[0] || 0),
 				bLon = Number(latlng[1] || 0);
 
 				
 			/* Prevent frequently address request */
 			if (aLat !== bLat || aLon !== bLon) {
-				this.mapMarker = latlng;
-				this.addr = {};
-				this.nearbyDisabled = false;
+				this.center = latlng;
+
+				this.debouncedAddressResetHandler();
 			}
 
 			this.debounce(() => {
@@ -144,42 +153,13 @@ export default {
 		},
 
 		/**
-		 * Handle radius change
-		 * 
-		 * @param {Event} e
-		 */
-		changeRadius(e) {
-			this.radius = Number(e.target.value);
-			this.nearbyDisabled = false;
-			this.saveDisabled = false;
-		},
-
-		// /**
-		//  * Show nearby offers on the map
-		//  */
-		// showNearby() {
-		// 	const
-		// 		center = [
-		// 			"marker",
-		// 			"point",
-		// 			"center"
-		// 		].map(p => this.map?.[p]).filter(p => p).shift(),
-		// 		geohash = this.encodeGeoHash(center || this.location);
-				
-		// 	this.getOffersFeed(geohash, this.radius);
-
-		// 	this.nearbyDisabled = true;
-		// },
-
-		/**
 		 * Reset account location
 		 */
 		reset() {
 			this.locationStore.reset();
 
-			this.mapMarker = null;
-			this.saveDisabled = false;
-			this.nearbyDisabled = false;
+			this.center = null;
+			this.saveDisabled = true;
 			this.hideLightbox();
 		},
 
@@ -187,13 +167,7 @@ export default {
 		 * Submit form data
 		 */
 		submit() {
-			const
-				center = [
-					"marker",
-					"point",
-					"center"
-				].map(p => this.map?.[p]).filter(p => p).shift(),
-				geohash = this.encodeGeoHash(center || this.location);
+			const geohash = this.encodeGeoHash(this.location);
 
 			this.saveDisabled = true;
 
@@ -208,30 +182,23 @@ export default {
 			this.hideLightbox();
 		},
 
-		// /**
-		//  * Get offers feed
-		//  */
-		// async getOffersFeed(center, radius) {
-		// 	this.offersNear = await this.getOffersFeedList(center, radius);
-		// },
-
 		mapAction(actionName) {
 
 			this.offersRequestData.actionName = actionName;
 
-			const geohashItems = []; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 			if (actionName === "loadData" || actionName === "loadNextPage") {
 
 				let pageStart = (actionName === "loadNextPage") ? (this.offersRequestData.pageStart + 1) : 0;
+				let topHeight = (actionName === "loadNextPage") ? this.offersRequestData.topHeight : null;
 
 				const ids = this.sdk.requestServiceData.ids;
 				ids.getBrtOffersFeed += 1;
 
 				const request = {
-					location: geohashItems,
+					location: this.getVisibleBoundsGeohashes(),
 					pageSize: this.offersRequestData.pageSize,
-					pageStart: pageStart,
+					pageStart,
+					topHeight, 
 					checkingData: {
 						requestId: ids.getBrtOffersFeed,
 						checkRequestId: true,
@@ -245,6 +212,9 @@ export default {
 				this.sdk.getBrtOffersFeed(
 					request
 				).then(offers => {
+					if (pageStart === 0) {
+						this.offersRequestData.topHeight = offers?.[0]?.height;
+					}
 					this.offersRequestData.pageStart = pageStart;
 					this.offersRequestData.isLoading = false;
 					this.setMapActionData(offers);
@@ -268,6 +238,110 @@ export default {
 
 		},
 
+		getVisibleBoundsGeohashes() {
+			const mainBounds = this.map.mapObject.getBounds();
+			let precision = 1;
+			let result = this.getGeohashesForBounds(mainBounds, precision);
+			let temp = [];
+			const params = {
+				maxCount: 300,
+				maxPrecision: 7
+			};
+
+			while (true) {
+				result.forEach(item => {
+
+					const needDivide =
+						this.geohashCoversBounds(item, mainBounds) 
+						&& !(this.geohashIsEqualToBounds(item, mainBounds))
+						|| this.geohashIntersectsBounds(item, mainBounds);
+					
+					if (needDivide) {
+						const bounds = this.getBoundsOfGeohash(item);
+						
+						let newItems = this.getGeohashesForBounds(
+							bounds, 
+							precision + 1
+						).filter(f => !(temp.includes(f) || this.geohashOutOfBounds(f, mainBounds)));
+
+						temp = temp.concat(newItems);
+
+					} else if (this.geohashInsideBounds(item, mainBounds)) {
+						temp.push(item);
+					}
+				})
+
+				if (temp.length <= params.maxCount && precision < params.maxPrecision) {
+					result = temp;
+					temp = [];
+					precision++;
+				} else {
+					break;
+				}
+			}
+
+			return result;
+		},
+
+		getBoundsOfGeohash(geohash) {
+			const [minLat, minLon, maxLat, maxLon] = decode_bbox(geohash);
+			return { 
+				_northEast: { lat: maxLat, lng: maxLon }, 
+				_southWest: { lat: minLat, lng: minLon } 
+			}
+		},
+
+		getGeohashesForBounds(bounds, precision) {
+			return bboxes(
+				bounds._southWest.lat, 
+				bounds._southWest.lng, 
+				bounds._northEast.lat, 
+				bounds._northEast.lng, 
+				precision
+			);
+		},
+
+		geohashCoversBounds(geohash, bounds) {
+			const geohashBounds = this.getBoundsOfGeohash(geohash);
+			return geohashBounds._northEast.lat >= bounds._northEast.lat
+				&& geohashBounds._northEast.lng >= bounds._northEast.lng
+				&& geohashBounds._southWest.lat <= bounds._southWest.lat
+				&& geohashBounds._southWest.lng <= bounds._southWest.lng
+		},
+
+		geohashIsEqualToBounds(geohash, bounds) {
+			const geohashBounds = this.getBoundsOfGeohash(geohash);
+			return geohashBounds._northEast.lat === bounds._northEast.lat
+				&& geohashBounds._northEast.lng === bounds._northEast.lng
+				&& geohashBounds._southWest.lat === bounds._southWest.lat
+				&& geohashBounds._southWest.lng === bounds._southWest.lng
+		},
+
+		geohashOutOfBounds(geohash, bounds) {
+			const geohashBounds = this.getBoundsOfGeohash(geohash);
+			return geohashBounds._southWest.lat >= bounds._northEast.lat
+				|| geohashBounds._southWest.lng >= bounds._northEast.lng
+				|| geohashBounds._northEast.lat <= bounds._southWest.lat
+				|| geohashBounds._northEast.lng <= bounds._southWest.lng;
+
+		},
+
+		geohashInsideBounds(geohash, bounds) {
+			const geohashBounds = this.getBoundsOfGeohash(geohash);
+			return geohashBounds._northEast.lat <= bounds._northEast.lat
+				&& geohashBounds._northEast.lng <= bounds._northEast.lng
+				&& geohashBounds._southWest.lat >= bounds._southWest.lat
+				&& geohashBounds._southWest.lng >= bounds._southWest.lng;
+		},
+
+		geohashIntersectsBounds(geohash, bounds) {
+			return !(
+				this.geohashCoversBounds(geohash, bounds) 
+				|| this.geohashOutOfBounds(geohash, bounds)
+				|| this.geohashInsideBounds(geohash, bounds)
+			);
+		},
+
 		setMapActionData(offers, error) {
 			this.mapActionData = {
 				actionName: this.offersRequestData.actionName,
@@ -282,11 +356,16 @@ export default {
 
 	mounted() {
 		this.lastAddr = this.address;
+		this.setupAddressResetHandler();
 
 		this.$2watch("$refs.map").then(map => {
 			this.map = map;
 		}).catch(e => { 
 			console.error(e);
 		});
-	}
+	},
+
+	beforeDestroy() {
+		this.debouncedAddressResetHandler?.cancel();
+	},
 }
