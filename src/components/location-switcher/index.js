@@ -1,5 +1,5 @@
 import AppErrors from "@/js/appErrors.js";
-import { GeoHashDivider } from "@/js/geohashUtils.js";
+import { GeoHashApproximator } from "@/js/geohashUtils.js";
 
 export default {
 	name: "Location",
@@ -7,9 +7,9 @@ export default {
 	data() {
 		return {
 			lightbox: false,
-			map: null,
 			center: null,
 			zoom: null,
+			bounds: null,
 			offersRequestData: {
 				pageSize: 100,
 				pageStart: 0,
@@ -152,6 +152,24 @@ export default {
 		},
 
 		/**
+		 * Informing of last zoom
+		 * 
+		 * @param {Number} zoom
+		 */
+		setZoom(zoom, e) {
+			this.zoom = zoom;
+		},
+
+		/**
+		 * Informing of last bounds
+		 * 
+		 * @param {Object} bounds
+		 */
+		setBounds(bounds, e) {
+			this.bounds = bounds;
+		},
+
+		/**
 		 * Reset account location
 		 */
 		reset() {
@@ -174,32 +192,34 @@ export default {
 			this.locationStore.set({
 				geohash,
 				zoom: this.zoom,
-				radius: this.radius
+				bounds: this.bounds
 			});
 
 			this.lastAddr = this.address;
 			this.hideLightbox();
 		},
 
-		mapAction(actionName) {
+		mapAction(actionName, actionParams, event) {
 
 			this.offersRequestData.actionName = actionName;
 
 			if (actionName === "loadData" || actionName === "loadNextPage") {
 
-				let pageStart = (actionName === "loadNextPage") ? (this.offersRequestData.pageStart + 1) : 0;
-				let topHeight = (actionName === "loadNextPage") ? this.offersRequestData.topHeight : null;
+				const 
+					pageStart = (actionName === "loadNextPage") ? (this.offersRequestData.pageStart + 1) : 0,
+					topHeight = (actionName === "loadNextPage") ? this.offersRequestData.topHeight : null,
+					pageSize = this.offersRequestData.pageSize;
 
 				const ids = this.sdk.requestServiceData.ids;
 				ids.getBrtOffersFeed += 1;
 
-				const geohashDivider = new GeoHashDivider(
-					this.map.mapObject.getBounds()
-				);
+				const
+					approximator = new GeoHashApproximator(actionParams.bounds),
+					location = approximator.getGeohashItems();
 
 				const request = {
-					location: geohashDivider.getVisibleBoundsGeohashes(),
-					pageSize: this.offersRequestData.pageSize,
+					location,
+					pageSize,
 					pageStart,
 					topHeight, 
 					checkingData: {
@@ -231,7 +251,7 @@ export default {
 						this.offersRequestData.isLoading = false;
 						this.setMapActionData(null, e);
 					} else {
-						console.info(`Location component, mapAction ${actionName}:`, e.message);
+						console.info(`Location component, map action ${actionName}:`, e.message);
 					}
 				});				
 			} else if (actionName === "moveMap") {
@@ -256,12 +276,6 @@ export default {
 	mounted() {
 		this.lastAddr = this.address;
 		this.setupAddressResetHandler();
-
-		this.$2watch("$refs.map").then(map => {
-			this.map = map;
-		}).catch(e => { 
-			console.error(e);
-		});
 	},
 
 	beforeDestroy() {

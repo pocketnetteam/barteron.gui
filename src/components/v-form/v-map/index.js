@@ -272,10 +272,11 @@ export default {
 
 				this.$emit("scale", this.scale, e);
 				this.$emit("change", center, e);
+				this.$emit("bounds", this.mapObject.getBounds(), e)
 			};
 
 			this.mapObject.on("movestart", e => {
-				this.$emit("mapAction", "moveMap");
+				this.$emit("mapAction", "moveMap", {}, e);
 
 				this.mapObject.off("moveend"); // prevent double moveend event bug
 				this.mapObject.on("moveend", e => moveEndHandler(e));
@@ -447,11 +448,18 @@ export default {
 		},
 
 		searchOffersEvent(e) {
-			this.$emit("mapAction", "loadData");
+			this.emitLoadingMapAction("loadData", e);
 		},
 
 		loadMoreOffersEvent(e) {
-			this.$emit("mapAction", "loadNextPage");
+			this.emitLoadingMapAction("loadNextPage", e);
+		},
+
+		emitLoadingMapAction(actionName, e) {
+			const actionParams = {
+				bounds: this.mapObject.getBounds(),
+			}
+			this.$emit("mapAction", actionName, actionParams, e);
 		}
 	},
 

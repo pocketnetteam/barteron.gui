@@ -43,8 +43,9 @@
 							:center="location"
 							:zoom="locationStore.zoom || undefined"
 							:mapActionData="mapActionData"
-							@scale="x => zoom = x"
+							@scale="setZoom"
 							@change="setCenter"
+							@bounds="setBounds"
 							@mapAction="mapAction"
 						/>
 					</div>

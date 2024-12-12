@@ -93,7 +93,7 @@ export default {
 	},
 
 	watch: {
-		"locationStore.geohash"() {
+		"locationStore.bounds"() {
 			this.getOffersFeed();
 			this.getComplexDeals();
 		}

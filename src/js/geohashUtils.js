@@ -1,6 +1,6 @@
 import { bboxes, decode_bbox } from "ngeohash";
 
-class GeoHashDivider {
+class GeoHashApproximator {
 
 	constructor(visibleBounds, params = {}) {
 		this.visibleBounds = visibleBounds;
@@ -11,7 +11,7 @@ class GeoHashDivider {
 		}
 	}
 
-	getVisibleBoundsGeohashes() {
+	getGeohashItems() {
 		const mainBounds = this.visibleBounds;
 		let precision = 1;
 		let result = this.getGeohashesForBounds(mainBounds, precision);
@@ -92,7 +92,6 @@ class GeoHashDivider {
 			|| geohashBounds._southWest.lng >= bounds._northEast.lng
 			|| geohashBounds._northEast.lat <= bounds._southWest.lat
 			|| geohashBounds._northEast.lng <= bounds._southWest.lng;
-
 	}
 
 	geohashInsideBounds(geohash, bounds) {
@@ -113,4 +112,4 @@ class GeoHashDivider {
 
 }
 
-export { GeoHashDivider };
+export { GeoHashApproximator };
