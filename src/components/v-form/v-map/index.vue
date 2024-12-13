@@ -35,7 +35,7 @@
 
 			<!-- Find my location -->
 			<template v-if="(isSearchMode || isInputMode)">
-				<l-control position="bottomleft">
+				<l-control position="topleft">
 					<div class="leaflet-bar">
 						<a
 							class="leaflet-control-location"
@@ -45,6 +45,11 @@
 						>
 							<i class="fa fa-search"></i>
 						</a>
+					</div>
+				</l-control>
+
+				<l-control position="bottomleft">
+					<div class="leaflet-bar">
 						<a
 							class="leaflet-control-location"
 							href="#"

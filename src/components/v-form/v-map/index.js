@@ -63,7 +63,7 @@ export default {
 		},
 		center: {
 			type: Array,
-			default: () => [55.751244, 37.618423]
+			default: () => [0, 0]
 		},
 		offers: {
 			type: Array,
@@ -75,7 +75,7 @@ export default {
 		},
 		zoom: {
 			type: Number,
-			default: 15
+			default: 10
 		},
 		maxZoom: {
 			type: Number,
@@ -84,11 +84,20 @@ export default {
 		mapActionData: {
 			type: Object,
 			default: () => ({})
-		}
+		},
+		addressInfo: {
+			type: String,
+			default: ""
+		},
 	},
 
 	data() {
-		this.provider = new OpenStreetMapProvider();
+		this.provider = new OpenStreetMapProvider({
+			params: {
+			  'accept-language': this.sdk.getLanguageByLocale(this.$root.$i18n.locale),
+			  addressdetails: 1,
+			},
+		  });
 
 		return {
 			offerIcon: this.imageUrl("offer.png"),
@@ -100,7 +109,8 @@ export default {
 				provider: this.provider,
 				style: "bar",
 				autoClose: true,
-				searchLabel: this.$t("locationLabels.enter_address")
+				searchLabel: this.$t("locationLabels.enter_address"),
+				notFoundMessage: this.$t("locationLabels.address_not_found"),
 			},
 			addressSearchEnabled: false,
 			marker: (this.isInputMode ? this.center : null),
@@ -176,7 +186,7 @@ export default {
 			get() {
 				return this.sdk.ifEmpty(this.sdk.location, undefined);
 			}
-		}
+		},
 	},
 
 	methods: {
@@ -195,8 +205,48 @@ export default {
 
 			if (el) {
 				this.addressSearchEnabled = options?.forcedValue ?? !(this.addressSearchEnabled);
-				el.style.visibility = this.addressSearchEnabled ? "visible" : "hidden" ;
+				el.style.visibility = this.addressSearchEnabled ? "visible" : "hidden";
 			}
+			event?.currentTarget?.blur();
+		},
+
+		getAddressInput() {
+			const
+				parent = this.$refs.map.$el,
+				el = parent.querySelector("div.leaflet-control-geosearch.bar form input");
+
+			return el;
+		},
+
+		setupAddressInputHandlers() {
+			const 
+				self = this,
+				el = this.getAddressInput();
+			
+			if (el) {
+				el.onfocus = function() {
+					el.placeholder = self.getAddressInputPlaceholder({ focus: true });
+				};
+	
+				el.onblur = function() {
+					el.placeholder = self.getAddressInputPlaceholder({ focus: false });
+				};
+			}
+		},
+		
+		addressInfoChanged() {
+			const 
+				self = this,
+				el = this.getAddressInput(),
+				isFocused = (document.activeElement === el);
+
+			if (el && !(isFocused)) {
+				el.placeholder = self.getAddressInputPlaceholder({ focus: false });
+			}
+		},
+
+		getAddressInputPlaceholder(options = {}) {
+			return (options?.focus) ? this.$t("locationLabels.enter_address") : (this.addressInfo || "...");
 		},
 
 		setupHandlers() {
@@ -263,6 +313,8 @@ export default {
 		},
 
 		setupSearchModeHandlers() {
+
+			this.setupAddressInputHandlers();
 			
 			const moveEndHandler = (e) => {
 				this.scale = this.mapObject.getZoom();
@@ -460,14 +512,32 @@ export default {
 				bounds: this.mapObject.getBounds(),
 			}
 			this.$emit("mapAction", actionName, actionParams, e);
-		}
+		},
+
+		latLonDefined(latLon) {
+			return latLon?.length && (latLon[0] || latLon[1]);
+		},
 	},
 
 	mounted() {
-		this.$2watch("$refs.map").then(() => {
-			this.mapObject = this.$refs.map.mapObject;
+		this.$2watch("$refs.map").then(map => {
+			this.mapObject = map.mapObject;
 			this.observeResize();
-			this.toggleAddressSearch(null, { forcedValue: this.isInputMode });
+		}).then(() => {
+			return this.latLonDefined(this.center) ? 
+				this.center 
+				: this.sdk.getDefaultLocation();
+		}).catch(e => { 
+			console.error(e);
+		}).then(latLon => {
+			const center = this.latLonDefined(latLon) ? latLon : [0, 0];
+			const zoom = this.latLonDefined(latLon) ? this.zoom : 0;
+			this.mapObject.setView(center, zoom);
+		}).then(() => {
+			this.toggleAddressSearch(
+				null, 
+				{ forcedValue: (this.isSearchMode || this.isInputMode) }
+			);
 			this.setupHandlers();
 			this.setupData();
 		}).catch(e => { 
@@ -476,6 +546,10 @@ export default {
 	},
 
 	watch: {
+		addressInfo() {
+			this.addressInfoChanged();
+		},
+
 		mapActionData: {
 			deep: true,
 			handler() {

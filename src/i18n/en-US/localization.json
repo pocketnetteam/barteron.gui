@@ -159,6 +159,7 @@
 
 	"locationLabels": {
 		"enter_address": "Enter address",
+		"address_not_found": "Sorry, that address could not be found",
 		"preferred": "Location for new offers",
 		"static": "Static",
 		"dynamic": "Dynamic",

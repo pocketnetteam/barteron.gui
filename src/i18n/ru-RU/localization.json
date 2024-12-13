@@ -159,6 +159,7 @@
 
 	"locationLabels": {
 		"enter_address": "Введите адрес",
+		"address_not_found": "Извините, адрес не найден",
 		"preferred": "Местоположение для новых объявлений",
 		"static": "Статическое",
 		"dynamic": "Динамическое",

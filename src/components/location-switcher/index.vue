@@ -26,14 +26,6 @@
 				@onHide="hideLightbox"
 			>
 				<v-form ref="form">
-					<div class="row info">
-						<i class="fa fa-map-marker-alt"></i>
-						<span>
-							<template v-if="!address"><i class="fa fa-spin fa-spinner"></i></template>
-							<template v-else>{{ address || $t('buttonLabels.unknown') }}</template>
-						</span>
-					</div>
-
 					<div class="row">
 						<!-- vMap -->
 						<v-map
@@ -43,6 +35,7 @@
 							:center="location"
 							:zoom="locationStore.zoom || undefined"
 							:mapActionData="mapActionData"
+							:addressInfo="address"
 							@scale="setZoom"
 							@change="setCenter"
 							@bounds="setBounds"

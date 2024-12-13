@@ -35,8 +35,7 @@ const
 
 			reset() {
 				this.set({
-					geohash: null,
-					zoom: null,
+					...this.location, 
 					bounds: null,
 				});
 			}

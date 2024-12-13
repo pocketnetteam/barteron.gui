@@ -118,12 +118,12 @@ export default {
 		},
 
 		/**
-		 * Hide lightbox
+		 * Setup address reset handler
 		 */
 		setupAddressResetHandler() {
 			this.debouncedAddressResetHandler = this.debounce(() => {
 				this.addr = {};
-			}, 1500);
+			}, 1000);
 		},
 
 		/**
