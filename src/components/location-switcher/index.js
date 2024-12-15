@@ -59,7 +59,6 @@ export default {
 		 */
 		showLightbox() {
 			this.lightbox = true;
-			this.preventMapMicroMovingEvents();
 		},
 
 		/**
@@ -118,7 +117,7 @@ export default {
 			
 			setTimeout(() => {
 				if (this.lightbox) this.saveRegionButtonEnabled = true;
-			}, 300);
+			}, 100);
 		},
 
 		/**
@@ -185,7 +184,21 @@ export default {
 		},
 
 		saveRegionEvent() {
-			this.submit();
+			const
+				needConfirmation = (this.zoom > this.maxDesiredZoomToSaveRegion),
+				completionHandler = () => this.submit();
+
+			if (needConfirmation) {
+				this.dialog?.instance
+					.view("question", this.$t("dialogLabels.saving_region_warning_by_zoom"))
+					.then(state => {
+						if (state) {
+							completionHandler();
+						}
+					});
+			} else {
+				completionHandler();
+			}
 		},
 
 		/**
