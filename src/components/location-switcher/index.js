@@ -1,5 +1,7 @@
 import AppErrors from "@/js/appErrors.js";
 import { GeoHashApproximator } from "@/js/geohashUtils.js";
+import { mapState } from "pinia";
+import { useLocaleStore } from "@/stores/locale.js";
 
 export default {
 	name: "Location",
@@ -17,30 +19,17 @@ export default {
 				isLoading: false,
 			},
 			mapActionData: {},
-			addr: {
-				fetching: false
-			},
-			lastAddr: null,
-			debouncedAddressResetHandler: null,
-			saveDisabled: true
+			saveRegionButtonEnabled: false,
+			debouncedAddressUpdateHandler: null,
+			currentAddress: {},
+			storedLocationAddress: {},
 		}
 	},
 
+	inject: ["dialog"],
+	
 	computed: {
-		/**
-		 * Get my location
-		 * 
-		 * @returns {Array|null}
-		 */
-		location() {
-			if (!this.sdk.empty(this.center)) {
-				return this.center;
-			} else if (this.locationStore.geohash) {
-				return this.geohash;
-			} else {
-				return undefined;
-			}
-		},
+		...mapState(useLocaleStore, ["locale"]),
 
 		/**
 		 * Decode offer geohash
@@ -51,54 +40,16 @@ export default {
 			return this.decodeGeoHash(this.locationStore.geohash);
 		},
 
-		/**
-		 * Get address from geohash
-		 * 
-		 * @returns {Object|null}
-		 */
-		address() {
-			if (!this.addr?.country) {
-				const location = /* this.account?.static ? this.geohash : */ this.location;
-
-				if (!this.addr.fetching && !this.sdk.empty(location)) {
-					this.addr.fetching = true;
-
-					this.sdk.geoLocation(location, {
-						"zoom": this.zoom || 18,
-						"accept-language": this.sdk.getLanguageByLocale(this.$root.$i18n.locale)
-					})
-						.then(result => {
-							if (result?.address) {
-								this.$set(this, "addr", {
-									...this.addr,
-									...result.address,
-									fetching: false
-								});
-							}
-						}).catch(e => { 
-							console.error(e);
-						}).finally(() => {
-							this.addr.fetching = false;
-						});
-				}
-
-				return null;
-			} else {
-				const position = [
-					this.addr.country,
-					this.addr.city || this.addr.town || this.addr.state || this.addr.county
-				].filter(a => a).join(", ")
-
-				if (!this.lastAddr) this.lastAddr = position;
-				return position;
-			}
+		resetRegionButtonEnabled() {
+			return this.searchRegionDefined;
 		},
 
-		/**
-		 * Get latest address for top button
-		 */
-		latestAddress() {
-			return this.lastAddr || this.address;
+		searchRegionDefined() {
+			return !!(this.locationStore.bounds);
+		},
+
+		maxDesiredZoomToSaveRegion() {
+			return 12;
 		}
 	},
 
@@ -108,6 +59,7 @@ export default {
 		 */
 		showLightbox() {
 			this.lightbox = true;
+			this.preventMapMicroMovingEvents();
 		},
 
 		/**
@@ -118,11 +70,19 @@ export default {
 		},
 
 		/**
+		 * Locale changed handler
+		 */
+		async updateAllAddresses() {
+			await this.updateCurrentAddress();
+			await this.updateStoredLocationAddress();
+		},
+
+		/**
 		 * Setup address reset handler
 		 */
-		setupAddressResetHandler() {
-			this.debouncedAddressResetHandler = this.debounce(() => {
-				this.addr = {};
+		setupAddressUpdateHandler() {
+			this.debouncedAddressUpdateHandler = this.debounce(() => {
+				this.updateCurrentAddress();
 			}, 1000);
 		},
 
@@ -130,33 +90,20 @@ export default {
 		 * Informing of last center
 		 * 
 		 * @param {Array} latlng
+		 * @param {Event} event
 		 */
-		setCenter(latlng, e) {
-			const
-				aLat = Number(this.center?.[0] || 0),
-				aLon = Number(this.center?.[1] || 0),
-				bLat = Number(latlng[0] || 0),
-				bLon = Number(latlng[1] || 0);
-
-				
-			/* Prevent frequently address request */
-			if (aLat !== bLat || aLon !== bLon) {
-				this.center = latlng;
-
-				this.debouncedAddressResetHandler();
-			}
-
-			this.debounce(() => {
-				if (this.lightbox) this.saveDisabled = false;
-			}, 300)();
+		setCenter(latlng, event) {
+			this.center = latlng;
+			this.debouncedAddressUpdateHandler();
 		},
 
 		/**
 		 * Informing of last zoom
 		 * 
 		 * @param {Number} zoom
+		 * @param {Event} event
 		 */
-		setZoom(zoom, e) {
+		setZoom(zoom, event) {
 			this.zoom = zoom;
 		},
 
@@ -164,19 +111,89 @@ export default {
 		 * Informing of last bounds
 		 * 
 		 * @param {Object} bounds
+		 * @param {Event} event
 		 */
-		setBounds(bounds, e) {
+		setBounds(bounds, event) {
 			this.bounds = bounds;
+			
+			setTimeout(() => {
+				if (this.lightbox) this.saveRegionButtonEnabled = true;
+			}, 300);
 		},
 
 		/**
-		 * Reset account location
+		 * Informing of geosearch showlocation
+		 * 
+		 * @param {Event} event
+		 */
+		geosearch_showlocation(event) {
+			this.$set(this.currentAddress, "text", null);
+			setTimeout(() => {
+				this.debouncedAddressUpdateHandler?.cancel();
+				this.updateCurrentAddress();
+			}, 500);
+		},
+
+		async updateCurrentAddress() {
+			await this.updateAddress(this.currentAddress, this.center);
+		},
+
+		async updateStoredLocationAddress() {
+			await this.updateAddress(this.storedLocationAddress, this.geohash);
+		},
+
+		async updateAddress(address, latLon) {
+			if (!(this.sdk.empty(latLon) || address.isLoading)) {
+				this.$set(address, "isLoading", true);
+				const needSmoothUpdate = (address === this.currentAddress);
+				if (!(needSmoothUpdate)) {
+					this.$set(address, "text", null);
+				}
+				const data = await this.loadAddress(latLon);
+				const detailsAllowed = (address === this.currentAddress);
+				this.$set(address, "text", this.getAddressText(data, detailsAllowed));
+				this.$set(address, "isLoading", false);
+			}
+		},
+
+		loadAddress(latLon) {
+			return !(this.sdk.empty(latLon)) ? 
+				this.sdk.geoLocation(latLon, {
+					"zoom": this.zoom || 18,
+					"accept-language": this.sdk.getLanguageByLocale(this.$root.$i18n.locale)
+				}).catch(e => {
+					console.error(e);
+				})
+				: null;
+		},
+
+		getAddressText(data, detailsAllowed) {
+			let result = null;
+			const 
+				displayName = data?.display_name,
+				address = data?.address;
+
+			if (detailsAllowed && this.zoom >= 15 && displayName) {
+				result = displayName;
+			} else if (!(this.sdk.empty(address))) {
+				result = [
+					address.country,
+					address.city || address.town || address.state || address.county
+				].filter(a => a).join(", ")
+			}
+			return result;
+		},
+
+		saveRegionEvent() {
+			this.submit();
+		},
+
+		/**
+		 * Reset stored location
 		 */
 		reset() {
-			this.locationStore.reset();
-
-			this.center = null;
-			this.saveDisabled = true;
+			this.locationStore.reset({onlyBounds: true});
+			this.saveRegionButtonEnabled = true;
 			this.hideLightbox();
 		},
 
@@ -184,18 +201,16 @@ export default {
 		 * Submit form data
 		 */
 		submit() {
-			const geohash = this.encodeGeoHash(this.location);
+			const geohash = this.encodeGeoHash(this.center);
 
-			this.saveDisabled = true;
-
-			/* Update account with data */
 			this.locationStore.set({
 				geohash,
 				zoom: this.zoom,
 				bounds: this.bounds
 			});
 
-			this.lastAddr = this.address;
+			this.saveRegionButtonEnabled = false;
+			this.updateStoredLocationAddress();
 			this.hideLightbox();
 		},
 
@@ -274,11 +289,17 @@ export default {
 	},
 
 	mounted() {
-		this.lastAddr = this.address;
-		this.setupAddressResetHandler();
+		this.setupAddressUpdateHandler();
+		this.updateAllAddresses();
+	},
+
+	watch: {
+		locale() {
+			this.updateAllAddresses();
+		}
 	},
 
 	beforeDestroy() {
-		this.debouncedAddressResetHandler?.cancel();
+		this.debouncedAddressUpdateHandler?.cancel();
 	},
 }

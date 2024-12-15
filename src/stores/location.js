@@ -33,11 +33,23 @@ const
 				});
 			},
 
-			reset() {
-				this.set({
-					...this.location, 
-					bounds: null,
-				});
+			reset(options = {onlyBounds: false}) {
+				let data = {};
+				
+				if (options?.onlyBounds) {
+					data = {
+						...this.location, 
+						bounds: null,
+					};
+				} else {
+					data = {
+						geohash: null,
+						zoom: null,
+						bounds: null,
+					};
+				}
+
+				this.set(data);
 			}
 		}
 	}),

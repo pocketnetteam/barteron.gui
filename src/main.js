@@ -272,7 +272,7 @@ Vue.prototype.shared = Vue.observable({
 		getOffersFeedList() {
 			const
 				location = this.getStoredLocation() || [],
-				pageSize = 25;
+				pageSize = 100;
 				
 			this.fetching = true;
 

@@ -123,6 +123,8 @@ export default {
 			loadingErrorMessage: "",
 			foundOffers: [],
 			cancelMoveEndHandler: null,
+			addressInput: null,
+			geosearchForm: null,
 		}
 	},
 
@@ -199,10 +201,7 @@ export default {
 		},
 
 		toggleAddressSearch(event, options = { forcedValue: null }) {
-			const
-				parent = this.$refs.map.$el,
-				el = parent.querySelector("div.leaflet-control-geosearch.bar form");
-
+			const el = this.getGeosearchForm();
 			if (el) {
 				this.addressSearchEnabled = options?.forcedValue ?? !(this.addressSearchEnabled);
 				el.style.visibility = this.addressSearchEnabled ? "visible" : "hidden";
@@ -210,12 +209,12 @@ export default {
 			event?.currentTarget?.blur();
 		},
 
-		getAddressInput() {
-			const
-				parent = this.$refs.map.$el,
-				el = parent.querySelector("div.leaflet-control-geosearch.bar form input");
-
-			return el;
+		getGeosearchForm() {
+			if (!(this.geosearchForm)) {
+				const parent = this.$refs.map.$el;
+				this.geosearchForm = parent.querySelector("div.leaflet-control-geosearch.bar form");
+			}
+			return this.geosearchForm;
 		},
 
 		setupAddressInputHandlers() {
@@ -236,13 +235,20 @@ export default {
 		
 		addressInfoChanged() {
 			const 
-				self = this,
 				el = this.getAddressInput(),
 				isFocused = (document.activeElement === el);
 
 			if (el && !(isFocused)) {
-				el.placeholder = self.getAddressInputPlaceholder({ focus: false });
+				el.placeholder = this.getAddressInputPlaceholder({ focus: false });
 			}
+		},
+
+		getAddressInput() {
+			if (!(this.addressInput)) {
+				const parent = this.$refs.map.$el;
+				this.addressInput = parent.querySelector("div.leaflet-control-geosearch.bar form input");
+			}
+			return this.addressInput;
 		},
 
 		getAddressInputPlaceholder(options = {}) {
@@ -317,6 +323,8 @@ export default {
 			this.setupAddressInputHandlers();
 			
 			const moveEndHandler = (e) => {
+				this.mapObject.off("moveend"); // prevent double moveend event bug
+
 				this.scale = this.mapObject.getZoom();
 				const center = Object.values(
 					this.mapObject.getCenter()
@@ -330,11 +338,14 @@ export default {
 			this.mapObject.on("movestart", e => {
 				this.$emit("mapAction", "moveMap", {}, e);
 
-				this.mapObject.off("moveend"); // prevent double moveend event bug
 				this.mapObject.on("moveend", e => moveEndHandler(e));
 			});
 
-			moveEndHandler(null);
+			this.mapObject.on("geosearch/showlocation", e => {
+				this.$emit("geosearch_showlocation", e);
+			});
+
+			// moveEndHandler(null);
 		},
 
 		setToggleWheelByFocus() {
@@ -500,10 +511,12 @@ export default {
 		},
 
 		searchOffersEvent(e) {
+			this.mapObject.closePopup();
 			this.emitLoadingMapAction("loadData", e);
 		},
 
 		loadMoreOffersEvent(e) {
+			this.mapObject.closePopup();
 			this.emitLoadingMapAction("loadNextPage", e);
 		},
 
