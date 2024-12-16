@@ -115,6 +115,7 @@ export default {
 			addressSearchEnabled: false,
 			marker: (this.isInputMode ? this.center : null),
 			scale: this.zoom,
+			locationWatcherEnabled: false,
 			mapState: "",
 			isLoading: false,
 			offersSearchButton: false,
@@ -122,7 +123,6 @@ export default {
 			loadingError: false,
 			loadingErrorMessage: "",
 			foundOffers: [],
-			cancelMoveEndHandler: null,
 			addressInput: null,
 			geosearchForm: null,
 		}
@@ -298,9 +298,6 @@ export default {
 				}
 			}
 
-			const debouncedMoveEndHandler = this.debounce((e) => markerAtCenter(true, e), 300);
-			this.cancelMoveEndHandler = debouncedMoveEndHandler.cancel;
-	
 			this.mapObject
 				.on("click", e => {
 					if (e.originalEvent.target.matches("div.vue2leaflet-map")) {
@@ -312,7 +309,7 @@ export default {
 					if (e?.originalEvent) markerAtCenter(false, e);
 				})
 				.on("moveend", e => {
-					debouncedMoveEndHandler(e);
+					markerAtCenter(true, e);
 				});
 
 			markerAtCenter(true);
@@ -332,7 +329,7 @@ export default {
 
 				this.$emit("scale", this.scale, e);
 				this.$emit("change", center, e);
-				this.$emit("bounds", this.mapObject.getBounds(), e)
+				this.$emit("bounds", this.mapObject.getBounds(), e);
 			};
 
 			this.mapObject.on("movestart", e => {
@@ -487,7 +484,9 @@ export default {
 			}
 		},
 
-		async setLocation() {
+		async startLocating() {
+			this.locationWatcherEnabled = true;
+
 			const isGranted = await this.sdk.checkPermission("geolocation");
 
 			if (!isGranted) {
@@ -499,9 +498,13 @@ export default {
 				});
 			}
 
-			if (this.location?.length) {
+			this.applyLocationIfDetected();
+		},
+
+		applyLocationIfDetected() {
+			if (this.latLonDefined(this.location)) {
+				this.locationWatcherEnabled = false;
 				this.mapObject.panTo(this.location);
-				this.$emit("change", this.location);
 			}
 		},
 
@@ -546,10 +549,8 @@ export default {
 			const zoom = this.latLonDefined(latLon) ? this.zoom : 0;
 			this.mapObject.setView(center, zoom);
 		}).then(() => {
-			this.toggleAddressSearch(
-				null, 
-				{ forcedValue: (this.isSearchMode || this.isInputMode) }
-			);
+			const needShowAddressInput = (this.isSearchMode || this.isInputMode);
+			this.toggleAddressSearch(null, {forcedValue: needShowAddressInput});
 			this.setupHandlers();
 			this.setupData();
 		}).catch(e => { 
@@ -560,6 +561,12 @@ export default {
 	watch: {
 		addressInfo() {
 			this.addressInfoChanged();
+		},
+
+		location() {
+			if (this.locationWatcherEnabled) {
+				this.applyLocationIfDetected();
+			}
 		},
 
 		mapActionData: {
@@ -573,6 +580,5 @@ export default {
 	beforeDestroy() {
 		this.mapObject.off();
 		this.resizeObserver?.disconnect();
-		this.cancelMoveEndHandler?.();
 	},
 }

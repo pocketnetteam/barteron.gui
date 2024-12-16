@@ -8,7 +8,7 @@
 			:style="{ height }"
 			:zoom="zoom"
 			:max-zoom="maxZoom"
-			:center="marker || center"
+			:center="center"
 		>
 			<!-- Offers near -->
 			<template v-if="shownOffers.length">
@@ -54,7 +54,7 @@
 							class="leaflet-control-location"
 							href="#"
 							role="button"
-							@click.prevent="setLocation"
+							@click.prevent="startLocating"
 						>
 							<i class="fa fa-location-arrow"></i>
 						</a>
