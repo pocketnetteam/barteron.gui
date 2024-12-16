@@ -345,7 +345,6 @@ export default {
 				this.$emit("geosearch_showlocation", e);
 			});
 
-			// moveEndHandler(null);
 		},
 
 		setToggleWheelByFocus() {
