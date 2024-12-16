@@ -1,13 +1,55 @@
 @import "@/css/vars.sass"
 @import "~leaflet.markercluster/dist/MarkerCluster.css"
 @import "~leaflet.markercluster/dist/MarkerCluster.Default.css"
-	
+
 div[class="map"],
 div[id^="map"]
 	box-sizing: content-box
 	overflow: hidden
 	height: var(--height)
 	width: var(--width)
+	position: relative
+
+	.offers-search-container
+		position: absolute
+		z-index: 1000
+		right: 10px
+		left: 55px
+		bottom: 21px
+		display: flex
+		flex-direction: column
+		justify-content: center
+		align-items: center
+
+		.offers-search-button
+			.v-button
+				background: $blue
+				opacity: 0.9
+		
+		.offers-load-more-button
+			.v-button
+				background: $roshi
+				opacity: 0.9
+
+		.offers-loading
+			width: 30px
+			height: 30px
+			padding: 2px
+			background: rgba(255,255,255,0.5)
+			border-radius: 4px
+
+			.fa-spinner
+				color: $hit
+				font-size: 26px
+			
+		.offers-loading-error
+			padding: 8px
+			border-radius: 8px
+			background: $primary
+			opacity: 0.9
+
+			.error-message
+				color: $dodoria
 
 	.leaflet-control-attribution a svg,
 	.leaflet-control-container .geosearch
@@ -53,7 +95,7 @@ div[id^="map"]
 				+scrollbar()
 				border: 0
 				padding-right: 8px
-				max-height: calc(var(--height) - 62px)
+				max-height: calc(var(--height) - 112px)
 				width: 100%
 
 				&:not(:empty)
@@ -67,6 +109,11 @@ div[id^="map"]
 						top: 0
 						right: 8px
 						left: 0
+
+	.leaflet-left
+		&.leaflet-bottom
+			.leaflet-control
+				margin-bottom: 20px
 
 	.leaflet-marker-icon
 		&.marker-cluster

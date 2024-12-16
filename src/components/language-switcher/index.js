@@ -41,48 +41,11 @@ export default {
 
 	methods: {
 		/**
-		 * Select locale
-		 * 
-		 * @param {String|Object} item
-		 */
-		selectLanguage(item) {
-			const selected = (() => {
-				if (item?.value) {
-					return item;
-				} else {
-					return this.localesList.filter(f => f.value.includes(item)).pop();
-				}
-			})();
-
-			this.$root.$i18n.locale = this.getLocale(selected.value);
-		},
-
-		/**
-		 * Get locale
-		 * 
-		 * @param {String} value
-		 * 
-		 * @returns {String}
-		 */
-		getLocale(value) {
-			let result = value;
-			if (value === LocaleStore.inheritLocale) {
-				const
-					language = this.sdk.appinfo?.locale,
-					target = this.localesList.filter(f => f.value.includes(language)).pop();
-				
-				result = target ? target.value : VueI18n.fallbackLocale;
-			}
-			return result;
-		},
-
-		/**
 		 * Set locale
 		 * 
 		 * @param {String|Object} item
 		 */
 		changeLanguage(item) {
-			this.selectLanguage(item);
 			LocaleStore.set(item.value);
 		},
 	},
@@ -92,14 +55,4 @@ export default {
 			this.$refs.locale?.updateButton();
 		}
 	},
-
-	created() {
-		if (this.locale) {
-			/* Get locale from store */
-			this.selectLanguage(this.locale);
-		} else if (this.sdk.appinfo?.locale) {
-			/* Get locale from bastyon */
-			this.selectLanguage(this.sdk.appinfo?.locale);
-		}
-	}
 }

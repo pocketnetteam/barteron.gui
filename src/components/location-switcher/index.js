@@ -1,38 +1,35 @@
+import AppErrors from "@/js/appErrors.js";
+import { GeoHashApproximator } from "@/js/geohashUtils.js";
+import { mapState } from "pinia";
+import { useLocaleStore } from "@/stores/locale.js";
+
 export default {
 	name: "Location",
 
 	data() {
 		return {
 			lightbox: false,
-			map: null,
-			mapMarker: null,
+			center: null,
 			zoom: null,
-			radius: 0,
-			offersNear: [],
-			addr: {
-				fetching: false
+			bounds: null,
+			offersRequestData: {
+				pageSize: 100,
+				pageStart: 0,
+				topHeight: null,
+				isLoading: false,
 			},
-			lastAddr: null,
-			nearbyDisabled: true,
-			saveDisabled: true
+			mapActionData: {},
+			saveRegionButtonEnabled: false,
+			debouncedAddressUpdateHandler: null,
+			currentAddress: {},
+			storedLocationAddress: {},
 		}
 	},
 
+	inject: ["dialog"],
+	
 	computed: {
-		/**
-		 * Get my location
-		 * 
-		 * @returns {Array|null}
-		 */
-		location() {
-			if (!this.sdk.empty(this.mapMarker)) {
-				return this.mapMarker;
-			} else if (this.locationStore.geohash) {
-				return this.geohash;
-			} else {
-				return undefined;
-			}
-		},
+		...mapState(useLocaleStore, ["locale"]),
 
 		/**
 		 * Decode offer geohash
@@ -43,54 +40,16 @@ export default {
 			return this.decodeGeoHash(this.locationStore.geohash);
 		},
 
-		/**
-		 * Get address from geohash
-		 * 
-		 * @returns {Object|null}
-		 */
-		address() {
-			if (!this.addr?.country) {
-				const location = /* this.account?.static ? this.geohash : */ this.location;
-
-				if (!this.addr.fetching && !this.sdk.empty(location)) {
-					this.addr.fetching = true;
-
-					this.sdk.geoLocation(location, {
-						"zoom": this.zoom || 18,
-						"accept-language": this.$root.$i18n.locale
-					})
-						.then(result => {
-							if (result?.address) {
-								this.$set(this, "addr", {
-									...this.addr,
-									...result.address,
-									fetching: false
-								});
-							}
-						}).catch(e => { 
-							console.error(e);
-						}).finally(() => {
-							this.addr.fetching = false;
-						});
-				}
-
-				return null;
-			} else {
-				const position = [
-					this.addr.country,
-					this.addr.city || this.addr.town || this.addr.state || this.addr.county
-				].filter(a => a).join(", ")
-
-				if (!this.lastAddr) this.lastAddr = position;
-				return position;
-			}
+		resetRegionButtonEnabled() {
+			return this.searchRegionDefined;
 		},
 
-		/**
-		 * Get latest address for top button
-		 */
-		latestAddress() {
-			return this.lastAddr || this.address;
+		searchRegionDefined() {
+			return !!(this.locationStore.bounds);
+		},
+
+		maxDesiredZoomToSaveRegion() {
+			return 12;
 		}
 	},
 
@@ -100,8 +59,6 @@ export default {
 		 */
 		showLightbox() {
 			this.lightbox = true;
-			this.radius = this.locationStore.radius ?? this.defaultRadius;
-			this.map.mapObject._onResize();
 		},
 
 		/**
@@ -112,67 +69,151 @@ export default {
 		},
 
 		/**
-		 * Informing of last marker
+		 * Locale changed handler
+		 */
+		async updateAllAddresses() {
+			await this.updateCurrentAddress();
+			await this.updateStoredLocationAddress();
+		},
+
+		/**
+		 * Setup address reset handler
+		 */
+		setupAddressUpdateHandler() {
+			this.debouncedAddressUpdateHandler = this.debounce(() => {
+				this.updateCurrentAddress();
+			}, 1000);
+		},
+
+		/**
+		 * Informing of last center
 		 * 
 		 * @param {Array} latlng
+		 * @param {Event} event
 		 */
-		setMarker(latlng, e) {
-			const
-				aLat = Number(this.mapMarker?.[0] || 0),
-				aLon = Number(this.mapMarker?.[1] || 0),
-				bLat = Number(latlng[0] || 0),
-				bLon = Number(latlng[1] || 0);
-
-				
-			/* Prevent frequently address request */
-			if (aLat !== bLat || aLon !== bLon) {
-				this.mapMarker = latlng;
-				this.addr = {};
-				this.nearbyDisabled = false;
-			}
-
-			this.debounce(() => {
-				if (this.lightbox) this.saveDisabled = false;
-			}, 300)();
+		setCenter(latlng, event) {
+			this.center = latlng;
+			this.debouncedAddressUpdateHandler();
 		},
 
 		/**
-		 * Handle radius change
+		 * Informing of last zoom
 		 * 
-		 * @param {Event} e
+		 * @param {Number} zoom
+		 * @param {Event} event
 		 */
-		changeRadius(e) {
-			this.radius = Number(e.target.value);
-			this.nearbyDisabled = false;
-			this.saveDisabled = false;
+		setZoom(zoom, event) {
+			this.zoom = zoom;
 		},
 
 		/**
-		 * Show nearby offers on the map
+		 * Informing of last bounds
+		 * 
+		 * @param {Object} bounds
+		 * @param {Event} event
 		 */
-		showNearby() {
+		setBounds(bounds, event) {
+			this.bounds = bounds;
+			
+			setTimeout(() => {
+				if (this.lightbox) this.saveRegionButtonEnabled = true;
+			}, 100);
+		},
+
+		/**
+		 * Informing of geosearch showlocation
+		 * 
+		 * @param {Event} event
+		 */
+		geosearch_showlocation(event) {
+			this.$set(this.currentAddress, "text", null);
+			setTimeout(() => {
+				this.debouncedAddressUpdateHandler?.cancel();
+				this.updateCurrentAddress();
+			}, 500);
+		},
+
+		async updateCurrentAddress() {
+			await this.updateAddress(this.currentAddress, this.center);
+		},
+
+		async updateStoredLocationAddress() {
+			await this.updateAddress(this.storedLocationAddress, this.geohash);
+		},
+
+		async updateAddress(address, latLon) {
+			if (!(this.sdk.empty(latLon) || address.isLoading)) {
+				this.$set(address, "isLoading", true);
+				const needSmoothUpdate = (address === this.currentAddress);
+				if (!(needSmoothUpdate)) {
+					this.$set(address, "text", null);
+				}
+				const data = await this.loadAddress(latLon);
+				const detailsAllowed = (address === this.currentAddress);
+				this.$set(address, "text", this.getAddressText(data, detailsAllowed));
+				this.$set(address, "isLoading", false);
+			}
+		},
+
+		loadAddress(latLon) {
+			return !(this.sdk.empty(latLon)) ? 
+				this.sdk.geoLocation(latLon, {
+					"zoom": this.zoom || 18,
+					"accept-language": this.sdk.getLanguageByLocale(this.$root.$i18n.locale)
+				}).catch(e => {
+					console.error(e);
+				})
+				: null;
+		},
+
+		getAddressText(data, detailsAllowed) {
+			let result = null;
+			const 
+				displayName = data?.display_name,
+				address = data?.address;
+
+			if (detailsAllowed && this.zoom >= 15 && displayName) {
+				result = displayName;
+			} else if (!(this.sdk.empty(address))) {
+				result = [
+					address.country,
+					address.city || address.town || address.state || address.county
+				].filter(a => a).join(", ")
+			}
+			return result;
+		},
+
+		saveRegionEvent() {
 			const
-				center = [
-					"marker",
-					"point",
-					"center"
-				].map(p => this.map?.[p]).filter(p => p).shift(),
-				geohash = this.encodeGeoHash(center || this.location);
-				
-			this.getOffersFeed(geohash, this.radius);
+				needConfirmation = (this.zoom > this.maxDesiredZoomToSaveRegion),
+				completionHandler = () => this.submit();
 
-			this.nearbyDisabled = true;
+			if (needConfirmation) {
+				this.dialog?.instance
+					.view("question", this.$t("dialogLabels.saving_region_warning_by_zoom"))
+					.then(state => {
+						if (state) {
+							completionHandler();
+						}
+					});
+			} else {
+				completionHandler();
+			}
 		},
 
 		/**
-		 * Reset account location
+		 * Show help
+		 */
+		help() {
+			this.dialog?.instance.view("info", this.$t("dialogLabels.map_help_info"))
+		},
+
+		/**
+		 * Reset stored location
 		 */
 		reset() {
-			this.locationStore.reset();
-
-			this.mapMarker = null;
-			this.saveDisabled = false;
-			this.nearbyDisabled = false;
+			this.locationStore.reset({onlyBounds: true});
+			this.saveRegionButtonEnabled = true;
 			this.hideLightbox();
 		},
 
@@ -180,43 +221,105 @@ export default {
 		 * Submit form data
 		 */
 		submit() {
-			const
-				center = [
-					"marker",
-					"point",
-					"center"
-				].map(p => this.map?.[p]).filter(p => p).shift(),
-				geohash = this.encodeGeoHash(center || this.location);
+			const geohash = this.encodeGeoHash(this.center);
 
-			this.saveDisabled = true;
-
-			/* Update account with data */
 			this.locationStore.set({
 				geohash,
 				zoom: this.zoom,
-				radius: this.radius
+				bounds: this.bounds
 			});
 
-			this.lastAddr = this.address;
+			this.saveRegionButtonEnabled = false;
+			this.updateStoredLocationAddress();
 			this.hideLightbox();
 		},
 
-		/**
-		 * Get offers feed
-		 */
-		async getOffersFeed(center, radius) {
-			this.offersNear = await this.getOffersFeedList(center, radius);
+		mapAction(actionName, actionParams, event) {
+
+			this.offersRequestData.actionName = actionName;
+
+			if (actionName === "loadData" || actionName === "loadNextPage") {
+
+				const 
+					pageStart = (actionName === "loadNextPage") ? (this.offersRequestData.pageStart + 1) : 0,
+					topHeight = (actionName === "loadNextPage") ? this.offersRequestData.topHeight : null,
+					pageSize = this.offersRequestData.pageSize;
+
+				const ids = this.sdk.requestServiceData.ids;
+				ids.getBrtOffersFeed += 1;
+
+				const
+					approximator = new GeoHashApproximator(actionParams.bounds),
+					location = approximator.getGeohashItems();
+
+				const request = {
+					location,
+					pageSize,
+					pageStart,
+					topHeight, 
+					checkingData: {
+						requestId: ids.getBrtOffersFeed,
+						checkRequestId: true,
+					}
+				}
+
+				this.offersRequestData.isLoading = true;
+
+				this.setMapActionData();
+
+				this.sdk.getBrtOffersFeed(
+					request
+				).then(offers => {
+					if (pageStart === 0) {
+						this.offersRequestData.topHeight = offers?.[0]?.height;
+					}
+					this.offersRequestData.pageStart = pageStart;
+					this.offersRequestData.isLoading = false;
+					this.setMapActionData(offers);
+				}).catch(e => { 
+					const
+						requestRejected = (e instanceof AppErrors.RequestIdError),
+						needHandleError = !(requestRejected);
+
+					if (needHandleError) {
+						console.error(e);
+						this.offersRequestData.isLoading = false;
+						this.setMapActionData(null, e);
+					} else {
+						console.info(`Location component, map action ${actionName}:`, e.message);
+					}
+				});				
+			} else if (actionName === "moveMap") {
+				this.offersRequestData.isLoading = false;
+				this.setMapActionData();
+			}
+
+		},
+
+		setMapActionData(offers, error) {
+			this.mapActionData = {
+				actionName: this.offersRequestData.actionName,
+				isLoading: this.offersRequestData.isLoading,
+				nextPageExists: (offers?.length === this.offersRequestData.pageSize),
+				isNextPage: (offers?.length && this.offersRequestData.pageStart > 0),
+				offers,
+				error
+			}
 		}
 	},
 
 	mounted() {
-		this.lastAddr = this.address;
+		this.setupAddressUpdateHandler();
+		this.updateAllAddresses();
+	},
 
-		this.$2watch("$refs.map").then(map => {
-			this.map = map;
-			this.getOffersFeed();
-		}).catch(e => { 
-			console.error(e);
-		});
-	}
+	watch: {
+		locale() {
+			this.updateAllAddresses();
+		}
+	},
+
+	beforeDestroy() {
+		this.debouncedAddressUpdateHandler?.cancel();
+	},
 }

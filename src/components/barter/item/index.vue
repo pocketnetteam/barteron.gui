@@ -383,11 +383,10 @@
 			<div class="row" v-if="item.geohash">
 				<!-- Component: Map -->
 				<v-map
-					ref="map"
+					mapMode="view"
 					:center="geohash"
-					:allowPosition="true"
-					:zoom="18"
-					:offers="offersNear"
+					:zoom="10"
+					:offers="[item]"
 				/>
 			</div>
 
