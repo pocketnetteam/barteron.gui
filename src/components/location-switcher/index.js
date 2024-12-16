@@ -202,6 +202,13 @@ export default {
 		},
 
 		/**
+		 * Show help
+		 */
+		help() {
+			this.dialog?.instance.view("info", this.$t("dialogLabels.map_help_info"))
+		},
+
+		/**
 		 * Reset stored location
 		 */
 		reset() {

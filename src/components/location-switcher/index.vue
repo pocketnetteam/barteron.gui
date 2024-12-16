@@ -53,6 +53,12 @@
 					<div class="row full-width right">
 						<div class="buttons-holder">
 							<v-button
+								vType="stroke"
+								:rippleEffect="false"
+								@click="help"
+							><i class="fa fa-question"></i>
+							</v-button>
+							<v-button
 								:rippleEffect="false"
 								:disabled="!(resetRegionButtonEnabled)"
 								@click="reset"

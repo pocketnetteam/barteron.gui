@@ -88,7 +88,7 @@ export default {
 		 * Reset account location
 		 */
 		reset() {
-			this.locationStore.reset();
+			this.locationStore.reset({onlyBounds: true});
 		}
 	},
 
