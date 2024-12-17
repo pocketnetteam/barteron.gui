@@ -156,11 +156,7 @@ export default {
 				hash = this.offer.hash,
 				form = this.$refs.form,
 				photos = this.$refs.photos,
-				center = [
-					"marker",
-					"point",
-					"center"
-				].map(p => this.$refs.map[p]).filter(p => p).shift(),
+				center = this.$refs.map["marker"],
 				data = form.serialize(),
 				images = photos.serialize(),
 				tags = this.getting === "something" ? data.tags.split(",").map(tag => Number(tag)) : [this.getting];

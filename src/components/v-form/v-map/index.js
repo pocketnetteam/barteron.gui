@@ -63,59 +63,108 @@ export default {
 		},
 		center: {
 			type: Array,
-			default: () => [55.751244, 37.618423]
-		},
-		point: {
-			type: Array,
-			default: null
+			default: () => [0, 0]
 		},
 		offers: {
 			type: Array,
 			default: () => []
 		},
-		allowPosition: {
-			type: Boolean,
-			default: false
-		},
-		allowSelection: {
-			type: Boolean,
-			default: false
+		mapMode: {
+			type: String,
+			default: "input"
 		},
 		zoom: {
 			type: Number,
-			default: 15
+			default: 10
 		},
 		maxZoom: {
 			type: Number,
 			default: 18
 		},
-		radius: {
-			type: Number,
-			default: 1
-		}
+		mapActionData: {
+			type: Object,
+			default: () => ({})
+		},
+		addressInfo: {
+			type: String,
+			default: ""
+		},
 	},
 
 	data() {
-		this.provider = new OpenStreetMapProvider();
+		this.provider = new OpenStreetMapProvider({
+			params: {
+			  'accept-language': this.sdk.getLanguageByLocale(this.$root.$i18n.locale),
+			  addressdetails: 1,
+			},
+		  });
 
 		return {
 			offerIcon: this.imageUrl("offer.png"),
 			offerIconActive: this.imageUrl("offer-active.png"),
 			iconSize: [32, 37],
-			offersNear: [],
 			mapObject: {},
+			resizeObserver: null,
 			geosearchOptions: {
 				provider: this.provider,
 				style: "bar",
 				autoClose: true,
-				searchLabel: this.$t("locationLabels.enter_address")
+				searchLabel: this.$t("locationLabels.enter_address"),
+				notFoundMessage: this.$t("locationLabels.address_not_found"),
 			},
-			marker: this.point,
-			scale: this.zoom
+			addressSearchEnabled: false,
+			marker: (this.isInputMode ? this.center : null),
+			scale: this.zoom,
+			locationWatcherEnabled: false,
+			mapState: "",
+			isLoading: false,
+			offersSearchButton: false,
+			offersLoadMoreButton: false,
+			loadingError: false,
+			loadingErrorMessage: "",
+			foundOffers: [],
+			addressInput: null,
+			geosearchForm: null,
 		}
 	},
 
 	computed: {
+		/**
+		 * Checking that the map mode is search
+		 * 
+		 * @returns {Boolean}
+		 */
+		isSearchMode() {
+			return this.mapMode === "search";
+		},
+
+		/**
+		 * Checking that the map mode is view
+		 * 
+		 * @returns {Boolean}
+		 */
+		isViewMode() {
+			return this.mapMode === "view";
+		},
+
+		/**
+		 * Checking that the map mode is input
+		 * 
+		 * @returns {Boolean}
+		 */
+		isInputMode() {
+			return this.mapMode === "input";
+		},
+
+		/**
+		 * Get offers to show
+		 * 
+		 * @returns {Array}
+		 */
+		shownOffers() {
+			return this.isSearchMode ? this.foundOffers : this.offers;
+		},
+
 		/**
 		 * Get icon anchor
 		 * 
@@ -139,11 +188,305 @@ export default {
 			get() {
 				return this.sdk.ifEmpty(this.sdk.location, undefined);
 			}
-		}
+		},
 	},
 
 	methods: {
-		async setLocation() {
+		observeResize() {
+			const map = this.$refs.map;
+			this.resizeObserver = new ResizeObserver(() => {
+				this.mapObject.invalidateSize();
+			});
+			this.resizeObserver.observe(map.$el);
+		},
+
+		toggleAddressSearch(event, options = { forcedValue: null }) {
+			const el = this.getGeosearchForm();
+			if (el) {
+				this.addressSearchEnabled = options?.forcedValue ?? !(this.addressSearchEnabled);
+				el.style.visibility = this.addressSearchEnabled ? "visible" : "hidden";
+			}
+			event?.currentTarget?.blur();
+		},
+
+		getGeosearchForm() {
+			if (!(this.geosearchForm)) {
+				const parent = this.$refs.map.$el;
+				this.geosearchForm = parent.querySelector("div.leaflet-control-geosearch.bar form");
+			}
+			return this.geosearchForm;
+		},
+
+		setupAddressInputHandlers() {
+			const 
+				self = this,
+				el = this.getAddressInput();
+			
+			if (el) {
+				el.onfocus = function() {
+					el.placeholder = self.getAddressInputPlaceholder({ focus: true });
+				};
+	
+				el.onblur = function() {
+					el.placeholder = self.getAddressInputPlaceholder({ focus: false });
+				};
+			}
+		},
+		
+		addressInfoChanged() {
+			const 
+				el = this.getAddressInput(),
+				isFocused = (document.activeElement === el);
+
+			if (el && !(isFocused)) {
+				el.placeholder = this.getAddressInputPlaceholder({ focus: false });
+			}
+		},
+
+		getAddressInput() {
+			if (!(this.addressInput)) {
+				const parent = this.$refs.map.$el;
+				this.addressInput = parent.querySelector("div.leaflet-control-geosearch.bar form input");
+			}
+			return this.addressInput;
+		},
+
+		getAddressInputPlaceholder(options = {}) {
+			return (options?.focus) ? this.$t("locationLabels.enter_address") : (this.addressInfo || "...");
+		},
+
+		setupHandlers() {
+
+			if (this.isViewMode) {
+				this.setupViewModeHandlers();
+			} else if(this.isInputMode) {
+				this.setupInputModeHandlers();
+			} else if (this.isSearchMode) {
+				this.setupSearchModeHandlers();
+			};
+
+			/* this.mapObject
+				.on("mousemove", e => {
+					this.lastMousePos = e.originalEvent;
+				})
+				.on("zoom", () => {
+					if (this.lastMousePos) {
+						const latLng = this.mapObject.mouseEventToLatLng(this.lastMousePos);
+						this.mapObject.setView(latLng, this.mapObject.getZoom());
+					}
+					console.log(this.mapObject)
+				}); */
+	
+		},
+
+		setupViewModeHandlers() {
+			this.setToggleWheelByFocus();
+		},
+
+		setupInputModeHandlers() {
+			this.setToggleWheelByFocus();
+
+			const markerAtCenter = (emit, event) => {
+				this.scale = this.mapObject.getZoom();
+				this.marker = Object.values(
+					this.mapObject.getCenter()
+				);
+				
+				if (emit) {
+					this.$emit("scale", this.scale, event);
+					this.$emit("change", this.marker, event);
+				}
+			}
+
+			this.mapObject
+				.on("click", e => {
+					if (e.originalEvent.target.matches("div.vue2leaflet-map")) {
+						this.marker = Object.values(e.latlng);
+						this.$emit("change", Object.values(e.latlng));
+					}
+				})
+				.on("move", e => {
+					if (e?.originalEvent) markerAtCenter(false, e);
+				})
+				.on("moveend", e => {
+					markerAtCenter(true, e);
+				});
+
+			markerAtCenter(true);
+		},
+
+		setupSearchModeHandlers() {
+
+			this.setupAddressInputHandlers();
+			
+			const moveEndHandler = (e) => {
+				this.mapObject.off("moveend"); // prevent double moveend event bug
+
+				this.scale = this.mapObject.getZoom();
+				const center = Object.values(
+					this.mapObject.getCenter()
+				);
+
+				this.$emit("scale", this.scale, e);
+				this.$emit("change", center, e);
+				this.$emit("bounds", this.mapObject.getBounds(), e);
+			};
+
+			this.mapObject.on("movestart", e => {
+				this.$emit("mapAction", "moveMap", {}, e);
+
+				this.mapObject.on("moveend", e => moveEndHandler(e));
+			});
+
+			this.mapObject.on("geosearch/showlocation", e => {
+				this.$emit("geosearch_showlocation", e);
+			});
+
+		},
+
+		setToggleWheelByFocus() {
+			this.toggleWheel(false);
+
+			this.mapObject
+				.on("focus", () => this.toggleWheel(true))
+				.on("blur", () => this.toggleWheel(false));
+		},
+
+		setupData() {
+			if (this.isSearchMode) {
+				this.changeStateTo("initialState");
+			}
+		},
+
+		changeStateTo(newState) {
+			this.mapState = newState;
+
+			if (this.isSearchMode) {
+
+				this.isLoading = false;
+				this.offersSearchButton = false;
+				this.offersLoadMoreButton = false;
+				this.loadingError = false;
+
+				switch (this.mapState) {
+					case "initialState":
+						this.offersSearchButton = true;
+						break;
+						
+					case "readyForSearch":
+						this.offersSearchButton = true;
+						break;
+
+					case "isLoading":
+						this.isLoading = true;
+						break;
+					
+					case "fullyLoaded":
+						break;
+
+					case "partiallyLoaded":
+						this.offersLoadMoreButton = true;
+						break;
+
+					case "loadingError":
+						this.loadingError = true;
+						break;
+	
+					default:
+						break;
+				}
+			}
+		},
+
+		mapActionDataChanged() {
+			if (this.isSearchMode) {
+
+				const res = this.mapActionData;
+
+				const
+					loadingStarted = res.isLoading,
+					mapMoved = !(res.isLoading || res.offers || res.error),
+					loadingCompleted = !(res.isLoading) && res.offers,
+					loadingFailed = !(res.isLoading) && res.error;
+				
+				switch (this.mapState) {
+
+					case "initialState":
+						if (loadingStarted) {
+							this.changeStateTo("isLoading");
+						}
+						break;
+
+					case "readyForSearch":
+
+						if (loadingStarted) {
+							this.changeStateTo("isLoading");
+						} else if (loadingCompleted) {
+							this.showLoadedOffers();
+						}
+						break;
+
+					case "isLoading":
+
+						if (mapMoved) {
+							this.changeStateTo("readyForSearch");
+						} else if (loadingCompleted) {
+							this.showLoadedOffers();
+							if (res.nextPageExists) {
+								this.changeStateTo("partiallyLoaded");
+							} else {
+								this.changeStateTo("fullyLoaded");
+							}
+						} else if (loadingFailed) {
+							this.loadingErrorMessage = res.error?.message;
+							this.changeStateTo("loadingError");
+						}
+						break;
+					
+					case "fullyLoaded":
+
+						if (mapMoved) {
+							this.changeStateTo("readyForSearch");
+						}
+						break;
+
+					case "partiallyLoaded":
+
+						if (mapMoved) {
+							this.changeStateTo("readyForSearch");
+						} else if (loadingStarted) {
+							this.changeStateTo("isLoading");
+						}
+						break;
+
+					case "loadingError":
+
+						if (mapMoved) {
+							this.changeStateTo("readyForSearch");
+						}						
+						break;
+	
+					default:
+						break;
+				}
+
+			}
+		},
+
+		showLoadedOffers() {
+			if (this.isSearchMode) {
+				const res = this.mapActionData;
+				if (res.isNextPage) {
+					this.foundOffers = this.foundOffers.concat(res.offers);
+				} else {
+					this.foundOffers = res.offers;
+				}
+			}
+		},
+
+		async startLocating() {
+			this.locationWatcherEnabled = true;
+
 			const isGranted = await this.sdk.checkPermission("geolocation");
 
 			if (!isGranted) {
@@ -155,68 +498,87 @@ export default {
 				});
 			}
 
-			if (this.location?.length) {
+			this.applyLocationIfDetected();
+		},
+
+		applyLocationIfDetected() {
+			if (this.latLonDefined(this.location)) {
+				this.locationWatcherEnabled = false;
 				this.mapObject.panTo(this.location);
-				this.$emit("change", this.location);
 			}
 		},
 
 		toggleWheel(enable) {
 			this.mapObject.scrollWheelZoom[enable ? "enable" : "disable"]()
-		}
+		},
+
+		searchOffersEvent(e) {
+			this.mapObject.closePopup();
+			this.emitLoadingMapAction("loadData", e);
+		},
+
+		loadMoreOffersEvent(e) {
+			this.mapObject.closePopup();
+			this.emitLoadingMapAction("loadNextPage", e);
+		},
+
+		emitLoadingMapAction(actionName, e) {
+			const actionParams = {
+				bounds: this.mapObject.getBounds(),
+			}
+			this.$emit("mapAction", actionName, actionParams, e);
+		},
+
+		latLonDefined(latLon) {
+			return latLon?.length && (latLon[0] || latLon[1]);
+		},
 	},
 
 	mounted() {
-		this.mapObject = this.$refs.map.mapObject;
-		const markerAtCenter = (emit, event) => {
-			this.scale = this.mapObject.getZoom();
-			this.marker = Object.values(
-				this.mapObject.getCenter()
-			);
-			
-			if (emit) {
-				this.$emit("scale", this.scale, event);
-				this.$emit("change", this.marker, event);
+		this.$2watch("$refs.map").then(map => {
+			this.mapObject = map.mapObject;
+			this.observeResize();
+		}).then(() => {
+			return this.latLonDefined(this.center) ? 
+				this.center 
+				: this.sdk.getDefaultLocation();
+		}).catch(e => { 
+			console.error(e);
+		}).then(latLon => {
+			const center = this.latLonDefined(latLon) ? latLon : [0, 0];
+			const zoom = this.latLonDefined(latLon) ? this.zoom : 0;
+			this.mapObject.setView(center, zoom);
+		}).then(() => {
+			const needShowAddressInput = (this.isSearchMode || this.isInputMode);
+			this.toggleAddressSearch(null, {forcedValue: needShowAddressInput});
+			this.setupHandlers();
+			this.setupData();
+		}).catch(e => { 
+			console.error(e);
+		});
+	},
+
+	watch: {
+		addressInfo() {
+			this.addressInfoChanged();
+		},
+
+		location() {
+			if (this.locationWatcherEnabled) {
+				this.applyLocationIfDetected();
 			}
-		}
+		},
 
-		/* this.mapObject
-			.on("mousemove", e => {
-				this.lastMousePos = e.originalEvent;
-			})
-			.on("zoom", () => {
-				if (this.lastMousePos) {
-					const latLng = this.mapObject.mouseEventToLatLng(this.lastMousePos);
-					this.mapObject.setView(latLng, this.mapObject.getZoom());
-				}
-				console.log(this.mapObject)
-			}); */
-
-		if(this.allowSelection) {
-			const debouncedMoveEndHandler = this.debounce((e) => markerAtCenter(true, e), 300);
-			this.cancelMoveEndHandler = debouncedMoveEndHandler.cancel;
-	
-			this.mapObject
-				.on("focus", () => this.toggleWheel(true))
-				.on("blur", () => this.toggleWheel(false))
-				.on("click", e => {
-					if (e.originalEvent.target.matches("div.vue2leaflet-map")) {
-						this.marker = Object.values(e.latlng);
-						this.$emit("change", Object.values(e.latlng));
-					}
-				})
-				.on("move", e => {
-					if (e?.originalEvent) markerAtCenter(false, e);
-				})
-				.on("moveend", e => {
-					debouncedMoveEndHandler(e);
-				});
-
-			markerAtCenter(true);
+		mapActionData: {
+			deep: true,
+			handler() {
+				this.mapActionDataChanged();
+			}
 		}
 	},
 
 	beforeDestroy() {
-		this.cancelMoveEndHandler?.()
+		this.mapObject.off();
+		this.resizeObserver?.disconnect();
 	},
 }

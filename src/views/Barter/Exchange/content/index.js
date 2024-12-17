@@ -107,6 +107,7 @@ export default {
 		if (isLoaded(offer)) {
 			try {
 				deals = await sdk.getBrtOfferDeals({
+					pageSize: 100, // TODO: add pagination to this page change pageSize to 10
 					myTags: [offer?.tag],
 					theirTags: await sdk.getTheirTags(offer),
 					excludeAddresses: [offer?.address]

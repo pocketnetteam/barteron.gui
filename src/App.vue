@@ -51,9 +51,14 @@
 <style lang="sass" src="@/css/main.sass"></style>
 <style src="@/assets/font-awesome/css/all.css"></style>
 <script>
+import Loader from "@/components/loader/index.vue";
+import VueI18n from "@/i18n/index.js";
 import { mapState } from "pinia";
 import { useThemeStore } from "@/stores/theme.js";
-import Loader from "@/components/loader/index.vue";
+import {
+	default as LocaleStore,
+	useLocaleStore
+} from "@/stores/locale.js";
 
 export default {
 	name: "Barteron",
@@ -63,7 +68,8 @@ export default {
 	},
 
 	computed: {
-		...mapState(useThemeStore, ["theme"])
+		...mapState(useThemeStore, ["theme"]),
+		...mapState(useLocaleStore, ["locale"])
 	},
 
 	data() {
@@ -103,6 +109,9 @@ export default {
 				account[0] = new this.sdk.models.Account({ address }).set();
 			}
 
+			/* Set language from user settings or bastyon sdk */
+			this.setLanguage();
+
 			/* Support urls from parent window */
 			this.sdk.on("changestate", (data) => {
 				console.log('bastyon -> barteron: ' + data, this.sdk.getRoute(data));
@@ -111,6 +120,34 @@ export default {
 
 			/* Hide preloader */
 			this.loading = false;
+		},
+
+		/**
+		 * Set language
+		 */
+		setLanguage() {
+			this.$root.$i18n.locale = this.getExistingLocale(this.locale);
+		},
+
+		/**
+		 * Get existing locale
+		 * 
+		 * @param {String} value
+		 * 
+		 * @returns {String}
+		 */
+		 getExistingLocale(value) {
+			let result = value;
+
+			if (value === LocaleStore.inheritLocale) {
+				const
+					language = this.sdk.appinfo?.locale,
+					target = LocaleStore.list.filter(f => f.includes(language)).pop();
+				
+				result = target || VueI18n.fallbackLocale;
+			}
+			
+			return result;
 		},
 
 		/**
@@ -215,6 +252,12 @@ export default {
 
 	updated() {
 		this.showHeaderIfNeeded();
+	},
+
+	watch: {
+		locale() {
+			this.setLanguage();
+		}
 	},
 
 	destroyed() {

@@ -32,7 +32,7 @@
 	"categoryLabels": {
 		"label": "Category",
 		"empty": "No offers found :(",
-		"empty_details": "Try to set {all_regions} in your location, or chose another city"
+		"empty_details": "Try to set {all_regions} in your location, or expand your search area on the map and save it again"
 	},
 
 	"stepsLabels": {
@@ -81,6 +81,7 @@
 		"find_exchange": "Find exchange",
 		"offer_an_exchange": "Offer an exchange",
 		"show_nearby_on_map": "Show offers on the map",
+		"search_in_visible_area": "Search in visible area",
 		"show_more": "Show more",
 		"buy_for": "Buy for {cost} PKOIN",
 		"edit": "Edit",
@@ -94,6 +95,7 @@
 		"yes": "Yes",
 		"no": "No",
 		"unknown": "Unknown",
+		"set_location": "Set location",
 		"apply": "Apply",
 		"submit": "Submit"
 	},
@@ -157,6 +159,7 @@
 
 	"locationLabels": {
 		"enter_address": "Enter address",
+		"address_not_found": "Sorry, that address could not be found",
 		"preferred": "Location for new offers",
 		"static": "Static",
 		"dynamic": "Dynamic",
@@ -183,6 +186,8 @@
 		"contact_seller": "Do you want to contact the seller?",
 		"contact_sellers": "Do you want to contact the sellers?",
 		"opening_room": "The chat is opening. Please wait.",
+		"map_help_info": "Offers displayed in the lists (category content, exchange offers, etc.) can be filtered by the visible area of the map.\n\nSet it so that it covers the desired search area and click the \"Save\" button. To reset the selection, click the \"All regions\" button.",
+		"saving_region_warning_by_zoom": "The coverage of the visible map area is too small. Offer lists will be filtered by this area. Continue anyway?",
 
 		"image_error": "Image upload error",
 		"node_error": "Node error has occured: {error}",

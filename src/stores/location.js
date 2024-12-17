@@ -6,8 +6,8 @@ const
 		state: () => ({
 			location: Pinia.get(storageId, {
 				geohash: null,
-				radius: null,
-				zoom: null
+				zoom: null,
+				bounds: null,
 			})
 		}),
 		
@@ -16,8 +16,8 @@ const
 				Pinia.getPrefix().then(() => {
 					this.location = Pinia.get(storageId, {
 						geohash: null,
-						radius: null,
-						zoom: null
+						zoom: null,
+						bounds: null,
 					});
 				}).catch(e => { 
 					console.error(e);
@@ -33,12 +33,23 @@ const
 				});
 			},
 
-			reset() {
-				this.set({
-					geohash: null,
-					radius: null,
-					zoom: null
-				});
+			reset(options = {onlyBounds: false}) {
+				let data = {};
+				
+				if (options?.onlyBounds) {
+					data = {
+						...this.location, 
+						bounds: null,
+					};
+				} else {
+					data = {
+						geohash: null,
+						zoom: null,
+						bounds: null,
+					};
+				}
+
+				this.set(data);
 			}
 		}
 	}),

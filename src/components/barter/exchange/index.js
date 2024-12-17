@@ -109,7 +109,7 @@ export default {
 		try {
 			this.items = await this.sdk.getBrtOffers();
 		} catch (e) {
-			console.log(e);
+			console.error(e);
 		}
 	}
 }

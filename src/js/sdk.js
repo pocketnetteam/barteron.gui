@@ -1,11 +1,14 @@
 import Vue from "vue";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
+import CountriesTimezones from "countries-and-timezones";
+import CityTimezones from "city-timezones";
 import VueI18n, { currencies } from "@/i18n/index.js";
 
 import Account from "@/js/models/account.js";
 import Offer from "@/js/models/offer.js";
 import OfferScore from "@/js/models/offerScore.js";
 import Comment from "@/js/models/comment.js";
+import AppErrors from "@/js/appErrors.js";
 
 /**
  * Allow work with bastyon
@@ -16,6 +19,11 @@ class SDK {
 	lastresult = "";
 	emitted = [];
 	localstorage = "";
+	requestServiceData = {
+		ids: {
+			getBrtOffersFeed: 0,
+		},
+	};
 
 	models = {
 		Account,
@@ -63,6 +71,17 @@ class SDK {
 		if (this.empty(this._currency)) this.getCurrency();
 
 		return this._currency;
+	}
+
+	/**
+	 * Get language by locale
+	 * 
+	 * @param {String} locale
+	 * 
+	 * @returns {String}
+	 */
+	getLanguageByLocale(locale) {
+		return String(locale || "").split("-").shift();
 	}
 
 	/**
@@ -736,6 +755,51 @@ class SDK {
 	}
 
 	/**
+	 * Get default location by time zone
+	 * 
+	 * @returns {Promise}
+	 */
+	getDefaultLocation() {
+		const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+		const
+			cityMapping = CityTimezones.cityMapping,
+			city = cityMapping.filter(f => f.timezone === timeZone).sort((a, b) => a.pop - b.pop).pop();
+		
+		const
+			country = CountriesTimezones.getCountryForTimezone(timeZone),
+			countryName = country?.name;
+	
+		if (city?.lat || city?.lng) {
+			const result = [Number(city.lat || 0), Number(city.lng || 0)];
+			return Promise.resolve(result);
+
+		} else if (countryName) {
+			const provider = new OpenStreetMapProvider();
+
+			return fetch(`
+				${ provider.searchUrl }?
+				${ new URLSearchParams({
+					format: "json",
+					q: countryName,
+				}).toString() }
+			`)
+				.then(result => result.json())
+				.then(data => { 
+					if (data?.length > 0 && (data[0].lat || data[0].lon)) {
+						const item = data[0];
+						return [Number(item.lat), Number(item.lon)];
+					} else {
+						throw new Error(`No data of lat, lon for country ${countryName}`);
+					}
+				})
+				.catch(e => this.setLastResult(e));
+		} else {
+			return Promise.reject(new Error(`Can't define city or country by time zone ${timeZone}`));
+		}
+	}
+
+	/**
 	 * Check access to localstroage
 	 * 
 	 * @returns {Array}
@@ -955,7 +1019,29 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	getBrtOffersFeed(request = {}) {
+		const
+			checkingData = request.checkingData,
+			requestName = "getBrtOffersFeed";
+
+		delete request.checkingData;
+
 		return this.rpc("getbarteronfeed", request).then(feed => {
+
+			if (checkingData?.checkRequestId) {
+				const 
+					ids = this.requestServiceData.ids,
+					requestId = checkingData?.requestId,
+					needReject = (requestId !== ids[requestName]);
+				
+				if (needReject) {
+					throw new AppErrors.RequestIdError(
+						requestName, 
+						requestId, 
+						ids.getBrtOffersFeed
+					);
+				}
+			}
+
 			return feed?.map(offer => new Offer(offer)) || [];
 		});
 	}

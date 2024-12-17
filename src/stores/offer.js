@@ -8,6 +8,7 @@ const
         state: () => ({
             items: [],
             itemsRoute: null,
+            topHeight: null,
             pageStart: 0,
             isLoading: false,
             filters: {
@@ -65,24 +66,28 @@ const
                     ...(search && { search: `%${ search }%` }),
                     location: mixin.methods.getStoredLocation() || [],
                     theirTags: Number.isInteger(+request?.id) ? [+request.id] : [],
+                    topHeight: request?.topHeight,
                     pageStart: request?.pageStart || 0,
                     pageSize: request?.pageSize || this.pageSize
                 });
             },
 
             async loadFirstPage(route) {
+                this.topHeight = null;
                 this.pageStart = 0;
                 this.scrollOffset = null;
 
                 const data = {
                     id: route.params.id,
                     route,
+                    topHeight: this.topHeight,
                     pageStart: this.pageStart
                 };
                 
                 try {
                     this.isLoading = true;
                     this.items = await this._requestItems(data);
+                    this.topHeight = this.items?.[0]?.height;
                     this.itemsRoute = route;
                 } catch (e) {
                     console.error(e);
