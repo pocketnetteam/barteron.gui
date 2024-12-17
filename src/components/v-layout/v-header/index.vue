@@ -2,8 +2,10 @@
 	<header id="header">
 		<div class="bottom">
 			<div class="bar">
-				<div class="inner">
-						<h1 class="logo">
+				
+				<!-- regular -->
+				<div class="inner">					
+					<h1 class="logo">
 						<router-link to="/">Barteron</router-link>
 					</h1>
 
@@ -11,6 +13,21 @@
 					<SearchBar />
 					<UserBar />
 				</div>
+
+				<!-- compact -->
+				<div class="inner-compact">
+					<div class="first-row">
+						<h1 class="logo">
+							<router-link to="/">Barteron</router-link>
+						</h1>
+						<UserBar />
+					</div>
+					<div class="second-row">
+						<Location />
+						<SearchBar />
+					</div>
+				</div>
+				
 			</div>
 		</div>
 	</header>
