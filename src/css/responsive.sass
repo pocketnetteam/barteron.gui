@@ -4,7 +4,14 @@
 	min-width: 340px
 
 	#header
-		padding-top: calc(var(--app-margin-top) + 55px)
+		padding-top: var(--app-margin-top)
+
+		.bar
+			.inner
+				display: flex
+			
+			.inner-compact
+				display: none
 
 	#header,
 	#main,
@@ -22,6 +29,31 @@
 		.no-sidebar
 			display: none
 
+/* Breakpoint for apply left padding to header */
+@media screen and (max-width: $header_left_padding_breakpoint)
+	#app
+		#header
+			.inner
+				padding-left: 65px
+
+/* Large screen size */
+@media screen and (max-width: $large)
+	#app
+
+/* Medium screen size */
+@media screen and (max-width: $medium)
+	#app
+		#header
+			.bar
+				.inner
+					display: none
+				
+				.inner-compact
+					display: block
+
+					.first-row
+						padding-left: 65px
+
 /* Tablet and Phones */
 @media screen and (max-width: $tablet)
 	#app
@@ -29,13 +61,9 @@
 
 		#header
 			.bar
-				.inner
-					flex-wrap: wrap
-					justify-content: space-between
-					gap: $r
-
-				.logo
-					flex-basis: 50%
+				.inner-compact
+					.first-row
+						padding-right: 65px
 
 				.search-bar
 					margin: 0
@@ -76,9 +104,57 @@
 				nav
 					margin: $r * 2 0 0
 
+/* Small screen size */
+@media screen and (max-width: $small)
+	#app
+		#header
+			.bar
+				.inner-compact
+					.logo
+						a
+							background: url(@/assets/images/logo_compact.png) no-repeat 50% 50%
+							background-size: contain
+							height: 32px
+							width: 32px
+
 /* Phones */
 @media screen and (max-width: $phones)
 	#app
+		#header
+			.bar
+				.inner-compact
+					.first-row
+						padding-right: 57px
+						padding-left: 57px
+
+					.first-row,
+					.second-row
+						gap: $r
+
+					.user-bar > ul > li:not(:last-child)
+						margin: 0 4px 0 0
+					
+					.user-bar
+						#create-offer-button
+							.v-button
+								white-space: pre-line
+								padding: $r
+
+								.text
+									gap: $r / 2
+					
+					.search-bar
+						#show-categories-button
+							.v-button
+								padding: $r * 1.5 $r
+
+					#location-switcher-button
+						.v-button
+							padding: $r / 2
+
+							span
+								gap: $r
+
 		.vs-carousel
 			.vs-carousel__slide
 				flex: 0 0 calc( 50% - 7px ) // Gap - 2px

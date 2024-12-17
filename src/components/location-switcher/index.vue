@@ -1,5 +1,6 @@
 <template>
 	<v-button
+		id="location-switcher-button"
 		:class="{
 			'location-switcher': true,
 			'lightbox-open': lightbox
