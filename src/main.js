@@ -10,7 +10,7 @@ import Categories from "@/js/categories.js";
 import Favorites from "@/data/favorites.json";
 
 import { GeoHash } from "geohash";
-import getHashesNear from "geohashes-near";
+import { GeoHashApproximator } from "@/js/geohashUtils.js";
 import LocationStore from "@/stores/location.js";
 import { Promise } from "core-js";
 
@@ -78,24 +78,6 @@ Vue.prototype.shared = Vue.observable({
 		 */
 		account() {
 			return this.sdk.barteron.accounts[this.sdk.address];
-		},
-
-		/**
-		 * Get default value of location radius in kilometers
-		 * 
-		 * @returns {Number}
-		 */
-		defaultRadius() {
-			return 10;
-		},
-
-		/**
-		 * Get max value of location radius in kilometers
-		 * 
-		 * @returns {Number}
-		 */
-		maxRadius() {
-			return 6000;
 		},
 
 		/**
@@ -197,12 +179,12 @@ Vue.prototype.shared = Vue.observable({
 		},
 
 		/**
-			 * Get absolute path from path
-			 * 
-			 * @param {String} path
-			 * 
-			 * @returns {String}
-			 */
+		 * Get absolute path from path
+		 * 
+		 * @param {String} path
+		 * 
+		 * @returns {String}
+		 */
 		imageUrl(path) {
 			if (["http", "data:image"].some(str => path?.startsWith && path.startsWith(str))) {
 				return path;
@@ -247,89 +229,6 @@ Vue.prototype.shared = Vue.observable({
 		},
 
 		/**
-		 * Get geohash radius
-		 * 
-		 * @param {Object} data
-		 * @param {String} data.geohash or
-		 * @param {Number} data.latitude
-		 * @param {Number} data.longitude
-		 * @param {Number} [data.radius]
-		 * @param {Number} [data.units]
-		 * 
-		 * @returns {Array}
-		 */
-		getGeoHashRadius({
-			geohash,
-			latitude,
-			longitude,
-			radius,
-			units
-		}) {
-			if (geohash) {
-				const result = GeoHash.decodeGeoHash(geohash);
-				latitude = result.latitude[0];
-				longitude = result.longitude[0];
-			}
-
-			if (!latitude || !longitude) return [];
-
-			radius = radius || this.defaultRadius;
-
-			const { precision, geohashCellLength } = this.getGeohashPrecision(radius);
-
-			return getHashesNear(
-				{ latitude, longitude },
-				precision,
-				radius + geohashCellLength * Math.sqrt(2) / 2,
-				units || "kilometers"
-			);
-		},
-
-		/**
-		 * Get geohash precision by radius and base cell length
-		 * 
-		 * @param {Number} radius
-		 * 
-		 * @returns {Object}
-		 */
-		getGeohashPrecision(radius) {
-			const geohashPrecisionOfStandardCellSizesInKm = [
-				{ p: 1, w: 5000,  h: 5000  },
-				{ p: 2, w: 1250,  h: 625   },
-				{ p: 3, w: 156,   h: 156   },
-				{ p: 4, w: 39.1,  h: 19.5  },
-				{ p: 5, w: 4.89,  h: 4.89  },
-				{ p: 6, w: 1.22,  h: 0.61  },
-				{ p: 7, w: 0.153, h: 0.153 },
-				{ p: 8, w: 0.0382, h: 0.0191 },
-			];
-
-			const
-				precisionsCount = geohashPrecisionOfStandardCellSizesInKm.length,
-				baseCellLength = radius * Math.sqrt(2) * 0.999999,
-				getGeohashCellLength = (item) => Math.max(item.w, item.h);
-
-			const items = geohashPrecisionOfStandardCellSizesInKm.filter((item, index) => {
-				const
-					itemLength = getGeohashCellLength(item),
-					isLast = (index == (precisionsCount - 1));
-
-				return itemLength <= baseCellLength || isLast;
-			});
-
-			const
-				target = items[0],
-				precision = target.p,
-				geohashCellLength = getGeohashCellLength(target);
-
-
-			return {
-				precision,
-				geohashCellLength,
-			};
-		},
-
-		/**
 		 * Encode geohash
 		 * 
 		 * @param {Array} latlng
@@ -358,94 +257,31 @@ Vue.prototype.shared = Vue.observable({
 		 * @returns {Array|null}
 		 */
 		getStoredLocation() {
-			const { geohash, radius } = LocationStore.location;
-			return geohash ? this.getGeoHashRadius({ geohash, radius }) : null;
-		},
-
-		/**
-		 * Checking if the offer is inside the circle
-		 * 
-		 * @param {Object} offer
-		 * @param {Objec} circle
-		 * 
-		 * @returns {Boolean}
-		 */
-		isOfferInCircle(offer, circle) {
-			let result = true;
-			if (circle && offer.geohash) {
-				const
-					[offerLat, offerLon] = this.decodeGeoHash(offer.geohash),
-					distance = this.getDistanceBetweenPointsInKm(
-						circle.lat,
-						circle.lon,
-						offerLat,
-						offerLon
-					);
-				result = (distance <= circle.radius);
+			let result = null;
+			const { bounds } = LocationStore.location;
+			if (bounds) {
+				const approximator = new GeoHashApproximator(bounds);
+				result = approximator.getGeohashItems(bounds);
 			}
 			return result;
 		},
 
 		/**
-		 * Get distance between two points in kilometers
-		 * 
-		 * @param {Number} lat1
-		 * @param {Number} lon1
-		 * @param {Number} lat2
-		 * @param {Number} lon2
-		 * 
-		 * @returns {Number}
-		 */
-		getDistanceBetweenPointsInKm(lat1, lon1, lat2, lon2) {
-			const
-				earthRadiusKm = 6371,
-				radPerDeg = 0.017453292519943295,
-				deg2Rad = (deg) => deg * radPerDeg;
-		  
-			const
-				dLat = deg2Rad(lat2-lat1),
-				dLon = deg2Rad(lon2-lon1);
-		  
-			lat1 = deg2Rad(lat1);
-			lat2 = deg2Rad(lat2);
-		  
-			const
-				a = Math.sin(dLat/2) * Math.sin(dLat/2)
-					+ Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2),
-				c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-
-			return earthRadiusKm * c;
-		},
-
-		/**
 		 * Get offers feed
 		 */
-		getOffersFeedList(center, radius) {
-			const location = center
-				? this.getGeoHashRadius({ geohash: center, radius })
-				: (this.getStoredLocation() || []);
-			
+		getOffersFeedList() {
 			const
-				circleCenter = center || LocationStore.location.geohash,
-				circleRadius = (center ? radius : LocationStore.location.radius) || this.defaultRadius;
-
-			let circle = null;
-			if (circleCenter) {
-				const [lat, lon] = this.decodeGeoHash(circleCenter);
-				circle = {
-					lat,
-					lon,
-					radius: circleRadius
-				};
-			};
-
+				location = this.getStoredLocation() || [],
+				pageSize = 100;
+				
 			this.fetching = true;
 
 			return this.sdk.getBrtOffersFeed({
 				location,
-				pageSize: 100
+				pageSize
 			}).then(offers => {
-				return offers.filter(offer => offer.active && this.isOfferInCircle(offer, circle));
+				// TODO: remove the filter below (filters should only be on the backend)
+				return offers.filter(offer => offer.active);
 			}).catch(e => { 
 				console.error(e);
 			}).finally(() => {

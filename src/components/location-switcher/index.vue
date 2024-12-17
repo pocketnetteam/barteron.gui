@@ -1,22 +1,26 @@
 <template>
 	<v-button
+		id="location-switcher-button"
 		:class="{
 			'location-switcher': true,
 			'lightbox-open': lightbox
 		}"
-		vType="stroke"
-		:title="locationStore.geohash ? lastAddr : ''"
+		vType="light"
+		:title="searchRegionDefined ? storedLocationAddress.text : ''"
 		@click="showLightbox"
 	>
 		<i
-			:class="`fa fa-map-marker-alt${ !locationStore.geohash ? ' slash' : '' }`"
+			:class="`fa fa-map-marker-alt${ !searchRegionDefined ? ' slash' : '' }`"
 		></i>
 		<div class="info">
 			<strong class="location">
-				<template v-if="locationStore.geohash && !lastAddr"><i class="fa fa-spin fa-spinner"></i></template>
-				<template v-else>{{ locationStore.geohash ? lastAddr : $t('buttonLabels.unknown') }}</template>
+				<template v-if="searchRegionDefined && storedLocationAddress.isLoading"><i class="fa fa-spin fa-spinner"></i></template>
+				<template v-else>{{ 
+						searchRegionDefined && storedLocationAddress.text ? 
+						storedLocationAddress.text 
+						: $t('buttonLabels.set_location') 
+				}}</template>
 			</strong>
-			<!-- <span class="distance">{{ (radius || defaultRadius) + $t('metricsLabels.km') }}</span> -->
 		</div>
 
 		<template #after>
@@ -27,57 +31,21 @@
 				@onHide="hideLightbox"
 			>
 				<v-form ref="form">
-					<div class="row info">
-						<i class="fa fa-map-marker-alt"></i>
-						<span>
-							<template v-if="!address"><i class="fa fa-spin fa-spinner"></i></template>
-							<template v-else>{{ address || $t('buttonLabels.unknown') }}</template>
-						</span>
-					</div>
-
-					<div class="row full-width">
-						<div class="col block full-width no-offset">
-							<!-- Label: Radius -->
-							<label for="radius" class="v-label">{{ $t('locationLabels.radius') }}</label>
-
-							<div class="col range">
-								<!-- Component: vInput -->
-								<v-input
-									id="radius"
-									name="radius"
-									type="range"
-									min="1"
-									:max="maxRadius"
-									:value="radius"
-									:vEvents="{
-										change: changeRadius,
-										input: changeRadius
-									}"
-								/>
-								<span class="value">{{ `${ radius } ${ $t('metricsLabels.km') }` }}</span>
-							</div>
-						</div>
-
-						<div class="col block no-offset">
-							<v-button
-								:disabled="nearbyDisabled"
-								@click="showNearby"
-							>{{ $t('buttonLabels.show_nearby_on_map') }}</v-button>
-						</div>
-					</div>
-
 					<div class="row">
 						<!-- vMap -->
 						<v-map
 							ref="map"
-							:center="location"
-							:allowPosition="true"
-							:allowSelection="true"
+							mapMode="search"
+							height="55vh"
+							:center="geohash"
 							:zoom="locationStore.zoom || undefined"
-							:radius="radius || undefined"
-							:offers="offersNear"
-							@scale="x => zoom = x"
-							@change="setMarker"
+							:mapActionData="mapActionData"
+							:addressInfo="currentAddress.text"
+							@scale="setZoom"
+							@change="setCenter"
+							@bounds="setBounds"
+							@geosearch_showlocation="geosearch_showlocation"
+							@mapAction="mapAction"
 						/>
 					</div>
 				</v-form>
@@ -86,12 +54,20 @@
 					<div class="row full-width right">
 						<div class="buttons-holder">
 							<v-button
-								:disabled="!locationStore.geohash"
+								vType="stroke"
+								:rippleEffect="false"
+								@click="help"
+							><i class="fa fa-question"></i>
+							</v-button>
+							<v-button
+								:rippleEffect="false"
+								:disabled="!(resetRegionButtonEnabled)"
 								@click="reset"
 							>{{ $t('buttonLabels.all_regions') }}</v-button>
 							<v-button
-								:disabled="saveDisabled"
-								@click="submit"
+								:rippleEffect="false"
+								:disabled="!(saveRegionButtonEnabled)"
+								@click="saveRegionEvent"
 							>{{ $t('buttonLabels.save') }}</v-button>
 						</div>
 					</div>

@@ -171,7 +171,7 @@ export default {
 		/**
 		 * Watch for location change to preload items
 		 */
-		async "LocationStore.geohash"() {
+		async "locationStore.bounds"() {
 			await this.loadFirstPage(this.$route);
 		},
 

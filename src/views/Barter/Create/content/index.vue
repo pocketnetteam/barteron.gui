@@ -205,11 +205,8 @@
 					id="location"
 					class="map"
 					ref="map"
+					mapMode="input"
 					:center="geohash || location || undefined"
-					:point="geohash || undefined"
-					:radius="0"
-					:allowPosition="true"
-					:allowSelection="true"
 				/>
 			</div>
 

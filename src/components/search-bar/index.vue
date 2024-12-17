@@ -7,6 +7,7 @@
 			@selected="selected"
 		/>
 		<v-button
+			id="show-categories-button"
 			vType="light"
 			@click="$refs.categorySelect.show()"
 		>{{ $t('buttonLabels.categories') }}</v-button>

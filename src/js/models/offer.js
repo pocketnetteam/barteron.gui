@@ -41,13 +41,15 @@ class Offer {
 			},
 			time = isMs(data?.time) ? +new Date : data?.time * 1000,
 			date = new Date(time),
+			height = data?.height,
 			till = data?.till || date.setFullYear(date.getFullYear() + 1);
 
 		/* Hidden properties */
 		Object.defineProperties(this, {
 			sdk: { value: Vue.prototype.sdk },
-			time: { value: time },
-			till: { value: till }
+			time: { value: time, writable: true, enumerable: true },
+			height: {value: height, writable: true, enumerable: true },
+			till: { value: till, writable: true, enumerable: true }
 		});
 
 		this.relay = data?.relay || false;

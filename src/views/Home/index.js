@@ -88,12 +88,12 @@ export default {
 		 * Reset account location
 		 */
 		reset() {
-			this.locationStore.reset();
+			this.locationStore.reset({onlyBounds: true});
 		}
 	},
 
 	watch: {
-		"locationStore.geohash"() {
+		"locationStore.bounds"() {
 			this.getOffersFeed();
 			this.getComplexDeals();
 		}
