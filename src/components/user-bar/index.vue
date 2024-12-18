@@ -22,7 +22,10 @@
 			</li>
 
 			<li>
-				<v-button @click="$event => requestPermissions($event, { path: '/barter/create' })">
+				<v-button 
+					vType="light"
+					@click="$event => requestPermissions($event, { path: '/barter/create' })"
+				>
 					<i class="fa fa-plus"></i>
 					<span>{{ $t('pageLabels.createBarter') }}</span>
 				</v-button>
