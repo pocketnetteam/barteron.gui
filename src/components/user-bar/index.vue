@@ -24,6 +24,7 @@
 			<li>
 				<v-button 
 					id="create-offer-button"
+					vType="light"
 					@click="$event => requestPermissions($event, { path: '/barter/create' })"
 				>
 					<i class="fa fa-plus"></i>
