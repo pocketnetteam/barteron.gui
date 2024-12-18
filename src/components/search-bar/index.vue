@@ -8,9 +8,11 @@
 		/>
 		<v-button
 			id="show-categories-button"
-			vType="light"
 			@click="$refs.categorySelect.show()"
-		>{{ $t('buttonLabels.categories') }}</v-button>
+		>
+			<i class="fa fa-list"></i>
+			<span>{{ $t('buttonLabels.categories') }}</span>
+		</v-button>
 		
 		<div class="text-field">
 			<input
