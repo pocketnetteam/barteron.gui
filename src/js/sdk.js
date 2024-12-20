@@ -418,6 +418,17 @@ class SDK {
 	}
 
 	/**
+	 * Open external link
+	 * 
+	 * @param {String} url
+	 * 
+	 * @returns {Promise}
+	 */
+	openExternalLink(url) {
+		return this.sdk.openExternalLink(url);
+	}
+
+	/**
 	 * Share resource
 	 * 
 	 * @param {Object} data
