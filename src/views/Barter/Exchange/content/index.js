@@ -1,5 +1,8 @@
 import Vue from "vue";
 import BarterList from "@/components/barter/list/index.vue";
+import {
+	default as profileStore,
+} from "@/stores/profile.js";
 
 export default {
 	name: "Content",
@@ -11,13 +14,18 @@ export default {
 	data() {
 		return {
 			isLoading: false,
-			deals: []
+			deals: [],
+			appBannerDisabled: false,
 		}
 	},
 
 	inject: ["dialog"],
 
 	computed: {
+		appsLink() {
+			return "https://bastyon.com/applications";
+		},
+
 		/**
 		 * Get offer by id
 		 * 
@@ -83,6 +91,19 @@ export default {
 				this.isLoading = false;
 			});
 		},
+
+		openAppsLink() {
+			this.sdk.openExternalLink(this.appsLink);
+		},
+
+		appBannerDisabledChange(value, e) {
+			profileStore.appBannerDisabled = e.target.checked;
+			profileStore.saveState();
+		},
+
+		hideAppBanner() {
+			this.appBannerDisabled = true;
+		},
 	},
 
 	async beforeRouteEnter (to, from, next) {
@@ -119,5 +140,10 @@ export default {
 
 		/* Pass data to instance */
 		next(vm => vm.deals = deals);
-	}
+	},
+
+	mounted() {
+		profileStore.setAddress(this.sdk.address);
+		this.appBannerDisabled = profileStore.appBannerDisabled;
+	},
 }

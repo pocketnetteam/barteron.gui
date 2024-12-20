@@ -1,5 +1,58 @@
 @import "@/css/vars.sass"
-	
+
+.app-banner
+	background: $primary
+	max-width: 600px
+	margin: auto
+	box-shadow: 1px 1px 6px $backdrop
+	padding: 1.5 * $r
+	border-radius: 16px
+
+	.box
+		margin: 0
+
+	.app-banner-holder
+		h1, p
+			color: $bulma
+			text-align: justify
+			word-wrap: break-word
+
+		h1.title
+			margin: 0 auto $r
+
+		h1.info
+			font-size: 1.2em
+			text-transform: none
+			font-weight: normal
+
+		#open-apps-link-button
+			margin: 4 * $r auto 4 * $r
+
+		p.important
+			font-weight: bold
+			font-size: 1.2em
+			margin: 0 auto 0
+
+		p.details
+			margin-top: .5em
+
+		.apps-link
+			color: $bulma
+
+		#app-banner-checkbox-holder
+			margin-top: 4 * $r
+
+			.v-switch-holder
+				padding: $r 0 $r / 2 0
+
+		#hide-button-holder
+			margin-top: 2* $r
+			border-top: 1px solid $beerus
+
+			#hide-button
+				margin-top: 2 * $r
+
+
 .my-barter-holder
 	padding: $r * 5 0 $r * 14
 

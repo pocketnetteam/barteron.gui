@@ -11,6 +11,7 @@ const
             bartersView: 'tile',
             activeTab: null,
             activeInnerAdsTab: null,
+            appBannerDisabled: false,
         }),
 
         actions: {
@@ -68,6 +69,10 @@ const
                 if (data?.activeInnerAdsTab) {
                     this.activeInnerAdsTab = data.activeInnerAdsTab;
                 };
+
+                if (data?.appBannerDisabled) {
+                    this.appBannerDisabled = data.appBannerDisabled;
+                }
             },
 
             saveState() {
@@ -75,6 +80,7 @@ const
                     bartersView: this.bartersView,
                     activeTab: this.activeTab,
                     activeInnerAdsTab: this.activeInnerAdsTab,
+                    appBannerDisabled: this.appBannerDisabled,
                 };
 
                 Pinia.set(storageId, data);
