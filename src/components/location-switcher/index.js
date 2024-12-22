@@ -121,6 +121,15 @@ export default {
 		},
 
 		/**
+		 * Show error from the map
+		 * 
+		 * @param {Error} error
+		 */
+		errorEvent(error) {
+			this.showError(error);
+		},
+
+		/**
 		 * Informing of geosearch showlocation
 		 * 
 		 * @param {Event} event
@@ -149,8 +158,13 @@ export default {
 					this.$set(address, "text", null);
 				}
 				const data = await this.loadAddress(latLon);
-				const detailsAllowed = (address === this.currentAddress);
-				this.$set(address, "text", this.getAddressText(data, detailsAllowed));
+
+				const options = {
+					detailsAllowed:  (address === this.currentAddress),
+					onlyCity: (address === this.storedLocationAddress)
+				};
+				this.$set(address, "text", this.getAddressText(data, options));
+
 				this.$set(address, "isLoading", false);
 			}
 		},
@@ -166,19 +180,28 @@ export default {
 				: null;
 		},
 
-		getAddressText(data, detailsAllowed) {
+		getAddressText(data, options) {
 			let result = null;
 			const 
 				displayName = data?.display_name,
-				address = data?.address;
+				address = data?.address,
+				detailsAllowed = options?.detailsAllowed,
+				onlyCity = options?.onlyCity;
 
 			if (detailsAllowed && this.zoom >= 15 && displayName) {
 				result = displayName;
 			} else if (!(this.sdk.empty(address))) {
-				result = [
-					address.country,
-					address.city || address.town || address.state || address.county
-				].filter(a => a).join(", ")
+				const 
+					country = address.country,
+					city = address.city || address.town || address.state || address.county;
+				
+				let items = [];
+				if (onlyCity) {
+					items = [ (city || country) ];
+				} else {
+					items = [city, country];
+				}
+				result = items.filter(a => a).join(", ");
 			}
 			return result;
 		},

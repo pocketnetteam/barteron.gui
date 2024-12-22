@@ -115,7 +115,7 @@ export default {
 			addressSearchEnabled: false,
 			marker: (this.isInputMode ? this.center : null),
 			scale: this.zoom,
-			locationWatcherEnabled: false,
+			userLocationIsLoading: false,
 			mapState: "",
 			isLoading: false,
 			offersSearchButton: false,
@@ -178,17 +178,6 @@ export default {
 			return [dx, dy];
 		},
 
-		/**
-		 * Get my location
-		 * 
-		 * @returns {Array|null}
-		 */
-		location: {
-			cache: false,
-			get() {
-				return this.sdk.ifEmpty(this.sdk.location, undefined);
-			}
-		},
 	},
 
 	methods: {
@@ -484,28 +473,29 @@ export default {
 			}
 		},
 
-		async startLocating() {
-			this.locationWatcherEnabled = true;
-
-			const isGranted = await this.sdk.checkPermission("geolocation");
-
-			if (!isGranted) {
-				/* Request for permissons */
-				await this.sdk.requestPermissions(["geolocation"]).then(() => {
-					this.$forceUpdate();
-				}).catch(e => { 
-					console.error(e);
-				});
+		startLocating() {
+			if (this.userLocationIsLoading) {
+				return;
 			}
 
-			this.applyLocationIfDetected();
-		},
-
-		applyLocationIfDetected() {
-			if (this.latLonDefined(this.location)) {
-				this.locationWatcherEnabled = false;
-				this.mapObject.panTo(this.location);
-			}
+			this.userLocationIsLoading = true;
+			this.sdk.requestUserLocation(true, true).then(result => {
+				if (this.latLonDefined(result)) {
+					this.scale = this.mapObject.getZoom();
+					const minZoom = 12;
+					this.mapObject.setView(
+						result, 
+						Math.max(this.scale, minZoom)
+					);
+				} else {
+					throw new Error('Location data is not defined');
+				}
+			}).catch(e => {
+				console.error(e);
+				this.$emit("errorEvent", e);
+			}).finally(() => {
+				this.userLocationIsLoading = false;
+			});
 		},
 
 		toggleWheel(enable) {
@@ -561,12 +551,6 @@ export default {
 	watch: {
 		addressInfo() {
 			this.addressInfoChanged();
-		},
-
-		location() {
-			if (this.locationWatcherEnabled) {
-				this.applyLocationIfDetected();
-			}
 		},
 
 		mapActionData: {

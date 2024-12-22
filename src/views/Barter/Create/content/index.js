@@ -24,6 +24,8 @@ export default {
 		}
 	},
 
+	inject: ["dialog"],
+
 	computed: {
 		/**
 		 * Get offer data (edit mode)
@@ -360,7 +362,16 @@ export default {
 		 */
 		scrollTo(target) {
 			this.scrollToElement(target, { block: "center" });
-		}
+		},
+
+		/**
+		 * Show error from the map
+		 * 
+		 * @param {Error} error
+		 */
+		errorEvent(error) {
+			this.showError(error);
+		},
 	},
 
 	beforeCreate() {

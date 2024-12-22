@@ -44,6 +44,7 @@
 							@scale="setZoom"
 							@change="setCenter"
 							@bounds="setBounds"
+							@errorEvent="errorEvent"
 							@geosearch_showlocation="geosearch_showlocation"
 							@mapAction="mapAction"
 						/>

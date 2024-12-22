@@ -60,9 +60,8 @@ class SDK {
 	_location = {};
 	get location() {
 		if (this.empty(this._location)) {
-			this.getLocation();
+			this.requestUserLocation(false, false);
 		}
-
 		return this._location;
 	}
 
@@ -685,24 +684,47 @@ class SDK {
 	}
 
 	/**
-	 * Location from bastyon
+	 * Request user location from bastyon
+	 * 
+	 * @param {Boolean} errorForwarding
+	 * @param {Boolean} needRequestPermission
 	 * 
 	 * @returns {Promise}
 	 */
-	async getLocation() {
-		const isGranted = await this.checkPermission("geolocation");
-
-		if (isGranted) {
-			return this.sdk.get.geolocation().then(location => {
-				this.lastresult = location;
-				const latlng = Object.values(location);
-				Vue.set(this, "_location", latlng);
-				return this._location;
-			}).catch(e => this.setLastResult(e))
-		} else {
-			Vue.set(this, "_location", this._location);
-			return Promise.resolve(this._location);
-		}
+	requestUserLocation(
+		errorForwarding, 
+		needRequestPermission
+	) {
+		return this.checkPermission("geolocation")
+			.then(result => {
+				return result || needRequestPermission && this.requestPermissions(["geolocation"]);
+			}).catch(e => {
+				this.setLastResult(e);
+				if (errorForwarding) {
+					throw new AppErrors.AppGeolocationPermissionError(e);
+				} else {
+					console.error(e);
+					return false;
+				}
+			}).then(result => {
+				if (result) {
+					return this.sdk.get.geolocation().then(location => {
+						this.lastresult = location;
+						const latlng = Object.values(location);
+						Vue.set(this, "_location", latlng);
+						return latlng;
+					})
+				} else {
+					return null;
+				}
+			}).catch(e => {
+				this.setLastResult(e);
+				if (errorForwarding) {
+					throw new AppErrors.GeolocationRequestError(e);
+				} else {
+					console.error(e);
+				}
+			});
 	}
 
 	/**
