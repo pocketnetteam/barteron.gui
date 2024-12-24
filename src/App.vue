@@ -221,7 +221,8 @@ export default {
 		if (
 			this?.sdk &&
 			!this.sdk.inBastyon() &&
-			this.manifest?.id
+			this.manifest?.id &&
+			!location.origin.includes("test.barter.pocketnet.app")
 		) {
 			window.location.href = `https://bastyon.com/application?id=${ this.manifest.id }`;
 		}
