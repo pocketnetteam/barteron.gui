@@ -20,8 +20,6 @@ export default {
 			},
 			mapActionData: {},
 			saveRegionButtonEnabled: false,
-			debouncedAddressUpdateHandler: null,
-			currentAddress: {},
 			storedLocationAddress: {},
 		}
 	},
@@ -69,23 +67,6 @@ export default {
 		},
 
 		/**
-		 * Locale changed handler
-		 */
-		async updateAllAddresses() {
-			await this.updateCurrentAddress();
-			await this.updateStoredLocationAddress();
-		},
-
-		/**
-		 * Setup address reset handler
-		 */
-		setupAddressUpdateHandler() {
-			this.debouncedAddressUpdateHandler = this.debounce(() => {
-				this.updateCurrentAddress();
-			}, 1000);
-		},
-
-		/**
 		 * Informing of last center
 		 * 
 		 * @param {Array} latlng
@@ -93,7 +74,6 @@ export default {
 		 */
 		setCenter(latlng, event) {
 			this.center = latlng;
-			this.debouncedAddressUpdateHandler();
 		},
 
 		/**
@@ -129,23 +109,6 @@ export default {
 			this.showError(error);
 		},
 
-		/**
-		 * Informing of geosearch showlocation
-		 * 
-		 * @param {Event} event
-		 */
-		geosearch_showlocation(event) {
-			this.$set(this.currentAddress, "text", null);
-			setTimeout(() => {
-				this.debouncedAddressUpdateHandler?.cancel();
-				this.updateCurrentAddress();
-			}, 500);
-		},
-
-		async updateCurrentAddress() {
-			await this.updateAddress(this.currentAddress, this.center);
-		},
-
 		async updateStoredLocationAddress() {
 			await this.updateAddress(this.storedLocationAddress, this.geohash);
 		},
@@ -153,15 +116,12 @@ export default {
 		async updateAddress(address, latLon) {
 			if (!(this.sdk.empty(latLon) || address.isLoading)) {
 				this.$set(address, "isLoading", true);
-				const needSmoothUpdate = (address === this.currentAddress);
-				if (!(needSmoothUpdate)) {
-					this.$set(address, "text", null);
-				}
+				this.$set(address, "text", null);
 				const data = await this.loadAddress(latLon);
 
 				const options = {
-					detailsAllowed:  (address === this.currentAddress),
-					onlyCity: (address === this.storedLocationAddress)
+					detailsAllowed: false,
+					onlyCity: true,
 				};
 				this.$set(address, "text", this.getAddressText(data, options));
 
@@ -332,17 +292,12 @@ export default {
 	},
 
 	mounted() {
-		this.setupAddressUpdateHandler();
-		this.updateAllAddresses();
+		this.updateStoredLocationAddress();
 	},
 
 	watch: {
 		locale() {
-			this.updateAllAddresses();
+			this.updateStoredLocationAddress();
 		}
-	},
-
-	beforeDestroy() {
-		this.debouncedAddressUpdateHandler?.cancel();
 	},
 }

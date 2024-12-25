@@ -74,6 +74,8 @@ div[id^="map"]
 		
 			input
 				padding-right: 22px
+				font-size: 1.4em
+				height: 32px
 
 				&:placeholder-shown ~ .reset
 					display: none
@@ -88,15 +90,17 @@ div[id^="map"]
 				position: absolute
 				top: 0
 				right: 8px
-				height: 30px
+				height: 32px
 				width: 22px
+				font-size: 1.4em
 
 			.results
 				+scrollbar()
 				border: 0
 				padding-right: 8px
-				max-height: calc(var(--height) - 112px)
+				max-height: calc(var(--height) - 116px)
 				width: 100%
+				font-size: 1.4em
 
 				&:not(:empty)
 					position: relative

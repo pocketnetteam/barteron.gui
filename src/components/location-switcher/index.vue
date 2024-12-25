@@ -40,12 +40,10 @@
 							:center="geohash"
 							:zoom="locationStore.zoom || undefined"
 							:mapActionData="mapActionData"
-							:addressInfo="currentAddress.text"
 							@scale="setZoom"
 							@change="setCenter"
 							@bounds="setBounds"
 							@errorEvent="errorEvent"
-							@geosearch_showlocation="geosearch_showlocation"
 							@mapAction="mapAction"
 						/>
 					</div>
