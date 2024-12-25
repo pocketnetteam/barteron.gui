@@ -1,3 +1,4 @@
+import Vue from "vue";
 import { Icon } from "leaflet";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
 import {
@@ -14,6 +15,8 @@ import {
 import Vue2LeafletMarkerCluster from "vue2-leaflet-markercluster";
 import LGeosearch from "vue2-leaflet-geosearch";
 import BarterItem from "@/components/barter/item/index.vue";
+import { mapState } from "pinia";
+import { useLocaleStore } from "@/stores/locale.js";
 
 delete Icon.Default.prototype._getIconUrl;
 Icon.Default.mergeOptions({
@@ -85,37 +88,20 @@ export default {
 			type: Object,
 			default: () => ({})
 		},
-		addressInfo: {
-			type: String,
-			default: ""
-		},
 	},
 
 	data() {
-		this.provider = new OpenStreetMapProvider({
-			params: {
-			  'accept-language': this.sdk.getLanguageByLocale(this.$root.$i18n.locale),
-			  addressdetails: 1,
-			},
-		  });
-
 		return {
 			offerIcon: this.imageUrl("offer.png"),
 			offerIconActive: this.imageUrl("offer-active.png"),
 			iconSize: [32, 37],
 			mapObject: {},
 			resizeObserver: null,
-			geosearchOptions: {
-				provider: this.provider,
-				style: "bar",
-				autoClose: true,
-				searchLabel: this.$t("locationLabels.enter_address"),
-				notFoundMessage: this.$t("locationLabels.address_not_found"),
-			},
+			geosearchOptions: this.getGeosearchOptions(),
 			addressSearchEnabled: false,
 			marker: (this.isInputMode ? this.center : null),
 			scale: this.zoom,
-			locationWatcherEnabled: false,
+			userLocationIsLoading: false,
 			mapState: "",
 			isLoading: false,
 			offersSearchButton: false,
@@ -123,12 +109,13 @@ export default {
 			loadingError: false,
 			loadingErrorMessage: "",
 			foundOffers: [],
-			addressInput: null,
 			geosearchForm: null,
 		}
 	},
 
 	computed: {
+		...mapState(useLocaleStore, ["locale"]),
+
 		/**
 		 * Checking that the map mode is search
 		 * 
@@ -178,20 +165,32 @@ export default {
 			return [dx, dy];
 		},
 
-		/**
-		 * Get my location
-		 * 
-		 * @returns {Array|null}
-		 */
-		location: {
-			cache: false,
-			get() {
-				return this.sdk.ifEmpty(this.sdk.location, undefined);
-			}
-		},
 	},
 
 	methods: {
+		getGeosearchOptions() {
+			return {
+				provider: this.getMapProvider(),
+				style: "bar",
+				autoClose: true,
+				searchLabel: this.$t("locationLabels.enter_address"),
+				notFoundMessage: this.$t("locationLabels.address_not_found"),
+			};
+		},
+
+		getMapProvider() {
+			return new OpenStreetMapProvider({
+				params: {
+				  'accept-language': this.sdk.getLanguageByLocale(this.$root.$i18n.locale),
+				  addressdetails: 1,
+				},
+			});
+		},
+
+		localeChanged() {
+			Vue.set(this, "geosearchOptions", this.getGeosearchOptions());
+		},
+
 		observeResize() {
 			const map = this.$refs.map;
 			this.resizeObserver = new ResizeObserver(() => {
@@ -215,44 +214,6 @@ export default {
 				this.geosearchForm = parent.querySelector("div.leaflet-control-geosearch.bar form");
 			}
 			return this.geosearchForm;
-		},
-
-		setupAddressInputHandlers() {
-			const 
-				self = this,
-				el = this.getAddressInput();
-			
-			if (el) {
-				el.onfocus = function() {
-					el.placeholder = self.getAddressInputPlaceholder({ focus: true });
-				};
-	
-				el.onblur = function() {
-					el.placeholder = self.getAddressInputPlaceholder({ focus: false });
-				};
-			}
-		},
-		
-		addressInfoChanged() {
-			const 
-				el = this.getAddressInput(),
-				isFocused = (document.activeElement === el);
-
-			if (el && !(isFocused)) {
-				el.placeholder = this.getAddressInputPlaceholder({ focus: false });
-			}
-		},
-
-		getAddressInput() {
-			if (!(this.addressInput)) {
-				const parent = this.$refs.map.$el;
-				this.addressInput = parent.querySelector("div.leaflet-control-geosearch.bar form input");
-			}
-			return this.addressInput;
-		},
-
-		getAddressInputPlaceholder(options = {}) {
-			return (options?.focus) ? this.$t("locationLabels.enter_address") : (this.addressInfo || "...");
 		},
 
 		setupHandlers() {
@@ -317,8 +278,6 @@ export default {
 
 		setupSearchModeHandlers() {
 
-			this.setupAddressInputHandlers();
-			
 			const moveEndHandler = (e) => {
 				this.mapObject.off("moveend"); // prevent double moveend event bug
 
@@ -484,28 +443,29 @@ export default {
 			}
 		},
 
-		async startLocating() {
-			this.locationWatcherEnabled = true;
-
-			const isGranted = await this.sdk.checkPermission("geolocation");
-
-			if (!isGranted) {
-				/* Request for permissons */
-				await this.sdk.requestPermissions(["geolocation"]).then(() => {
-					this.$forceUpdate();
-				}).catch(e => { 
-					console.error(e);
-				});
+		startLocating() {
+			if (this.userLocationIsLoading) {
+				return;
 			}
 
-			this.applyLocationIfDetected();
-		},
-
-		applyLocationIfDetected() {
-			if (this.latLonDefined(this.location)) {
-				this.locationWatcherEnabled = false;
-				this.mapObject.panTo(this.location);
-			}
+			this.userLocationIsLoading = true;
+			this.sdk.requestUserLocation(true, true).then(result => {
+				if (this.latLonDefined(result)) {
+					this.scale = this.mapObject.getZoom();
+					const minZoom = 12;
+					this.mapObject.setView(
+						result, 
+						Math.max(this.scale, minZoom)
+					);
+				} else {
+					throw new Error('Location data is not defined');
+				}
+			}).catch(e => {
+				console.error(e);
+				this.$emit("errorEvent", e);
+			}).finally(() => {
+				this.userLocationIsLoading = false;
+			});
 		},
 
 		toggleWheel(enable) {
@@ -559,14 +519,8 @@ export default {
 	},
 
 	watch: {
-		addressInfo() {
-			this.addressInfoChanged();
-		},
-
-		location() {
-			if (this.locationWatcherEnabled) {
-				this.applyLocationIfDetected();
-			}
+		locale() {
+			this.localeChanged();
 		},
 
 		mapActionData: {

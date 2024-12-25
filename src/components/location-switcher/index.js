@@ -20,8 +20,6 @@ export default {
 			},
 			mapActionData: {},
 			saveRegionButtonEnabled: false,
-			debouncedAddressUpdateHandler: null,
-			currentAddress: {},
 			storedLocationAddress: {},
 		}
 	},
@@ -69,23 +67,6 @@ export default {
 		},
 
 		/**
-		 * Locale changed handler
-		 */
-		async updateAllAddresses() {
-			await this.updateCurrentAddress();
-			await this.updateStoredLocationAddress();
-		},
-
-		/**
-		 * Setup address reset handler
-		 */
-		setupAddressUpdateHandler() {
-			this.debouncedAddressUpdateHandler = this.debounce(() => {
-				this.updateCurrentAddress();
-			}, 1000);
-		},
-
-		/**
 		 * Informing of last center
 		 * 
 		 * @param {Array} latlng
@@ -93,7 +74,6 @@ export default {
 		 */
 		setCenter(latlng, event) {
 			this.center = latlng;
-			this.debouncedAddressUpdateHandler();
 		},
 
 		/**
@@ -121,20 +101,12 @@ export default {
 		},
 
 		/**
-		 * Informing of geosearch showlocation
+		 * Show error from the map
 		 * 
-		 * @param {Event} event
+		 * @param {Error} error
 		 */
-		geosearch_showlocation(event) {
-			this.$set(this.currentAddress, "text", null);
-			setTimeout(() => {
-				this.debouncedAddressUpdateHandler?.cancel();
-				this.updateCurrentAddress();
-			}, 500);
-		},
-
-		async updateCurrentAddress() {
-			await this.updateAddress(this.currentAddress, this.center);
+		errorEvent(error) {
+			this.showError(error);
 		},
 
 		async updateStoredLocationAddress() {
@@ -144,13 +116,15 @@ export default {
 		async updateAddress(address, latLon) {
 			if (!(this.sdk.empty(latLon) || address.isLoading)) {
 				this.$set(address, "isLoading", true);
-				const needSmoothUpdate = (address === this.currentAddress);
-				if (!(needSmoothUpdate)) {
-					this.$set(address, "text", null);
-				}
+				this.$set(address, "text", null);
 				const data = await this.loadAddress(latLon);
-				const detailsAllowed = (address === this.currentAddress);
-				this.$set(address, "text", this.getAddressText(data, detailsAllowed));
+
+				const options = {
+					detailsAllowed: false,
+					onlyCity: true,
+				};
+				this.$set(address, "text", this.getAddressText(data, options));
+
 				this.$set(address, "isLoading", false);
 			}
 		},
@@ -166,19 +140,28 @@ export default {
 				: null;
 		},
 
-		getAddressText(data, detailsAllowed) {
+		getAddressText(data, options) {
 			let result = null;
 			const 
 				displayName = data?.display_name,
-				address = data?.address;
+				address = data?.address,
+				detailsAllowed = options?.detailsAllowed,
+				onlyCity = options?.onlyCity;
 
 			if (detailsAllowed && this.zoom >= 15 && displayName) {
 				result = displayName;
 			} else if (!(this.sdk.empty(address))) {
-				result = [
-					address.country,
-					address.city || address.town || address.state || address.county
-				].filter(a => a).join(", ")
+				const 
+					country = address.country,
+					city = address.city || address.town || address.state || address.county;
+				
+				let items = [];
+				if (onlyCity) {
+					items = [ (city || country) ];
+				} else {
+					items = [city, country];
+				}
+				result = items.filter(a => a).join(", ");
 			}
 			return result;
 		},
@@ -309,17 +292,12 @@ export default {
 	},
 
 	mounted() {
-		this.setupAddressUpdateHandler();
-		this.updateAllAddresses();
+		this.updateStoredLocationAddress();
 	},
 
 	watch: {
 		locale() {
-			this.updateAllAddresses();
+			this.updateStoredLocationAddress();
 		}
-	},
-
-	beforeDestroy() {
-		this.debouncedAddressUpdateHandler?.cancel();
 	},
 }
