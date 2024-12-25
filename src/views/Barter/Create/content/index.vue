@@ -207,6 +207,7 @@
 					ref="map"
 					mapMode="input"
 					:center="geohash || location || undefined"
+					@errorEvent="errorEvent"
 				/>
 			</div>
 

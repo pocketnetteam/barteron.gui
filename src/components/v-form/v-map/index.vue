@@ -50,7 +50,14 @@
 
 				<l-control position="bottomleft">
 					<div class="leaflet-bar">
+						<div
+							v-if="userLocationIsLoading" 
+							class="location-spinner"
+						>
+							<i class="fa fa-spinner fa-spin"></i>
+						</div>
 						<a
+							v-else
 							class="leaflet-control-location"
 							href="#"
 							role="button"
