@@ -224,7 +224,9 @@ export default {
 			this.manifest?.id &&
 			!location.origin.includes("test.barter.pocketnet.app")
 		) {
-			window.location.href = `https://bastyon.com/application?id=${ this.manifest.id }`;
+			let restUrl = (location.pathname + location.search + location.hash).replace("/", "");
+			restUrl = (restUrl ? "&p=" + this.sdk.hexEncode(restUrl) : "");
+			window.location.href = `https://bastyon.com/application?id=${ this.manifest.id }${ restUrl }`;
 		}
 
 		/* Watch for dialog */
