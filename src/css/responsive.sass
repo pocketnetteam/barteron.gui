@@ -7,11 +7,19 @@
 		padding-top: var(--app-margin-top)
 
 		.bar
+			padding-top: 2px
+			padding-bottom: 2px
+
 			.inner
+				height: var(--bastyon-menu-height)
 				display: flex
 			
 			.inner-compact
 				display: none
+
+				.first-row,
+				.second-row
+					height: var(--bastyon-menu-height)
 
 	#header,
 	#main,
@@ -34,7 +42,7 @@
 	#app
 		#header
 			.inner
-				padding-left: 65px
+				padding-left: calc(var(--bastyon-menu-height) + 2px)
 
 /* Large screen size */
 @media screen and (max-width: $large)
@@ -52,7 +60,7 @@
 					display: block
 
 					.first-row
-						padding-left: 65px
+						padding-left: calc(var(--bastyon-menu-height) + 2px)
 
 /* Tablet and Phones */
 @media screen and (max-width: $tablet)
@@ -63,7 +71,7 @@
 			.bar
 				.inner-compact
 					.first-row
-						padding-right: 65px
+						padding-right: calc(var(--bastyon-menu-height) + 2px)
 
 				.search-bar
 					margin: 0
@@ -124,15 +132,15 @@
 			.bar
 				.inner-compact
 					.first-row
-						padding-right: 57px
-						padding-left: 57px
+						padding-right: calc(var(--bastyon-menu-height) + 2px)
+						padding-left: calc(var(--bastyon-menu-height) + 2px)
 
 					.first-row,
 					.second-row
 						gap: $r
 
 					.user-bar > ul > li:not(:last-child)
-						margin: 0 4px 0 0
+						margin: 0 $r 0 0
 					
 					.user-bar
 						#create-offer-button
@@ -152,7 +160,9 @@
 									gap: $r / 2
 
 					#location-switcher-button
-						.v-button
+						max-width: 25%
+
+						>.v-button
 							padding: $r / 2
 
 							span
@@ -171,6 +181,37 @@
 
 			.row-holder
 				margin: 0 0 $r * 2
+
+/* Small phones */
+@media screen and (max-width: $small_phones)
+	#app
+		#header
+			.bar
+				.inner-compact
+					.user-bar
+						#create-offer-button
+							.v-button i
+								display: none
+
+					.search-bar
+						#show-categories-button
+							.v-button i
+								display: none
+						
+						.text-field
+							font-size: .9em
+
+							input
+								padding-left: $r / 2
+
+					#location-switcher-button
+						>.v-button
+							font-size: .8em
+
+						.offers-search-button,
+						.offers-load-more-button
+							.v-button i
+								display: none
 
 /* Tablet */
 @media screen and (min-width: $phones) and (max-width: $tablet)
