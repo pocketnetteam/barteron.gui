@@ -162,7 +162,7 @@
 					#location-switcher-button
 						max-width: 25%
 
-						.v-button
+						>.v-button
 							padding: $r / 2
 
 							span
@@ -205,9 +205,13 @@
 								padding-left: $r / 2
 
 					#location-switcher-button
-						.v-button
+						>.v-button
 							font-size: .8em
 
+						.offers-search-button,
+						.offers-load-more-button
+							.v-button i
+								display: none
 
 /* Tablet */
 @media screen and (min-width: $phones) and (max-width: $tablet)
