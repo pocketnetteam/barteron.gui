@@ -138,7 +138,7 @@
 	},
 	"281": {
 		"name": "jewelry_watches",
-		"icon": "fa-clock",
+		"icon": "fa-gem",
 		"id": 281,
 		"parent": null,
 		"children": [],
@@ -280,13 +280,21 @@
 		"children": [],
 		"order": 3500
 	},
+	"21": {
+		"name": "bijouterie_decorations",
+		"icon": "fa-crown",
+		"id": 21,
+		"parent": null,
+		"children": [],
+		"order": 3510
+	},
 	"20": {
 		"name": "cosmetics_perfumery_hygiene",
 		"icon": "fa-pump-soap",
 		"id": 20,
 		"parent": null,
 		"children": [],
-		"order": 3510
+		"order": 3520
 	},
 	"11700": {
 		"name": "home_garden",
@@ -330,7 +338,7 @@
 	},
 	"45100": {
 		"name": "entertainment_memorabilia",
-		"icon": "fa-gem",
+		"icon": "fa-scroll",
 		"id": 45100,
 		"parent": null,
 		"children": [],
