@@ -291,7 +291,7 @@ export default {
 			if (!this.max) {
 				return this.files.length;
 			} else {
-				return this.files.length && this.files.length < this.max;
+				return this.files.length && this.files.length <= this.max;
 			}
 		},
 
@@ -317,7 +317,7 @@ export default {
 		 */
 		images(images) {
 			this.files = [];
-			this.attach(images);
+			this.attach(images, { disableLog: true });
 		},
 
 		/**
