@@ -23,7 +23,8 @@
 			9,
 			12576,
 			10,
-			11
+			11,
+			22
 		],
 		"order": 200
 	},
@@ -103,6 +104,13 @@
 		"parent": 2,
 		"children": [],
 		"order": 1300
+	},
+	"22": {
+		"name": "marketing",
+		"id": 22,
+		"parent": 2,
+		"children": [],
+		"order": 1310
 	},
 	"220": {
 		"name": "toys_hobbies",
