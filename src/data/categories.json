@@ -257,7 +257,7 @@
 		"order": 3100
 	},
 	"11116": {
-		"name": "coins_paper_money",
+		"name": "paper_money",
 		"icon": "fa-money-bill-alt",
 		"id": 11116,
 		"parent": null,
