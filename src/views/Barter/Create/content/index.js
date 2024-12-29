@@ -169,7 +169,7 @@ export default {
 				language: this.$i18n.locale,
 				caption: data.title,
 				description: data.description,
-				tag: Number(data.category ?? 99),
+				tag: Number(data.category || 99),
 				tags: tags,
 				condition: this.condition,
 				images: Object.values(images),
