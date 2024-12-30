@@ -200,10 +200,11 @@
 		"map_help_info": "Offers displayed in the lists (category content, exchange offers, etc.) can be filtered by the visible area of the map.\n\nSet it so that it covers the desired search area and click the \"Save\" button. To reset the selection, click the \"All regions\" button.",
 		"saving_region_warning_by_zoom": "The coverage of the visible map area is too small. Offer lists will be filtered by this area. Continue anyway?",
 
-		"image_error": "Image upload error",
+		"image_error": "Image upload error: {error}",
 		"node_error": "Node error has occured: {error}",
 		"app_geolocation_permission_error": "You have restricted access to geolocation. Click the \"Application Settings\" button to allow the access.",
 		"platform_geolocation_permission_error": "Access to geolocation is restricted in the browser or operating system settings. You need to allow the access.",
+		"images_max_count_exceeded_error": "Maximum count of images exceeded",
 		"error#-26": "Min relay fee not met",
 		"error#-1": "Error loading sdk library",
 		"error#0": "{error}",

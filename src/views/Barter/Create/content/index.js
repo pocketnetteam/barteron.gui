@@ -287,7 +287,7 @@ export default {
 						bottom: 10,
 						right: 10
 					} */
-				})
+				}, true)
 					.then(urls => {
 						/* Replace data:image with given urls */
 						if (urls?.length) {
@@ -329,7 +329,7 @@ export default {
 					})
 					.catch(error => {
 						/* Show error dialog */
-						form.dialog.view("error", this.$t("dialogLabels.image_error", { error }));
+						form.dialog.view("error", this.$t("dialogLabels.image_error", { error: error.message }));
 					});
 			} else {
 				/* Scroll view to first rejected input */
