@@ -924,7 +924,7 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	rpc(method, props) {
-		return this.sdk.rpc(method, [props]).then(result => {
+		return this.sdk.rpc(method, [props], {}).then(result => {
 			return this.lastresult = result;
 		}).catch(e => this.setLastResult(e));
 	}
