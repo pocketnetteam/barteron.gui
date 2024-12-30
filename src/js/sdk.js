@@ -602,14 +602,22 @@ class SDK {
 	 * 
 	 * @param {Array} data
 	 * @param {Array[String]} data.images
+	 * @param {Boolean} errorForwarding
 	 * 
 	 * @returns {Promise}
 	 */
-	uploadImagesToImgur(data) {
+	uploadImagesToImgur(data, errorForwarding) {
 		return this.sdk.images.upload(data).then(result => {
 			this.lastresult = "uploadImageToImgur: success (console.log)"
 			return result.map(m => m.url);
-		}).catch(e => this.setLastResult(e))
+		}).catch(e => {
+			this.setLastResult(e);
+			if (errorForwarding) {
+				throw new AppErrors.UploadImagesError(e);
+			} else {
+				console.error(e);
+			}
+		})
 	}
 
 	/**
