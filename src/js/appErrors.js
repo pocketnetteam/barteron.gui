@@ -30,8 +30,21 @@ class GeolocationRequestError extends Error {
 	}
 }
 
+class UploadImagesError extends Error {
+	constructor(error) {
+		let message = error.message;
+		const imagesMaxCountExceeded = (/images:max:\d+$/.test(message)); // example "images:max:10"
+		if (imagesMaxCountExceeded) {
+			message =  VueI18n.t("dialogLabels.images_max_count_exceeded_error");
+		}
+		super(message);
+		this.error = error;
+	}
+}
+
 export default { 
 	RequestIdError, 
 	AppGeolocationPermissionError, 
-	GeolocationRequestError 
+	GeolocationRequestError,
+	UploadImagesError
 }
