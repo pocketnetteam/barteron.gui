@@ -1,5 +1,6 @@
 import Pinia from "@/stores/store.js";
 import Vue from "vue";
+import Categories from "@/js/categories.js";
 
 const 
     defaultPageSize = 12,
@@ -65,11 +66,23 @@ const
                     ...this.filters,
                     ...(search && { search: `%${ search }%` }),
                     location: mixin.methods.getStoredLocation() || [],
-                    theirTags: Number.isInteger(+request?.id) ? [+request.id] : [],
+                    theirTags: this._getTheirTags(request),
                     topHeight: request?.topHeight,
                     pageStart: request?.pageStart || 0,
                     pageSize: request?.pageSize || this.pageSize
                 });
+            },
+
+            _getTheirTags(request) {
+                let result = [];
+                if (Number.isInteger(+request?.id)) {
+                    const
+                        id = String(+request.id),
+                        categories = new Categories();
+
+                    result = categories.findChildrenRecursivelyById(id).map(item => Number(item.id));
+                }
+                return result;
             },
 
             async loadFirstPage(route) {

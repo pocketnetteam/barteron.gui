@@ -72,6 +72,29 @@ class Categories {
 	findByName(name) {
 		return Array.isArray(name) ? name.map(n => this.find(n)) : this.find(name);
 	}
+
+	/**
+	 * Search children recursively by id
+	 * 
+	 * @param {String} id
+	 * 
+	 * @returns {Array}
+	 */
+	findChildrenRecursivelyById(id) {
+		let result = [];
+
+		const current = this.findById(id);
+		if (current) {
+			result.push(current);
+			
+			const childrenIds = (current.children || []).map(id => String(id));
+			childrenIds.forEach(id => {
+				result = result.concat(this.findChildrenRecursivelyById(id));
+			});
+		}
+
+		return result;
+	}
 };
 
 export default Categories;
