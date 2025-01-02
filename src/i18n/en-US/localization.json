@@ -202,6 +202,7 @@
 
 		"image_error": "Image upload error: {error}",
 		"node_error": "Node error has occured: {error}",
+		"disabled_permissions": "The following permissions are disabled: {error}. Click the \"Application Settings\" button to allow the access.",
 		"app_geolocation_permission_error": "You have restricted access to geolocation. Click the \"Application Settings\" button to allow the access.",
 		"platform_geolocation_permission_error": "Access to geolocation is restricted in the browser or operating system settings. You need to allow the access.",
 		"images_max_count_exceeded_error": "Maximum count of images exceeded",

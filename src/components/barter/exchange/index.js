@@ -41,6 +41,8 @@ export default {
 		 * @param {@Offer} offer
 		 */
 		createRoom(offer) {
+			if (this.sdk.willOpenRegistration()) return;
+			
 			this.isLoading = true;
 			this.dialog?.instance.view("load", this.$t("dialogLabels.opening_room"));
 			this.sendMessage({
