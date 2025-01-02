@@ -39,6 +39,8 @@ export default {
 		 * @param {@ComplexDeal} deal
 		 */
 		createRoom(deal) {
+			if (this.sdk.willOpenRegistration()) return;
+
 			this.isLoading = true;
 			this.dialog?.instance.view("load", this.$t("dialogLabels.opening_room"));
 			this.sendMessage({
