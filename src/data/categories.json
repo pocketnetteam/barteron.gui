@@ -376,6 +376,14 @@
 		"children": [],
 		"order": 4400
 	},
+	"23": {
+		"name": "bank_transfer",
+		"icon": "fa-landmark",
+		"id": 23,
+		"parent": null,
+		"children": [],
+		"order": 4410
+	},
 	"12": {
 		"name": "gold_silver",
 		"icon": "fa-coins",
