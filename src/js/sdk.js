@@ -115,6 +115,24 @@ class SDK {
 	}
 
 	/**
+	 * Creates disabled permissions error
+	 * 
+	 * @param {Array} items - Permission items
+	 * 
+	 * @returns {Error}
+	 */
+	disabledPermissionsError(items) {
+		const
+			options = {
+				key: "dialogLabels.disabled_permissions",
+				details: items.join(', ')
+			},
+			message = this.errorMessage(null, options);
+
+		return new Error(message);
+	}
+
+	/**
 	 * Check if Array/Object is empty
 	 * 
 	 * @param {*} prop
@@ -353,6 +371,19 @@ class SDK {
 	}
 
 	/**
+	 * Check registration and open the form if needed
+	 * 
+	 * @returns {Boolean}
+	 */
+	willOpenRegistration() {
+		const result = !(this._address);
+		if (result) {
+			this.openRegistration();
+		}
+		return result;
+	}
+
+	/**
 	 * Get local route from data
 	 * 
 	 * @param {String} route
@@ -376,7 +407,8 @@ class SDK {
 	createRoom(request) {
 		return new Promise((resolve, reject) => {
 			/* Request for permissons */
-			this.requestPermissions(["chat"]).then(result => {
+			const items = ["chat"];
+			this.requestPermissions(items).then(result => {
 				if (result) {
 					this.sdk.chat.getOrCreateRoom({
 						users: request.members,
@@ -388,9 +420,10 @@ class SDK {
 					.then(resolve)
 					.catch(reject);
 				} else {
-					reject(result);
+					reject(this.disabledPermissionsError(items));
 				}
-			});
+			})
+			.catch(reject);
 		});
 	}
 
@@ -426,10 +459,10 @@ class SDK {
 							.then(resolve)
 							.catch(reject);
 					} else {
-						let error = new Error(`Error occurred while requesting permission(s): ${items.join(', ')}`);
-						reject(error);
+						reject(this.disabledPermissionsError(items));
 					}
-				});
+				})
+				.catch(reject);
 		});
 	}
 
@@ -503,7 +536,18 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	getAction(data) {
-		return this.sdk.get.action(data);
+		return this.sdk.get.action(data)
+			.catch(e => this.setLastResult(e));
+	}
+
+	/**
+	 * Get actions
+	 * 
+	 * @returns {Promise}
+	 */
+	getActions() {
+		return this.sdk.get.actions()
+			.catch(e => this.setLastResult(e));
 	}
 
 	/**
@@ -512,7 +556,7 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	getOfferActions() {
-		return this.sdk.get.actions().then(actions => {
+		return this.getActions().then(actions => {
 			return Promise.all(
 				(actions || [])
 					.filter(action => this.isOfferAction(action))
@@ -580,7 +624,7 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	getVoteActions() {
-		return this.sdk.get.actions().then(actions => {
+		return this.getActions().then(actions => {
 			return (actions || []).filter(item => this.isVoteAction(item));
 		});
 	}
@@ -628,7 +672,9 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	checkPermission(permission) {
-		return this.sdk?.permissions.check({ permission });
+		return this.sdk?.permissions.check({ permission }).catch(e => {
+			console.error(e);
+		});
 	}
 
 	/**
