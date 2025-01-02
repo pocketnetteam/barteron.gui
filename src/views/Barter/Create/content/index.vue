@@ -119,9 +119,9 @@
 										:key="`favorite-${ index }`"
 										v-if="!instance.vTags.includes(id)"
 										@click="instance.insert(id)"
-									>
-										{{ $t(categories.items[id]?.name) || $t('buttonLabels.unknown') }}
-										<i class="fa fa-plus"></i>
+									>{{ 
+										$t(categories.items[id]?.name) || $t('buttonLabels.unknown') 
+									}}<i class="fa fa-plus"></i>
 									</li>
 								</template>
 							</ul>
