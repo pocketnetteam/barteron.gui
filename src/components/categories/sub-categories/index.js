@@ -19,7 +19,12 @@ export default {
 	data() {
 		return {
 			expanded: this.open,
-			count: this.items.length - this.visible
+		}
+	},
+
+	computed: {
+		count() {
+			return this.items.length - this.visible;
 		}
 	},
 
