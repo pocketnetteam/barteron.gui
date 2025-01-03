@@ -15,6 +15,7 @@
 		<header v-if="header">
 			<h1 v-if="!compact">{{ $t('voteLabels.title') }} - </h1>
 			<Score
+				ref="offerScore"
 				:rating="true"
 				:stars="5"
 				:value="completedOfferScoresAverage()"
@@ -23,7 +24,7 @@
 				:relayMode="true"
 				:voteable="voteable()"
 				:rejected="hasRejectedOfferScore()"
-				@change="vote"
+				@change="voteEvent"
 			/>
 			<i 
 				v-if="hasRelayOfferScore()" 
@@ -76,7 +77,7 @@
 								vSize="sm"
 								class="submit"
 								:disabled="isCommentLoading"
-								@click="submit"
+								@click="submitCommentEvent"
 							>
 								<i
 									class="fa fa-spinner fa-spin"
