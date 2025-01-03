@@ -2,14 +2,15 @@ import Loader from "@/components/loader/index.vue";
 import BarterList from "@/components/barter/list/index.vue";
 import { useOfferStore } from "@/stores/offer.js";
 import { mapState, mapWritableState, mapActions } from "pinia";
+import { useLocaleStore } from "@/stores/locale.js";
 
-function setValueToVSelect(el, value) {
+function setValueToVSelect(ref, value) {
 	const
-		items = el?.items || [],
+		items = ref?.items || [],
 		targetItem = items.filter(item => item.value === value)[0];
 
 	if (targetItem) {
-		el.setValue(targetItem);
+		ref.setValue(targetItem);
 	}
 }
 
@@ -48,6 +49,10 @@ export default {
 
 		...mapState(useOfferStore, [
 			"pageSize",
+		]),
+
+		...mapState(useLocaleStore, [
+			"locale",
 		]),
 
 		/**
@@ -183,6 +188,13 @@ export default {
 				this.showError(this.currentError)
 				this.currentError = null;
 			}
+		},
+
+		locale() {
+			this.$nextTick(() => {
+				this.setOrderValueToElement();
+				this.setBartersViewToElement();
+			});
 		},
 	},
 
