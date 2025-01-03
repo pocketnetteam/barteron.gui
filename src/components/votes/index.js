@@ -110,6 +110,23 @@ export default {
 		},
 
 		/**
+		 * Vote event
+		 * 
+		 * @param {Number} score
+		 */
+		voteEvent(score) {
+			this.dialog?.instance
+				.view("question", this.$t("dialogLabels.submit_rating"))
+				.then(state => {
+					if (state) {
+						this.vote(score);
+					} else {
+						this.$refs.offerScore?.reset();
+					}
+				});
+		},
+
+		/**
 		 * Store vote
 		 * 
 		 * @param {Number} score
@@ -137,9 +154,22 @@ export default {
 		},
 
 		/**
+		 * Event of comment submitting
+		 */
+		submitCommentEvent() {
+			this.dialog?.instance
+				.view("question", this.$t("dialogLabels.submit_comment"))
+				.then(state => {
+					if (state) {
+						this.submitComment();
+					}
+				});
+		},
+
+		/**
 		 * Send comment
 		 */
-		submit() {
+		submitComment() {
 			const
 				form = this.$refs.form,
 				feed = this.$refs.vote,
