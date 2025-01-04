@@ -29,7 +29,9 @@
 				></i>
 			</template>
 		</a>
-		<slot></slot>
+		<div id="aside-content">
+			<slot></slot>
+		</div>
 	</aside>
 </template>
 

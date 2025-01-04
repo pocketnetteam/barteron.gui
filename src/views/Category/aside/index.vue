@@ -1,5 +1,7 @@
 <template>
-	<v-aside>
+	<v-aside
+		ref="asideCategories"
+	>
 		<v-details
 			v-if="subCategories?.length"
 			:title="$t('categoryLabels.label')"
