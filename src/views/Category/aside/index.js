@@ -133,6 +133,15 @@ export default {
 			});
 
 			this.applyDisabled = true;
+
+			this.hideIfNeeded();
+		},
+
+		hideIfNeeded() {
+			const ref = this.$refs.asideCategories;
+			if (ref && ref.active) {
+				ref.toggle();
+			}
 		}
 	},
 

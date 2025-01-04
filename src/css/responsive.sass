@@ -81,15 +81,40 @@
 					justify-content: flex-end
 					width: 100%
 
-		#aside,
 		#sidebar
 			display: none
+		
+		#aside
+			padding: $r
+			position: fixed
+			z-index: 1005
+			bottom: $r
+
+			#aside-content
+				overflow-y: auto
+				max-height: calc(100vh - (var(--app-margin-top) + 2 * var(--bastyon-menu-height) + 13px + #{$r*2} + #{$r*2}))
+
+			.side-toggle
+				display: block
+
+		#aside
+			left: -$sidebar-width
+			box-shadow: none
+			+transition()
+			transition-property: box-shadow, left
+
+			&.active
+				left: $r
+				box-shadow: 1px 1px 6px $backdrop
 
 		.barter-item-page
 			.no-sidebar
 				display: block
 
 		#container
+			&:has(#aside)
+				padding-left: $r * 0
+
 			#content.shrink-right
 				margin: 0
 				width: 100%
@@ -167,6 +192,46 @@
 
 							span
 								gap: $r
+
+		#main #container #content
+			.tabset
+				ul
+					gap: $r / 2
+
+					li a
+						gap: $r / 2
+						padding-left: $r
+						padding-right: $r
+
+						i.fa
+							display: none
+
+				.v-select-holder
+					.v-select
+						padding-left: $r
+						padding-right: $r
+
+					i.icon
+						display: none
+
+					i.v-dropdown-arrow
+						margin-left: $r / 2
+
+		#footer
+			.footer-holder
+				padding-left: 36px
+
+			.bar nav
+				gap: $r / 2
+
+				.v-select-holder
+					.v-select, .v-select-dropdown
+						padding-left: $r / 2
+						padding-right: $r / 2
+						min-width: 120px
+
+						i.fa
+							margin-right: $r / 2
 
 		.vs-carousel
 			.vs-carousel__slide
