@@ -21,6 +21,8 @@
 					:items="newFromGoods"
 					:loaderState="fetching"
 					:carousel="true"
+					:showForwardButton="!(fetching) && newFromGoods.length == offersFeedListPageSize"
+					@forwardButtonClick="showNewOffers"
 				/>
 				<template v-if="!fetching && !newFromGoods.length">
 					<p>{{ $t('categoryLabels.empty') }}</p>

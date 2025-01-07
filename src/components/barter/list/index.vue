@@ -75,6 +75,16 @@
 						</template>
 					</BarterItem>
 				</slide>
+				<slide 
+					v-if="showForwardButton"
+					class="forward-button"
+				>
+					<v-button 
+						@click="forwardButtonClick"
+					>
+						<i class="fa fa-forward"></i>
+					</v-button>
+				</slide>
 			</carousel>
 		</div>
 	</div>
