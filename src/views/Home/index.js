@@ -2,6 +2,7 @@ import PopularList from "@/components/categories/popular-list/index.vue";
 import BarterList from "@/components/barter/list/index.vue";
 import Banner from "@/components/banner/index.vue";
 import viewedStore from "@/stores/viewed.js";
+import offerStore from "@/stores/offer.js";
 
 export default {
 	name: "Home",
@@ -27,6 +28,15 @@ export default {
 		 */
 		async getOffersFeed() {
 			this.newFromGoods = await this.getOffersFeedList();
+		},
+
+		/**
+		 * Show new offers
+		 */
+		showNewOffers() {
+			offerStore.setFiltersForNewOffers();
+			const route = offerStore.getRouteForNewOffers();
+			this.$router.push(route);
 		},
 
 		/**

@@ -27,12 +27,22 @@ const
         
         actions: {
             fetch() {
-				Pinia.getPrefix().then(() => {
-                    const data = Pinia.get(storageId, {});
-                    this.restoreState(data);
-				}).catch(e => { 
-                    console.error(e);
-                });
+                const 
+                    canSyncFetch = (Pinia.prefix),
+                    clbk = () => {
+                        const data = Pinia.get(storageId, {});
+                        this.restoreState(data);
+                    };
+
+                if (canSyncFetch) {
+                    clbk();
+                } else {
+                    Pinia.getPrefix().then(() => {
+                        clbk();
+                    }).catch(e => { 
+                        console.error(e);
+                    });
+                }
 			},
 
             restoreState(data) {
@@ -164,6 +174,20 @@ const
                 return this.filters;
             },
 
+            setFiltersForNewOffers() {
+                this.filters = {
+                    orderBy: "height",
+                    orderDesc: true
+                };
+            },
+
+            getRouteForNewOffers() {
+                return {
+                    name: "category",
+                    params: { id: "search" },
+                    query: { search: "" }
+                };
+            },
         }
     }),
     store = storage();
