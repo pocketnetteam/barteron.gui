@@ -31,12 +31,22 @@ export default {
 		loaderItems: {
 			type: Number,
 			default: 4
-		}
+		},
+		showForwardButton: {
+			type: Boolean,
+			default: false
+		},
 	},
 
 	computed: {
 		list() {
 			return this.loaderState ? this.loaderItems : this.items;
+		}
+	},
+	
+	methods: {
+		forwardButtonClick(e) {
+			this.$emit('forwardButtonClick', e);
 		}
 	}
 }
