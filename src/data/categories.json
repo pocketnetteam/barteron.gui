@@ -208,13 +208,127 @@
 		"children": [],
 		"order": 2500
 	},
+	"24": {
+		"name": "pets",
+		"icon": "fa-dog",
+		"id": 24,
+		"parent": null,
+		"children": [
+			25,
+			26,
+			27,
+			28,
+			29,
+			1281
+		],
+		"order": 2600
+	},
+	"25": {
+		"name": "dogs",
+		"id": 25,
+		"parent": 24,
+		"children": [],
+		"order": 2605
+	},
+	"26": {
+		"name": "cats",
+		"id": 26,
+		"parent": 24,
+		"children": [],
+		"order": 2610
+	},
+	"27": {
+		"name": "birds",
+		"id": 27,
+		"parent": 24,
+		"children": [],
+		"order": 2615
+	},
+	"28": {
+		"name": "aquarium",
+		"id": 28,
+		"parent": 24,
+		"children": [],
+		"order": 2620
+	},
+	"29": {
+		"name": "other_pets",
+		"id": 29,
+		"parent": 24,
+		"children": [
+			30,
+			31,
+			32,
+			33,
+			34,
+			35,
+			36,
+			37
+		],
+		"order": 2625
+	},
+	"30": {
+		"name": "amphibians",
+		"id": 30,
+		"parent": 29,
+		"children": [],
+		"order": 2630
+	},
+	"31": {
+		"name": "rodents",
+		"id": 31,
+		"parent": 29,
+		"children": [],
+		"order": 2635
+	},
+	"32": {
+		"name": "rabbits",
+		"id": 32,
+		"parent": 29,
+		"children": [],
+		"order": 2640
+	},
+	"33": {
+		"name": "horses",
+		"id": 33,
+		"parent": 29,
+		"children": [],
+		"order": 2645
+	},
+	"34": {
+		"name": "reptiles",
+		"id": 34,
+		"parent": 29,
+		"children": [],
+		"order": 2650
+	},
+	"35": {
+		"name": "farm_animals",
+		"id": 35,
+		"parent": 29,
+		"children": [],
+		"order": 2655
+	},
+	"36": {
+		"name": "ferrets",
+		"id": 36,
+		"parent": 29,
+		"children": [],
+		"order": 2660
+	},
+	"37": {
+		"name": "other",
+		"id": 37,
+		"parent": 29,
+		"children": [],
+		"order": 2665
+	},
 	"1281": {
 		"name": "pet_supplies",
-		"icon": "fa-cat",
 		"id": 1281,
-		"parent": null,
+		"parent": 24,
 		"children": [],
-		"order": 2600
+		"order": 2670
 	},
 	"1305": {
 		"name": "tickets_experiences",
