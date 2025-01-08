@@ -21,7 +21,7 @@
 					:items="newFromGoods"
 					:loaderState="fetching"
 					:carousel="true"
-					:showForwardButton="!(fetching) && newFromGoods.length == offersFeedListPageSize"
+					:showForwardButton="!(fetching) && newFromGoods.length > 4"
 					@forwardButtonClick="showNewOffers"
 				/>
 				<template v-if="!fetching && !newFromGoods.length">
