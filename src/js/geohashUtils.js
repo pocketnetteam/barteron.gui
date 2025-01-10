@@ -112,4 +112,68 @@ class GeoHashApproximator {
 
 }
 
-export { GeoHashApproximator };
+class GeoHashLimitator {
+	constructor(location = [], allowedAreaAlias = "") {
+		this.location = location;
+		this.allowedAreaAlias = allowedAreaAlias;
+	}
+
+	getAllowedArea() {
+		let items = [];
+
+		switch (this.allowedAreaAlias) {
+			case "Canada,USA":
+				items = [
+					"bk,bs,bu,b7,be,bg,b6,bd,bf,b1,b3,b9",
+					"b5x,b5m,b5q,b5r,b5n,b5p",
+					"zc",
+					"c",
+					"fn,fq,fw,fj,fm,fh,fk,fs,f5,f7,fe,f4,f6,fd,f1,f3,f9,fc,f0,f2,f8,fb",
+					"87,8e",
+					"9p,9r,9x,9z,9n,9q,9w,9y,9m,9t,9v,9u",
+					"dp,dr,dx,dn,dq,dj,dh",
+				];
+				break;
+
+			default:
+				break;
+		}
+
+		return items.reduce(
+			(res, item) => res.concat(item.split(",")),
+			[]
+		);
+	}
+
+	limit() {
+		let result = [];
+		const allowedArea = this.getAllowedArea();
+		if (!(this.location.length)) {
+			result = allowedArea;
+		} else {
+			for (let i = 0; i < this.location.length; i++) {
+				const item = this.location[i];
+				for (let j = 0; j < allowedArea.length; j++) {
+					const allowedItem = allowedArea[j];
+					if (item.length >= allowedItem.length) {
+						const itemInsideAllowedItem = (item.indexOf(allowedItem) === 0);
+						if (itemInsideAllowedItem) {
+							result.push(item);
+							break;
+						}
+					} else {
+						const allowedItemIsPartOfLocation = (allowedItem.indexOf(item) === 0);
+						if (allowedItemIsPartOfLocation) {
+							result.push(allowedItem);
+							continue;
+						}
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+}
+
+export { GeoHashApproximator, GeoHashLimitator };

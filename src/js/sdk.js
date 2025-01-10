@@ -3,6 +3,7 @@ import { OpenStreetMapProvider } from "leaflet-geosearch";
 import CountriesTimezones from "countries-and-timezones";
 import CityTimezones from "city-timezones";
 import VueI18n, { currencies } from "@/i18n/index.js";
+import { GeoHashLimitator } from "@/js/geohashUtils.js";
 
 import Account from "@/js/models/account.js";
 import Offer from "@/js/models/offer.js";
@@ -332,6 +333,52 @@ class SDK {
 			Vue.set(this, "_appinfo", info);
 			return info;
 		}).catch(e => this.setLastResult(e));
+	}
+
+	/**
+	 * Checks if this is the Brighteon project
+	 * 
+	 * @returns {Boolean}
+	 */
+	isBrighteonProject() {
+		return (this.appinfo?.project?.name === "Brighteon");
+	}
+
+	/**
+	 * Setup request for Brighteon project
+	 * 
+	 * @param {Object} request
+	 */
+	setupRequestForBrighteon(request) {
+		request.lang = "en-US";
+		
+		const limitator = new GeoHashLimitator(request.location, "Canada,USA");
+		request.location = limitator.limit();
+	}
+
+	/**
+	 * Setup RPC options for Brighteon project
+	 * 
+	 * @param {Object} options
+	 */
+	setupRPCOptionsForBrighteon(options) {
+		options.rpc = {
+			fnode: this.getRPCNodeForBrighteon(),
+		};
+	}
+
+	getRPCNodeForBrighteon() {
+		if (!(this._RPCNodeForBrighteon)) {
+			const 
+				index = (Math.random() < 0.5 ? 0 : 1),
+				items = [
+					"65.21.56.203:38081",
+					"135.181.196.243:38081"
+				];
+
+			this._RPCNodeForBrighteon = items[index];
+		}
+		return this._RPCNodeForBrighteon;
 	}
 
 	/**
@@ -970,7 +1017,11 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	rpc(method, props) {
-		return this.sdk.rpc(method, [props], {}).then(result => {
+		const options = {};
+		if (this.isBrighteonProject()) {
+			this.setupRPCOptionsForBrighteon(options);
+		};
+		return this.sdk.rpc(method, [props], options).then(result => {
 			return this.lastresult = result;
 		}).catch(e => this.setLastResult(e));
 	}
@@ -1136,6 +1187,15 @@ class SDK {
 
 		delete request.checkingData;
 
+		if (this.isBrighteonProject()) {
+			this.setupRequestForBrighteon(request);
+
+			const locationIsEmpty = !(request.location?.length);
+			if (locationIsEmpty) {
+				return Promise.resolve([]);
+			}
+		};
+
 		return this.rpc("getbarteronfeed", request).then(feed => {
 
 			if (checkingData?.checkRequestId) {
@@ -1182,6 +1242,15 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	getBrtOfferDeals(request) {
+		if (this.isBrighteonProject()) {
+			this.setupRequestForBrighteon(request);
+
+			const locationIsEmpty = !(request.location?.length);
+			if (locationIsEmpty) {
+				return Promise.resolve([]);
+			}
+		};
+		
 		return this.rpc("getbarterondeals", {
 			...request,
 			myTags: (request?.myTags || []).map(tag => +tag),
@@ -1206,6 +1275,15 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	getBrtOfferComplexDeals(request) {
+		if (this.isBrighteonProject()) {
+			this.setupRequestForBrighteon(request);
+
+			const locationIsEmpty = !(request.location?.length);
+			if (locationIsEmpty) {
+				return Promise.resolve([]);
+			}
+		};
+
 		return this.rpc("getbarteroncomplexdeals", {
 			...request,
 			myTag: +request?.myTag,
