@@ -28,12 +28,13 @@ class GeoHashApproximator {
 				if (needDivide) {
 					const bounds = this.getBoundsOfGeohash(item);
 					
-					let newItems = this.getGeohashesForBounds(
-						bounds, 
-						precision + 1
-					).filter(f => !(temp.includes(f) || this.geohashOutOfBounds(f, mainBounds)));
+					const newItems = this.getGeohashesForBounds(bounds, precision + 1);
+					const newItemsWithoutSideGeohashes = newItems.filter(f => f.indexOf(item) === 0);
+					const newItemsToAdd = newItemsWithoutSideGeohashes.filter(
+						f => !(temp.includes(f) || this.geohashOutOfBounds(f, mainBounds))
+					);
 
-					temp = temp.concat(newItems);
+					temp = temp.concat(newItemsToAdd);
 
 				} else if (this.geohashInsideBounds(item, mainBounds)) {
 					temp.push(item);
