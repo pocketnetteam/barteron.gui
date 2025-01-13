@@ -12,14 +12,18 @@ export default {
 			applyDisabled: true,
 			priceVariant: '-',
 			lastPriceInputId: null,
-			preventFiltersWatcher: false,
+			categorySelectionVariant: "categoryField",
+			filtersWatcherDisabled: false,
 			filters: {
 				priceMin: "",
 				priceMax: "",
+				categorySelection: "",
 				condition: []
 			}
 		}
 	},
+
+	inject: ["dialog"],
 
 	computed: {
 		category() {
@@ -35,13 +39,17 @@ export default {
 		setupFilters() {
 			const source = this.$components.content.getFilters();
 
-			this.preventFiltersWatcher = true;
+			this.filtersWatcherDisabled = true;
 
 			this.filters.priceMin = (typeof source.priceMin === 'number') ? source.priceMin / 100 : null;
 			this.filters.priceMax = (typeof source.priceMax === 'number') ? source.priceMax / 100 : null;
 			this.updatePriceVariant();
 
+			this.filters.categorySelection = source.categorySelection || "categoryField";
+			this.updateCategorySelectionVariant();
+
 			this.filters.condition = source.condition;
+			//this.updateConditionVariants();
 		},
 
 		updatePriceVariant() {
@@ -51,6 +59,14 @@ export default {
 
 			this.priceVariant = `${min}-${max}`;
 		},
+
+		updateCategorySelectionVariant(){
+			this.categorySelectionVariant = this.filters.categorySelection;
+		},
+
+		// updateConditionVariants() {
+		// 	this.condition = this.filters.condition;
+		// },
 
 		/**
 		 * Make price fields related
@@ -85,11 +101,20 @@ export default {
 			this.lastPriceInputId = null;
 		},
 
-		onKeyDown(e) {
+		onKeyUpPrice(e) {
 			const filtersChanged = !this.applyDisabled;
 			if (e?.keyCode === 13 && filtersChanged) {
 				this.applyFilters();
 			}
+		},
+
+		changeCategorySelection(e) {
+			const opt = typeof e === "string" && e;
+			this.filters.categorySelection = opt || "";
+		},
+
+		showCategorySelectionHelp() {
+			this.dialog?.instance.view("info", this.$t("categorySelectionLabels.help_info"));
 		},
 
 		/* changeCondition(value, e) {
@@ -118,13 +143,15 @@ export default {
 				}
 				this.lastPriceInputId = null;
 
-				this.preventFiltersWatcher = true;
+				this.filtersWatcherDisabled = true;
 
 				this.filters.priceMin = min;
 				this.filters.priceMax = max;
 			}
 
 			this.updatePriceVariant();
+
+			this.updateCategorySelectionVariant();
 
 			this.$components.content.applyFilters({
 				...this.filters,
@@ -134,7 +161,56 @@ export default {
 
 			this.applyDisabled = true;
 
-			this.hideIfNeeded();
+			this.markIfNeeded();
+
+			setTimeout(() => {
+				this.hideIfNeeded();
+			}, 100);
+		},
+
+		priceFilterEnabled() {
+			const source = this.$components.content?.getFilters();
+			return source && (source.priceMin || source.priceMax);
+		},
+
+		categorySelectionFilterEnabled() {
+			const source = this.$components.content?.getFilters();
+			return source && (source.categorySelection === "exchangeList");
+		},
+
+		filtersEnabled() {
+			return this.priceFilterEnabled() || this.categorySelectionFilterEnabled();
+		},
+
+		resetFilters() {
+			this.filtersWatcherDisabled = true;
+
+			this.filters.priceMin = null;
+			this.filters.priceMax = null;
+			this.updatePriceVariant();
+
+			this.filters.categorySelection = "categoryField";
+			this.updateCategorySelectionVariant();
+
+			this.$components.content.applyFilters({
+				...this.filters,
+			});
+
+			this.applyDisabled = true;
+
+			this.markIfNeeded();
+
+			setTimeout(() => {
+				this.hideIfNeeded();
+			}, 100);
+		},
+
+		markIfNeeded() {
+			const
+				ref = this.$refs.asideCategories,
+				value = this.filtersEnabled();
+
+			ref?.mark(value);
 		},
 
 		hideIfNeeded() {
@@ -146,19 +222,24 @@ export default {
 	},
 
 	mounted() {
-		this.setupFilters()
+		this.setupFilters();
+
+		this.$2watch("$refs.asideCategories").then(() => {
+			this.markIfNeeded();
+		}).catch(e => { 
+			console.error(e);
+		});
 	},
 
 	watch: {
 		filters: {
 			deep: true,
 			handler() {
-				if (!this.preventFiltersWatcher) {
+				if (!(this.filtersWatcherDisabled)) {
 					this.applyDisabled = false;
 				}
-				this.preventFiltersWatcher = false;
+				this.filtersWatcherDisabled = false;
 			}
-
-		}
+		},
 	}
 }

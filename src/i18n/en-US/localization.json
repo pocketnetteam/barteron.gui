@@ -99,6 +99,7 @@
 		"download_app": "Download application",
 		"continue_working": "Continue working",
 		"apply": "Apply",
+		"reset": "Reset",
 		"submit": "Submit"
 	},
 
@@ -133,6 +134,14 @@
 		"range": "From {from} To {to}",
 		"over": "Over {from}",
 		"no_matter": "No matter"
+	},
+
+	"categorySelectionLabels": {
+		"label": "Category Selection",
+		"description": "Specify the field for category selection in offers:",
+		"categoryField": "Category",
+		"exchangeList": "Exchange list",
+		"help_info": "The \"Category\" option is a selection of offers posted in the current category.\n\nThe \"Exchange List\" option is a selection of offers which propose you an exchange for the current category.\n\nExample:\n- to find out which goods and services can be purchased for PKOIN, you need to go to the \"Pocketcoins\" category and select the \"Exchange List\" option."
 	},
 
 	"conditionLabels": {

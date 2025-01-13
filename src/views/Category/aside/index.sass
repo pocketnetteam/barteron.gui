@@ -5,10 +5,6 @@
 		.v-switch
 			padding: 0
 
-	.filter-apply
-		.v-button-holder .v-button
-			width: 100%
-
 	.v-details
 		.summary
 			display: flex
@@ -17,3 +13,16 @@
 
 			i
 				background-color: $blue-hover
+			
+			.filter-title
+				padding-top: 2px
+				padding-bottom: 2px
+				border-radius: 12px
+				+transition()
+				transition-duration: .1s
+
+				&.filter-enabled
+					padding-left: 10px
+					padding-right: 10px
+					color: $white
+					background-color: $hit

@@ -10,7 +10,8 @@ export default {
 
 	data() {
 		return {
-			active: false
+			active: false,
+			marked: false,
 		}
 	},
 
@@ -20,6 +21,10 @@ export default {
 		 */
 		toggle() {
 			this.active = !this.active;
+		},
+
+		mark(value) {
+			this.marked = value;
 		}
 	}
 }

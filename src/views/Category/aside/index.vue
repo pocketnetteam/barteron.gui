@@ -14,7 +14,12 @@
 			<template #title>
 				<strong class="summary">
 					<i class="icon-pkoin"></i>
-					{{ $t('priceLabels.label') }}
+					<span
+						:class="{
+							'filter-title': true,
+							'filter-enabled': priceFilterEnabled()
+						}"
+					>{{ $t('priceLabels.label') }}</span>
 				</strong>
 			</template>
 
@@ -28,7 +33,7 @@
 					type="minmax"
 					vSize="lg"
 					:vEvents="{
-						keydown: onKeyDown,
+						keyup: onKeyUpPrice,
 						change: changePrice,
 						input: changePrice
 					}"
@@ -51,6 +56,45 @@
 						$t('priceLabels.no_matter')
 					]"
 					@change="changePriceVariant"
+				/>
+			</div>
+		</v-details>
+
+		<v-details 
+			:open="true"
+		>
+			<template #title>
+				<strong class="summary">
+					<span
+						:class="{
+							'filter-title': true,
+							'filter-enabled': categorySelectionFilterEnabled()
+						}"
+					>{{ $t('categorySelectionLabels.label') }}</span>
+				</strong>
+			</template>
+
+			<div class="row">
+				<div>{{ $t('categorySelectionLabels.description') }}</div>
+				<v-button
+					vType="stroke"
+					:rippleEffect="false"
+					@click="showCategorySelectionHelp"
+				><i class="fa fa-info"></i>
+				</v-button>
+			</div>
+
+			<div class="row">
+				<v-switch
+					type="radio"
+					name="categorySelection"
+					:value="['categoryField', 'exchangeList']"
+					:checked="categorySelectionVariant"
+					:label="[
+						$t('categorySelectionLabels.categoryField'),
+						$t('categorySelectionLabels.exchangeList'),
+					]"
+					@change="changeCategorySelection"
 				/>
 			</div>
 		</v-details>
@@ -83,11 +127,19 @@
 			/>
 		</v-details> -->
 
-		<div class="v-details filter-apply">
-			<v-button
-				:disabled="applyDisabled"
-				@click="applyFilters"
-			>{{ $t('buttonLabels.apply') }}</v-button>
+		<div class="v-details">
+			<div class="row">
+				<div class="buttons-holder full-width">
+					<v-button
+						:disabled="!(filtersEnabled())"
+						@click="resetFilters"
+					>{{ $t('buttonLabels.reset') }}</v-button>
+					<v-button
+						:disabled="applyDisabled"
+						@click="applyFilters"
+					>{{ $t('buttonLabels.apply') }}</v-button>
+				</div>
+			</div>
 		</div>
 	</v-aside>
 </template>
