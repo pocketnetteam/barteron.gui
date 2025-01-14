@@ -44,16 +44,16 @@
 				<v-switch
 					type="radio"
 					name="price"
-					:value="['-10', '10-50', '50-100', '100-500', '500-1000', '1000-', '-']"
+					:value="['-', '-10', '10-50', '50-100', '100-500', '500-1000', '1000-']"
 					:checked="priceVariant"
 					:label="[
+						$t('priceLabels.no_matter'),
 						$t('priceLabels.under', { to: 10 }),
 						$t('priceLabels.range', { from: 10, to: 50 }),
 						$t('priceLabels.range', { from: 50, to: 100 }),
 						$t('priceLabels.range', { from: 100, to: 500 }),
 						$t('priceLabels.range', { from: 500, to: 1000 }),
 						$t('priceLabels.over', { from: 1000 }),
-						$t('priceLabels.no_matter')
 					]"
 					@change="changePriceVariant"
 				/>
