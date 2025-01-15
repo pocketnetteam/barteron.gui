@@ -1,10 +1,12 @@
 import SubCategories from "@/components/categories/sub-categories/index.vue";
+import ExchangeList from "@/components/barter/exchange/list/index.vue";
 
 export default {
 	name: "Aside",
 
 	components: {
-		SubCategories
+		SubCategories,
+		ExchangeList
 	},
 
 	data() {
@@ -12,10 +14,11 @@ export default {
 			applyDisabled: true,
 			priceVariant: '-',
 			lastPriceInputId: null,
-			preventFiltersWatcher: false,
+			filtersWatcherDisabled: false,
 			filters: {
 				priceMin: "",
 				priceMax: "",
+				exchangeOptionsTags: [],
 				condition: []
 			}
 		}
@@ -32,16 +35,24 @@ export default {
 	},
 
 	methods: {
+		disableFiltersWatcher() {
+			this.filtersWatcherDisabled = true;
+			setTimeout(() => { this.filtersWatcherDisabled = false; }, 10);
+		},
+
 		setupFilters() {
 			const source = this.$components.content.getFilters();
 
-			this.preventFiltersWatcher = true;
+			this.disableFiltersWatcher();
 
 			this.filters.priceMin = (typeof source.priceMin === 'number') ? source.priceMin / 100 : null;
 			this.filters.priceMax = (typeof source.priceMax === 'number') ? source.priceMax / 100 : null;
 			this.updatePriceVariant();
 
+			this.filters.exchangeOptionsTags = source.exchangeOptionsTags || [];
+
 			this.filters.condition = source.condition;
+			//this.updateConditionVariants();
 		},
 
 		updatePriceVariant() {
@@ -51,6 +62,10 @@ export default {
 
 			this.priceVariant = `${min}-${max}`;
 		},
+
+		// updateConditionVariants() {
+		// 	this.condition = this.filters.condition;
+		// },
 
 		/**
 		 * Make price fields related
@@ -85,10 +100,20 @@ export default {
 			this.lastPriceInputId = null;
 		},
 
-		onKeyDown(e) {
+		onKeyUpPrice(e) {
 			const filtersChanged = !this.applyDisabled;
 			if (e?.keyCode === 13 && filtersChanged) {
 				this.applyFilters();
+			}
+		},
+
+		exchangeOptionsChange(tags) {
+			this.filters.exchangeOptionsTags = tags;
+		},
+
+		removeExchangeOptions() {
+			if (this.filters.exchangeOptionsTags.length) {
+				this.filters.exchangeOptionsTags = [];
 			}
 		},
 
@@ -118,7 +143,7 @@ export default {
 				}
 				this.lastPriceInputId = null;
 
-				this.preventFiltersWatcher = true;
+				this.disableFiltersWatcher();
 
 				this.filters.priceMin = min;
 				this.filters.priceMax = max;
@@ -134,7 +159,55 @@ export default {
 
 			this.applyDisabled = true;
 
-			this.hideIfNeeded();
+			this.markIfNeeded();
+
+			setTimeout(() => {
+				this.hideIfNeeded();
+			}, 100);
+		},
+
+		priceFilterEnabled() {
+			const source = this.$components.content?.getFilters();
+			return source && (source.priceMin || source.priceMax);
+		},
+
+		exchangeOptionsFilterEnabled() {
+			const source = this.$components.content?.getFilters();
+			return source?.exchangeOptionsTags?.length;
+		},
+
+		filtersEnabled() {
+			return this.priceFilterEnabled() || this.exchangeOptionsFilterEnabled();
+		},
+
+		resetFilters() {
+			this.disableFiltersWatcher();
+
+			this.filters.priceMin = null;
+			this.filters.priceMax = null;
+			this.updatePriceVariant();
+
+			this.removeExchangeOptions();
+
+			this.$components.content.applyFilters({
+				...this.filters,
+			});
+
+			this.applyDisabled = true;
+
+			this.markIfNeeded();
+
+			setTimeout(() => {
+				this.hideIfNeeded();
+			}, 100);
+		},
+
+		markIfNeeded() {
+			const
+				ref = this.$refs.asideCategories,
+				value = this.filtersEnabled();
+
+			ref?.mark(value);
 		},
 
 		hideIfNeeded() {
@@ -146,19 +219,24 @@ export default {
 	},
 
 	mounted() {
-		this.setupFilters()
+		this.setupFilters();
+
+		this.$2watch("$refs.asideCategories").then(() => {
+			this.markIfNeeded();
+		}).catch(e => { 
+			console.error(e);
+		});
 	},
 
 	watch: {
 		filters: {
 			deep: true,
 			handler() {
-				if (!this.preventFiltersWatcher) {
+				if (!(this.filtersWatcherDisabled)) {
 					this.applyDisabled = false;
 				}
-				this.preventFiltersWatcher = false;
+				this.filtersWatcherDisabled = false;
 			}
-
-		}
+		},
 	}
 }

@@ -54,6 +54,7 @@
 			<CategorySelect
 				v-if="editable"
 				ref="categorySelect"
+				:title="categorySelectTitle"
 				:marked="vTags"
 				@selected="insert"
 			/>

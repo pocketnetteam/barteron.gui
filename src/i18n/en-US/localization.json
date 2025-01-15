@@ -26,7 +26,8 @@
 		"label": "Categories",
 		"choose": "Choose a category",
 		"popular": "Most popular categories",
-		"select": "Select"
+		"select": "Select",
+		"categoryNotSelected": "Category not selected"
 	},
 
 	"categoryLabels": {
@@ -99,6 +100,7 @@
 		"download_app": "Download application",
 		"continue_working": "Continue working",
 		"apply": "Apply",
+		"reset": "Reset",
 		"submit": "Submit"
 	},
 
@@ -133,6 +135,12 @@
 		"range": "From {from} To {to}",
 		"over": "Over {from}",
 		"no_matter": "No matter"
+	},
+
+	"exchangeOptions": {
+		"label": "Exchange Options",
+		"description": "Select offers with exchange for:",
+		"categorySelectTitle": "What to exchange for"
 	},
 
 	"conditionLabels": {

@@ -67,32 +67,73 @@ const
                 Pinia.set(storageId, data);
             },
 
-            _requestItems(request) {
+            _requestItems(data) {
                 const
                     mixin = Vue.prototype.shared,
-                    search = request?.route?.query?.search;
-            
-                return Vue.prototype.sdk.getBrtOfferDeals({
-                    ...this.filters,
+                    search = data?.route?.query?.search;
+
+                const
+                    myTags = this._getExchangeOptionsTags(),
+                    theirTags = this._getTagsById(data);
+
+                const request = {
+                    ...this._filtersForRequest(),
                     ...(search && { search: `%${ search }%` }),
                     location: mixin.methods.getStoredLocation() || [],
-                    theirTags: this._getTheirTags(request),
-                    topHeight: request?.topHeight,
-                    pageStart: request?.pageStart || 0,
-                    pageSize: request?.pageSize || this.pageSize
-                });
+                    myTags,
+                    theirTags,
+                    topHeight: data?.topHeight,
+                    pageStart: data?.pageStart || 0,
+                    pageSize: data?.pageSize || this.pageSize
+                };
+            
+                return Vue.prototype.sdk.getBrtOfferDeals(request);
             },
 
-            _getTheirTags(request) {
+            _getTagsById(data) {
                 let result = [];
-                if (Number.isInteger(+request?.id)) {
+                if (Number.isInteger(+data?.id)) {
                     const
-                        id = String(+request.id),
+                        id = String(+data.id),
                         categories = new Categories();
 
                     result = categories.findChildrenRecursivelyById(id).map(item => Number(item.id));
                 }
                 return result;
+            },
+
+            _getExchangeOptionsTags() {
+                const
+                    tags = this.filters.exchangeOptionsTags || [],
+                    categories = tags.length && (new Categories());
+
+                const result = tags.reduce(
+                    (res, id) => {
+                        const foundTags = categories.findChildrenRecursivelyById(id).map(item => Number(item.id));
+                        return res.concat(foundTags);
+                    },
+                    []
+                );
+
+                return result;
+            },
+
+            _filtersForRequest() {
+                const result = {
+                    ...this.filters
+                };
+                delete result.exchangeOptionsTags;
+                return result;
+            },
+
+            _setTopHeight() {
+                this.topHeight = null;
+                if (this.pageStart === 0 
+                    && this.filters.orderBy === "height" 
+                    && this.filters.orderDesc
+                ) {
+                    this.topHeight = this.items?.[0]?.height;
+                }
             },
 
             async loadFirstPage(route) {
@@ -103,14 +144,13 @@ const
                 const data = {
                     id: route.params.id,
                     route,
-                    topHeight: this.topHeight,
                     pageStart: this.pageStart
                 };
                 
                 try {
                     this.isLoading = true;
                     this.items = await this._requestItems(data);
-                    this.topHeight = this.items?.[0]?.height;
+                    this._setTopHeight();
                     this.itemsRoute = route;
                 } catch (e) {
                     console.error(e);
@@ -124,6 +164,7 @@ const
                 const data = {
                     id: route.params.id,
                     route: route,
+                    topHeight: this.topHeight,
                     pageStart: (this.pageStart + 1),
                 };
 
