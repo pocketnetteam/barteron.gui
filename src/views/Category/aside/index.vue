@@ -68,35 +68,62 @@
 					<span
 						:class="{
 							'filter-title': true,
-							'filter-enabled': categorySelectionFilterEnabled()
+							'filter-enabled': exchangeOptionsFilterEnabled()
 						}"
-					>{{ $t('categorySelectionLabels.label') }}</span>
+					>{{ $t('exchangeOptions.label') }}</span>
 				</strong>
 			</template>
 
 			<div class="row">
-				<div>{{ $t('categorySelectionLabels.description') }}</div>
-				<v-button
-					vType="stroke"
-					:rippleEffect="false"
-					@click="showCategorySelectionHelp"
-				><i class="fa fa-info"></i>
-				</v-button>
+				<div>{{ $t('exchangeOptions.description') }}</div>
 			</div>
 
-			<div class="row">
-				<v-switch
-					type="radio"
-					name="categorySelection"
-					:value="['categoryField', 'exchangeList']"
-					:checked="categorySelectionVariant"
-					:label="[
-						$t('categorySelectionLabels.categoryField'),
-						$t('categorySelectionLabels.exchangeList'),
-					]"
-					@change="changeCategorySelection"
-				/>
-			</div>
+			<ExchangeList
+				holderClass="field"
+				vSize="md"
+				:tags="filters.exchangeOptionsTags"
+				:title="false"
+				:categorySelectTitle="$t('exchangeOptions.categorySelectTitle')"
+				:editable="true"
+				:editMode="true"
+				@change="exchangeOptionsChange"
+			>
+				<template #default="{ instance }">
+					<input name="tags" type="hidden" :value="instance.vTags.join()">
+				</template>
+
+				<template #after="{ instance }">
+					<div class="row">
+
+						<!-- Favorite tags -->
+						<ul class="favorites">
+							<template v-for="(id, index) in [17,13,11116]">
+								<li
+									:key="`favorite-${ index }`"
+									v-if="!instance.vTags.includes(id)"
+									@click="instance.insert(id)"
+								>{{ 
+									$t(categories.items[id]?.name) || $t('buttonLabels.unknown') 
+								}}<i class="fa fa-plus"></i>
+								</li>
+							</template>
+						</ul>
+
+						<div 
+							id="remove-exchange-options"
+						>
+							<v-button
+								vType="stroke"
+								@click="removeExchangeOptions"
+							>
+								<i class="fa fa-trash"></i>
+							</v-button>
+						</div>
+
+					</div>
+				</template>
+			</ExchangeList>			
+
 		</v-details>
 
 		<!-- <v-details
@@ -131,6 +158,7 @@
 			<div class="row">
 				<div class="buttons-holder full-width">
 					<v-button
+						vType="chi-chi"
 						:disabled="!(filtersEnabled())"
 						@click="resetFilters"
 					>{{ $t('buttonLabels.reset') }}</v-button>

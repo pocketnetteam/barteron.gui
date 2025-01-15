@@ -38,6 +38,10 @@ export default {
 		saveText: {
 			type: String,
 			default: "<i class='fa fa-check fa-shrink'></i>"
+		},
+		categorySelectTitle: {
+			type: String,
+			default: ""
 		}
 	},
 
@@ -94,6 +98,10 @@ export default {
 		 */
 		remove(index) {
 			this.vTags.splice(index, 1);
+
+			if (this.editMode) {
+				this.$emit('change', this.vTags);
+			}
 		},
 
 		/**

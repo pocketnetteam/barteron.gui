@@ -20,6 +20,11 @@ export default {
 		value: {
 			type: [Number, String],
 			default: null
+		},
+
+		title: {
+			type: String,
+			default: ""
 		}
 	},
 
@@ -51,10 +56,30 @@ export default {
 
 	methods: {
 		/**
+		 * Check if the component belongs to aside component
+		 * 
+		 * @returns {Boolean}
+		 */
+		belongsToAsideComponent() {
+			let vm = this;
+			let items = [];
+			while (vm) {
+				items.unshift(vm);
+				vm = vm.$parent;
+			};
+			return items.some(f => f === this.$components.aside);
+		},
+
+		/**
 		 * Show
 		 */
 		show() {
 			this.clear().visible = true;
+
+			if (this.belongsToAsideComponent()) {
+				const el = this.$components.aside.$el;
+				el.classList.add("showing-lightbox");
+			}
 		},
 
 		/**
@@ -62,6 +87,11 @@ export default {
 		 */
 		hide() {
 			this.visible = false;
+
+			if (this.belongsToAsideComponent()) {
+				const el = this.$components.aside.$el;
+				el.classList.remove("showing-lightbox");
+			}
 		},
 
 		/**

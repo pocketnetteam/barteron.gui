@@ -1,10 +1,12 @@
 import SubCategories from "@/components/categories/sub-categories/index.vue";
+import ExchangeList from "@/components/barter/exchange/list/index.vue";
 
 export default {
 	name: "Aside",
 
 	components: {
-		SubCategories
+		SubCategories,
+		ExchangeList
 	},
 
 	data() {
@@ -12,18 +14,15 @@ export default {
 			applyDisabled: true,
 			priceVariant: '-',
 			lastPriceInputId: null,
-			categorySelectionVariant: "categoryField",
 			filtersWatcherDisabled: false,
 			filters: {
 				priceMin: "",
 				priceMax: "",
-				categorySelection: "",
+				exchangeOptionsTags: [],
 				condition: []
 			}
 		}
 	},
-
-	inject: ["dialog"],
 
 	computed: {
 		category() {
@@ -36,17 +35,21 @@ export default {
 	},
 
 	methods: {
+		disableFiltersWatcher() {
+			this.filtersWatcherDisabled = true;
+			setTimeout(() => { this.filtersWatcherDisabled = false; }, 10);
+		},
+
 		setupFilters() {
 			const source = this.$components.content.getFilters();
 
-			this.filtersWatcherDisabled = true;
+			this.disableFiltersWatcher();
 
 			this.filters.priceMin = (typeof source.priceMin === 'number') ? source.priceMin / 100 : null;
 			this.filters.priceMax = (typeof source.priceMax === 'number') ? source.priceMax / 100 : null;
 			this.updatePriceVariant();
 
-			this.filters.categorySelection = source.categorySelection || "categoryField";
-			this.updateCategorySelectionVariant();
+			this.filters.exchangeOptionsTags = source.exchangeOptionsTags || [];
 
 			this.filters.condition = source.condition;
 			//this.updateConditionVariants();
@@ -58,10 +61,6 @@ export default {
 				max = this.filters.priceMax || '';
 
 			this.priceVariant = `${min}-${max}`;
-		},
-
-		updateCategorySelectionVariant(){
-			this.categorySelectionVariant = this.filters.categorySelection;
 		},
 
 		// updateConditionVariants() {
@@ -108,13 +107,14 @@ export default {
 			}
 		},
 
-		changeCategorySelection(e) {
-			const opt = typeof e === "string" && e;
-			this.filters.categorySelection = opt || "";
+		exchangeOptionsChange(tags) {
+			this.filters.exchangeOptionsTags = tags;
 		},
 
-		showCategorySelectionHelp() {
-			this.dialog?.instance.view("info", this.$t("categorySelectionLabels.help_info"));
+		removeExchangeOptions() {
+			if (this.filters.exchangeOptionsTags.length) {
+				this.filters.exchangeOptionsTags = [];
+			}
 		},
 
 		/* changeCondition(value, e) {
@@ -143,15 +143,13 @@ export default {
 				}
 				this.lastPriceInputId = null;
 
-				this.filtersWatcherDisabled = true;
+				this.disableFiltersWatcher();
 
 				this.filters.priceMin = min;
 				this.filters.priceMax = max;
 			}
 
 			this.updatePriceVariant();
-
-			this.updateCategorySelectionVariant();
 
 			this.$components.content.applyFilters({
 				...this.filters,
@@ -173,24 +171,23 @@ export default {
 			return source && (source.priceMin || source.priceMax);
 		},
 
-		categorySelectionFilterEnabled() {
+		exchangeOptionsFilterEnabled() {
 			const source = this.$components.content?.getFilters();
-			return source && (source.categorySelection === "exchangeList");
+			return source?.exchangeOptionsTags?.length;
 		},
 
 		filtersEnabled() {
-			return this.priceFilterEnabled() || this.categorySelectionFilterEnabled();
+			return this.priceFilterEnabled() || this.exchangeOptionsFilterEnabled();
 		},
 
 		resetFilters() {
-			this.filtersWatcherDisabled = true;
+			this.disableFiltersWatcher();
 
 			this.filters.priceMin = null;
 			this.filters.priceMax = null;
 			this.updatePriceVariant();
 
-			this.filters.categorySelection = "categoryField";
-			this.updateCategorySelectionVariant();
+			this.removeExchangeOptions();
 
 			this.$components.content.applyFilters({
 				...this.filters,

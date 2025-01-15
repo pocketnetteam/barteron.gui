@@ -73,10 +73,8 @@ const
                     search = data?.route?.query?.search;
 
                 const
-                    tags = this._getTagsById(data),
-                    useMyTags = (this.filters.categorySelection === "exchangeList"),
-                    myTags = useMyTags ? tags : [],
-                    theirTags = !(useMyTags) ? tags : [];
+                    myTags = this._getExchangeOptionsTags(),
+                    theirTags = this._getTagsById(data);
 
                 const request = {
                     ...this._filtersForRequest(),
@@ -104,11 +102,27 @@ const
                 return result;
             },
 
+            _getExchangeOptionsTags() {
+                const
+                    tags = this.filters.exchangeOptionsTags || [],
+                    categories = tags.length && (new Categories());
+
+                const result = tags.reduce(
+                    (res, id) => {
+                        const foundTags = categories.findChildrenRecursivelyById(id).map(item => Number(item.id));
+                        return res.concat(foundTags);
+                    },
+                    []
+                );
+
+                return result;
+            },
+
             _filtersForRequest() {
                 const result = {
                     ...this.filters
                 };
-                delete result.categorySelection;
+                delete result.exchangeOptionsTags;
                 return result;
             },
 

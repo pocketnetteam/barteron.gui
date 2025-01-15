@@ -3,7 +3,7 @@
 		class="categories-select"
 		size="md"
 		ref="lightbox"
-		:title="$t('categoriesLabels.choose')"
+		:title="title || $t('categoriesLabels.choose')"
 		:visible="visible"
 		@onHide="hide"
 	>
@@ -41,7 +41,7 @@
 						count: results.length
 					})
 				}}</p>
-				<p v-else>{{ $tc('searchLabels.result', 0) }}</p>
+				<p class="no-result" v-else>{{ $tc('searchLabels.result', 0) }}</p>
 			</div>
 		</template>
 
@@ -76,6 +76,13 @@
 						>{{ $t(parent.name) }}</a>
 						<span v-else>{{ $t(parent.name) }}</span>
 					</li>
+				</ul>
+
+				<!-- <ul v-else-if="!(query && changed)" class="history">
+					<li class="root">{{ $t('categoriesLabels.categoryNotSelected') }}</li>
+				</ul> -->
+				<ul v-else class="history">
+					<li class="root">{{ $t('categoriesLabels.categoryNotSelected') }}</li>
 				</ul>
 
 				<!-- Categories -->
