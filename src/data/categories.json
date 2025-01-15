@@ -504,6 +504,7 @@
 		"id": 12,
 		"parent": null,
 		"children": [
+			38,
 			13,
 			14,
 			15,
@@ -511,8 +512,15 @@
 		],
 		"order": 4500
 	},
+	"38": {
+		"name": "gold_coins",
+		"id": 38,
+		"parent": 12,
+		"children": [],
+		"order": 4510
+	},
 	"13": {
-		"name": "gold_silver_coins",
+		"name": "silver_coins",
 		"id": 13,
 		"parent": 12,
 		"children": [],
