@@ -26,7 +26,8 @@
 		"label": "Категории",
 		"choose": "Выбрать категорию",
 		"popular": "Популярные категории",
-		"select": "Выбрать"
+		"select": "Выбрать",
+		"categoryNotSelected": "Категория не выбрана"
 	},
 
 	"categoryLabels": {
@@ -99,6 +100,7 @@
 		"download_app": "Скачать приложение",
 		"continue_working": "Продолжить работу",
 		"apply": "Применить",
+		"reset": "Сбросить",
 		"submit": "Отправить"
 	},
 
@@ -133,6 +135,12 @@
 		"range": "От {from} До {to}",
 		"over": "Свыше {from}",
 		"no_matter": "Не важно"
+	},
+
+	"exchangeOptions": {
+		"label": "Варианты обмена",
+		"description": "Выбрать объявления с обменом на:",
+		"categorySelectTitle": "На что обменять"
 	},
 
 	"conditionLabels": {

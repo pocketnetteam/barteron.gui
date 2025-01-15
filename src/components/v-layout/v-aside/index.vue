@@ -4,7 +4,10 @@
 		:class="{ active }"
 	>
 		<a
-			class="side-toggle"
+			:class="{
+				'side-toggle': true,
+				'side-marked': marked
+			}"
 			href="#"
 			@click.prevent="toggle"
 		>

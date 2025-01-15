@@ -5,10 +5,6 @@
 		.v-switch
 			padding: 0
 
-	.filter-apply
-		.v-button-holder .v-button
-			width: 100%
-
 	.v-details
 		.summary
 			display: flex
@@ -17,3 +13,67 @@
 
 			i
 				background-color: $blue-hover
+			
+			.filter-title
+				padding-top: 2px
+				padding-bottom: 2px
+				border-radius: 12px
+				+transition()
+				transition-duration: .1s
+
+				&.filter-enabled
+					padding-left: 10px
+					padding-right: 10px
+					color: $white
+					background-color: $hit
+
+		.exchange
+			.v-list-holder
+				&.field,
+				&.field-novalidate
+					border-radius: 12px
+					display: flex
+					justify-content: space-between
+					gap: 10px
+					padding: 2px
+					border: 1px solid $beerus
+
+			.list,
+			.edit
+				margin: 0
+
+				li.toggle
+					padding: 0 4px
+
+			.edit
+				display: flex
+				align-items: flex-end
+
+			.favorites
+				+resetList()
+				display: flex
+				align-items: flex-end
+				flex-wrap: wrap
+				gap: .7em
+				font-size: .85em
+				line-height: 1.8em
+				margin: 1em 0 0
+				padding: 0 4px
+				width: 100%
+
+				li
+					background: $beerus
+					border-radius: 8px
+					color: $popo
+					display: flex
+					align-items: center
+					gap: $r
+					cursor: pointer
+					padding: 0.2em .7em
+					max-width: 100%
+					position: relative
+					white-space: pre-wrap
+
+			#remove-exchange-options
+				margin-top: 11.9px
+				margin-left: 2 * $r
