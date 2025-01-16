@@ -70,27 +70,47 @@ const
             _requestItems(data) {
                 const
                     mixin = Vue.prototype.shared,
+                    tagsData = this._getTagsData(data),
                     search = data?.route?.query?.search;
-
-                const
-                    myTags = this._getExchangeOptionsTags(),
-                    theirTags = this._getTagsById(data);
 
                 const request = {
                     ...this._filtersForRequest(),
+                    ...tagsData.tagsProps,
                     ...(search && { search: `%${ search }%` }),
                     location: mixin.methods.getStoredLocation() || [],
-                    myTags,
-                    theirTags,
                     topHeight: data?.topHeight,
                     pageStart: data?.pageStart || 0,
                     pageSize: data?.pageSize || this.pageSize
                 };
             
-                return Vue.prototype.sdk.getBrtOfferDeals(request);
+                if (tagsData.isDealRequest) {
+                    return Vue.prototype.sdk.getBrtOfferDeals(request);
+                } else {
+                    return Vue.prototype.sdk.getBrtOffersFeed(request);
+                }
             },
 
-            _getTagsById(data) {
+            _getTagsData(data) {
+                const
+                    requestTags = this._getRequestTags(data),
+                    exchangeOptionsTags = this._getExchangeOptionsTags(),
+                    isDealRequest = exchangeOptionsTags?.length;
+
+                const tagsProps = {};
+                if (isDealRequest) {
+                    tagsProps.myTags = exchangeOptionsTags;
+                    tagsProps.theirTags = requestTags;
+                } else {
+                    tagsProps.tags = requestTags;
+                }
+
+                return {
+                    tagsProps,
+                    isDealRequest
+                };
+            },
+
+            _getRequestTags(data) {
                 let result = [];
                 if (Number.isInteger(+data?.id)) {
                     const
