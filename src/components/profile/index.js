@@ -43,13 +43,8 @@ export default {
 
 		/* Get user's avatar */
 		avatar() {
-			let url = this.user?.i;
-
-			if (url?.includes("bastyon.com:8092")) {
-				url = url.replace("bastyon.com", "pocketnet.app");
-			}
-
-			return url;
+			const url = this.user?.i;
+			return this.sdk.manageBastyonImageSrc(url);
 		},
 
 		/**

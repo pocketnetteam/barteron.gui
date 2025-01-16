@@ -712,6 +712,17 @@ class SDK {
 	}
 
 	/**
+	 * Manage bastyon image source
+	 * 
+	 * @param {String} src - source
+	 * 
+	 * @returns {String}
+	 */
+	manageBastyonImageSrc(src) {
+		return this.sdk.manageBastyonImageSrc(src);
+	}
+
+	/**
 	 * Check if permission is granted
 	 * 
 	 * @param {String} permission - Permission name
