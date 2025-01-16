@@ -97,7 +97,7 @@
 
 						<!-- Favorite tags -->
 						<ul class="favorites">
-							<template v-for="(id, index) in [17,13,11116]">
+							<template v-for="(id, index) in [17,38,13,11116]">
 								<li
 									:key="`favorite-${ index }`"
 									v-if="!instance.vTags.includes(id)"
