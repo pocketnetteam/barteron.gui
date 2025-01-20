@@ -36,6 +36,7 @@ export default {
 
 	data() {
 		return {
+			isOfferScoreConfirm: false,
 			isOfferScoreLoading: false,
 			isCommentLoading: false,
 			score: 0,
@@ -115,12 +116,16 @@ export default {
 		 * @param {Number} score
 		 */
 		voteEvent(score) {
+			this.score = score;
+			this.isOfferScoreConfirm = true;
 			this.dialog?.instance
 				.view("question", this.$t("dialogLabels.submit_rating"))
 				.then(state => {
+					this.isOfferScoreConfirm = false;
 					if (state) {
 						this.vote(score);
 					} else {
+						this.score = 0;
 						this.$refs.offerScore?.reset();
 					}
 				});
@@ -146,6 +151,7 @@ export default {
 					this.offerScores.push(element);
 				}).catch(e => {
 					this.score = 0;
+					this.$refs.offerScore?.reset();
 					this.showError(e);
 				}).finally(() => {
 					this.isOfferScoreLoading = false;
@@ -207,7 +213,9 @@ export default {
 		},
 
 		starsValue() {
-			return (this.hasRelayOfferScore() || this.isOfferScoreLoading) ? this.score : null;
+			return (this.hasRelayOfferScore() 
+				|| this.isOfferScoreLoading 
+				|| this.isOfferScoreConfirm) ? this.score : null;
 		},
 
 		completedOfferScoresAverage() {
@@ -245,7 +253,8 @@ export default {
 		voteable() {
 			return this.form
 				&& !(this.offerScores.some(f => f.address === this.sdk.address && (f.relay || f.completed))
-					|| this.isOfferScoreLoading);
+					|| this.isOfferScoreLoading
+					|| this.isOfferScoreConfirm);
 		},
 
 		validComments() {
