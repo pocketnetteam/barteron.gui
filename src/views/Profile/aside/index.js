@@ -13,6 +13,8 @@ export default {
 		ExchangeList
 	},
 
+	inject: ['dialog'],
+
 	computed: {
 		/**
 		 * Get bastyon address
@@ -40,5 +42,36 @@ export default {
 		account() {
 			return this.sdk.barteron.accounts[this.address];
 		}
+	},
+
+	methods: {
+		sendMessageEvent() {
+			this.dialog?.instance
+				.view("question", this.$t("dialogLabels.send_message"))
+				.then(state => {
+					if (state) {
+						this.createRoom();
+					}
+				});
+
+		},
+
+		createRoom() {
+			if (this.sdk.willOpenRegistration()) return;
+			
+			this.isLoading = true;
+			this.dialog?.instance.view("load", this.$t("dialogLabels.opening_room"));
+			this.sendMessage({
+				members: [this.address],
+				openRoom: true
+			}).then(() => {
+				this.dialog?.instance.hide();
+			}).catch(e => {
+				this.showError(e);
+			}).finally(() => {
+				this.isLoading = false;
+			});
+		},
+
 	}
 }
