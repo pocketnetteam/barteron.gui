@@ -173,4 +173,8 @@ class OG {
 			}, array_keys($tags), array_values($tags))
 		) . "\n";
 	}
+
+	public function getIconLink() {
+		echo "<link rel=\"icon\" href=\"https://{$this->manifest['scope']}/{$this->manifest['icon']}\">";
+	}
 }

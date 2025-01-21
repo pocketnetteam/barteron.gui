@@ -286,6 +286,16 @@
 		"yb": "YB"
 	},
 
+	"contacts": {
+		"label": "Contacts",
+		"add": "Add",
+		"email": "Email",
+		"phone": "Phone",
+		"telegram": "Telegram",
+		"whatsapp": "Whatsapp",
+		"viber": "Viber"
+	},
+
 	"title": "Title",
 	"my_list": "My list",
 	"something": "Something",

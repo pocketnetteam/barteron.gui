@@ -1,20 +1,33 @@
 const
-	{ defineConfig } = require('@vue/cli-service'),
-	path = require("path");
+	{ defineConfig } = require("@vue/cli-service"),
+	path = require("path"),
+	WebpackShellPluginNext = require("webpack-shell-plugin-next"),
+	buildDir = path.resolve(__dirname, process.env.VUE_APP_EXPORT || "./dist");
 
 module.exports = defineConfig({
-	outputDir: path.resolve(__dirname, process.env.VUE_APP_EXPORT || "./dist"),
+	outputDir: buildDir,
 
 	indexPath: "index.php",
 
 	chainWebpack: config => {
-		if (process.env.NODE_ENV === 'production') {
+		if (process.env.NODE_ENV === "production") {
 			config
-				.plugin('html')
+				.plugin("html")
 				.tap(args => {
 					args[0].template = "./public/index.php";
 					return args;
 				});
+				
+			config
+				.plugin("webpack-shell-plugin-next").use(WebpackShellPluginNext, [
+					{
+						onBuildEnd: {
+							scripts: [`chmod 664 ${ buildDir }/contacts.db`],
+							blocking: false,
+							parallel: false,
+						},
+					},
+				]);
 		}
 	},
 
@@ -26,9 +39,17 @@ module.exports = defineConfig({
 		port: 8080, // CHANGE YOUR PORT HERE!
 		https: true,
 		client: {
-			webSocketURL: 'ws://0.0.0.0:8080/ws',
+			webSocketURL: "ws://0.0.0.0:8080/ws",
 		},
-		headers: { "Access-Control-Allow-Origin": "*" }
+		headers: { "Access-Control-Allow-Origin": "*" },
+		proxy: {
+			"/contacts": {
+				target: process.env.VUE_APP_PROXY_TO || "https://localhost:8080",
+				secure: false,
+				changeOrigin: true,
+				logLevel: "debug"
+			},
+		}
 	},
 
 	pluginOptions: {

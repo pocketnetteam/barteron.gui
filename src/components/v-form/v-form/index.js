@@ -53,6 +53,7 @@ export default {
 				Array.from(
 					form.querySelectorAll(fields)
 				).forEach(field => {
+					console.log(field)
 					const
 						parent = field.closest(this.classes.parent),
 						valid = {};
