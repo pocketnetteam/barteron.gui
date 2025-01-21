@@ -1,21 +1,27 @@
 <template>
 	<article class="comment">
 		<div class="comment-left">
-			<div class="avatar">
-				<i
-					v-if="!user?.i?.startsWith('http')"
-					:style="hslColor"
-				>{{ shortName }}</i>
-				
-				<picture v-else>
-					<img :src="user?.i" :alt="user?.name">
-				</picture>
-			</div>
+			<router-link :to="{ name: 'profile', params: { id: user.address } }">
+				<div class="avatar">
+					<i
+						v-if="!user?.i?.startsWith('http')"
+						:style="hslColor"
+					>{{ shortName }}</i>
+					
+					<picture v-else>
+						<img :src="user?.i" :alt="user?.name">
+					</picture>
+				</div>
+			</router-link>
 		</div>
 
 		<div class="comment-body">
 			<div class="username-container">
-				<strong class="username">{{ user.name }}</strong>
+				<strong class="username">
+					<router-link 
+						:to="{ name: 'profile', params: { id: user.address } }"
+					>{{ user.name }}</router-link>
+				</strong>
 				<i 
 					v-if="item.relay" 
 					class="comment-relay fa fa-spinner fa-spin"
