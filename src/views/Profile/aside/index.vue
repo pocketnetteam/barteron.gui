@@ -20,6 +20,15 @@
 					<!-- <a class="ask" href="#"><i class="fa fa-question"></i></a> -->
 				</template>
 			</Profile>
+
+			<div 
+				v-if="!(isMyProfile)" 
+				class="message"
+			>
+				<v-button
+					@click="sendMessageEvent"
+				>{{ $t('buttonLabels.send_message') }}</v-button>
+			</div>
 		</div>
 
 		<!-- Wallet -->
