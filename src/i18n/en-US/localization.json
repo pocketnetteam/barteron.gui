@@ -42,7 +42,8 @@
 		"photos": "Add photos",
 		"get": "What you want to get",
 		"description": "Description",
-		"location": "Location"
+		"location": "Location",
+		"delivery": "Delivery"
 	},
 
 	"ratingLabels": {

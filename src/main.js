@@ -6,7 +6,6 @@ import i18n from "./i18n/index.js";
 
 import Manifest from "../public/b_manifest.json";
 import SDK from "@/js/sdk.js";
-import API from "@/js/api.js";
 import Categories from "@/js/categories.js";
 import Favorites from "@/data/favorites.json";
 
@@ -49,7 +48,6 @@ Vue.component("v-textarea", () => import("@/components/v-form/v-textarea/index.v
 /* Make categories and barters global */
 Vue.prototype.manifest = Manifest;
 Vue.prototype.sdk = Vue.observable(new SDK());
-Vue.prototype.api = Vue.observable(new API());
 Vue.prototype.categories = Vue.observable(new Categories());
 Vue.prototype.favorites = Favorites;
 Vue.prototype.shared = Vue.observable({

@@ -31,15 +31,6 @@
 			</div>
 		</div>
 
-		<!-- Contacts -->
-		<div class="box" v-if="isMyProfile">
-			<strong class="title">{{ $t('contacts.label') }}</strong>
-			<Contacts
-				:hash="address"
-				:canEdit="true"
-			/>
-		</div>
-
 		<!-- Wallet -->
 		<div class="box" v-if="isMyProfile">
 			<Wallet />

@@ -22,8 +22,10 @@
 				@change="change"
 			/>
 			<div class="v-switch">
+				<slot name="controlBefore" :index="index"></slot>
 				<span class="v-control"></span>
 				<label v-if="sw.label" :for="sw.id || sw.name">{{ sw.label }}</label>
+				<slot name="controlAfter" :index="index"></slot>
 			</div>
 		</div>
 

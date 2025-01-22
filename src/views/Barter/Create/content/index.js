@@ -2,6 +2,7 @@ import { GeoHash } from "geohash";
 import BarterList from "@/components/barter/list/index.vue";
 import Category from "@/components/categories/field/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
+import Delivery from "@/components/delivery/index.vue";
 import { currencies, numberFormats } from "@/i18n/index.js";
 import CurrencyStore from "@/stores/currency.js";
 
@@ -11,7 +12,8 @@ export default {
 	components: {
 		BarterList,
 		Category,
-		ExchangeList
+		ExchangeList,
+		Delivery
 	},
 
 	data() {

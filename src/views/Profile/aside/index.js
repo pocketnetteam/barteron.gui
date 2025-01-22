@@ -1,5 +1,4 @@
 import Profile from "@/components/profile/index.vue";
-import Contacts from "@/components/profile/contacts/index.vue";
 import Wallet from "@/components/wallet/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
 
@@ -8,7 +7,6 @@ export default {
 
 	components: {
 		Profile,
-		Contacts,
 		Wallet,
 		ExchangeList
 	},

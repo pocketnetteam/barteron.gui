@@ -196,7 +196,7 @@
 				/>
 			</div>
 
-			<div class="row block">
+			<div class="row block sep">
 				<!-- Title: Location -->
 				<strong class="title">{{ $t('stepsLabels.location') }}</strong>
 
@@ -209,6 +209,14 @@
 					:center="geohash || location || undefined"
 					@errorEvent="errorEvent"
 				/>
+			</div>
+
+			<div class="row block">
+				<!-- Title: Delivery -->
+				<strong class="title">{{ $t('stepsLabels.delivery') }}</strong>
+
+				<!-- Delivery -->
+				<Delivery />
 			</div>
 
 			<div id="offer-options" class="row full-width wrap">
