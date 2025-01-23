@@ -21,7 +21,9 @@
 				/>
 
 				<section id="main">
-					<router-view />
+					<keep-alive include="Home">
+						<router-view />
+					</keep-alive>
 
 					<div
 						id="container"

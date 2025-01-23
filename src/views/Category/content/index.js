@@ -144,20 +144,6 @@ export default {
 		setBartersViewToElement() {
 			setValueToVSelect(this.$refs.bartersView, this.bartersView);
 		},
-
-		/**
-		 * Set scroll offset if needed
-		 */
-		setScrollOffsetIfNeeded() {
-			if (this.scrollOffset) {
-				document.body.scrollTo({
-					top: this.scrollOffset.y,
-					left: this.scrollOffset.x,
-					behavior: "instant",
-				});
-				this.scrollOffset = null;
-			}
-		},
 	},
 
 	watch: {
@@ -210,8 +196,6 @@ export default {
 		}).catch(e => { 
 			console.error(e);
 		});
-
-		this.setScrollOffsetIfNeeded();
 	},
 
 	beforeRouteEnter (to, from, next) {

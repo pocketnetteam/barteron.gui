@@ -391,7 +391,8 @@
 			</div>
 
 			<!-- without sidebar -->
-			<div class="row block sep no-sidebar"/>
+			<div class="row block sep no-sidebar">
+			</div>
 
 			<!-- without sidebar -->
 			<div class="row block sep no-sidebar" v-if="!isMyOffer">
