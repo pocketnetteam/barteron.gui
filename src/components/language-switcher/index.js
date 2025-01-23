@@ -48,6 +48,11 @@ export default {
 		changeLanguage(item) {
 			LocaleStore.set(item.value);
 		},
+
+		htmlContent() {
+			const item = this.localesList.filter(f => f.value === this.$root.$i18n.locale).pop();
+			return (item || this.localesList[0]).text;
+		},
 	},
 
 	watch: {

@@ -24,7 +24,7 @@
 				:relayMode="true"
 				:voteable="voteable()"
 				:rejected="hasRejectedOfferScore()"
-				@change="voteEvent"
+				@change="vote"
 			/>
 			<i 
 				v-if="hasRelayOfferScore()" 
@@ -77,7 +77,7 @@
 								vSize="sm"
 								class="submit"
 								:disabled="isCommentLoading"
-								@click="submitCommentEvent"
+								@click="submitComment"
 							>
 								<i
 									class="fa fa-spinner fa-spin"

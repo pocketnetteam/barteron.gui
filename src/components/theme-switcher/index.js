@@ -7,6 +7,7 @@ import {
 	default as LocaleStore,
 	useLocaleStore
 } from "@/stores/locale.js";
+import VueI18n from "@/i18n/index.js";
 
 export default {
 	name: "ThemeSwitcher",
@@ -64,6 +65,16 @@ export default {
 					}
 				})()
 			}));
+		},
+
+		dropdownList() {
+			return this.themesList.map(theme => ({
+				...theme,
+				text: `
+				<i class='fa ${ theme.icon }'></i>
+				${ VueI18n.t(`themeLabels.${ theme.value }`) }
+				`
+			}));
 		}
 	},
 
@@ -75,6 +86,15 @@ export default {
 		 */
 		changeTheme(theme) {
 			ThemeStore.set(theme?.value);
+		},
+
+		htmlContent() {
+			let value = this.theme;
+			if (this.theme?.includes && this.theme?.includes("inherit")) {
+				value = value.split(" ")[1];
+			};
+			const item = this.dropdownList.filter(f => f.value === value).pop();
+			return (item || this.dropdownList[0]).text;
 		},
 	},
 
