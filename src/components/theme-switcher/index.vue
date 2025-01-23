@@ -3,16 +3,15 @@
 		class="theme-switcher"
 		vType="light"
 		vSize="md"
-		:dropdown="themesList.map(theme => ({
-			...theme,
-			text: `
-			<i class='fa ${ theme.icon }'></i>
-			${ $t(`themeLabels.${ theme.value }`) }
-			`
-		}))"
+		:dropdown="dropdownList"
 		ref="theme"
 		@selected="changeTheme"
-	/>
+	>
+		<span 
+			class="value" 
+			v-html="htmlContent()"
+		></span>
+	</v-select>
 </template>
 
 <style scoped lang="sass" src="./index.sass"></style>

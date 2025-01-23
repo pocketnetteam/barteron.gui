@@ -264,14 +264,14 @@
 	},
 
 	"themeLabels": {
-		"inherit": "Inherit",
+		"inherit": "System",
 		"light": "Light",
 		"navy": "Navy",
 		"dark": "Dark"
 	},
 
 	"localeLabels": {
-		"inherit": "Inherit"
+		"inherit": "System"
 	},
 
 	"metricsLabels": {
