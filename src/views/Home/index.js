@@ -14,8 +14,6 @@ export default {
 
 	data() {
 		return {
-			fetching: true,
-			newFromGoods: [],
 			mayMatchExchanges: [],
 			viewedList: []
 		}
@@ -87,5 +85,13 @@ export default {
 	mounted() {
 		this.getComplexDeals();
 		this.getViewed();
-	}
+	},
+
+	activated() {
+		if (this.sdk.needUpdateComplexDeals) {
+			this.sdk.needUpdateComplexDeals = false;
+			this.getComplexDeals();
+		}
+		this.getViewed();
+	},
 }

@@ -1,6 +1,7 @@
 @import "@/css/vars.sass"
 
 $item-width-max: 294px
+$compact-item-width-max: 180px
 
 .barter-carousel-holder
 	.vs-carousel
@@ -18,18 +19,21 @@ $item-width-max: 294px
 				margin: 0 auto
 				max-width: $item-width-max
 
-		.forward-button
-			flex: 0 0 50px
-			width: 50px
-			height: 180px
+	&.compact-view
+		.vs-carousel
+			.vs-carousel__wrapper
+				border-radius: 8px
+				gap: 9px
+		
+			.vs-carousel__slide
+				flex: 0 0 calc( 16% - 7px ) // Gap - 2px
+				width: calc( 16% - 7px ) // Gap - 2px
 
-			.v-button-holder
-				width: 100%
-				height: 100%
-				font-size: 1.6em
-
-				.v-button
-					padding: 1.5 * $r
+				& > *
+					box-sizing: content-box
+					display: block
+					margin: 0 auto
+					max-width: $compact-item-width-max
 
 	.vs-carousel__arrows
 		+fontAwesome("")
@@ -67,6 +71,10 @@ $item-width-max: 294px
 			+transition()
 			color: $bulma
 			font-size: 1.4rem
+
+	&.compact-view
+		.vs-carousel__arrows
+			top: 37px
 
 	.vs-carousel__arrows--left
 		&:before

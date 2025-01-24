@@ -4,7 +4,13 @@
 		'barter-item-relay': hasRelay
 	}">
 		<!-- Picture -->
-		<picture v-if="images?.length && vType !== 'page'">
+		<picture 
+			:class="{
+				'compact-view': compactView,
+				'hide-info': hideInfo
+			}"
+			v-if="images?.length && vType !== 'page'"
+		>
 			<router-link :to="!(hasRelay || isRemoved) ? offerLink : {}">
 				<span
 					class="state"
@@ -69,7 +75,7 @@
 		</picture>
 
 		<!-- View: Tile -->
-		<template v-if="vType === 'tile'">
+		<template v-if="vType === 'tile' && !(hideInfo)">
 			<div class="row pricing">
 				<span class="price">
 					<template v-if="item.price">
@@ -158,7 +164,7 @@
 		</template>
 
 		<!-- View: Row -->
-		<template v-if="vType === 'row'">
+		<template v-if="vType === 'row' && !(hideInfo)">
 			<div class="row descr">
 				<div class="row-holder">
 					<span class="title" v-if="item.caption">

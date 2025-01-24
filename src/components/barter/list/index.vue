@@ -25,6 +25,8 @@
 						v-else
 						:item="item"
 						:vType="vType"
+						:hideInfo="hideInfo"
+						:compactView="compactView"
 						:customLink="customLink"
 					>
 						<template #favorite v-if="$slots.favorite || $scopedSlots.favorite">
@@ -44,7 +46,10 @@
 		</div>
 
 		<div
-			class="barter-carousel-holder"
+			:class="{
+				'barter-carousel-holder': true,
+				'compact-view': compactView,
+			}"
 			v-else
 		>
 			<carousel>
@@ -60,6 +65,8 @@
 						v-else
 						:item="item"
 						:vType="vType"
+						:hideInfo="hideInfo"
+						:compactView="compactView"
 						:customLink="customLink"
 					>
 						<template #favorite v-if="$slots.favorite || $scopedSlots.favorite">
@@ -74,16 +81,6 @@
 							<slot name="offer" :item="item"></slot>
 						</template>
 					</BarterItem>
-				</slide>
-				<slide 
-					v-if="showForwardButton"
-					class="forward-button"
-				>
-					<v-button 
-						@click="forwardButtonClick"
-					>
-						<i class="fa fa-forward"></i>
-					</v-button>
 				</slide>
 			</carousel>
 		</div>

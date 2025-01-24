@@ -5,6 +5,8 @@
 			<BarterList
 				:items="mayMatchExchanges"
 				:carousel="true"
+				:hideInfo="true"
+				:compactView="true"
 				:customLink="(offer) => ({ name: 'ThreeSidedSearch', query: { source: offer.source.hash, target: offer.hash } })"
 			/>
 		</section>
@@ -14,6 +16,8 @@
 			<BarterList
 				:items="viewedList"
 				:carousel="true"
+				:hideInfo="true"
+				:compactView="true"
 			/>
 		</section>
 

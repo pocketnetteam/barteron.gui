@@ -25,6 +25,7 @@ class SDK {
 			getBrtOffersFeed: 0,
 		},
 	};
+	needUpdateComplexDeals = false;
 
 	models = {
 		Account,
@@ -1347,6 +1348,7 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	setBrtOffer(data) {
+		this.needUpdateComplexDeals = true;
 		return this.sdk.barteron.offer({
 			...data,
 			...{ hash: data.hash?.length === 64 ? data.hash : null }
@@ -1359,6 +1361,7 @@ class SDK {
 	 * @param {String} param0
 	 */
 	delBrtOffer({ hash }) {
+		this.needUpdateComplexDeals = true;
 		return this.sdk.barteron.removeOffer({ hash });
 	}
 
