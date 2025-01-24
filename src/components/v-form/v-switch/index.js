@@ -6,7 +6,7 @@ export default {
 		name: { type: [String, Array], default: () => [] },
 		type: { type: [String, Array], default: () => [] },
 		value: { type: [String, Array], default: () => [] },
-		checked: { type: [String, Array], default: () => [] },
+		selected: { type: [String, Array], default: () => [] },
 		label: { type: [String, Array], default: () => [] },
 		
 		vSize: String,
@@ -15,14 +15,14 @@ export default {
 
 	computed: {
 		switches() {
-			return this.getSwitches([this.id, this.name, this.type, this.value, this.checked, this.label]);
+			return this.getSwitches([this.id, this.name, this.type, this.value, this.selected, this.label]);
 		}
 	},
 
 	data() {
 		return {
 			inputs: [],
-			active: this.checked
+			active: this.selected
 		}
 	},
 
@@ -88,11 +88,23 @@ export default {
 		 */
 		change(e) {
 			this.$emit("change", e.target.value, e);
+		},
+
+		/**
+		 * Serialize fields
+		 * 
+		 * @method serialize
+		 * 
+		 * @returns {Array}
+		 */
+		serialize() {
+			return [ ...this.active ];
 		}
 	},
 
 	mounted() {
 		/* Create real-time computed property */
+		console.log(this.selected)
 		this.inputs = new Proxy(this.$refs.fields, {
 			get(target, index) {
 				return target?.[index];

@@ -1,15 +1,51 @@
 <template>
-	<div class="delivery">
+	<div
+		class="delivery"
+		v-if="entries.length"
+	>
+		<!-- Delivery point checkbox and name -->
 		<v-switch
-			id="delivery"
-			type="checkbox"
-			:label="entries.map(e => e.caption)"
-			:value="entries.map(e => e.address)"
+			ref="switch"
+			:id="entries.map(e => e.hash)"
+			:selected="entries.map(e => e.checked ? e.hash : false).filter(f => f)[0]"
+			:name="entries.map(e => 'delivery')"
+			:type="type"
+			:label="entries.map(e => $te(e.caption) ? $t(e.caption) : e.caption)"
+			:value="entries.map(e => e.hash)"
 		>
 			<template #controlBefore="{ index }">
-				<img :src="entries[index].images[0]" :alt="entries[index].caption">
+				<div class="image">
+					<!-- Delivery point image -->
+					<img
+						:src="entries[index]?.images?.[0]"
+						:alt="$te(entries[index]?.caption) ? $t(entries[index]?.caption) : entries[index]?.caption"
+					>
+				</div>
+			</template>
+
+			<template #controlAfter="{ index }">
+				<a
+					href="#"
+					class="about"
+					v-if="entries[index]?.address"
+					@click.prevent="showAbout(entries[index])"
+				>
+					<i class="fa fa-question icon"></i>
+					{{ $t("deliveryLabels.details") }}
+				</a>
 			</template>
 		</v-switch>
+
+		<v-lightbox
+			class="about-point-dialog"
+			size="md"
+			:visible="about"
+			:title="$t('deliveryLabels.about', { point: entry?.caption })"
+			@onHide="hideAbout"
+		>
+			<!-- Content -->
+			<div>xuj</div>
+		</v-lightbox>
 	</div>
 </template>
 

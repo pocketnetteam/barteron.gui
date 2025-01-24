@@ -1,6 +1,7 @@
 import ImageLoad from "@/components/image-load/index.vue";
 import Loader from "@/components/loader/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
+import Delivery from "@/components/delivery/index.vue";
 import CurrencySwitcher from "@/components/currency-switcher/index.vue";
 import Caption from "@/components/barter/item/caption/index.vue";
 import Price from "@/components/barter/item/price/index.vue";
@@ -10,6 +11,7 @@ import Profile from "@/components/profile/index.vue";
 import LikeStore from "@/stores/like.js";
 import PhotoSwipe from "photoswipe";
 import "photoswipe/style.css";
+import selfPickup from "@/assets/images/self-pickup.png";
 
 export default {
 	name: "BarterItem",
@@ -18,6 +20,7 @@ export default {
 		ImageLoad,
 		Loader,
 		ExchangeList,
+		Delivery,
 		Caption,
 		Price,
 		MyOptions,
@@ -48,7 +51,9 @@ export default {
 		return {
 			hover: 0,
 			active: 0,
-			addr: {}
+			addr: {},
+			deliveryPending: false,
+			deliveryPoints: []
 		}
 	},
 
@@ -185,6 +190,29 @@ export default {
 		},
 
 		/**
+		 * Get delivery points
+		 * 
+		 * @returns {Number}
+		 */
+		getDeliveryPoints() {
+			if (!this.deliveryPending && this.item?.delivery?.length) {
+				this.deliveryPending = true;
+				this.sdk.getBrtOffersByHashes([ ...this.item?.delivery || [] ])
+					.then(feed => {
+						this.deliveryPending = false;
+						this.deliveryPoints = [{
+							hash: "self",
+							images: [selfPickup],
+							caption: "deliveryLabels.pickup",
+							checked: true
+						}, ...feed];
+					});
+			}
+
+			return this?.item?.delivery.length;
+		},
+
+		/**
 		 * Customize offer link
 		 * 
 		 * @returns {Object|String}
@@ -237,7 +265,7 @@ export default {
 		 */
 		isRemoved() {
 			return this.item.status === "removed";
-		},
+		}
 	},
 
 	methods: {
@@ -316,6 +344,6 @@ export default {
 			}).catch(e => {
 				console.error(e);
 			});
-		},
-	},
+		}
+	}
 }

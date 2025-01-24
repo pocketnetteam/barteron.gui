@@ -11,22 +11,21 @@
 			:key="index"
 			class="v-switch-input"
 		>
+			<slot name="controlBefore" :index="index"></slot>
 			<input
 				ref="fields"
 				:id="sw.id"
 				:name="sw.name || sw.id"
 				:type="sw.type"
 				:value="sw.value"
-				:checked="sw.checked"
 				v-model="active"
 				@change="change"
 			/>
 			<div class="v-switch">
-				<slot name="controlBefore" :index="index"></slot>
 				<span class="v-control"></span>
 				<label v-if="sw.label" :for="sw.id || sw.name">{{ sw.label }}</label>
-				<slot name="controlAfter" :index="index"></slot>
 			</div>
+			<slot name="controlAfter" :index="index"></slot>
 		</div>
 
 		<slot name="after"></slot>

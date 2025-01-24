@@ -42,8 +42,14 @@
 		"photos": "Add photos",
 		"get": "What you want to get",
 		"description": "Description",
-		"location": "Location",
-		"delivery": "Delivery"
+		"location": "Location"
+	},
+
+	"deliveryLabels": {
+		"label": "Delivery",
+		"pickup": "Self pickup",
+		"details": "Details",
+		"about": "Abount {point}"
 	},
 
 	"ratingLabels": {

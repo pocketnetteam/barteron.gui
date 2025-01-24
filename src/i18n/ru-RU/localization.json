@@ -42,8 +42,14 @@
 		"photos": "Добавьте фотографии",
 		"get": "Что вы хотите получить",
 		"description": "Описание",
-		"location": "Местоположение",
-		"delivery": "Доставка"
+		"location": "Местоположение"
+	},
+
+	"deliveryLabels": {
+		"label": "Доставка",
+		"pickup": "Самовывоз",
+		"details": "Подробнее",
+		"about": "Подробнее о {point}"
 	},
 
 	"ratingLabels": {

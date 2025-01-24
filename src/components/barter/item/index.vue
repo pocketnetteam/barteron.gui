@@ -368,7 +368,10 @@
 				<p class="description">{{ item.description }}</p>
 			</div>
 
-			<div class="row info" v-if="geohash">
+			<div
+				class="row info"
+				v-if="geohash"
+			>
 				<div class="col">
 					<span class="title">{{ $t('stepsLabels.location') }}</span>
 					<ul>
@@ -380,13 +383,31 @@
 				</div>
 			</div>
 
-			<div class="row" v-if="item.geohash">
+			<div
+				class="row"
+				:class="{ 'sep': item.delivery?.length }"
+				v-if="item.geohash"
+			>
 				<!-- Component: Map -->
 				<v-map
 					mapMode="view"
 					:center="geohash"
 					:zoom="10"
 					:offers="[item]"
+				/>
+			</div>
+
+			<div
+				class="row block"
+				v-if="getDeliveryPoints"
+			>
+				<strong class="title">{{ $t('deliveryLabels.label') }}</strong>
+
+				<!-- Delivery -->
+				<Delivery
+					ref="delivery"
+					:entries="deliveryPoints"
+					type="radio"
 				/>
 			</div>
 

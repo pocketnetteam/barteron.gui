@@ -196,7 +196,10 @@
 				/>
 			</div>
 
-			<div class="row block sep">
+			<div
+				class="row block"
+				:class="{ 'sep': deliveryPoints.length }"
+			>
 				<!-- Title: Location -->
 				<strong class="title">{{ $t('stepsLabels.location') }}</strong>
 
@@ -207,16 +210,24 @@
 					ref="map"
 					mapMode="input"
 					:center="geohash || location || undefined"
+					@change="getDeliveryPoints"
 					@errorEvent="errorEvent"
 				/>
 			</div>
 
-			<div class="row block">
+			<div
+				class="row block"
+				v-if="deliveryPoints.length"
+			>
 				<!-- Title: Delivery -->
-				<strong class="title">{{ $t('stepsLabels.delivery') }}</strong>
+				<strong class="title">{{ $t('deliveryLabels.label') }}</strong>
 
 				<!-- Delivery -->
-				<Delivery />
+				<Delivery
+					ref="delivery"
+					:entries="deliveryPoints"
+					type="checkbox"
+				/>
 			</div>
 
 			<div id="offer-options" class="row full-width wrap">

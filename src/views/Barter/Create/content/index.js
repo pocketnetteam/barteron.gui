@@ -22,7 +22,8 @@ export default {
 			condition: "new",
 			price: 0,
 			pkoin: 0,
-			tags: []
+			tags: [],
+			deliveryPoints: []
 		}
 	},
 
@@ -153,6 +154,18 @@ export default {
 		},
 
 		/**
+		 * Get near delivery points
+		 */
+		getDeliveryPoints(latlng) {
+			this.sdk.getBrtOffersFeed({
+				tags: [97, 98],
+				location: this.encodeGeoHash(latlng)
+			}).then(feed => {
+				this.deliveryPoints = feed;
+			});
+		},
+
+		/**
 		 * Create new offer model and fill data
 		 */
 		serializeForm() {
@@ -163,6 +176,7 @@ export default {
 				center = this.$refs.map["marker"],
 				data = form.serialize(),
 				images = photos.serialize(),
+				delivery = this.$refs.delivery.serialize(),
 				tags = this.getting === "something" ? data.tags.split(",").map(tag => Number(tag)) : [this.getting];
 
 			/* Fill offer data */
@@ -176,6 +190,7 @@ export default {
 				condition: this.condition,
 				images: Object.values(images),
 				geohash: GeoHash.encodeGeoHash.apply(null, center),
+				delivery,
 				price: Number(data.pkoin || 0)
 			});
 

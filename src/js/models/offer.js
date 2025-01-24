@@ -15,7 +15,7 @@ class Offer {
 	constructor(data) {
 		/* Extract JSON values and format object */
 		const
-			{ t, a, c, p } = JSON.parse(data?.p?.s4 || '{"t":"","a":[],"c":"new","p":"publish"}'),
+			{ t, a, c, p, d } = JSON.parse(data?.p?.s4 || '{"t":"","a":[],"c":"new","p":"published","d":[]}'),
 			images = JSON.parse(data?.p?.s5 || "[]");
 		
 		/* Iterable properties */
@@ -30,6 +30,7 @@ class Offer {
 		this.tags = (data?.tags || a || []).map(tag => !isNaN(+tag) ? +tag : tag);
 		this.condition = data?.condition || c || "new";
 		this.images = data?.images || images;
+		this.delivery = (data?.delivery ?? d ?? []);
 		this.geohash = data?.geohash || data?.p?.s6 || "";
 		this.price = (data?.price || data?.p?.i1 / 100 || 0);
 		this.published = (data?.published ?? p ?? "published"); // published, withdrawed, removed
