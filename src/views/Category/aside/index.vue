@@ -1,5 +1,6 @@
 <template>
 	<v-aside
+		v-if="!(isEmptyListFromFullSearch())"
 		ref="asideCategories"
 	>
 		<v-details

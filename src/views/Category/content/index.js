@@ -1,6 +1,6 @@
 import Loader from "@/components/loader/index.vue";
 import BarterList from "@/components/barter/list/index.vue";
-import { useOfferStore } from "@/stores/offer.js";
+import offerStore, { useOfferStore } from "@/stores/offer.js";
 import { mapState, mapWritableState, mapActions } from "pinia";
 import { useLocaleStore } from "@/stores/locale.js";
 
@@ -144,6 +144,17 @@ export default {
 		setBartersViewToElement() {
 			setValueToVSelect(this.$refs.bartersView, this.bartersView);
 		},
+
+		isEmptyListFromFullSearch() {
+			return offerStore.isEmptyListFromFullSearch(this.$route);
+		},
+
+		/**
+		 * Reset account location
+		 */
+		reset() {
+			this.locationStore.reset({onlyBounds: true});
+		}
 	},
 
 	watch: {

@@ -2,7 +2,6 @@ import PopularList from "@/components/categories/popular-list/index.vue";
 import BarterList from "@/components/barter/list/index.vue";
 import Banner from "@/components/banner/index.vue";
 import viewedStore from "@/stores/viewed.js";
-import offerStore from "@/stores/offer.js";
 
 export default {
 	name: "Home",
@@ -23,22 +22,6 @@ export default {
 	},
 
 	methods: {
-		/**
-		 * Get offers feed
-		 */
-		async getOffersFeed() {
-			this.newFromGoods = await this.getOffersFeedList();
-		},
-
-		/**
-		 * Show new offers
-		 */
-		showNewOffers() {
-			offerStore.setFiltersForNewOffers();
-			const route = offerStore.getRouteForNewOffers();
-			this.$router.push(route);
-		},
-
 		/**
 		 * Get complex deals
 		 */
@@ -93,24 +76,15 @@ export default {
 				}
 			}
 		},
-
-		/**
-		 * Reset account location
-		 */
-		reset() {
-			this.locationStore.reset({onlyBounds: true});
-		}
 	},
 
 	watch: {
 		"locationStore.bounds"() {
-			this.getOffersFeed();
 			this.getComplexDeals();
 		}
 	},
 
 	mounted() {
-		this.getOffersFeed();
 		this.getComplexDeals();
 		this.getViewed();
 	}
