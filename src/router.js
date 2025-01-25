@@ -1,12 +1,15 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import offerStore from "@/stores/offer.js";
 
 const routes = [
 	{
 		path: "/",
 		name: "home",
 		components: {
-			default: () => import("@/views/Home/index.vue")
+			default: () => import("@/views/Home/index.vue"),
+			aside: () => import("@/views/Category/aside/index.vue"),
+			content: () => import("@/views/Category/content/index.vue")
 		}
 	},
 	{
@@ -80,6 +83,22 @@ const router = new VueRouter({
 	mode: "history",
 	duplicateNavigationPolicy: "reload",
 	scrollBehavior(to, from, savedPosition) {
+		const 
+			scrollOffset = offerStore.scrollOffset,
+			isReturnToOfferListFromItem = (from.name == "barterItem" 
+				&& to.fullPath === offerStore.itemsRoute?.fullPath
+			);
+		
+		if (isReturnToOfferListFromItem && scrollOffset) {
+			document.body.scrollTo({
+				top: scrollOffset.y,
+				left: scrollOffset.x,
+				behavior: "instant",
+			});
+			offerStore.scrollOffset = null;
+			return;
+		}
+
 		if (to.hash) {
 			return {selector: to.hash}
 		} else if(savedPosition) {

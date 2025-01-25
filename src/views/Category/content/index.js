@@ -1,6 +1,6 @@
 import Loader from "@/components/loader/index.vue";
 import BarterList from "@/components/barter/list/index.vue";
-import { useOfferStore } from "@/stores/offer.js";
+import offerStore, { useOfferStore } from "@/stores/offer.js";
 import { mapState, mapWritableState, mapActions } from "pinia";
 import { useLocaleStore } from "@/stores/locale.js";
 
@@ -145,19 +145,16 @@ export default {
 			setValueToVSelect(this.$refs.bartersView, this.bartersView);
 		},
 
-		/**
-		 * Set scroll offset if needed
-		 */
-		setScrollOffsetIfNeeded() {
-			if (this.scrollOffset) {
-				document.body.scrollTo({
-					top: this.scrollOffset.y,
-					left: this.scrollOffset.x,
-					behavior: "instant",
-				});
-				this.scrollOffset = null;
-			}
+		isEmptyListFromFullSearch() {
+			return offerStore.isEmptyListFromFullSearch(this.$route);
 		},
+
+		/**
+		 * Reset account location
+		 */
+		reset() {
+			this.locationStore.reset({onlyBounds: true});
+		}
 	},
 
 	watch: {
@@ -210,8 +207,6 @@ export default {
 		}).catch(e => { 
 			console.error(e);
 		});
-
-		this.setScrollOffsetIfNeeded();
 	},
 
 	beforeRouteEnter (to, from, next) {

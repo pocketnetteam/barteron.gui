@@ -93,14 +93,11 @@ Vue.prototype.shared = Vue.observable({
 			});
 		},
 
-		/**
-		 * Get offers feed list page size
-		 * 
-		 * @returns {Number}
-		 */
-		offersFeedListPageSize() {
-			return 10;
-		}
+		offerChanges() {
+			return Vue.observable({
+				offerUpdateActionId: this.sdk.offerUpdateActionId
+			})
+		},
 	},
 
 	methods: {
@@ -273,29 +270,6 @@ Vue.prototype.shared = Vue.observable({
 				result = approximator.getGeohashItems(bounds);
 			}
 			return result;
-		},
-
-		/**
-		 * Get offers feed
-		 */
-		getOffersFeedList() {
-			const
-				location = this.getStoredLocation() || [],
-				pageSize = this.offersFeedListPageSize;
-				
-			this.fetching = true;
-
-			return this.sdk.getBrtOffersFeed({
-				location,
-				pageSize
-			}).then(offers => {
-				// TODO: remove the filter below (filters should only be on the backend)
-				return offers.filter(offer => offer.active);
-			}).catch(e => { 
-				console.error(e);
-			}).finally(() => {
-				this.fetching = false;
-			});
 		},
 
 		/**

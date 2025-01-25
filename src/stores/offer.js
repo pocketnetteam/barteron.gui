@@ -3,7 +3,7 @@ import Vue from "vue";
 import Categories from "@/js/categories.js";
 
 const 
-    defaultPageSize = 12,
+    defaultPageSize = 18,
     storageId = "offer",
     storage = Pinia.defineStore(storageId, {
         state: () => ({
@@ -248,6 +248,22 @@ const
                     params: { id: "search" },
                     query: { search: "" }
                 };
+            },
+
+            isFiltersActive() {
+                return Object.keys(this.filters)
+                    .filter(key => this.filters[key] && !(key === "orderBy" || key === "orderDesc"))
+                    .some(f => Array.isArray(f) && f.length || !(Array.isArray(f)) && f);
+            },
+
+            isEmptyListFromFullSearch(currentRoute) {
+                const fullSearchPaths = ["/", "/category/search?search="];
+                return !(this.isLoading) 
+                    && !(this.items.length) 
+                    && !(this.isFiltersActive())
+                    && this.itemsRoute
+                    && this.itemsRoute.fullPath === currentRoute?.fullPath
+                    && fullSearchPaths.includes(this.itemsRoute.fullPath);
             },
         }
     }),

@@ -25,6 +25,7 @@ class SDK {
 			getBrtOffersFeed: 0,
 		},
 	};
+	offerUpdateActionId = null;
 
 	models = {
 		Account,
@@ -1350,6 +1351,9 @@ class SDK {
 		return this.sdk.barteron.offer({
 			...data,
 			...{ hash: data.hash?.length === 64 ? data.hash : null }
+		}).then(action => {
+			this.offerUpdateActionId = action.id;
+			return action;
 		});
 	}
 
@@ -1359,7 +1363,10 @@ class SDK {
 	 * @param {String} param0
 	 */
 	delBrtOffer({ hash }) {
-		return this.sdk.barteron.removeOffer({ hash });
+		return this.sdk.barteron.removeOffer({ hash }).then(action => {
+			this.offerUpdateActionId = action.id;
+			return action;
+		});
 	}
 
 	/**
