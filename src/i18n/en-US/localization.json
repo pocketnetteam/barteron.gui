@@ -49,7 +49,7 @@
 		"label": "Delivery",
 		"pickup": "Self pickup",
 		"details": "Details",
-		"about": "Abount {point}"
+		"about": "About \"{point}\""
 	},
 
 	"ratingLabels": {

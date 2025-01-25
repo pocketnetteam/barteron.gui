@@ -104,7 +104,6 @@ export default {
 
 	mounted() {
 		/* Create real-time computed property */
-		console.log(this.selected)
 		this.inputs = new Proxy(this.$refs.fields, {
 			get(target, index) {
 				return target?.[index];

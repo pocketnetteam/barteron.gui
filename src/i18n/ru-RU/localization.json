@@ -49,7 +49,7 @@
 		"label": "Доставка",
 		"pickup": "Самовывоз",
 		"details": "Подробнее",
-		"about": "Подробнее о {point}"
+		"about": "Подробнее о \"{point}\""
 	},
 
 	"ratingLabels": {

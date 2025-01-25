@@ -413,6 +413,7 @@
 				<Delivery
 					ref="delivery"
 					:entries="deliveryPoints"
+					:offerHash="item.hash"
 					type="radio"
 				/>
 			</div>

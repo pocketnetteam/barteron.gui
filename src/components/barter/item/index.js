@@ -316,14 +316,19 @@ export default {
 			return arguments[arguments.length - 1];
 		},
 
+		/**
+		 * Click on image
+		 * 
+		 * @param {Number} index
+		 */
 		imageClick(index) {
 			const options = {
 				index,
-				initialZoomLevel: 'fit',
+				initialZoomLevel: "fit",
 				secondaryZoomLevel: 2,
 				maxZoomLevel: 4,
 				wheelToZoom: true,
-				showHideAnimationType: 'fade'
+				showHideAnimationType: "fade"
 			};
 
 			const promises = this.images.map(item => {

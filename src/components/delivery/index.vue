@@ -12,6 +12,7 @@
 			:type="type"
 			:label="entries.map(e => $te(e.caption) ? $t(e.caption) : e.caption)"
 			:value="entries.map(e => e.hash)"
+			@change="e => getSelectedPoint(e)"
 		>
 			<template #controlBefore="{ index }">
 				<div class="image">
@@ -44,7 +45,10 @@
 			@onHide="hideAbout"
 		>
 			<!-- Content -->
-			<div>xuj</div>
+			<PointPreview
+				v-if="entry"
+				:item="entry"
+			/>
 		</v-lightbox>
 	</div>
 </template>

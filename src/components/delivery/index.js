@@ -1,10 +1,20 @@
+import PointPreview from "../barter/item/details/index.vue";
+
 export default {
 	name: "Delivery",
+
+	components: {
+		PointPreview
+	},
 
 	props: {
 		entries: {
 			type: Array,
 			default: () => []
+		},
+		offerHash: {
+			type: String,
+			default: ""
 		},
 		type: {
 			type: String,
@@ -39,6 +49,23 @@ export default {
 		 */
 		serialize() {
 			return this.switch.serialize();
+		},
+
+		/**
+		 * Get selected point
+		 * 
+		 * @param {String} e
+		 * 
+		 * @returns {Object}
+		 */
+		getSelectedPoint(e) {
+			this.entry = this.entries.filter(f => f.hash === e)?.[0];
+
+			if (this.offerHash) {
+				this.sdk.barteron._offers[this.offerHash].selectedPoint = this.entry;
+			}
+			
+			return this.entry;
 		},
 
 		/**

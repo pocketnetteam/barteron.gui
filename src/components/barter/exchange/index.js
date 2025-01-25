@@ -31,23 +31,26 @@ export default {
 		 */
 		address() {
 			return this.item?.address;
-		},
+		}
 	},
 
 	methods: {
 		/**
 		 * Create room and send message
 		 * 
-		 * @param {@Offer} offer
+		 * @param {Offer} offer
 		 */
 		createRoom(offer) {
 			if (this.sdk.willOpenRegistration()) return;
+			const
+				/** @type {Object|undefined} */
+				delivery = this.sdk.barteron.offers[offer.hash]?.deliveryPoint;
 			
 			this.isLoading = true;
 			this.dialog?.instance.view("load", this.$t("dialogLabels.opening_room"));
 			this.sendMessage({
 				name: offer.caption,
-				members: [this.address],
+				members: [this.address, delivery?.address].filter(f => f),
 				messages: [this.sdk.appLink(`barter/${ offer.hash }`)],
 				openRoom: true
 			}).then(() => {
@@ -96,7 +99,7 @@ export default {
 				.view("question", this.$t("dialogLabels.contact_seller"))
 				.then(state => {
 					if (state) {
-						this.createRoom(this.item);
+						this.createRoom(this.item, this.item.deliveryPoint);
 					}
 				});
 		}
