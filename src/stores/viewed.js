@@ -2,7 +2,7 @@ import Pinia from "@/stores/store.js";
 
 const
 	storageId = "viewed",
-	maxCount = 10,
+	maxCount = 20,
 	storage = Pinia.defineStore(storageId, {
 		state: () => ({
 			viewed: Pinia.get(storageId, [])

@@ -1,5 +1,5 @@
 <template>
-	<v-content>
+	<v-content v-if="!(isEmptyListFromFullSearch())">
 		<div class="row">
 			<div class="col no-offset">
 				<v-select
@@ -70,6 +70,22 @@
 				type="circular" 
 			/>
 		</div>
+	</v-content>
+
+	<v-content v-else>
+		<section>
+			<p>{{ $t('categoryLabels.empty') }}</p>
+			<i18n
+				path="categoryLabels.empty_details"
+				tag="p"
+			>
+				<template #all_regions>
+					<v-button
+						@click="reset"
+					>{{ $t('buttonLabels.all_regions') }}</v-button>
+				</template>
+			</i18n>
+		</section>
 	</v-content>
 </template>
 

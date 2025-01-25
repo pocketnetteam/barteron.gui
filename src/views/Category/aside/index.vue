@@ -1,5 +1,6 @@
 <template>
 	<v-aside
+		v-if="!(isEmptyListFromFullSearch())"
 		ref="asideCategories"
 	>
 		<v-details
@@ -154,7 +155,7 @@
 			/>
 		</v-details> -->
 
-		<div class="v-details">
+		<div class="v-details" id="action-buttons">
 			<div class="row">
 				<div class="buttons-holder full-width">
 					<v-button

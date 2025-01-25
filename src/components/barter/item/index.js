@@ -41,6 +41,14 @@ export default {
 			type: String,
 			default: "tile"
 		},
+		hideInfo: {
+			type: Boolean,
+			default: false
+		},
+		compactView: {
+			type: Boolean,
+			default: false
+		},
 		customLink: {
 			type: [String, Object, Function],
 			default: null
