@@ -15,7 +15,8 @@ export default {
 	data() {
 		return {
 			mayMatchExchanges: [],
-			viewedList: []
+			viewedList: [],
+			needForceUpdate: false,
 		}
 	},
 
@@ -59,19 +60,46 @@ export default {
 		/**
 		 * Get viewed list
 		 */
-		async getViewed() {
-			const hashes = viewedStore.viewed;
-			if (hashes?.length) {
-				let offers = [];
+		async getViewed(options = {fullUpdate: false}) {
+			const 
+				storedHashes = viewedStore.viewed || [],
+				currentOffers = (options?.fullUpdate ? [] : this.viewedList),
+				currentHashes = currentOffers.map(item => item?.hash).filter(f => f),
+				newHashes = storedHashes.filter(f => !(currentHashes.includes(f)));
+			
+			let
+				newOffers = [],
+				requestError = null;
+
+			if (newHashes.length) {
 				try {
-					offers = await this.sdk.getBrtOffersByHashes(hashes);
-					const sourceHashes = offers.map(item => item?.hash).filter(item => item);
-					viewedStore.updateInPatchMode(sourceHashes);
+					newOffers = await this.sdk.getBrtOffersByHashes(newHashes);
 				} catch (e) {
-					console.error(e)
-				} finally {
-					this.viewedList = offers;
-				}
+					requestError = e;
+					console.error(e);
+				};
+			}
+
+			if (!(requestError)) {
+				const
+					allOffers = currentOffers.concat(newOffers),
+					allHashes = allOffers.map(item => item?.hash).filter(f => f),
+					filteredHashes = storedHashes.filter(f => allHashes.includes(f)),
+					needUpdateStore = (JSON.stringify(storedHashes) !== JSON.stringify(filteredHashes));
+
+				if (needUpdateStore) {
+					viewedStore.updateInPatchMode(filteredHashes);
+				};
+
+				const newViewedList = filteredHashes.map(hash => allOffers.filter(f => f.hash === hash).pop());
+
+				// to avoid re-render bug for images we change viewedList twice
+				// we left first item in list to prevent disappear viewedList
+				// and then in setTimeout we put all items to viewedList
+				this.viewedList = newViewedList.slice(0,1);
+				setTimeout(() => {
+					this.viewedList = newViewedList;
+				});
 			}
 		},
 	},
@@ -79,6 +107,10 @@ export default {
 	watch: {
 		"locationStore.bounds"() {
 			this.getComplexDeals();
+		},
+
+		"offerChanges.offerUpdateActionId"() {
+			this.needForceUpdate = true;
 		}
 	},
 
@@ -88,10 +120,10 @@ export default {
 	},
 
 	activated() {
-		if (this.sdk.needUpdateComplexDeals) {
-			this.sdk.needUpdateComplexDeals = false;
+		if (this.needForceUpdate) {
 			this.getComplexDeals();
-		}
-		this.getViewed();
+		};
+		this.getViewed({fullUpdate: this.needForceUpdate});
+		this.needForceUpdate = false;
 	},
 }
