@@ -36,8 +36,7 @@
 		"vue-snap": "^0.7.1",
 		"vue2-leaflet": "^2.7.1",
 		"vue2-leaflet-geosearch": "^1.0.6",
-		"vue2-leaflet-markercluster": "^3.1.0",
-		"webpack-shell-plugin-next": "^2.3.2"
+		"vue2-leaflet-markercluster": "^3.1.0"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.12.16",

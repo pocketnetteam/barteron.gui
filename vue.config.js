@@ -1,7 +1,6 @@
 const
 	{ defineConfig } = require("@vue/cli-service"),
 	path = require("path"),
-	WebpackShellPluginNext = require("webpack-shell-plugin-next"),
 	buildDir = path.resolve(__dirname, process.env.VUE_APP_EXPORT || "./dist");
 
 module.exports = defineConfig({
@@ -17,17 +16,6 @@ module.exports = defineConfig({
 					args[0].template = "./public/index.php";
 					return args;
 				});
-				
-			config
-				.plugin("webpack-shell-plugin-next").use(WebpackShellPluginNext, [
-					{
-						onBuildEnd: {
-							scripts: [`chmod 664 ${ buildDir }/contacts.db`],
-							blocking: false,
-							parallel: false,
-						},
-					},
-				]);
 		}
 	},
 
