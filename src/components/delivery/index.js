@@ -37,6 +37,15 @@ export default {
 		 */
 		switch() {
 			return this.$refs.switch;
+		},
+
+		/**
+		 * Show delivery only on test
+		 * 
+		 * @returns {Boolean}
+		 */
+		isVisible() {
+			return this.entries.length && location.origin.includes("test.barter.pocketnet.app");
 		}
 	},
 

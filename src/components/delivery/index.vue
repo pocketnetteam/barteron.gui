@@ -1,7 +1,7 @@
 <template>
 	<div
 		class="delivery"
-		v-if="entries.length"
+		v-if="isVisible"
 	>
 		<!-- Delivery point checkbox and name -->
 		<v-switch
