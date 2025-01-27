@@ -177,4 +177,32 @@ class GeoHashLimitator {
 
 }
 
-export { GeoHashApproximator, GeoHashLimitator };
+class GeohashBoundsHelper {
+	constructor(latlng, sideLengthInKm) {
+		const [lat, lng] = latlng;
+		this.center = {lat, lng};
+		this.sideLength = sideLengthInKm;
+	}
+
+	getBounds() {
+		const
+			R = 6371, /* Radius of the earth in km */
+			lat_per_km = 180 / (Math.PI * R),
+			lng_per_km = 360 / (2 * Math.PI * Math.cos(this.center.lat) * R),
+			dLat = lat_per_km * this.sideLength,
+			dLng = lng_per_km * this.sideLength;
+
+		return {
+			_southWest: {
+				lat: this.center.lat - dLat / 2,
+				lng: this.center.lng - dLng / 2
+			},
+			_northEast: {
+				lat: this.center.lat + dLat / 2,
+				lng: this.center.lng + dLng / 2
+			}
+		};
+	}
+}
+
+export { GeoHashApproximator, GeoHashLimitator, GeohashBoundsHelper };
