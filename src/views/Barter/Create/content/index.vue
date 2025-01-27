@@ -219,15 +219,17 @@
 				class="row block"
 				v-if="deliveryPoints.length"
 			>
-				<!-- Title: Delivery -->
-				<strong class="title">{{ $t('deliveryLabels.label') }}</strong>
-
 				<!-- Delivery -->
 				<Delivery
 					ref="delivery"
 					:entries="deliveryPoints"
 					type="checkbox"
-				/>
+				>
+					<template #before>
+						<!-- Title: Delivery -->
+						<strong class="title">{{ $t('deliveryLabels.label') }}</strong>
+					</template>
+				</Delivery>
 			</div>
 
 			<div id="offer-options" class="row full-width wrap">

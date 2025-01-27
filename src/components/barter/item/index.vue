@@ -407,15 +407,17 @@
 				class="row block"
 				v-if="getDeliveryPoints"
 			>
-				<strong class="title">{{ $t('deliveryLabels.label') }}</strong>
-
 				<!-- Delivery -->
 				<Delivery
 					ref="delivery"
 					:entries="deliveryPoints"
 					:offerHash="item.hash"
 					type="radio"
-				/>
+				>
+					<template #before>
+						<strong class="title">{{ $t('deliveryLabels.label') }}</strong>
+					</template>
+				</Delivery>
 			</div>
 
 			<!-- without sidebar -->

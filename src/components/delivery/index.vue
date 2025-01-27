@@ -3,6 +3,8 @@
 		class="delivery"
 		v-if="isVisible"
 	>
+		<slot name="before"></slot>
+
 		<!-- Delivery point checkbox and name -->
 		<v-switch
 			ref="switch"
@@ -36,6 +38,8 @@
 				</a>
 			</template>
 		</v-switch>
+
+		<slot name="after"></slot>
 
 		<v-lightbox
 			class="about-point-dialog"
