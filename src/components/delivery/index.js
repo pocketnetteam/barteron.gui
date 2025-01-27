@@ -57,7 +57,7 @@ export default {
 		 * @returns {Array}
 		 */
 		serialize() {
-			return this.switch.serialize();
+			return this.switch?.serialize() || [];
 		},
 
 		/**
