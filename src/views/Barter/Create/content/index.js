@@ -5,6 +5,7 @@ import ExchangeList from "@/components/barter/exchange/list/index.vue";
 import Delivery from "@/components/delivery/index.vue";
 import { currencies, numberFormats } from "@/i18n/index.js";
 import CurrencyStore from "@/stores/currency.js";
+import { GeohashBoundsHelper, GeoHashApproximator } from "@/js/geohashUtils.js";
 
 export default {
 	name: "Content",
@@ -157,9 +158,16 @@ export default {
 		 * Get near delivery points
 		 */
 		getDeliveryPoints(latlng) {
+			const
+				sideLengthInKm = 100,
+				boundsHelper = new GeohashBoundsHelper(latlng, sideLengthInKm),
+				approximator = new GeoHashApproximator(boundsHelper.getBounds()),
+				location = approximator.getGeohashItems();
+
 			this.sdk.getBrtOffersFeed({
 				tags: [97, 98],
-				location: this.encodeGeoHash(latlng)
+				location,
+				pageSize: 200
 			}).then(feed => {
 				this.deliveryPoints = feed;
 			});
