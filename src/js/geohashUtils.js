@@ -187,8 +187,9 @@ class GeohashBoundsHelper {
 	getBounds() {
 		const
 			R = 6371, /* Radius of the earth in km */
+			phi = this.center.lat * Math.PI / 180,
 			lat_per_km = 180 / (Math.PI * R),
-			lng_per_km = 360 / (2 * Math.PI * Math.cos(this.center.lat) * R),
+			lng_per_km = 360 / (2 * Math.PI * Math.cos(phi) * R),
 			dLat = lat_per_km * this.sideLength,
 			dLng = lng_per_km * this.sideLength;
 
