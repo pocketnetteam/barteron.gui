@@ -60,7 +60,7 @@
 				<v-switch
 					type="radio"
 					name="getting"
-					:checked="getting"
+					:selected="getting"
 					:value="['my_list', 'something', 'for_nothing']"
 					:label="[$t('my_list'), $t('something'), $t('for_nothing')]"
 					vType="button"
@@ -173,7 +173,7 @@
 				<v-switch
 					type="radio"
 					name="condition"
-					:checked="condition"
+					:selected="condition"
 					:value="['used', 'new']"
 					:label="[$t('conditionLabels.used'), $t('conditionLabels.new')]"
 					vType="slide"

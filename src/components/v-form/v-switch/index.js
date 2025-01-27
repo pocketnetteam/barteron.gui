@@ -27,7 +27,7 @@ export default {
 	},
 
 	watch: {
-		checked(value) {
+		selected(value) {
 			this.active = value;
 		}
 	},

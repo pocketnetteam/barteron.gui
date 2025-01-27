@@ -46,7 +46,7 @@
 					type="radio"
 					name="price"
 					:value="['-', '-10', '10-50', '50-100', '100-500', '500-1000', '1000-']"
-					:checked="priceVariant"
+					:selected="priceVariant"
 					:label="[
 						$t('priceLabels.no_matter'),
 						$t('priceLabels.under', { to: 10 }),
