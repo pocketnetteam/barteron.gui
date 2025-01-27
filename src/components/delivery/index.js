@@ -45,7 +45,9 @@ export default {
 		 * @returns {Boolean}
 		 */
 		isVisible() {
-			return this.entries.length && location.origin.includes("test.barter.pocketnet.app");
+			return this.entries.length 
+				&& (location.origin.includes("test.barter.pocketnet.app")
+					|| location.origin.includes("https://localhost:8080"));
 		}
 	},
 
