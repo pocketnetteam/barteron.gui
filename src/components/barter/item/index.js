@@ -205,7 +205,7 @@ export default {
 		getDeliveryPoints() {
 			if (!this.deliveryPending && this.item?.delivery?.length) {
 				this.deliveryPending = true;
-				this.sdk.getBrtOffersByHashes([ ...this.item?.delivery || [] ])
+				this.sdk.getBrtOffersByHashes([ ...(this.item?.delivery || []) ])
 					.then(feed => {
 						this.deliveryPending = false;
 						this.deliveryPoints = [{
@@ -217,7 +217,7 @@ export default {
 					});
 			}
 
-			return this?.item?.delivery.length;
+			return this?.item?.delivery?.length;
 		},
 
 		/**
