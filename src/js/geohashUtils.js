@@ -178,8 +178,8 @@ class GeoHashLimitator {
 }
 
 class GeohashBoundsHelper {
-	constructor(latlng, sideLengthInKm) {
-		const [lat, lng] = latlng;
+	constructor(latLng, sideLengthInKm) {
+		const [lat, lng] = latLng;
 		this.center = {lat, lng};
 		this.sideLength = sideLengthInKm;
 	}
