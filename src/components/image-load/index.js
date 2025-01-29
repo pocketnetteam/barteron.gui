@@ -18,7 +18,12 @@ export default {
 		 * @returns {String}
 		 */
 		extractUrl(url) {
-			return url?.includes("url") ? url.match(/url\((.+)\)/)?.[1] : url;
+			let result = url;
+			const isImageData = url?.startsWith("data:image");
+			if (!(isImageData)) {
+				result = url?.includes("url") ? url.match(/url\((.+)\)/)?.[1] : url;
+			}
+			return result;
 		},
 
 		/**

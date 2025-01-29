@@ -184,7 +184,7 @@ export default {
 				center = this.$refs.map["marker"],
 				data = form.serialize(),
 				images = photos.serialize(),
-				delivery = this.$refs.delivery.serialize(),
+				delivery = this.$refs.delivery?.serialize() || [],
 				tags = this.getting === "something" ? data.tags.split(",").map(tag => Number(tag)) : [this.getting];
 
 			/* Fill offer data */
