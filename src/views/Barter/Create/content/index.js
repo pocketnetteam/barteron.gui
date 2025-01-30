@@ -185,7 +185,9 @@ export default {
 				data = form.serialize(),
 				images = photos.serialize(),
 				delivery = this.$refs.delivery?.serialize() || [],
-				tags = this.getting === "something" ? data.tags.split(",").map(tag => Number(tag)) : [this.getting];
+				tags = this.getting === "something" 
+					? (data.tags ? data.tags.split(",").map(tag => Number(tag)) : [])
+					: [this.getting];
 
 			/* Fill offer data */
 			this.offer.update({

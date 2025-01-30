@@ -29,9 +29,7 @@
 					</li>
 
 					<li>
-						<span>
-							{{ (account?.rating || 0).toFixed(1) }} {{ $t('ratingLabels.label').toLowerCase() }} 
-							(0 {{ $t('ratingLabels.reviews').toLowerCase() }})</span>
+						<span>{{ ratingInfo }}</span>
 					</li>
 				</ul>
 			</div>
