@@ -252,7 +252,6 @@
 		"label": "Отзывы",
 		"title": "Рейтинг",
 		"votes": "Нет голосов | {count} голос | {count} голоса | {count} голосов",
-		"voteIsPublishing": "Оценка публикуется",
 		"commentIsPublishing": "Комментарий публикуется",
 		"voteNotPublished": "Оценка не опубликована",
 		"commentNotPublished": "Комментарий не опубликован",

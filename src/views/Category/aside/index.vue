@@ -159,7 +159,6 @@
 			<div class="row">
 				<div class="buttons-holder full-width">
 					<v-button
-						vType="chi-chi"
 						:disabled="!(filtersEnabled())"
 						@click="resetFilters"
 					>{{ $t('buttonLabels.reset') }}</v-button>

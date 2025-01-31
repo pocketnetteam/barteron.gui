@@ -342,7 +342,7 @@ class SDK {
 	 * @returns {Boolean}
 	 */
 	isBrighteonProject() {
-		return (this.appinfo?.project?.name === "Brighteon");
+		return ((this.appinfo?.project?.name || "").toLowerCase() === "brighteon");
 	}
 
 	/**
@@ -351,9 +351,10 @@ class SDK {
 	 * @param {Object} request
 	 */
 	setupRequestForBrighteon(request) {
-		request.lang = "en-US";
+		const params = this.getBrighteonProjectParams();
+		request.lang = params.locale;
 		
-		const limitator = new GeoHashLimitator(request.location, "Canada,USA");
+		const limitator = new GeoHashLimitator(request.location, params.location.alias);
 		request.location = limitator.limit();
 	}
 
@@ -945,7 +946,10 @@ class SDK {
 			countryName = country?.name;
 	
 		if (city?.lat || city?.lng) {
-			const result = [Number(city.lat || 0), Number(city.lng || 0)];
+			const
+				latLng = [Number(city.lat || 0), Number(city.lng || 0)],
+				result = this.fixLocationIfNeeded(latLng);
+
 			return Promise.resolve(result);
 
 		} else if (countryName) {
@@ -961,15 +965,75 @@ class SDK {
 				.then(result => result.json())
 				.then(data => { 
 					if (data?.length > 0 && (data[0].lat || data[0].lon)) {
-						const item = data[0];
-						return [Number(item.lat), Number(item.lon)];
+						const
+							item = data[0],
+							latLng = [Number(item.lat), Number(item.lon)];
+
+						return this.fixLocationIfNeeded(latLng);
 					} else {
-						throw new Error(`No data of lat, lon for country ${countryName}`);
+						const fixedLatLng = this.fixLocationIfNeeded(null);
+						return fixedLatLng || Promise.reject(new Error(`No data of lat, lon for country ${countryName}`));
 					}
 				})
-				.catch(e => this.setLastResult(e));
+				.catch(e => {
+					this.setLastResult(e);
+					return this.fixLocationIfNeeded(null);
+				});
 		} else {
-			return Promise.reject(new Error(`Can't define city or country by time zone ${timeZone}`));
+			const fixedLatLng = this.fixLocationIfNeeded(null);
+			return fixedLatLng 
+				? Promise.resolve(fixedLatLng) 
+				: Promise.reject(new Error(`Can't define city or country by time zone ${timeZone}`));
+		}
+	}
+
+	/**
+	 * Fix location if needed
+	 * 
+	 * @param {Array} latLng
+	 * 
+	 * @returns {Array}
+	 */
+	fixLocationIfNeeded(latLng) {
+		let result = latLng;
+		if (this.isBrighteonProject()) {
+			const params = this.getBrighteonProjectParams();
+			if (latLng && Array.isArray(latLng)) {
+				const
+					[lat, lng] = latLng,
+					box = params.location.box;
+				
+				const isValid = 
+					(box.minLat <= lat && lat <= box.maxLat 
+						&& box.minLng <= lng && lng <= box.maxLng);
+					
+				result = isValid ? latLng : params.location.center;
+
+			} else {
+				result = params.location.center;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Get brighteon project params
+	 * 
+	 * @returns {Object}
+	 */
+	getBrighteonProjectParams() {
+		return {
+			locale: "en-US",
+			location: {
+				alias: "Canada,USA",
+				center: [44.966667, -103.766667],
+				box: {
+					minLat: 24.544622,
+					minLng: -168.114716,
+					maxLat: 83.095345,
+					maxLng: -52.621967
+				},
+			},
 		}
 	}
 

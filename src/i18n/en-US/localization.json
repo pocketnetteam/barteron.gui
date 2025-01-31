@@ -252,7 +252,6 @@
 		"label": "Votes",
 		"title": "Rating",
 		"votes": "No votes | {count} vote | {count} votes",
-		"voteIsPublishing": "Vote is publishing",
 		"commentIsPublishing": "Comment is publishing",
 		"voteNotPublished": "Vote not published",
 		"commentNotPublished": "Comment not published",

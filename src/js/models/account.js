@@ -32,6 +32,8 @@ class Account {
 		Object.defineProperties(this, {
 			sdk: { value: Vue.prototype.sdk },
 			regdate: { value: data?.additional?.regdate * 1000 || +new Date },
+			ratingSum: { value: data?.additional?.rating_sum ?? 0 },
+			ratingCount: { value: data?.additional?.rating_count ?? 0 },
 			rating: { value: (data?.additional?.rating ?? 0) / 10 }
 		});
 

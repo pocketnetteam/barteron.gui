@@ -26,11 +26,6 @@
 				:rejected="hasRejectedOfferScore()"
 				@change="vote"
 			/>
-			<i 
-				v-if="hasRelayOfferScore()" 
-				class="vote-relay fa fa-spinner fa-spin"
-				:title="$t('voteLabels.voteIsPublishing')"
-			></i>
 			<span>{{ $tc('voteLabels.votes', offerScoresCount()) }}</span>
 			<div v-if="hasRejectedOfferScore()" class="vote-rejected">{{ $t('voteLabels.voteNotPublished') }}</div>
 			<div v-if="hasRejectedComment()" class="comment-rejected">{{ $t('voteLabels.commentNotPublished') }}</div>
