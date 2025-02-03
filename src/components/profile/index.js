@@ -56,6 +56,25 @@ export default {
 		},
 
 		/**
+		 * Get rating info
+		 * 
+		 * @returns {String}
+		 */
+		ratingInfo() {
+			const 
+				ratingValue = (this.account?.rating || 0).toFixed(1),
+				ratingLabel = this.$t('ratingLabels.label').toLowerCase(),
+				votesCount = this.account?.ratingCount || 0,
+				votesLabel = this.$tc('voteLabels.votes', votesCount).toLowerCase();
+			
+			const
+				ratingText = `${ratingValue} ${ratingLabel}`,
+				votesText = votesCount ? ` (${votesLabel})` : "";
+
+			return ratingText + votesText;
+		},
+
+		/**
 		 * Generate hsl background for user
 		 * 
 		 * @returns {String}
