@@ -24,6 +24,8 @@ export default {
 			price: 0,
 			pkoin: 0,
 			tags: [],
+			currencyPrice: {},
+			currencyPriceEnabled: true,
 			deliveryPoints: []
 		}
 	},
@@ -129,20 +131,34 @@ export default {
 					}
 
 					if (offer.condition) this.condition = offer.condition;
-	
+					
+					this.currencyPrice = offer.currencyPrice || {};
+					const currencyPriceData = this.getCurrencyPriceData();
+					this.currencyPriceEnabled = (offer.hash === "draft" || currencyPriceData.exists);
+					if (currencyPriceData.exists) {
+						this.price = this.currencyPrice.price;
+						this.$2watch("$refs.currency").then(ref => {
+							ref.setValue(currencyPriceData.listItem);
+						}).catch(e => { 
+							console.error(e);
+						});
+					};					
+
 					if (offer.price) {
 						this.pkoin = offer.price;
+						
+						if (!(this.currencyPriceEnabled)) {
+							/* Await for currencies list */
+							clearInterval(this.awaitCurrency);
+							this.awaitCurrency = setInterval(() => {
+								if (!this.sdk.empty(this.sdk.currency)) {
+									clearInterval(this.awaitCurrency);
+									delete this.awaitCurrency;
 
-						/* Await for currencies list */
-						clearInterval(this.awaitCurrency);
-						this.awaitCurrency = setInterval(() => {
-							if (!this.sdk.empty(this.sdk.currency)) {
-								clearInterval(this.awaitCurrency);
-								delete this.awaitCurrency;
-
-								this.calcPrice(offer.price);
-							}
-						});
+									this.calcPrice(offer.price);
+								}
+							});
+						}
 					}
 				} else {
 					/* Reset fields to default */
@@ -150,8 +166,63 @@ export default {
 					this.getting = "something";
 					this.condition = "new";
 					this.price = this.pkoin = 0;
+					this.currencyPrice = {};
+					this.currencyPriceEnabled = true;
 				}
 			});
+		},
+
+		priceHintLabel() {
+			const
+				state = this.currencyPriceEnabled ? "enabled" : "disabled",
+				key = `currency_price_${state}_hint`,
+				currency = this.$refs.currency?.selected?.toUpperCase();
+
+			return this.$t(key, { currency });
+		},
+
+		currencyPriceLabel() {
+			const currency = this.$refs.currency?.selected?.toUpperCase();
+			return this.$t("currency_price_text", { currency });
+		},
+
+		currencyPriceEnabledStateChanged(value, e) {
+			this.currencyPriceEnabled = e.target.checked;
+		},
+
+		getCurrencyPriceData() {
+			let exists = false;
+			let listItem = null;
+
+			const currency = this.currencyPrice.currency;
+			if (currency && this.currencyPrice.price >= 0) {
+				const value = currency.toUpperCase();
+				listItem = this.currencies.filter(f => f.value?.toUpperCase() === value).pop();
+				exists = !!(listItem);
+			};
+
+			return {
+				exists,
+				listItem,
+			};
+		},
+
+		serializeCurrencyPrice() {
+			let result = {};
+
+			const
+				currency = this.$refs.currency.selected,
+				price = this.price,
+				isValid = (currency && price >= 0);
+			
+			if (this.currencyPriceEnabled && isValid) {
+				result = {
+					currency,
+					price,
+				};
+			};
+
+			return result;
 		},
 
 		/**
@@ -185,6 +256,7 @@ export default {
 				data = form.serialize(),
 				images = photos.serialize(),
 				delivery = this.$refs.delivery?.serialize() || [],
+				currencyPrice = this.serializeCurrencyPrice(),
 				tags = this.getting === "something" 
 					? (data.tags ? data.tags.split(",").map(tag => Number(tag)) : [])
 					: [this.getting];
@@ -200,6 +272,7 @@ export default {
 				condition: this.condition,
 				images: Object.values(images),
 				geohash: GeoHash.encodeGeoHash.apply(null, center),
+				currencyPrice,
 				delivery,
 				price: Number(data.pkoin || 0)
 			});

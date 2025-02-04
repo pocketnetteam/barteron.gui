@@ -162,10 +162,30 @@
 				</v-input>
 
 				<!-- Label: Currency text -->
-				<label for="currency" class="v-label">
+				<label 
+					id="currency-label"
+					for="currency" 
+					class="v-label"
+				>
 					<i class="fa fa-info-circle"></i>
-					{{ $t('choose_currency_text') }}
+					{{ priceHintLabel() }}
 				</label>
+
+				<!-- vSwitch: currency price -->
+				<div class="row" id="currency-price-holder">
+					<v-switch
+						class="no-padding"
+						type="checkbox"
+						name="currencyPrice"
+						:label="currencyPriceLabel()"
+						:selected="currencyPriceEnabled ? 'enabled' : ''"
+						:value="'enabled'"
+						vType="checkbox"
+						vSize="xl"
+						@change="currencyPriceEnabledStateChanged"
+					/>
+				</div>
+
 			</div>
 
 			<div class="row block sep">
