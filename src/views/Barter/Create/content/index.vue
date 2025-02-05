@@ -43,6 +43,7 @@
 
 				<!-- Paragraph: Image upload text -->
 				<p>
+					<i class="fa fa-info-circle"></i>
 					{{
 						$t('photosLabels.upload_image_text', {
 							count: 10,

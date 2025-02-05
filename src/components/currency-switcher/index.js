@@ -45,8 +45,8 @@ export default {
 			let value = null;
 
 			const
-				selectedCurrency = this.currency?.value,
-				fixedCurrency = this.currencyPrice?.currency,
+				selectedCurrency = this.currency?.value?.toUpperCase(),
+				fixedCurrency = this.currencyPrice?.currency?.toUpperCase(),
 				fixedPrice = this.currencyPrice?.price,
 				currencyPriceExists = (fixedCurrency && fixedPrice);
 			

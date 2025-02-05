@@ -87,7 +87,7 @@ export default {
 		/**
 		 * Convert price from currency to pkoin
 		 * 
-		 * @param {Number} reverse - from pkoin to currency
+		 * @param {Object|Event|Number} reverse - from pkoin to currency
 		 */
 		calcPrice(reverse) {
 			const
@@ -96,10 +96,15 @@ export default {
 				currency = this.$refs.currency?.selected?.toUpperCase();
 
 			/* Handle pkoin input */
-			if (reverse?.target?.name === "pkoin") reverse = reverse.target.value;
+			if (reverse?.target?.name === "pkoin") {
+				reverse = reverse.target.value;
+			};
 
 			if (!this.sdk.empty(values)) {
-				if (price && !price?.value?.length) price.value = 0;
+				if (price && !price?.value?.length) {
+					price.value = 0;
+				};
+
 				if (reverse?.target || reverse?.value) {
 					/* Typing in price field */
 					this.price = parseFloat(price?.value || 0);
@@ -133,33 +138,29 @@ export default {
 					if (offer.condition) this.condition = offer.condition;
 					
 					this.currencyPrice = offer.currencyPrice || {};
+					
 					const currencyPriceData = this.getCurrencyPriceData();
 					this.currencyPriceEnabled = (offer.hash === "draft" || currencyPriceData.exists);
-					if (currencyPriceData.exists) {
-						this.price = this.currencyPrice.price;
-						this.$2watch("$refs.currency").then(ref => {
-							ref.setValue(currencyPriceData.listItem);
-						}).catch(e => { 
-							console.error(e);
-						});
-					};					
-
-					if (offer.price) {
-						this.pkoin = offer.price;
-						
-						if (!(this.currencyPriceEnabled)) {
-							/* Await for currencies list */
-							clearInterval(this.awaitCurrency);
-							this.awaitCurrency = setInterval(() => {
-								if (!this.sdk.empty(this.sdk.currency)) {
-									clearInterval(this.awaitCurrency);
-									delete this.awaitCurrency;
-
-									this.calcPrice(offer.price);
-								}
-							});
-						}
-					}
+					
+					this.waitForRefs("currency,price").then(() => {
+						if (currencyPriceData.exists) {
+							this.price = this.currencyPrice.price;
+							this.$refs.currency.setValue(currencyPriceData.listItem);
+						} else if (offer.price) {
+							this.pkoin = offer.price;
+						};
+					}).then(() => {
+						/* Wait for currency rates */
+						return this.sdk.currency;
+					}).then(() => {
+						if (currencyPriceData.exists) {
+							this.calcPrice({value: currencyPriceData.currency});
+						} else if (offer.price) {
+							this.calcPrice(offer.price);
+						};
+					}).catch(e => { 
+						console.error(e);
+					});
 				} else {
 					/* Reset fields to default */
 					this.tags = [];
@@ -194,16 +195,19 @@ export default {
 			let exists = false;
 			let listItem = null;
 
-			const currency = this.currencyPrice.currency;
-			if (currency && this.currencyPrice.price >= 0) {
-				const value = currency.toUpperCase();
-				listItem = this.currencies.filter(f => f.value?.toUpperCase() === value).pop();
+			const
+				currency = this.currencyPrice.currency?.toUpperCase(),
+				price = this.currencyPrice.price;
+
+			if (currency && (typeof price === "number") && price >= 0) {
+				listItem = this.currencies.filter(f => f.value?.toUpperCase() === currency).pop();
 				exists = !!(listItem);
 			};
 
 			return {
 				exists,
 				listItem,
+				currency,
 			};
 		},
 
@@ -211,7 +215,7 @@ export default {
 			let result = {};
 
 			const
-				currency = this.$refs.currency.selected,
+				currency = this.$refs.currency?.selected?.toUpperCase(),
 				price = this.price,
 				isValid = (currency && price >= 0);
 			

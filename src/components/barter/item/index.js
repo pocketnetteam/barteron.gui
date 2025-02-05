@@ -103,7 +103,7 @@ export default {
 
 			const
 				currencyPrice = this.item?.currencyPrice,
-				fixedCurrency = currencyPrice?.currency,
+				fixedCurrency = currencyPrice?.currency?.toUpperCase(),
 				fixedPrice = currencyPrice?.price,
 				needCalc = (fixedCurrency && fixedPrice);
 			
