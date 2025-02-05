@@ -38,7 +38,7 @@ export default {
 				value = isValid ? (fixedPrice / rate) : null;
 			};
 
-			return value ? value.toFixed(2) : null;
+			return value;
 		},
 	}
 }

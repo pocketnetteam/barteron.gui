@@ -3,7 +3,7 @@
 		<template v-if="item?.price">
 			<span id="pkoin-price" class="col">
 				<span class="currency icon-pkoin"></span>
-				<span class="amount">{{ pkoinPrice ? $n(pkoinPrice) : '...' }}</span>
+				<span class="amount">{{ pkoinPrice ? $n(pkoinPrice, 'shortPkoin') : '...' }}</span>
 				<span>{{ $t('profileLabels.coins') }}</span>
 			</span>
 			<span class="col">

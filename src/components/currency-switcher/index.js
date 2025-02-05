@@ -77,7 +77,7 @@ export default {
 				value = isValid ? this.amount * rate : null;
 			};
 			
-			return value ? value.toFixed(2) : null;
+			return value;
 		}
 	},
 

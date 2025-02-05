@@ -47,6 +47,20 @@ const
 		}
 	},
 
+	commonCurrency = {
+		style: "decimal",
+		useGrouping: true,
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2,
+	},
+
+	commonPkoin = {
+		style: "decimal",
+		useGrouping: true,
+		minimumFractionDigits: 0,
+		maximumFractionDigits: 2,
+	},
+
 	numberFormats = {
 		"en-US": {
 			currency: {
@@ -58,7 +72,9 @@ const
 				currency: "USD",
 				minimumFractionDigits: 0,
 				maximumFractionDigits: 0
-			}
+			},
+			shortPkoin: commonPkoin,
+			shortCurrency: commonCurrency,
 		},
 
 		"ru-RU": {
@@ -71,7 +87,9 @@ const
 				currency: "RUB",
 				minimumFractionDigits: 0,
 				maximumFractionDigits: 0
-			}
+			},
+			shortPkoin: commonPkoin,
+			shortCurrency: commonCurrency,
 		}
 	},
 

@@ -108,11 +108,11 @@ export default {
 				if (reverse?.target || reverse?.value) {
 					/* Typing in price field */
 					this.price = parseFloat(price?.value || 0);
-					this.pkoin = (((this.price / values[currency]) * 100) / 100).toFixed(2);
+					this.pkoin = (this.price / values[currency]).toFixed(2);
 				} else {
 					/* Get value from offer */
 					this.pkoin = parseFloat(reverse || 0);
-					this.price = (((this.pkoin * values[currency]) * 100) / 100).toFixed(2);
+					this.price = (this.pkoin * values[currency]).toFixed(2);
 				}
 			}
 		},
