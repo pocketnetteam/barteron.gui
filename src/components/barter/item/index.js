@@ -229,6 +229,8 @@ export default {
 		 * @returns {Number}
 		 */
 		getDeliveryPoints() {
+			return false;
+			
 			if (!this.deliveryPending && this.item?.delivery?.length) {
 				this.deliveryPending = true;
 				this.sdk.getBrtOffersByHashes([ ...(this.item?.delivery || []) ])

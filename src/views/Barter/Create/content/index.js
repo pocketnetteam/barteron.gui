@@ -196,8 +196,8 @@ export default {
 			let listItem = null;
 
 			const
-				currency = this.currencyPrice.currency?.toUpperCase(),
-				price = this.currencyPrice.price;
+				currency = this.currencyPrice?.currency?.toUpperCase(),
+				price = this.currencyPrice?.price;
 
 			if (currency && (typeof price === "number") && price >= 0) {
 				listItem = this.currencies.filter(f => f.value?.toUpperCase() === currency).pop();
@@ -233,6 +233,8 @@ export default {
 		 * Get near delivery points
 		 */
 		getDeliveryPoints(latlng) {
+			return;
+			
 			const
 				sideLengthInKm = 100,
 				boundsHelper = new GeohashBoundsHelper(latlng, sideLengthInKm),

@@ -21,6 +21,7 @@
 							'filter-enabled': priceFilterEnabled()
 						}"
 					>{{ $t('priceLabels.label') }}</span>
+					<span class="coins">{{ $t('profileLabels.coins') }}</span>
 				</strong>
 			</template>
 
