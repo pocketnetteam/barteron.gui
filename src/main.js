@@ -150,6 +150,23 @@ Vue.prototype.shared = Vue.observable({
 		},
 
 		/**
+		 * Wait for refs
+		 * 
+		 * @param {String} refs - string of refs (example: "ref1,ref2")
+		 * 
+		 * @returns {Promise}
+		 */
+		waitForRefs(refs) {
+			const items = (refs || [])
+				.split(",")
+				.map(ref => ref.trim())
+				.filter(f => f)
+				.map(ref => this.$2watch(`$refs.${ref}`));
+
+			return Promise.all(items);
+		},
+
+		/**
 		 * Scroll To
 		 * 
 		 * @param {String} el
