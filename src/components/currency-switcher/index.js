@@ -6,6 +6,10 @@ export default {
 
 	props: {
 		amount: Number,
+		currencyPrice: {
+			type: Object,
+			default: () => ({})
+		},
 		switcher: Boolean,
 		hideButton: Boolean,
 		vSize: String
@@ -35,14 +39,45 @@ export default {
 		/**
 		 * Calculate amount into selected currency
 		 * 
-		 * @returns {Number}
+		 * @returns {String|null}
 		 */
 		converted() {
-			const
-				currency = this.sdk.currency,
-				result = (((this.amount * currency[this.currency?.value]) * 100) / 100);
+			let value = null;
 
-			return !Number.isNaN(result) ? result.toFixed(2) : null;
+			const
+				selectedCurrency = this.currency?.value?.toUpperCase(),
+				fixedCurrency = this.currencyPrice?.currency?.toUpperCase(),
+				fixedPrice = this.currencyPrice?.price,
+				currencyPriceExists = (fixedCurrency && fixedPrice);
+			
+			if (currencyPriceExists) {
+				const needConvert = (selectedCurrency !== fixedCurrency);
+				if (needConvert) {
+					const
+						rates = this.sdk.currency,
+						rateFrom = rates[fixedCurrency],
+						rateTo = rates[selectedCurrency],
+						isValid = (
+							rateFrom 
+							&& rateTo 
+							&& (typeof rateFrom === "number") 
+							&& (typeof rateTo === "number")
+						);
+
+					value = isValid ? (fixedPrice * rateTo / rateFrom) : null;
+				} else {
+					value = fixedPrice;
+				}
+			} else {
+				const
+					rates = this.sdk.currency,
+					rate = rates[selectedCurrency],
+					isValid = (rate && (typeof rate === "number"));
+
+				value = isValid ? (this.amount * rate) : null;
+			};
+			
+			return value;
 		}
 	},
 

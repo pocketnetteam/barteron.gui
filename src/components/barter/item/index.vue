@@ -80,7 +80,7 @@
 				<span class="price">
 					<template v-if="item.price">
 						<span class="currency icon-pkoin"></span>
-						{{ $n(item.price) }}
+						{{ pkoinPrice ? $n(pkoinPrice, 'shortPkoin') : '...' }}
 						<span>{{ $t('profileLabels.coins') }}</span>
 					</template>
 					<template v-else>
@@ -105,6 +105,7 @@
 					<CurrencySwitcher
 						:switcher="false"
 						:amount="item?.price"
+						:currencyPrice="item?.currencyPrice"
 						:hideButton="true"
 					/>
 				</div>
@@ -192,7 +193,7 @@
 					<span class="price">
 						<template v-if="item.price">
 							<span class="currency icon-pkoin"></span>
-							{{ $n(item.price) }}
+							{{ pkoinPrice ? $n(pkoinPrice, 'shortPkoin') : '...' }}
 							<span>{{ $t('profileLabels.coins') }}</span>
 						</template>
 						<template v-else>
@@ -205,6 +206,7 @@
 						<CurrencySwitcher
 							:switcher="false"
 							:amount="item?.price"
+							:currencyPrice="item?.currencyPrice"
 							:hideButton="true"
 						/>
 					</div>

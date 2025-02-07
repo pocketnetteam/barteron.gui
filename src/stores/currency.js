@@ -9,11 +9,21 @@ const
 		
 		actions: {
 			fetch() {
-				Pinia.getPrefix().then(() => {
-					this.currency = Pinia.get(storageId, "");
-				}).catch(e => { 
-					console.error(e);
-				});
+				const 
+					canSyncFetch = (Pinia.prefix),
+					clbk = () => {
+						this.currency = Pinia.get(storageId, "");
+					};
+
+				if (canSyncFetch) {
+					clbk();
+				} else {
+					Pinia.getPrefix().then(() => {
+						clbk();
+					}).catch(e => { 
+						console.error(e);
+					});
+				}
 			},
 
 			set(currency) {

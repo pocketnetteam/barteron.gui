@@ -24,6 +24,8 @@ export default {
 			price: 0,
 			pkoin: 0,
 			tags: [],
+			currencyPrice: {},
+			currencyPriceEnabled: false,
 			deliveryPoints: []
 		}
 	},
@@ -70,6 +72,13 @@ export default {
 		},
 
 		/**
+		 * Currency price option available
+		 */
+		currencyPriceAvailable() {
+			return (this.sdk.getTransactionsApiVersion() >= 2);
+		},
+
+		/**
 		 * Format currencies to list
 		 */
 		currencies() {
@@ -85,7 +94,7 @@ export default {
 		/**
 		 * Convert price from currency to pkoin
 		 * 
-		 * @param {Number} reverse - from pkoin to currency
+		 * @param {Object|Event|Number} reverse - from pkoin to currency
 		 */
 		calcPrice(reverse) {
 			const
@@ -94,18 +103,23 @@ export default {
 				currency = this.$refs.currency?.selected?.toUpperCase();
 
 			/* Handle pkoin input */
-			if (reverse?.target?.name === "pkoin") reverse = reverse.target.value;
+			if (reverse?.target?.name === "pkoin") {
+				reverse = reverse.target.value;
+			};
 
 			if (!this.sdk.empty(values)) {
-				if (price && !price?.value?.length) price.value = 0;
+				if (price && !price?.value?.length) {
+					price.value = 0;
+				};
+
 				if (reverse?.target || reverse?.value) {
 					/* Typing in price field */
 					this.price = parseFloat(price?.value || 0);
-					this.pkoin = (((this.price / values[currency]) * 100) / 100).toFixed(2);
+					this.pkoin = (this.price / values[currency]).toFixed(2);
 				} else {
 					/* Get value from offer */
 					this.pkoin = parseFloat(reverse || 0);
-					this.price = (((this.pkoin * values[currency]) * 100) / 100).toFixed(2);
+					this.price = (this.pkoin * values[currency]).toFixed(2);
 				}
 			}
 		},
@@ -129,35 +143,111 @@ export default {
 					}
 
 					if (offer.condition) this.condition = offer.condition;
-	
-					if (offer.price) {
-						this.pkoin = offer.price;
+					
+					this.currencyPrice = offer.currencyPrice || {};
+					
+					const currencyPriceData = this.getCurrencyPriceData();
 
-						/* Await for currencies list */
-						clearInterval(this.awaitCurrency);
-						this.awaitCurrency = setInterval(() => {
-							if (!this.sdk.empty(this.sdk.currency)) {
-								clearInterval(this.awaitCurrency);
-								delete this.awaitCurrency;
-
-								this.calcPrice(offer.price);
-							}
-						});
-					}
+					this.currencyPriceEnabled = this.currencyPriceAvailable 
+						&& (offer.hash === "draft" || currencyPriceData.exists);
+					
+					this.waitForRefs("currency,price").then(() => {
+						if (currencyPriceData.exists) {
+							this.price = this.currencyPrice.price;
+							this.$refs.currency.setValue(currencyPriceData.listItem);
+						} else if (offer.price) {
+							this.pkoin = offer.price;
+						};
+					}).then(() => {
+						/* Wait for currency rates */
+						return this.sdk.currency;
+					}).then(() => {
+						if (currencyPriceData.exists) {
+							this.calcPrice({value: currencyPriceData.currency});
+						} else if (offer.price) {
+							this.calcPrice(offer.price);
+						};
+					}).catch(e => { 
+						console.error(e);
+					});
 				} else {
 					/* Reset fields to default */
 					this.tags = [];
 					this.getting = "something";
 					this.condition = "new";
 					this.price = this.pkoin = 0;
+					this.currencyPrice = {};
+					this.currencyPriceEnabled = this.currencyPriceAvailable;
 				}
 			});
+		},
+
+		priceHintLabel() {
+			const
+				state = this.currencyPriceEnabled ? "enabled" : "disabled",
+				key = `currency_price_${state}_hint`,
+				currency = this.$refs.currency?.selected?.toUpperCase();
+
+			return this.$t(key, { currency });
+		},
+
+		currencyPriceLabel() {
+			const currency = this.$refs.currency?.selected?.toUpperCase();
+			return this.$t("currency_price_text", { currency });
+		},
+
+		currencyPriceEnabledStateChanged(value, e) {
+			this.currencyPriceEnabled = e.target.checked;
+		},
+
+		getCurrencyPriceData() {
+			let exists = false;
+			let listItem = null;
+
+			const
+				currency = this.currencyPrice?.currency?.toUpperCase(),
+				price = this.currencyPrice?.price;
+
+			if (this.currencyPriceAvailable 
+				&& currency 
+				&& (typeof price === "number") 
+				&& price >= 0
+			) {
+				listItem = this.currencies.filter(f => f.value?.toUpperCase() === currency).pop();
+				exists = !!(listItem);
+			};
+
+			return {
+				exists,
+				listItem,
+				currency,
+			};
+		},
+
+		serializeCurrencyPrice() {
+			let result = {};
+
+			const
+				currency = this.$refs.currency?.selected?.toUpperCase(),
+				price = this.price,
+				isValid = (currency && price >= 0);
+			
+			if (this.currencyPriceEnabled && isValid) {
+				result = {
+					currency,
+					price,
+				};
+			};
+
+			return result;
 		},
 
 		/**
 		 * Get near delivery points
 		 */
 		getDeliveryPoints(latlng) {
+			return;
+			
 			const
 				sideLengthInKm = 100,
 				boundsHelper = new GeohashBoundsHelper(latlng, sideLengthInKm),
@@ -185,6 +275,7 @@ export default {
 				data = form.serialize(),
 				images = photos.serialize(),
 				delivery = this.$refs.delivery?.serialize() || [],
+				currencyPrice = this.serializeCurrencyPrice(),
 				tags = this.getting === "something" 
 					? (data.tags ? data.tags.split(",").map(tag => Number(tag)) : [])
 					: [this.getting];
@@ -200,6 +291,7 @@ export default {
 				condition: this.condition,
 				images: Object.values(images),
 				geohash: GeoHash.encodeGeoHash.apply(null, center),
+				currencyPrice,
 				delivery,
 				price: Number(data.pkoin || 0)
 			});
