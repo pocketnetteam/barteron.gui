@@ -16,6 +16,7 @@
 			3,
 			4,
 			5,
+			39,
 			26395,
 			6,
 			7,
@@ -48,6 +49,13 @@
 		"parent": 2,
 		"children": [],
 		"order": 500
+	},
+	"39": {
+		"name": "landscape_design",
+		"id": 39,
+		"parent": 2,
+		"children": [],
+		"order": 510
 	},
 	"26395": {
 		"name": "health_beauty",
