@@ -173,7 +173,11 @@
 				</label>
 
 				<!-- vSwitch: currency price -->
-				<div class="row" id="currency-price-holder">
+				<div 
+					v-if="currencyPriceAvailable"
+					class="row" 
+					id="currency-price-holder"
+				>
 					<v-switch
 						class="no-padding"
 						type="checkbox"

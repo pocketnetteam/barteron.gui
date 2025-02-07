@@ -336,6 +336,10 @@ class SDK {
 		}).catch(e => this.setLastResult(e));
 	}
 
+	getTransactionsApiVersion() {
+		return (this.appinfo?.transactionsApiVersion || 0);
+	}
+
 	/**
 	 * Checks if this is the Brighteon project
 	 * 

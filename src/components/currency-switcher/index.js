@@ -74,7 +74,7 @@ export default {
 					rate = rates[selectedCurrency],
 					isValid = (rate && (typeof rate === "number"));
 
-				value = isValid ? this.amount * rate : null;
+				value = isValid ? (this.amount * rate) : null;
 			};
 			
 			return value;
