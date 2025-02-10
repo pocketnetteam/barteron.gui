@@ -157,6 +157,8 @@ const
             },
 
             async loadFirstPage(route) {
+                this.items = [];
+                
                 this.topHeight = null;
                 this.pageStart = 0;
                 this.scrollOffset = null;
