@@ -6,7 +6,9 @@
 				:key="index"
 			>
 				<template v-if="lastActive || index < tree.length - 1">
-					<router-link :to="item.link">{{ getName(item.name) }}</router-link>
+					<router-link 
+						:to="item.link"
+					><span @click="itemClick(item)">{{ getName(item.name) }}</span></router-link>
 				</template>
 				<template v-else>{{ getName(item.name) }}</template>
 			</menuitem>

@@ -196,13 +196,8 @@ export default {
 	},
 
 	mounted() {
-		this.$2watch("$refs.order").then(() => {
+		this.waitForRefs("order, bartersView").then(() => {
 			this.setOrderValueToElement();
-		}).catch(e => { 
-			console.error(e);
-		});
-
-		this.$2watch("$refs.bartersView").then(() => {
 			this.setBartersViewToElement();
 		}).catch(e => { 
 			console.error(e);

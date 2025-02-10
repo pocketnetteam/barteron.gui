@@ -1,3 +1,5 @@
+import offerStore from "@/stores/offer.js";
+
 export default {
 	name: "Breadcrumbs",
 
@@ -63,6 +65,22 @@ export default {
 		 */
 		getName(name) {
 			return this.$te(`pageLabels.${ name }`) ? this.$t(`pageLabels.${ name }`) : this.$t(name);
-		}
+		},
+
+		itemClick() {
+			// workaround: in case the route is not processed in the @/views/Category/content/index.js
+			setTimeout(async () => {
+				const 
+					fullPath = this.$route?.fullPath,
+					needReloadOffers = !(
+						offerStore.loadingItemsRoute?.fullPath === fullPath
+						|| offerStore.itemsRoute?.fullPath === fullPath
+					);
+
+				if (needReloadOffers) {
+					await offerStore.loadFirstPage(this.$route);
+				}
+			}, 50);
+		},
 	}
 }

@@ -298,6 +298,12 @@ export default {
 	watch: {
 		locale() {
 			this.updateStoredLocationAddress();
+		},
+
+		$route() {
+			if (this.lightbox) {
+				this.hideLightbox();
+			}
 		}
 	},
 }
