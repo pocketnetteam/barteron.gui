@@ -95,13 +95,7 @@ export default {
 		 * Contact seller
 		 */
 		contactSeller() {
-			this.dialog?.instance
-				.view("question", this.$t("dialogLabels.contact_seller"))
-				.then(state => {
-					if (state) {
-						this.createRoom(this.item, this.item.deliveryPoint);
-					}
-				});
+			this.createRoom(this.item, this.item.deliveryPoint);
 		}
 	},
 

@@ -36,7 +36,7 @@
 			<v-button 
 				:disabled="isLoading"
 				@click="contactSeller"
-			><span>{{ $t('buttonLabels.contact_seller') }}</span>
+			><span>{{ $t('buttonLabels.start_purchase') }}</span>
 			</v-button>
 
 			<!-- <v-button vType="roshi">

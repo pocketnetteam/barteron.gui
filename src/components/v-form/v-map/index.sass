@@ -115,11 +115,25 @@ div[id^="map"]
 						left: 0
 
 	.leaflet-left
+		&.leaflet-top
+			.leaflet-control
+				.leaflet-bar
+					a.leaflet-control-search
+						display: flex
+						align-items: center
+						justify-content: center
+
+	.leaflet-left
 		&.leaflet-bottom
 			.leaflet-control
 				margin-bottom: 20px
 
 				.leaflet-bar
+					a.leaflet-control-location
+						display: flex
+						align-items: center
+						justify-content: center
+
 					.location-spinner
 						width: 30px
 						height: 30px
