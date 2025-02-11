@@ -9,6 +9,7 @@ const
         state: () => ({
             items: [],
             itemsRoute: null,
+            loadingItemsRoute: null,
             topHeight: null,
             pageStart: 0,
             isLoading: false,
@@ -157,6 +158,10 @@ const
             },
 
             async loadFirstPage(route) {
+                this.loadingItemsRoute = route;
+                this.itemsRoute = null;
+                this.items = [];
+                
                 this.topHeight = null;
                 this.pageStart = 0;
                 this.scrollOffset = null;
@@ -177,6 +182,7 @@ const
                     this.currentError = e;
                 } finally {
                     this.isLoading = false;
+                    this.loadingItemsRoute = null;
                 }
             },
 

@@ -61,13 +61,7 @@ export default {
 		 * @param {@Offer} offer
 		 */
 		proposeExchange(offer) {
-			this.dialog?.instance
-				.view("question", this.$t("dialogLabels.contact_seller"))
-				.then(state => {
-					if (state) {
-						this.createRoom(offer);
-					}
-				});
+			this.createRoom(offer);
 		},
 
 		/**

@@ -24,13 +24,7 @@ export default {
 		 * @param {@ComplexDeal} deal
 		 */
 		proposeExchange(deal) {
-			this.dialog?.instance
-				.view("question", this.$t("dialogLabels.contact_sellers"))
-				.then(state => {
-					if (state) {
-						this.createRoom(deal);
-					}
-				});
+			this.createRoom(deal);
 		},
 
 		/**

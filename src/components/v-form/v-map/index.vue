@@ -38,7 +38,7 @@
 				<l-control position="topleft">
 					<div class="leaflet-bar">
 						<a
-							class="leaflet-control-location"
+							class="leaflet-control-search"
 							href="#"
 							role="button"
 							@click.prevent="toggleAddressSearch"

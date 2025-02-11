@@ -64,7 +64,8 @@ export default {
 			const 
 				ratingValue = (this.account?.rating || 0).toFixed(1),
 				ratingLabel = this.$t('ratingLabels.label').toLowerCase(),
-				votesCount = this.account?.ratingCount || 0,
+				// votesCount = this.account?.ratingCount || 0,
+				votesCount = 0, // to temporarily hide of votesLabel (https://github.com/pocketnetteam/barteron.gui/issues/341)
 				votesLabel = this.$tc('voteLabels.votes', votesCount).toLowerCase();
 			
 			const

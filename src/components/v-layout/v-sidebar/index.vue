@@ -29,7 +29,12 @@
 				></i>
 			</template>
 		</a>
-		<slot></slot>
+		<div 
+			id="sidebar-content" 
+			class="sticky-content"
+		>
+			<slot></slot>
+		</div>
 	</aside>
 </template>
 
