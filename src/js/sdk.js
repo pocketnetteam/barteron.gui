@@ -725,7 +725,15 @@ class SDK {
 	 * @returns {String}
 	 */
 	manageBastyonImageSrc(src) {
-		return this.sdk.manageBastyonImageSrc(src);
+		let result = src;
+		if (this.sdk.manageBastyonImageSrc) {
+			result = this.sdk.manageBastyonImageSrc(src);
+		} else {
+			if (src?.includes("bastyon.com:8092")) {
+				result = src.replace("bastyon.com", "pocketnet.app");
+			}
+		};
+		return result;
 	}
 
 	/**
