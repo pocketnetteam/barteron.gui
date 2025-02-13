@@ -43,17 +43,6 @@ export default {
 	},
 
 	methods: {
-		sendMessageEvent() {
-			this.dialog?.instance
-				.view("question", this.$t("dialogLabels.send_message"))
-				.then(state => {
-					if (state) {
-						this.createRoom();
-					}
-				});
-
-		},
-
 		createRoom() {
 			if (this.sdk.willOpenRegistration()) return;
 			

@@ -26,7 +26,7 @@
 				class="message"
 			>
 				<v-button
-					@click="sendMessageEvent"
+					@click="createRoom"
 				>{{ $t('buttonLabels.send_message') }}</v-button>
 			</div>
 		</div>
