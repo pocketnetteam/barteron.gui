@@ -22,7 +22,7 @@
 					<ul class="slide">
 						<li
 							v-for="(image, index) in images"
-							:key="index"
+							:key="image"
 							:class="{ 'hover': hover === index }"
 							@mouseenter="() => hover = index"
 							@mouseleave="() => hover = 0"
@@ -64,7 +64,7 @@
 					>
 						<li
 							v-for="(image, index) in images"
-							:key="index"
+							:key="image"
 							:class="{ 'hover': hover === index }"
 							@mouseenter="() => hover = index"
 							@mouseleave="() => hover = 0"
@@ -262,7 +262,7 @@
 				<ul class="fade">
 					<li
 						v-for="(image, index) in images"
-						:key="index"
+						:key="image"
 						:class="{ 'active': active === index }"
 						@click="imageClick(index)"
 					>
@@ -303,7 +303,7 @@
 				>
 					<li
 						v-for="(image, index) in images"
-						:key="index"
+						:key="image"
 						:class="{ 'active': active === index }"
 						@click="() => active = index"
 					>
