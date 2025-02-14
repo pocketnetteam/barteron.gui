@@ -29,7 +29,7 @@ class Offer {
 		this.tag = data?.tag || t || null;
 		this.tags = (data?.tags || a || []).map(tag => !isNaN(+tag) ? +tag : tag);
 		this.condition = data?.condition || c || "new";
-		this.images = data?.images || images;
+		this.images = (data?.images || images || []).filter(f => f);
 		this.delivery = (data?.delivery ?? d ?? []);
 		this.geohash = data?.geohash || data?.p?.s6 || "";
 		this.currencyPrice = data?.currencyPrice || f || {};

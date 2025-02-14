@@ -8,7 +8,7 @@
 			<ul class="fade">
 				<li
 					v-for="(image, index) in images"
-					:key="index"
+					:key="image"
 					:class="{ 'active': active === index }"
 					@click="imageClick(index)"
 				>
@@ -49,7 +49,7 @@
 			>
 				<li
 					v-for="(image, index) in images"
-					:key="index"
+					:key="image"
 					:class="{ 'active': active === index }"
 					@click="() => active = index"
 				>
