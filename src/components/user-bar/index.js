@@ -44,6 +44,12 @@ export default {
 			return this.user?.name?.substring(0, 1).toUpperCase() || "?";
 		},
 
+		/* Get user's avatar */
+		avatar() {
+			const url = this.user?.i;
+			return this.sdk.manageBastyonImageSrc(url);
+		},
+
 		/**
 		 * Generate hsl background for user
 		 * 
