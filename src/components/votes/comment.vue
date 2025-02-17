@@ -4,12 +4,12 @@
 			<router-link :to="{ name: 'profile', params: { id: user.address } }">
 				<div class="avatar">
 					<i
-						v-if="!user?.i?.startsWith('http')"
+						v-if="!avatar?.startsWith('http')"
 						:style="hslColor"
 					>{{ shortName }}</i>
 					
 					<picture v-else>
-						<img :src="user?.i" :alt="user?.name">
+						<img :src="avatar" :alt="user?.name">
 					</picture>
 				</div>
 			</router-link>
@@ -98,6 +98,12 @@ export default {
 		 */
 		 shortName() {
 			return this.user?.name?.substring(0, 1).toUpperCase() || "?";
+		},
+
+		/* Get user's avatar */
+		avatar() {
+			const url = this.user?.i;
+			return this.sdk.manageBastyonImageSrc(url);
 		},
 
 		/**

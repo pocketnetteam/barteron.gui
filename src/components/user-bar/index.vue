@@ -11,12 +11,12 @@
 					@click="$event => requestPermissions($event, { path: `/profile/${ address }` })"
 				>
 					<i
-						v-if="!user?.i?.startsWith('http')"
+						v-if="!avatar?.startsWith('http')"
 						:style="hslColor"
 					>{{ shortName }}</i>
 					
 					<picture v-else>
-						<img :src="user?.i" :alt="user?.name">
+						<img :src="avatar" :alt="user?.name">
 					</picture>
 				</a>
 			</li>
