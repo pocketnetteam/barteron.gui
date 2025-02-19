@@ -60,7 +60,7 @@
 					></v-textarea>
 				</div>
 
-				<div class="row full-width">
+				<div class="row full-width right">
 					<!-- vButton: Submit -->
 					<v-button
 						:disabled="loading"

@@ -21,6 +21,10 @@
 				/>
 
 				<section id="main">
+					<keep-alive>
+						<survey-bar/>
+					</keep-alive>
+
 					<keep-alive include="Home">
 						<router-view />
 					</keep-alive>
@@ -55,6 +59,7 @@
 <script>
 import Loader from "@/components/loader/index.vue";
 import VueI18n from "@/i18n/index.js";
+import SurveyBar from "@/components/survey-bar/index.vue";
 import { mapState } from "pinia";
 import { useThemeStore } from "@/stores/theme.js";
 import {
@@ -66,7 +71,8 @@ export default {
 	name: "Barteron",
 
 	components: {
-		Loader
+		Loader,
+		SurveyBar,
 	},
 
 	computed: {

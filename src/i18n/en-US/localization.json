@@ -92,6 +92,7 @@
 		"show_nearby_on_map": "Show offers on the map",
 		"search_in_visible_area": "Search in visible area",
 		"show_more": "Show more",
+		"show": "Show",
 		"buy_for": "Buy for {cost} PKOIN",
 		"edit": "Edit",
 		"save": "Save",
@@ -258,11 +259,23 @@
 
 	"feedbackLabels": {
 		"title": "Leave your feedback here",
-		"name": "Type your name here",
-		"email": "Type your email here",
-		"message": "Type your message here",
-		"submit_form": "Submitting, please wait..",
+		"name": "Enter your name here",
+		"email": "Enter your email here",
+		"message": "Enter your message here",
+		"submit_form": "Submitting, please wait...",
 		"submit_success": "Your request has been successfully submitted"
+	},
+
+	"surveyLabels": {
+		"title": "Anonymous survey",
+		"prompt": "You can help us improve Barteron! Take an anonymous survey",
+		"question_placeholder": "Enter your answer here",
+		"question1": "What can be improved in barteron first of all?",
+		"question2": "What do you like most about the barteron?",
+		"email": "You can specify an email for feedback",
+		"email_placeholder": "Email (OPTIONAL)",
+		"submit_form": "Submitting, please wait...",
+		"submit_success": "Your answers have been sent successfully"
 	},
 
 	"themeLabels": {

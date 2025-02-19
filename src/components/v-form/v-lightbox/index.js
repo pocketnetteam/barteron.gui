@@ -6,6 +6,10 @@ export default {
 			type: Boolean,
 			default: false
 		},
+		closeButtonDisabled: {
+			type: Boolean,
+			default: false
+		},
 		size: String,
 		title: String,
 		close: {
