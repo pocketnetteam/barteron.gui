@@ -246,8 +246,6 @@ export default {
 		 * Get near delivery points
 		 */
 		getDeliveryPoints(latlng) {
-			return;
-			
 			const
 				sideLengthInKm = 100,
 				boundsHelper = new GeohashBoundsHelper(latlng, sideLengthInKm),

@@ -407,7 +407,7 @@
 
 			<div
 				class="row block"
-				v-if="getDeliveryPoints"
+				v-if="deliveryPoints?.length"
 			>
 				<!-- Delivery -->
 				<Delivery

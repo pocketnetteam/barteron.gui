@@ -44,7 +44,7 @@ export default {
 			if (this.sdk.willOpenRegistration()) return;
 			const
 				/** @type {Object|undefined} */
-				delivery = this.sdk.barteron.offers[offer.hash]?.deliveryPoint;
+				delivery = this.sdk.barteron.offers[offer.hash]?.selectedPoint;
 			
 			this.isLoading = true;
 			this.dialog?.instance.view("load", this.$t("dialogLabels.opening_room"));
@@ -95,7 +95,7 @@ export default {
 		 * Contact seller
 		 */
 		contactSeller() {
-			this.createRoom(this.item, this.item.deliveryPoint);
+			this.createRoom(this.item);
 		}
 	},
 

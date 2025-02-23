@@ -224,31 +224,6 @@ export default {
 		},
 
 		/**
-		 * Get delivery points
-		 * 
-		 * @returns {Number}
-		 */
-		getDeliveryPoints() {
-			return false;
-			
-			if (!this.deliveryPending && this.item?.delivery?.length) {
-				this.deliveryPending = true;
-				this.sdk.getBrtOffersByHashes([ ...(this.item?.delivery || []) ])
-					.then(feed => {
-						this.deliveryPending = false;
-						this.deliveryPoints = [{
-							hash: "self",
-							images: [selfPickup],
-							caption: "deliveryLabels.pickup",
-							checked: true
-						}, ...feed];
-					});
-			}
-
-			return this?.item?.delivery?.length;
-		},
-
-		/**
 		 * Customize offer link
 		 * 
 		 * @returns {Object|String}
@@ -377,6 +352,32 @@ export default {
 			}).catch(e => {
 				console.error(e);
 			});
-		}
+		},
+
+		/**
+		 * Find delivery points
+		 * 
+		 * @returns {Number}
+		 */
+		findDeliveryPoints() {
+			if (!this.deliveryPending && this.item?.delivery?.length) {
+				this.deliveryPending = true;
+				this.sdk.getBrtOffersByHashes([ ...(this.item?.delivery || []) ])
+					.then(feed => {
+						this.deliveryPending = false;
+						this.deliveryPoints = [{
+							hash: "self",
+							images: [selfPickup],
+							caption: "deliveryLabels.pickup",
+							checked: true
+						}, ...feed];
+					});
+			}
+		},
+
+	},
+
+	mounted() {
+		this.findDeliveryPoints();
 	}
 }
