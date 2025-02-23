@@ -2,7 +2,9 @@
 	<div class="user-bar">
 		<ul>
 			<li>
-				<CurrencySwitcher />
+				<CurrencySwitcher 
+					vSize="sm"
+				/>
 			</li>
 
 			<li>

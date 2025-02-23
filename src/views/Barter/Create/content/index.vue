@@ -149,6 +149,7 @@
 					<template #input0After>
 						<v-select
 							ref="currency"
+							vSize="xs"
 							:dropdown="currencies"
 							@selected="calcPrice"
 						/>
