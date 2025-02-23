@@ -22,7 +22,9 @@
 
 				<section id="main">
 					<keep-alive>
-						<survey-bar/>
+						<survey-bar
+							v-if="isSurveyBarVisible"
+						/>
 					</keep-alive>
 
 					<keep-alive include="Home">
@@ -60,12 +62,17 @@
 import Loader from "@/components/loader/index.vue";
 import VueI18n from "@/i18n/index.js";
 import SurveyBar from "@/components/survey-bar/index.vue";
-import { mapState } from "pinia";
+import Pinia from "@/stores/store.js";
+import { mapState, mapWritableState } from "pinia";
 import { useThemeStore } from "@/stores/theme.js";
 import {
 	default as LocaleStore,
 	useLocaleStore
 } from "@/stores/locale.js";
+import { 
+	default as SurveyStore,
+	useSurveyStore
+} from "@/stores/survey.js";
 
 export default {
 	name: "Barteron",
@@ -77,7 +84,13 @@ export default {
 
 	computed: {
 		...mapState(useThemeStore, ["theme"]),
-		...mapState(useLocaleStore, ["locale"])
+		...mapState(useLocaleStore, ["locale"]),
+
+		...mapWritableState(useSurveyStore, ["isSurveyBarVisible"]),
+
+		surveyDisplayInterval() {
+			return 600_000;
+		},
 	},
 
 	data() {
@@ -88,7 +101,7 @@ export default {
 			minHeaderScrollPosition: 35,
 			lastScrollPosition: 0,
 			lastRoute: null,
-			isHeaderVisible: true
+			isHeaderVisible: true,
 		}
 	},
 
@@ -117,6 +130,13 @@ export default {
 				account[0] = new this.sdk.models.Account({ address }).set();
 			}
 
+			/* Load storage prefix */
+			try {
+				await Pinia.getPrefix();	
+			} catch (e) {
+				console.error(e);
+			}
+
 			/* Set language from user settings or bastyon sdk */
 			this.setLanguage();
 
@@ -125,6 +145,8 @@ export default {
 				console.log('bastyon -> barteron: ' + data, this.sdk.getRoute(data));
 				this.$router.push(this.sdk.getRoute(data));
 			});
+
+			this.setSurveyBarVisibility();
 
 			/* Hide preloader */
 			this.loading = false;
@@ -221,7 +243,36 @@ export default {
 			
 			this.lastRoute = currentRoute;
 			this.lastScrollPosition = currentScrollPosition;
-		}
+		},
+
+		setSurveyBarVisibility() {
+			this.sdk.getSurveyData().then(data => {
+				const needSurvey = (data?.status === "new");
+				if (needSurvey) {
+					if (this.needShowSurveyBar()) {
+						this.isSurveyBarVisible = true;
+					} else {
+						const interval = setInterval(() => {
+							if (this.needShowSurveyBar()) {
+								this.isSurveyBarVisible = true;
+								clearInterval(interval);
+							}
+						}, 60_000);
+					};
+				}
+			}).catch(e => {
+				console.error(e);
+			});
+		},
+
+		needShowSurveyBar() {
+			const 
+				startTime = SurveyStore.startTime || SurveyStore.createStartTime(),
+				currentTime = Date.now(),
+				result = (currentTime - startTime >= this.surveyDisplayInterval);
+			
+			return result;
+		},
 	},
 
 	mounted() {

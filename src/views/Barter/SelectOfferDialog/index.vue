@@ -3,7 +3,7 @@
 		class="select-offer-dialog"
 		size="md"
 		:visible="lightbox"
-		:title="dialogTitle"
+		:title="$t('barterLabels.select')"
 		@onHide="hide"
 	>
 		<ul>
@@ -26,7 +26,7 @@
 						:disabled="!items[selected]"
 						@click="select"
 					>
-						<span>{{ selectButtonTitle }}</span>
+						<span>{{ $t('buttonLabels.propose_exchange') }}</span>
 					</v-button>
 				</div>
 			</div>

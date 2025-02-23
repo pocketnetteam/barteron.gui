@@ -19,7 +19,7 @@
 				<v-button
 					class="survey-bar-close"
 					vType="light"
-					@click="close"
+					@click="closeEvent"
 				>
 					<i class="fa fa-times"></i>
 				</v-button>

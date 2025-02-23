@@ -26,6 +26,7 @@ class SDK {
 		},
 	};
 	offerUpdateActionId = null;
+	surveyURL = "https://.../barteron/survey";
 
 	models = {
 		Account,
@@ -1094,6 +1095,61 @@ class SDK {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Get Survey data
+	 * 
+	 * @returns {Promise}
+	 */
+	getSurveyData() {
+		return new Promise((resolve, reject) => {
+			if (this._address) {
+				fetch(`${this.surveyURL}/check`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json;charset=utf-8'
+					},
+					body: JSON.stringify({address: this._address})
+				}).then(
+					result => result.json()
+				).then(data => {
+					const success = ((data?.result || "").toLowerCase() === "success");
+					if (success) {
+						const status = (data.status || "new");
+						resolve({status});
+					} else {
+						reject(new Error("Survey check request failed"));
+					}
+				}).catch(reject);
+			} else {
+				resolve(null);
+			}
+		});
+	}
+
+	/**
+	 * Set Survey data
+	 * 
+	 * @param {Object} data
+	 * 
+	 * @returns {Promise}
+	 */
+	setSurveyData(data) {
+		return fetch(`${this.surveyURL}/form`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json;charset=utf-8'
+			},
+			body: JSON.stringify(data)
+		}).then(
+			result => result.json()
+		).then(data => {
+			const success = ((data?.result || "").toLowerCase() === "success");
+			if (!(success)) {
+				throw new Error("Survey data request failed");
+			};
+		});
 	}
 
 	/**

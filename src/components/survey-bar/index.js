@@ -1,5 +1,10 @@
 import Survey from "@/components/survey/index.vue";
 import Vue from 'vue';
+import { mapWritableState } from "pinia";
+import { 
+	default as SurveyStore,
+	useSurveyStore
+} from "@/stores/survey.js";
 
 export default {
 	name: "SurveyBar",
@@ -16,16 +21,19 @@ export default {
 	inject: ['lightboxContainer'],
 
 	computed: {
+		...mapWritableState(useSurveyStore, ["isSurveyBarVisible"]),
 	},
 
 	methods: {
 		show() {
 			const ComponentClass = Vue.extend(Survey);
 			const instance = new ComponentClass({
-				propsData: {}
+				propsData: {},
 			});
 			
-			instance.$on('onSubmit', vm => {});
+			instance.$on('onSubmit', vm => {
+				this.close(true);
+			});
 
 			instance.$mount();
 			this.lightboxContainer().appendChild(instance.$el);
@@ -33,5 +41,20 @@ export default {
 				instance.show();
 			});
 		},
+
+		closeEvent() {
+			this.close(false);
+		},
+
+		close(submitted) {
+			this.isSurveyBarVisible = false;
+			SurveyStore.setStartTime(null);
+			if (!(submitted)) {
+				const data = { status: "rejected" };
+				this.sdk.setSurveyData(data).catch(e => {
+					console.error(e);
+				});
+			}
+		}
 	}
 }

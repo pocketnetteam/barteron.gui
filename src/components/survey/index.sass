@@ -2,6 +2,13 @@
 
 .survey-dialog
 	.v-form
+		.validation-info
+			display: none
+
+			&.failed
+				display: block
+				color: $dodoria
+
 		.v-textarea-holder
 			textarea
 				&::placeholder
