@@ -257,6 +257,7 @@
 	},
 
 	"feedbackLabels": {
+		"subject": "Barteron, feedback",
 		"title": "Leave your feedback here",
 		"name": "Type your name here",
 		"email": "Type your email here",

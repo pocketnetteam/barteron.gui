@@ -3,7 +3,7 @@
 		<v-button
 			vType="light"
 			vSize="md"
-			@click="() => lightbox = true"
+			@click="click"
 		>
 			<i class="fa fa-comments"></i>
 		</v-button>
