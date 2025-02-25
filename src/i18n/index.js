@@ -97,9 +97,6 @@ const
 		data = {
 			"en-US_1": { code: "USD", graphem: "$" },
 			"en-US_2": { code: "EUR", graphem: "€" },
-			"en-US_3": { code: "CNY", graphem: "¥" },
-			"en-US_4": { code: "CAD", graphem: "C$" },
-			"en-US_5": { code: "AUD", graphem: "A$" },
 			"ru-RU_1": { code: "RUB", graphem: "₽" },
 			"ru-RU_2": { code: "BYN", graphem: "Br" },
 			"ru-RU_3": { code: "UAH", graphem: "₴" },
