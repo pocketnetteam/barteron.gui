@@ -16,6 +16,19 @@ export default {
 
 	methods: {
 		/**
+		 * Click event
+		 */
+		click() {
+			// this.lightbox = true;
+
+			const
+				subject = this.$t("feedbackLabels.subject"),
+				link = `mailto:support@bastyon.com?subject=${subject}`;
+
+			this.sdk.openExternalLink(link);
+		},
+
+		/**
 		 * Submit form
 		 */
 		submit() {
