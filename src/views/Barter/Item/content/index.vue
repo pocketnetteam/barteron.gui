@@ -7,7 +7,7 @@
 
 		<Votes
 			:item="item"
-			:form="item && !isMyOffer"
+			:form="!!(item)"
 		/>
 	</v-content>
 </template>
