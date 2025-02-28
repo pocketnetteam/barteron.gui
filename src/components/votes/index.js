@@ -195,6 +195,7 @@ export default {
 					const element = this.createRelayComment(action);
 					feed.content = "";
 					this.comments.push(element);
+					this.score = 0;
 				}).catch(e => { 
 					this.showError(e);
 				}).finally(() => {
@@ -279,8 +280,7 @@ export default {
 		},
 
 		commentable() {
-			return this.form 
-				&& !(this.comments.some(f => f.address === this.sdk.address && (f.relay || f.completed)));
+			return this.form;
 		},
 	},
 
