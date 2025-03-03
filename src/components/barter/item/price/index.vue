@@ -3,11 +3,12 @@
 		<template v-if="item?.price">
 			<span id="pkoin-price" class="col">
 				<span class="currency icon-pkoin"></span>
-				<span class="amount">{{ pkoinPrice ? $n(pkoinPrice, 'shortPkoin') : '...' }}</span>
+				<span class="amount">{{ pkoinPrice ? (pricePrefix + $n(pkoinPrice, 'shortPkoin')) : '...' }}</span>
 				<span>{{ $t('profileLabels.coins') }}</span>
 			</span>
 			<span class="col">
 				<CurrencySwitcher
+					:pricePrefix="pricePrefix"
 					:amount="item?.price"
 					:currencyPrice="item?.currencyPrice"
 					:hideButton="true"

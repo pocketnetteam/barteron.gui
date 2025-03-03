@@ -48,6 +48,10 @@ export default {
 			return offer;
 		},
 
+		pickupPoint() {
+			return this.offer?.delivery?.pickupPoint || {};
+		},
+
 		/**
 		 * Get my location
 		 * 
@@ -76,6 +80,13 @@ export default {
 		 */
 		currencyPriceAvailable() {
 			return (this.sdk.getTransactionsApiVersion() >= 2);
+		},
+
+		/**
+		 * Delivery option available
+		 */
+		deliveryAvailable() {
+			return (this.sdk.getTransactionsApiVersion() >= 3);
 		},
 
 		/**
@@ -182,6 +193,10 @@ export default {
 			});
 		},
 
+		isPickupPointCategory() {
+			return (this.$refs.category?.id === 97);
+		},
+
 		priceHintLabel() {
 			const
 				state = this.currencyPriceEnabled ? "enabled" : "disabled",
@@ -242,6 +257,25 @@ export default {
 			return result;
 		},
 
+		serializeDelivery(data) {
+			let result = {};
+
+			if (this.deliveryAvailable) {
+				if (this.isPickupPointCategory && data) {
+					result = {
+						pickupPoint: {
+							financialTerms: data.financialTerms,
+							workSchedule: data.workSchedule,
+							address: (data.address || "").length > 200 ? data.address.slice(0, 200) : data.address,
+							route: data.route,
+						},
+					};
+				}
+			}
+
+			return result;
+		},
+
 		/**
 		 * Get near delivery points
 		 */
@@ -253,7 +287,7 @@ export default {
 				location = approximator.getGeohashItems();
 
 			this.sdk.getBrtOffersFeed({
-				tags: [97, 98],
+				tags: [97],
 				location,
 				pageSize: 200
 			}).then(feed => {
@@ -272,7 +306,7 @@ export default {
 				center = this.$refs.map["marker"],
 				data = form.serialize(),
 				images = photos.serialize(),
-				delivery = this.$refs.delivery?.serialize() || [],
+				delivery = this.serializeDelivery(data),
 				currencyPrice = this.serializeCurrencyPrice(),
 				tags = this.getting === "something" 
 					? (data.tags ? data.tags.split(",").map(tag => Number(tag)) : [])

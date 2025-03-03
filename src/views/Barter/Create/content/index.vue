@@ -131,6 +131,11 @@
 				</template>
 			</div>
 
+			<strong
+				v-if="getting !== 'for_nothing' && isPickupPointCategory()"
+				class="subtitle"
+			>{{ $t('deliveryLabels.pickupPointPriceCaption') }}</strong>
+
 			<div class="row block" v-if="getting !== 'for_nothing'">
 				<!-- Input: Currency exchange to PKOIN -->
 				<v-input
@@ -206,6 +211,91 @@
 				/>
 			</div>
 
+			<!-- Delivery fields -->
+			<div 
+				v-if="deliveryAvailable && isPickupPointCategory()"
+				id="pickup-point-info"
+				class="row block"
+			>
+				<strong class="title">{{ $t('deliveryLabels.pickupPointInfo') }}</strong>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.financial_terms') }}</strong>
+
+					<v-textarea
+						ref="financialTerms"
+						id="financial-terms"
+						class="field"
+						name="financialTerms"
+						length="250"
+						:value="pickupPoint.financialTerms"
+					/>
+				</div>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.shelf_life') }}</strong>
+
+					<v-input
+						ref="shelfLife"
+						class="field-novalidate"
+						name="shelfLife"
+						id="shelf-life"
+						:readonly="'shelfLife'"
+						:value="$t('deliveryLabels.default_shelf_life_value')"
+						vSize="lg"
+					/>
+					<label 
+						id="shelf-life-label"
+						for="shelf-life" 
+						class="v-label"
+					>
+						<i class="fa fa-info-circle"></i>
+						{{ $t('deliveryLabels.shelf_life_hint') }}
+					</label>
+
+				</div>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.work_schedule') }}</strong>
+
+					<v-textarea
+						ref="workSchedule"
+						id="work-schedule"
+						class="field"
+						name="workSchedule"
+						length="250"
+						:value="pickupPoint.workSchedule"
+					/>
+				</div>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.address') }}</strong>
+
+					<v-input
+						ref="address"
+						class="field"
+						name="address"
+						id="address"
+						:value="pickupPoint.address"
+						vSize="lg"
+					/>
+				</div>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.how_to_get') }}</strong>
+
+					<v-textarea
+						ref="route"
+						id="route"
+						class="field"
+						name="route"
+						length="500"
+						:value="pickupPoint.route"
+					/>
+				</div>
+
+			</div>
+
 			<div class="row block sep">
 				<!-- Title: Description -->
 				<strong class="title">{{ $t('stepsLabels.description') }}</strong>
@@ -242,7 +332,7 @@
 
 			<div
 				class="row block"
-				v-if="deliveryPoints.length"
+				v-if="!isPickupPointCategory() && deliveryPoints.length"
 			>
 				<!-- Delivery -->
 				<Delivery

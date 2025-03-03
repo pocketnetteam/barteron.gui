@@ -150,6 +150,24 @@ export default {
 		},
 
 		/**
+		 * Get pickup point data
+		 * 
+		 * @returns {Object}
+		 */
+		pickupPoint() {
+			return this.item.delivery?.pickupPoint;
+		},
+
+		/**
+		 * Get price prefix
+		 * 
+		 * @returns {String}
+		 */
+		pricePrefix() {
+			return this.pickupPoint ? (this.$t("priceLabels.from") + " ") : "";
+		},
+
+		/**
 		 * Get user location
 		 * 
 		 * @returns {Array|null}

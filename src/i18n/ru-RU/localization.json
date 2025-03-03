@@ -47,6 +47,15 @@
 
 	"deliveryLabels": {
 		"label": "Доставка",
+		"pickupPointPriceCaption": "Укажите минимальную стоимость доставки",
+		"pickupPointInfo": "Информация о пункте выдачи заказов",
+		"financial_terms": "Финансовые условия",
+		"shelf_life": "Срок хранения",
+		"default_shelf_life_value": "14 дней",
+		"shelf_life_hint": "Обратите внимание, срок хранения должен соответствовать указанному значению",
+		"work_schedule": "График работы",
+		"address": "Адрес",
+		"how_to_get": "Как добраться",
 		"pickup": "Самовывоз",
 		"details": "Подробнее",
 		"about": "Подробнее о \"{point}\""

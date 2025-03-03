@@ -80,7 +80,7 @@
 				<span class="price">
 					<template v-if="item.price">
 						<span class="currency icon-pkoin"></span>
-						{{ pkoinPrice ? $n(pkoinPrice, 'shortPkoin') : '...' }}
+						{{ pkoinPrice ? (pricePrefix + $n(pkoinPrice, 'shortPkoin')) : '...' }}
 						<span>{{ $t('profileLabels.coins') }}</span>
 					</template>
 					<template v-else>
@@ -103,6 +103,7 @@
 
 				<div class="currency-holder">
 					<CurrencySwitcher
+						:pricePrefix="pricePrefix"
 						:switcher="false"
 						:amount="item?.price"
 						:currencyPrice="item?.currencyPrice"
@@ -193,7 +194,7 @@
 					<span class="price">
 						<template v-if="item.price">
 							<span class="currency icon-pkoin"></span>
-							{{ pkoinPrice ? $n(pkoinPrice, 'shortPkoin') : '...' }}
+							{{ pkoinPrice ? (pricePrefix + $n(pkoinPrice, 'shortPkoin')) : '...' }}
 							<span>{{ $t('profileLabels.coins') }}</span>
 						</template>
 						<template v-else>
@@ -204,6 +205,7 @@
 
 					<div class="currency-holder">
 						<CurrencySwitcher
+							:pricePrefix="pricePrefix"
 							:switcher="false"
 							:amount="item?.price"
 							:currencyPrice="item?.currencyPrice"
@@ -369,6 +371,41 @@
 					:tags="exchangeList.map(l => l.id)"
 					:visible="0 /* Means show all items without toggle */"
 				/>
+			</div>
+
+			<!-- Delivery fields -->
+			<div 
+				v-if="pickupPoint"
+				id="pickup-point-info"
+				class="row block"
+			>
+				<strong class="title">{{ $t('deliveryLabels.pickupPointInfo') }}</strong>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.financial_terms') }}</strong>
+					<p class="description">{{ pickupPoint.financialTerms }}</p>
+				</div>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.shelf_life') }}</strong>
+					<p class="description">{{ $t('deliveryLabels.default_shelf_life_value') }}</p>
+				</div>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.work_schedule') }}</strong>
+					<p class="description">{{ pickupPoint.workSchedule }}</p>
+				</div>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.address') }}</strong>
+					<p class="description">{{ pickupPoint.address }}</p>
+				</div>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.how_to_get') }}</strong>
+					<p class="description">{{ pickupPoint.route }}</p>
+				</div>
+
 			</div>
 
 			<div class="row block sep" v-if="item.description">

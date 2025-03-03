@@ -47,6 +47,15 @@
 
 	"deliveryLabels": {
 		"label": "Delivery",
+		"pickupPointPriceCaption": "Specify the minimum shipping cost",
+		"pickupPointInfo": "Information about pickup point",
+		"financial_terms": "Financial terms",
+		"shelf_life": "Shelf life",
+		"default_shelf_life_value": "14 days",
+		"shelf_life_hint": "Please note that the shelf life must match the specified value",
+		"work_schedule": "Work schedule",
+		"address": "Address",
+		"how_to_get": "How to get",
 		"pickup": "Self pickup",
 		"details": "Details",
 		"about": "About \"{point}\""
