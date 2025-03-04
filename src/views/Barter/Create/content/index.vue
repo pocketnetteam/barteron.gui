@@ -134,7 +134,7 @@
 			<strong
 				v-if="getting !== 'for_nothing' && isPickupPointCategory()"
 				class="subtitle"
-			>{{ $t('deliveryLabels.pickupPointPriceCaption') }}</strong>
+			>{{ $t('deliveryLabels.pickup_point_price_caption') }}</strong>
 
 			<div class="row block" v-if="getting !== 'for_nothing'">
 				<!-- Input: Currency exchange to PKOIN -->
@@ -217,7 +217,7 @@
 				id="pickup-point-info"
 				class="row block"
 			>
-				<strong class="title">{{ $t('deliveryLabels.pickupPointInfo') }}</strong>
+				<strong class="title">{{ $t('deliveryLabels.pickup_point_info') }}</strong>
 
 				<div class="row block">
 					<strong class="subtitle">{{ $t('deliveryLabels.financial_terms') }}</strong>
@@ -228,7 +228,7 @@
 						class="field"
 						name="financialTerms"
 						length="250"
-						:value="pickupPoint.financialTerms"
+						:value="pickupPoint?.financialTerms"
 					/>
 				</div>
 
@@ -264,7 +264,7 @@
 						class="field"
 						name="workSchedule"
 						length="250"
-						:value="pickupPoint.workSchedule"
+						:value="pickupPoint?.workSchedule"
 					/>
 				</div>
 
@@ -276,7 +276,7 @@
 						class="field"
 						name="address"
 						id="address"
-						:value="pickupPoint.address"
+						:value="pickupPoint?.address"
 						vSize="lg"
 					/>
 				</div>
@@ -290,7 +290,7 @@
 						class="field"
 						name="route"
 						length="500"
-						:value="pickupPoint.route"
+						:value="pickupPoint?.route"
 					/>
 				</div>
 
@@ -311,10 +311,7 @@
 				/>
 			</div>
 
-			<div
-				class="row block"
-				:class="{ 'sep': deliveryPoints.length }"
-			>
+			<div class="row block sep">
 				<!-- Title: Location -->
 				<strong class="title">{{ $t('stepsLabels.location') }}</strong>
 
@@ -323,13 +320,67 @@
 					id="location"
 					class="map"
 					ref="map"
-					mapMode="input"
+					mapMode="deliveryInput"
 					:center="geohash || location || undefined"
 					@change="getDeliveryPoints"
 					@errorEvent="errorEvent"
 				/>
 			</div>
 
+			<div 
+				class="row block sep"
+				v-if="!isPickupPointCategory()"
+			>
+				<!-- Title: Delivery -->
+				<strong class="title">{{ $t('deliveryLabels.label') }}</strong>
+
+				<!-- vSwitch: pickup points enabled -->
+				<div class="row">
+					<v-switch
+						class="no-padding"
+						type="checkbox"
+						name="pickupPointsEnabled"
+						:label="$t('deliveryLabels.use_pickup_points')"
+						:selected="pickupPointsEnabled ? 'enabled' : ''"
+						:value="'enabled'"
+						vType="checkbox"
+						vSize="xl"
+						@change="pickupPointsEnabledStateChanged"
+					/>
+				</div>
+
+				<!-- vSwitch: self pickup enabled -->
+				<div class="row">
+					<v-switch
+						class="no-padding"
+						type="checkbox"
+						name="selfPickupEnabled"
+						:label="$t('deliveryLabels.self_pickup_available')"
+						:selected="selfPickupEnabled ? 'enabled' : ''"
+						:value="'enabled'"
+						vType="checkbox"
+						vSize="xl"
+						@change="selfPickupEnabledStateChanged"
+					/>
+				</div>
+
+				<div 
+					v-if="selfPickupEnabled"
+					class="row full-width"
+				>
+					<v-textarea
+						ref="selfPickupAdditionalInfo"
+						id="self-pickup-additional-info"
+						class="field-novalidate full-width"
+						name="selfPickupAdditionalInfo"
+						length="500"
+						:placeholder="$t('deliveryLabels.self_pickup_additional_info_placeholder')"
+						:value="deliveryOptions?.selfPickup?.additionalInfo"
+					/>
+				</div>
+			</div>
+
+			<!-- //////////////////////////////////////////////////////////////////////// -->
 			<div
 				class="row block"
 				v-if="!isPickupPointCategory() && deliveryPoints.length"

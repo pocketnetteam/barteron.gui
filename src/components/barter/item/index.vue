@@ -379,7 +379,7 @@
 				id="pickup-point-info"
 				class="row block"
 			>
-				<strong class="title">{{ $t('deliveryLabels.pickupPointInfo') }}</strong>
+				<strong class="title">{{ $t('deliveryLabels.pickup_point_info') }}</strong>
 
 				<div class="row block">
 					<strong class="subtitle">{{ $t('deliveryLabels.financial_terms') }}</strong>

@@ -34,7 +34,7 @@
 			</template>
 
 			<!-- Find my location -->
-			<template v-if="(isSearchMode || isInputMode)">
+			<template v-if="(isSearchMode || isInputMode || isDeliveryInputMode)">
 				<l-control position="topleft">
 					<div class="leaflet-bar">
 						<a
@@ -70,8 +70,8 @@
 			</template>
 
 			<!-- Pin marker -->
-			<template v-if="(isSearchMode || isInputMode)">
-				<l-marker v-if="isInputMode && marker" :latLng="marker" />
+			<template v-if="(isSearchMode || isInputMode || isDeliveryInputMode)">
+				<l-marker v-if="(isInputMode || isDeliveryInputMode) && marker" :latLng="marker" />
 				<l-geosearch :options="geosearchOptions" />
 			</template>
 

@@ -26,6 +26,8 @@ export default {
 			tags: [],
 			currencyPrice: {},
 			currencyPriceEnabled: false,
+			pickupPointsEnabled: false,
+			selfPickupEnabled: false,
 			deliveryPoints: []
 		}
 	},
@@ -49,7 +51,11 @@ export default {
 		},
 
 		pickupPoint() {
-			return this.offer?.delivery?.pickupPoint || {};
+			return this.offer?.delivery?.pickupPoint;
+		},
+
+		deliveryOptions() {
+			return this.offer?.delivery?.deliveryOptions;
 		},
 
 		/**
@@ -154,7 +160,11 @@ export default {
 					}
 
 					if (offer.condition) this.condition = offer.condition;
-					
+
+					const deliveryOptions = this.deliveryAvailable && offer.delivery?.deliveryOptions;
+					this.pickupPointsEnabled = (deliveryOptions?.pickupPoints?.isEnabled ? true : false);
+					this.selfPickupEnabled = (deliveryOptions?.selfPickup?.isEnabled ? true : false);
+				
 					this.currencyPrice = offer.currencyPrice || {};
 					
 					const currencyPriceData = this.getCurrencyPriceData();
@@ -189,6 +199,8 @@ export default {
 					this.price = this.pkoin = 0;
 					this.currencyPrice = {};
 					this.currencyPriceEnabled = this.currencyPriceAvailable;
+					this.pickupPointsEnabled = false;
+					this.selfPickupEnabled = false;
 				}
 			});
 		},
@@ -213,6 +225,14 @@ export default {
 
 		currencyPriceEnabledStateChanged(value, e) {
 			this.currencyPriceEnabled = e.target.checked;
+		},
+
+		pickupPointsEnabledStateChanged(value, e) {
+			this.pickupPointsEnabled = e.target.checked;
+		},
+
+		selfPickupEnabledStateChanged(value, e) {
+			this.selfPickupEnabled = e.target.checked;
 		},
 
 		getCurrencyPriceData() {
@@ -260,8 +280,10 @@ export default {
 		serializeDelivery(data) {
 			let result = {};
 
-			if (this.deliveryAvailable) {
-				if (this.isPickupPointCategory && data) {
+			if (this.deliveryAvailable && data) {
+
+				const isPickupPointOffer = this.isPickupPointCategory();
+				if (isPickupPointOffer) {
 					result = {
 						pickupPoint: {
 							financialTerms: data.financialTerms,
@@ -270,6 +292,21 @@ export default {
 							route: data.route,
 						},
 					};
+				} else if (!(isPickupPointOffer)) {
+					const deliveryOptionsExist = (this.pickupPointsEnabled || this.selfPickupEnabled);
+					if (deliveryOptionsExist) {
+						result = {
+							deliveryOptions: {
+								pickupPoints: {
+									isEnabled: this.pickupPointsEnabled,
+								},
+								selfPickup: {
+									isEnabled: this.selfPickupEnabled,
+									additionalInfo: data.selfPickupAdditionalInfo,
+								},
+							},
+						};
+					}
 				}
 			}
 

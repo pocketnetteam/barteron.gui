@@ -99,7 +99,7 @@ export default {
 			resizeObserver: null,
 			geosearchOptions: this.getGeosearchOptions(),
 			addressSearchEnabled: false,
-			marker: (this.isInputMode ? this.center : null),
+			marker: null,
 			scale: this.zoom,
 			userLocationIsLoading: false,
 			mapState: "",
@@ -141,6 +141,15 @@ export default {
 		 */
 		isInputMode() {
 			return this.mapMode === "input";
+		},
+
+		/**
+		 * Checking that the map mode is delivery input
+		 * 
+		 * @returns {Boolean}
+		 */
+		isDeliveryInputMode() {
+			return this.mapMode === "deliveryInput";
 		},
 
 		/**
@@ -222,6 +231,8 @@ export default {
 				this.setupViewModeHandlers();
 			} else if(this.isInputMode) {
 				this.setupInputModeHandlers();
+			} else if(this.isDeliveryInputMode) {
+				this.setupDeliveryInputModeHandlers();
 			} else if (this.isSearchMode) {
 				this.setupSearchModeHandlers();
 			};
@@ -276,6 +287,18 @@ export default {
 			markerAtCenter(true);
 		},
 
+		setupDeliveryInputModeHandlers() {
+			this.setToggleWheelByFocus();
+
+			this.mapObject
+				.on("click", e => {
+					if (e.originalEvent.target.matches("div.vue2leaflet-map")) {
+						this.marker = Object.values(e.latlng);
+						this.$emit("change", Object.values(e.latlng));
+					}
+				})
+		},
+
 		setupSearchModeHandlers() {
 
 			const moveEndHandler = (e) => {
@@ -312,7 +335,9 @@ export default {
 		},
 
 		setupData() {
-			if (this.isSearchMode) {
+			if (this.isInputMode || this.isDeliveryInputMode) {
+				this.marker = Object.values(this.mapObject.getCenter());
+			} else if (this.isSearchMode) {
 				this.changeStateTo("initialState");
 			}
 		},
@@ -509,7 +534,7 @@ export default {
 			const zoom = this.latLonDefined(latLon) ? this.zoom : 0;
 			this.mapObject.setView(center, zoom);
 		}).then(() => {
-			const needShowAddressInput = (this.isSearchMode || this.isInputMode);
+			const needShowAddressInput = (this.isSearchMode || this.isInputMode || this.isDeliveryInputMode);
 			this.toggleAddressSearch(null, {forcedValue: needShowAddressInput});
 			this.setupHandlers();
 			this.setupData();
