@@ -8,6 +8,7 @@ export default {
 		name: { type: [String, Array], default: () => [] },
 		type: { type: [String, Array], default: () => [] },
 		readonly: { type: [String, Array], default: () => [] },
+		disabled: { type: [Boolean, Array], default: () => [] },
 		step: { type: [Number, String, Array], default: () => [] },
 		min: { type: [Number, String, Array], default: () => [] },
 		max: { type: [Number, String, Array], default: () => [] },

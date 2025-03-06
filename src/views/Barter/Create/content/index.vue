@@ -1,6 +1,9 @@
 <template>
 	<v-content class="shrink-right">
-		<v-form ref="form">
+		<v-form 
+			ref="form"
+			:rules="validationRules"
+		>
 			<!-- Title: What you propose -->
 			<strong class="title">{{ $t('stepsLabels.propose') }}</strong>
 
@@ -258,13 +261,12 @@
 				<div class="row block">
 					<strong class="subtitle">{{ $t('deliveryLabels.work_schedule') }}</strong>
 
-					<v-textarea
+					<work-schedule
 						ref="workSchedule"
 						id="work-schedule"
-						class="field"
+						holderClass="field"
 						name="workSchedule"
-						length="250"
-						:value="pickupPoint?.workSchedule"
+						:workSchedule="pickupPoint?.workSchedule"
 					/>
 				</div>
 

@@ -57,6 +57,8 @@
 		"default_shelf_life_value": "14 days",
 		"shelf_life_hint": "Please note that the shelf life must match the specified value",
 		"work_schedule": "Work schedule",
+		"work_schedule_additional_info_placeholder": "Add your work schedule information (optional)",
+		"all_day": "24 hours",
 		"address": "Address",
 		"how_to_get": "How to get",
 		"pickup": "Self pickup",

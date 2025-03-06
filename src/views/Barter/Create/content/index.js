@@ -2,6 +2,7 @@ import { GeoHash } from "geohash";
 import BarterList from "@/components/barter/list/index.vue";
 import Category from "@/components/categories/field/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
+import WorkSchedule from "@/components/work-schedule/index.vue";
 import Delivery from "@/components/delivery/index.vue";
 import { currencies, numberFormats } from "@/i18n/index.js";
 import CurrencyStore from "@/stores/currency.js";
@@ -14,6 +15,7 @@ export default {
 		BarterList,
 		Category,
 		ExchangeList,
+		WorkSchedule,
 		Delivery
 	},
 
@@ -104,7 +106,23 @@ export default {
 				value: currency.code,
 				selected: currency.code === (CurrencyStore.currency || numberFormats[this.$root.$i18n.locale]?.currency.currency)
 			}));
-		}
+		},
+
+		validationRules() {
+			return {
+				"input[name], textarea[name]": {
+					empty: true, /* Validate for emptity */
+					regex: false, /* Validate with regex */
+					prop: "value" /* Check field prop */
+				},
+				"#work-schedule-day-list": {
+					empty: true, /* Validate for emptity */
+					regex: false, /* Validate with regex */
+					prop: "validatedvalue", /* Check field prop */
+					isCustomDataAttr: true,
+				}
+			}
+		},
 	},
 
 	methods: {
@@ -287,7 +305,7 @@ export default {
 					result = {
 						pickupPoint: {
 							financialTerms: data.financialTerms,
-							workSchedule: data.workSchedule,
+							workSchedule: this.$refs.workSchedule.serialize(),
 							address: (data.address || "").length > 200 ? data.address.slice(0, 200) : data.address,
 							route: data.route,
 						},
@@ -536,10 +554,10 @@ export default {
 						return input;
 					} else {
 						return this.$refs.photos.$el;
-					}
+					};
 				})();
 
-				this.scrollTo(field);
+				field && this.scrollTo(field);
 			}
 		},
 

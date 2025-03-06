@@ -1,0 +1,39 @@
+@import "@/css/vars.sass"
+
+.work-schedule
+	
+	#work-schedule-day-list
+		margin-top: $r
+		border-radius: 1rem
+
+	.day
+		width: 100%
+		display: flex
+		flex-wrap: wrap
+		align-items: center
+		gap: 2 * $r
+
+		&:not(:first-child)
+			margin-top: 2 * $r
+
+		.day-checkbox
+			.v-switch
+				label
+					width: 40px
+		
+		.range
+			display: flex
+			align-items: center
+			gap: $r / 2
+
+			.separator
+				&.disabled
+					color: $trunks
+
+			.interval-input
+				&.dark-theme
+					input
+						color-scheme: dark
+
+	#additional-info-holder
+		margin-top: 2 * $r

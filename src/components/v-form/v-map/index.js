@@ -557,7 +557,7 @@ export default {
 	},
 
 	beforeDestroy() {
-		this.mapObject.off();
+		this.mapObject.off?.();
 		this.resizeObserver?.disconnect();
 	},
 }

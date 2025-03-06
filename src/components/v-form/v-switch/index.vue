@@ -18,12 +18,16 @@
 				:name="sw.name || sw.id"
 				:type="sw.type"
 				:value="sw.value"
+				:disabled="sw.disabled"
 				v-model="active"
 				@change="change"
 			/>
 			<div class="v-switch">
 				<span class="v-control"></span>
-				<label v-if="sw.label" :for="sw.id || sw.name">{{ sw.label }}</label>
+				<label 
+					v-if="sw.label" :for="sw.id || sw.name"
+					:class="{'disabled': sw.disabled}"
+				>{{ sw.label }}</label>
 			</div>
 			<slot name="controlAfter" :index="index"></slot>
 		</div>

@@ -57,6 +57,8 @@
 		"default_shelf_life_value": "14 дней",
 		"shelf_life_hint": "Обратите внимание, срок хранения должен соответствовать указанному значению",
 		"work_schedule": "График работы",
+		"work_schedule_additional_info_placeholder": "Добавьте информацию о графике работы (необязательно)",
+		"all_day": "24 часа",
 		"address": "Адрес",
 		"how_to_get": "Как добраться",
 		"pickup": "Самовывоз",

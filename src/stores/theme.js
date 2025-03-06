@@ -43,6 +43,10 @@ const
 			set(theme) {
 				Pinia.set(storageId, theme);
 				this.apply(theme);
+			},
+
+			isDarkTheme() {
+				return (this.theme?.includes("navy") || this.theme?.includes("dark"));
 			}
 		}
 	}),

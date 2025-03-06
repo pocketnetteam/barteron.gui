@@ -8,6 +8,7 @@ export default {
 		value: { type: [String, Array], default: () => [] },
 		selected: { type: [String, Array], default: () => [] },
 		label: { type: [String, Array], default: () => [] },
+		disabled: { type: [Boolean, Array], default: () => [] },
 		
 		vSize: String,
 		vType: String
@@ -15,7 +16,7 @@ export default {
 
 	computed: {
 		switches() {
-			return this.getSwitches([this.id, this.name, this.type, this.value, this.selected, this.label]);
+			return this.getSwitches([this.id, this.name, this.type, this.value, this.selected, this.label, this.disabled]);
 		}
 	},
 
