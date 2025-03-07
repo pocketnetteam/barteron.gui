@@ -100,20 +100,21 @@
 			/>
 		</div>
 		
-		<div v-if="isViewMode">
-			<div 
-				v-for="(dayString, index) in weekDaysListForView()"
-				:key="index"
-			>
+		<div v-if="isViewMode" class="row block">
+			<div>
 				<p 
+					v-for="(row, index) in weekDaysListForView()"
+					:key="index"
 					class="description"
-				>{{ dayString }}</p>
+				><span class="work-schedule-day-name">{{ row.weekDayName }}</span> {{ row.timeInterval }}</p>
 			</div>
-			
-			<p 
-				v-if="additionalInfo"
-				class="description"
-			>{{ additionalInfo }}</p>
+
+			<div class="work-schedule-additional-info">
+				<label>
+					<i class="fa fa-info-circle"></i>
+					{{ additionalInfo }}
+				</label>
+			</div>
 		</div>
 	</div>
 </template>

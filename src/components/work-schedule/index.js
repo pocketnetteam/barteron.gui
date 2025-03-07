@@ -190,13 +190,16 @@ export default {
 				
 				if (dayData) {
 					const 
-						dayName = `${this.weekDayName(dayNumber)}:`,
-						dayTime = dayData.allDay 
+						weekDayName = `${this.weekDayName(dayNumber)}:`,
+						timeInterval = dayData.allDay 
 							? this.$t("deliveryLabels.around_the_clock") 
 							: `${dayData.startTime} - ${dayData.finishTime}`,
-						dayString = `${dayName} ${dayTime}`;
+						row = {
+							weekDayName, 
+							timeInterval
+						};
 
-					result.push(dayString);
+					result.push(row);
 				}
 			}
 			return result;
