@@ -393,7 +393,10 @@
 
 				<div class="row block">
 					<strong class="subtitle">{{ $t('deliveryLabels.work_schedule') }}</strong>
-					<p class="description">{{ pickupPoint.workSchedule }}</p>
+					<work-schedule
+						mode="view"
+						:workSchedule="pickupPoint.workSchedule"
+					/>
 				</div>
 
 				<div class="row block">

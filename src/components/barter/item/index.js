@@ -1,6 +1,7 @@
 import ImageLoad from "@/components/image-load/index.vue";
 import Loader from "@/components/loader/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
+import WorkSchedule from "@/components/work-schedule/index.vue";
 import Delivery from "@/components/delivery/index.vue";
 import CurrencySwitcher from "@/components/currency-switcher/index.vue";
 import Caption from "@/components/barter/item/caption/index.vue";
@@ -12,6 +13,7 @@ import LikeStore from "@/stores/like.js";
 import PhotoSwipe from "photoswipe";
 import "photoswipe/style.css";
 import selfPickup from "@/assets/images/self-pickup.png";
+import workSchedule from "@/components/work-schedule";
 
 export default {
 	name: "BarterItem",
@@ -20,6 +22,7 @@ export default {
 		ImageLoad,
 		Loader,
 		ExchangeList,
+		WorkSchedule,
 		Delivery,
 		Caption,
 		Price,

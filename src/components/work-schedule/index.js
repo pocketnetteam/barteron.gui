@@ -9,13 +9,8 @@ export default {
 			type: Object,
 			default: () => ({})
 		},
+		mode: String,
 		holderClass: String,
-	},
-
-	computed: {
-		isDarkTheme() {
-			return ThemeStore.isDarkTheme();
-		},
 	},
 
 	data() {
@@ -25,9 +20,89 @@ export default {
 		}
 	},
 
+	computed: {
+		isEditMode() {
+			return (this.mode === "edit");
+		},
+
+		isViewMode() {
+			return (this.mode === "view");
+		},
+
+		isDarkTheme() {
+			return ThemeStore.isDarkTheme();
+		},
+
+		getWeekDays() {
+			const
+				result = [],
+				locale = this.$root.$i18n.locale,
+				baseDate = new Date(Date.UTC(2025, 0, 6)); // just a Monday
+
+			for(i = 0; i < 7; i++) {
+				const dayName = baseDate.toLocaleDateString(locale, { weekday: "short" });
+				result.push(this.capitalizeFirstLetter(dayName));
+				baseDate.setDate(baseDate.getDate() + 1);       
+			}
+
+			return result;
+		},
+	},
+
 	methods: {
 		dayKey(dayNumber) {
 			return "day" + dayNumber;
+		},
+
+		weekDayName(dayNumber) {
+			return this.getWeekDays[dayNumber - 1];
+		},
+
+		weekDayExists(dayNumber) {
+			return this.weekDays[this.dayKey(dayNumber)];
+		},
+
+		allDaySelected(dayNumber) {
+			return this.weekDays[this.dayKey(dayNumber)]?.allDay;
+		},
+
+		requiredInputTimeIsEmpty(dayNumber, prop) {
+			return this.weekDayExists(dayNumber) && !(this.allDaySelected(dayNumber)) && !(this.intervalTimeFilled(dayNumber, prop));
+		},
+
+		intervalTimeFilled(dayNumber, prop) {
+			const dayData = this.weekDays[this.dayKey(dayNumber)];
+			const [hh, mm] = (dayData?.[prop] || "").split(":");
+			return (hh?.length && mm?.length);
+		},
+
+		filledIntervalIsWrong(dayNumber) {
+			let result = false;
+
+			const dayData = this.weekDays[this.dayKey(dayNumber)];
+			if (dayData?.startTime && dayData?.finishTime) {
+				const emptyExists = !(this.intervalTimeFilled(dayNumber, "startTime") && this.intervalTimeFilled(dayNumber, "finishTime"));
+				if (emptyExists) {
+					result = true;
+				} else {
+					const [startHH, startMM] = dayData.startTime.split(":");
+					const [finishHH, finishMM] = dayData.finishTime.split(":");
+	
+					try {
+						const
+							startInMinutes = Number(startHH) * 60 + Number(startMM),
+							finishInMinutes = Number(finishHH) * 60 + Number(finishMM);
+						
+						if (startInMinutes >= finishInMinutes) {
+							result = true;
+						}
+					} catch (error) {
+						result = true;
+					}
+				}
+			}
+			
+			return result;
 		},
 
 		dayEnabledStateChanged(dayNumber, event) {
@@ -62,30 +137,12 @@ export default {
 			}
 		},
 
-		getWeekDays(format = "short") {
-			const
-				result = [],
-				locale = this.$root.$i18n.locale,
-				baseDate = new Date(Date.UTC(2025, 0, 6)); // just a Monday
-
-			for(i = 0; i < 7; i++) {
-				const dayName = baseDate.toLocaleDateString(locale, { weekday: format });
-				result.push(this.capitalizeFirstLetter(dayName));
-				baseDate.setDate(baseDate.getDate() + 1);       
-			}
-
-			return result;
-		},
-
 		capitalizeFirstLetter(value) {
 			return String(value).charAt(0).toUpperCase() + String(value).slice(1);
 		},
 
 		validate() {
 			let result = true;
-
-			console.log('this.weekDays', this.weekDays);
-			
 
 			let atLeastOneDayFound = false;
 			for (let dayNumber = 1; dayNumber <= 7; dayNumber++) {
@@ -98,23 +155,7 @@ export default {
 					if (!(dayData.allDay || (dayData.startTime && dayData.finishTime))) {
 						result = false;
 					} else if (dayData.startTime && dayData.finishTime) {
-						const [startHH, startMM] = dayData.startTime.split(":");
-						const [finishHH, finishMM] = dayData.finishTime.split(":");
-
-						const emptyExists = !(startHH.length && startMM.length && finishHH.length && finishMM.length);
-						if (emptyExists) {
-							result = false;
-						}
-
-						try {
-							const
-								startInMinutes = Number(startHH) * 60 + Number(startMM),
-								finishInMinutes = Number(finishHH) * 60 + Number(finishMM);
-							
-							if (startInMinutes >= finishInMinutes) {
-								result = false;
-							}
-						} catch (error) {
+						if (this.filledIntervalIsWrong(dayNumber)) {
 							result = false;
 						}
 					}
@@ -138,6 +179,27 @@ export default {
 				additionalInfo: this.$refs.additionalInfo.content,
 			};
 			return JSON.parse(JSON.stringify(data));
+		},
+
+		weekDaysListForView() {
+			const result = [];
+			for (let dayNumber = 1; dayNumber <= 7; dayNumber++) {
+				const
+					key = this.dayKey(dayNumber),
+					dayData = this.weekDays[key];
+				
+				if (dayData) {
+					const 
+						dayName = `${this.weekDayName(dayNumber)}:`,
+						dayTime = dayData.allDay 
+							? this.$t("deliveryLabels.around_the_clock") 
+							: `${dayData.startTime} - ${dayData.finishTime}`,
+						dayString = `${dayName} ${dayTime}`;
+
+					result.push(dayString);
+				}
+			}
+			return result;
 		},
 
 		fillWorkSchedule() {

@@ -1,6 +1,7 @@
 <template>
 	<div class="work-schedule">
 		<div 
+			v-if="isEditMode"
 			id="work-schedule-day-list" 
 			:class="holderClass"
 			:data-validatedvalue="validatedValue()"
@@ -14,9 +15,9 @@
 					class="no-padding day-checkbox field-custom-validation"
 					type="checkbox"
 					name="workScheduleDayEnabledState"
-					:selected="weekDays[dayKey(dayNumber)] ? 'enabled' : ''"
+					:selected="weekDayExists(dayNumber) ? 'enabled' : ''"
 					:value="'enabled'"
-					:label="[getWeekDays()[dayNumber - 1]]"
+					:label="[weekDayName(dayNumber)]"
 					vType="checkbox"
 					vSize="sm"
 					@change="(value, event) => dayEnabledStateChanged(dayNumber, event)"
@@ -27,9 +28,11 @@
 						:class="{
 							'field-custom-validation': true,
 							'interval-input': true,
+							'wrong-field': requiredInputTimeIsEmpty(dayNumber, 'startTime') 
+								|| filledIntervalIsWrong(dayNumber),
 							'dark-theme': isDarkTheme
 						}"
-						:disabled="!(weekDays[dayKey(dayNumber)]) || weekDays[dayKey(dayNumber)]?.allDay"
+						:disabled="!(weekDayExists(dayNumber)) || allDaySelected(dayNumber)"
 						type="time"
 						step="300"
 						name="workScheduleDayStartTime"
@@ -43,16 +46,18 @@
 					
 					<label :class="{
 						'separator': true,
-						'disabled': !(weekDays[dayKey(dayNumber)]) || weekDays[dayKey(dayNumber)]?.allDay
+						'disabled': !(weekDayExists(dayNumber)) || allDaySelected(dayNumber)
 					}">-</label>
 					
 					<v-input
 						:class="{
 							'field-custom-validation': true,
 							'interval-input': true,
+							'wrong-field': requiredInputTimeIsEmpty(dayNumber, 'finishTime') 
+								|| filledIntervalIsWrong(dayNumber),
 							'dark-theme': isDarkTheme
 						}"
-						:disabled="!(weekDays[dayKey(dayNumber)]) || weekDays[dayKey(dayNumber)]?.allDay"
+						:disabled="!(weekDayExists(dayNumber)) || allDaySelected(dayNumber)"
 						type="time"
 						step="300"
 						name="workScheduleDayFinishTime"
@@ -69,10 +74,10 @@
 					class="no-padding field-custom-validation"
 					type="checkbox"
 					name="workScheduleAllDayEnabledState"
-					:selected="weekDays[dayKey(dayNumber)]?.allDay ? 'enabled' : ''"
+					:selected="allDaySelected(dayNumber) ? 'enabled' : ''"
 					:value="'enabled'"
 					:label="[$t('deliveryLabels.all_day')]"
-					:disabled="!(weekDays[dayKey(dayNumber)])"
+					:disabled="!(weekDayExists(dayNumber))"
 					vType="checkbox"
 					vSize="sm"
 					@change="(value, event) => allDayEnabledStateChanged(dayNumber, event)"
@@ -81,7 +86,10 @@
 			</div>
 		</div>
 
-		<div id="additional-info-holder">
+		<div 
+			v-if="isEditMode"
+			id="additional-info-holder"
+		>
 			<v-textarea
 				ref="additionalInfo"
 				class="field-custom-validation"
@@ -90,6 +98,22 @@
 				:placeholder="$t('deliveryLabels.work_schedule_additional_info_placeholder')"
 				:value="additionalInfo"
 			/>
+		</div>
+		
+		<div v-if="isViewMode">
+			<div 
+				v-for="(dayString, index) in weekDaysListForView()"
+				:key="index"
+			>
+				<p 
+					class="description"
+				>{{ dayString }}</p>
+			</div>
+			
+			<p 
+				v-if="additionalInfo"
+				class="description"
+			>{{ additionalInfo }}</p>
 		</div>
 	</div>
 </template>

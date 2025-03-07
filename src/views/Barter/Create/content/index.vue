@@ -264,6 +264,7 @@
 					<work-schedule
 						ref="workSchedule"
 						id="work-schedule"
+						mode="edit"
 						holderClass="field"
 						name="workSchedule"
 						:workSchedule="pickupPoint?.workSchedule"
