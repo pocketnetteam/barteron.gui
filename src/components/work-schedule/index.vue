@@ -109,7 +109,10 @@
 				><span class="work-schedule-day-name">{{ row.weekDayName }}</span> {{ row.timeInterval }}</p>
 			</div>
 
-			<div class="work-schedule-additional-info">
+			<div 
+				v-if="additionalInfo"
+				class="work-schedule-additional-info"
+			>
 				<label>
 					<i class="fa fa-info-circle"></i>
 					{{ additionalInfo }}

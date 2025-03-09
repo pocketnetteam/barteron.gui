@@ -5,6 +5,11 @@
 	box-sizing: border-box
 	outline-color: $blue
 
+// translate css vars into js
+html
+	&:root
+		--device-size-large: #{$large}
+
 html,
 body
 	font: 14px "Segoi UI", Verdana, Helvetica, sans-serif

@@ -18,9 +18,9 @@
 						:key="offer.hash"
 					>
 						<l-icon
-							:icon-size="iconSize"
-							:icon-url="isViewMode ? offerIconActive : offerIcon"
-							:icon-anchor="iconAnchor"
+							:icon-size="getOfferIcon(offer).size"
+							:icon-url="getOfferIcon(offer)[isViewMode ? 'active' : 'regular']"
+							:icon-anchor="getOfferIcon(offer).anchor"
 						>
 						</l-icon>
 						<l-tooltip v-if="!(isViewMode)">{{ offer.caption }}</l-tooltip>
@@ -78,7 +78,7 @@
 			<l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
 		</l-map>
 		<div 
-			v-if="isSearchMode" 
+			v-if="(isSearchMode || isDeliveryInputMode)" 
 			class="offers-search-container"
 		>
 			<div

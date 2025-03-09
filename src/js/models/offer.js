@@ -128,6 +128,15 @@ class Offer {
 	}
 
 	/**
+	 * Is pickup point computed property
+	 * 
+	 * @returns {Boolean}
+	 */
+	get isPickupPoint() {
+		return this.tag === 97;
+	}
+
+	/**
 	 * Watch action status
 	 */
 	action() {

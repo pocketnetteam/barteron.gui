@@ -30,6 +30,13 @@ export default {
 			currencyPriceEnabled: false,
 			pickupPointsEnabled: false,
 			selfPickupEnabled: false,
+			pickupPointsRequestData: {
+				pageSize: 100,
+				pageStart: 0,
+				topHeight: null,
+				isLoading: false,
+			},
+			mapActionData: {},
 			deliveryPoints: []
 		}
 	},
@@ -126,6 +133,21 @@ export default {
 	},
 
 	methods: {
+		mapHeight() {
+			let result = undefined;
+			const value = getComputedStyle(document.documentElement).getPropertyValue('--device-size-large');
+			if (value) {
+				const 
+					query = `screen and (max-width: ${value})`,
+					exceedsInputSize = !(window.matchMedia(query).matches);
+				
+				if (exceedsInputSize) {
+					result = "560px"
+				}
+			}
+			return result;
+		},
+
 		/**
 		 * Convert price from currency to pkoin
 		 * 
@@ -253,6 +275,81 @@ export default {
 			this.selfPickupEnabled = e.target.checked;
 		},
 
+		mapAction(actionName, actionParams, event) {
+
+			this.pickupPointsRequestData.actionName = actionName;
+
+			if (actionName === "loadData" || actionName === "loadNextPage") {
+
+				const 
+					tags = [97],
+					pageStart = (actionName === "loadNextPage") ? (this.pickupPointsRequestData.pageStart + 1) : 0,
+					topHeight = (actionName === "loadNextPage") ? this.pickupPointsRequestData.topHeight : null,
+					pageSize = this.pickupPointsRequestData.pageSize;
+
+				const ids = this.sdk.requestServiceData.ids;
+				ids.getBrtOffersFeed += 1;
+
+				const
+					approximator = new GeoHashApproximator(actionParams.bounds),
+					location = approximator.getGeohashItems();
+
+				const request = {
+					tags,
+					location,
+					pageSize,
+					pageStart,
+					topHeight, 
+					checkingData: {
+						requestId: ids.getBrtOffersFeed,
+						checkRequestId: true,
+					}
+				}
+
+				this.pickupPointsRequestData.isLoading = true;
+
+				this.setMapActionData();
+
+				this.sdk.getBrtOffersFeed(
+					request
+				).then(offers => {
+					if (pageStart === 0) {
+						this.pickupPointsRequestData.topHeight = offers?.[0]?.height;
+					}
+					this.pickupPointsRequestData.pageStart = pageStart;
+					this.pickupPointsRequestData.isLoading = false;
+					this.setMapActionData(offers);
+				}).catch(e => { 
+					const
+						requestRejected = (e instanceof AppErrors.RequestIdError),
+						needHandleError = !(requestRejected);
+
+					if (needHandleError) {
+						console.error(e);
+						this.pickupPointsRequestData.isLoading = false;
+						this.setMapActionData(null, e);
+					} else {
+						console.info(`Location component, map action ${actionName}:`, e.message);
+					}
+				});				
+			} else if (actionName === "moveMap") {
+				this.pickupPointsRequestData.isLoading = false;
+				this.setMapActionData();
+			}
+
+		},
+
+		setMapActionData(offers, error) {
+			this.mapActionData = {
+				actionName: this.pickupPointsRequestData.actionName,
+				isLoading: this.pickupPointsRequestData.isLoading,
+				nextPageExists: (offers?.length === this.pickupPointsRequestData.pageSize),
+				isNextPage: (offers?.length && this.pickupPointsRequestData.pageStart > 0),
+				offers,
+				error
+			}
+		},		
+
 		getCurrencyPriceData() {
 			let exists = false;
 			let listItem = null;
@@ -335,6 +432,9 @@ export default {
 		 * Get near delivery points
 		 */
 		getDeliveryPoints(latlng) {
+			this.deliveryPoints = [];
+			return;
+
 			const
 				sideLengthInKm = 100,
 				boundsHelper = new GeohashBoundsHelper(latlng, sideLengthInKm),

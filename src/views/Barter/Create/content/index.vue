@@ -323,10 +323,13 @@
 					id="location"
 					class="map"
 					ref="map"
-					mapMode="deliveryInput"
+					:height="mapHeight()"
+					:mapMode="pickupPointsEnabled ? 'deliveryInput' : 'input'"
 					:center="geohash || location || undefined"
+					:mapActionData="mapActionData"
 					@change="getDeliveryPoints"
 					@errorEvent="errorEvent"
+					@mapAction="mapAction"
 				/>
 			</div>
 
@@ -338,7 +341,7 @@
 				<strong class="title">{{ $t('deliveryLabels.label') }}</strong>
 
 				<!-- vSwitch: pickup points enabled -->
-				<div class="row">
+				<div class="row block">
 					<v-switch
 						class="no-padding"
 						type="checkbox"
@@ -350,7 +353,17 @@
 						vSize="xl"
 						@change="pickupPointsEnabledStateChanged"
 					/>
+
+					<label 
+						v-if="pickupPointsEnabled" 
+						class="v-label"
+					>
+						<i class="fa fa-info-circle"></i>
+						{{ $t("deliveryLabels.pickup_points_enabled_hint") }}
+					</label>
 				</div>
+
+
 
 				<!-- vSwitch: self pickup enabled -->
 				<div class="row">
