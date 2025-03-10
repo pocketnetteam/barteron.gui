@@ -47,6 +47,7 @@
 
 	"deliveryLabels": {
 		"label": "Пункты выдачи заказов и самовывоз",
+		"pickup_point": "Пункт выдачи заказов",
 		"self_pickup_available": "Доступен самовывоз",
 		"self_pickup_additional_info_placeholder": "Добавьте информацию о самовывозе (необязательно)",
 		"use_pickup_points": "Использовать пункты выдачи заказов",
@@ -108,6 +109,8 @@
 		"show_nearby_on_map": "Показать обмены на карте",
 		"search_in_visible_area": "Искать в видимой области",
 		"show_more": "Показать ещё",
+		"show": "Показать",
+		"select": "Выбрать",
 		"buy_for": "Купить за {cost} PKOIN",
 		"edit": "Редактировать",
 		"save": "Сохранить",

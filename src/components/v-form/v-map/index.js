@@ -508,6 +508,11 @@ export default {
 			}
 		},
 
+		selectPickupPoint(offer) {
+			this.mapObject.closePopup();
+			this.$emit("selectPickupPoint", offer);
+		},
+
 		startLocating() {
 			if (this.userLocationIsLoading) {
 				return;

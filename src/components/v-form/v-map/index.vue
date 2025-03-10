@@ -26,8 +26,9 @@
 						<l-tooltip v-if="!(isViewMode)">{{ offer.caption }}</l-tooltip>
 						<l-popup v-if="!(isViewMode)">
 							<PickupPointItem 
-								v-if="offer.isPickupPoint"
+								v-if="isDeliveryInputMode && offer.isPickupPoint"
 								:item="offer"
+								@selectItem="() => selectPickupPoint(offer)"
 							/>
 							<BarterItem 
 								v-else

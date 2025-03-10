@@ -1,7 +1,9 @@
+import Vue from "vue";
 import ImageLoad from "@/components/image-load/index.vue";
 import Loader from "@/components/loader/index.vue";
 import Caption from "@/components/barter/item/caption/index.vue";
 import PhotoSwipe from "photoswipe";
+import SelectPickupPointDialog from "@/components/pickup-point/select-dialog/index.vue";
 import "photoswipe/style.css";
 
 export default {
@@ -11,9 +13,10 @@ export default {
 		ImageLoad,
 		Loader,
 		Caption,
+		SelectPickupPointDialog,
 	},
 
-	inject: ["dialog"],
+	inject: ['dialog', 'lightboxContainer'],
 	
 	props: {
 		item: {
@@ -141,6 +144,29 @@ export default {
 			}).catch(e => {
 				console.error(e);
 			});
+		},
+
+		showItem() {
+			var ComponentClass = Vue.extend(SelectPickupPointDialog);
+			var instance = new ComponentClass({
+				propsData: {
+					item: this.item,
+				},
+			});
+			
+			instance.$on('onSelect', vm => {
+				this.selectItem();
+			});
+
+			instance.$mount();
+			this.lightboxContainer().appendChild(instance.$el);
+			this.$nextTick(() => {
+				instance.show();
+			});
+		},
+
+		selectItem() {
+			this.$emit("selectItem", this);
 		},
 	},
 }

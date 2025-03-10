@@ -47,6 +47,7 @@
 
 	"deliveryLabels": {
 		"label": "Pickup points and self pickup",
+		"pickup_point": "Pickup point",
 		"self_pickup_available": "Self pickup available",
 		"self_pickup_additional_info_placeholder": "Add self pickup information (optional)",
 		"use_pickup_points": "Use pickup points",
@@ -108,6 +109,8 @@
 		"show_nearby_on_map": "Show offers on the map",
 		"search_in_visible_area": "Search in visible area",
 		"show_more": "Show more",
+		"show": "Show",
+		"select": "Select",
 		"buy_for": "Buy for {cost} PKOIN",
 		"edit": "Edit",
 		"save": "Save",

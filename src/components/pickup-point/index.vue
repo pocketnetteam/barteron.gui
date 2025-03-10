@@ -70,6 +70,10 @@
 				{{ item.caption }}
 			</div>
 
+			<div class="row" v-if="item.delivery?.pickupPoint?.address">
+				{{ item.delivery?.pickupPoint?.address }}
+			</div>
+
 			<div class="row info" v-if="item.time || item.geohash">
 				<slot name="info" v-if="$slots.info && !(hasRelay || isRemoved)"></slot>
 				<ul v-else>
@@ -98,6 +102,18 @@
 			<div class="row offer" v-if="$slots.offer">
 				<slot name="offer"></slot>
 			</div>
+
+			<div class="row">
+				<div class="buttons-holder full-width">
+					<v-button
+						@click="showItem"
+					>{{ $t('buttonLabels.show') }}</v-button>
+					<v-button
+						@click="selectItem"
+					>{{ $t('buttonLabels.select') }}</v-button>
+				</div>
+			</div>
+
 		</template>
 	</div>
 </template>

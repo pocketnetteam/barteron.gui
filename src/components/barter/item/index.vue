@@ -377,7 +377,7 @@
 			<div 
 				v-if="pickupPoint"
 				id="pickup-point-info"
-				class="row block"
+				class="row block sep"
 			>
 				<strong class="title">{{ $t('deliveryLabels.pickup_point_info') }}</strong>
 
