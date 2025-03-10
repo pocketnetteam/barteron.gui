@@ -15,6 +15,7 @@ import {
 import Vue2LeafletMarkerCluster from "vue2-leaflet-markercluster";
 import LGeosearch from "vue2-leaflet-geosearch";
 import BarterItem from "@/components/barter/item/index.vue";
+import PickupPointItem from "@/components/pickup-point/index.vue";
 import { mapState } from "pinia";
 import { useLocaleStore } from "@/stores/locale.js";
 
@@ -40,7 +41,8 @@ export default {
 		LControl,
 		LIcon,
 		LGeosearch,
-		BarterItem
+		BarterItem,
+		PickupPointItem
 	},
 
 	props: {
@@ -105,6 +107,7 @@ export default {
 				anchor: [16, 37],
 			},
 			mapObject: {},
+			mapHandlers: {},
 			resizeObserver: null,
 			geosearchOptions: this.getGeosearchOptions(),
 			addressSearchEnabled: false,
@@ -246,6 +249,7 @@ export default {
 				this.setupSearchModeHandlers();
 			};
 
+			// legacy
 			/* this.mapObject
 				.on("mousemove", e => {
 					this.lastMousePos = e.originalEvent;
@@ -263,17 +267,9 @@ export default {
 		resetAllCustomHandlers() {
 			this.toggleWheel(true);
 
-			const events = [
-				"click",
-				"move",
-				"moveend",
-				"movestart",
-				"geosearch/showlocation",
-				"focus",
-				"blur",
-				"popupopen",
-			];
-			events.forEach(item => this.mapObject.off(item));
+			Object.entries(this.mapHandlers).forEach(([key, value]) => {
+				this.mapObject.off(key, value);
+			});
 		},
 
 		setupViewModeHandlers() {
@@ -295,39 +291,40 @@ export default {
 				}
 			}
 
+			const handlers = this.mapHandlers;
+
+			handlers.click = (e) => {
+				if (e.originalEvent.target.matches("div.vue2leaflet-map")) {
+					this.marker = Object.values(e.latlng);
+					this.$emit("change", Object.values(e.latlng));
+				}
+			};
+
+			handlers.move = (e) => {
+				if (e?.originalEvent) markerAtCenter(false, e);
+			};
+
+			handlers.moveend = (e) => {
+				markerAtCenter(true, e);
+			};
+
 			this.mapObject
-				.on("click", e => {
-					if (e.originalEvent.target.matches("div.vue2leaflet-map")) {
-						this.marker = Object.values(e.latlng);
-						this.$emit("change", Object.values(e.latlng));
-					}
-				})
-				.on("move", e => {
-					if (e?.originalEvent) markerAtCenter(false, e);
-				})
-				.on("moveend", e => {
-					markerAtCenter(true, e);
-				});
+				.on("click", handlers.click)
+				.on("move", handlers.move)
+				.on("moveend", handlers.moveend);
 
 			markerAtCenter(true);
 		},
 
 		setupDeliveryInputModeHandlers() {
 			this.setupSearchModeHandlers();
-
-			// this.mapObject
-			// 	.on("click", e => {
-			// 		if (e.originalEvent.target.matches("div.vue2leaflet-map")) {
-			// 			this.marker = Object.values(e.latlng);
-			// 			this.$emit("change", Object.values(e.latlng));
-			// 		}
-			// 	})
 		},
 
 		setupSearchModeHandlers() {
+			const handlers = this.mapHandlers;
 
 			const moveEndHandler = (e) => {
-				this.mapObject.off("moveend"); // prevent double moveend event bug
+				this.mapObject.off("moveend", handlers.moveend); // prevent double moveend event bug
 
 				this.scale = this.mapObject.getZoom();
 				const center = Object.values(
@@ -339,27 +336,38 @@ export default {
 				this.$emit("bounds", this.mapObject.getBounds(), e);
 			};
 
-			this.mapObject.on("movestart", e => {
+			handlers.moveend = (e) => moveEndHandler(e);
+
+			handlers.movestart = (e) => {
 				this.$emit("mapAction", "moveMap", {}, e);
+				this.mapObject.on("moveend", handlers.moveend);
+			};
 
-				this.mapObject.on("moveend", e => moveEndHandler(e));
-			});
-
-			this.mapObject.on("geosearch/showlocation", e => {
+			handlers["geosearch/showlocation"] = (e) => {
 				this.$emit("geosearch_showlocation", e);
-			});
+			};
 
-			this.mapObject.on("popupopen", e => {
+			handlers.popupopen = (e) => {
 				this.toggleAddressSearch(null, {forcedValue: false});
-			});
+			};
+			
+			this.mapObject
+				.on("movestart", handlers.movestart)
+				.on("geosearch/showlocation", handlers["geosearch/showlocation"])
+				.on("popupopen", handlers.popupopen);
 		},
 
 		setToggleWheelByFocus() {
 			this.toggleWheel(false);
 
+			const handlers = this.mapHandlers;
+
+			handlers.focus = () => this.toggleWheel(true);
+			handlers.blur = () => this.toggleWheel(false);
+
 			this.mapObject
-				.on("focus", () => this.toggleWheel(true))
-				.on("blur", () => this.toggleWheel(false));
+				.on("focus", handlers.focus)
+				.on("blur", handlers.blur);
 		},
 
 		setupData() {

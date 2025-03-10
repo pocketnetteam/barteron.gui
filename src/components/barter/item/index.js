@@ -13,7 +13,6 @@ import LikeStore from "@/stores/like.js";
 import PhotoSwipe from "photoswipe";
 import "photoswipe/style.css";
 import selfPickup from "@/assets/images/self-pickup.png";
-import workSchedule from "@/components/work-schedule";
 
 export default {
 	name: "BarterItem",

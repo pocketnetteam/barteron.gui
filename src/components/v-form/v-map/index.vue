@@ -25,7 +25,12 @@
 						</l-icon>
 						<l-tooltip v-if="!(isViewMode)">{{ offer.caption }}</l-tooltip>
 						<l-popup v-if="!(isViewMode)">
-							<BarterItem
+							<PickupPointItem 
+								v-if="offer.isPickupPoint"
+								:item="offer"
+							/>
+							<BarterItem 
+								v-else
 								:item="offer"
 							/>
 						</l-popup>

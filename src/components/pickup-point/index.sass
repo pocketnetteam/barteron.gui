@@ -1,0 +1,183 @@
+@import "@/css/vars.sass"
+
+.pswp__top-bar
+	left: 55px
+	right: 55px
+	width: auto
+
+.pswp__button--arrow--prev
+	left: 55px
+
+.pswp__button--arrow--next
+	right: 55px
+
+.pswp
+	img
+		object-fit: contain
+
+.pswp__img--placeholder
+    display: none !important
+
+.pickup-point-item
+	cursor: default
+	display: inline-flex
+	flex-direction: column
+	font-size: 1em
+	position: relative
+	width: 100%
+	z-index: 0
+
+	.title
+		a
+			color: inherit
+			text-decoration: none
+
+	&.pickup-point-item-relay
+		picture,
+		picture a
+			cursor: default
+
+	picture
+		cursor: pointer
+		border-radius: 11px
+		display: block
+		margin: 0 0 .9em
+		position: relative
+		overflow: hidden
+		height: 180px
+		width: 100%
+		+unselectable()
+
+		a
+			text-decoration: none
+
+		.image
+			height: 100%
+			width: 100%
+
+		img
+			display: block
+			object-fit: cover
+			height: 100%
+			width: 100%
+
+		.img-error
+			background: none !important
+			color: $dodoria
+			container-type: size
+			display: flex
+			align-items: center
+			justify-content: center
+			position: relative
+			height: 100%
+			width: 100%
+
+			&::before
+				background: $bulma
+				opacity: .25
+				content: ""
+				position: absolute
+				height: 100%
+				width: 100%
+
+			.fa
+				position: relative
+				font-size: 27cqh
+
+		ul.slide
+			display: flex
+			justify-content: stretch
+			height: 100%
+			+resetList()
+
+			li
+				width: 100%
+
+				&.hover
+					.image
+						opacity: 1
+
+				.image
+					position: absolute
+					top: 0
+					right: 0
+					bottom: 0
+					left: 0
+					opacity: 0
+					z-index: -2
+					+transition(opacity)
+
+		.bullets
+			+resetList()
+			background: $overlay-half
+			border-radius: 12px
+			display: flex
+			padding: 2px 4px
+			position: absolute
+			right: 8px
+			bottom: 8px
+
+			li
+				background: $background-gray-ghost
+				border-radius: 50%
+				margin: 2px
+				overflow: hidden
+				text-indent: -9999px
+				height: 4px
+				width: 4px
+
+				&.hover
+					background: $primary
+
+	.row:not(:last-child)
+		margin: 0 0 .6em
+
+	.title
+		color: $popo
+		font-weight: 700
+
+		a
+			display: block
+			overflow: hidden
+			text-overflow: ellipsis
+			white-space: nowrap
+			width: 100%
+
+	.info
+		font-size: .86em
+		line-height: 1.2
+
+	.info
+		display: flex
+		justify-content: space-between
+
+		.published,
+		.withdrawed
+			color: $hit
+
+		.outdated,
+		.removed
+			color: $dodoria
+
+		ul,
+		dl
+			+resetList()
+			color: $trunks
+			display: flex
+
+			li
+				display: flex
+
+				&:not(:first-child)
+					margin: 0 0 0 $r
+
+					&:before
+						display: inline-block
+						content: "\2022"
+						margin: 0 $r 0 0
+
+		dl
+			gap: 8px
+
+			dd
+				margin: 0
