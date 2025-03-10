@@ -8,6 +8,7 @@ export default {
 		value: { type: [String, Array], default: () => [] },
 		selected: { type: [String, Array], default: () => [] },
 		label: { type: [String, Array], default: () => [] },
+		image: { type: [Object, Array], default: () => [] },
 		disabled: { type: [Boolean, Array], default: () => [] },
 		
 		vSize: String,

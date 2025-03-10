@@ -24,6 +24,12 @@
 			/>
 			<div class="v-switch">
 				<span class="v-control"></span>
+				<img
+					v-if="sw.image"
+					class="label-image"
+					:src="sw.image.src" 
+					:alt="sw.image.alt"
+				>
 				<label 
 					v-if="sw.label" :for="sw.id || sw.name"
 					:class="{'disabled': sw.disabled}"
