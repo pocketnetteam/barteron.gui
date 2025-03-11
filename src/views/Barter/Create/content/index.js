@@ -3,6 +3,7 @@ import BarterList from "@/components/barter/list/index.vue";
 import Category from "@/components/categories/field/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
 import WorkSchedule from "@/components/work-schedule/index.vue";
+import PickupPointList from "@/components/pickup-point/list/index.vue";
 import Delivery from "@/components/delivery/index.vue";
 import { currencies, numberFormats } from "@/i18n/index.js";
 import CurrencyStore from "@/stores/currency.js";
@@ -16,6 +17,7 @@ export default {
 		Category,
 		ExchangeList,
 		WorkSchedule,
+		PickupPointList,
 		Delivery
 	},
 
@@ -29,6 +31,7 @@ export default {
 			currencyPrice: {},
 			currencyPriceEnabled: false,
 			pickupPointsEnabled: false,
+			pickupPointItems: [],
 			selfPickupEnabled: false,
 			pickupPointsRequestData: {
 				pageSize: 100,
@@ -273,6 +276,10 @@ export default {
 
 		selfPickupEnabledStateChanged(value, e) {
 			this.selfPickupEnabled = e.target.checked;
+		},
+
+		selectPickupPoint(offer) {
+			this.pickupPointItems.push(offer);
 		},
 
 		mapAction(actionName, actionParams, event) {

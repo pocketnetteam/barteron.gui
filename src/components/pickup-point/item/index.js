@@ -23,6 +23,10 @@ export default {
 			type: Object,
 			default: () => ({})
 		},
+		isSelfPickup: {
+			type: Boolean,
+			default: false
+		}
 	},
 
 	data() {

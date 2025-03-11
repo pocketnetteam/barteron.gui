@@ -15,7 +15,7 @@ import {
 import Vue2LeafletMarkerCluster from "vue2-leaflet-markercluster";
 import LGeosearch from "vue2-leaflet-geosearch";
 import BarterItem from "@/components/barter/item/index.vue";
-import PickupPointItem from "@/components/pickup-point/index.vue";
+import PickupPointItem from "@/components/pickup-point/item/index.vue";
 import { mapState } from "pinia";
 import { useLocaleStore } from "@/stores/locale.js";
 

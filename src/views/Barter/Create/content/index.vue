@@ -324,18 +324,19 @@
 					class="map"
 					ref="map"
 					:height="mapHeight()"
-					:mapMode="isPickupPointCategory() && pickupPointsEnabled ? 'deliveryInput' : 'input'"
+					:mapMode="(!(isPickupPointCategory()) && pickupPointsEnabled) ? 'deliveryInput' : 'input'"
 					:center="geohash || location || undefined"
 					:mapActionData="mapActionData"
 					@change="getDeliveryPoints"
 					@errorEvent="errorEvent"
 					@mapAction="mapAction"
+					@selectPickupPoint="selectPickupPoint"
 				/>
 			</div>
 
 			<div 
 				class="row block sep"
-				v-if="!isPickupPointCategory()"
+				v-if="!(isPickupPointCategory())"
 			>
 				<!-- Title: Delivery -->
 				<strong class="title">{{ $t('deliveryLabels.label') }}</strong>
@@ -364,7 +365,10 @@
 					</label>
 				</div>
 
-
+				<PickupPointList
+					v-if="pickupPointsEnabled"
+					:items="pickupPointItems"
+				/>
 
 				<!-- vSwitch: self pickup enabled -->
 				<div class="row">

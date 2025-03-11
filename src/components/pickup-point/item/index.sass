@@ -27,11 +27,6 @@
 	width: 100%
 	z-index: 0
 
-	.title
-		a
-			color: inherit
-			text-decoration: none
-
 	&.pickup-point-item-relay
 		picture,
 		picture a
@@ -133,16 +128,19 @@
 		margin: 0 0 .6em
 
 	.title
+		display: block
 		color: $popo
 		font-weight: 700
+		overflow: hidden
+		text-overflow: ellipsis
+		white-space: nowrap
 
-		a
-			display: block
-			overflow: hidden
-			text-overflow: ellipsis
-			white-space: nowrap
-			width: 100%
-
+	.address
+		overflow: hidden
+		white-space: nowrap
+		text-overflow: ellipsis
+		display: block
+ 
 	.info
 		font-size: .86em
 		line-height: 1.2
