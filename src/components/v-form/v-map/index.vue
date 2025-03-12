@@ -19,7 +19,7 @@
 					>
 						<l-icon
 							:icon-size="getOfferIcon(offer).size"
-							:icon-url="getOfferIcon(offer)[isViewMode ? 'active' : 'regular']"
+							:icon-url="getOfferIcon(offer).url"
 							:icon-anchor="getOfferIcon(offer).anchor"
 						>
 						</l-icon>
@@ -28,6 +28,9 @@
 							<PickupPointItem 
 								v-if="isDeliveryInputMode && offer.isPickupPoint"
 								:item="offer"
+								role="popup"
+								:mode="isDeliveryInputMode ? 'input' : 'select'"
+								:isSelected="isSelectedOffer(offer)"
 								@selectItem="() => selectPickupPoint(offer)"
 							/>
 							<BarterItem 

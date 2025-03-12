@@ -74,6 +74,10 @@ export default {
 			type: Array,
 			default: () => []
 		},
+		selectedOfferIds: {
+			type: Array,
+			default: () => []
+		},
 		mapMode: {
 			type: String,
 			default: "input"
@@ -177,7 +181,15 @@ export default {
 
 	methods: {
 		getOfferIcon(offer) {
-			return offer.isPickupPoint ? this.pickupPointIcon : this.offerIcon;
+			const 
+				icon = offer.isPickupPoint ? this.pickupPointIcon : this.offerIcon,
+				key = (this.isViewMode || this.isSelectedOffer(offer)) ? "active" : "regular",
+				url = icon[key];
+
+			return {
+				...icon,
+				url,
+			};
 		},
 
 		getGeosearchOptions() {
@@ -511,6 +523,10 @@ export default {
 		selectPickupPoint(offer) {
 			this.mapObject.closePopup();
 			this.$emit("selectPickupPoint", offer);
+		},
+
+		isSelectedOffer(offer) {
+			return this.selectedOfferIds.some(f => f === offer.hash);
 		},
 
 		startLocating() {

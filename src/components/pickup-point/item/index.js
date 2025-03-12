@@ -26,7 +26,19 @@ export default {
 		isSelfPickup: {
 			type: Boolean,
 			default: false
-		}
+		},
+		role: { // popup, listItem
+			type: String,
+			required: true
+		},
+		mode: { // input, select
+			type: String,
+			required: true
+		},
+		isSelected: {
+			type: Boolean,
+			default: false
+		},
 	},
 
 	data() {
@@ -171,6 +183,10 @@ export default {
 
 		selectItem() {
 			this.$emit("selectItem", this);
+		},
+
+		unselectItem() {
+			this.$emit("unselectItem", this);
 		},
 	},
 }

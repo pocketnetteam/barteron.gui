@@ -120,6 +120,12 @@
 							@click="showItem"
 						>{{ $t('buttonLabels.show') }}</v-button>
 						<v-button
+							v-if="isSelected"
+							vType="hit"
+							@click="unselectItem"
+						>{{ $t('buttonLabels.cancel') }}</v-button>
+						<v-button
+							v-else
 							vType="hit-stroke"
 							@click="selectItem"
 						>{{ $t('buttonLabels.select') }}</v-button>

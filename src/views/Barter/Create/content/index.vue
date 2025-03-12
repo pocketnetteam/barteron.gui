@@ -325,6 +325,7 @@
 					ref="map"
 					:height="mapHeight()"
 					:mapMode="(!(isPickupPointCategory()) && pickupPointsEnabled) ? 'deliveryInput' : 'input'"
+					:selectedOfferIds="selectedOfferIds()"
 					:center="geohash || location || undefined"
 					:mapActionData="mapActionData"
 					@change="getDeliveryPoints"
@@ -368,6 +369,7 @@
 				<PickupPointList
 					v-if="pickupPointsEnabled"
 					:items="pickupPointItems"
+					mode="input"
 				/>
 
 				<!-- vSwitch: self pickup enabled -->

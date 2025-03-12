@@ -14,6 +14,9 @@
 					<PickupPointItem
 						v-else
 						:item="item"
+						role="listItem"
+						:mode="mode"
+						:isSelected="mode === 'input'"
 					/>
 				</slide>
 			</carousel>

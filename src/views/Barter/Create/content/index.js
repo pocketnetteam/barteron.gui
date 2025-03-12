@@ -279,7 +279,14 @@ export default {
 		},
 
 		selectPickupPoint(offer) {
-			this.pickupPointItems.push(offer);
+			const added = this.pickupPointItems.some(f => f.hash === offer.hash);
+			if (!(added)) {
+				this.pickupPointItems.push(offer);
+			};
+		},
+
+		selectedOfferIds() {
+			return this.pickupPointItems.map(item => item.hash).filter(f => f);
 		},
 
 		mapAction(actionName, actionParams, event) {

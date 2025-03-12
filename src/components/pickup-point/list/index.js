@@ -18,6 +18,10 @@ export default {
 			type: Array,
 			default: () => []
 		},
+		mode: {
+			type: String,
+			required: true
+		},
 		loaderState: Boolean,
 		loaderItems: {
 			type: Number,
