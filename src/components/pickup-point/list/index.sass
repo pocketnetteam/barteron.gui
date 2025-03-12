@@ -3,6 +3,8 @@
 $item-width-max: 294px
 
 .pickup-point-carousel-holder
+	font-size: 0.75rem
+
 	.vs-carousel
 		.vs-carousel__wrapper
 			border-radius: 11px 11px 0 0
@@ -11,6 +13,8 @@ $item-width-max: 294px
 		.vs-carousel__slide
 			flex: 0 0 calc( 33.3% - 17px ) // Gap - 2px
 			width: calc( 33.3% - 17px ) // Gap - 2px
+			font-size: 1.08333em
+			line-height: 1.5
 
 			& > *
 				box-sizing: content-box
@@ -63,3 +67,14 @@ $item-width-max: 294px
 		&:before
 			content: "\f105"
 			margin: 0 0 0 3px
+
+.pickup-point-empty-list
+	height: 180px
+	width: 100%
+	padding: 2 * $r
+	border: 2px solid $trunks
+	border-radius: 12px
+	display: flex
+	align-items: center
+	justify-content: center
+	text-align: center

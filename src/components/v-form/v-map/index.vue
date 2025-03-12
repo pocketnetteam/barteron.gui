@@ -31,7 +31,9 @@
 								role="popup"
 								:mode="isDeliveryInputMode ? 'input' : 'select'"
 								:isSelected="isSelectedOffer(offer)"
-								@selectItem="() => selectPickupPoint(offer)"
+								@showItem="showPickupPoint"
+								@selectItem="selectPickupPoint"
+								@unselectItem="unselectPickupPoint"
 							/>
 							<BarterItem 
 								v-else

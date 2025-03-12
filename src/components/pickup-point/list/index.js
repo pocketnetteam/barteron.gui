@@ -34,4 +34,10 @@ export default {
 			return this.loaderState ? this.loaderItems : this.items;
 		}
 	},
+
+	methods: {
+		unselectItem(offer) {
+			this.$emit("unselectItem", offer);
+		},
+	}
 }

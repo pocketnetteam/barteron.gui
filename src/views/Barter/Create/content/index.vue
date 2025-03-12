@@ -332,6 +332,7 @@
 					@errorEvent="errorEvent"
 					@mapAction="mapAction"
 					@selectPickupPoint="selectPickupPoint"
+					@unselectPickupPoint="unselectPickupPoint"
 				/>
 			</div>
 
@@ -357,19 +358,21 @@
 						@change="pickupPointsEnabledStateChanged"
 					/>
 
-					<label 
+					<!-- <label 
 						v-if="pickupPointsEnabled" 
 						class="v-label"
 					>
 						<i class="fa fa-info-circle"></i>
 						{{ $t("deliveryLabels.pickup_points_enabled_hint") }}
-					</label>
+					</label> -->
 				</div>
 
 				<PickupPointList
 					v-if="pickupPointsEnabled"
+					id="pickup-point-list"
 					:items="pickupPointItems"
 					mode="input"
+					@unselectItem="unselectPickupPoint"
 				/>
 
 				<!-- vSwitch: self pickup enabled -->

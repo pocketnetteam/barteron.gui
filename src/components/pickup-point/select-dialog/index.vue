@@ -17,7 +17,15 @@
 			<div class="row full-width right">
 				<div class="buttons-holder min-h-w">
 					<v-button
-						@click="select"
+						v-if="isSelected"
+						vType="hit"
+						@click="dialogAction"
+					>
+						<span>{{ $t('buttonLabels.cancel') }}</span>
+					</v-button>
+					<v-button
+						v-else
+						@click="dialogAction"
 					>
 						<span>{{ $t('buttonLabels.select') }}</span>
 					</v-button>

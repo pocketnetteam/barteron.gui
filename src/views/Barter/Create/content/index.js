@@ -285,6 +285,13 @@ export default {
 			};
 		},
 
+		unselectPickupPoint(offer) {
+			const index = this.pickupPointItems.findIndex(f => f.hash === offer.hash);
+			if (index >= 0) {
+				this.pickupPointItems.splice(index, 1);
+			}
+		},
+
 		selectedOfferIds() {
 			return this.pickupPointItems.map(item => item.hash).filter(f => f);
 		},

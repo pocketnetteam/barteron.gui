@@ -77,12 +77,14 @@
 					v-if="item.caption"
 					class="row title"
 					:title="item.caption"
+					@click="showItem"
 				>{{ item.caption }}</div>
 
 				<div 
 					v-if="item.delivery?.pickupPoint?.address"
 					class="row address" 
 					:title="item.delivery?.pickupPoint?.address"
+					@click="showItem"
 				>{{ item.delivery?.pickupPoint?.address }}</div>
 
 				<div class="row info" v-if="item.time || item.geohash">

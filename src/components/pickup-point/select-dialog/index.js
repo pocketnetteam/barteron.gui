@@ -12,6 +12,7 @@ export default {
 
 	props: {
 		item: Object,
+		isSelected: Boolean,
 	},
 
 	data() {
@@ -34,8 +35,8 @@ export default {
 			}, 300);
 		},
 
-		select() {
-			this.$emit("onSelect", this);
+		dialogAction() {
+			this.$emit("onDialogAction", this);
 			this.hide();
 		},
 

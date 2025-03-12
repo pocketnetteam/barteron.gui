@@ -1,6 +1,8 @@
 <template>
-	<div class="pickup-point-carousel">
-
+	<div 
+		v-if="list?.length"
+		class="pickup-point-carousel"
+	>
 		<div class="pickup-point-carousel-holder">
 			<carousel>
 				<slide
@@ -17,10 +19,23 @@
 						role="listItem"
 						:mode="mode"
 						:isSelected="mode === 'input'"
+						@unselectItem="unselectItem"
 					/>
 				</slide>
 			</carousel>
 		</div>
+	</div>
+
+	<div 
+		v-else
+		class="pickup-point-empty-list"
+	>
+		<label 
+			class="v-label"
+		>
+			<i class="fa fa-info-circle"></i>
+			{{ $t("deliveryLabels.pickup_points_enabled_hint") }}
+		</label>
 	</div>
 </template>
 

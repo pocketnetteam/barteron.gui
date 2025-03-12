@@ -167,11 +167,12 @@ export default {
 			var instance = new ComponentClass({
 				propsData: {
 					item: this.item,
+					isSelected: this.isSelected,
 				},
 			});
 			
-			instance.$on('onSelect', vm => {
-				this.selectItem();
+			instance.$on('onDialogAction', vm => {
+				this.dialogAction();
 			});
 
 			instance.$mount();
@@ -179,14 +180,24 @@ export default {
 			this.$nextTick(() => {
 				instance.show();
 			});
+
+			this.$emit("showItem", this.item);
+		},
+
+		dialogAction() {
+			if (this.isSelected) {
+				this.unselectItem();
+			} else {
+				this.selectItem();
+			}
 		},
 
 		selectItem() {
-			this.$emit("selectItem", this);
+			this.$emit("selectItem", this.item);
 		},
 
 		unselectItem() {
-			this.$emit("unselectItem", this);
+			this.$emit("unselectItem", this.item);
 		},
 	},
 }

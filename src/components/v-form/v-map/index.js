@@ -520,9 +520,22 @@ export default {
 			}
 		},
 
+		showPickupPoint() {
+			this.mapObject.closePopup();
+		},
+
 		selectPickupPoint(offer) {
 			this.mapObject.closePopup();
-			this.$emit("selectPickupPoint", offer);
+			setTimeout(() => {
+				this.$emit("selectPickupPoint", offer);
+			}, 300);
+		},
+
+		unselectPickupPoint(offer) {
+			this.mapObject.closePopup();
+			setTimeout(() => {
+				this.$emit("unselectPickupPoint", offer);
+			}, 300);
 		},
 
 		isSelectedOffer(offer) {
