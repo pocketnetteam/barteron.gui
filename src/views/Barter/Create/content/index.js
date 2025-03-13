@@ -130,6 +130,12 @@ export default {
 					regex: false, /* Validate with regex */
 					prop: "validatedvalue", /* Check field prop */
 					isCustomDataAttr: true,
+				},
+				".pickup-point-empty-list": {
+					empty: true, /* Validate for emptity */
+					regex: false, /* Validate with regex */
+					prop: "validatedvalue", /* Check field prop */
+					isCustomDataAttr: true,
 				}
 			}
 		},

@@ -26,12 +26,15 @@
 		</div>
 	</div>
 
-	<div 
-		v-else
-		class="pickup-point-empty-list-holder"
-	>
-		<div class="pickup-point-empty-list">
-			{{ $t("deliveryLabels.pickup_points_enabled_placeholder") }}
+	<div v-else>
+		<div 
+			class="pickup-point-empty-list"
+			:class="holderClass"
+			:data-validatedvalue="validatedValue()"
+		>
+			<div class="pickup-point-empty-list-area">
+				{{ $t("deliveryLabels.pickup_points_enabled_placeholder") }}
+			</div>
 		</div>
 
 		<label class="v-label">

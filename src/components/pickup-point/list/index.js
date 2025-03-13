@@ -22,6 +22,7 @@ export default {
 			type: String,
 			required: true
 		},
+		holderClass: String,
 		loaderState: Boolean,
 		loaderItems: {
 			type: Number,
@@ -38,6 +39,10 @@ export default {
 	methods: {
 		unselectItem(offer) {
 			this.$emit("unselectItem", offer);
+		},
+
+		validatedValue() {
+			return !!(this.list?.length);
 		},
 	}
 }
