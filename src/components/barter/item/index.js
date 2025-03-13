@@ -2,7 +2,6 @@ import ImageLoad from "@/components/image-load/index.vue";
 import Loader from "@/components/loader/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
 import WorkSchedule from "@/components/work-schedule/index.vue";
-import Delivery from "@/components/delivery/index.vue";
 import CurrencySwitcher from "@/components/currency-switcher/index.vue";
 import Caption from "@/components/barter/item/caption/index.vue";
 import Price from "@/components/barter/item/price/index.vue";
@@ -22,7 +21,6 @@ export default {
 		Loader,
 		ExchangeList,
 		WorkSchedule,
-		Delivery,
 		Caption,
 		Price,
 		MyOptions,
@@ -62,8 +60,6 @@ export default {
 			hover: 0,
 			active: 0,
 			addr: {},
-			deliveryPending: false,
-			deliveryPoints: []
 		}
 	},
 
@@ -374,30 +370,5 @@ export default {
 			});
 		},
 
-		/**
-		 * Find delivery points
-		 * 
-		 * @returns {Number}
-		 */
-		findDeliveryPoints() {
-			if (!this.deliveryPending && this.item?.delivery?.length) {
-				this.deliveryPending = true;
-				this.sdk.getBrtOffersByHashes([ ...(this.item?.delivery || []) ])
-					.then(feed => {
-						this.deliveryPending = false;
-						this.deliveryPoints = [{
-							hash: "self",
-							images: [selfPickup],
-							caption: "deliveryLabels.pickup",
-							checked: true
-						}, ...feed];
-					});
-			}
-		},
-
 	},
-
-	mounted() {
-		this.findDeliveryPoints();
-	}
 }

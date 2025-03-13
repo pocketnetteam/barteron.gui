@@ -433,7 +433,7 @@
 
 			<div
 				class="row"
-				:class="{ 'sep': item.delivery?.length }"
+				:class="{ 'sep': false }"
 				v-if="item.geohash"
 			>
 				<!-- Component: Map -->
@@ -443,23 +443,6 @@
 					:zoom="10"
 					:offers="[item]"
 				/>
-			</div>
-
-			<div
-				class="row block"
-				v-if="deliveryPoints?.length"
-			>
-				<!-- Delivery -->
-				<Delivery
-					ref="delivery"
-					:entries="deliveryPoints"
-					:offerHash="item.hash"
-					type="radio"
-				>
-					<template #before>
-						<strong class="title">{{ $t('deliveryLabels.label') }}</strong>
-					</template>
-				</Delivery>
 			</div>
 
 			<!-- without sidebar -->

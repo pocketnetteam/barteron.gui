@@ -4,7 +4,6 @@ import Category from "@/components/categories/field/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
 import WorkSchedule from "@/components/work-schedule/index.vue";
 import PickupPointList from "@/components/pickup-point/list/index.vue";
-import Delivery from "@/components/delivery/index.vue";
 import { currencies, numberFormats } from "@/i18n/index.js";
 import CurrencyStore from "@/stores/currency.js";
 import { GeohashBoundsHelper, GeoHashApproximator } from "@/js/geohashUtils.js";
@@ -18,7 +17,6 @@ export default {
 		ExchangeList,
 		WorkSchedule,
 		PickupPointList,
-		Delivery
 	},
 
 	data() {
@@ -40,7 +38,6 @@ export default {
 				isLoading: false,
 			},
 			mapActionData: {},
-			deliveryPoints: []
 		}
 	},
 
@@ -456,28 +453,6 @@ export default {
 			}
 
 			return result;
-		},
-
-		/**
-		 * Get near delivery points
-		 */
-		getDeliveryPoints(latlng) {
-			this.deliveryPoints = [];
-			return;
-
-			const
-				sideLengthInKm = 100,
-				boundsHelper = new GeohashBoundsHelper(latlng, sideLengthInKm),
-				approximator = new GeoHashApproximator(boundsHelper.getBounds()),
-				location = approximator.getGeohashItems();
-
-			this.sdk.getBrtOffersFeed({
-				tags: [97],
-				location,
-				pageSize: 200
-			}).then(feed => {
-				this.deliveryPoints = feed;
-			});
 		},
 
 		/**

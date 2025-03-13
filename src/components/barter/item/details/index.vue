@@ -139,7 +139,7 @@
 		<!-- Map -->
 		<div
 			class="row"
-			:class="{ 'sep': item.delivery?.length }"
+			:class="{ 'sep': false }"
 			v-if="item.geohash"
 		>
 			<!-- Component: Map -->

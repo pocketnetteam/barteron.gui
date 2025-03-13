@@ -328,7 +328,6 @@
 					:selectedOfferIds="selectedOfferIds()"
 					:center="geohash || location || undefined"
 					:mapActionData="mapActionData"
-					@change="getDeliveryPoints"
 					@errorEvent="errorEvent"
 					@mapAction="mapAction"
 					@selectPickupPoint="selectPickupPoint"
@@ -357,14 +356,6 @@
 						vSize="xl"
 						@change="pickupPointsEnabledStateChanged"
 					/>
-
-					<!-- <label 
-						v-if="pickupPointsEnabled" 
-						class="v-label"
-					>
-						<i class="fa fa-info-circle"></i>
-						{{ $t("deliveryLabels.pickup_points_enabled_hint") }}
-					</label> -->
 				</div>
 
 				<PickupPointList
@@ -406,24 +397,6 @@
 						:value="deliveryOptions?.selfPickup?.additionalInfo"
 					/>
 				</div>
-			</div>
-
-			<!-- //////////////////////////////////////////////////////////////////////// -->
-			<div
-				class="row block"
-				v-if="!isPickupPointCategory() && deliveryPoints.length"
-			>
-				<!-- Delivery -->
-				<Delivery
-					ref="delivery"
-					:entries="deliveryPoints"
-					type="checkbox"
-				>
-					<template #before>
-						<!-- Title: Delivery -->
-						<strong class="title">{{ $t('deliveryLabels.label') }}</strong>
-					</template>
-				</Delivery>
 			</div>
 
 			<div id="offer-options" class="row full-width wrap">
