@@ -28,11 +28,13 @@
 
 	<div 
 		v-else
-		class="pickup-point-empty-list"
+		class="pickup-point-empty-list-holder"
 	>
-		<label 
-			class="v-label"
-		>
+		<div class="pickup-point-empty-list">
+			{{ $t("deliveryLabels.pickup_points_enabled_placeholder") }}
+		</div>
+
+		<label class="v-label">
 			<i class="fa fa-info-circle"></i>
 			{{ $t("deliveryLabels.pickup_points_enabled_hint") }}
 		</label>
