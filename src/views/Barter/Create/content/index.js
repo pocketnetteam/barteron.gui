@@ -286,7 +286,7 @@ export default {
 
 		selectPickupPoint(offer) {
 			const added = this.pickupPointItems.some(f => f.hash === offer.hash);
-			if (!(added)) {
+			if (!(added) && offer.hash?.length >= 64) {
 				this.pickupPointItems.push(offer);
 			};
 		},
@@ -299,7 +299,9 @@ export default {
 		},
 
 		selectedOfferIds() {
-			return this.pickupPointItems.map(item => item.hash).filter(f => f);
+			return this.pickupPointItems
+				.filter(f => (f.hash?.length >= 64))
+				.map(item => item.hash);
 		},
 
 		mapAction(actionName, actionParams, event) {
@@ -441,6 +443,7 @@ export default {
 							deliveryOptions: {
 								pickupPoints: {
 									isEnabled: this.pickupPointsEnabled,
+									items: this.selectedOfferIds(),
 								},
 								selfPickup: {
 									isEnabled: this.selfPickupEnabled,
