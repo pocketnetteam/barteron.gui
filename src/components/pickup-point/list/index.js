@@ -30,19 +30,13 @@ export default {
 		},
 	},
 
-	computed: {
-		list() {
-			return this.loaderState ? this.loaderItems : this.items;
-		}
-	},
-
 	methods: {
 		unselectItem(offer) {
 			this.$emit("unselectItem", offer);
 		},
 
 		validatedValue() {
-			return !!(this.list?.length);
+			return !!(this.items?.length);
 		},
 	}
 }

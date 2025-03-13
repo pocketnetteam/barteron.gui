@@ -6,7 +6,7 @@ import WorkSchedule from "@/components/work-schedule/index.vue";
 import PickupPointList from "@/components/pickup-point/list/index.vue";
 import { currencies, numberFormats } from "@/i18n/index.js";
 import CurrencyStore from "@/stores/currency.js";
-import { GeohashBoundsHelper, GeoHashApproximator } from "@/js/geohashUtils.js";
+import { GeoHashApproximator } from "@/js/geohashUtils.js";
 
 export default {
 	name: "Content",
@@ -30,6 +30,8 @@ export default {
 			currencyPriceEnabled: false,
 			pickupPointsEnabled: false,
 			pickupPointItems: [],
+			pickupPointsLoading: false,
+			pickupPointsLoadingCount: 0,
 			selfPickupEnabled: false,
 			pickupPointsRequestData: {
 				pageSize: 100,
@@ -145,9 +147,9 @@ export default {
 			if (value) {
 				const 
 					query = `screen and (max-width: ${value})`,
-					exceedsInputSize = !(window.matchMedia(query).matches);
+					exceedsQuerySize = !(window.matchMedia(query).matches);
 				
-				if (exceedsInputSize) {
+				if (exceedsQuerySize) {
 					result = "560px"
 				}
 			}
@@ -207,10 +209,6 @@ export default {
 
 					if (offer.condition) this.condition = offer.condition;
 
-					const deliveryOptions = this.deliveryAvailable && offer.delivery?.deliveryOptions;
-					this.pickupPointsEnabled = (deliveryOptions?.pickupPoints?.isEnabled ? true : false);
-					this.selfPickupEnabled = (deliveryOptions?.selfPickup?.isEnabled ? true : false);
-				
 					this.currencyPrice = offer.currencyPrice || {};
 					
 					const currencyPriceData = this.getCurrencyPriceData();
@@ -237,15 +235,42 @@ export default {
 					}).catch(e => { 
 						console.error(e);
 					});
+
+					const deliveryOptions = this.deliveryAvailable && offer.delivery?.deliveryOptions;
+					this.pickupPointsEnabled = (deliveryOptions?.pickupPoints?.isEnabled ? true : false);
+					this.selfPickupEnabled = (deliveryOptions?.selfPickup?.isEnabled ? true : false);
+
+					if (this.pickupPointsEnabled) {
+						const ids = deliveryOptions?.pickupPoints?.ids || [];
+
+						this.pickupPointsLoading = true;
+						this.pickupPointsLoadingCount = ids.length;
+						
+						this.sdk.getBrtOffersByHashes(ids).then(items => {
+							this.pickupPointItems = items;
+						}).catch(e => {
+							this.showError(e);
+						}).finally(() => {
+							this.pickupPointsLoading = false;
+							this.pickupPointsLoadingCount = 0;
+						});
+					}
+
 				} else {
 					/* Reset fields to default */
 					this.tags = [];
 					this.getting = "something";
 					this.condition = "new";
 					this.price = this.pkoin = 0;
+					
 					this.currencyPrice = {};
 					this.currencyPriceEnabled = this.currencyPriceAvailable;
+					
 					this.pickupPointsEnabled = false;
+					this.pickupPointItems = [];
+					this.pickupPointsLoading = false;
+					this.pickupPointsLoadingCount = 0;
+					
 					this.selfPickupEnabled = false;
 				}
 			});
@@ -440,7 +465,7 @@ export default {
 							deliveryOptions: {
 								pickupPoints: {
 									isEnabled: this.pickupPointsEnabled,
-									items: this.selectedOfferIds(),
+									ids: this.selectedOfferIds(),
 								},
 								selfPickup: {
 									isEnabled: this.selfPickupEnabled,

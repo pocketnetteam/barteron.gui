@@ -1,12 +1,12 @@
 <template>
 	<div 
-		v-if="list?.length"
+		v-if="loaderState && loaderItems || items?.length"
 		class="pickup-point-carousel"
 	>
 		<div class="pickup-point-carousel-holder">
 			<carousel>
 				<slide
-					v-for="(item, index) in list"
+					v-for="(item, index) in (loaderState && loaderItems || items)"
 					:key="index"
 				>
 					<loader
@@ -36,11 +36,6 @@
 				{{ $t("deliveryLabels.pickup_points_enabled_placeholder") }}
 			</div>
 		</div>
-
-		<label class="v-label">
-			<i class="fa fa-info-circle"></i>
-			{{ $t("deliveryLabels.pickup_points_enabled_hint") }}
-		</label>
 	</div>
 </template>
 

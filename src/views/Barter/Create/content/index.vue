@@ -356,6 +356,14 @@
 						vSize="xl"
 						@change="pickupPointsEnabledStateChanged"
 					/>
+
+					<label 
+						v-if="pickupPointsEnabled"
+						class="v-label"
+					>
+						<i class="fa fa-info-circle"></i>
+						{{ $t("deliveryLabels.pickup_points_enabled_hint") }}
+					</label>
 				</div>
 
 				<PickupPointList
@@ -363,6 +371,8 @@
 					id="pickup-point-list"
 					holderClass="field"
 					:items="pickupPointItems"
+					:loaderState="pickupPointsLoading"
+					:loaderItems="pickupPointsLoadingCount"
 					mode="input"
 					@unselectItem="unselectPickupPoint"
 				/>

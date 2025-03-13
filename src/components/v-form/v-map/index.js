@@ -126,6 +126,7 @@ export default {
 			loadingErrorMessage: "",
 			foundOffers: [],
 			geosearchForm: null,
+			mountingComplete: false,
 		}
 	},
 
@@ -594,6 +595,8 @@ export default {
 	},
 
 	mounted() {
+		this.mountingComplete = false;
+
 		this.$2watch("$refs.map").then(map => {
 			this.mapObject = map.mapObject;
 			this.observeResize();
@@ -611,12 +614,16 @@ export default {
 			this.setupMapMode();
 		}).catch(e => { 
 			console.error(e);
+		}).finally(() => {
+			this.mountingComplete = true;
 		});
 	},
 
 	watch: {
 		mapMode() {
-			this.setupMapMode();
+			this.$2watch("mountingComplete").then(() => {
+				this.setupMapMode();
+			})			
 		},
 
 		locale() {
