@@ -28,6 +28,20 @@ export default {
 			type: Number,
 			default: 4
 		},
+		loadingError: {
+			type: Object,
+			default: null
+		},
+	},
+
+	computed: {
+		emptyListPlaceholder() {
+			const key = this.loadingError 
+				? "pickup_points_loading_error_placeholder" 
+				: "pickup_points_enabled_placeholder";
+
+			return this.$t(`deliveryLabels.${key}`);
+		},
 	},
 
 	methods: {

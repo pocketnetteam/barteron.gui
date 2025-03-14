@@ -5,13 +5,13 @@ import WorkSchedule from "@/components/work-schedule/index.vue";
 import CurrencySwitcher from "@/components/currency-switcher/index.vue";
 import Caption from "@/components/barter/item/caption/index.vue";
 import Price from "@/components/barter/item/price/index.vue";
+import PickupPointList from "@/components/pickup-point/list/index.vue";
 import MyOptions from "@/components/barter/item/my-options/index.vue";
 import BarterExchange from "@/components/barter/exchange/index.vue";
 import Profile from "@/components/profile/index.vue";
 import LikeStore from "@/stores/like.js";
 import PhotoSwipe from "photoswipe";
 import "photoswipe/style.css";
-import selfPickup from "@/assets/images/self-pickup.png";
 
 export default {
 	name: "BarterItem",
@@ -23,14 +23,13 @@ export default {
 		WorkSchedule,
 		Caption,
 		Price,
+		PickupPointList,
 		MyOptions,
 		BarterExchange,
 		Profile,
 		CurrencySwitcher
 	},
 
-	inject: ["dialog"],
-	
 	props: {
 		item: {
 			type: Object,
@@ -60,8 +59,15 @@ export default {
 			hover: 0,
 			active: 0,
 			addr: {},
+
+			pickupPointItems: [],
+			pickupPointsLoading: false,
+			pickupPointsLoadingCount: 0,
+			pickupPointsLoadingError: null,
 		}
 	},
+
+	inject: ["dialog"],
 
 	computed: {
 		/**
@@ -163,6 +169,25 @@ export default {
 		 */
 		pricePrefix() {
 			return this.pickupPoint ? (this.$t("priceLabels.from") + " ") : "";
+		},
+
+		/**
+		 * Get delivery options data
+		 * 
+		 * @returns {Object}
+		 */
+		deliveryOptions() {
+			return this.item?.delivery?.deliveryOptions;
+		},
+
+		/**
+		 * Check if delivery options available
+		 * 
+		 * @returns {Boolean}
+		 */
+		deliveryOptionsAvailable() {
+			const options = this.deliveryOptions || {};
+			return (options.pickupPoints?.isEnabled || options.selfPickup?.isEnabled);
 		},
 
 		/**
@@ -370,5 +395,49 @@ export default {
 			});
 		},
 
+		loadPickupPointsIfNeeded() {
+			if (this.deliveryOptionsAvailable) {
+
+				this.pickupPointItems = [];
+				this.pickupPointsLoading = false;
+				this.pickupPointsLoadingCount = 0;
+				this.pickupPointsLoadingError = null;
+				
+				const options = this.deliveryOptions || {};
+
+				if (options.selfPickup?.isEnabled) {
+					const item = {
+						isSelfPickup: true,
+						additionalInfo: options.selfPickup?.additionalInfo,
+					};
+					this.pickupPointItems = [item];
+				}
+
+				if (options.pickupPoints?.isEnabled) {
+					const ids = options.pickupPoints?.ids || [];
+
+					this.pickupPointsLoading = true;
+					this.pickupPointsLoadingCount = ids.length + this.pickupPointItems.length;
+					this.pickupPointsLoadingError = null;
+					
+					this.sdk.getBrtOffersByHashes(ids).then(items => {
+						this.pickupPointItems = this.pickupPointItems.concat(items);
+					}).catch(e => {
+						this.pickupPointsLoadingError = e;
+						this.showError(e);
+					}).finally(() => {
+						this.pickupPointsLoading = false;
+						this.pickupPointsLoadingCount = 0;
+					});
+				}
+			}
+		},
+
+	},
+
+	mounted() {
+		this.$2watch("item.address").then(() => {
+			this.loadPickupPointsIfNeeded();
+		});
 	},
 }

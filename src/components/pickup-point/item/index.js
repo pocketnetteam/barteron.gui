@@ -23,15 +23,11 @@ export default {
 			type: Object,
 			default: () => ({})
 		},
-		isSelfPickup: {
-			type: Boolean,
-			default: false
-		},
 		role: { // popup, listItem
 			type: String,
 			required: true
 		},
-		mode: { // input, select
+		mode: { // input, view
 			type: String,
 			required: true
 		},
@@ -163,6 +159,19 @@ export default {
 		},
 
 		showItem() {
+			if (this.item?.isSelfPickup) {
+				this.showSelfPickup();
+			} else {
+				this.showPickupPoint();
+			}
+			this.$emit("showItem", this.item);
+		},
+
+		showSelfPickup() {
+			this.dialog?.instance.view("info", this.item?.additionalInfo);
+		},
+
+		showPickupPoint() {
 			var ComponentClass = Vue.extend(SelectPickupPointDialog);
 			var instance = new ComponentClass({
 				propsData: {
@@ -180,8 +189,6 @@ export default {
 			this.$nextTick(() => {
 				instance.show();
 			});
-
-			this.$emit("showItem", this.item);
 		},
 
 		dialogAction() {

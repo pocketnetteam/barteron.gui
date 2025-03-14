@@ -33,7 +33,7 @@
 			:data-validatedvalue="validatedValue()"
 		>
 			<div class="pickup-point-empty-list-area">
-				{{ $t("deliveryLabels.pickup_points_enabled_placeholder") }}
+				{{ emptyListPlaceholder }}
 			</div>
 		</div>
 	</div>

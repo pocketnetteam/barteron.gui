@@ -4,8 +4,29 @@
 		'pickup-point-item-relay': hasRelay
 	}">
 		<!-- Self pickup -->
-		<div v-if="isSelfPickup">
+		<div v-if="item?.isSelfPickup">
+			<picture class="self-pickup">
+				<div class="image">
+					<img
+						:src="imageUrl('self-pickup.png')"
+						:alt="'self-pickup'"
+					>
+				</div>
+			</picture>
 
+			<div class="row">
+				<div class="buttons-holder full-width">
+					<v-button
+						v-if="item?.additionalInfo"
+						vType="stroke"
+						@click="showItem"
+					>{{ $t('buttonLabels.show') }}</v-button>
+					<v-button
+						vType="hit"
+						@click="selectItem"
+					>{{ $t('buttonLabels.select') }}</v-button>
+				</div>
+			</div>
 		</div>
 
 		<!-- Regular pickup point -->

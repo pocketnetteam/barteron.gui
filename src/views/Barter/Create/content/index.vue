@@ -373,6 +373,7 @@
 					:items="pickupPointItems"
 					:loaderState="pickupPointsLoading"
 					:loaderItems="pickupPointsLoadingCount"
+					:loadingError="pickupPointsLoadingError"
 					mode="input"
 					@unselectItem="unselectPickupPoint"
 				/>

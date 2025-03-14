@@ -373,7 +373,7 @@
 				/>
 			</div>
 
-			<!-- Delivery fields -->
+			<!-- Pickup point data -->
 			<div 
 				v-if="pickupPoint"
 				id="pickup-point-info"
@@ -408,7 +408,6 @@
 					<strong class="subtitle">{{ $t('deliveryLabels.how_to_get') }}</strong>
 					<p class="description">{{ pickupPoint.route }}</p>
 				</div>
-
 			</div>
 
 			<div class="row block sep" v-if="item.description">
@@ -433,7 +432,7 @@
 
 			<div
 				class="row"
-				:class="{ 'sep': false }"
+				:class="{ 'sep': deliveryOptions }"
 				v-if="item.geohash"
 			>
 				<!-- Component: Map -->
@@ -443,6 +442,25 @@
 					:zoom="10"
 					:offers="[item]"
 				/>
+			</div>
+
+			<!-- Delivery options data -->
+			<div 
+				v-if="deliveryOptionsAvailable"
+				id="delivery-options-info"
+				class="row block"
+			>
+				<strong class="title">{{ $t('deliveryLabels.label') }}</strong>
+
+				<PickupPointList
+					id="pickup-point-list"
+					:items="pickupPointItems"
+					:loaderState="pickupPointsLoading"
+					:loaderItems="pickupPointsLoadingCount"
+					:loadingError="pickupPointsLoadingError"
+					mode="view"
+				/>
+
 			</div>
 
 			<!-- without sidebar -->

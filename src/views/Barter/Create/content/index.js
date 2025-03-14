@@ -28,11 +28,15 @@ export default {
 			tags: [],
 			currencyPrice: {},
 			currencyPriceEnabled: false,
+
 			pickupPointsEnabled: false,
 			pickupPointItems: [],
 			pickupPointsLoading: false,
 			pickupPointsLoadingCount: 0,
+			pickupPointsLoadingError: null,
+
 			selfPickupEnabled: false,
+			
 			pickupPointsRequestData: {
 				pageSize: 100,
 				pageStart: 0,
@@ -245,10 +249,12 @@ export default {
 
 						this.pickupPointsLoading = true;
 						this.pickupPointsLoadingCount = ids.length;
+						this.pickupPointsLoadingError = null;
 						
 						this.sdk.getBrtOffersByHashes(ids).then(items => {
 							this.pickupPointItems = items;
 						}).catch(e => {
+							this.pickupPointsLoadingError = e;
 							this.showError(e);
 						}).finally(() => {
 							this.pickupPointsLoading = false;
@@ -270,6 +276,7 @@ export default {
 					this.pickupPointItems = [];
 					this.pickupPointsLoading = false;
 					this.pickupPointsLoadingCount = 0;
+					this.pickupPointsLoadingError = null;
 					
 					this.selfPickupEnabled = false;
 				}

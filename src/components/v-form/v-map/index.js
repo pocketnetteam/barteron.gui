@@ -623,7 +623,7 @@ export default {
 		mapMode() {
 			this.$2watch("mountingComplete").then(() => {
 				this.setupMapMode();
-			})			
+			});
 		},
 
 		locale() {

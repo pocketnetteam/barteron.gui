@@ -52,6 +52,7 @@
 		"self_pickup_additional_info_placeholder": "Добавьте информацию о самовывозе (необязательно)",
 		"use_pickup_points": "Использовать пункты выдачи заказов",
 		"pickup_points_enabled_placeholder": "Выполните поиск и подбор подходящих пунктов выдачи на карте",
+		"pickup_points_loading_error_placeholder": "Произошла ошибка при загрузке пунктов выдачи заказов",
 		"pickup_points_enabled_hint": "Местоположение в этом режиме зафиксировано, для его изменения временно отключите данную опцию",
 		"pickup_point_price_caption": "Укажите минимальную стоимость доставки",
 		"pickup_point_info": "Информация о пункте выдачи заказов",

@@ -52,6 +52,7 @@
 		"self_pickup_additional_info_placeholder": "Add self pickup information (optional)",
 		"use_pickup_points": "Use pickup points",
 		"pickup_points_enabled_placeholder": "Search and select suitable pickup points on the map",
+		"pickup_points_loading_error_placeholder": "An error occurred while loading pickup points",
 		"pickup_points_enabled_hint": "The location is fixed in this mode, to change it, temporarily disable this option",
 		"pickup_point_price_caption": "Specify the minimum shipping cost",
 		"pickup_point_info": "Information about pickup point",
