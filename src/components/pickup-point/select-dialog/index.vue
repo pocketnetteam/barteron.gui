@@ -7,7 +7,7 @@
 		@onHide="hide"
 	>
 
-		<p v-if="item?.isSelfPickup">{{ item?.additionalInfo || $t('deliveryLabels.no_self_pickup_additional_info') }}</p>
+		<p class="additional-info" v-if="item?.isSelfPickup">{{ item?.additionalInfo || $t('deliveryLabels.no_self_pickup_additional_info') }}</p>
 
 		<BarterItem
 			v-else
