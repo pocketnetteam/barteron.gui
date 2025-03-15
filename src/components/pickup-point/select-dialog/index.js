@@ -11,8 +11,14 @@ export default {
 	i18n,
 
 	props: {
-		item: Object,
-		isSelected: Boolean,
+		item: {
+			type: Object,
+			default: () => ({})
+		},
+		isSelected: {
+			type: Boolean,
+			default: false
+		},
 	},
 
 	data() {

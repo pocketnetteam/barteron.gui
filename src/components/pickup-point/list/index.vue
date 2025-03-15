@@ -8,6 +8,9 @@
 				<slide
 					v-for="(item, index) in (loaderState && loaderItems || items)"
 					:key="index"
+					:class="{
+						'compact-view': compactView,
+					}"
 				>
 					<loader
 						type="offer-tile"

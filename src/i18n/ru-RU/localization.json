@@ -48,8 +48,12 @@
 	"deliveryLabels": {
 		"label": "Пункты выдачи заказов и самовывоз",
 		"pickup_point": "Пункт выдачи заказов",
+		"self_pickup": "Самовывоз",
 		"self_pickup_available": "Доступен самовывоз",
 		"self_pickup_additional_info_placeholder": "Добавьте информацию о самовывозе (необязательно)",
+		"self_pickup_additional_info": "Информация о самовывозе",
+		"self_pickup_additional_info_exists": "Ознакомьтесь с информацией",
+		"no_self_pickup_additional_info": "Нет дополнительной информации",
 		"use_pickup_points": "Использовать пункты выдачи заказов",
 		"pickup_points_enabled_placeholder": "Выполните поиск и подбор подходящих пунктов выдачи на карте",
 		"pickup_points_loading_error_placeholder": "Произошла ошибка при загрузке пунктов выдачи заказов",

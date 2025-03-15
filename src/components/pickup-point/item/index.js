@@ -82,6 +82,21 @@ export default {
 		},
 
 		/**
+		 * About self pickup info
+		 * 
+		 * @returns {String}
+		 */
+		aboutSelfPickupInfo() {
+			let result = "";
+			if (this.item.isSelfPickup) {
+				result = this.item.additionalInfo 
+					? this.$t("deliveryLabels.self_pickup_additional_info_exists")
+					: this.$t("deliveryLabels.no_self_pickup_additional_info");
+			}
+			return result;
+		},
+
+		/**
 		 * Decode offer geohash
 		 * 
 		 * @returns {Array|null}
@@ -159,19 +174,11 @@ export default {
 		},
 
 		showItem() {
-			if (this.item?.isSelfPickup) {
-				this.showSelfPickup();
-			} else {
-				this.showPickupPoint();
-			}
+			this.showDialog();
 			this.$emit("showItem", this.item);
 		},
 
-		showSelfPickup() {
-			this.dialog?.instance.view("info", this.item?.additionalInfo);
-		},
-
-		showPickupPoint() {
+		showDialog() {
 			var ComponentClass = Vue.extend(SelectPickupPointDialog);
 			var instance = new ComponentClass({
 				propsData: {

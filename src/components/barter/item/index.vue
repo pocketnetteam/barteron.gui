@@ -455,6 +455,7 @@
 				<PickupPointList
 					id="pickup-point-list"
 					:items="pickupPointItems"
+					:compactView="true"
 					:loaderState="pickupPointsLoading"
 					:loaderItems="pickupPointsLoadingCount"
 					:loadingError="pickupPointsLoadingError"

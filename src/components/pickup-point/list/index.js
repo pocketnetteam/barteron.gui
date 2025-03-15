@@ -23,6 +23,10 @@ export default {
 			required: true
 		},
 		holderClass: String,
+		compactView: {
+			type: Boolean,
+			default: false
+		},
 		loaderState: Boolean,
 		loaderItems: {
 			type: Number,

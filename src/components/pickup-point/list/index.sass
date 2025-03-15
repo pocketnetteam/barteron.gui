@@ -8,11 +8,16 @@ $item-width-max: 294px
 	.vs-carousel
 		.vs-carousel__wrapper
 			border-radius: 11px 11px 0 0
-			gap: 19px
+			gap: 9px
 	
 		.vs-carousel__slide
-			flex: 0 0 calc( 33.3% - 17px ) // Gap - 2px
-			width: calc( 33.3% - 17px ) // Gap - 2px
+			flex: 0 0 calc( 33.3% - 7px ) // Gap - 2px
+			width: calc( 33.3% - 7px ) // Gap - 2px
+			
+			&.compact-view
+				flex: 0 0 calc( 25% - 7px ) // Gap - 2px
+				width: calc( 25% - 7px ) // Gap - 2px
+
 			font-size: 1.08333em
 			line-height: 1.5
 

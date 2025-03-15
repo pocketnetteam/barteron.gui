@@ -4,7 +4,7 @@
 		'pickup-point-item-relay': hasRelay
 	}">
 		<!-- Self pickup -->
-		<div v-if="item?.isSelfPickup">
+		<div v-if="item.isSelfPickup">
 			<picture class="self-pickup">
 				<div class="image">
 					<img
@@ -14,11 +14,49 @@
 				</div>
 			</picture>
 
+			<div 
+				class="row title"
+				:title="$t('deliveryLabels.self_pickup')"
+				@click="showItem"
+			>{{ $t('deliveryLabels.self_pickup') }}</div>
+
+			<div 
+				class="row about-self-pickup-info"
+				:title="aboutSelfPickupInfo"
+				@click="showItem"
+			>{{ aboutSelfPickupInfo }}</div>
+
+			<div class="row info" v-if="item.time || item.geohash">
+				<slot name="info" v-if="$slots.info && !(hasRelay || isRemoved)"></slot>
+				<ul v-else>
+					<template v-if="hasRelay">
+						<!-- Relay -->
+						<li>
+							<dl :class="item.status">
+								<dt><i class="fa fa-spinner fa-spin"></i></dt>
+								<dd>{{ $t(`itemLabels.${ item.published }`) }}</dd>
+							</dl>
+						</li>
+					</template>
+
+					<template v-else>
+						<!-- Date -->
+						<li v-if="item.time">
+							<dl :class="item.status">
+								<dt><i class="fa fa-calendar"></i></dt>
+								<dd><time>{{ $d(item.time, 'middle', $i18n.locale) }}</time></dd>
+							</dl>
+						</li>
+					</template>
+				</ul>
+			</div>
+
+
 			<div class="row">
 				<div class="buttons-holder full-width">
 					<v-button
-						v-if="item?.additionalInfo"
-						vType="stroke"
+						v-if="item.additionalInfo"
+						vType="bulma-stroke"
 						@click="showItem"
 					>{{ $t('buttonLabels.show') }}</v-button>
 					<v-button

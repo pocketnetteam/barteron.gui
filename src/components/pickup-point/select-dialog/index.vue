@@ -3,11 +3,14 @@
 		class="pickup-point-dialog"
 		size="md"
 		:visible="lightbox"
-		:title="$t('deliveryLabels.pickup_point')"
+		:title="item?.isSelfPickup ? $t('deliveryLabels.self_pickup_additional_info') : $t('deliveryLabels.pickup_point')"
 		@onHide="hide"
 	>
 
+		<p v-if="item?.isSelfPickup">{{ item?.additionalInfo || $t('deliveryLabels.no_self_pickup_additional_info') }}</p>
+
 		<BarterItem
+			v-else
 			:item="item"
 			vType="page"
 		/>

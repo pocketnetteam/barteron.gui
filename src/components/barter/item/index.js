@@ -409,6 +409,11 @@ export default {
 					const item = {
 						isSelfPickup: true,
 						additionalInfo: options.selfPickup?.additionalInfo,
+						time: this.item.time,
+						relay: this.item.relay,
+						status: this.item.status,
+						published: this.item.published,
+						geohash: this.item.published,
 					};
 					this.pickupPointItems = [item];
 				}

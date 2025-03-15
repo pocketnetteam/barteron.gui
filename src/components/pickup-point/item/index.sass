@@ -43,9 +43,6 @@
 		width: 100%
 		+unselectable()
 
-		&.self-pickup
-			cursor: default
-
 		a
 			text-decoration: none
 
@@ -81,6 +78,12 @@
 			.fa
 				position: relative
 				font-size: 27cqh
+
+		&.self-pickup
+			cursor: default
+
+			img
+				object-fit: contain
 
 		ul.slide
 			display: flex
@@ -139,7 +142,8 @@
 		white-space: nowrap
 		cursor: pointer
 
-	.address
+	.address,
+	.about-self-pickup-info
 		overflow: hidden
 		white-space: nowrap
 		text-overflow: ellipsis
