@@ -33,7 +33,7 @@ export default {
 			default: 4
 		},
 		loadingError: {
-			type: Object,
+			type: Error,
 			default: null
 		},
 	},
@@ -51,6 +51,10 @@ export default {
 	methods: {
 		unselectItem(offer) {
 			this.$emit("unselectItem", offer);
+		},
+
+		repeatLoading() {
+			this.$emit("repeatLoading", this);
 		},
 
 		validatedValue() {

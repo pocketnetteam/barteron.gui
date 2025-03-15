@@ -36,7 +36,11 @@
 			:data-validatedvalue="validatedValue()"
 		>
 			<div class="pickup-point-empty-list-area">
-				{{ emptyListPlaceholder }}
+				<p :class="{ 'error': loadingError }">{{ emptyListPlaceholder }}</p>
+				<v-button
+					v-if="loadingError"
+					@click="repeatLoading"
+				>{{ $t('buttonLabels.repeat') }}</v-button>
 			</div>
 		</div>
 	</div>

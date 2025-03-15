@@ -460,6 +460,7 @@
 					:loaderState="pickupPointsLoading"
 					:loaderItems="pickupPointsLoadingCount"
 					:loadingError="pickupPointsLoadingError"
+					@repeatLoading="pickupPointsRepeatLoading"
 				/>
 
 			</div>

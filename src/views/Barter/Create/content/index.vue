@@ -376,6 +376,7 @@
 					:loadingError="pickupPointsLoadingError"
 					mode="input"
 					@unselectItem="unselectPickupPoint"
+					@repeatLoading="pickupPointsRepeatLoading"
 				/>
 
 				<!-- vSwitch: self pickup enabled -->

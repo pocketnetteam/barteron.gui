@@ -212,55 +212,8 @@ export default {
 					}
 
 					if (offer.condition) this.condition = offer.condition;
-
-					this.currencyPrice = offer.currencyPrice || {};
-					
-					const currencyPriceData = this.getCurrencyPriceData();
-
-					this.currencyPriceEnabled = this.currencyPriceAvailable 
-						&& (offer.hash === "draft" || currencyPriceData.exists);
-					
-					this.waitForRefs("currency,price").then(() => {
-						if (currencyPriceData.exists) {
-							this.price = this.currencyPrice.price;
-							this.$refs.currency.setValue(currencyPriceData.listItem);
-						} else if (offer.price) {
-							this.pkoin = offer.price;
-						};
-					}).then(() => {
-						/* Wait for currency rates */
-						return this.sdk.currency;
-					}).then(() => {
-						if (currencyPriceData.exists) {
-							this.calcPrice({value: currencyPriceData.currency});
-						} else if (offer.price) {
-							this.calcPrice(offer.price);
-						};
-					}).catch(e => { 
-						console.error(e);
-					});
-
-					const deliveryOptions = this.deliveryAvailable && offer.delivery?.deliveryOptions;
-					this.pickupPointsEnabled = (deliveryOptions?.pickupPoints?.isEnabled ? true : false);
-					this.selfPickupEnabled = (deliveryOptions?.selfPickup?.isEnabled ? true : false);
-
-					if (this.pickupPointsEnabled) {
-						const ids = deliveryOptions?.pickupPoints?.ids || [];
-
-						this.pickupPointsLoading = true;
-						this.pickupPointsLoadingCount = ids.length;
-						this.pickupPointsLoadingError = null;
-						
-						this.sdk.getBrtOffersByHashes(ids).then(items => {
-							this.pickupPointItems = items;
-						}).catch(e => {
-							this.pickupPointsLoadingError = e;
-							this.showError(e);
-						}).finally(() => {
-							this.pickupPointsLoading = false;
-							this.pickupPointsLoadingCount = 0;
-						});
-					}
+					this.fillPriceData(offer);
+					this.fillDeliveryData(offer);
 
 				} else {
 					/* Reset fields to default */
@@ -281,6 +234,75 @@ export default {
 					this.selfPickupEnabled = false;
 				}
 			});
+		},
+
+		fillPriceData(offer) {
+			this.currencyPrice = offer.currencyPrice || {};
+					
+			const currencyPriceData = this.getCurrencyPriceData();
+
+			this.currencyPriceEnabled = this.currencyPriceAvailable 
+				&& (offer.hash === "draft" || currencyPriceData.exists);
+			
+			this.waitForRefs("currency,price").then(() => {
+				if (currencyPriceData.exists) {
+					this.price = this.currencyPrice.price;
+					this.$refs.currency.setValue(currencyPriceData.listItem);
+				} else if (offer.price) {
+					this.pkoin = offer.price;
+				};
+			}).then(() => {
+				/* Wait for currency rates */
+				return this.sdk.currency;
+			}).then(() => {
+				if (currencyPriceData.exists) {
+					this.calcPrice({value: currencyPriceData.currency});
+				} else if (offer.price) {
+					this.calcPrice(offer.price);
+				};
+			}).catch(e => { 
+				console.error(e);
+			});
+		},
+
+		fillDeliveryData(offer) {
+			const deliveryOptions = this.getDeliveryOptions(offer);
+			this.pickupPointsEnabled = (deliveryOptions?.pickupPoints?.isEnabled ? true : false);
+			this.selfPickupEnabled = (deliveryOptions?.selfPickup?.isEnabled ? true : false);
+
+			if (this.pickupPointsEnabled) {
+				const ids = deliveryOptions?.pickupPoints?.ids || [];
+				this.loadPickupPoints(ids);
+			};
+		},
+
+		getDeliveryOptions(offer) {
+			return this.deliveryAvailable && offer.delivery?.deliveryOptions;
+		},
+
+		loadPickupPoints(ids) {
+			this.pickupPointItems = [];
+			this.pickupPointsLoading = true;
+			this.pickupPointsLoadingCount = ids.length;
+			this.pickupPointsLoadingError = null;
+			
+			this.sdk.getBrtOffersByHashes(ids).then(items => {
+				this.pickupPointItems = items;
+			}).catch(e => {
+				this.pickupPointsLoadingError = e;
+				this.pickupPointItems = [];
+				console.error(e);
+			}).finally(() => {
+				this.pickupPointsLoading = false;
+				this.pickupPointsLoadingCount = 0;
+			});
+		},
+
+		pickupPointsRepeatLoading() {
+			const offer = this.offer;
+			const deliveryOptions = this.getDeliveryOptions(offer);
+			const ids = deliveryOptions?.pickupPoints?.ids || [];
+			this.loadPickupPoints(ids);
 		},
 
 		isPickupPointCategory() {

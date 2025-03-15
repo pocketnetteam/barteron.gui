@@ -430,7 +430,8 @@ export default {
 						this.pickupPointItems = this.pickupPointItems.concat(items);
 					}).catch(e => {
 						this.pickupPointsLoadingError = e;
-						this.showError(e);
+						this.pickupPointItems = [];
+						console.error(e);
 					}).finally(() => {
 						this.pickupPointsLoading = false;
 						this.pickupPointsLoadingCount = 0;
@@ -439,6 +440,9 @@ export default {
 			}
 		},
 
+		pickupPointsRepeatLoading() {
+			this.loadPickupPointsIfNeeded();
+		},
 	},
 
 	mounted() {
