@@ -201,39 +201,32 @@ export default {
 		fillData(offer) {
 			this.$nextTick(() => {
 				if (offer.hash?.length >= 64 || offer.hash === "draft") {
-					if (offer.tags) {
-						if (["my_list", "for_nothing"].includes(offer.tags[0])) {
-							this.tags = [];
-							this.getting = offer.tags[0];
-						} else {
-							this.getting = "something";
-							this.tags = offer.tags;
-						}
-					}
-
-					if (offer.condition) this.condition = offer.condition;
+					this.fillTagsData(offer);
+					this.fillConditionData(offer);
 					this.fillPriceData(offer);
 					this.fillDeliveryData(offer);
-
 				} else {
-					/* Reset fields to default */
-					this.tags = [];
-					this.getting = "something";
-					this.condition = "new";
-					this.price = this.pkoin = 0;
-					
-					this.currencyPrice = {};
-					this.currencyPriceEnabled = this.currencyPriceAvailable;
-					
-					this.pickupPointsEnabled = false;
-					this.pickupPointItems = [];
-					this.pickupPointsLoading = false;
-					this.pickupPointsLoadingCount = 0;
-					this.pickupPointsLoadingError = null;
-					
-					this.selfPickupEnabled = false;
+					this.resetOfferFieldsToDefault();
 				}
 			});
+		},
+
+		fillTagsData(offer) {
+			if (offer.tags) {
+				if (["my_list", "for_nothing"].includes(offer.tags[0])) {
+					this.tags = [];
+					this.getting = offer.tags[0];
+				} else {
+					this.getting = "something";
+					this.tags = offer.tags;
+				}
+			};
+		},
+
+		fillConditionData(offer) {
+			if (offer.condition) {
+				this.condition = offer.condition;
+			};
 		},
 
 		fillPriceData(offer) {
@@ -296,6 +289,24 @@ export default {
 				this.pickupPointsLoading = false;
 				this.pickupPointsLoadingCount = 0;
 			});
+		},
+
+		resetOfferFieldsToDefault() {
+			this.tags = [];
+			this.getting = "something";
+			this.condition = "new";
+			this.price = this.pkoin = 0;
+			
+			this.currencyPrice = {};
+			this.currencyPriceEnabled = this.currencyPriceAvailable;
+			
+			this.pickupPointsEnabled = false;
+			this.pickupPointItems = [];
+			this.pickupPointsLoading = false;
+			this.pickupPointsLoadingCount = 0;
+			this.pickupPointsLoadingError = null;
+			
+			this.selfPickupEnabled = false;
 		},
 
 		pickupPointsRepeatLoading() {
