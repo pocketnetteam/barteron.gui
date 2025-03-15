@@ -408,6 +408,7 @@ export default {
 				if (options.selfPickup?.isEnabled) {
 					const item = {
 						isSelfPickup: true,
+						address: this.item.address,
 						additionalInfo: options.selfPickup?.additionalInfo,
 						time: this.item.time,
 						relay: this.item.relay,

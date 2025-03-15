@@ -60,6 +60,7 @@
 						@click="showItem"
 					>{{ $t('buttonLabels.show') }}</v-button>
 					<v-button
+						v-if="mode !== 'readonly'"
 						vType="hit"
 						@click="selectItem"
 					>{{ $t('buttonLabels.select') }}</v-button>
@@ -178,18 +179,21 @@
 				<div class="row">
 					<div class="buttons-holder full-width">
 						<v-button
+							vType="bulma-stroke"
 							@click="showItem"
 						>{{ $t('buttonLabels.show') }}</v-button>
-						<v-button
-							v-if="isSelected"
-							vType="hit"
-							@click="unselectItem"
-						>{{ $t('buttonLabels.cancel') }}</v-button>
-						<v-button
-							v-else
-							vType="hit-stroke"
-							@click="selectItem"
-						>{{ $t('buttonLabels.select') }}</v-button>
+						<template v-if="mode !== 'readonly'">
+							<v-button
+								v-if="isSelected"
+								vType="hit-stroke"
+								@click="unselectItem"
+							>{{ $t('buttonLabels.cancel') }}</v-button>
+							<v-button
+								v-else
+								vType="hit"
+								@click="selectItem"
+							>{{ $t('buttonLabels.select') }}</v-button>
+						</template>
 					</div>
 				</div>
 

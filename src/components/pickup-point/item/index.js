@@ -27,7 +27,7 @@ export default {
 			type: String,
 			required: true
 		},
-		mode: { // input, view
+		mode: { // input, selection, readonly
 			type: String,
 			required: true
 		},
@@ -184,6 +184,7 @@ export default {
 				propsData: {
 					item: this.item,
 					isSelected: this.isSelected,
+					mode: this.mode,
 				},
 			});
 			
@@ -199,11 +200,13 @@ export default {
 		},
 
 		dialogAction() {
-			if (this.isSelected) {
-				this.unselectItem();
-			} else {
-				this.selectItem();
-			}
+			if (this.mode !== "readonly") {
+				if (this.isSelected) {
+					this.unselectItem();
+				} else {
+					this.selectItem();
+				};
+			};
 		},
 
 		selectItem() {

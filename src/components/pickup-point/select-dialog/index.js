@@ -19,6 +19,10 @@ export default {
 			type: Boolean,
 			default: false
 		},
+		mode: {
+			type: String,
+			required: true
+		},
 	},
 
 	data() {

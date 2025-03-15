@@ -454,12 +454,12 @@
 
 				<PickupPointList
 					id="pickup-point-list"
-					:items="pickupPointItems"
+					:mode="isMyOffer ? 'readonly' : 'selection'"
 					:compactView="true"
+					:items="pickupPointItems"
 					:loaderState="pickupPointsLoading"
 					:loaderItems="pickupPointsLoadingCount"
 					:loadingError="pickupPointsLoadingError"
-					mode="view"
 				/>
 
 			</div>

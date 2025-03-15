@@ -19,18 +19,26 @@
 		<template #footer>
 			<div class="row full-width right">
 				<div class="buttons-holder min-h-w">
+					<template v-if="mode !== 'readonly'">
+						<v-button
+							v-if="isSelected"
+							vType="hit"
+							@click="dialogAction"
+						>
+							<span>{{ $t('buttonLabels.cancel') }}</span>
+						</v-button>
+						<v-button
+							v-else
+							vType="hit"
+							@click="dialogAction"
+						>
+							<span>{{ $t('buttonLabels.select') }}</span>
+						</v-button>
+					</template>
 					<v-button
-						v-if="isSelected"
-						vType="hit"
-						@click="dialogAction"
+						@click="hide"
 					>
-						<span>{{ $t('buttonLabels.cancel') }}</span>
-					</v-button>
-					<v-button
-						v-else
-						@click="dialogAction"
-					>
-						<span>{{ $t('buttonLabels.select') }}</span>
+						<span>{{ $t('buttonLabels.close') }}</span>
 					</v-button>
 				</div>
 			</div>
