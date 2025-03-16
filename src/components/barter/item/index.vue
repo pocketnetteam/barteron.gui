@@ -437,10 +437,14 @@
 			>
 				<!-- Component: Map -->
 				<v-map
-					mapMode="view"
+					:mapMode="mapMode"
+					:pickupPointPopupMode="isMyOffer ? 'readonly' : 'selection'"
 					:center="geohash"
 					:zoom="10"
-					:offers="[item]"
+					:offers="mapOffers()"
+					:selectedOfferIds="selectedOfferIds()"
+					@selectPickupPoint="selectPickupPoint"
+					@unselectPickupPoint="unselectPickupPoint"
 				/>
 			</div>
 
@@ -457,10 +461,13 @@
 					:mode="isMyOffer ? 'readonly' : 'selection'"
 					:compactView="true"
 					:items="pickupPointItems"
+					:selectedOfferIds="selectedOfferIds()"
 					:loaderState="pickupPointsLoading"
 					:loaderItems="pickupPointsLoadingCount"
 					:loadingError="pickupPointsLoadingError"
 					@repeatLoading="pickupPointsRepeatLoading"
+					@selectItem="selectPickupPoint"
+					@unselectItem="unselectPickupPoint"
 				/>
 
 			</div>

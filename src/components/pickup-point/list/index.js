@@ -18,6 +18,10 @@ export default {
 			type: Array,
 			default: () => []
 		},
+		selectedOfferIds: {
+			type: Array,
+			default: () => []
+		},
 		mode: {
 			type: String,
 			required: true
@@ -49,6 +53,14 @@ export default {
 	},
 
 	methods: {
+		isSelectedItem(item) {
+			return this.mode === "input" || item?.hash && this.selectedOfferIds?.includes(item?.hash);
+		},
+
+		selectItem(offer) {
+			this.$emit("selectItem", offer);
+		},
+
 		unselectItem(offer) {
 			this.$emit("unselectItem", offer);
 		},

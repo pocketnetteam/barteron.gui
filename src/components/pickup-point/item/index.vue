@@ -1,8 +1,11 @@
 <template>
 	<div :class="{
 		[`pickup-point-item`]: true,
-		'pickup-point-item-relay': hasRelay
+		'pickup-point-item-relay': hasRelay,
+		'selected': isSelected && mode === 'selection' && role === 'listItem'
 	}">
+		<i class="fa fa-check-circle"></i>
+		
 		<!-- Self pickup -->
 		<div v-if="item.isSelfPickup">
 			<picture class="self-pickup">
@@ -59,11 +62,18 @@
 						vType="bulma-stroke"
 						@click="showItem"
 					>{{ $t('buttonLabels.show') }}</v-button>
-					<v-button
-						v-if="mode !== 'readonly'"
-						vType="hit"
-						@click="selectItem"
-					>{{ $t('buttonLabels.select') }}</v-button>
+					<template v-if="mode !== 'readonly'">
+						<v-button
+							v-if="isSelected"
+							vType="hit-stroke"
+							@click="unselectItem"
+						>{{ $t('buttonLabels.cancel') }}</v-button>
+						<v-button
+							v-else
+							vType="hit"
+							@click="selectItem"
+						>{{ $t('buttonLabels.select') }}</v-button>
+					</template>
 				</div>
 			</div>
 		</div>

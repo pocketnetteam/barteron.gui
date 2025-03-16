@@ -21,7 +21,8 @@
 						:item="item"
 						role="listItem"
 						:mode="mode"
-						:isSelected="mode === 'input'"
+						:isSelected="isSelectedItem(item)"
+						@selectItem="selectItem"
 						@unselectItem="unselectItem"
 					/>
 				</slide>

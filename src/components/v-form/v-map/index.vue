@@ -23,13 +23,17 @@
 							:icon-anchor="getOfferIcon(offer).anchor"
 						>
 						</l-icon>
-						<l-tooltip v-if="!(isViewMode)">{{ offer.caption }}</l-tooltip>
-						<l-popup v-if="!(isViewMode)">
+						
+						<l-tooltip
+							v-if="!(isViewMode || isDeliverySelectionMode && !(offer.isPickupPoint))"
+						>{{ offer.caption }}</l-tooltip>
+
+						<l-popup v-if="!(isViewMode || isDeliverySelectionMode && !(offer.isPickupPoint))">
 							<PickupPointItem 
-								v-if="isDeliveryInputMode && offer.isPickupPoint"
+								v-if="(isDeliveryInputMode || isDeliverySelectionMode) && offer.isPickupPoint"
 								:item="offer"
 								role="popup"
-								:mode="isDeliveryInputMode ? 'input' : 'select'"
+								:mode="pickupPointPopupMode"
 								:isSelected="isSelectedOffer(offer)"
 								@showItem="showPickupPoint"
 								@selectItem="selectPickupPoint"

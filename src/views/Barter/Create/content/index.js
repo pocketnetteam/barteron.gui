@@ -160,6 +160,10 @@ export default {
 			return result;
 		},
 
+		mapMode() {
+			return (!(this.isPickupPointCategory()) && this.pickupPointsEnabled) ? "deliveryInput" : "input";
+		},
+
 		/**
 		 * Convert price from currency to pkoin
 		 * 

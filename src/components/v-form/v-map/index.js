@@ -82,6 +82,10 @@ export default {
 			type: String,
 			default: "input"
 		},
+		pickupPointPopupMode: {
+			type: String,
+			default: "readonly"
+		},
 		zoom: {
 			type: Number,
 			default: 10
@@ -152,6 +156,15 @@ export default {
 		},
 
 		/**
+		 * Checking that the map mode is delivery selection
+		 * 
+		 * @returns {Boolean}
+		 */
+		isDeliverySelectionMode() {
+			return this.mapMode === "deliverySelection";
+		},
+
+		/**
 		 * Checking that the map mode is input
 		 * 
 		 * @returns {Boolean}
@@ -184,7 +197,11 @@ export default {
 		getOfferIcon(offer) {
 			const 
 				icon = offer.isPickupPoint ? this.pickupPointIcon : this.offerIcon,
-				key = (this.isViewMode || this.isSelectedOffer(offer)) ? "active" : "regular",
+				key = (
+					this.isViewMode 
+					|| this.isSelectedOffer(offer)
+					|| this.isDeliverySelectionMode && !(offer.isPickupPoint)
+				) ? "active" : "regular",
 				url = icon[key];
 
 			return {
@@ -254,6 +271,8 @@ export default {
 
 			if (this.isViewMode) {
 				this.setupViewModeHandlers();
+			} else if (this.isDeliverySelectionMode) {
+				this.setupDeliverySelectionModeHandlers();
 			} else if(this.isInputMode) {
 				this.setupInputModeHandlers();
 			} else if(this.isDeliveryInputMode) {
@@ -287,6 +306,10 @@ export default {
 
 		setupViewModeHandlers() {
 			this.setToggleWheelByFocus();
+		},
+
+		setupDeliverySelectionModeHandlers() {
+			this.setupViewModeHandlers();
 		},
 
 		setupInputModeHandlers() {

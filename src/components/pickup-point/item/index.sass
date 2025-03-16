@@ -27,6 +27,32 @@
 	width: 100%
 	z-index: 0
 
+	i.fa
+		display: none
+
+	&.selected
+		padding: $r
+		border: 2px solid $piccolo
+		border-radius: 12px
+
+		>i.fa
+			background: $gohan
+			border: 1px solid $gohan
+			border-radius: 50%
+			color: $piccolo
+			display: block
+			font-size: 20px
+			position: absolute
+			top: 6px
+			right: 6px
+			height: 20px
+			width: 20px
+
+			&::before
+				position: relative
+				top: -1px
+				left: -1px
+
 	&.pickup-point-item-relay
 		picture,
 		picture a

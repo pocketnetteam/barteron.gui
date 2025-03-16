@@ -64,6 +64,8 @@ export default {
 			pickupPointsLoading: false,
 			pickupPointsLoadingCount: 0,
 			pickupPointsLoadingError: null,
+
+			selectedOfferId: null,
 		}
 	},
 
@@ -191,6 +193,25 @@ export default {
 		},
 
 		/**
+		 * Get pickup point ids
+		 * 
+		 * @returns {Array}
+		 */
+		pickupPointIds() {
+			const options = this.deliveryOptions || {};
+			return options.pickupPoints?.isEnabled ? options.pickupPoints?.ids || [] : [];
+		},
+
+		/**
+		 * Get map mode
+		 * 
+		 * @returns {String}
+		 */
+		mapMode() {
+			return this.pickupPointIds?.length ? "deliverySelection" : "view";
+		},
+
+		/**
 		 * Get user location
 		 * 
 		 * @returns {Array|null}
@@ -313,6 +334,12 @@ export default {
 	},
 
 	methods: {
+		mapOffers() {
+			return this.mapMode === "deliverySelection" 
+				? [this.item, ...this.pickupPointItems.filter(f => !(f.isSelfPickup))] 
+				: [this.item];
+		},
+
 		/**
 		 * Set like state
 		 */
@@ -408,6 +435,7 @@ export default {
 				if (options.selfPickup?.isEnabled) {
 					const item = {
 						isSelfPickup: true,
+						hash: `self_pickup_${Date.now()}`,
 						address: this.item.address,
 						additionalInfo: options.selfPickup?.additionalInfo,
 						time: this.item.time,
@@ -442,6 +470,18 @@ export default {
 
 		pickupPointsRepeatLoading() {
 			this.loadPickupPointsIfNeeded();
+		},
+
+		selectPickupPoint(offer) {
+			this.selectedOfferId = offer.hash;
+		},
+
+		unselectPickupPoint() {
+			this.selectedOfferId = null;
+		},
+
+		selectedOfferIds() {
+			return this.selectedOfferId ? [this.selectedOfferId] : [];
 		},
 	},
 
