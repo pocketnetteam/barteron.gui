@@ -202,6 +202,10 @@ export default {
 			return options.pickupPoints?.isEnabled ? options.pickupPoints?.ids || [] : [];
 		},
 
+		selfPickupItemId() {
+			return "self_pickup";
+		},
+
 		/**
 		 * Get map mode
 		 * 
@@ -435,7 +439,7 @@ export default {
 				if (options.selfPickup?.isEnabled) {
 					const item = {
 						isSelfPickup: true,
-						hash: `self_pickup_${Date.now()}`,
+						hash: this.selfPickupItemId,
 						address: this.item.address,
 						additionalInfo: options.selfPickup?.additionalInfo,
 						time: this.item.time,
@@ -490,4 +494,20 @@ export default {
 			this.loadPickupPointsIfNeeded();
 		});
 	},
+
+	watch: {
+		selectedOfferId(newValue) {
+			let option = null;
+			if (newValue) {
+				option = (newValue === this.selfPickupItemId) 
+					? {selfPickup: true} 
+					: {pickupPoint: this.pickupPointItems.filter(f => f.hash === newValue).pop()};
+			}
+
+			const hash = this.item?.hash;
+			if (hash) {
+				this.sdk.barteron.offers[hash].selectedDeliveryOption = option;
+			}
+		}
+	}
 }

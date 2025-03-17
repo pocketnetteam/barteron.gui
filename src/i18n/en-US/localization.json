@@ -70,9 +70,8 @@
 		"around_the_clock": "Around the clock",
 		"address": "Address",
 		"how_to_get": "How to get",
-		"pickup": "Self pickup",
-		"details": "Details",
-		"about": "About \"{point}\""
+		"chat_message_self_pickup_selected": "Delivery option - \"Self pickup\"",
+		"chat_message_pickup_point_selected": "Delivery option - \"Pickup point\""
 	},
 
 	"ratingLabels": {
@@ -242,6 +241,7 @@
 		"submit_comment": "Do you want to submit the comment?",
 		"map_help_info": "Offers displayed in the lists (category content, exchange offers, etc.) can be filtered by the visible area of the map.\n\nSet it so that it covers the desired search area and click the \"Save\" button. To reset the selection, click the \"All regions\" button.",
 		"saving_region_warning_by_zoom": "The coverage of the visible map area is too small. Offer lists will be filtered by this area. Continue anyway?",
+		"need_select_delivery_option": "The seller provided options for receiving the order. Please select one of the options and try again",
 
 		"image_error": "Image upload error: {error}",
 		"node_error": "Node error has occured: {error}",

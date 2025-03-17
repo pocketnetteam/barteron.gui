@@ -26,6 +26,7 @@
 	position: relative
 	width: 100%
 	z-index: 0
+	padding-bottom: calc(#{$r*2} + 4px)
 
 	i.fa
 		display: none
@@ -33,7 +34,7 @@
 	&.selected
 		padding: $r
 		border: 2px solid $piccolo
-		border-radius: 12px
+		border-radius: 16px
 
 		>i.fa
 			background: $gohan
@@ -53,6 +54,9 @@
 				top: -1px
 				left: -1px
 
+		picture
+			height: calc(180px - #{$r} - 2px)
+
 	&.pickup-point-item-relay
 		picture,
 		picture a
@@ -60,7 +64,7 @@
 
 	picture
 		cursor: pointer
-		border-radius: 11px
+		border-radius: 12px
 		display: block
 		margin: 0 0 .9em
 		position: relative

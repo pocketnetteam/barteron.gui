@@ -31,7 +31,18 @@ export default {
 		 */
 		address() {
 			return this.item?.address;
-		}
+		},
+
+		/**
+		 * Check if delivery options available
+		 * 
+		 * @returns {Boolean}
+		 */
+		deliveryOptionsAvailable() {
+			const options = this.item?.delivery?.deliveryOptions || {};
+			return (options.pickupPoints?.isEnabled || options.selfPickup?.isEnabled);
+		},
+
 	},
 
 	methods: {
@@ -39,21 +50,47 @@ export default {
 		 * Create room and send message
 		 * 
 		 * @param {Offer} offer
+		 * @param {Object} options
 		 */
-		createRoom(offer) {
+		createRoom(offer, options = {}) {
 			if (this.sdk.willOpenRegistration()) return;
-			const
-				/** @type {Object|undefined} */
-				delivery = this.sdk.barteron.offers[offer.hash]?.selectedPoint;
+
+			let needCreateRoom = true;
+
+			const data = {
+				name: offer.caption,
+				members: [this.address],
+				messages: [this.sdk.appLink(`barter/${ offer.hash }`)],
+				openRoom: true,
+			};
+
+			if (this.deliveryOptionsAvailable && options?.isPurchase) {
+				const option = this.sdk.barteron.offers[offer.hash]?.selectedDeliveryOption;
+				if (option?.selfPickup) {
+					data.messages.push(this.$t("deliveryLabels.chat_message_self_pickup_selected"));
+				} else if (option?.pickupPoint) {
+					const 
+						address = option?.pickupPoint?.address,
+						hash = option?.pickupPoint?.hash;
+					
+					if (address && hash) {
+						if (!(data.members.includes(address))) {
+							data.members.push(address);
+						}
+						data.messages.push(this.sdk.appLink(`barter/${ hash }`));
+						data.messages.push(this.$t("deliveryLabels.chat_message_pickup_point_selected"));
+					}
+				} else {
+					needCreateRoom = false;
+					this.dialog?.instance.view("info", this.$t("dialogLabels.need_select_delivery_option"));
+				}
+			}
 			
+			if (!(needCreateRoom)) return;
+
 			this.isLoading = true;
 			this.dialog?.instance.view("load", this.$t("dialogLabels.opening_room"));
-			this.sendMessage({
-				name: offer.caption,
-				members: [this.address, delivery?.address].filter(f => f),
-				messages: [this.sdk.appLink(`barter/${ offer.hash }`)],
-				openRoom: true
-			}).then(() => {
+			this.sendMessage(data).then(() => {
 				this.dialog?.instance.hide();
 			}).catch(e => {
 				this.showError(e);
@@ -95,7 +132,7 @@ export default {
 		 * Contact seller
 		 */
 		contactSeller() {
-			this.createRoom(this.item);
+			this.createRoom(this.item, {isPurchase: true});
 		}
 	},
 
