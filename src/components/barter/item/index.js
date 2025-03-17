@@ -487,6 +487,16 @@ export default {
 		selectedOfferIds() {
 			return this.selectedOfferId ? [this.selectedOfferId] : [];
 		},
+
+		clearSelectedDeliveryOption() {
+			const 
+				hash = this.item?.hash,
+				targetOffer = hash && this.sdk.barteron._offers[hash];
+			
+			if (targetOffer && targetOffer.selectedDeliveryOption) {
+				delete targetOffer.selectedDeliveryOption;
+			};
+		}
 	},
 
 	mounted() {
@@ -502,12 +512,19 @@ export default {
 				option = (newValue === this.selfPickupItemId) 
 					? {selfPickup: true} 
 					: {pickupPoint: this.pickupPointItems.filter(f => f.hash === newValue).pop()};
-			}
+			};
 
-			const hash = this.item?.hash;
-			if (hash) {
-				this.sdk.barteron.offers[hash].selectedDeliveryOption = option;
-			}
+			const 
+				hash = this.item?.hash,
+				targetOffer = hash && this.sdk.barteron._offers[hash];
+
+			if (targetOffer) {
+				targetOffer.selectedDeliveryOption = option;
+			};
 		}
-	}
+	},
+
+	beforeDestroy() {
+		this.clearSelectedDeliveryOption();
+	},
 }

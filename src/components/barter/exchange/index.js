@@ -82,7 +82,8 @@ export default {
 					}
 				} else {
 					needCreateRoom = false;
-					this.dialog?.instance.view("info", this.$t("dialogLabels.need_select_delivery_option"));
+					const section = this.$t("deliveryLabels.label");
+					this.dialog?.instance.view("info", this.$t("dialogLabels.need_select_delivery_option", { section }));
 				}
 			}
 			

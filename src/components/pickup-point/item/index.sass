@@ -1,5 +1,7 @@
 @import "@/css/vars.sass"
 
+$pd: 3px // selected item padding
+
 .pswp__top-bar
 	left: 55px
 	right: 55px
@@ -26,13 +28,13 @@
 	position: relative
 	width: 100%
 	z-index: 0
-	padding-bottom: calc(#{$r*2} + 4px)
+	padding-bottom: calc(#{$pd*2} + 4px)
 
 	i.fa
 		display: none
 
 	&.selected
-		padding: $r
+		padding: $pd
 		border: 2px solid $piccolo
 		border-radius: 16px
 
@@ -55,7 +57,7 @@
 				left: -1px
 
 		picture
-			height: calc(180px - #{$r} - 2px)
+			height: calc(180px - #{$pd} - 2px)
 
 	&.pickup-point-item-relay
 		picture,
@@ -113,7 +115,7 @@
 			cursor: default
 
 			img
-				object-fit: contain
+				object-fit: cover
 
 		ul.slide
 			display: flex
