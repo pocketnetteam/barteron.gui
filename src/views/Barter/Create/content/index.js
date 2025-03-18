@@ -145,21 +145,6 @@ export default {
 	},
 
 	methods: {
-		mapHeight() {
-			let result = undefined;
-			const value = getComputedStyle(document.documentElement).getPropertyValue('--device-size-large');
-			if (value) {
-				const 
-					query = `screen and (max-width: ${value})`,
-					exceedsQuerySize = !(window.matchMedia(query).matches);
-				
-				if (exceedsQuerySize) {
-					result = "560px"
-				}
-			}
-			return result;
-		},
-
 		mapMode() {
 			return (!(this.isPickupPointCategory()) && this.pickupPointsEnabled) ? "deliveryInput" : "input";
 		},

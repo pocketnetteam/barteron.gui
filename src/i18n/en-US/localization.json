@@ -46,12 +46,12 @@
 	},
 
 	"deliveryLabels": {
-		"label": "Pickup points and self pickup",
+		"label": "Pickup points and self-pickup",
 		"pickup_point": "Pickup point",
-		"self_pickup": "Self pickup",
-		"self_pickup_available": "Self pickup available",
-		"self_pickup_additional_info_placeholder": "Add self pickup information (optional)",
-		"self_pickup_additional_info": "Self pickup information",
+		"self_pickup": "Self-pickup",
+		"self_pickup_available": "Self-pickup available",
+		"self_pickup_additional_info_placeholder": "Add self-pickup information (optional)",
+		"self_pickup_additional_info": "Self-pickup information",
 		"self_pickup_additional_info_exists": "Check out the information",
 		"no_self_pickup_additional_info": "No additional information",
 		"use_pickup_points": "Use pickup points",
@@ -70,8 +70,8 @@
 		"around_the_clock": "Around the clock",
 		"address": "Address",
 		"how_to_get": "How to get",
-		"chat_message_self_pickup_selected": "Delivery option - \"Self pickup\"",
-		"chat_message_pickup_point_selected": "Delivery option - \"Pickup point\""
+		"chat_message_self_pickup_selected": "Delivery option: \"Self-pickup\"",
+		"chat_message_pickup_point_selected": "Delivery option: \"Pickup point\""
 	},
 
 	"ratingLabels": {

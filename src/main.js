@@ -125,6 +125,26 @@ Vue.prototype.shared = Vue.observable({
 		},
 
 		/**
+		 * Get map height
+		 * 
+		 * @returns {String|undefined}
+		 */
+		mapHeight() {
+			let result = undefined;
+			const value = getComputedStyle(document.documentElement).getPropertyValue('--device-size-large');
+			if (value) {
+				const 
+					query = `screen and (max-width: ${value})`,
+					exceedsQuerySize = !(window.matchMedia(query).matches);
+				
+				if (exceedsQuerySize) {
+					result = "560px"
+				}
+			}
+			return result;
+		},
+
+		/**
 		 * Vue2 watch
 		 * 
 		 * @param {String} prop

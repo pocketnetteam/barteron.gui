@@ -361,6 +361,7 @@
 					<label 
 						v-if="pickupPointsEnabled"
 						class="v-label"
+						:class="{'warning-level': !(pickupPointItems.length)}"
 					>
 						<i class="fa fa-info-circle"></i>
 						{{ $t("deliveryLabels.pickup_points_enabled_hint") }}

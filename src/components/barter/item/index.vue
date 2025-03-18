@@ -438,6 +438,7 @@
 				<!-- Component: Map -->
 				<v-map
 					:mapMode="mapMode"
+					:height="(mapMode === 'deliverySelection') ? mapHeight() : undefined"
 					:pickupPointPopupMode="isMyOffer ? 'readonly' : 'selection'"
 					:center="geohash"
 					:zoom="10"

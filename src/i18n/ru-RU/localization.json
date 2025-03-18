@@ -70,8 +70,8 @@
 		"around_the_clock": "Круглосуточно",
 		"address": "Адрес",
 		"how_to_get": "Как добраться",
-		"chat_message_self_pickup_selected": "Вариант доставки - \"Самовывоз\"",
-		"chat_message_pickup_point_selected": "Вариант доставки - \"Пункт выдачи заказов\""
+		"chat_message_self_pickup_selected": "Вариант доставки: \"Самовывоз\"",
+		"chat_message_pickup_point_selected": "Вариант доставки: \"Пункт выдачи заказов\""
 	},
 
 	"ratingLabels": {
