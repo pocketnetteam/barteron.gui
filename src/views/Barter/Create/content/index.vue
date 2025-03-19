@@ -370,6 +370,7 @@
 
 				<PickupPointList
 					v-if="pickupPointsEnabled"
+					ref="pickupPointList"
 					id="pickup-point-list"
 					holderClass="field"
 					:items="pickupPointItems"

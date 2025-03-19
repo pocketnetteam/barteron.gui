@@ -41,8 +41,13 @@
 		"propose": "What you propose",
 		"photos": "Add photos",
 		"get": "What you want to get",
+		"financial-terms": "Financial terms",
+		"work-schedule": "Work schedule",
+		"address": "Address",
+		"route": "How to get",
 		"description": "Description",
-		"location": "Location"
+		"location": "Location",
+		"pickup-point-list": "Pickup points"
 	},
 
 	"deliveryLabels": {

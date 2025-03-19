@@ -41,8 +41,13 @@
 		"propose": "Что вы предлагаете",
 		"photos": "Добавьте фотографии",
 		"get": "Что вы хотите получить",
+		"financial-terms": "Финансовые условия",
+		"work-schedule": "График работы",
+		"address": "Адрес",
+		"route": "Как добраться",
 		"description": "Описание",
-		"location": "Местоположение"
+		"location": "Местоположение",
+		"pickup-point-list": "Пункты выдачи заказов"
 	},
 
 	"deliveryLabels": {

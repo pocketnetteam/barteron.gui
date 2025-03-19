@@ -521,6 +521,8 @@ export default {
 				data = form.serialize(),
 				images = photos.serialize(),
 				delivery = this.serializeDelivery(data),
+				workSchedule = this.$refs.workSchedule, // optional
+				pickupPointList = this.$refs.pickupPointList, // optional
 				currencyPrice = this.serializeCurrencyPrice(),
 				tags = this.getting === "something" 
 					? (data.tags ? data.tags.split(",").map(tag => Number(tag)) : [])
@@ -551,7 +553,22 @@ export default {
 				photos.$el.classList.remove(form.classes.passed);
 			}
 
-			return { hash, form, photos, center, data, images };
+			return { hash, form, photos, center, data, images, workSchedule, pickupPointList };
+		},
+
+		updateAsideStepsAsync() {
+			this.$nextTick(() => {
+				const 
+					items = this.$components.aside.steps,
+					newItems = this.parseLabels("stepsLabels").filter(f => document.getElementById(f.value)),
+					values = items.map(m => m.value),
+					newValues = newItems.map(m => m.value),
+					needUpdate = (JSON.stringify(values) !== JSON.stringify(newValues));
+				
+				if (needUpdate) {
+					this.$components.aside.steps = newItems;
+				}
+			});
 		},
 
 		/**
@@ -561,6 +578,8 @@ export default {
 		 * @param {Object} scope.form
 		 * @param {Boolean} scope.formValid
 		 * @param {Boolean} scope.photosValid
+		 * @param {Boolean|undefined} scope.workScheduleValid
+		 * @param {Boolean|undefined} scope.pickupPointListValid
 		 */
 		stepState(scope) {
 			this.$components.aside.steps.forEach(step => {
@@ -583,6 +602,14 @@ export default {
 
 							case "location": {
 								return true;
+							}
+
+							case "work-schedule": {
+								return scope.workScheduleValid;
+							}
+
+							case "pickup-point-list": {
+								return scope.pickupPointListValid;
 							}
 
 							default: {
@@ -624,15 +651,19 @@ export default {
 		 */
 		submit() {
 			const
-				{ hash, form, photos, images } = this.serializeForm(),
+				{ hash, form, photos, images, workSchedule, pickupPointList } = this.serializeForm(),
 				formValid = form.validate(),
-				photosValid = photos.validate();
+				photosValid = photos.validate(),
+				workScheduleValid = workSchedule?.validate(),
+				pickupPointListValid = pickupPointList?.validate();
 
 			/* Set steps validity at aside */
 			this.stepState({
 				form,
 				formValid,
-				photosValid
+				photosValid,
+				workScheduleValid,
+				pickupPointListValid,
 			});
 
 			/* Check all fields validity */
@@ -742,5 +773,13 @@ export default {
 	beforeCreate() {
 		/* Request for permissons */
 		this.sdk.requestPermissions(["account"]);
+	},
+
+	mounted() {
+		this.updateAsideStepsAsync();
+	},
+
+	updated() {
+		this.updateAsideStepsAsync();
 	}
 }

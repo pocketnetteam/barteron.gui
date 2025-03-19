@@ -69,8 +69,12 @@ export default {
 			this.$emit("repeatLoading", this);
 		},
 
+		validate() {
+			return this.items?.length;
+		},
+
 		validatedValue() {
-			return !!(this.items?.length);
+			return Boolean(this.validate());
 		},
 	}
 }
