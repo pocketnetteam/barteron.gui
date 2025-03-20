@@ -61,12 +61,57 @@
 			</ul>
 		</picture>
 
+		<!-- Caption -->
+		<div class="row block" v-if="item.caption">
+			<strong class="subtitle">{{ item.caption }}</strong>
+		</div>
+
 		<!-- Price -->
 		<div class="info">
 			<div class="col">
 				<span class="title">{{ $t('priceLabels.label') }}</span>
 				<Price :item="item" />
 			</div>
+		</div>
+
+		<div class="row block sep"></div>
+
+		<!-- Delivery fields -->
+		<div 
+			v-if="pickupPoint"
+			id="pickup-point-info"
+			class="row block sep"
+		>
+			<strong class="title">{{ $t('deliveryLabels.pickup_point_info') }}</strong>
+
+			<div class="row block">
+				<strong class="subtitle">{{ $t('deliveryLabels.financial_terms') }}</strong>
+				<p class="description">{{ pickupPoint.financialTerms }}</p>
+			</div>
+
+			<div class="row block">
+				<strong class="subtitle">{{ $t('deliveryLabels.shelf_life') }}</strong>
+				<p class="description">{{ $t('deliveryLabels.default_shelf_life_value') }}</p>
+			</div>
+
+			<div class="row block">
+				<strong class="subtitle">{{ $t('deliveryLabels.work_schedule') }}</strong>
+				<work-schedule
+					mode="view"
+					:workSchedule="pickupPoint.workSchedule"
+				/>
+			</div>
+
+			<div class="row block">
+				<strong class="subtitle">{{ $t('deliveryLabels.address') }}</strong>
+				<p class="description">{{ pickupPoint.address }}</p>
+			</div>
+
+			<div class="row block">
+				<strong class="subtitle">{{ $t('deliveryLabels.how_to_get') }}</strong>
+				<p class="description">{{ pickupPoint.route }}</p>
+			</div>
+
 		</div>
 
 		<!-- Description -->
@@ -94,7 +139,7 @@
 		<!-- Map -->
 		<div
 			class="row"
-			:class="{ 'sep': item.delivery?.length }"
+			:class="{ 'sep': false }"
 			v-if="item.geohash"
 		>
 			<!-- Component: Map -->

@@ -10,6 +10,7 @@ export default {
 			type: Object,
 			default: () => ({
 				parent: ".field",
+				parentCustomValidation: ".field-custom-validation",
 				passed: "passed",
 				rejected: "rejected"
 			})
@@ -20,7 +21,8 @@ export default {
 				"input[name], textarea[name]": {
 					empty: true, /* Validate for emptity */
 					regex: false, /* Validate with regex */
-					prop: "value" /* Check field prop */
+					prop: "value", /* Check field prop */
+					isCustomDataAttr: false,
 				}
 			})
 		}
@@ -55,14 +57,19 @@ export default {
 				).forEach(field => {
 					const
 						parent = field.closest(this.classes.parent),
+						parentCustomValidation = field.closest(this.classes.parentCustomValidation),
 						valid = {};
 
-					if (parent) {
+					if (!(parentCustomValidation) && parent) {
 						parent.classList.remove(this.classes.passed, this.classes.rejected);
 
 						/* Rules */
 						if (rule.empty) {
-							valid.empty = rule.empty && !!field[rule.prop];
+							if (rule.isCustomDataAttr) {
+								valid.empty = rule.empty && !!(field.dataset?.[rule.prop]);
+							} else {
+								valid.empty = rule.empty && !!field[rule.prop];
+							}
 						}
 	
 						if (rule.regex) {

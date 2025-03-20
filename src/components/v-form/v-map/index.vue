@@ -18,14 +18,29 @@
 						:key="offer.hash"
 					>
 						<l-icon
-							:icon-size="iconSize"
-							:icon-url="isViewMode ? offerIconActive : offerIcon"
-							:icon-anchor="iconAnchor"
+							:icon-size="getOfferIcon(offer).size"
+							:icon-url="getOfferIcon(offer).url"
+							:icon-anchor="getOfferIcon(offer).anchor"
 						>
 						</l-icon>
-						<l-tooltip v-if="!(isViewMode)">{{ offer.caption }}</l-tooltip>
-						<l-popup v-if="!(isViewMode)">
-							<BarterItem
+						
+						<l-tooltip
+							v-if="!(isViewMode || isDeliverySelectionMode && !(offer.isPickupPoint))"
+						>{{ offer.caption }}</l-tooltip>
+
+						<l-popup v-if="!(isViewMode || isDeliverySelectionMode && !(offer.isPickupPoint))">
+							<PickupPointItem 
+								v-if="(isDeliveryInputMode || isDeliverySelectionMode) && offer.isPickupPoint"
+								:item="offer"
+								role="popup"
+								:mode="pickupPointPopupMode"
+								:isSelected="isSelectedOffer(offer)"
+								@showItem="showPickupPoint"
+								@selectItem="selectPickupPoint"
+								@unselectItem="unselectPickupPoint"
+							/>
+							<BarterItem 
+								v-else
 								:item="offer"
 							/>
 						</l-popup>
@@ -34,7 +49,7 @@
 			</template>
 
 			<!-- Find my location -->
-			<template v-if="(isSearchMode || isInputMode)">
+			<template v-if="(isSearchMode || isInputMode || isDeliveryInputMode)">
 				<l-control position="topleft">
 					<div class="leaflet-bar">
 						<a
@@ -70,15 +85,15 @@
 			</template>
 
 			<!-- Pin marker -->
-			<template v-if="(isSearchMode || isInputMode)">
-				<l-marker v-if="isInputMode && marker" :latLng="marker" />
+			<template v-if="(isSearchMode || isInputMode || isDeliveryInputMode)">
+				<l-marker v-if="(isInputMode || isDeliveryInputMode) && marker" :latLng="marker" />
 				<l-geosearch :options="geosearchOptions" />
 			</template>
 
 			<l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
 		</l-map>
 		<div 
-			v-if="isSearchMode" 
+			v-if="(isSearchMode || isDeliveryInputMode)" 
 			class="offers-search-container"
 		>
 			<div

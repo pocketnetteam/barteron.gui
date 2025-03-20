@@ -2,10 +2,11 @@ import { GeoHash } from "geohash";
 import BarterList from "@/components/barter/list/index.vue";
 import Category from "@/components/categories/field/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
-import Delivery from "@/components/delivery/index.vue";
+import WorkSchedule from "@/components/work-schedule/index.vue";
+import PickupPointList from "@/components/pickup-point/list/index.vue";
 import { currencies, numberFormats } from "@/i18n/index.js";
 import CurrencyStore from "@/stores/currency.js";
-import { GeohashBoundsHelper, GeoHashApproximator } from "@/js/geohashUtils.js";
+import { GeoHashApproximator } from "@/js/geohashUtils.js";
 
 export default {
 	name: "Content",
@@ -14,7 +15,8 @@ export default {
 		BarterList,
 		Category,
 		ExchangeList,
-		Delivery
+		WorkSchedule,
+		PickupPointList,
 	},
 
 	data() {
@@ -26,7 +28,22 @@ export default {
 			tags: [],
 			currencyPrice: {},
 			currencyPriceEnabled: false,
-			deliveryPoints: []
+
+			pickupPointsEnabled: false,
+			pickupPointItems: [],
+			pickupPointsLoading: false,
+			pickupPointsLoadingCount: 0,
+			pickupPointsLoadingError: null,
+
+			selfPickupEnabled: false,
+			
+			pickupPointsRequestData: {
+				pageSize: 100,
+				pageStart: 0,
+				topHeight: null,
+				isLoading: false,
+			},
+			mapActionData: {},
 		}
 	},
 
@@ -46,6 +63,14 @@ export default {
 			this.fillData(offer);
 
 			return offer;
+		},
+
+		pickupPoint() {
+			return this.offer?.delivery?.pickupPoint;
+		},
+
+		deliveryOptions() {
+			return this.offer?.delivery?.deliveryOptions;
 		},
 
 		/**
@@ -79,6 +104,13 @@ export default {
 		},
 
 		/**
+		 * Delivery option available
+		 */
+		deliveryAvailable() {
+			return (this.sdk.getTransactionsApiVersion() >= 3);
+		},
+
+		/**
 		 * Format currencies to list
 		 */
 		currencies() {
@@ -87,10 +119,36 @@ export default {
 				value: currency.code,
 				selected: currency.code === (CurrencyStore.currency || numberFormats[this.$root.$i18n.locale]?.currency.currency)
 			}));
-		}
+		},
+
+		validationRules() {
+			return {
+				"input[name], textarea[name]": {
+					empty: true, /* Validate for emptity */
+					regex: false, /* Validate with regex */
+					prop: "value" /* Check field prop */
+				},
+				"#work-schedule-day-list": {
+					empty: true, /* Validate for emptity */
+					regex: false, /* Validate with regex */
+					prop: "validatedvalue", /* Check field prop */
+					isCustomDataAttr: true,
+				},
+				".pickup-point-empty-list": {
+					empty: true, /* Validate for emptity */
+					regex: false, /* Validate with regex */
+					prop: "validatedvalue", /* Check field prop */
+					isCustomDataAttr: true,
+				}
+			}
+		},
 	},
 
 	methods: {
+		mapMode() {
+			return (!(this.isPickupPointCategory()) && this.pickupPointsEnabled) ? "deliveryInput" : "input";
+		},
+
 		/**
 		 * Convert price from currency to pkoin
 		 * 
@@ -132,54 +190,123 @@ export default {
 		fillData(offer) {
 			this.$nextTick(() => {
 				if (offer.hash?.length >= 64 || offer.hash === "draft") {
-					if (offer.tags) {
-						if (["my_list", "for_nothing"].includes(offer.tags[0])) {
-							this.tags = [];
-							this.getting = offer.tags[0];
-						} else {
-							this.getting = "something";
-							this.tags = offer.tags;
-						}
-					}
-
-					if (offer.condition) this.condition = offer.condition;
-					
-					this.currencyPrice = offer.currencyPrice || {};
-					
-					const currencyPriceData = this.getCurrencyPriceData();
-
-					this.currencyPriceEnabled = this.currencyPriceAvailable 
-						&& (offer.hash === "draft" || currencyPriceData.exists);
-					
-					this.waitForRefs("currency,price").then(() => {
-						if (currencyPriceData.exists) {
-							this.price = this.currencyPrice.price;
-							this.$refs.currency.setValue(currencyPriceData.listItem);
-						} else if (offer.price) {
-							this.pkoin = offer.price;
-						};
-					}).then(() => {
-						/* Wait for currency rates */
-						return this.sdk.currency;
-					}).then(() => {
-						if (currencyPriceData.exists) {
-							this.calcPrice({value: currencyPriceData.currency});
-						} else if (offer.price) {
-							this.calcPrice(offer.price);
-						};
-					}).catch(e => { 
-						console.error(e);
-					});
+					this.fillTagsData(offer);
+					this.fillConditionData(offer);
+					this.fillPriceData(offer);
+					this.fillDeliveryData(offer);
 				} else {
-					/* Reset fields to default */
-					this.tags = [];
-					this.getting = "something";
-					this.condition = "new";
-					this.price = this.pkoin = 0;
-					this.currencyPrice = {};
-					this.currencyPriceEnabled = this.currencyPriceAvailable;
+					this.resetOfferFieldsToDefault();
 				}
 			});
+		},
+
+		fillTagsData(offer) {
+			if (offer.tags) {
+				if (["my_list", "for_nothing"].includes(offer.tags[0])) {
+					this.tags = [];
+					this.getting = offer.tags[0];
+				} else {
+					this.getting = "something";
+					this.tags = offer.tags;
+				}
+			};
+		},
+
+		fillConditionData(offer) {
+			if (offer.condition) {
+				this.condition = offer.condition;
+			};
+		},
+
+		fillPriceData(offer) {
+			this.currencyPrice = offer.currencyPrice || {};
+					
+			const currencyPriceData = this.getCurrencyPriceData();
+
+			this.currencyPriceEnabled = this.currencyPriceAvailable 
+				&& (offer.hash === "draft" || currencyPriceData.exists);
+			
+			this.waitForRefs("currency,price").then(() => {
+				if (currencyPriceData.exists) {
+					this.price = this.currencyPrice.price;
+					this.$refs.currency.setValue(currencyPriceData.listItem);
+				} else if (offer.price) {
+					this.pkoin = offer.price;
+				};
+			}).then(() => {
+				/* Wait for currency rates */
+				return this.sdk.currency;
+			}).then(() => {
+				if (currencyPriceData.exists) {
+					this.calcPrice({value: currencyPriceData.currency});
+				} else if (offer.price) {
+					this.calcPrice(offer.price);
+				};
+			}).catch(e => { 
+				console.error(e);
+			});
+		},
+
+		fillDeliveryData(offer) {
+			const deliveryOptions = this.getDeliveryOptions(offer);
+			this.pickupPointsEnabled = (deliveryOptions?.pickupPoints?.isEnabled ? true : false);
+			this.selfPickupEnabled = (deliveryOptions?.selfPickup?.isEnabled ? true : false);
+
+			if (this.pickupPointsEnabled) {
+				const ids = deliveryOptions?.pickupPoints?.ids || [];
+				this.loadPickupPoints(ids);
+			};
+		},
+
+		getDeliveryOptions(offer) {
+			return this.deliveryAvailable && offer.delivery?.deliveryOptions;
+		},
+
+		loadPickupPoints(ids) {
+			this.pickupPointItems = [];
+			this.pickupPointsLoading = true;
+			this.pickupPointsLoadingCount = ids.length;
+			this.pickupPointsLoadingError = null;
+			
+			this.sdk.getBrtOffersByHashes(ids).then(items => {
+				this.pickupPointItems = items;
+			}).catch(e => {
+				this.pickupPointsLoadingError = e;
+				this.pickupPointItems = [];
+				console.error(e);
+			}).finally(() => {
+				this.pickupPointsLoading = false;
+				this.pickupPointsLoadingCount = 0;
+			});
+		},
+
+		resetOfferFieldsToDefault() {
+			this.tags = [];
+			this.getting = "something";
+			this.condition = "new";
+			this.price = this.pkoin = 0;
+			
+			this.currencyPrice = {};
+			this.currencyPriceEnabled = this.currencyPriceAvailable;
+			
+			this.pickupPointsEnabled = false;
+			this.pickupPointItems = [];
+			this.pickupPointsLoading = false;
+			this.pickupPointsLoadingCount = 0;
+			this.pickupPointsLoadingError = null;
+			
+			this.selfPickupEnabled = false;
+		},
+
+		pickupPointsRepeatLoading() {
+			const offer = this.offer;
+			const deliveryOptions = this.getDeliveryOptions(offer);
+			const ids = deliveryOptions?.pickupPoints?.ids || [];
+			this.loadPickupPoints(ids);
+		},
+
+		isPickupPointCategory() {
+			return (this.$refs.category?.id === 97);
 		},
 
 		priceHintLabel() {
@@ -199,6 +326,109 @@ export default {
 		currencyPriceEnabledStateChanged(value, e) {
 			this.currencyPriceEnabled = e.target.checked;
 		},
+
+		pickupPointsEnabledStateChanged(value, e) {
+			this.pickupPointsEnabled = e.target.checked;
+		},
+
+		selfPickupEnabledStateChanged(value, e) {
+			this.selfPickupEnabled = e.target.checked;
+		},
+
+		selectPickupPoint(offer) {
+			const added = this.pickupPointItems.some(f => f.hash === offer.hash);
+			if (!(added) && offer.hash?.length >= 64) {
+				this.pickupPointItems.push(offer);
+			};
+		},
+
+		unselectPickupPoint(offer) {
+			const index = this.pickupPointItems.findIndex(f => f.hash === offer.hash);
+			if (index >= 0) {
+				this.pickupPointItems.splice(index, 1);
+			}
+		},
+
+		selectedOfferIds() {
+			return this.pickupPointItems
+				.filter(f => (f.hash?.length >= 64))
+				.map(item => item.hash);
+		},
+
+		mapAction(actionName, actionParams, event) {
+
+			this.pickupPointsRequestData.actionName = actionName;
+
+			if (actionName === "loadData" || actionName === "loadNextPage") {
+
+				const 
+					tags = [97],
+					pageStart = (actionName === "loadNextPage") ? (this.pickupPointsRequestData.pageStart + 1) : 0,
+					topHeight = (actionName === "loadNextPage") ? this.pickupPointsRequestData.topHeight : null,
+					pageSize = this.pickupPointsRequestData.pageSize;
+
+				const ids = this.sdk.requestServiceData.ids;
+				ids.getBrtOffersFeed += 1;
+
+				const
+					approximator = new GeoHashApproximator(actionParams.bounds),
+					location = approximator.getGeohashItems();
+
+				const request = {
+					tags,
+					location,
+					pageSize,
+					pageStart,
+					topHeight, 
+					checkingData: {
+						requestId: ids.getBrtOffersFeed,
+						checkRequestId: true,
+					}
+				}
+
+				this.pickupPointsRequestData.isLoading = true;
+
+				this.setMapActionData();
+
+				this.sdk.getBrtOffersFeed(
+					request
+				).then(offers => {
+					if (pageStart === 0) {
+						this.pickupPointsRequestData.topHeight = offers?.[0]?.height;
+					}
+					this.pickupPointsRequestData.pageStart = pageStart;
+					this.pickupPointsRequestData.isLoading = false;
+					this.setMapActionData(offers);
+				}).catch(e => { 
+					const
+						requestRejected = (e instanceof AppErrors.RequestIdError),
+						needHandleError = !(requestRejected);
+
+					if (needHandleError) {
+						console.error(e);
+						this.pickupPointsRequestData.isLoading = false;
+						this.setMapActionData(null, e);
+					} else {
+						console.info(`Location component, map action ${actionName}:`, e.message);
+					}
+				});				
+			} else if (actionName === "moveMap") {
+				this.pickupPointsRequestData.isLoading = false;
+				this.setMapActionData();
+			}
+
+		},
+
+		setMapActionData(offers, error) {
+			this.mapActionData = {
+				actionName: this.pickupPointsRequestData.actionName,
+				isLoading: this.pickupPointsRequestData.isLoading,
+				nextPageExists: (offers?.length === this.pickupPointsRequestData.pageSize),
+				isNextPage: (offers?.length && this.pickupPointsRequestData.pageStart > 0),
+				offers,
+				error
+			}
+		},		
 
 		getCurrencyPriceData() {
 			let exists = false;
@@ -242,25 +472,41 @@ export default {
 			return result;
 		},
 
-		/**
-		 * Get near delivery points
-		 */
-		getDeliveryPoints(latlng) {
-			return;
-			
-			const
-				sideLengthInKm = 100,
-				boundsHelper = new GeohashBoundsHelper(latlng, sideLengthInKm),
-				approximator = new GeoHashApproximator(boundsHelper.getBounds()),
-				location = approximator.getGeohashItems();
+		serializeDelivery(data) {
+			let result = {};
 
-			this.sdk.getBrtOffersFeed({
-				tags: [97, 98],
-				location,
-				pageSize: 200
-			}).then(feed => {
-				this.deliveryPoints = feed;
-			});
+			if (this.deliveryAvailable && data) {
+
+				const isPickupPointOffer = this.isPickupPointCategory();
+				if (isPickupPointOffer) {
+					result = {
+						pickupPoint: {
+							financialTerms: data.financialTerms,
+							workSchedule: this.$refs.workSchedule.serialize(),
+							address: (data.address || "").length > 200 ? data.address.slice(0, 200) : data.address,
+							route: data.route,
+						},
+					};
+				} else if (!(isPickupPointOffer)) {
+					const deliveryOptionsExist = (this.pickupPointsEnabled || this.selfPickupEnabled);
+					if (deliveryOptionsExist) {
+						result = {
+							deliveryOptions: {
+								pickupPoints: {
+									isEnabled: this.pickupPointsEnabled,
+									ids: this.selectedOfferIds(),
+								},
+								selfPickup: {
+									isEnabled: this.selfPickupEnabled,
+									additionalInfo: data.selfPickupAdditionalInfo,
+								},
+							},
+						};
+					}
+				}
+			}
+
+			return result;
 		},
 
 		/**
@@ -274,7 +520,9 @@ export default {
 				center = this.$refs.map["marker"],
 				data = form.serialize(),
 				images = photos.serialize(),
-				delivery = this.$refs.delivery?.serialize() || [],
+				delivery = this.serializeDelivery(data),
+				workSchedule = this.$refs.workSchedule, // optional
+				pickupPointList = this.$refs.pickupPointList, // optional
 				currencyPrice = this.serializeCurrencyPrice(),
 				tags = this.getting === "something" 
 					? (data.tags ? data.tags.split(",").map(tag => Number(tag)) : [])
@@ -305,7 +553,22 @@ export default {
 				photos.$el.classList.remove(form.classes.passed);
 			}
 
-			return { hash, form, photos, center, data, images };
+			return { hash, form, photos, center, data, images, workSchedule, pickupPointList };
+		},
+
+		updateAsideStepsAsync() {
+			this.$nextTick(() => {
+				const 
+					items = this.$components.aside.steps,
+					newItems = this.parseLabels("stepsLabels").filter(f => document.getElementById(f.value)),
+					values = items.map(m => m.value),
+					newValues = newItems.map(m => m.value),
+					needUpdate = (JSON.stringify(values) !== JSON.stringify(newValues));
+				
+				if (needUpdate) {
+					this.$components.aside.steps = newItems;
+				}
+			});
 		},
 
 		/**
@@ -315,6 +578,8 @@ export default {
 		 * @param {Object} scope.form
 		 * @param {Boolean} scope.formValid
 		 * @param {Boolean} scope.photosValid
+		 * @param {Boolean|undefined} scope.workScheduleValid
+		 * @param {Boolean|undefined} scope.pickupPointListValid
 		 */
 		stepState(scope) {
 			this.$components.aside.steps.forEach(step => {
@@ -337,6 +602,14 @@ export default {
 
 							case "location": {
 								return true;
+							}
+
+							case "work-schedule": {
+								return scope.workScheduleValid;
+							}
+
+							case "pickup-point-list": {
+								return scope.pickupPointListValid;
 							}
 
 							default: {
@@ -378,15 +651,19 @@ export default {
 		 */
 		submit() {
 			const
-				{ hash, form, photos, images } = this.serializeForm(),
+				{ hash, form, photos, images, workSchedule, pickupPointList } = this.serializeForm(),
 				formValid = form.validate(),
-				photosValid = photos.validate();
+				photosValid = photos.validate(),
+				workScheduleValid = workSchedule?.validate(),
+				pickupPointListValid = pickupPointList?.validate();
 
 			/* Set steps validity at aside */
 			this.stepState({
 				form,
 				formValid,
-				photosValid
+				photosValid,
+				workScheduleValid,
+				pickupPointListValid,
 			});
 
 			/* Check all fields validity */
@@ -467,10 +744,10 @@ export default {
 						return input;
 					} else {
 						return this.$refs.photos.$el;
-					}
+					};
 				})();
 
-				this.scrollTo(field);
+				field && this.scrollTo(field);
 			}
 		},
 
@@ -496,5 +773,13 @@ export default {
 	beforeCreate() {
 		/* Request for permissons */
 		this.sdk.requestPermissions(["account"]);
+	},
+
+	mounted() {
+		this.updateAsideStepsAsync();
+	},
+
+	updated() {
+		this.updateAsideStepsAsync();
 	}
 }

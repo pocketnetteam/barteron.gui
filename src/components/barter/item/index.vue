@@ -80,7 +80,7 @@
 				<span class="price">
 					<template v-if="item.price">
 						<span class="currency icon-pkoin"></span>
-						{{ pkoinPrice ? $n(pkoinPrice, 'shortPkoin') : '...' }}
+						{{ pkoinPrice ? (pricePrefix + $n(pkoinPrice, 'shortPkoin')) : '...' }}
 						<span>{{ $t('profileLabels.coins') }}</span>
 					</template>
 					<template v-else>
@@ -103,6 +103,7 @@
 
 				<div class="currency-holder">
 					<CurrencySwitcher
+						:pricePrefix="pricePrefix"
 						:switcher="false"
 						:amount="item?.price"
 						:currencyPrice="item?.currencyPrice"
@@ -193,7 +194,7 @@
 					<span class="price">
 						<template v-if="item.price">
 							<span class="currency icon-pkoin"></span>
-							{{ pkoinPrice ? $n(pkoinPrice, 'shortPkoin') : '...' }}
+							{{ pkoinPrice ? (pricePrefix + $n(pkoinPrice, 'shortPkoin')) : '...' }}
 							<span>{{ $t('profileLabels.coins') }}</span>
 						</template>
 						<template v-else>
@@ -204,6 +205,7 @@
 
 					<div class="currency-holder">
 						<CurrencySwitcher
+							:pricePrefix="pricePrefix"
 							:switcher="false"
 							:amount="item?.price"
 							:currencyPrice="item?.currencyPrice"
@@ -371,6 +373,43 @@
 				/>
 			</div>
 
+			<!-- Pickup point data -->
+			<div 
+				v-if="pickupPoint"
+				id="pickup-point-info"
+				class="row block sep"
+			>
+				<strong class="title">{{ $t('deliveryLabels.pickup_point_info') }}</strong>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.financial_terms') }}</strong>
+					<p class="description">{{ pickupPoint.financialTerms }}</p>
+				</div>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.shelf_life') }}</strong>
+					<p class="description">{{ $t('deliveryLabels.default_shelf_life_value') }}</p>
+				</div>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.work_schedule') }}</strong>
+					<work-schedule
+						mode="view"
+						:workSchedule="pickupPoint.workSchedule"
+					/>
+				</div>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.address') }}</strong>
+					<p class="description">{{ pickupPoint.address }}</p>
+				</div>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.how_to_get') }}</strong>
+					<p class="description">{{ pickupPoint.route }}</p>
+				</div>
+			</div>
+
 			<div class="row block sep" v-if="item.description">
 				<strong class="title">{{ $t('stepsLabels.description') }}</strong>
 				<p class="description">{{ item.description }}</p>
@@ -393,33 +432,45 @@
 
 			<div
 				class="row"
-				:class="{ 'sep': item.delivery?.length }"
+				:class="{ 'sep': deliveryOptions }"
 				v-if="item.geohash"
 			>
 				<!-- Component: Map -->
 				<v-map
-					mapMode="view"
+					:mapMode="mapMode"
+					:height="(mapMode === 'deliverySelection') ? mapHeight() : undefined"
+					:pickupPointPopupMode="isMyOffer ? 'readonly' : 'selection'"
 					:center="geohash"
 					:zoom="10"
-					:offers="[item]"
+					:offers="mapOffers()"
+					:selectedOfferIds="selectedOfferIds()"
+					@selectPickupPoint="selectPickupPoint"
+					@unselectPickupPoint="unselectPickupPoint"
 				/>
 			</div>
 
-			<div
+			<!-- Delivery options data -->
+			<div 
+				v-if="deliveryOptionsAvailable"
+				id="delivery-options-info"
 				class="row block"
-				v-if="getDeliveryPoints"
 			>
-				<!-- Delivery -->
-				<Delivery
-					ref="delivery"
-					:entries="deliveryPoints"
-					:offerHash="item.hash"
-					type="radio"
-				>
-					<template #before>
-						<strong class="title">{{ $t('deliveryLabels.label') }}</strong>
-					</template>
-				</Delivery>
+				<strong class="title">{{ $t('deliveryLabels.label') }}</strong>
+
+				<PickupPointList
+					id="pickup-point-list"
+					:mode="isMyOffer ? 'readonly' : 'selection'"
+					:compactView="true"
+					:items="pickupPointItems"
+					:selectedOfferIds="selectedOfferIds()"
+					:loaderState="pickupPointsLoading"
+					:loaderItems="pickupPointsLoadingCount"
+					:loadingError="pickupPointsLoadingError"
+					@repeatLoading="pickupPointsRepeatLoading"
+					@selectItem="selectPickupPoint"
+					@unselectItem="unselectPickupPoint"
+				/>
+
 			</div>
 
 			<!-- without sidebar -->

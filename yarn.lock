@@ -2778,7 +2778,7 @@ core-js-compat@^3.31.0, core-js-compat@^3.34.0, core-js-compat@^3.8.3:
   dependencies:
     browserslist "^4.22.3"
 
-core-js@^3.8.0, core-js@^3.8.3:
+core-js@^3.8.3:
   version "3.36.0"
   resolved "https://registry.npmjs.org/core-js/-/core-js-3.36.0.tgz"
   integrity sha512-mt7+TUBbTFg5+GngsAxeKBTl5/VS0guFeJacYge9OmHb+m058UwwIm41SE9T4Den7ClatV57B6TYTuJ0CX1MAw==
@@ -6417,7 +6417,7 @@ scss-tokenizer@^0.4.3:
 
 seamless-scroll-polyfill@^1.2.3:
   version "1.2.4"
-  resolved "https://registry.npmjs.org/seamless-scroll-polyfill/-/seamless-scroll-polyfill-1.2.4.tgz"
+  resolved "https://registry.yarnpkg.com/seamless-scroll-polyfill/-/seamless-scroll-polyfill-1.2.4.tgz#0b701a223f6992786b527b837cc132852ebe232f"
   integrity sha512-1CwHvQRS88m/HwN76hnjFu9dzU2HUJmGbvUkKMoRq70o6Pd1DcD4aGvsku0OqRhUuFKQOsjm0Imo1cC/PWWOfA==
 
 section-matter@^1.0.0:
@@ -7373,15 +7373,6 @@ vue-router@^3.0.0:
   resolved "https://registry.npmjs.org/vue-router/-/vue-router-3.6.5.tgz"
   integrity sha512-VYXZQLtjuvKxxcshuRAwjHnciqZVoXAjTjcqBTz4rKc8qih9g9pI3hbDjmqXaHdgL3v8pV6P8Z335XvHzESxLQ==
 
-vue-snap@^0.7.1:
-  version "0.7.1"
-  resolved "https://registry.npmjs.org/vue-snap/-/vue-snap-0.7.1.tgz"
-  integrity sha512-sQPV8h/G+PUjKDG0HpOtWi0HNqSYF8D34BXFXydbmN+tJerSzYrcA+bBIOITXjusQjwf7hMPAFdAEoZ3ANhgww==
-  dependencies:
-    core-js "^3.8.0"
-    lodash "^4.17.20"
-    seamless-scroll-polyfill "^1.2.3"
-
 vue-style-loader@^4.1.0, vue-style-loader@^4.1.3:
   version "4.1.3"
   resolved "https://registry.npmjs.org/vue-style-loader/-/vue-style-loader-4.1.3.tgz"
@@ -7555,11 +7546,6 @@ webpack-merge@^5.7.3:
     clone-deep "^4.0.1"
     flat "^5.0.2"
     wildcard "^2.0.0"
-
-webpack-shell-plugin-next@^2.3.2:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/webpack-shell-plugin-next/-/webpack-shell-plugin-next-2.3.2.tgz#e7ff817f007cbdc8b9e29800d36c92e3cd64bafd"
-  integrity sha512-VAM1TcncZJHVkXDLlqXt2YMUEYuJca8MRqPThXX0SzxKetXCE16eTzEWaF3a/QbLF2j3grBMosCpnLzxXyu3cA==
 
 webpack-sources@^3.2.3:
   version "3.2.3"

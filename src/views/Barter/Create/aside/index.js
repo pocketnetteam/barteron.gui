@@ -3,7 +3,7 @@ export default {
 
 	data() {
 		return {
-			steps: this.parseLabels("stepsLabels")
+			steps: [],
 		}
 	},
 
@@ -47,5 +47,5 @@ export default {
 				this.$set(this.steps, index, { ...this.steps[index], ...flag });
 			}
 		}
-	}
+	},
 }

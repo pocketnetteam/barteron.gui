@@ -1,6 +1,9 @@
 <template>
 	<v-content class="shrink-right">
-		<v-form ref="form">
+		<v-form 
+			ref="form"
+			:rules="validationRules"
+		>
 			<!-- Title: What you propose -->
 			<strong class="title">{{ $t('stepsLabels.propose') }}</strong>
 
@@ -131,6 +134,11 @@
 				</template>
 			</div>
 
+			<strong
+				v-if="getting !== 'for_nothing' && isPickupPointCategory()"
+				class="subtitle"
+			>{{ $t('deliveryLabels.pickup_point_price_caption') }}</strong>
+
 			<div class="row block" v-if="getting !== 'for_nothing'">
 				<!-- Input: Currency exchange to PKOIN -->
 				<v-input
@@ -207,6 +215,91 @@
 				/>
 			</div>
 
+			<!-- Delivery fields -->
+			<div 
+				v-if="deliveryAvailable && isPickupPointCategory()"
+				id="pickup-point-info"
+				class="row block"
+			>
+				<strong class="title">{{ $t('deliveryLabels.pickup_point_info') }}</strong>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.financial_terms') }}</strong>
+
+					<v-textarea
+						ref="financialTerms"
+						id="financial-terms"
+						class="field"
+						name="financialTerms"
+						length="250"
+						:value="pickupPoint?.financialTerms"
+					/>
+				</div>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.shelf_life') }}</strong>
+
+					<v-input
+						ref="shelfLife"
+						class="field-novalidate"
+						name="shelfLife"
+						id="shelf-life"
+						:readonly="'shelfLife'"
+						:value="$t('deliveryLabels.default_shelf_life_value')"
+						vSize="lg"
+					/>
+					<label 
+						id="shelf-life-label"
+						for="shelf-life" 
+						class="v-label"
+					>
+						<i class="fa fa-info-circle"></i>
+						{{ $t('deliveryLabels.shelf_life_hint') }}
+					</label>
+
+				</div>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.work_schedule') }}</strong>
+
+					<work-schedule
+						ref="workSchedule"
+						id="work-schedule"
+						mode="edit"
+						holderClass="field"
+						name="workSchedule"
+						:workSchedule="pickupPoint?.workSchedule"
+					/>
+				</div>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.address') }}</strong>
+
+					<v-input
+						ref="address"
+						class="field"
+						name="address"
+						id="address"
+						:value="pickupPoint?.address"
+						vSize="lg"
+					/>
+				</div>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.how_to_get') }}</strong>
+
+					<v-textarea
+						ref="route"
+						id="route"
+						class="field"
+						name="route"
+						length="500"
+						:value="pickupPoint?.route"
+					/>
+				</div>
+
+			</div>
+
 			<div class="row block sep">
 				<!-- Title: Description -->
 				<strong class="title">{{ $t('stepsLabels.description') }}</strong>
@@ -222,10 +315,7 @@
 				/>
 			</div>
 
-			<div
-				class="row block"
-				:class="{ 'sep': deliveryPoints.length }"
-			>
+			<div class="row block sep">
 				<!-- Title: Location -->
 				<strong class="title">{{ $t('stepsLabels.location') }}</strong>
 
@@ -234,28 +324,95 @@
 					id="location"
 					class="map"
 					ref="map"
-					mapMode="input"
+					:height="mapHeight()"
+					:mapMode="mapMode()"
+					:pickupPointPopupMode="'input'"
+					:selectedOfferIds="selectedOfferIds()"
 					:center="geohash || location || undefined"
-					@change="getDeliveryPoints"
+					:mapActionData="mapActionData"
 					@errorEvent="errorEvent"
+					@mapAction="mapAction"
+					@selectPickupPoint="selectPickupPoint"
+					@unselectPickupPoint="unselectPickupPoint"
 				/>
 			</div>
 
-			<div
-				class="row block"
-				v-if="deliveryPoints.length"
+			<div 
+				class="row block sep"
+				v-if="!(isPickupPointCategory())"
 			>
-				<!-- Delivery -->
-				<Delivery
-					ref="delivery"
-					:entries="deliveryPoints"
-					type="checkbox"
+				<!-- Title: Delivery -->
+				<strong class="title">{{ $t('deliveryLabels.label') }}</strong>
+
+				<!-- vSwitch: pickup points enabled -->
+				<div class="row block">
+					<v-switch
+						class="no-padding"
+						type="checkbox"
+						name="pickupPointsEnabled"
+						:label="$t('deliveryLabels.use_pickup_points')"
+						:image="{src: imageUrl('pickup-point.png'), alt: 'icon'}"
+						:selected="pickupPointsEnabled ? 'enabled' : ''"
+						:value="'enabled'"
+						vType="checkbox"
+						vSize="xl"
+						@change="pickupPointsEnabledStateChanged"
+					/>
+
+					<label 
+						v-if="pickupPointsEnabled"
+						class="v-label"
+						:class="{'warning-level': !(pickupPointItems.length)}"
+					>
+						<i class="fa fa-info-circle"></i>
+						{{ $t("deliveryLabels.pickup_points_enabled_hint") }}
+					</label>
+				</div>
+
+				<PickupPointList
+					v-if="pickupPointsEnabled"
+					ref="pickupPointList"
+					id="pickup-point-list"
+					holderClass="field"
+					:items="pickupPointItems"
+					:loaderState="pickupPointsLoading"
+					:loaderItems="pickupPointsLoadingCount"
+					:loadingError="pickupPointsLoadingError"
+					mode="input"
+					@unselectItem="unselectPickupPoint"
+					@repeatLoading="pickupPointsRepeatLoading"
+				/>
+
+				<!-- vSwitch: self pickup enabled -->
+				<div class="row">
+					<v-switch
+						class="no-padding"
+						type="checkbox"
+						name="selfPickupEnabled"
+						:label="$t('deliveryLabels.self_pickup_available')"
+						:image="{src: imageUrl('self-pickup.png'), alt: 'icon'}"
+						:selected="selfPickupEnabled ? 'enabled' : ''"
+						:value="'enabled'"
+						vType="checkbox"
+						vSize="xl"
+						@change="selfPickupEnabledStateChanged"
+					/>
+				</div>
+
+				<div 
+					v-if="selfPickupEnabled"
+					class="row full-width"
 				>
-					<template #before>
-						<!-- Title: Delivery -->
-						<strong class="title">{{ $t('deliveryLabels.label') }}</strong>
-					</template>
-				</Delivery>
+					<v-textarea
+						ref="selfPickupAdditionalInfo"
+						id="self-pickup-additional-info"
+						class="field-novalidate full-width"
+						name="selfPickupAdditionalInfo"
+						length="500"
+						:placeholder="$t('deliveryLabels.self_pickup_additional_info_placeholder')"
+						:value="deliveryOptions?.selfPickup?.additionalInfo"
+					/>
+				</div>
 			</div>
 
 			<div id="offer-options" class="row full-width wrap">
