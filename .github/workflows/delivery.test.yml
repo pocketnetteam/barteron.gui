@@ -2,9 +2,6 @@ name: delivery.test
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - delivery_test
 
 jobs:
   build:
