@@ -16,14 +16,15 @@
 			>
 				<template>
 					<div class="title">
-							<h1>{{ title }}</h1>
+						<h1>{{ title }}</h1>
 
-							<v-button
+						<v-button
 							class="v-lightbox-close"
 							vType="light"
+							:disabled="closeButtonDisabled"
 							@click="hide"
 							v-if="close"
-							>
+						>
 							<i class="fa fa-times"></i>
 						</v-button>
 					</div>

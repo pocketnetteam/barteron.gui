@@ -19,6 +19,14 @@ export default {
 		}
 	},
 
+	methods: {
+		trimContent() {
+			if (this.content) {
+				this.content = this.content.trim();
+			}
+		},
+	},
+
 	mounted() {
 		this.content = this.value ?? "";
 	},
@@ -35,6 +43,8 @@ export default {
 			}
 
 			this.count = val.length;
+
+			this.$emit("contentChanged");
 			
 			this.$nextTick(() => {
 				const textarea = this.$refs.textarea;

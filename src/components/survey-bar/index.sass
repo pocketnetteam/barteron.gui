@@ -1,0 +1,39 @@
+@import "@/css/vars.sass"
+
+#survey-bar
+	padding: $r / 2
+	margin-bottom: 4 * $r
+	border: 1px solid $beerus
+	border-radius: 12px
+	background: $goku
+
+	.content
+		padding: 0 $r / 2 0
+		gap: $r
+		justify-content: space-between
+		align-items: center
+
+		.title
+			font-size: 1.1em
+			color: $bulma
+			padding-left: $r
+
+		.buttons-holder
+			gap: $r * 1.5
+			align-items: center
+
+			.survey-bar-close
+				.v-button
+					border: none
+					border-radius: 8px
+					background: none
+					color: $bulma
+					font-size: 18px
+					height: 32px
+					width: 32px
+					+transition()
+
+					&:hover
+						background: $darkgray
+						color: $bulma
+
