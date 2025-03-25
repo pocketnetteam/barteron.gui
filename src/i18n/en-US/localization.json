@@ -92,6 +92,7 @@
 		"show_nearby_on_map": "Show offers on the map",
 		"search_in_visible_area": "Search in visible area",
 		"show_more": "Show more",
+		"show": "Show",
 		"buy_for": "Buy for {cost} PKOIN",
 		"edit": "Edit",
 		"save": "Save",
@@ -215,9 +216,12 @@
 		"submit_comment": "Do you want to submit the comment?",
 		"map_help_info": "Offers displayed in the lists (category content, exchange offers, etc.) can be filtered by the visible area of the map.\n\nSet it so that it covers the desired search area and click the \"Save\" button. To reset the selection, click the \"All regions\" button.",
 		"saving_region_warning_by_zoom": "The coverage of the visible map area is too small. Offer lists will be filtered by this area. Continue anyway?",
+		"survey_form": "Submitting, please wait...",
+		"survey_success": "Your answers have been sent",
 
 		"image_error": "Image upload error: {error}",
 		"node_error": "Node error has occured: {error}",
+		"survey_error": "An error occurred while sending your answers: {error}",
 		"disabled_permissions": "The following permissions are disabled: {error}. Click the \"Application Settings\" button to allow the access.",
 		"app_geolocation_permission_error": "You have restricted access to geolocation. Click the \"Application Settings\" button to allow the access.",
 		"platform_geolocation_permission_error": "Access to geolocation is restricted in the browser or operating system settings. You need to allow the access.",
@@ -259,11 +263,22 @@
 	"feedbackLabels": {
 		"subject": "Barteron, feedback",
 		"title": "Leave your feedback here",
-		"name": "Type your name here",
-		"email": "Type your email here",
-		"message": "Type your message here",
-		"submit_form": "Submitting, please wait..",
+		"name": "Enter your name here",
+		"email": "Enter your email here",
+		"message": "Enter your message here",
+		"submit_form": "Submitting, please wait...",
 		"submit_success": "Your request has been successfully submitted"
+	},
+
+	"surveyLabels": {
+		"title": "Anonymous survey",
+		"prompt": "You can help us improve Barteron! Take an anonymous survey",
+		"answer_placeholder": "Enter your answer here",
+		"question1": "What can be improved in barteron first of all?",
+		"question2": "What do you like most about the barteron?",
+		"email": "You can specify an email for feedback",
+		"email_placeholder": "Email (OPTIONAL)",
+		"empty_answers": "You must answer at least one question"
 	},
 
 	"themeLabels": {

@@ -1,7 +1,9 @@
-import VueI18n from "@/i18n/index.js";
+import i18n from "@/i18n/index.js";
 
 export default {
 	name: "SelectOfferDialog",
+
+	i18n,
 
 	props: {
 		item: Object,
@@ -15,16 +17,6 @@ export default {
 		return {
 			lightbox: false,
 			selected: null,
-		}
-	},
-
-	computed: {
-		dialogTitle() {
-			return VueI18n.t('barterLabels.select');
-		},
-
-		selectButtonTitle() {
-			return VueI18n.t('buttonLabels.propose_exchange');
 		}
 	},
 
