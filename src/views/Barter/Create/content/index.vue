@@ -339,7 +339,7 @@
 
 			<div 
 				class="row block sep"
-				v-if="!(isPickupPointCategory())"
+				v-if="deliveryAvailable && !(isPickupPointCategory())"
 			>
 				<!-- Title: Delivery -->
 				<strong class="title">{{ $t('deliveryLabels.label') }}</strong>

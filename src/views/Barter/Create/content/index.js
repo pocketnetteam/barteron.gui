@@ -146,7 +146,7 @@ export default {
 
 	methods: {
 		mapMode() {
-			return (!(this.isPickupPointCategory()) && this.pickupPointsEnabled) ? "deliveryInput" : "input";
+			return (this.deliveryAvailable && !(this.isPickupPointCategory()) && this.pickupPointsEnabled) ? "deliveryInput" : "input";
 		},
 
 		/**
