@@ -246,6 +246,10 @@ export default {
 		},
 
 		setSurveyBarVisibility() {
+			if (process.env.NODE_ENV !== "production") {
+				return;
+			};
+
 			this.sdk.getSurveyData().then(data => {
 				const needSurvey = (data?.status === "new");
 				if (needSurvey) {

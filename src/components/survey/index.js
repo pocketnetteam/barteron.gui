@@ -86,6 +86,8 @@ export default {
 			this.$refs.form.dialog.view("load", this.$t("dialogLabels.survey_form"));
 
 			const data = this.$refs.form.serialize();
+			data.address = this.sdk.address;
+			data.status = "completed";
 
 			this.loading = true;
 			this.sdk.setSurveyData(data).then(() => {

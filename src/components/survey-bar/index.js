@@ -50,7 +50,10 @@ export default {
 			this.isSurveyBarVisible = false;
 			SurveyStore.setStartTime(null);
 			if (!(submitted)) {
-				const data = { status: "rejected" };
+				const data = {
+					address: this.sdk.address,
+					status: "rejected",
+				};
 				this.sdk.setSurveyData(data).catch(e => {
 					console.error(e);
 				});

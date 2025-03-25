@@ -26,7 +26,7 @@ class SDK {
 		},
 	};
 	offerUpdateActionId = null;
-	surveyURL = "https://.../barteron/survey";
+	surveyURL = "https://p2p.back.pocketnet.app/barteron/survey";
 
 	models = {
 		Account,
