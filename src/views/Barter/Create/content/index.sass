@@ -131,12 +131,13 @@
 		&.rejected
 			padding: $r
 
-	#pickup-point-list
-		margin: 0 0 6 * $r
+	.v-form
+		#pickup-point-list
+			margin: 0 0 6 * $r
+			max-width: calc(684px - #{$r*2})
 
-		.pickup-point-empty-list
-			border-radius: 12px
+			.pickup-point-empty-list
+				border-radius: 12px
 
-			&:not(.rejected)
-				border: 2px solid $trunks
-				
+				&:not(.rejected)
+					border: 2px solid $trunks

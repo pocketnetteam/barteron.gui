@@ -482,6 +482,7 @@ div[class^="barter-item-"]
 			.description
 				color: $popo
 				white-space: pre-wrap
+				word-break: break-all
 
 		> .info
 			font-size: 1em
@@ -513,11 +514,12 @@ div[class^="barter-item-"]
 				color: $popo
 				font-weight: bold
 
-	#pickup-point-list
-		margin: 0 0 6 * $r
+		#pickup-point-list
+			margin: 0 0 6 * $r
+			max-width: calc(#{$width} - #{$r*4} - 2px - #{$sidebar-width})
 
-		.pickup-point-empty-list
-			border-radius: 12px
+			.pickup-point-empty-list
+				border-radius: 12px
 
-			&:not(.rejected)
-				border: 2px solid $trunks
+				&:not(.rejected)
+					border: 2px solid $trunks
