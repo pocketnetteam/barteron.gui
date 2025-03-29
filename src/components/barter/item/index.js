@@ -9,6 +9,7 @@ import PickupPointList from "@/components/pickup-point/list/index.vue";
 import MyOptions from "@/components/barter/item/my-options/index.vue";
 import BarterExchange from "@/components/barter/exchange/index.vue";
 import Profile from "@/components/profile/index.vue";
+import LegalInfo from "@/components/legal-info/index.vue";
 import LikeStore from "@/stores/like.js";
 import PhotoSwipe from "photoswipe";
 import "photoswipe/style.css";
@@ -27,7 +28,8 @@ export default {
 		MyOptions,
 		BarterExchange,
 		Profile,
-		CurrencySwitcher
+		CurrencySwitcher,
+		LegalInfo,
 	},
 
 	props: {
@@ -334,7 +336,20 @@ export default {
 		 */
 		isRemoved() {
 			return this.item.status === "removed";
-		}
+		},
+
+		requiredLegalInfoItemKeys() {
+			return ["barter_agreement_draft"];
+		},
+
+		legalInfoAvailable() {
+			const
+				locale = this.$root.$i18n.locale,
+				data = LegalInfo.methods.allDocumentsWithoutContext?.() || {},
+				existingKeys = (data[locale] || []).map(m => m.i18nKey);
+
+			return this.requiredLegalInfoItemKeys.some(f => existingKeys.includes(f));
+		},
 	},
 
 	methods: {

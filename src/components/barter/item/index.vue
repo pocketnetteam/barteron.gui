@@ -499,6 +499,17 @@
 					:item="item"
 				/>
 			</div>
+
+			<!-- Legal info -->
+			<div 
+				v-if="legalInfoAvailable"
+				class="row block top-sep"
+			>
+				<strong class="title">{{ $t('legalLabels.label') }}</strong>
+				<LegalInfo
+					:i18nDocumentKeys="requiredLegalInfoItemKeys"
+				/>
+			</div>
 		</template>
 	</div>
 </template>

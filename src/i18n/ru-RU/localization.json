@@ -188,6 +188,13 @@
 		"used": "Б/У"
 	},
 
+	"legalLabels": {
+		"label": "Юридическая информация",
+		"user_agreement": "Пользовательское соглашение",
+		"personal_data_processing_policy": "Политика обработки персональных данных",
+		"barter_agreement_draft": "Проект договора мены"
+	},
+
 	"typeLabels": {
 		"label": "Тип",
 		"notebook": {

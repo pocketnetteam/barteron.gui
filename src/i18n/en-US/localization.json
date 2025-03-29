@@ -188,6 +188,13 @@
 		"used": "Used"
 	},
 
+	"legalLabels": {
+		"label": "Legal information",
+		"user_agreement": "User Agreement",
+		"personal_data_processing_policy": "Personal Data Processing Policy",
+		"barter_agreement_draft": "Draft of the barter agreement"
+	},
+
 	"typeLabels": {
 		"label": "Type",
 		"notebook": {
