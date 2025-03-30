@@ -5,7 +5,8 @@
 			vSize="md"
 			@click="click"
 		>
-			<i class="fa fa-comments"></i>
+			<i class="fa fa-envelope"></i>
+			<span class="support">{{ $t('buttonLabels.support') }}</span>
 		</v-button>
 		
 		<v-lightbox
