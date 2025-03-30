@@ -551,19 +551,26 @@ export default {
 		selectPickupPoint(offer) {
 			this.mapObject.closePopup();
 			setTimeout(() => {
-				this.$emit("selectPickupPoint", offer);
+				this.$emit("selectPickupPoint", offer, {source: "map"});
 			}, 300);
 		},
 
 		unselectPickupPoint(offer) {
 			this.mapObject.closePopup();
 			setTimeout(() => {
-				this.$emit("unselectPickupPoint", offer);
+				this.$emit("unselectPickupPoint", offer, {source: "map"});
 			}, 300);
 		},
 
 		isSelectedOffer(offer) {
 			return this.selectedOfferIds.some(f => f === offer.hash);
+		},
+
+		moveToGeohash(geohash) {
+			this.mapObject.setView(
+				this.decodeGeoHash(geohash),
+				this.scale || 0
+			);
 		},
 
 		startLocating() {

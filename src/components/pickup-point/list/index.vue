@@ -4,10 +4,11 @@
 		class="pickup-point-carousel"
 	>
 		<div class="pickup-point-carousel-holder">
-			<carousel>
+			<carousel ref="carousel">
 				<slide
 					v-for="(item, index) in (loaderState && loaderItems || items)"
 					:key="index"
+					:id="getElementId(item?.hash || 'loader')"
 					:class="{
 						'compact-view': compactView,
 					}"

@@ -188,6 +188,13 @@
 		"used": "Used"
 	},
 
+	"legalLabels": {
+		"label": "Legal information",
+		"user_agreement": "User Agreement",
+		"personal_data_processing_policy": "Personal Data Processing Policy",
+		"barter_agreement_draft": "Draft of the barter agreement"
+	},
+
 	"typeLabels": {
 		"label": "Type",
 		"notebook": {
@@ -259,8 +266,10 @@
 		"error#0": "{error}",
 		"error#4": "You have already rated this offer earlier",
 		"error#5": "You can't add a rating to your own offer",
+		"error#12": "Object not found",
 		"error#21": "Failed OpReturn",
 		"error#28": "Too many transactions",
+		"error#60": "Your reputation does not yet allow you to rate offers low",
 		"error#65": "Exceeded limit"
 	},
 
