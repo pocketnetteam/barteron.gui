@@ -408,7 +408,7 @@
 						id="self-pickup-additional-info"
 						class="field-novalidate full-width"
 						name="selfPickupAdditionalInfo"
-						length="500"
+						length="1000"
 						:placeholder="$t('deliveryLabels.self_pickup_additional_info_placeholder')"
 						:value="deliveryOptions?.selfPickup?.additionalInfo"
 					/>

@@ -343,18 +343,23 @@
 				</div>
 
 				<div class="col buttons">
-					<v-button vType="stroke bulma-color bulma-color-hover">
+					<v-button 
+						vType="stroke bulma-color bulma-color-hover"
+						@click="setLike"
+					>
 						<i
 							:class="{
 								'fa fa-heart': true,
 								'active': hasLike
 							}"
-							@click="setLike"
 						></i>
 					</v-button>
 
-					<v-button vType="stroke bulma-color bulma-color-hover">
-						<i class="fa fa-share-alt" @click="shareItem"></i>
+					<v-button 
+						vType="stroke bulma-color bulma-color-hover"
+						@click="shareItem"
+					>
+						<i class="fa fa-share-alt"></i>
 					</v-button>
 				</div>
 			</div>
@@ -437,6 +442,7 @@
 			>
 				<!-- Component: Map -->
 				<v-map
+					ref="map"
 					:mapMode="mapMode"
 					:height="(mapMode === 'deliverySelection') ? mapHeight() : undefined"
 					:pickupPointPopupMode="isMyOffer ? 'readonly' : 'selection'"
@@ -458,6 +464,7 @@
 				<strong class="title">{{ $t('deliveryLabels.label') }}</strong>
 
 				<PickupPointList
+					ref="pickupPointList"
 					id="pickup-point-list"
 					:mode="isMyOffer ? 'readonly' : 'selection'"
 					:compactView="true"

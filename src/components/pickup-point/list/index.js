@@ -53,20 +53,31 @@ export default {
 	},
 
 	methods: {
+		getElementId(hash) {
+			return `list-item-${hash || ""}`;
+		},
+
 		isSelectedItem(item) {
 			return this.mode === "input" || item?.hash && this.selectedOfferIds?.includes(item?.hash);
 		},
 
 		selectItem(offer) {
-			this.$emit("selectItem", offer);
+			this.$emit("selectItem", offer, {source: "list"});
 		},
 
 		unselectItem(offer) {
-			this.$emit("unselectItem", offer);
+			this.$emit("unselectItem", offer, {source: "list"});
 		},
 
 		repeatLoading() {
 			this.$emit("repeatLoading", this);
+		},
+
+		scrollToItem(hash) {
+			const index = this.items?.findIndex(f => f.hash === hash);
+			if (index >= 0) {
+				this.$refs.carousel?.goToSlide(index);
+			}
 		},
 
 		validate() {

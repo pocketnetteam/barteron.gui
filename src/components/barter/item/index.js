@@ -461,7 +461,7 @@ export default {
 						relay: this.item.relay,
 						status: this.item.status,
 						published: this.item.published,
-						geohash: this.item.published,
+						geohash: this.item.geohash,
 					};
 					this.pickupPointItems = [item];
 				}
@@ -491,8 +491,13 @@ export default {
 			this.loadPickupPointsIfNeeded();
 		},
 
-		selectPickupPoint(offer) {
+		selectPickupPoint(offer, options) {
 			this.selectedOfferId = offer.hash;
+			if (options?.source === "map") {
+				offer.hash && this.$refs.pickupPointList?.scrollToItem(offer.hash);
+			} else if (options?.source === "list") {
+				offer.geohash && this.$refs.map?.moveToGeohash(offer.geohash);
+			}
 		},
 
 		unselectPickupPoint() {
