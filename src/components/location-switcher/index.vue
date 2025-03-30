@@ -18,7 +18,7 @@
 				<template v-else>{{ 
 						searchRegionDefined && storedLocationAddress.text ? 
 						storedLocationAddress.text 
-						: $t('buttonLabels.set_location') 
+						: $t('buttonLabels.search_area') 
 				}}</template>
 			</strong>
 		</div>
