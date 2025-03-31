@@ -18,6 +18,7 @@ import BarterItem from "@/components/barter/item/index.vue";
 import PickupPointItem from "@/components/pickup-point/item/index.vue";
 import { mapState } from "pinia";
 import { useLocaleStore } from "@/stores/locale.js";
+import ThemeStore from "@/stores/theme.js";
 
 delete Icon.Default.prototype._getIconUrl;
 Icon.Default.mergeOptions({
@@ -191,6 +192,9 @@ export default {
 			return (this.isSearchMode || this.isDeliveryInputMode) ? this.foundOffers : this.offers;
 		},
 
+		isDarkTheme() {
+			return ThemeStore.isDarkTheme();
+		},
 	},
 
 	methods: {
