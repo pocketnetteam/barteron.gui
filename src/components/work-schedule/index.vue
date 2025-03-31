@@ -94,7 +94,7 @@
 				ref="additionalInfo"
 				class="field-custom-validation"
 				name="workScheduleAdditionalInfo"
-				length="250"
+				length="500"
 				:placeholder="$t('deliveryLabels.work_schedule_additional_info_placeholder')"
 				:value="additionalInfo"
 			/>
