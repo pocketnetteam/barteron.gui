@@ -2,6 +2,7 @@
 	<div
 		:id="id"
 		:style="{ height, width, '--height': height, '--width': width }"
+		:class="{ 'dark-theme': isDarkTheme }"
 	>
 		<l-map
 			ref="map"

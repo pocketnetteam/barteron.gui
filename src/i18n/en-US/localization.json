@@ -135,9 +135,10 @@
 		"yes": "Yes",
 		"no": "No",
 		"unknown": "Unknown",
-		"set_location": "Set location",
+		"search_area": "Search area",
 		"download_app": "Download application",
 		"continue_working": "Continue working",
+		"support": "Support",
 		"apply": "Apply",
 		"reset": "Reset",
 		"submit": "Submit"
