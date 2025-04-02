@@ -293,7 +293,7 @@
 						id="route"
 						class="field"
 						name="route"
-						length="500"
+						length="1000"
 						:value="pickupPoint?.route"
 					/>
 				</div>

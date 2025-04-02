@@ -47,6 +47,10 @@
 /* Large screen size */
 @media screen and (max-width: $large)
 	#app
+		#container
+			#content.shrink-right
+				margin: 0
+				width: 100%
 
 /* Medium screen size */
 @media screen and (max-width: $medium)
@@ -117,10 +121,6 @@
 		#container
 			&:has(#aside)
 				padding-left: $r * 0
-
-			#content.shrink-right
-				margin: 0
-				width: 100%
 
 		.v-lightbox section
 			max-width: 100%

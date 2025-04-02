@@ -26,12 +26,12 @@
 						</l-icon>
 						
 						<l-tooltip
-							v-if="!(isViewMode || isDeliverySelectionMode && !(offer.isPickupPoint))"
+							v-if="!(isViewMode || isDeliverySelectionMode && !(offer.isPickupPoint || offer.isSelfPickup))"
 						>{{ offer.caption }}</l-tooltip>
 
-						<l-popup v-if="!(isViewMode || isDeliverySelectionMode && !(offer.isPickupPoint))">
+						<l-popup v-if="!(isViewMode || isDeliverySelectionMode && !(offer.isPickupPoint || offer.isSelfPickup))">
 							<PickupPointItem 
-								v-if="(isDeliveryInputMode || isDeliverySelectionMode) && offer.isPickupPoint"
+								v-if="(isDeliveryInputMode || isDeliverySelectionMode) && (offer.isPickupPoint || offer.isSelfPickup)"
 								:item="offer"
 								role="popup"
 								:mode="pickupPointPopupMode"

@@ -354,9 +354,17 @@ export default {
 
 	methods: {
 		mapOffers() {
-			return this.mapMode === "deliverySelection" 
-				? [this.item, ...this.pickupPointItems.filter(f => !(f.isSelfPickup))] 
-				: [this.item];
+			let result = [];
+			if (this.mapMode === "deliverySelection") {
+				const
+					selfPickupExists = this.pickupPointItems.some(f => f.isSelfPickup),
+					shouldReplaceThisOfferWithSelfPickupItem = selfPickupExists;
+
+				result = shouldReplaceThisOfferWithSelfPickupItem ? [...this.pickupPointItems] : [this.item, ...this.pickupPointItems];
+			} else {
+				result = [this.item];
+			};
+			return result;
 		},
 
 		/**
@@ -456,6 +464,7 @@ export default {
 						isSelfPickup: true,
 						hash: this.selfPickupItemId,
 						address: this.item.address,
+						caption: this.$t("deliveryLabels.self_pickup"),
 						additionalInfo: options.selfPickup?.additionalInfo,
 						time: this.item.time,
 						relay: this.item.relay,

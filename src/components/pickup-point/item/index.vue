@@ -19,9 +19,9 @@
 
 			<div 
 				class="row title"
-				:title="$t('deliveryLabels.self_pickup')"
+				:title="item.caption"
 				@click="showItem"
-			>{{ $t('deliveryLabels.self_pickup') }}</div>
+			>{{ item.caption }}</div>
 
 			<div 
 				class="row about-self-pickup-info"
