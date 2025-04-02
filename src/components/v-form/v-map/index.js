@@ -115,6 +115,12 @@ export default {
 				size: [32, 37],
 				anchor: [16, 37],
 			},
+			selfPickupIcon: {
+				regular: this.imageUrl("self-pickup-icon.png"),
+				active: this.imageUrl("self-pickup-icon-active.png"),
+				size: [32, 37],
+				anchor: [16, 37],
+			},
 			mapObject: {},
 			mapHandlers: {},
 			resizeObserver: null,
@@ -199,12 +205,19 @@ export default {
 
 	methods: {
 		getOfferIcon(offer) {
-			const 
-				icon = offer.isPickupPoint ? this.pickupPointIcon : this.offerIcon,
-				key = (
+			let icon = {};
+			if (offer.isPickupPoint) {
+				icon = this.pickupPointIcon;
+			} else if (offer.isSelfPickup) {
+				icon = this.selfPickupIcon;
+			} else {
+				icon = this.offerIcon;
+			}
+
+			const key = (
 					this.isViewMode 
 					|| this.isSelectedOffer(offer)
-					|| this.isDeliverySelectionMode && !(offer.isPickupPoint)
+					|| this.isDeliverySelectionMode && !(offer.isPickupPoint || offer.isSelfPickup)
 				) ? "active" : "regular",
 				url = icon[key];
 
