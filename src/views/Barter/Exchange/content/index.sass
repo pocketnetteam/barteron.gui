@@ -1,56 +1,61 @@
 @import "@/css/vars.sass"
 
-.app-banner
-	background: $primary
-	max-width: 600px
-	margin: auto
-	box-shadow: 1px 1px 6px $backdrop
-	padding: 1.5 * $r
-	border-radius: 16px
+.app-banner-holder
+	display: flex
+	justify-content: center
+	align-items: center
+	padding: $r
 
-	.box
-		margin: 0
+	.app-banner
+		background: $primary
+		max-width: 600px
+		box-shadow: 1px 1px 6px $backdrop
+		padding: 1.5 * $r
+		border-radius: 16px
 
-	.app-banner-holder
-		h1, p
-			color: $bulma
-			text-align: justify
-			word-wrap: break-word
+		.box
+			margin: 0
 
-		h1.title
-			margin: 0 auto $r
+		.app-banner-content
+			h1, p
+				color: $bulma
+				text-align: justify
+				word-wrap: break-word
 
-		h1.info
-			font-size: 1.2em
-			text-transform: none
-			font-weight: normal
+			h1.title
+				margin: 0 auto $r
 
-		#open-apps-link-button
-			margin: 4 * $r auto 4 * $r
+			h1.info
+				font-size: 1.2em
+				text-transform: none
+				font-weight: normal
 
-		p.important
-			font-weight: bold
-			font-size: 1.2em
-			margin: 0 auto 0
+			#open-apps-link-button
+				margin: 4 * $r auto 4 * $r
 
-		p.details
-			margin-top: .5em
+			p.important
+				font-weight: bold
+				font-size: 1.2em
+				margin: 0 auto 0
 
-		.apps-link
-			color: $bulma
+			p.details
+				margin-top: .5em
 
-		#app-banner-checkbox-holder
-			margin-top: 4 * $r
+			.apps-link
+				color: $bulma
 
-			.v-switch-holder
-				padding: $r 0 $r / 2 0
+			#app-banner-checkbox-holder
+				margin-top: 4 * $r
 
-		#hide-button-holder
-			margin-top: 2* $r
-			border-top: 1px solid $beerus
+				.v-switch-holder
+					padding: $r 0 $r / 2 0
 
-			#hide-button
-				margin-top: 2 * $r
+			#hide-button-holder
+				margin-top: 2* $r
+				border-top: 1px solid $beerus
+
+				#hide-button
+					margin-top: 2 * $r
 
 
 .my-barter-holder
