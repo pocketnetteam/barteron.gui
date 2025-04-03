@@ -12,6 +12,7 @@
 		</v-button>
 
 		<v-button
+			v-if="offerExists"
 			vType="hit"
 			:to="{ name: 'exchangeOptions', params: { id: item?.hash }, query: { expanded: 1 } }"
 		>

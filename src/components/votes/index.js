@@ -57,6 +57,10 @@ export default {
 		comments() {
 			return this.details?.comments || [];
 		},
+
+		offerExists() {
+			return (this.item?.hash?.length >= 64);
+		},
 	},
 
 	methods: {
@@ -252,7 +256,8 @@ export default {
 		},
 
 		voteable() {
-			return this.form
+			return this.offerExists 
+				&& this.form
 				&& !(this.offerScores.some(f => f.address === this.sdk.address && (f.relay || f.completed))
 					|| this.isOfferScoreLoading
 					|| this.isOfferScoreConfirm);
@@ -280,7 +285,7 @@ export default {
 		},
 
 		commentable() {
-			return this.form;
+			return this.offerExists && this.form;
 		},
 	},
 
