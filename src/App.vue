@@ -69,10 +69,7 @@ import {
 	default as LocaleStore,
 	useLocaleStore
 } from "@/stores/locale.js";
-import { 
-	default as SurveyStore,
-	useSurveyStore
-} from "@/stores/survey.js";
+import { useSurveyStore } from "@/stores/survey.js";
 
 export default {
 	name: "Barteron",
@@ -102,6 +99,7 @@ export default {
 			lastScrollPosition: 0,
 			lastRoute: null,
 			isHeaderVisible: true,
+			surveyTimerId: null,
 		}
 	},
 
@@ -251,31 +249,15 @@ export default {
 			};
 
 			this.sdk.getSurveyData().then(data => {
-				const needSurvey = (data?.status === "new");
+				const needSurvey = (data?.status === "new" && !(this.surveyTimerId));
 				if (needSurvey) {
-					if (this.needShowSurveyBar()) {
+					this.surveyTimerId = setTimeout(() => {
 						this.isSurveyBarVisible = true;
-					} else {
-						const interval = setInterval(() => {
-							if (this.needShowSurveyBar()) {
-								this.isSurveyBarVisible = true;
-								clearInterval(interval);
-							}
-						}, 60_000);
-					};
+					}, this.surveyDisplayInterval);
 				}
 			}).catch(e => {
 				console.error(e);
 			});
-		},
-
-		needShowSurveyBar() {
-			const 
-				startTime = SurveyStore.startTime || SurveyStore.createStartTime(),
-				currentTime = Date.now(),
-				result = (currentTime - startTime >= this.surveyDisplayInterval);
-			
-			return result;
 		},
 	},
 

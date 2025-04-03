@@ -1,10 +1,7 @@
 import Survey from "@/components/survey/index.vue";
 import Vue from 'vue';
 import { mapWritableState } from "pinia";
-import { 
-	default as SurveyStore,
-	useSurveyStore
-} from "@/stores/survey.js";
+import { useSurveyStore } from "@/stores/survey.js";
 
 export default {
 	name: "SurveyBar",
@@ -48,7 +45,6 @@ export default {
 
 		close(submitted) {
 			this.isSurveyBarVisible = false;
-			SurveyStore.setStartTime(null);
 			if (!(submitted)) {
 				const data = {
 					address: this.sdk.address,
