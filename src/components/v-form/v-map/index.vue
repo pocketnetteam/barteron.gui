@@ -133,7 +133,5 @@
 	</div>
 </template>
 
-<style src="leaflet/dist/leaflet.css"></style>
-<style src="leaflet-geosearch/assets/css/leaflet.css"></style>
 <style lang="sass" src="./index.sass"></style>
 <script src="./index.js"></script>
