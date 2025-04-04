@@ -136,9 +136,11 @@ div[id^="map"]
 				color: $popo
 				background-color: $goku
 
-				>:hover
+				> div:hover,
+				> div.active
 					border-color: $trunks
 					background-color: transparent
+					cursor: pointer
 
 				&:not(:empty)
 					position: relative
