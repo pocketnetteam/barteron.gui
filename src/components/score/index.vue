@@ -1,6 +1,7 @@
 <template>
 	<div :class="{
 		score: true,
+		preview: mode === 'preview',
 		voteable: voteable && !voted
 	}">
 		<span
@@ -31,6 +32,15 @@
 				><i class="fa fa-star"></i></li>
 			</ul>
 		</div>
+
+		<span 
+			v-if="mode === 'preview' && votesCount > 0"
+			class="votes-count"
+		><i class="fa fa-user"></i>{{ votesCount }}</span>
+		<!-- <template v-if="mode === 'preview' && votesCount > 0">
+			<i class="fa fa-user"></i>
+			<span>{{ votesCount }}</span>
+		</template> -->
 	</div>
 </template>
 

@@ -4,6 +4,7 @@ import Loader from "@/components/loader/index.vue";
 import Caption from "@/components/barter/item/caption/index.vue";
 import PhotoSwipe from "photoswipe";
 import SelectPickupPointDialog from "@/components/pickup-point/select-dialog/index.vue";
+import Score from "@/components/score/index.vue";
 import "photoswipe/style.css";
 
 export default {
@@ -14,6 +15,7 @@ export default {
 		Loader,
 		Caption,
 		SelectPickupPointDialog,
+		Score,
 	},
 
 	inject: ['dialog', 'lightboxContainer'],
@@ -41,10 +43,32 @@ export default {
 		return {
 			hover: 0,
 			active: 0,
+			isAnimating: false,
+			selectionModeButtonVType: undefined,
 		}
 	},
 
 	computed: {
+		isInputMode() {
+			return this.mode === "input";
+		},
+
+		isSelectionMode() {
+			return this.mode === "selection";
+		},
+
+		isReadonlyMode() {
+			return this.mode === "readonly";
+		},
+
+		isPopupRole() {
+			return this.role === "popup";
+		},
+
+		isListItemRole() {
+			return this.role === "listItem";
+		},
+		
 		/**
 		 * Get author address
 		 * 
@@ -108,6 +132,10 @@ export default {
 		/* Get offer images */
 		images() {
 			return (this.item.images || []).map(url => this.sdk.manageBastyonImageSrc(url));
+		},
+
+		averageOfferScore() {
+			return this.sdk.barteron.averageOfferScores[this.item.hash];
 		},
 
 		/**
@@ -179,12 +207,51 @@ export default {
 		},
 
 		showDialog() {
+			let actionButtonSettings = undefined;
+			if (this.isInputMode) {
+				actionButtonSettings = {
+					i18nKeys: {
+						regular: "select",
+						isSelected: "cancel",
+					},
+					vType: {
+						regular: undefined,
+						isSelected: "hit",
+					}
+				};
+			} else if (this.isSelectionMode) {
+				if (this.isPopupRole) {
+					actionButtonSettings = {
+						i18nKeys: {
+							regular: "buy",
+							isSelected: "buy",
+						},
+						vType: {
+							regular: "hit",
+							isSelected: "hit",
+						}
+					};
+				} else {
+					actionButtonSettings = {
+						i18nKeys: {
+							regular: "select",
+							isSelected: "buy",
+						},
+						vType: {
+							regular: undefined,
+							isSelected: "hit",
+						}
+					};
+				}
+			};
+
 			var ComponentClass = Vue.extend(SelectPickupPointDialog);
 			var instance = new ComponentClass({
 				propsData: {
 					item: this.item,
 					isSelected: this.isSelected,
 					mode: this.mode,
+					actionButtonSettings,
 				},
 			});
 			
@@ -200,12 +267,52 @@ export default {
 		},
 
 		dialogAction() {
-			if (this.mode !== "readonly") {
-				if (this.isSelected) {
-					this.unselectItem();
-				} else {
-					this.selectItem();
+			if (!(this.isReadonlyMode)) {
+				if (this.isInputMode) {
+					if (this.isSelected) {
+						this.unselectItem();
+					} else {
+						this.selectItem();
+					}
 				};
+
+				if (this.isSelectionMode) {
+					if (this.isPopupRole) {
+						this.buyAtItem();
+					} else {
+						if (this.isSelected) {
+							this.buyAtItem();
+						} else {
+							this.selectItem();
+						}
+					}
+				};
+			};
+		},
+
+		animateSelection() {
+			const needAnimate = (
+				this.isSelectionMode 
+				&& this.isListItemRole 
+				&& !(this.isAnimating)
+			);
+
+			if (needAnimate) {
+				this.isAnimating = true;
+
+				const delay = (ms) => {
+					return new Promise(resolve => setTimeout(resolve, ms));
+				};
+
+				delay(100).then(() => {
+					this.selectionModeButtonVType = "bulma-stroke";
+					return delay(300);
+				}).then(() => {
+					this.selectionModeButtonVType = undefined;
+					return delay(300);
+				}).then(() => {
+					this.isAnimating = false;
+				});
 			};
 		},
 
@@ -215,6 +322,10 @@ export default {
 
 		unselectItem() {
 			this.$emit("unselectItem", this.item);
+		},
+
+		buyAtItem() {
+			this.$emit("buyAtItem", this.item);
 		},
 	},
 }

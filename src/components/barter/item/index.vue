@@ -1,14 +1,12 @@
 <template>
 	<div :class="{
 		[`barter-item-${ vType }`]: true,
-		'barter-item-relay': hasRelay
+		'barter-item-relay': hasRelay,
+		'compact-view': compactView,
+		'hide-info': hideInfo,
 	}">
 		<!-- Picture -->
 		<picture 
-			:class="{
-				'compact-view': compactView,
-				'hide-info': hideInfo
-			}"
 			v-if="images?.length && vType !== 'page'"
 		>
 			<router-link :to="!(hasRelay || isRemoved) ? offerLink : {}">
@@ -70,6 +68,15 @@
 							@mouseleave="() => hover = 0"
 						>{{ index }}</li>
 					</ul>
+					<Score
+						v-if="averageOfferScore?.value"
+						mode="preview"
+						:rating="'behind'"
+						:stars="1"
+						:value="averageOfferScore?.value"
+						:starsValue="averageOfferScore?.value"
+						:votesCount="averageOfferScore?.count"
+					/>
 				</template>
 			</router-link>
 		</picture>
@@ -450,8 +457,9 @@
 					:zoom="10"
 					:offers="mapOffers()"
 					:selectedOfferIds="selectedOfferIds()"
+					@errorEvent="mapErrorEvent"
 					@selectPickupPoint="selectPickupPoint"
-					@unselectPickupPoint="unselectPickupPoint"
+					@buyAtPickupPoint="buyAtPickupPoint"
 				/>
 			</div>
 
@@ -475,13 +483,21 @@
 					:loadingError="pickupPointsLoadingError"
 					@repeatLoading="pickupPointsRepeatLoading"
 					@selectItem="selectPickupPoint"
-					@unselectItem="unselectPickupPoint"
+					@buyAtItem="buyAtPickupPoint"
 				/>
+
+				<label
+					v-if="purchaseStateLabel.isEnabled"
+					class="v-label warning-level no-sidebar"
+				>
+					<i :class="purchaseStateLabel.iconClass"></i>
+					{{ $t(purchaseStateLabel.i18nKey) }}
+				</label>
 
 			</div>
 
 			<!-- without sidebar -->
-			<div class="row block sep no-sidebar">
+			<div class="row block top-sep no-sidebar">
 			</div>
 
 			<!-- without sidebar -->
@@ -503,7 +519,6 @@
 				<!-- Someone's offer -->
 				<BarterExchange
 					v-if="!isMyOffer"
-					:item="item"
 				/>
 			</div>
 

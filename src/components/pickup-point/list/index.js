@@ -69,6 +69,10 @@ export default {
 			this.$emit("unselectItem", offer, {source: "list"});
 		},
 
+		buyAtItem(offer) {
+			this.$emit("buyAtItem", offer, {source: "list"});
+		},
+
 		repeatLoading() {
 			this.$emit("repeatLoading", this);
 		},
@@ -77,6 +81,15 @@ export default {
 			const index = this.items?.findIndex(f => f.hash === hash);
 			if (index >= 0) {
 				this.$refs.carousel?.goToSlide(index);
+			}
+		},
+
+		animateSelection() {
+			if (!(this.loaderState)) {
+				(this.items || []).map(m => m?.hash).filter(f => f).forEach(el => {
+					const ref = this.$refs[el]?.[0];
+					ref?.animateSelection?.();
+				});
 			}
 		},
 

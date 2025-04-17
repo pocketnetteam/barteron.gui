@@ -17,7 +17,7 @@
 				<!-- Someone's offer -->
 				<BarterExchange
 					v-if="!isMyOffer"
-					:item="item"
+					:purchaseStateLabels="true"
 				/>
 			</div>
 		</div>

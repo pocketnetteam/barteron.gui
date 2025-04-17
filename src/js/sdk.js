@@ -10,6 +10,7 @@ import Offer from "@/js/models/offer.js";
 import OfferScore from "@/js/models/offerScore.js";
 import Comment from "@/js/models/comment.js";
 import AppErrors from "@/js/appErrors.js";
+import deliverySettings from "@/js/deliverySettings.js"
 
 /**
  * Allow work with bastyon
@@ -263,6 +264,7 @@ class SDK {
 			_offers: {},
 			_details: {},
 			_offerScores: {},
+			_averageOfferScores: {},
 			_comments: {}
 		};
 
@@ -299,6 +301,14 @@ class SDK {
 
 			/* Barteron offers scores */
 			offerScores: new Proxy(this.barteron._offerScores, {
+				get(target, hash) {
+					if (hash !== "draft" && (typeof hash !== "string" || hash?.length < 64)) return this;
+					return target?.[hash];
+				}
+			}),
+
+			/* Barteron average offers scores */
+			averageOfferScores: new Proxy(this.barteron._averageOfferScores, {
 				get(target, hash) {
 					if (hash !== "draft" && (typeof hash !== "string" || hash?.length < 64)) return this;
 					return target?.[hash];
@@ -1049,6 +1059,10 @@ class SDK {
 		}
 	}
 
+	getDeliverySettings() {
+		return deliverySettings;
+	}
+
 	/**
 	 * Check access to localstroage
 	 * 
@@ -1152,15 +1166,26 @@ class SDK {
 	 * Get barteron offers by address
 	 * 
 	 * @param {String} address
+	 * @param {Object} options
 	 * 
 	 * @returns {Promise}
 	 */
-	async getBrtOffers(address) {
+	async getBrtOffers(
+		address, 
+		options = { disabledAverageOfferScores: false }
+	) {
 		if (!address && !this._address) await this.getAddress();
 		address = address || this._address;
 
-		return this.rpc("getbarteronoffersbyaddress", address).then(offers => {
-			return offers?.map(offer => new Offer(offer)) || [];
+		return this.rpc("getbarteronoffersbyaddress", address).then(items => {
+			const offers = items?.map(item => new Offer(item)) || [];
+
+			if (!(options?.disabledAverageOfferScores)) {
+				const offerIds = offers.map(m => m.hash);
+				this.getBrtAverageOfferScores(offerIds);
+			};
+
+			return offers;
 		});
 	}
 
@@ -1168,15 +1193,23 @@ class SDK {
 	 * Get barteron offers by hashes
 	 * 
 	 * @param {Array[String]} hashes
+	 * @param {Object} options
 	 * 
 	 * @returns {Promise}
 	 */
-	getBrtOffersByHashes(hashes = []) {
+	getBrtOffersByHashes(
+		hashes = [], 
+		options = { disabledAverageOfferScores: false }
+	) {
 		hashes.forEach(hash => {
 			if (!this.barteron._offers[hash]) {
 				new Offer({ hash });
 			}
 		});
+
+		if (!(options?.disabledAverageOfferScores)) {
+			this.getBrtAverageOfferScores(hashes);
+		};
 
 		return this.rpc("getbarteronoffersbyroottxhashes", hashes).then(offers => {
 			/* Sort to get offers in same order as requested */
@@ -1229,7 +1262,7 @@ class SDK {
 							data[key] = details[key]?.filter(f => f.s2 === hash).map(item => new OfferScore(item)) || [];
 						} else if (key === "comments") {
 							data[key] = details[key]?.filter(f => f.s3 === hash).map(item => new Comment(item)) || [];
-						} else {
+						} else if (key === "commentScores") {
 							data[key] = details[key]?.filter(f => f.s2 === hash) || [];
 						}
 					}
@@ -1237,6 +1270,84 @@ class SDK {
 					Vue.set(this.barteron._details, hash, data);
 				}
 			});
+
+			return details;
+		}).catch(e => {
+			console.error(e);
+		});
+	}
+	
+	/**
+	 * Get barteron average offers score
+	 * 
+	 * @param {Array[String]} offerIds
+	 * @param {Object} options
+	 * 
+	 * @returns {Promise}
+	 */
+	getBrtAverageOfferScores(
+		offerIds = [], 
+		options = { forceUpdate: false }
+	) {
+		offerIds.forEach(hash => {
+			if (!this.barteron._averageOfferScores[hash]) {
+				Vue.set(this.barteron._averageOfferScores, hash, {});
+			}
+		});
+
+		const 
+			cacheInterval = 12 * 60 * 60_000,
+			nowDate = Date.now();
+
+		const filteredIds = offerIds.filter(hash => {
+			let needUpdate = false;
+			const 
+				item = this.barteron._averageOfferScores[hash],
+				createdAt = item?.createdAt;
+
+			if (
+				options?.forceUpdate
+				|| !(createdAt)
+				|| createdAt && (nowDate - createdAt >= cacheInterval)
+			) {
+				needUpdate = true;
+			}
+			return needUpdate;
+		})
+
+		if (!(filteredIds.length)) {
+			return;
+		}
+
+		return this.rpc("getbarteronoffersdetails", {
+			offerIds: filteredIds,
+			includeAccounts: false,
+			includeScores: true,
+			includeComments: false,
+			includeCommentScores: false,
+		}).then(details => {
+			const offerScores = details?.offerScores;
+			if (offerScores) {
+				filteredIds.forEach(hash => {
+					const scores = offerScores
+						.filter(f => f.s2 === hash)
+						.map(m => Number(m.i1))
+						.filter(f => !(Number.isNaN(f)) && Number.isFinite(f));
+					
+					const 
+						count = scores.length,
+						value = scores.reduce((acc, value) => acc + value, 0) / (scores.length || 1),
+						createdAt = Date.now();
+					
+					const data = {
+						count,
+						value,
+						createdAt,
+					};
+					
+					Vue.set(this.barteron._averageOfferScores, hash, data);
+				});
+			};
 
 			return details;
 		}).catch(e => {
@@ -1266,9 +1377,14 @@ class SDK {
 	 * @param {String} request.orderBy height | location | price
 	 * @param {Boolean} request.orderDesc true | false
 	 * 
+	 * @param {Object} options
+	 * 
 	 * @returns {Promise}
 	 */
-	getBrtOffersFeed(request = {}) {
+	getBrtOffersFeed(
+		request = {}, 
+		options = { disabledAverageOfferScores: false }
+	) {
 		const
 			checkingData = request.checkingData,
 			requestName = "getBrtOffersFeed";
@@ -1301,7 +1417,14 @@ class SDK {
 				}
 			}
 
-			return feed?.map(offer => new Offer(offer)) || [];
+			const offers = feed?.map(offer => new Offer(offer)) || [];
+
+			if (!(options?.disabledAverageOfferScores)) {
+				const offerIds = offers.map(m => m.hash);
+				this.getBrtAverageOfferScores(offerIds);
+			};
+
+			return offers;
 		});
 	}
 
@@ -1327,9 +1450,11 @@ class SDK {
 	 * @param {String} request.orderBy height | location | price
 	 * @param {Boolean} request.orderDesc true | false
 	 * 
+	 * @param {Object} options
+	 * 
 	 * @returns {Promise}
 	 */
-	getBrtOfferDeals(request) {
+	getBrtOfferDeals(request, options = { disabledAverageOfferScores: false }) {
 		if (this.isBrighteonProject()) {
 			this.setupRequestForBrighteon(request);
 
@@ -1344,7 +1469,14 @@ class SDK {
 			myTags: (request?.myTags || []).map(tag => +tag),
 			theirTags: (request?.theirTags || []).map(tag => +tag)
 		}).then(deals => {
-			return deals?.map(offer => new Offer(offer)) || [];
+			const offers = deals?.map(offer => new Offer(offer)) || [];
+
+			if (!(options?.disabledAverageOfferScores)) {
+				const offerIds = offers.map(m => m.hash);
+				this.getBrtAverageOfferScores(offerIds);
+			};
+
+			return offers;
 		});
 	}
 
@@ -1455,6 +1587,8 @@ class SDK {
 	 * @param {String} data.offerId
 	 * @param {String} data.value
 	 * @param {String} data.address
+	 * 
+	 * @returns {Promise}
 	 */
 	setBrtOfferVote(data) {
 		return this.sdk.barteron.vote({
