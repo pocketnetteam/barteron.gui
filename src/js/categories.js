@@ -74,6 +74,24 @@ class Categories {
 	}
 
 	/**
+	 * Get parents by id
+	 * 
+	 * @param {String} id
+	 * 
+	 * @returns {Array}
+	 */
+	getParentsById(id) {
+		const result = [];
+		let item = this.findById(id);
+		while (item?.parent) {
+			const parentItem = this.findById(item.parent);
+			parentItem && result.unshift(parentItem);
+			item = parentItem;
+		};
+		return result;
+	}
+
+	/**
 	 * Search children recursively by id
 	 * 
 	 * @param {String} id

@@ -1,4 +1,4 @@
-import SubCategories from "@/components/categories/sub-categories/index.vue";
+import CategoriesHierarchy from "@/components/categories/categories-hierarchy/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
 import LegalInfo from "@/components/legal-info/index.vue";
 import offerStore from "@/stores/offer.js";
@@ -7,7 +7,7 @@ export default {
 	name: "Aside",
 
 	components: {
-		SubCategories,
+		CategoriesHierarchy,
 		ExchangeList,
 		LegalInfo,
 	},
@@ -30,10 +30,6 @@ export default {
 	computed: {
 		category() {
 			return this.categories.findById(this.$route.params.id);
-		},
-
-		subCategories() {
-			return this.categories.findById(this.category?.children);
 		},
 
 		requiredLegalInfoItemKeys() {
