@@ -1,14 +1,19 @@
 import i18n from "@/i18n/index.js";
+import router from "@/router.js";
 import BarterItem from "@/components/barter/item/details/index.vue";
+import Votes from "@/components/votes/index.vue";
 
 export default {
 	name: "SelectPickupPointDialog",
 
 	components: {
 		BarterItem,
+		Votes,
 	},
 
 	i18n,
+
+	router,
 
 	props: {
 		item: {
@@ -66,6 +71,14 @@ export default {
 		remove() {
 			this.$destroy();
 			this.$el.parentNode.removeChild(this.$el);			
+		}
+	},
+
+	watch: {
+		$route() {
+			if (this.lightbox) {
+				this.hide();
+			}
 		}
 	},
 }
