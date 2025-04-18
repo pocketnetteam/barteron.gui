@@ -350,6 +350,10 @@ class SDK {
 		return (this.appinfo?.transactionsApiVersion || 0);
 	}
 
+	isProductionEnvironment() {
+		return (process.env.NODE_ENV === "production");
+	}
+
 	/**
 	 * Checks if this is the Brighteon project
 	 * 
@@ -378,8 +382,10 @@ class SDK {
 	 * @param {Object} options
 	 */
 	setupRPCOptionsForBrighteon(options) {
-		options.rpc = {
-			fnode: this.getRPCNodeForBrighteon(),
+		if (this.isProductionEnvironment()) {
+			options.rpc = {
+				fnode: this.getRPCNodeForBrighteon(),
+			};
 		};
 	}
 
@@ -395,6 +401,23 @@ class SDK {
 			this._RPCNodeForBrighteon = items[index];
 		}
 		return this._RPCNodeForBrighteon;
+	}
+
+	/**
+	 * Setup RPC options for method
+	 * 
+	 * @param {String} method
+	 * @param {Object} options
+	 */
+	setupRPCOptionsForMethod(method, options) {
+		if (method === "getbarteronoffersdetails") {
+			// forced redirection to avoid bugs of this method before the implementation of version 0.22.16
+			if (this.isProductionEnvironment()) {
+				options.rpc = {
+					fnode: "65.21.56.203:38081",
+				};
+			}
+		};
 	}
 
 	/**
@@ -1122,6 +1145,8 @@ class SDK {
 		const options = {};
 		if (this.isBrighteonProject()) {
 			this.setupRPCOptionsForBrighteon(options);
+		} else {
+			this.setupRPCOptionsForMethod(method, options);
 		};
 		return this.sdk.rpc(method, [props], options).then(result => {
 			return this.lastresult = result;
