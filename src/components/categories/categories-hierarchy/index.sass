@@ -1,12 +1,16 @@
 @import "@/css/vars.sass"
 
-.sub-categories-list
+@import "@/css/vars.sass"
+
+.categories-hierarchy-list
 	menu
 		+resetList()
 
 		menuitem
 			display: block
-			padding: $r * 1.15
+
+			&:not(:last-child)
+				margin-bottom: $r * 1.5
 
 			a
 				color: $bulma
@@ -16,6 +20,17 @@
 				&:hover
 					color: $blue
 
+			&.current-category
+				margin-left: $r * 2.5
+
+				a
+					font-weight: bold
+					color: $popo
+					pointer-events: none
+
+			&.sub-category
+				margin-left: $r * 4
+
 	.toggle
 		+transition(color)
 		background: none
@@ -24,7 +39,7 @@
 		cursor: pointer
 		display: block
 		text-decoration: none
-		padding: $r * 1.15
+		margin-top: $r * 3
 
 		&:hover
 			color: $blue-hover
