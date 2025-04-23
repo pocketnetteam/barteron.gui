@@ -412,18 +412,22 @@ export default {
 
 		/**
 		 * Share item
+		 * 
+		 * @param {Object} options
 		 */
-		shareItem() {
+		shareItem(options = { shareOnBastyon: false }) {
 			if (!(this.hasRelay || this.isRemoved)) {
 				const data = {
-					path: `barter/${ this.item.hash }`,
-					sharing: {
-						title: this.$t("itemLabels.label"),
-						text: { body: this.item.caption }
-					}
+					hash: this.item.hash,
+					caption: this.item.caption,
+					images: this.images,
 				};
-				this.sdk.share(data);
+				this.sdk.share(data, options);
 			}
+		},
+
+		shareItemOnBastyonIsAvailable() {
+			return this.sdk.shareOnBastyonIsAvailable();
 		},
 
 		/**

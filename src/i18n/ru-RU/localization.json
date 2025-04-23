@@ -113,6 +113,7 @@
 		"cancel": "Отменить",
 		"preview": "Предпросмотр",
 		"publish": "Опубликовать",
+		"publish_on_bastyon": "Опубликовать на Bastyon",
 		"propose_exchange": "Предложить обмен",
 		"group_exchange": "Групповой обмен",
 		"start_purchase": "Начать покупку",
@@ -157,7 +158,12 @@
 		"empty": "Нет добавленных тегов",
 		"free": "Бесплатно",
 		"select": "Выберите объявление на которое вы хотите обменяться",
-		"outdated": "У этого объявления истёк срок публикации"
+		"outdated": "У этого объявления истёк срок публикации",
+		"publication_on_bastyon": "Публикация на Bastyon",
+		"offer_has_been_published": "Объявление опубликовано.",
+		"share_offer_on_bastyon_hint": "Опубликуйте пост о Вашем предложении на Bastyon!",
+		"share_offer_option_availability": "Данная опция также доступна на странице объявления.",
+		"dont_show_again": "Больше не показывать"
 	},
 
 	"orderLabels": {

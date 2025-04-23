@@ -27,6 +27,7 @@ class SDK {
 		},
 	};
 	offerUpdateActionId = null;
+	lastPublishedOfferId = null;
 
 	models = {
 		Account,
@@ -578,18 +579,36 @@ class SDK {
 	 * Share resource
 	 * 
 	 * @param {Object} data
-	 * @param {String} data.path
-	 * @param {Object} data.sharing
-	 * @param {String} data.sharing.title
-	 * @param {Object} data.sharing.text
-	 * @param {String} data.sharing.text.body
+	 * @param {String} data.hash
+	 * @param {String} data.caption
+	 * @param {Array[String]} data.images
+	 * 
+	 * @param {Object} options
 	 * 
 	 * @returns {Void}
 	 */
-	share(data) {
-		return this.sdk.helpers.share(data).then(() => {
-			this.lastresult = "share: success"
+	share(data, options = { shareOnBastyon: false }) {
+		const formattedData = {
+			path: `barter/${ data.hash }`,
+			sharing: {
+				title: VueI18n.t("itemLabels.label"),
+				text: { body: data.caption },
+				images: data.images,
+			},
+		};
+
+		return Promise.resolve().then(() => {
+			return options?.shareOnBastyon 
+				? this.sdk.helpers.shareOnBastyon(formattedData) 
+				: this.sdk.helpers.share(formattedData);
+		}).then(() => {
+			this.lastresult = "share: success";
+			return true;
 		}).catch(e => this.setLastResult(e));
+	}
+
+	shareOnBastyonIsAvailable() {
+		return !!(this.sdk.helpers.shareOnBastyon);
 	}
 
 	/**

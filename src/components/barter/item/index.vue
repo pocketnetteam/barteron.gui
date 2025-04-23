@@ -324,7 +324,7 @@
 				</ul>
 			</picture>
 
-			<div class="row d-sep sided">
+			<div class="row d-sep sided wrap gap-md">
 				<div class="col no-offset wrap">
 					<ul class="stat">
 						<li
@@ -367,6 +367,15 @@
 						@click="shareItem"
 					>
 						<i class="fa fa-share-alt"></i>
+					</v-button>
+
+					<v-button 
+						v-if="shareItemOnBastyonIsAvailable()"
+						vType="hit"
+						class="share-item-on-bastyon"
+						@click="shareItem({ shareOnBastyon: true })"
+					>
+						<i class="fa fa-plus-circle"></i><span>{{ $t('buttonLabels.publish_on_bastyon') }}</span>
 					</v-button>
 				</div>
 			</div>

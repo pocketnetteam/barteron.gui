@@ -113,6 +113,7 @@
 		"cancel": "Cancel",
 		"preview": "Preview",
 		"publish": "Publish",
+		"publish_on_bastyon": "Publish on the Bastyon",
 		"propose_exchange": "Propose exchange",
 		"group_exchange": "Group exchange",
 		"start_purchase": "Start purchase",
@@ -157,7 +158,12 @@
 		"empty": "No tags added",
 		"free": "For free",
 		"select": "Select item that you want exchange",
-		"outdated": "This offer publication date has expired"
+		"outdated": "This offer publication date has expired",
+		"publication_on_bastyon": "Publication on the Bastyon",
+		"offer_has_been_published": "The offer has been published.",
+		"share_offer_on_bastyon_hint": "Publish a post about your offer on the Bastyon!",
+		"share_offer_option_availability": "This option is also available on the offer page.",
+		"dont_show_again": "Don't show again"
 	},
 
 	"orderLabels": {

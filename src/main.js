@@ -92,12 +92,6 @@ Vue.prototype.shared = Vue.observable({
 				reset: LocationStore.reset
 			});
 		},
-
-		offerChanges() {
-			return Vue.observable({
-				offerUpdateActionId: this.sdk.offerUpdateActionId
-			})
-		},
 	},
 
 	methods: {
