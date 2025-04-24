@@ -7,13 +7,25 @@
 		@onHide="hide"
 	>
 
-		<p class="additional-info" v-if="item?.isSelfPickup">{{ item?.additionalInfo || $t('deliveryLabels.no_self_pickup_additional_info') }}</p>
+		<template v-if="item?.isSelfPickup">
+			<p class="additional-info">{{ item?.additionalInfo || $t('deliveryLabels.no_self_pickup_additional_info') }}</p>
+		</template>
 
-		<BarterItem
-			v-else
-			:item="item"
-			vType="page"
-		/>
+		<template v-else>
+			<BarterItem
+				:item="item"
+				vType="page"
+			/>
+
+			<div class="row block top-sep">
+				<Votes
+					id="votes-section"
+					:item="item"
+					:form="false"
+				/>
+			</div>
+		</template>
+
 
 		<!-- Footer -->
 		<template #footer>
@@ -22,17 +34,17 @@
 					<template v-if="mode !== 'readonly'">
 						<v-button
 							v-if="isSelected"
-							vType="hit"
+							:vType="actionButtonSettings.vType.isSelected"
 							@click="dialogAction"
 						>
-							<span>{{ $t('buttonLabels.cancel') }}</span>
+							<span>{{ $t(`buttonLabels.${actionButtonSettings.i18nKeys.isSelected}`) }}</span>
 						</v-button>
 						<v-button
 							v-else
-							vType="hit"
+							:vType="actionButtonSettings.vType.regular"
 							@click="dialogAction"
 						>
-							<span>{{ $t('buttonLabels.select') }}</span>
+							<span>{{ $t(`buttonLabels.${actionButtonSettings.i18nKeys.regular}`) }}</span>
 						</v-button>
 					</template>
 					<v-button

@@ -53,9 +53,12 @@
 <style lang="sass" src="@/css/main.sass"></style>
 <style src="@/assets/font-awesome/css/all.css"></style>
 <script>
+import Vue from "vue";
 import Loader from "@/components/loader/index.vue";
+import OfferShareDialog from "@/components/barter/item/share-dialog/index.vue";
 import VueI18n from "@/i18n/index.js";
 import { mapState } from "pinia";
+import { default as profileStore } from "@/stores/profile.js";
 import { useThemeStore } from "@/stores/theme.js";
 import {
 	default as LocaleStore,
@@ -66,7 +69,8 @@ export default {
 	name: "Barteron",
 
 	components: {
-		Loader
+		Loader,
+		OfferShareDialog,
 	},
 
 	computed: {
@@ -215,7 +219,25 @@ export default {
 			
 			this.lastRoute = currentRoute;
 			this.lastScrollPosition = currentScrollPosition;
-		}
+		},
+
+		showOfferShareDialog() {
+			if (!(this.sdk.shareOnBastyonIsAvailable()) || profileStore.offerShareDisabled) {
+				return;
+			};
+
+			var ComponentClass = Vue.extend(OfferShareDialog);
+			var instance = new ComponentClass({
+				propsData: {
+				},
+			});
+			
+			instance.$mount();
+			this.lightboxContainer?.appendChild(instance.$el);
+			this.$nextTick(() => {
+				instance.show();
+			});
+		},
 	},
 
 	mounted() {
@@ -262,7 +284,11 @@ export default {
 	watch: {
 		locale() {
 			this.setLanguage();
-		}
+		},
+
+		"sdk.lastPublishedOfferId"() {
+			this.showOfferShareDialog();
+		},
 	},
 
 	destroyed() {

@@ -398,7 +398,8 @@ export default {
 					}
 					this.pickupPointsRequestData.pageStart = pageStart;
 					this.pickupPointsRequestData.isLoading = false;
-					this.setMapActionData(offers);
+					const filteredOffers = this.filterPickupPointsIfNeeded(offers);
+					this.setMapActionData(filteredOffers);
 				}).catch(e => { 
 					const
 						requestRejected = (e instanceof AppErrors.RequestIdError),
@@ -417,6 +418,44 @@ export default {
 				this.setMapActionData();
 			}
 
+		},
+
+		filterPickupPointsIfNeeded(offers) {
+			let result = offers;
+	
+			const 
+				settings = this.sdk.getDeliverySettings(),
+				addressFilter = settings?.addressFilter;
+
+			if (addressFilter?.isEnabled) {
+				result = (offers || []).filter(f => f?.address && addressFilter?.items?.includes(f.address));
+			};
+	
+			return result;
+		},
+
+		offerCreationParams() {
+			let
+				isAllowed = true,
+				blockingMessage = null;
+
+			if (this.isPickupPointCategory()) {
+				const 
+					settings = this.sdk.getDeliverySettings(),
+					addressFilter = settings?.addressFilter;
+
+				if (addressFilter?.isEnabled) {
+					isAllowed = addressFilter?.items?.includes(this.sdk.address);
+					if (!(isAllowed)) {
+						blockingMessage = this.$t("deliveryLabels.pickup_point_creation_is_forbidden");
+					};
+				}
+			};
+
+			return {
+				isAllowed,
+				blockingMessage,
+			}
 		},
 
 		setMapActionData(offers, error) {
@@ -650,6 +689,13 @@ export default {
 		 * Submit form data
 		 */
 		submit() {
+			const params = this.offerCreationParams();
+			if (!(params.isAllowed)) {
+				const error = new Error(params.blockingMessage);
+				this.showError(error);
+				return;
+			};
+
 			const
 				{ hash, form, photos, images, workSchedule, pickupPointList } = this.serializeForm(),
 				formValid = form.validate(),
@@ -765,7 +811,7 @@ export default {
 		 * 
 		 * @param {Error} error
 		 */
-		errorEvent(error) {
+		mapErrorEvent(error) {
 			this.showError(error);
 		},
 	},

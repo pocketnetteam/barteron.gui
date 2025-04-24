@@ -142,11 +142,21 @@ class Offer {
 	action() {
 		this.sdk.on("action", action => {
 			if (this.hash === action.transaction) {
+				const statusBefore = this.status;
+				const props = {
+					relay: (!!action?.relay && !action?.completed),
+				};
 				Vue.set(
 					this.sdk.barteron._offers[this.hash],
 					"relay",
-					!!action?.relay && !action?.completed
+					props.relay
 				);
+				const statusAfter = this.status;
+
+				const offerHasPublished = (statusBefore === "published" && statusAfter === "valid");
+				if (offerHasPublished) {
+					this.sdk.lastPublishedOfferId = this.hash;
+				};
 			}
 		});
 	}

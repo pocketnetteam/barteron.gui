@@ -4,11 +4,13 @@
 		ref="asideCategories"
 	>
 		<v-details
-			v-if="subCategories?.length"
+			v-if="category"
 			:title="$t('categoryLabels.label')"
 			:open="true"
 		>
-			<SubCategories :items="subCategories" />
+			<CategoriesHierarchy 
+				:currentCategory="category"
+			/>
 		</v-details>
 
 		<v-details :open="true">

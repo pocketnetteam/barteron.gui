@@ -62,7 +62,7 @@
 		</picture>
 
 		<!-- Caption -->
-		<div class="row block" v-if="item.caption">
+		<div class="row block t-sep" v-if="item.caption">
 			<strong class="subtitle">{{ item.caption }}</strong>
 		</div>
 

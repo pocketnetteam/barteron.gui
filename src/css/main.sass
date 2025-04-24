@@ -71,6 +71,12 @@ span.link
 		font-size: 1em
 		margin: 0 0 1.75em
 		
+		&.warning-level
+			color: $hit
+
+		&.error-level
+			color: $dodoria
+
 		&:not(:last-child)
 			margin: 0 0 $r * 2
 
@@ -163,6 +169,15 @@ span.link
 .col
 	&:not(:last-child)
 		margin: 0 0 $r * 3 0
+
+	&.gap-sm
+		gap: $r
+
+	&.gap-md
+		gap: $r * 2
+
+	&.gap-lg
+		gap: $r * 3
 
 	&.wrap
 		flex-wrap: wrap

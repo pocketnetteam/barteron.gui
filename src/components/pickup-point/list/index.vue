@@ -19,12 +19,14 @@
 					/>
 					<PickupPointItem
 						v-else
+						:ref="item?.hash"
 						:item="item"
 						role="listItem"
 						:mode="mode"
 						:isSelected="isSelectedItem(item)"
 						@selectItem="selectItem"
 						@unselectItem="unselectItem"
+						@buyAtItem="buyAtItem"
 					/>
 				</slide>
 			</carousel>

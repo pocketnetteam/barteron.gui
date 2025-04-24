@@ -4,7 +4,6 @@
 	position: relative
 	width: 100%
 	z-index: 2
-	overflow: auto
 
 	&[class*="shrink"]
 		margin: 0 calc(#{$sidebar-width} + 2em)
@@ -15,3 +14,6 @@
 
 	&.shrink-right
 		margin-left: 0
+
+	&.overflow-auto
+		overflow: auto

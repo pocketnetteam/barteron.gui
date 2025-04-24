@@ -1,5 +1,5 @@
 <template>
-	<v-content class="shrink-right">
+	<v-content class="shrink-right overflow-auto">
 		<v-form 
 			ref="form"
 			:rules="validationRules"
@@ -27,9 +27,20 @@
 					class="field-novalidate"
 					:value="offer.tag"
 				/>
+
+				<label
+					v-if="!(offerCreationParams().isAllowed)"
+					class="v-label error-level"
+				>
+					<i class="fa fa-info-circle"></i>
+					{{ offerCreationParams().blockingMessage }}
+				</label>
 			</div>
 
-			<div class="row block sep">
+			<div 
+				v-if="offerCreationParams().isAllowed" 
+				class="row block sep"
+			>
 				<!-- Title: Photos -->
 				<strong class="title">{{ $t('stepsLabels.photos') }}</strong>
 
@@ -56,7 +67,11 @@
 				</p>
 			</div>
 
-			<div id="get" class="row block">
+			<div 
+				v-if="offerCreationParams().isAllowed" 
+				id="get" 
+				class="row block"
+			>
 				<!-- Title: What you want to get -->
 				<strong class="title">{{ $t('stepsLabels.get') }}</strong>
 
@@ -73,7 +88,10 @@
 				/>
 			</div>
 
-			<div class="row block">
+			<div 
+				v-if="offerCreationParams().isAllowed" 
+				class="row block"
+			>
 				<!-- Select: Tags (from account) -->
 				<template v-if="getting === 'my_list'">
 					<ExchangeList
@@ -135,11 +153,14 @@
 			</div>
 
 			<strong
-				v-if="getting !== 'for_nothing' && isPickupPointCategory()"
+				v-if="getting !== 'for_nothing' && isPickupPointCategory() && offerCreationParams().isAllowed"
 				class="subtitle"
 			>{{ $t('deliveryLabels.pickup_point_price_caption') }}</strong>
 
-			<div class="row block" v-if="getting !== 'for_nothing'">
+			<div 
+				v-if="getting !== 'for_nothing' && offerCreationParams().isAllowed" 
+				class="row block"
+			>
 				<!-- Input: Currency exchange to PKOIN -->
 				<v-input
 					ref="price"
@@ -202,7 +223,10 @@
 
 			</div>
 
-			<div class="row block sep">
+			<div 
+				v-if="offerCreationParams().isAllowed" 
+				class="row block sep"
+			>
 				<!-- vSwitch (Radio) -->
 				<v-switch
 					type="radio"
@@ -217,7 +241,7 @@
 
 			<!-- Delivery fields -->
 			<div 
-				v-if="deliveryAvailable && isPickupPointCategory()"
+				v-if="deliveryAvailable && isPickupPointCategory() && offerCreationParams().isAllowed"
 				id="pickup-point-info"
 				class="row block"
 			>
@@ -300,7 +324,10 @@
 
 			</div>
 
-			<div class="row block sep">
+			<div 
+				v-if="offerCreationParams().isAllowed" 
+				class="row block sep"
+			>
 				<!-- Title: Description -->
 				<strong class="title">{{ $t('stepsLabels.description') }}</strong>
 
@@ -315,7 +342,10 @@
 				/>
 			</div>
 
-			<div class="row block sep">
+			<div 
+				v-if="offerCreationParams().isAllowed" 
+				class="row block sep"
+			>
 				<!-- Title: Location -->
 				<strong class="title">{{ $t('stepsLabels.location') }}</strong>
 
@@ -330,7 +360,7 @@
 					:selectedOfferIds="selectedOfferIds()"
 					:center="geohash || location || undefined"
 					:mapActionData="mapActionData"
-					@errorEvent="errorEvent"
+					@errorEvent="mapErrorEvent"
 					@mapAction="mapAction"
 					@selectPickupPoint="selectPickupPoint"
 					@unselectPickupPoint="unselectPickupPoint"
@@ -339,7 +369,7 @@
 
 			<div 
 				class="row block sep"
-				v-if="deliveryAvailable && !(isPickupPointCategory())"
+				v-if="deliveryAvailable && !(isPickupPointCategory()) && offerCreationParams().isAllowed""
 			>
 				<!-- Title: Delivery -->
 				<strong class="title">{{ $t('deliveryLabels.label') }}</strong>
@@ -415,7 +445,11 @@
 				</div>
 			</div>
 
-			<div id="offer-options" class="row full-width wrap">
+			<div 
+				v-if="offerCreationParams().isAllowed" 
+				id="offer-options" 
+				class="row full-width wrap"
+			>
 				<!-- vButton: Cancel -->
 				<v-button
 					vType="bulma-stroke"

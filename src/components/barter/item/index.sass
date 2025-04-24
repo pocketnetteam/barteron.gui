@@ -49,13 +49,6 @@ div[class^="barter-item-"]
 		width: 100%
 		+unselectable()
 
-		&.compact-view
-			border-radius: 8px
-			height: 110px
-		
-		&.hide-info
-			margin: 0
-
 		a
 			text-decoration: none
 
@@ -136,6 +129,30 @@ div[class^="barter-item-"]
 
 				&.hover
 					background: $primary
+
+		.score
+			background: $overlay-half
+			border-radius: 6px
+			position: absolute
+			padding: 0 $r 0
+			left: 8px
+			bottom: 8px
+			color: $white
+			font-size: 0.85em
+
+	&.compact-view
+		font-size: 0.8em
+
+		picture
+			border-radius: 8px
+			height: 110px
+	
+	&.hide-info
+		picture
+			margin: 0
+
+			.score
+				display: none
 
 	.state
 		background: $goku
@@ -433,6 +450,14 @@ div[class^="barter-item-"]
 
 					img
 						border-radius: 10px
+
+		.share-item-on-bastyon
+			height: 36px
+
+			.text
+				font-size: 1rem
+				gap: 1rem
+
 
 		> .row
 			color: $trunks

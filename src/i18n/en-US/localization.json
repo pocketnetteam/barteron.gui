@@ -74,7 +74,12 @@
 		"all_day": "24 hours",
 		"around_the_clock": "Around the clock",
 		"address": "Address",
+		"address_not_specified": "Address not specified",
 		"how_to_get": "How to get",
+		"pickup_point_creation_is_forbidden": "The pickup points functionality is currently in public testing. If you want to open a pickup point, please contact support@bastyon.com first",
+		"hint_for_delivery_option_selection": "Select an Pickup point or Self-pickup option (if available) on the map or in the list",
+		"hint_for_purchase_at_pickup_point": "The \"Buy\" option will open a chat to complete the purchase",
+		"chat_message_exchange_proposed": "I propose the exchange",
 		"chat_message_self_pickup_selected": "Delivery option: \"Self-pickup\"",
 		"chat_message_pickup_point_selected": "Delivery option: \"Pickup point\""
 	},
@@ -108,9 +113,12 @@
 		"cancel": "Cancel",
 		"preview": "Preview",
 		"publish": "Publish",
+		"boost_info": "How to advertise an offer",
+		"share_on_bastyon": "Share on Bastyon",
 		"propose_exchange": "Propose exchange",
 		"group_exchange": "Group exchange",
 		"start_purchase": "Start purchase",
+		"go_to_selection": "Go to selection",
 		"send_message": "Send message",
 		"my_announcements": "My announcements",
 		"find_exchange_options": "Find exchange options",
@@ -121,6 +129,7 @@
 		"show_more": "Show more",
 		"show": "Show",
 		"select": "Select",
+		"buy": "Buy",
 		"buy_for": "Buy for {cost} PKOIN",
 		"edit": "Edit",
 		"save": "Save",
@@ -150,7 +159,12 @@
 		"empty": "No tags added",
 		"free": "For free",
 		"select": "Select item that you want exchange",
-		"outdated": "This offer publication date has expired"
+		"outdated": "This offer publication date has expired",
+		"share_on_bastyon": "Share on Bastyon",
+		"offer_has_been_published": "The offer has been published.",
+		"share_offer_on_bastyon_hint": "Share your offer on Bastyon! You can also boost the post in the feed on Bastyon.",
+		"share_offer_option_availability": "This option is also available on the offer page. More details about boosting a post here:",
+		"dont_show_again": "Don't show again"
 	},
 
 	"orderLabels": {
@@ -254,7 +268,6 @@
 		"submit_comment": "Do you want to submit the comment?",
 		"map_help_info": "Offers displayed in the lists (category content, exchange offers, etc.) can be filtered by the visible area of the map.\n\nSet it so that it covers the desired search area and click the \"Save\" button. To reset the selection, click the \"All regions\" button.",
 		"saving_region_warning_by_zoom": "The coverage of the visible map area is too small. Offer lists will be filtered by this area. Continue anyway?",
-		"need_select_delivery_option": "The seller provided options for receiving the order. Please select one of the options in the section \"{section}\" and try again",
 
 		"image_error": "Image upload error: {error}",
 		"node_error": "Node error has occured: {error}",

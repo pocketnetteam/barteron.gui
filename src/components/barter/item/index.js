@@ -5,14 +5,18 @@ import WorkSchedule from "@/components/work-schedule/index.vue";
 import CurrencySwitcher from "@/components/currency-switcher/index.vue";
 import Caption from "@/components/barter/item/caption/index.vue";
 import Price from "@/components/barter/item/price/index.vue";
+import BoostInfo from "@/components/barter/item/boost-info/index.vue";
 import PickupPointList from "@/components/pickup-point/list/index.vue";
 import MyOptions from "@/components/barter/item/my-options/index.vue";
 import BarterExchange from "@/components/barter/exchange/index.vue";
 import Profile from "@/components/profile/index.vue";
 import LegalInfo from "@/components/legal-info/index.vue";
 import LikeStore from "@/stores/like.js";
+import SelectOfferDialog from "@/views/Barter/SelectOfferDialog/index.vue";
+import Score from "@/components/score/index.vue";
 import PhotoSwipe from "photoswipe";
 import "photoswipe/style.css";
+import Vue from 'vue';
 
 export default {
 	name: "BarterItem",
@@ -24,12 +28,15 @@ export default {
 		WorkSchedule,
 		Caption,
 		Price,
+		BoostInfo,
 		PickupPointList,
 		MyOptions,
 		BarterExchange,
 		Profile,
 		CurrencySwitcher,
 		LegalInfo,
+		SelectOfferDialog,
+		Score,
 	},
 
 	props: {
@@ -61,6 +68,11 @@ export default {
 			hover: 0,
 			active: 0,
 			addr: {},
+			myOffers: [],
+
+            exchangeAvailable: false,
+            purchaseState: "startPurchase",
+            isChatLoading: false,
 
 			pickupPointItems: [],
 			pickupPointsLoading: false,
@@ -71,7 +83,7 @@ export default {
 		}
 	},
 
-	inject: ["dialog"],
+	inject: ["dialog", 'lightboxContainer'],
 
 	computed: {
 		/**
@@ -208,6 +220,26 @@ export default {
 			return "self_pickup";
 		},
 
+		purchaseStateLabel() {
+			const result = {
+				isEnabled: false,
+				iconClass: "",
+				i18nKey: ""
+			};
+			
+			if (this.purchaseState === "waitForPickupPoint") {
+				result.isEnabled = true;
+				result.iconClass = "fa fa-chevron-circle-up";
+				result.i18nKey = "deliveryLabels.hint_for_delivery_option_selection";
+			} else if (this.purchaseState === "pickupPointSelected") {
+				result.isEnabled = true;
+				result.iconClass = "fa fa-info-circle";
+				result.i18nKey = "deliveryLabels.hint_for_purchase_at_pickup_point"
+			};
+
+			return result;
+		},
+
 		/**
 		 * Get map mode
 		 * 
@@ -311,6 +343,10 @@ export default {
 			return (this.item.images || []).map(url => this.sdk.manageBastyonImageSrc(url));
 		},
 
+		averageOfferScore() {
+			return this.sdk.barteron.averageOfferScores[this.item.hash];
+		},
+
 		/**
 		 * Get like state
 		 * 
@@ -378,18 +414,22 @@ export default {
 
 		/**
 		 * Share item
+		 * 
+		 * @param {Object} options
 		 */
-		shareItem() {
+		shareItem(options = { shareOnBastyon: false }) {
 			if (!(this.hasRelay || this.isRemoved)) {
 				const data = {
-					path: `barter/${ this.item.hash }`,
-					sharing: {
-						title: this.$t("itemLabels.label"),
-						text: { body: this.item.caption }
-					}
+					hash: this.item.hash,
+					caption: this.item.caption,
+					images: this.images,
 				};
-				this.sdk.share(data);
+				this.sdk.share(data, options);
 			}
+		},
+
+		shareItemOnBastyonIsAvailable() {
+			return this.sdk.shareOnBastyonIsAvailable();
 		},
 
 		/**
@@ -447,6 +487,28 @@ export default {
 			}).catch(e => {
 				console.error(e);
 			});
+		},
+
+		/**
+		 * Select your offer to propose exchange seller's offer
+		 */
+		selectOfferToExchange() {
+			var ComponentClass = Vue.extend(SelectOfferDialog);
+			var instance = new ComponentClass({
+				propsData: {
+					item: this.item,
+					items: this.myOffers,
+				}
+			});
+			
+			instance.$on('onSelect', vm => {
+				const targetOffer = this.myOffers[vm.selected];
+				this.createRoom(targetOffer, {isExchange: true});
+			});
+
+			instance.$mount();
+			this.lightboxContainer().appendChild(instance.$el);
+			instance.show();
 		},
 
 		loadPickupPointsIfNeeded() {
@@ -509,51 +571,133 @@ export default {
 			}
 		},
 
-		unselectPickupPoint() {
-			this.selectedOfferId = null;
+		buyAtPickupPoint(offer, options) {
+			if (this.selectedOfferId !== offer.hash) {
+				this.selectedOfferId = offer.hash;
+			};
+			this.buyAtSelectedPickupPoint();
 		},
 
 		selectedOfferIds() {
 			return this.selectedOfferId ? [this.selectedOfferId] : [];
 		},
 
-		clearSelectedDeliveryOption() {
-			const 
-				hash = this.item?.hash,
-				targetOffer = hash && this.sdk.barteron._offers[hash];
-			
-			if (targetOffer && targetOffer.selectedDeliveryOption) {
-				delete targetOffer.selectedDeliveryOption;
+		/**
+		 * Start purchase
+		 */
+		startPurchase() {
+			this.createRoom(this.item, {isPurchase: true});
+		},
+
+		waitForPickupPoint() {
+			this.goToPickupPointList();
+			if (this.purchaseState === "waitForPickupPoint") {
+				this.$refs.pickupPointList?.animateSelection();
+			}
+		},
+
+		/**
+		 * Go to pickup point list
+		 */
+		goToPickupPointList() {
+			this.scrollToElement("#pickup-point-list", { block: "center" });
+		},
+
+		/**
+		 * Buy at selected pickup point
+		 */
+		buyAtSelectedPickupPoint() {
+			this.startPurchase();
+		},
+
+		/**
+		 * Create room and send message
+		 * 
+		 * @param {Offer} offer
+		 * @param {Object} options
+		 */
+		createRoom(offer, options = {}) {
+			if (this.sdk.willOpenRegistration()) return;
+
+			let needCreateRoom = true;
+
+			const data = {
+				name: offer.caption,
+				members: [this.address],
+				messages: [this.sdk.appLink(`barter/${ offer.hash }`)],
+				openRoom: true,
 			};
-		}
+
+			if (this.deliveryOptionsAvailable && options?.isPurchase) {
+				const pickupPoint = this.selectedOfferId && this.pickupPointItems.find(f => f.hash === this.selectedOfferId);
+				if (pickupPoint?.isSelfPickup) {
+					data.messages.push(this.$t("deliveryLabels.chat_message_self_pickup_selected"));
+				} else if (pickupPoint?.hash) {
+					const 
+						address = pickupPoint.address,
+						hash = pickupPoint.hash;
+					
+					if (address && hash) {
+						if (!(data.members.includes(address))) {
+							data.members.push(address);
+						}
+						data.messages.push(this.sdk.appLink(`barter/${ hash }`));
+						data.messages.push(this.$t("deliveryLabels.chat_message_pickup_point_selected"));
+					}
+				} else {
+					needCreateRoom = false;
+					this.purchaseState = "waitForPickupPoint";
+					this.goToPickupPointList();
+				}
+			} else if (options?.isExchange && this.item?.hash) {
+				data.messages.push(this.sdk.appLink(`barter/${ this.item?.hash }`));
+				data.messages.push(this.$t("deliveryLabels.chat_message_exchange_proposed"));
+			}
+			
+			if (!(needCreateRoom)) return;
+
+			this.isChatLoading = true;
+			this.dialog?.instance.view("load", this.$t("dialogLabels.opening_room"));
+			this.sendMessage(data).then(() => {
+				this.dialog?.instance.hide();
+			}).catch(e => {
+				this.showError(e);
+			}).finally(() => {
+				this.isChatLoading = false;
+			});
+		},
+
+		/**
+		 * Show error from the map
+		 * 
+		 * @param {Error} error
+		 */
+		mapErrorEvent(error) {
+			this.showError(error);
+		},
 	},
 
 	mounted() {
-		this.$2watch("item.address").then(() => {
-			this.loadPickupPointsIfNeeded();
-		});
-	},
-
-	watch: {
-		selectedOfferId(newValue) {
-			let option = null;
-			if (newValue) {
-				option = (newValue === this.selfPickupItemId) 
-					? {selfPickup: true} 
-					: {pickupPoint: this.pickupPointItems.filter(f => f.hash === newValue).pop()};
-			};
-
-			const 
-				hash = this.item?.hash,
-				targetOffer = hash && this.sdk.barteron._offers[hash];
-
-			if (targetOffer) {
-				targetOffer.selectedDeliveryOption = option;
-			};
+		if (this.vType === "page") {
+			this.$2watch("item.address").then(() => {
+				this.loadPickupPointsIfNeeded();
+			});
+	
+			this.sdk.getBrtOffers().then(items => {
+				this.myOffers = items;
+			}).catch(e => {
+				console.error(e);
+			});
 		}
 	},
 
-	beforeDestroy() {
-		this.clearSelectedDeliveryOption();
+	watch: {
+		myOffers() {
+			this.exchangeAvailable = (this.myOffers?.length > 0);
+		},
+
+		selectedOfferId(newValue) {
+			this.purchaseState = (newValue ? "pickupPointSelected" : "waitForPickupPoint");
+		},
 	},
 }

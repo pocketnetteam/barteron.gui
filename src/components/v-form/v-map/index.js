@@ -53,7 +53,7 @@ export default {
 		},
 		height: {
 			type: String,
-			default: "350px"
+			default: "400px"
 		},
 		width: {
 			type: String,
@@ -579,6 +579,13 @@ export default {
 			}, 300);
 		},
 
+		buyAtPickupPoint(offer) {
+			this.mapObject.closePopup();
+			setTimeout(() => {
+				this.$emit("buyAtPickupPoint", offer, {source: "map"});
+			}, 300);
+		},
+
 		isSelectedOffer(offer) {
 			return this.selectedOfferIds.some(f => f === offer.hash);
 		},
@@ -604,6 +611,9 @@ export default {
 						result, 
 						Math.max(this.scale, minZoom)
 					);
+					if (this.isViewMode || this.isDeliverySelectionMode) {
+						this.marker = result;
+					}
 				} else {
 					throw new Error('Location data is not defined');
 				}
