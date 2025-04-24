@@ -1,10 +1,10 @@
-name: delivery.test
+name: test.barter.pocketnet.app
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - delivery_test
+      - dev
 
 jobs:
   build:
