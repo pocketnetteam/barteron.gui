@@ -43,6 +43,8 @@ export default {
 		}
 	},
 
+	inject: ["dialog"],
+
 	computed: {
 		details() {
 			return this.sdk.barteron.details[this.item?.hash];
