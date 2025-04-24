@@ -113,7 +113,8 @@
 		"cancel": "Cancel",
 		"preview": "Preview",
 		"publish": "Publish",
-		"publish_on_bastyon": "Publish on the Bastyon",
+		"boost_info": "How to advertise an offer",
+		"share_on_bastyon": "Share on the Bastyon",
 		"propose_exchange": "Propose exchange",
 		"group_exchange": "Group exchange",
 		"start_purchase": "Start purchase",
@@ -159,10 +160,10 @@
 		"free": "For free",
 		"select": "Select item that you want exchange",
 		"outdated": "This offer publication date has expired",
-		"publication_on_bastyon": "Publication on the Bastyon",
+		"share_on_bastyon": "Share on the Bastyon",
 		"offer_has_been_published": "The offer has been published.",
-		"share_offer_on_bastyon_hint": "Publish a post about your offer on the Bastyon!",
-		"share_offer_option_availability": "This option is also available on the offer page.",
+		"share_offer_on_bastyon_hint": "Share your offer on the Bastyon! You can also boost the post in the feed on the Bastyon.",
+		"share_offer_option_availability": "This option is also available on the offer page. More details about boosting a post here:",
 		"dont_show_again": "Don't show again"
 	},
 

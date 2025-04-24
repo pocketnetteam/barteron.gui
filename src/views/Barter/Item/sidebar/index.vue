@@ -3,6 +3,7 @@
 		<div class="box">
 			<Caption :item="item"/>
 			<Price :item="item"/>
+			<BoostInfo/>
 
 			<div class="row t-sep">
 				<!-- My offer -->

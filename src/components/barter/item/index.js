@@ -5,6 +5,7 @@ import WorkSchedule from "@/components/work-schedule/index.vue";
 import CurrencySwitcher from "@/components/currency-switcher/index.vue";
 import Caption from "@/components/barter/item/caption/index.vue";
 import Price from "@/components/barter/item/price/index.vue";
+import BoostInfo from "@/components/barter/item/boost-info/index.vue";
 import PickupPointList from "@/components/pickup-point/list/index.vue";
 import MyOptions from "@/components/barter/item/my-options/index.vue";
 import BarterExchange from "@/components/barter/exchange/index.vue";
@@ -27,6 +28,7 @@ export default {
 		WorkSchedule,
 		Caption,
 		Price,
+		BoostInfo,
 		PickupPointList,
 		MyOptions,
 		BarterExchange,

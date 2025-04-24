@@ -3,7 +3,7 @@
 		class="offer-share-dialog"
 		size="md"
 		:visible="lightbox"
-		:title="$t('barterLabels.publication_on_bastyon')"
+		:title="$t('barterLabels.share_on_bastyon')"
 		@onHide="hide"
 	>
 
@@ -43,6 +43,11 @@
 
 		<p class="details">
 			{{ $t('barterLabels.share_offer_option_availability') }}
+			<a 
+				class="link" 
+				href="#"
+				@click.prevent="openBoostInfoLink"
+			><b>{{ bastyonBoostInfoURL }}</b></a>
 		</p>
 
 		<div id="offer-share-checkbox-holder">
@@ -65,7 +70,7 @@
 						vType="hit"
 						@click="shareOnBastyon"
 					>
-						<i class="fa fa-plus-circle"></i><span>{{ $t('buttonLabels.publish_on_bastyon') }}</span>
+						<i class="fa fa-plus-circle"></i><span>{{ $t('buttonLabels.share_on_bastyon') }}</span>
 					</v-button>
 				</div>
 			</div>

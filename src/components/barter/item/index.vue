@@ -375,7 +375,7 @@
 						class="share-item-on-bastyon"
 						@click="shareItem({ shareOnBastyon: true })"
 					>
-						<i class="fa fa-plus-circle"></i><span>{{ $t('buttonLabels.publish_on_bastyon') }}</span>
+						<i class="fa fa-plus-circle"></i><span>{{ $t('buttonLabels.share_on_bastyon') }}</span>
 					</v-button>
 				</div>
 			</div>
@@ -384,6 +384,7 @@
 			<div class="row block sep no-sidebar">
 				<Caption :item="item"/>
 				<Price :item="item"/>
+				<BoostInfo/>
 			</div>
 
 			<div class="row block sep">

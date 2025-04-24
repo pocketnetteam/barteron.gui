@@ -31,6 +31,10 @@ export default {
 		images() {
 			return (this.item.images || []).map(url => this.sdk.manageBastyonImageSrc(url));
 		},
+
+		bastyonBoostInfoURL() {
+			return this.sdk.bastyonBoostInfoURL;
+		}
 	},
 
 	methods: {
@@ -50,6 +54,10 @@ export default {
 		remove() {
 			this.$destroy();
 			this.$el.parentNode.removeChild(this.$el);			
+		},
+
+		openBoostInfoLink() {
+			this.sdk.openExternalLink(this.bastyonBoostInfoURL);
 		},
 
 		offerShareDisabledChange(value, e) {

@@ -43,6 +43,10 @@ class SDK {
 		}
 	};
 
+	get bastyonBoostInfoURL() {
+		return "https://bastyon.com/boost";
+	};
+
 	_appinfo = null;
 	get appinfo() {
 		if (!this._appinfo) this.getAppInfo();
