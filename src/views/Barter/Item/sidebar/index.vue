@@ -3,6 +3,7 @@
 		<div class="box">
 			<Caption :item="item"/>
 			<Price :item="item"/>
+			<BoostInfo/>
 
 			<div class="row t-sep">
 				<!-- My offer -->
@@ -17,7 +18,7 @@
 				<!-- Someone's offer -->
 				<BarterExchange
 					v-if="!isMyOffer"
-					:item="item"
+					:purchaseStateLabels="true"
 				/>
 			</div>
 		</div>

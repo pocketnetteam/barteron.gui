@@ -5,6 +5,11 @@
 	box-sizing: border-box
 	outline-color: $blue
 
+// translate css vars into js
+html
+	&:root
+		--device-size-large: #{$large}
+
 html,
 body
 	font: 14px "Segoi UI", Verdana, Helvetica, sans-serif
@@ -20,6 +25,12 @@ strong.title
 	font-size: 1.6em
 	font-weight: normal
 	margin: 0 0 $r * 3
+
+strong.subtitle
+	display: flex
+	font-size: 1.2em
+	font-weight: normal
+	margin: 0 0 $r
 
 a.link,
 span.link
@@ -60,6 +71,12 @@ span.link
 		font-size: 1em
 		margin: 0 0 1.75em
 		
+		&.warning-level
+			color: $hit
+
+		&.error-level
+			color: $dodoria
+
 		&:not(:last-child)
 			margin: 0 0 $r * 2
 
@@ -129,6 +146,11 @@ span.link
 			border-width: 1px 0
 			padding: $r * 2 0
 
+		&.top-sep
+			border-top: 1px solid $beerus
+			border-bottom: none
+			padding: $r * 2 0 $r
+
 	.col
 		display: flex
 		align-items: center
@@ -147,6 +169,15 @@ span.link
 .col
 	&:not(:last-child)
 		margin: 0 0 $r * 3 0
+
+	&.gap-sm
+		gap: $r
+
+	&.gap-md
+		gap: $r * 2
+
+	&.gap-lg
+		gap: $r * 3
 
 	&.wrap
 		flex-wrap: wrap
@@ -221,6 +252,8 @@ span.link
 .side-toggle
 	background: $blue
 	border-radius: 0 $r $r 0
+	border: 2px solid $white
+	border-left: none
 	cursor: pointer
 	font-size: $r * 3
 	text-align: center

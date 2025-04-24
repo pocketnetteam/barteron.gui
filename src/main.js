@@ -92,12 +92,6 @@ Vue.prototype.shared = Vue.observable({
 				reset: LocationStore.reset
 			});
 		},
-
-		offerChanges() {
-			return Vue.observable({
-				offerUpdateActionId: this.sdk.offerUpdateActionId
-			})
-		},
 	},
 
 	methods: {
@@ -122,6 +116,26 @@ Vue.prototype.shared = Vue.observable({
 			debounced.cancel = () => clearTimeout(timer);
 
 			return debounced;
+		},
+
+		/**
+		 * Get map height
+		 * 
+		 * @returns {String|undefined}
+		 */
+		mapHeight() {
+			let result = undefined;
+			const value = getComputedStyle(document.documentElement).getPropertyValue('--device-size-large');
+			if (value) {
+				const 
+					query = `screen and (max-width: ${value})`,
+					exceedsQuerySize = !(window.matchMedia(query).matches);
+				
+				if (exceedsQuerySize) {
+					result = "560px"
+				}
+			}
+			return result;
 		},
 
 		/**

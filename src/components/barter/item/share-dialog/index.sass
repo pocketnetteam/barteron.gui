@@ -1,0 +1,72 @@
+@import "@/css/vars.sass"
+
+.offer-share-dialog
+	picture
+		cursor: default
+		border-radius: 12px
+		display: block
+		margin: 0 0 .9em
+		position: relative
+		overflow: hidden
+		height: 120px
+		width: 120px
+		+unselectable()
+
+		a
+			text-decoration: none
+
+		.image
+			height: 100%
+			width: 100%
+
+		img
+			display: block
+			object-fit: cover
+			height: 100%
+			width: 100%
+
+		.img-error
+			background: none !important
+			color: $dodoria
+			container-type: size
+			display: flex
+			align-items: center
+			justify-content: center
+			position: relative
+			height: 100%
+			width: 100%
+
+			&::before
+				background: $bulma
+				opacity: .25
+				content: ""
+				position: absolute
+				height: 100%
+				width: 100%
+
+			.fa
+				position: relative
+				font-size: 27cqh
+
+	h1, p
+		color: $bulma
+		text-align: justify
+		word-wrap: break-word
+
+	p.caption
+		color: $popo
+		font-size: 1.2em
+
+	h1.info
+		font-size: 1.2em
+		text-transform: none
+		font-weight: bold
+
+	p.details
+		margin-top: .5em
+
+	#offer-share-checkbox-holder
+		margin-top: 4 * $r
+
+		.v-switch-holder
+			padding: $r 0 $r / 2 0

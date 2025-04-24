@@ -5,6 +5,10 @@ export default {
 	name: "CurrencySwitcher",
 
 	props: {
+		pricePrefix: {
+			type: String,
+			default: ""
+		},
 		amount: Number,
 		currencyPrice: {
 			type: Object,

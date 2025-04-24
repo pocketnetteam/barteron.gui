@@ -109,7 +109,7 @@ export default {
 			this.getComplexDeals();
 		},
 
-		"offerChanges.offerUpdateActionId"() {
+		"sdk.offerUpdateActionId"() {
 			this.needForceUpdate = true;
 		}
 	},

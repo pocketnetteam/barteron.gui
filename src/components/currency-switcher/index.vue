@@ -15,7 +15,7 @@
 				class="currency graphem"
 				:class="`graphem-${ currency?.value.toLowerCase() }`"
 			>{{ currency?.graphem ?? '?' }}</span>
-			<span class="amount">{{ converted ? $n(converted, 'shortCurrency') : '...' }}</span>
+			<span class="amount">{{ converted ? (pricePrefix + $n(converted, 'shortCurrency')) : '...' }}</span>
 			<span v-if="hideButton">{{ currency?.value }}</span>
 		</template>
 		
