@@ -2,6 +2,7 @@
 	<div
 		:id="id"
 		:style="{ height, width, '--height': height, '--width': width }"
+		:class="{ 'dark-theme': isDarkTheme }"
 	>
 		<l-map
 			ref="map"
@@ -18,14 +19,30 @@
 						:key="offer.hash"
 					>
 						<l-icon
-							:icon-size="iconSize"
-							:icon-url="isViewMode ? offerIconActive : offerIcon"
-							:icon-anchor="iconAnchor"
+							:icon-size="getOfferIcon(offer).size"
+							:icon-url="getOfferIcon(offer).url"
+							:icon-anchor="getOfferIcon(offer).anchor"
 						>
 						</l-icon>
-						<l-tooltip v-if="!(isViewMode)">{{ offer.caption }}</l-tooltip>
-						<l-popup v-if="!(isViewMode)">
-							<BarterItem
+						
+						<l-tooltip
+							v-if="!(isViewMode || isDeliverySelectionMode && !(offer.isPickupPoint || offer.isSelfPickup))"
+						>{{ offer.caption }}</l-tooltip>
+
+						<l-popup v-if="!(isViewMode || isDeliverySelectionMode && !(offer.isPickupPoint || offer.isSelfPickup))">
+							<PickupPointItem 
+								v-if="(isDeliveryInputMode || isDeliverySelectionMode) && (offer.isPickupPoint || offer.isSelfPickup)"
+								:item="offer"
+								role="popup"
+								:mode="pickupPointPopupMode"
+								:isSelected="isSelectedOffer(offer)"
+								@showItem="showPickupPoint"
+								@selectItem="selectPickupPoint"
+								@unselectItem="unselectPickupPoint"
+								@buyAtItem="buyAtPickupPoint"
+							/>
+							<BarterItem 
+								v-else
 								:item="offer"
 							/>
 						</l-popup>
@@ -34,7 +51,7 @@
 			</template>
 
 			<!-- Find my location -->
-			<template v-if="(isSearchMode || isInputMode)">
+			<template>
 				<l-control position="topleft">
 					<div class="leaflet-bar">
 						<a
@@ -70,15 +87,15 @@
 			</template>
 
 			<!-- Pin marker -->
-			<template v-if="(isSearchMode || isInputMode)">
-				<l-marker v-if="isInputMode && marker" :latLng="marker" />
+			<template>
+				<l-marker v-if="(isInputMode || isDeliveryInputMode || isViewMode || isDeliverySelectionMode) && marker" :latLng="marker" />
 				<l-geosearch :options="geosearchOptions" />
 			</template>
 
 			<l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
 		</l-map>
 		<div 
-			v-if="isSearchMode" 
+			v-if="(isSearchMode || isDeliveryInputMode)" 
 			class="offers-search-container"
 		>
 			<div
@@ -117,7 +134,5 @@
 	</div>
 </template>
 
-<style src="leaflet/dist/leaflet.css"></style>
-<style src="leaflet-geosearch/assets/css/leaflet.css"></style>
 <style lang="sass" src="./index.sass"></style>
 <script src="./index.js"></script>

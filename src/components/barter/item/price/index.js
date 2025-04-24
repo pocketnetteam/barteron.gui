@@ -40,5 +40,23 @@ export default {
 
 			return value;
 		},
+
+		/**
+		 * Get pickup point data
+		 * 
+		 * @returns {Object}
+		 */
+		pickupPoint() {
+			return this.item.delivery?.pickupPoint;
+		},
+
+		/**
+		 * Get price prefix
+		 * 
+		 * @returns {String}
+		 */
+		pricePrefix() {
+			return this.pickupPoint ? (this.$t("priceLabels.from") + " ") : "";
+		},
 	}
 }

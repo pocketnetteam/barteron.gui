@@ -1,7 +1,7 @@
 import Loader from "@/components/loader/index.vue";
 import BarterItem from "../item/index.vue";
-import { Carousel, Slide } from "vue-snap";
-import "vue-snap/dist/vue-snap.css";
+import { Carousel, Slide } from "@/components/vue-snap/index.js";
+import "@/components/vue-snap/vue-snap.css";
 
 export default {
 	name: "BarterList",

@@ -43,8 +43,6 @@ export default {
 		}
 	},
 
-	inject: ["dialog"],
-
 	computed: {
 		details() {
 			return this.sdk.barteron.details[this.item?.hash];
@@ -56,6 +54,10 @@ export default {
 
 		comments() {
 			return this.details?.comments || [];
+		},
+
+		offerExists() {
+			return (this.item?.hash?.length >= 64);
 		},
 	},
 
@@ -111,27 +113,6 @@ export default {
 		},
 
 		/**
-		 * Vote event
-		 * 
-		 * @param {Number} score
-		 */
-		voteEvent(score) {
-			this.score = score;
-			this.isOfferScoreConfirm = true;
-			this.dialog?.instance
-				.view("question", this.$t("dialogLabels.submit_rating"))
-				.then(state => {
-					this.isOfferScoreConfirm = false;
-					if (state) {
-						this.vote(score);
-					} else {
-						this.score = 0;
-						this.$refs.offerScore?.reset();
-					}
-				});
-		},
-
-		/**
 		 * Store vote
 		 * 
 		 * @param {Number} score
@@ -157,19 +138,6 @@ export default {
 					this.isOfferScoreLoading = false;
 				});
 			}
-		},
-
-		/**
-		 * Event of comment submitting
-		 */
-		submitCommentEvent() {
-			this.dialog?.instance
-				.view("question", this.$t("dialogLabels.submit_comment"))
-				.then(state => {
-					if (state) {
-						this.submitComment();
-					}
-				});
 		},
 
 		/**
@@ -252,7 +220,8 @@ export default {
 		},
 
 		voteable() {
-			return this.form
+			return this.offerExists 
+				&& this.form
 				&& !(this.offerScores.some(f => f.address === this.sdk.address && (f.relay || f.completed))
 					|| this.isOfferScoreLoading
 					|| this.isOfferScoreConfirm);
@@ -280,7 +249,7 @@ export default {
 		},
 
 		commentable() {
-			return this.form;
+			return this.offerExists && this.form;
 		},
 	},
 

@@ -2,6 +2,10 @@ export default {
 	name: "Score",
 
 	props: {
+		mode: {
+			type: String,
+			default: "regular" // values: regular, preview
+		},
 		rating: {
 			type: [Boolean, String],
 			default: false
@@ -21,6 +25,10 @@ export default {
 		delimeter: {
 			type: String,
 			default: "."
+		},
+		votesCount: {
+			type: Number,
+			default: 0
 		},
 		relayMode: {
 			type: Boolean,

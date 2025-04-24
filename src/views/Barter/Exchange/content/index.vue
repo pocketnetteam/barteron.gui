@@ -3,61 +3,63 @@
 
 		<!-- show app banner -->
 		<template v-if="!(appBannerDisabled)">
-			<div class="app-banner">
-				<div class="app-banner-holder box">
-					<h1 class="title">{{ $t('appBannerLabels.title') }}</h1>
-					<h1 class="info row">
-						{{ $t('appBannerLabels.paragraph1') }}
-					</h1>
-					<h1 class="info row">
-						{{ $t('appBannerLabels.paragraph2') }}
-					</h1>
-
-					<div class="row full-width center">
-						<div class="buttons-holder min-h-w">
-							<v-button 
-								id="open-apps-link-button"
-								vType="hit"
-								@click="openAppsLink"
-							>
-								{{ $t('buttonLabels.download_app') }}
-							</v-button>
-						</div>
-					</div>
-
-					<div class="col">
-						<p class="important">
-							{{ $t('appBannerLabels.important') }}
-						</p>
-						<p class="details">
-							{{ $t('appBannerLabels.details') }}
-						</p>
-						<h1 class="info">
-							{{ appsLink }}
+			<div class="app-banner-holder">
+				<div class="app-banner">
+					<div class="app-banner-content box">
+						<h1 class="title">{{ $t('appBannerLabels.title') }}</h1>
+						<h1 class="info row">
+							{{ $t('appBannerLabels.paragraph1') }}
 						</h1>
-					</div>
-					<div id="app-banner-checkbox-holder">
-						<v-switch
-							class="no-padding"
-							type="checkbox"
-							name="appBannerDisabled"
-							:label="$t('appBannerLabels.dont_show_again')"
-							vType="checkbox"
-							vSize="xl"
-							@change="appBannerDisabledChange"
-						/>
-					</div>
-					<div 
-						id="hide-button-holder"
-						class="row full-width right"
-					>
-						<div class="buttons-holder min-h-w">
-							<v-button
-								id="hide-button"
-								@click="hideAppBanner"
-							>
-								<span>{{ $t('buttonLabels.continue_working') }}</span>
-							</v-button>
+						<h1 class="info row">
+							{{ $t('appBannerLabels.paragraph2') }}
+						</h1>
+
+						<div class="row full-width center">
+							<div class="buttons-holder min-h-w">
+								<v-button 
+									id="open-apps-link-button"
+									vType="hit"
+									@click="openAppsLink"
+								>
+									{{ $t('buttonLabels.download_app') }}
+								</v-button>
+							</div>
+						</div>
+
+						<div class="col">
+							<p class="important">
+								{{ $t('appBannerLabels.important') }}
+							</p>
+							<p class="details">
+								{{ $t('appBannerLabels.details') }}
+							</p>
+							<h1 class="info">
+								{{ appsLink }}
+							</h1>
+						</div>
+						<div id="app-banner-checkbox-holder">
+							<v-switch
+								class="no-padding"
+								type="checkbox"
+								name="appBannerDisabled"
+								:label="$t('appBannerLabels.dont_show_again')"
+								vType="checkbox"
+								vSize="xl"
+								@change="appBannerDisabledChange"
+							/>
+						</div>
+						<div 
+							id="hide-button-holder"
+							class="row full-width right"
+						>
+							<div class="buttons-holder min-h-w">
+								<v-button
+									id="hide-button"
+									@click="hideAppBanner"
+								>
+									<span>{{ $t('buttonLabels.continue_working') }}</span>
+								</v-button>
+							</div>
 						</div>
 					</div>
 				</div>

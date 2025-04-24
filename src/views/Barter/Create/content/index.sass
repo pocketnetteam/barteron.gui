@@ -113,3 +113,28 @@
 
 	#offer-options
 		gap: 10px
+
+	#pickup-point-info
+		> div
+			margin-bottom: 4 * $r
+
+			&:last-child
+				margin-bottom: 6 * $r
+
+	#work-schedule-day-list
+		&:not(.rejected)
+			border-color: transparent
+		
+		&.rejected
+			padding: $r
+
+	.v-form
+		#pickup-point-list
+			margin: 0 0 6 * $r
+			max-width: calc(684px - #{$r*2})
+
+			.pickup-point-empty-list
+				border-radius: 12px
+
+				&:not(.rejected)
+					border: 2px solid $trunks
