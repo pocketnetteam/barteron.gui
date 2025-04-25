@@ -13,6 +13,12 @@
 		&.score-behind
 			order: 2
 
+	&.preview
+		gap: $r / 2
+
+		.rating
+			color: $white
+
 	.stars
 		position: relative
 
@@ -56,3 +62,13 @@
 
 						&:hover ~ li
 							color: $lightgray
+
+	.votes-count
+		font-size: 1em
+		font-weight: bold
+		margin-left: $r
+		color: $white
+		order: 3
+
+		i
+			margin-right: $r / 2

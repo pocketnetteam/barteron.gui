@@ -17,6 +17,15 @@ export default {
 		isPreview() {
 			return this.$route.query.preview;
 		},
+
+		/**
+		 * Check if offer exists
+		 * 
+		 * @returns {Boolean}
+		 */
+		offerExists() {
+			return (this.item?.hash?.length >= 64);
+		},
 	},
 
 	methods: {

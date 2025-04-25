@@ -1,6 +1,7 @@
 import ImageLoad from "@/components/image-load/index.vue";
 import Loader from "@/components/loader/index.vue";
 import Price from "@/components/barter/item/price/index.vue"
+import WorkSchedule from "@/components/work-schedule/index.vue";
 import PhotoSwipe from "photoswipe";
 import "photoswipe/style.css";
 
@@ -10,7 +11,8 @@ export default {
 	components: {
 		ImageLoad,
 		Loader,
-		Price
+		Price,
+		WorkSchedule
 	},
 
 	props: {
@@ -34,6 +36,15 @@ export default {
 			return (this.item.images || []).map(url => this.sdk.manageBastyonImageSrc(url));
 		},
 		
+		/**
+		 * Get pickup point data
+		 * 
+		 * @returns {Object}
+		 */
+		pickupPoint() {
+			return this.item.delivery?.pickupPoint;
+		},
+
 		/**
 		 * Get user location
 		 * 

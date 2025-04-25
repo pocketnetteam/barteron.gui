@@ -4,11 +4,13 @@
 		ref="asideCategories"
 	>
 		<v-details
-			v-if="subCategories?.length"
+			v-if="category"
 			:title="$t('categoryLabels.label')"
 			:open="true"
 		>
-			<SubCategories :items="subCategories" />
+			<CategoriesHierarchy 
+				:currentCategory="category"
+			/>
 		</v-details>
 
 		<v-details :open="true">
@@ -155,6 +157,21 @@
 				:value="type.map(item => item.value)"
 			/>
 		</v-details> -->
+
+		<v-details 
+			v-if="legalInfoAvailable"
+			:open="true"
+		>
+			<template #title>
+				<strong class="summary">
+					<span class="filter-title">{{ $t('legalLabels.label') }}</span>
+				</strong>
+			</template>
+
+			<LegalInfo
+				:i18nDocumentKeys="requiredLegalInfoItemKeys"
+			/>
+		</v-details>
 
 		<div class="v-details" id="action-buttons">
 			<div class="row">

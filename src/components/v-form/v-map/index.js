@@ -15,8 +15,10 @@ import {
 import Vue2LeafletMarkerCluster from "vue2-leaflet-markercluster";
 import LGeosearch from "vue2-leaflet-geosearch";
 import BarterItem from "@/components/barter/item/index.vue";
+import PickupPointItem from "@/components/pickup-point/item/index.vue";
 import { mapState } from "pinia";
 import { useLocaleStore } from "@/stores/locale.js";
+import ThemeStore from "@/stores/theme.js";
 
 delete Icon.Default.prototype._getIconUrl;
 Icon.Default.mergeOptions({
@@ -40,7 +42,8 @@ export default {
 		LControl,
 		LIcon,
 		LGeosearch,
-		BarterItem
+		BarterItem,
+		PickupPointItem
 	},
 
 	props: {
@@ -50,7 +53,7 @@ export default {
 		},
 		height: {
 			type: String,
-			default: "350px"
+			default: "400px"
 		},
 		width: {
 			type: String,
@@ -72,9 +75,17 @@ export default {
 			type: Array,
 			default: () => []
 		},
+		selectedOfferIds: {
+			type: Array,
+			default: () => []
+		},
 		mapMode: {
 			type: String,
 			default: "input"
+		},
+		pickupPointPopupMode: {
+			type: String,
+			default: "readonly"
 		},
 		zoom: {
 			type: Number,
@@ -92,14 +103,30 @@ export default {
 
 	data() {
 		return {
-			offerIcon: this.imageUrl("offer.png"),
-			offerIconActive: this.imageUrl("offer-active.png"),
-			iconSize: [32, 37],
+			offerIcon: {
+				regular: this.imageUrl("offer.png"),
+				active: this.imageUrl("offer-active.png"),
+				size: [32, 37],
+				anchor: [16, 37],
+			},
+			pickupPointIcon: {
+				regular: this.imageUrl("pickup-point.png"),
+				active: this.imageUrl("pickup-point-active.png"),
+				size: [32, 37],
+				anchor: [16, 37],
+			},
+			selfPickupIcon: {
+				regular: this.imageUrl("self-pickup-icon.png"),
+				active: this.imageUrl("self-pickup-icon-active.png"),
+				size: [32, 37],
+				anchor: [16, 37],
+			},
 			mapObject: {},
+			mapHandlers: {},
 			resizeObserver: null,
 			geosearchOptions: this.getGeosearchOptions(),
 			addressSearchEnabled: false,
-			marker: (this.isInputMode ? this.center : null),
+			marker: null,
 			scale: this.zoom,
 			userLocationIsLoading: false,
 			mapState: "",
@@ -110,6 +137,7 @@ export default {
 			loadingErrorMessage: "",
 			foundOffers: [],
 			geosearchForm: null,
+			mountingComplete: false,
 		}
 	},
 
@@ -135,6 +163,15 @@ export default {
 		},
 
 		/**
+		 * Checking that the map mode is delivery selection
+		 * 
+		 * @returns {Boolean}
+		 */
+		isDeliverySelectionMode() {
+			return this.mapMode === "deliverySelection";
+		},
+
+		/**
 		 * Checking that the map mode is input
 		 * 
 		 * @returns {Boolean}
@@ -144,30 +181,52 @@ export default {
 		},
 
 		/**
+		 * Checking that the map mode is delivery input
+		 * 
+		 * @returns {Boolean}
+		 */
+		isDeliveryInputMode() {
+			return this.mapMode === "deliveryInput";
+		},
+
+		/**
 		 * Get offers to show
 		 * 
 		 * @returns {Array}
 		 */
 		shownOffers() {
-			return this.isSearchMode ? this.foundOffers : this.offers;
+			return (this.isSearchMode || this.isDeliveryInputMode) ? this.foundOffers : this.offers;
 		},
 
-		/**
-		 * Get icon anchor
-		 * 
-		 * @returns {Array}
-		 */
-		iconAnchor() {
-			const
-				dx = (this.iconSize?.[0] || 0) / 2,
-				dy = (this.iconSize?.[1] || 0);
-
-			return [dx, dy];
+		isDarkTheme() {
+			return ThemeStore.isDarkTheme();
 		},
-
 	},
 
 	methods: {
+		getOfferIcon(offer) {
+			let icon = {};
+			if (offer.isPickupPoint) {
+				icon = this.pickupPointIcon;
+			} else if (offer.isSelfPickup) {
+				icon = this.selfPickupIcon;
+			} else {
+				icon = this.offerIcon;
+			}
+
+			const key = (
+					this.isViewMode 
+					|| this.isSelectedOffer(offer)
+					|| this.isDeliverySelectionMode && !(offer.isPickupPoint || offer.isSelfPickup)
+				) ? "active" : "regular",
+				url = icon[key];
+
+			return {
+				...icon,
+				url,
+			};
+		},
+
 		getGeosearchOptions() {
 			return {
 				provider: this.getMapProvider(),
@@ -199,6 +258,13 @@ export default {
 			this.resizeObserver.observe(map.$el);
 		},
 
+		setupMapMode() {
+			const needShowAddressInput = (this.isSearchMode || this.isInputMode || this.isDeliveryInputMode);
+			this.toggleAddressSearch(null, {forcedValue: needShowAddressInput});
+			this.setupHandlers();
+			this.setupData();
+		},
+
 		toggleAddressSearch(event, options = { forcedValue: null }) {
 			const el = this.getGeosearchForm();
 			if (el) {
@@ -218,14 +284,21 @@ export default {
 
 		setupHandlers() {
 
+			this.resetAllCustomHandlers();
+
 			if (this.isViewMode) {
 				this.setupViewModeHandlers();
+			} else if (this.isDeliverySelectionMode) {
+				this.setupDeliverySelectionModeHandlers();
 			} else if(this.isInputMode) {
 				this.setupInputModeHandlers();
+			} else if(this.isDeliveryInputMode) {
+				this.setupDeliveryInputModeHandlers();
 			} else if (this.isSearchMode) {
 				this.setupSearchModeHandlers();
 			};
 
+			// legacy
 			/* this.mapObject
 				.on("mousemove", e => {
 					this.lastMousePos = e.originalEvent;
@@ -240,8 +313,20 @@ export default {
 	
 		},
 
+		resetAllCustomHandlers() {
+			this.toggleWheel(true);
+
+			Object.entries(this.mapHandlers).forEach(([key, value]) => {
+				this.mapObject.off(key, value);
+			});
+		},
+
 		setupViewModeHandlers() {
 			this.setToggleWheelByFocus();
+		},
+
+		setupDeliverySelectionModeHandlers() {
+			this.setupViewModeHandlers();
 		},
 
 		setupInputModeHandlers() {
@@ -259,27 +344,40 @@ export default {
 				}
 			}
 
+			const handlers = this.mapHandlers;
+
+			handlers.click = (e) => {
+				if (e.originalEvent.target.matches("div.vue2leaflet-map")) {
+					this.marker = Object.values(e.latlng);
+					this.$emit("change", Object.values(e.latlng));
+				}
+			};
+
+			handlers.move = (e) => {
+				if (e?.originalEvent) markerAtCenter(false, e);
+			};
+
+			handlers.moveend = (e) => {
+				markerAtCenter(true, e);
+			};
+
 			this.mapObject
-				.on("click", e => {
-					if (e.originalEvent.target.matches("div.vue2leaflet-map")) {
-						this.marker = Object.values(e.latlng);
-						this.$emit("change", Object.values(e.latlng));
-					}
-				})
-				.on("move", e => {
-					if (e?.originalEvent) markerAtCenter(false, e);
-				})
-				.on("moveend", e => {
-					markerAtCenter(true, e);
-				});
+				.on("click", handlers.click)
+				.on("move", handlers.move)
+				.on("moveend", handlers.moveend);
 
 			markerAtCenter(true);
 		},
 
+		setupDeliveryInputModeHandlers() {
+			this.setupSearchModeHandlers();
+		},
+
 		setupSearchModeHandlers() {
+			const handlers = this.mapHandlers;
 
 			const moveEndHandler = (e) => {
-				this.mapObject.off("moveend"); // prevent double moveend event bug
+				this.mapObject.off("moveend", handlers.moveend); // prevent double moveend event bug
 
 				this.scale = this.mapObject.getZoom();
 				const center = Object.values(
@@ -291,28 +389,48 @@ export default {
 				this.$emit("bounds", this.mapObject.getBounds(), e);
 			};
 
-			this.mapObject.on("movestart", e => {
+			handlers.moveend = (e) => moveEndHandler(e);
+
+			handlers.movestart = (e) => {
 				this.$emit("mapAction", "moveMap", {}, e);
+				this.mapObject.on("moveend", handlers.moveend);
+			};
 
-				this.mapObject.on("moveend", e => moveEndHandler(e));
-			});
-
-			this.mapObject.on("geosearch/showlocation", e => {
+			handlers["geosearch/showlocation"] = (e) => {
 				this.$emit("geosearch_showlocation", e);
-			});
+			};
 
+			handlers.popupopen = (e) => {
+				this.toggleAddressSearch(null, {forcedValue: false});
+			};
+			
+			this.mapObject
+				.on("movestart", handlers.movestart)
+				.on("geosearch/showlocation", handlers["geosearch/showlocation"])
+				.on("popupopen", handlers.popupopen);
 		},
 
 		setToggleWheelByFocus() {
 			this.toggleWheel(false);
 
+			const handlers = this.mapHandlers;
+
+			handlers.focus = () => this.toggleWheel(true);
+			handlers.blur = () => this.toggleWheel(false);
+
 			this.mapObject
-				.on("focus", () => this.toggleWheel(true))
-				.on("blur", () => this.toggleWheel(false));
+				.on("focus", handlers.focus)
+				.on("blur", handlers.blur);
 		},
 
 		setupData() {
-			if (this.isSearchMode) {
+			if (this.isInputMode || this.isDeliveryInputMode) {
+				this.marker = this.marker ?? Object.values(this.mapObject.getCenter());
+				if (this.isDeliveryInputMode) {
+					this.changeStateTo("initialState");
+				}
+			} else if (this.isSearchMode) {
+				this.marker = null;
 				this.changeStateTo("initialState");
 			}
 		},
@@ -320,7 +438,7 @@ export default {
 		changeStateTo(newState) {
 			this.mapState = newState;
 
-			if (this.isSearchMode) {
+			if (this.isSearchMode || this.isDeliveryInputMode) {
 
 				this.isLoading = false;
 				this.offersSearchButton = false;
@@ -358,7 +476,7 @@ export default {
 		},
 
 		mapActionDataChanged() {
-			if (this.isSearchMode) {
+			if (this.isSearchMode || this.isDeliveryInputMode) {
 
 				const res = this.mapActionData;
 
@@ -433,7 +551,7 @@ export default {
 		},
 
 		showLoadedOffers() {
-			if (this.isSearchMode) {
+			if (this.isSearchMode || this.isDeliveryInputMode) {
 				const res = this.mapActionData;
 				if (res.isNextPage) {
 					this.foundOffers = this.foundOffers.concat(res.offers);
@@ -441,6 +559,42 @@ export default {
 					this.foundOffers = res.offers;
 				}
 			}
+		},
+
+		showPickupPoint() {
+			this.mapObject.closePopup();
+		},
+
+		selectPickupPoint(offer) {
+			this.mapObject.closePopup();
+			setTimeout(() => {
+				this.$emit("selectPickupPoint", offer, {source: "map"});
+			}, 300);
+		},
+
+		unselectPickupPoint(offer) {
+			this.mapObject.closePopup();
+			setTimeout(() => {
+				this.$emit("unselectPickupPoint", offer, {source: "map"});
+			}, 300);
+		},
+
+		buyAtPickupPoint(offer) {
+			this.mapObject.closePopup();
+			setTimeout(() => {
+				this.$emit("buyAtPickupPoint", offer, {source: "map"});
+			}, 300);
+		},
+
+		isSelectedOffer(offer) {
+			return this.selectedOfferIds.some(f => f === offer.hash);
+		},
+
+		moveToGeohash(geohash) {
+			this.mapObject.setView(
+				this.decodeGeoHash(geohash),
+				this.scale || 0
+			);
 		},
 
 		startLocating() {
@@ -457,6 +611,9 @@ export default {
 						result, 
 						Math.max(this.scale, minZoom)
 					);
+					if (this.isViewMode || this.isDeliverySelectionMode) {
+						this.marker = result;
+					}
 				} else {
 					throw new Error('Location data is not defined');
 				}
@@ -495,6 +652,8 @@ export default {
 	},
 
 	mounted() {
+		this.mountingComplete = false;
+
 		this.$2watch("$refs.map").then(map => {
 			this.mapObject = map.mapObject;
 			this.observeResize();
@@ -509,16 +668,21 @@ export default {
 			const zoom = this.latLonDefined(latLon) ? this.zoom : 0;
 			this.mapObject.setView(center, zoom);
 		}).then(() => {
-			const needShowAddressInput = (this.isSearchMode || this.isInputMode);
-			this.toggleAddressSearch(null, {forcedValue: needShowAddressInput});
-			this.setupHandlers();
-			this.setupData();
+			this.setupMapMode();
 		}).catch(e => { 
 			console.error(e);
+		}).finally(() => {
+			this.mountingComplete = true;
 		});
 	},
 
 	watch: {
+		mapMode() {
+			this.$2watch("mountingComplete").then(() => {
+				this.setupMapMode();
+			});
+		},
+
 		locale() {
 			this.localeChanged();
 		},
@@ -532,7 +696,7 @@ export default {
 	},
 
 	beforeDestroy() {
-		this.mapObject.off();
+		this.mapObject.off?.();
 		this.resizeObserver?.disconnect();
 	},
 }

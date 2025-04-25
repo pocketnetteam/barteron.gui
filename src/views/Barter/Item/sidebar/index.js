@@ -3,6 +3,7 @@ import Profile from "@/components/profile/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
 import Caption from "@/components/barter/item/caption/index.vue";
 import Price from "@/components/barter/item/price/index.vue";
+import BoostInfo from "@/components/barter/item/boost-info/index.vue";
 import MyOptions from "@/components/barter/item/my-options/index.vue";
 
 export default {
@@ -14,6 +15,7 @@ export default {
 		ExchangeList,
 		Caption,
 		Price,
+		BoostInfo,
 		MyOptions
 	},
 

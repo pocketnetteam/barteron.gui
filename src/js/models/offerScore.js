@@ -65,11 +65,16 @@ class OfferScore {
 						relay: !(action?.completed || action?.rejected),
 						completed: action?.completed,
 						rejected: action?.rejected,
-					};
+					},
+					needUpdateAverageOfferScore = (this.offerId && props.completed && !(this.completed));
 
 				Object.entries(props).forEach(([key, value]) => {
 					Vue.set(target, key, value);
 				});
+
+				if (needUpdateAverageOfferScore) {
+					this.sdk.getBrtAverageOfferScores([this.offerId], {forceUpdate: true});
+				};
 			}
 		}
 

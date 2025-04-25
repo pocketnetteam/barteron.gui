@@ -13,6 +13,16 @@
 		display: flex
 		align-items: center
 
+		.label-image
+			width: 30px
+			height: 30px
+			object-fit: contain
+			margin-left: 0.75em
+
+		label
+			&.disabled
+				color: $trunks
+
 	input
 		border: 0
 		cursor: pointer
@@ -47,6 +57,7 @@
 						transform: rotate(45deg)
 						height: 7px
 						width: 3px
+						pointer-events: none
 
 		/* Radio */
 		&[type="radio"]

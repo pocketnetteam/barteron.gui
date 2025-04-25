@@ -41,15 +41,47 @@
 		"propose": "Что вы предлагаете",
 		"photos": "Добавьте фотографии",
 		"get": "Что вы хотите получить",
+		"financial-terms": "Финансовые условия",
+		"work-schedule": "График работы",
+		"address": "Адрес",
+		"route": "Как добраться",
 		"description": "Описание",
-		"location": "Местоположение"
+		"location": "Местоположение",
+		"pickup-point-list": "Пункты выдачи заказов"
 	},
 
 	"deliveryLabels": {
-		"label": "Доставка",
-		"pickup": "Самовывоз",
-		"details": "Подробнее",
-		"about": "Подробнее о \"{point}\""
+		"label": "Пункты выдачи заказов и самовывоз",
+		"pickup_point": "Пункт выдачи заказов",
+		"self_pickup": "Самовывоз",
+		"self_pickup_available": "Доступен самовывоз",
+		"self_pickup_additional_info_placeholder": "Добавьте информацию о самовывозе (необязательно)",
+		"self_pickup_additional_info": "Информация о самовывозе",
+		"self_pickup_additional_info_exists": "Ознакомьтесь с информацией",
+		"no_self_pickup_additional_info": "Нет дополнительной информации",
+		"use_pickup_points": "Использовать пункты выдачи заказов",
+		"pickup_points_enabled_placeholder": "Выполните поиск и подбор подходящих пунктов выдачи на карте",
+		"pickup_points_loading_error_placeholder": "Произошла ошибка при загрузке пунктов выдачи заказов",
+		"pickup_points_enabled_hint": "Местоположение в этом режиме зафиксировано, для его изменения временно отключите данную опцию",
+		"pickup_point_price_caption": "Укажите минимальную стоимость доставки",
+		"pickup_point_info": "Информация о пункте выдачи заказов",
+		"financial_terms": "Финансовые условия",
+		"shelf_life": "Срок хранения",
+		"default_shelf_life_value": "14 дней",
+		"shelf_life_hint": "Обратите внимание, срок хранения должен соответствовать указанному значению",
+		"work_schedule": "График работы",
+		"work_schedule_additional_info_placeholder": "Добавьте информацию об изменениях в графике работы (необязательно)",
+		"all_day": "24 часа",
+		"around_the_clock": "Круглосуточно",
+		"address": "Адрес",
+		"address_not_specified": "Адрес не указан",
+		"how_to_get": "Как добраться",
+		"pickup_point_creation_is_forbidden": "Функционал ПВЗ сейчас находится в публичном тестировании. Если вы хотите открыть ПВЗ, свяжитесь сначала с support@bastyon.com",
+		"hint_for_delivery_option_selection": "Выберите опцию Пункт выдачи заказов или Самовывоз (при наличии) на карте или в списке",
+		"hint_for_purchase_at_pickup_point": "Опция \"Купить\" откроет чат для оформления покупки",
+		"chat_message_exchange_proposed": "Предлагаю обмен",
+		"chat_message_self_pickup_selected": "Вариант доставки: \"Самовывоз\"",
+		"chat_message_pickup_point_selected": "Вариант доставки: \"Пункт выдачи заказов\""
 	},
 
 	"ratingLabels": {
@@ -81,9 +113,12 @@
 		"cancel": "Отменить",
 		"preview": "Предпросмотр",
 		"publish": "Опубликовать",
+		"boost_info": "Как рекламировать объявление",
+		"share_on_bastyon": "Поделиться в Bastyon",
 		"propose_exchange": "Предложить обмен",
 		"group_exchange": "Групповой обмен",
 		"start_purchase": "Начать покупку",
+		"go_to_selection": "Перейти к выбору",
 		"send_message": "Отправить сообщение",
 		"my_announcements": "Мои объявления",
 		"find_exchange_options": "Найти обмены",
@@ -93,9 +128,13 @@
 		"search_in_visible_area": "Искать в видимой области",
 		"show_more": "Показать ещё",
 		"show": "Показать",
+		"select": "Выбрать",
+		"buy": "Купить",
 		"buy_for": "Купить за {cost} PKOIN",
 		"edit": "Редактировать",
 		"save": "Сохранить",
+		"close": "Закрыть",
+		"repeat": "Повторить",
 		"all_regions": "Все регионы",
 		"renew": "Продлить",
 		"withdraw": "Снять с публикации",
@@ -105,9 +144,10 @@
 		"yes": "Да",
 		"no": "Нет",
 		"unknown": "Неизвестно",
-		"set_location": "Указать локацию",
+		"search_area": "Область поиска",
 		"download_app": "Скачать приложение",
 		"continue_working": "Продолжить работу",
+		"support": "Поддержка",
 		"apply": "Применить",
 		"reset": "Сбросить",
 		"submit": "Отправить"
@@ -119,7 +159,12 @@
 		"empty": "Нет добавленных тегов",
 		"free": "Бесплатно",
 		"select": "Выберите объявление на которое вы хотите обменяться",
-		"outdated": "У этого объявления истёк срок публикации"
+		"outdated": "У этого объявления истёк срок публикации",
+		"share_on_bastyon": "Поделиться в Bastyon",
+		"offer_has_been_published": "Объявление опубликовано.",
+		"share_offer_on_bastyon_hint": "Поделитесь Вашим предложением в Bastyon! Вы также можете поднять пост в ленте на Bastyon.",
+		"share_offer_option_availability": "Данная опция также доступна на странице объявления. Подробнее о поднятии поста здесь:",
+		"dont_show_again": "Больше не показывать"
 	},
 
 	"orderLabels": {
@@ -156,6 +201,13 @@
 		"label": "Состояние",
 		"new": "Новое",
 		"used": "Б/У"
+	},
+
+	"legalLabels": {
+		"label": "Юридическая информация",
+		"user_agreement": "Пользовательское соглашение",
+		"personal_data_processing_policy": "Политика обработки персональных данных",
+		"barter_agreement_draft": "Проект договора мены"
 	},
 
 	"typeLabels": {
@@ -231,8 +283,10 @@
 		"error#0": "{error}",
 		"error#4": "Вы уже оценили данное объявление ранее",
 		"error#5": "Добавление оценки своему собственному объявлению недоступно",
+		"error#12": "Объект не найден",
 		"error#21": "Неудачный OpReturn",
 		"error#28": "Слишком много транзакций",
+		"error#60": "Ваша репутация пока не позволяет ставить низкие оценки объявлениям",
 		"error#65": "Превышен лимит"
 	},
 
@@ -274,7 +328,7 @@
 		"title": "Анонимный опрос",
 		"prompt": "Вы можете помочь нам улучшить Бартерон! Пройдите анонимный опрос",
 		"answer_placeholder": "Введите ваш ответ здесь",
-		"question1": "Что можно улучшить на бартероне в певрую очередь?",
+		"question1": "Что можно улучшить на бартероне в первую очередь?",
 		"question2": "Что на бартероне вам нравится больше всего?",
 		"email": "Вы можете указать email для обратной связи",
 		"email_placeholder": "Email (НЕОБЯЗАТЕЛЬНО)",

@@ -1,0 +1,20 @@
+@import "@/css/vars.sass"
+
+.legal-info
+	
+	.legal-info-list
+		+resetList()
+		color: $bulma
+
+		li
+			&:not(:last-child)
+				margin-bottom: $r * 2
+
+			.link
+				color: $bulma
+
+				&:hover
+					color: $bulma-hover
+
+				i
+					margin-right: $r

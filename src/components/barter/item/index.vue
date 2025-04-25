@@ -1,14 +1,12 @@
 <template>
 	<div :class="{
 		[`barter-item-${ vType }`]: true,
-		'barter-item-relay': hasRelay
+		'barter-item-relay': hasRelay,
+		'compact-view': compactView,
+		'hide-info': hideInfo,
 	}">
 		<!-- Picture -->
 		<picture 
-			:class="{
-				'compact-view': compactView,
-				'hide-info': hideInfo
-			}"
 			v-if="images?.length && vType !== 'page'"
 		>
 			<router-link :to="!(hasRelay || isRemoved) ? offerLink : {}">
@@ -70,6 +68,15 @@
 							@mouseleave="() => hover = 0"
 						>{{ index }}</li>
 					</ul>
+					<Score
+						v-if="averageOfferScore?.value"
+						mode="preview"
+						:rating="'behind'"
+						:stars="1"
+						:value="averageOfferScore?.value"
+						:starsValue="averageOfferScore?.value"
+						:votesCount="averageOfferScore?.count"
+					/>
 				</template>
 			</router-link>
 		</picture>
@@ -80,7 +87,7 @@
 				<span class="price">
 					<template v-if="item.price">
 						<span class="currency icon-pkoin"></span>
-						{{ pkoinPrice ? $n(pkoinPrice, 'shortPkoin') : '...' }}
+						{{ pkoinPrice ? (pricePrefix + $n(pkoinPrice, 'shortPkoin')) : '...' }}
 						<span>{{ $t('profileLabels.coins') }}</span>
 					</template>
 					<template v-else>
@@ -103,6 +110,7 @@
 
 				<div class="currency-holder">
 					<CurrencySwitcher
+						:pricePrefix="pricePrefix"
 						:switcher="false"
 						:amount="item?.price"
 						:currencyPrice="item?.currencyPrice"
@@ -193,7 +201,7 @@
 					<span class="price">
 						<template v-if="item.price">
 							<span class="currency icon-pkoin"></span>
-							{{ pkoinPrice ? $n(pkoinPrice, 'shortPkoin') : '...' }}
+							{{ pkoinPrice ? (pricePrefix + $n(pkoinPrice, 'shortPkoin')) : '...' }}
 							<span>{{ $t('profileLabels.coins') }}</span>
 						</template>
 						<template v-else>
@@ -204,6 +212,7 @@
 
 					<div class="currency-holder">
 						<CurrencySwitcher
+							:pricePrefix="pricePrefix"
 							:switcher="false"
 							:amount="item?.price"
 							:currencyPrice="item?.currencyPrice"
@@ -315,7 +324,7 @@
 				</ul>
 			</picture>
 
-			<div class="row d-sep sided">
+			<div class="row d-sep sided wrap gap-md">
 				<div class="col no-offset wrap">
 					<ul class="stat">
 						<li
@@ -341,18 +350,32 @@
 				</div>
 
 				<div class="col buttons">
-					<v-button vType="stroke bulma-color bulma-color-hover">
+					<v-button 
+						vType="stroke bulma-color bulma-color-hover"
+						@click="setLike"
+					>
 						<i
 							:class="{
 								'fa fa-heart': true,
 								'active': hasLike
 							}"
-							@click="setLike"
 						></i>
 					</v-button>
 
-					<v-button vType="stroke bulma-color bulma-color-hover">
-						<i class="fa fa-share-alt" @click="shareItem"></i>
+					<v-button 
+						vType="stroke bulma-color bulma-color-hover"
+						@click="shareItem"
+					>
+						<i class="fa fa-share-alt"></i>
+					</v-button>
+
+					<v-button 
+						v-if="shareItemOnBastyonIsAvailable()"
+						vType="hit"
+						class="share-item-on-bastyon"
+						@click="shareItem({ shareOnBastyon: true })"
+					>
+						<i class="fa fa-plus-circle"></i><span>{{ $t('buttonLabels.share_on_bastyon') }}</span>
 					</v-button>
 				</div>
 			</div>
@@ -361,6 +384,7 @@
 			<div class="row block sep no-sidebar">
 				<Caption :item="item"/>
 				<Price :item="item"/>
+				<BoostInfo/>
 			</div>
 
 			<div class="row block sep">
@@ -369,6 +393,43 @@
 					:tags="exchangeList.map(l => l.id)"
 					:visible="0 /* Means show all items without toggle */"
 				/>
+			</div>
+
+			<!-- Pickup point data -->
+			<div 
+				v-if="pickupPoint"
+				id="pickup-point-info"
+				class="row block sep"
+			>
+				<strong class="title">{{ $t('deliveryLabels.pickup_point_info') }}</strong>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.financial_terms') }}</strong>
+					<p class="description">{{ pickupPoint.financialTerms }}</p>
+				</div>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.shelf_life') }}</strong>
+					<p class="description">{{ $t('deliveryLabels.default_shelf_life_value') }}</p>
+				</div>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.work_schedule') }}</strong>
+					<work-schedule
+						mode="view"
+						:workSchedule="pickupPoint.workSchedule"
+					/>
+				</div>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.address') }}</strong>
+					<p class="description">{{ pickupPoint.address }}</p>
+				</div>
+
+				<div class="row block">
+					<strong class="subtitle">{{ $t('deliveryLabels.how_to_get') }}</strong>
+					<p class="description">{{ pickupPoint.route }}</p>
+				</div>
 			</div>
 
 			<div class="row block sep" v-if="item.description">
@@ -393,37 +454,60 @@
 
 			<div
 				class="row"
-				:class="{ 'sep': item.delivery?.length }"
+				:class="{ 'sep': deliveryOptions }"
 				v-if="item.geohash"
 			>
 				<!-- Component: Map -->
 				<v-map
-					mapMode="view"
+					ref="map"
+					:mapMode="mapMode"
+					:height="(mapMode === 'deliverySelection') ? mapHeight() : undefined"
+					:pickupPointPopupMode="isMyOffer ? 'readonly' : 'selection'"
 					:center="geohash"
 					:zoom="10"
-					:offers="[item]"
+					:offers="mapOffers()"
+					:selectedOfferIds="selectedOfferIds()"
+					@errorEvent="mapErrorEvent"
+					@selectPickupPoint="selectPickupPoint"
+					@buyAtPickupPoint="buyAtPickupPoint"
 				/>
 			</div>
 
-			<div
+			<!-- Delivery options data -->
+			<div 
+				v-if="deliveryOptionsAvailable"
+				id="delivery-options-info"
 				class="row block"
-				v-if="getDeliveryPoints"
 			>
-				<!-- Delivery -->
-				<Delivery
-					ref="delivery"
-					:entries="deliveryPoints"
-					:offerHash="item.hash"
-					type="radio"
+				<strong class="title">{{ $t('deliveryLabels.label') }}</strong>
+
+				<PickupPointList
+					ref="pickupPointList"
+					id="pickup-point-list"
+					:mode="isMyOffer ? 'readonly' : 'selection'"
+					:compactView="true"
+					:items="pickupPointItems"
+					:selectedOfferIds="selectedOfferIds()"
+					:loaderState="pickupPointsLoading"
+					:loaderItems="pickupPointsLoadingCount"
+					:loadingError="pickupPointsLoadingError"
+					@repeatLoading="pickupPointsRepeatLoading"
+					@selectItem="selectPickupPoint"
+					@buyAtItem="buyAtPickupPoint"
+				/>
+
+				<label
+					v-if="purchaseStateLabel.isEnabled"
+					class="v-label warning-level no-sidebar"
 				>
-					<template #before>
-						<strong class="title">{{ $t('deliveryLabels.label') }}</strong>
-					</template>
-				</Delivery>
+					<i :class="purchaseStateLabel.iconClass"></i>
+					{{ $t(purchaseStateLabel.i18nKey) }}
+				</label>
+
 			</div>
 
 			<!-- without sidebar -->
-			<div class="row block sep no-sidebar">
+			<div class="row block top-sep no-sidebar">
 			</div>
 
 			<!-- without sidebar -->
@@ -445,7 +529,17 @@
 				<!-- Someone's offer -->
 				<BarterExchange
 					v-if="!isMyOffer"
-					:item="item"
+				/>
+			</div>
+
+			<!-- Legal info -->
+			<div 
+				v-if="legalInfoAvailable"
+				class="row block top-sep"
+			>
+				<strong class="title">{{ $t('legalLabels.label') }}</strong>
+				<LegalInfo
+					:i18nDocumentKeys="requiredLegalInfoItemKeys"
 				/>
 			</div>
 		</template>
