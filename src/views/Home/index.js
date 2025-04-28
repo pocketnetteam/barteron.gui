@@ -21,10 +21,10 @@ export default {
 	},
 
 	methods: {
-		/**
-		 * Get complex deals
-		 */
-		async getComplexDeals() {
+		// TODO: remove this method
+		async getComplexDeals_Deprecated() {
+			this.mayMatchExchanges = [];
+
 			if (this.address?.length) {
 				/* Get my offers list */
 				const myOffers = await this.sdk.getBrtOffers(this.address)
@@ -55,6 +55,99 @@ export default {
 					});
 				}
 			}
+		},
+
+		/**
+		 * Get complex deals
+		 */
+		async getComplexDeals() {
+			this.mayMatchExchanges = [];
+
+			if (!(this.address?.length)) {
+				return;
+			};
+
+			const myAccount = await this.sdk.getBrtAccount(this.address)
+				.then(accounts => accounts?.[0])
+				.catch(e => console.error(e));
+
+			if (!(myAccount)) {
+				return;
+			};
+
+			const myOffers = await this.sdk.getBrtOffers(this.address)
+				.then(offers => offers.filter(offer => offer.active))
+				.catch(e => console.error(e));
+
+			const allTags = await Promise.all(
+				myOffers.map(async offer => {
+					const theirTags = await this.sdk.getTheirTags(offer, { account: myAccount });
+					return {
+						offer,
+						myTag: offer.tag,
+						theirTags,
+					};
+				})
+			).catch(e => { 
+				console.error(e);
+			});
+
+			const groupedTags = [];
+			allTags.forEach(item => {
+				const groupedItem = groupedTags.filter(f => {
+					let res = false;
+					try {
+						const
+							arr1 = JSON.stringify([... f.theirTags].sort()),
+							arr2 = JSON.stringify([... item.theirTags].sort());
+
+						res = (
+							f.myTag === item.myTag 
+							&& arr1 === arr2
+						);
+					} catch (e) {
+						console.error(e);
+					}
+					return res;
+				}).pop();
+
+				if (groupedItem) {
+					groupedItem.offers.push(item.offer);
+				} else {
+					groupedTags.push({
+						offers: [item.offer],
+						myTag: item.myTag,
+						theirTags: item.theirTags,
+					});
+				};
+			});
+
+			Promise.all(
+				(groupedTags || []).map(groupedItem => {
+					return this.sdk.getBrtOfferComplexDeals({
+						location: this.getStoredLocation() || [],
+						myTag: groupedItem.myTag,
+						theirTags: groupedItem.theirTags,
+						excludeAddresses: [this.address]
+					}).then(deals => {
+						const 
+							firstOffer = groupedItem.offers[0],
+							targets = (deals || []).map(m => m.target.update({ source: firstOffer }));
+						return targets[0]; // This approach is wrong, need to create a complex deal selection wizard by tags
+					});
+				})
+			).then(results => {
+				const targets = results.flat().filter(f => f);
+				const uniqTargets = [];
+				targets.forEach(item => {
+					if (!(uniqTargets.some(f => f.hash === item.hash))) {
+						uniqTargets.push(item);
+					};
+				});
+				this.mayMatchExchanges = uniqTargets;
+			}).catch(e => { 
+				console.error(e);
+			});
 		},
 
 		/**
