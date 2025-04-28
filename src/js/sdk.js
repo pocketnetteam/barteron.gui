@@ -1139,10 +1139,11 @@ class SDK {
 	 * Get their tags value from offer
 	 * 
 	 * @param {Object} offer
+	 * @param {Object} options
 	 * 
 	 * @returns {Array}
 	 */
-	async getTheirTags(offer) {
+	async getTheirTags(offer, options = {}) {
 		let result = [];
 
 		const
@@ -1151,7 +1152,7 @@ class SDK {
 			isForNothing = tags?.includes("for_nothing");
 
 		if(isMyList) {
-			const account = await this.getBrtAccount(offer?.address);
+			const account = options?.account || (await this.getBrtAccount(offer?.address))?.[0];
 			result = account?.tags;
 		} else if(!isForNothing) {
 			result = tags;
