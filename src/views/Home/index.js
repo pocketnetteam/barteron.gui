@@ -23,8 +23,6 @@ export default {
 	methods: {
 		// TODO: remove this method
 		async getComplexDeals_Deprecated() {
-			this.mayMatchExchanges = [];
-
 			if (this.address?.length) {
 				/* Get my offers list */
 				const myOffers = await this.sdk.getBrtOffers(this.address)
@@ -61,8 +59,6 @@ export default {
 		 * Get complex deals
 		 */
 		async getComplexDeals() {
-			this.mayMatchExchanges = [];
-
 			if (!(this.address?.length)) {
 				return;
 			};

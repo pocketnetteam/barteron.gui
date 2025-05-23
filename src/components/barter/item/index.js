@@ -206,16 +206,6 @@ export default {
 			return (options.pickupPoints?.isEnabled || options.selfPickup?.isEnabled);
 		},
 
-		/**
-		 * Get pickup point ids
-		 * 
-		 * @returns {Array}
-		 */
-		pickupPointIds() {
-			const options = this.deliveryOptions || {};
-			return options.pickupPoints?.isEnabled ? options.pickupPoints?.ids || [] : [];
-		},
-
 		selfPickupItemId() {
 			return "self_pickup";
 		},
@@ -246,7 +236,7 @@ export default {
 		 * @returns {String}
 		 */
 		mapMode() {
-			return this.pickupPointIds?.length ? "deliverySelection" : "view";
+			return this.deliveryOptionsAvailable ? "deliverySelection" : "view";
 		},
 
 		/**
