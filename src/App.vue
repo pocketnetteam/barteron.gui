@@ -39,9 +39,11 @@
 							name="aside"
 							v-if="hasComponents(['aside'])"
 						/>
+						<!-- props "key" used here for this reason: https://github.com/pocketnetteam/barteron.gui/issues/425 -->
 						<router-view
 							name="content"
 							v-if="hasComponents(['content'])"
+							:key="$route?.name"
 						/>
 						<router-view
 							name="sidebar"
