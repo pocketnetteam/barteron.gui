@@ -16,11 +16,13 @@ export default {
 				link = this.sdk.appLink(`barter/${ this.item.hash }`),
 				url = new URL(link),
 				entityLink = "/application" + url.search,
-				entityTxid = this.item.hash;
+				entityTxid = this.item.hash,
+				entityType = "offer";
 
 			const data = { 
 				entityLink,
 				entityTxid,
+				entityType,
 			};
 			this.sdk.openComplaintDialog(data);
 		},
