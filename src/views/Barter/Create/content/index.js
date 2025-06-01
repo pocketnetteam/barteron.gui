@@ -21,6 +21,9 @@ export default {
 
 	data() {
 		return {
+			sourceOffer: null,
+			offer: {},
+
 			videoOrderVariant: "first",
 			getting: "something",
 			condition: "new",
@@ -51,21 +54,6 @@ export default {
 	inject: ["dialog"],
 
 	computed: {
-		/**
-		 * Get offer data (edit mode)
-		 * 
-		 * @returns {@Offer}
-		 */
-		offer() {
-			let offer = this.sdk.barteron.offers[this.$route.params.id];
-
-			if (!offer.hash) offer = new this.sdk.models.Offer();
-
-			this.fillData(offer);
-
-			return offer;
-		},
-
 		pickupPoint() {
 			return this.offer?.delivery?.pickupPoint;
 		},
@@ -195,7 +183,7 @@ export default {
 		 * 
 		 * @param {Object} offer
 		 */
-		fillData(offer) {
+		fillDataAsync(offer) {
 			this.$nextTick(() => {
 				if (offer.hash?.length >= 64 || offer.hash === "draft") {
 					this.fillVideoData(offer);
@@ -542,27 +530,21 @@ export default {
 		},
 
 		serializeVideo() {
-			let result = {
-				videoSettings: {},
-				video: "",
-			};
+			let 
+				url = "",
+				videoSettings = {};
 
 			if (this.addingVideoAvailable) {
-				const
-					url = this.$refs.videoUploader?.getData()?.url || "",
-					order = this.videoOrderVariant || "first";
-
-				if (url) {
-					result = {
-						videoSettings: {
-							order,
-						},
-						video: url,
-					};
+				url = this.$refs.videoUploader?.getData()?.url || "";
+				videoSettings = {
+					order: this.videoOrderVariant || "first",
 				};
 			};
 
-			return result;
+			return {
+				videoSettings,
+				video: url,
+			};
 		},
 
 		serializeDelivery(data) {
@@ -638,7 +620,7 @@ export default {
 					: [this.getting];
 
 			/* Fill offer data */
-			this.offer.update({
+			this.sourceOffer.update({
 				address: this.sdk.address,
 				language: this.$i18n.locale,
 				caption: data.title,
@@ -841,7 +823,7 @@ export default {
 						form.dialog.view("load", this.$t("dialogLabels.data_node"));
 
 						/* Send request to create or update(hash) an offer */
-						this.offer.set({
+						this.sourceOffer.set({
 							hash,
 							images: Object.values(images),
 							published: "published"
@@ -910,6 +892,38 @@ export default {
 		mapErrorEvent(error) {
 			this.showError(error);
 		},
+
+		loadOffer() {
+			Promise.resolve().then(() => {
+				const
+					id = this.$route.params.id,
+					cached = this.sdk.barteron._offers[id],
+					loaded = cached?.address;
+				
+				if (cached && loaded) {
+					return cached;
+				} else if (!(id) || id === "draft") {
+					return new this.sdk.models.Offer();
+				} else if (id?.length >= 64) {					
+					return this.sdk.getBrtOffersByHashes([id]).then(items => {
+						const offer = items[0];
+						if (!(offer)) {
+							throw new Error(`Failed to load offer, hash: ${id})`);
+						};
+						return offer;
+					});
+				} else {
+					throw new Error(`Internal error: unknown type of $route.params.id = ${id}`);
+				};
+			}).then(offer => {
+				this.sourceOffer = offer;
+				const offerCopy = {...offer};
+				this.offer = offerCopy;
+				this.fillDataAsync(offerCopy);
+			}).catch(e => {
+				this.showError(e);
+			})
+		},
 	},
 
 	beforeCreate() {
@@ -918,7 +932,7 @@ export default {
 	},
 
 	mounted() {
-		this.updateAsideStepsAsync();
+		this.loadOffer();
 	},
 
 	updated() {
