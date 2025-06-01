@@ -145,7 +145,9 @@ export default {
 			/* Support urls from parent window */
 			this.sdk.on("changestate", (data) => {
 				console.log('bastyon -> barteron: ' + data, this.sdk.getRoute(data));
-				this.$router.push(this.sdk.getRoute(data));
+				this.$router.push(this.sdk.getRoute(data)).catch(e => {
+					console.error(e);
+				});
 			});
 
 			this.setSurveyBarVisibility();

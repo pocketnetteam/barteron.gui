@@ -40,6 +40,7 @@
 		"label": "Steps",
 		"propose": "What you propose",
 		"photos": "Add photos",
+		"video": "Add video",
 		"get": "What you want to get",
 		"financial-terms": "Financial terms",
 		"work-schedule": "Work schedule",
@@ -262,6 +263,8 @@
 		"offer_renew": "Are you sure you want renew this offer?",
 		"offer_withdraw": "Are you sure you want withdraw this offer?",
 		"offer_delete": "Are you sure you want remove this offer?",
+		"video_delete": "Are you sure you want to remove this video?",
+		"need_remove_unpublished_video": "The video has been uploaded but not published. It will be removed. Continue?",
 		"pending_reg": "Please wait until your account being activacted",
 		"opening_room": "The chat is opening. Please wait.",
 		"submit_rating": "Do you want to submit the rating?",
@@ -292,7 +295,7 @@
 
 	"photosLabels": {
 		"upload_image": "Upload image",
-		"upload_image_text": "The first photo will be displayed in the offer, select the best one. You can upload up to {count} photos in {formats} format.",
+		"upload_image_text": "The first photo will be displayed in the offer, select the best one. You can upload up to {count} photos in {formats} format. To change the order of photos, use drag & drop. To make a photo the first, click on it.",
 		"attached": "Image attached",
 		"detatched": "Image detatched",
 		"error_paste": "Error pasting image",
@@ -301,6 +304,18 @@
 		"formatError": "Allowed types is {formats}",
 		"status": "No images | {count} image - {size} | {count} images - {size}",
 		"size_is_calculated": "Size is calculated"
+	},
+
+	"videosLabels": {
+		"upload_video": "Upload video",
+		"upload_video_text": "You can upload up to one video. Recommended video parameters: duration up to 2 minutes, resolution up to 720p. Uploading a video is optional. Uploaded videos can be found in the \"My Videos\" list on Bastyon.",
+		"video_is_being_processed": "Video is being processed",
+		"video_processing_failed": "Video processing failed. Please delete the video and try again.",
+		"wait_until_video_processed": "Please wait until the video is processed or delete it",
+		"finish_working_with_video": "Please finish working with the video",
+		"order_selection_title": "Arrange relative to images:",
+		"order_first": "First",
+		"order_last": "Last"
 	},
 
 	"voteLabels": {

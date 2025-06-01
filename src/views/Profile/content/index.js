@@ -209,7 +209,7 @@ export default {
 					path: `/profile/${ this.address }`,
 					hash: `#${ tab }`
 				}).catch(e => {
-					this.showError(e);
+					console.error(e);
 				});
 			}
 		},

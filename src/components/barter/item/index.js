@@ -1,5 +1,6 @@
 import ImageLoad from "@/components/image-load/index.vue";
 import Loader from "@/components/loader/index.vue";
+import VideoPreview from "@/components/video-preview/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
 import WorkSchedule from "@/components/work-schedule/index.vue";
 import CurrencySwitcher from "@/components/currency-switcher/index.vue";
@@ -14,7 +15,7 @@ import LegalInfo from "@/components/legal-info/index.vue";
 import LikeStore from "@/stores/like.js";
 import SelectOfferDialog from "@/views/Barter/SelectOfferDialog/index.vue";
 import Score from "@/components/score/index.vue";
-import PhotoSwipe from "photoswipe";
+import { showMediaItems } from "@/js/mediaUtils.js";
 import "photoswipe/style.css";
 import Vue from 'vue';
 
@@ -24,6 +25,7 @@ export default {
 	components: {
 		ImageLoad,
 		Loader,
+		VideoPreview,
 		ExchangeList,
 		WorkSchedule,
 		Caption,
@@ -65,6 +67,7 @@ export default {
 
 	data() {
 		return {
+			videoItem: null,
 			hover: 0,
 			active: 0,
 			addr: {},
@@ -343,6 +346,28 @@ export default {
 			return (this.item.images || []).map(url => this.sdk.manageBastyonImageSrc(url));
 		},
 
+		mediaItems() {
+			const imageItems = (this.images || []).map(m => ({
+				url: m,
+				type: "image",
+			}));
+
+			let result = imageItems;
+
+			this.setVideoItem();
+
+			if (this.videoItem) {
+				const order = this.item.videoSettings?.order;
+				if (order === "last") {
+					result = [...imageItems, this.videoItem];
+				} else {
+					result = [this.videoItem, ...imageItems];
+				};
+			};
+
+			return result;
+		},
+
 		averageOfferScore() {
 			return this.sdk.barteron.averageOfferScores[this.item.hash];
 		},
@@ -446,47 +471,34 @@ export default {
 			return arguments[arguments.length - 1];
 		},
 
+		setVideoItem() {
+			if (!(this.videoItem)) {
+				const url = this.item.video;
+				if (url) {
+					Vue.set(this, "videoItem", {
+						url: url,
+						type: "video",
+						data: null,
+						error: null,
+					});
+
+					this.sdk.getVideoInfo([url]).then(dataItems => {
+						Vue.set(this.videoItem, "data", dataItems?.[0]);
+					}).catch(e => {
+						Vue.set(this.videoItem, "error", e);
+						console.error(e);
+					});
+				};
+			};
+		},
+
 		/**
-		 * Click on image
+		 * Click on media item
 		 * 
 		 * @param {Number} index
 		 */
-		imageClick(index) {
-			const options = {
-				index,
-				initialZoomLevel: "fit",
-				secondaryZoomLevel: 2,
-				maxZoomLevel: 4,
-				wheelToZoom: true,
-				showHideAnimationType: "fade"
-			};
-
-			const promises = this.images.map(item => {
-				return new Promise(resolve => {
-					let image = new Image();
-					image.onload = () => resolve(image);
-					image.onerror = () => resolve(image);
-					image.src = item;
-				})
-			});
-
-			Promise.allSettled(promises).then(results => {
-				options.dataSource = results
-					.map(item => item.value)
-					.filter(image => image)
-					.map(image => {
-						return {
-							src:    image.src,
-							width:  image.width,
-							height: image.height
-						}
-					});
-
-				const gallery = new PhotoSwipe(options);
-				gallery.init();
-			}).catch(e => {
-				console.error(e);
-			});
+		mediaItemClick(index) {
+			showMediaItems(this.mediaItems, index);
 		},
 
 		/**
@@ -683,12 +695,18 @@ export default {
 				this.loadPickupPointsIfNeeded();
 			});
 	
-			this.sdk.getBrtOffers().then(items => {
-				this.myOffers = items;
-			}).catch(e => {
-				console.error(e);
-			});
-		}
+			const 
+				needCheckExchangeAvailability = !(this.isMyOffer),
+				needRequestMyOffers = needCheckExchangeAvailability;
+
+			if (needRequestMyOffers) {
+				this.sdk.getBrtOffers().then(items => {
+					this.myOffers = items;
+				}).catch(e => {
+					console.error(e);
+				});
+			};
+		};
 	},
 
 	watch: {

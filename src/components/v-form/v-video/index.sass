@@ -1,0 +1,115 @@
+@import "@/css/vars.sass"
+
+$fieldHeight: 175px
+$videoHeight: 300px
+
+.video-uploader
+	position: relative
+	margin: 0 0 $r
+
+	.video-query
+		padding: 7px 7px 0 0
+
+		.ready-to-upload
+			cursor: pointer
+			height: $fieldHeight
+			width: 100%
+			border: 2px solid $trunks
+			border-radius: 12px
+			display: flex
+			flex-direction: column
+			align-items: center
+			justify-content: center
+			color: $popo
+
+			.fa
+				color: inherit
+				display: block
+				font-size: 1.5em
+				text-align: center
+				margin: 0 0 8px
+
+		.processing-of-uploaded-video,
+		.video-processing-failed
+			position: relative
+
+			picture,
+			img
+				display: block
+				height: $videoHeight
+				width: 100%
+			
+			img
+				object-fit: contain
+				background-color: $beerus
+
+			.processing-status-holder
+				position: absolute
+				bottom: $r * 2
+				left: 0
+				right: 0
+				display: flex
+				justify-content: center
+				align-items: center
+
+				.processing-status
+					margin: 0 $r
+					padding: $r $r * 2
+					background-color: $gohan
+					border-radius: 12px
+
+		.processing-of-uploaded-video
+			.processing-status
+				color: $hit
+
+		.video-processing-failed
+			.processing-status
+				color: $dodoria
+
+		.video-uploaded
+			position: relative
+			height: $videoHeight
+
+		.processing-of-uploaded-video,
+		.video-uploaded,
+		.video-processing-failed
+			.remove
+				+transition(background-color)
+				background-color: $dodoria
+				border-radius: 50%
+				color: $primary
+				cursor: pointer
+				font-size: 17px
+				display: flex
+				align-items: center
+				justify-content: center
+				padding: $r
+				position: absolute
+				top: -7px
+				right: -7px
+				height: 28px
+				width: 28px
+				z-index: 10
+
+		.error-state
+			height: $fieldHeight
+			width: 100%
+			border: 2px solid $trunks
+			border-radius: 12px
+
+			.error-info
+				padding: $r * 2
+				width: 100%
+				height: 100%
+				display: flex
+				flex-direction: column
+				gap: 2 * $r
+				align-items: center
+				justify-content: center
+
+				p
+					color: $dodoria
+
+	// .status
+	// 	display: block
+	// 	margin: $r * 3 0 0

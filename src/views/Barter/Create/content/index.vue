@@ -68,6 +68,44 @@
 			</div>
 
 			<div 
+				v-if="addingVideoAvailable && offerCreationParams().isAllowed" 
+				class="row block sep"
+			>
+				<strong class="title">{{ $t('stepsLabels.video') }}</strong>
+
+				<v-video
+					ref="videoUploader"
+					id="video"
+					class="field-novalidate"
+					@newVideoAdded="newVideoAdded"
+					:url="offer.video"
+				/>
+
+				<!-- Paragraph: Video upload text -->
+				<p>
+					<i class="fa fa-info-circle"></i>
+					{{ $t('videosLabels.upload_video_text') }}
+				</p>
+
+				<div class="video-order-title">{{ $t('videosLabels.order_selection_title') }}</div>
+
+				<div class="video-order-holder">
+					<v-switch
+						type="radio"
+						name="videoOrder"
+						vSize="xl"
+						:value="['first', 'last']"
+						:selected="videoOrderVariant"
+						:label="[
+							$t('videosLabels.order_first'),
+							$t('videosLabels.order_last'),
+						]"
+						@change="changeVideoOrderVariant"
+					/>
+				</div>
+			</div>
+
+			<div 
 				v-if="offerCreationParams().isAllowed" 
 				id="get" 
 				class="row block"

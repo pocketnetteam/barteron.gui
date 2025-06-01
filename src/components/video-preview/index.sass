@@ -1,0 +1,34 @@
+@import "@/css/vars.sass"
+
+.video-preview
+	width: 100%
+	height: 100%
+	cursor: pointer
+	position: relative
+
+	.thumbnail-image
+		+unselectable()
+		width: 100%
+		height: 100%
+		object-fit: contain
+
+	.play-holder
+		position: absolute
+		top: 0
+		left: 0
+		right: 0
+		bottom: 0
+		display: flex
+		justify-content: center
+		align-items: center
+
+		i.fa
+			font-size: 2em
+			color: $white
+			text-shadow: 1px 1px $black
+
+.thumbnails
+	.video-preview
+		.play-holder
+			i.fa
+				font-size: 1.2em
