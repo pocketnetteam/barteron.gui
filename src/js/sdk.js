@@ -801,18 +801,21 @@ class SDK {
 
 			return (res || []).map(m => {
 				const
+					infoExists = !!(m?.data),
 					name = m?.data?.original?.name,
 					state = m?.data?.original?.state,
 					playlistUrl = m?.data?.original?.streamingPlaylists[0]?.playlistUrl,
 					thumbnailUrl = m?.data?.thumbnail;
 
-				return {
-					name,
-					state,
-					playlistUrl,
-					thumbnailUrl,
-				};
-			})
+				return infoExists ? 
+					{
+						name,
+						state,
+						playlistUrl,
+						thumbnailUrl,
+					} 
+					: null;
+			});
 		}).catch(e => {
 			this.setLastResult(e);
 			throw e;

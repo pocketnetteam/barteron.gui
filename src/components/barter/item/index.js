@@ -483,7 +483,12 @@ export default {
 					});
 
 					this.sdk.getVideoInfo([url]).then(dataItems => {
-						Vue.set(this.videoItem, "data", dataItems?.[0]);
+						const videoItem = dataItems?.[0];
+						if (videoItem) {
+							Vue.set(this.videoItem, "data", videoItem);
+						} else {
+							throw new Error(this.$t("videosLabels.video_not_found_or_removed"));
+						};
 					}).catch(e => {
 						Vue.set(this.videoItem, "error", e);
 						console.error(e);

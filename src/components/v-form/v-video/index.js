@@ -29,6 +29,23 @@ export default {
 	inject: ["dialog"],
 	
 	methods: {
+		updateData() {
+			if (this.currentUrl) {
+				this.loadVideoInfo().then(() => {
+					if (this.videoInfo?.playlistUrl) {
+						this.changeStateTo("videoUploaded");
+					} else {
+						throw new Error(this.$t("videosLabels.video_not_found_or_removed"));
+					};
+				}).catch(e => {
+					this.error = e;
+					this.changeStateTo("errorState");
+				})
+			} else {
+				this.changeStateTo("readyToUpload");
+			};		
+		},
+
 		changeStateTo(newState) {
 			this.state = newState;
 
@@ -225,16 +242,13 @@ export default {
 	},
 
 	mounted() {
-		if (this.currentUrl) {
-			this.loadVideoInfo().then(() => {
-				if (this.videoInfo.playlistUrl) {
-					this.changeStateTo("videoUploaded");
-				} else {
-					this.changeStateTo("readyToUpload");
-				};
-			})
-		} else {
-			this.changeStateTo("readyToUpload");
-		};		
+		this.updateData();
+	},
+
+	watch: {
+		url(newValue) {
+			this.currentUrl = newValue;
+			this.updateData();
+		},
 	},
 }
