@@ -10,6 +10,7 @@ import PickupPointList from "@/components/pickup-point/list/index.vue";
 import MyOptions from "@/components/barter/item/my-options/index.vue";
 import BarterExchange from "@/components/barter/exchange/index.vue";
 import Profile from "@/components/profile/index.vue";
+import Complain from "@/components/barter/item/complain/index.vue";
 import LegalInfo from "@/components/legal-info/index.vue";
 import LikeStore from "@/stores/like.js";
 import SelectOfferDialog from "@/views/Barter/SelectOfferDialog/index.vue";
@@ -33,6 +34,7 @@ export default {
 		MyOptions,
 		BarterExchange,
 		Profile,
+		Complain,
 		CurrencySwitcher,
 		LegalInfo,
 		SelectOfferDialog,

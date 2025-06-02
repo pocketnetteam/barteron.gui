@@ -1,5 +1,6 @@
 import BarterExchange from "@/components/barter/exchange/index.vue";
 import Profile from "@/components/profile/index.vue";
+import Complain from "@/components/barter/item/complain/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
 import Caption from "@/components/barter/item/caption/index.vue";
 import Price from "@/components/barter/item/price/index.vue";
@@ -12,6 +13,7 @@ export default {
 	components: {
 		BarterExchange,
 		Profile,
+		Complain,
 		ExchangeList,
 		Caption,
 		Price,

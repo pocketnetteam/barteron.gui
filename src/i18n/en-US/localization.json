@@ -254,6 +254,12 @@
 		"removed": "Offer is removing"
 	},
 
+	"complaintLabels": {
+		"label": "Complaint",
+		"complain": "Complain",
+		"hint": "Complain about the offer"
+	},
+
 	"dialogLabels": {
 		"label": "Dialog",
 
