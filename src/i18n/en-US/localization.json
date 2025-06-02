@@ -132,6 +132,7 @@
 		"select": "Select",
 		"buy": "Buy",
 		"buy_for": "Buy for {cost} PKOIN",
+		"open": "Open",
 		"edit": "Edit",
 		"save": "Save",
 		"close": "Close",

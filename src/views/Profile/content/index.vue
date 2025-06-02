@@ -109,12 +109,12 @@
 								</dl> -->
 							</template>
 
-							<!-- Edit and find exchange -->
+							<!-- Open and find exchange -->
 							<template #offer="{ item }" v-if="isMyProfile">
 								<v-button
-									:to="{ name: 'createBarter', params: { id: item.hash, from: $route.path } }"
+									:to="{ name: 'barterItem', params: { id: item.hash } }"
 									:disabled="item.relay || item.status === 'removed'"
-								>{{ $t('buttonLabels.edit') }}</v-button>
+								>{{ $t('buttonLabels.open') }}</v-button>
 
 								<v-button
 									vType="hit-stroke"
@@ -156,12 +156,12 @@
 								</dl> -->
 							</template>
 
-							<!-- Edit and find exchange -->
+							<!-- Open and find exchange -->
 							<template #offer="{ item }" v-if="isMyProfile">
 								<v-button
-									:to="{ name: 'createBarter', params: { id: item.hash, from: $route.path } }"
+									:to="{ name: 'barterItem', params: { id: item.hash } }"
 									:disabled="item.relay || item.status === 'removed'"
-								>{{ $t('buttonLabels.edit') }}</v-button>
+								>{{ $t('buttonLabels.open') }}</v-button>
 
 								<v-button
 									vType="hit-stroke"
