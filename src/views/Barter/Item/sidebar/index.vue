@@ -40,6 +40,12 @@
 				</template>
 			</ExchangeList>
 		</div>
+
+		<Complain
+			v-if="!(isMyOffer) && sdk.complaintIsAvailable()"
+			class="with-sidebar"
+			:item="item"
+		/>
 	</v-sidebar>
 </template>
 

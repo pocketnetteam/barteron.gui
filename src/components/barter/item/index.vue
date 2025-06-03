@@ -513,6 +513,11 @@
 			<!-- without sidebar -->
 			<div class="row block sep no-sidebar" v-if="!isMyOffer">
 				<Profile :hash="address" />
+				<Complain
+					v-if="sdk.complaintIsAvailable()"
+					class="without-sidebar"
+					:item="item"
+				/>
 			</div>
 
 			<!-- without sidebar -->

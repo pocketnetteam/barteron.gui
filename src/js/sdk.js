@@ -619,6 +619,20 @@ class SDK {
 		return !!(this.sdk.helpers.shareOnBastyon);
 	}
 
+	complaintIsAvailable() {
+		return !!(this.sdk.helpers.complain);
+	}
+
+	openComplaintDialog(data) {
+		return this.sdk.helpers.complain(data).then(result => {
+			this.lastresult = "openComplaintDialog: success"
+			return result;
+		}).catch(e => {
+			this.setLastResult(e);
+			console.error(e);
+		});
+	}
+
 	/**
 	 * Get image from mobile camera
 	 * 
