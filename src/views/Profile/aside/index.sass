@@ -1,48 +1,8 @@
 @import "@/css/vars.sass"
 
-.list
-	+resetList()
-	color: $bulma
-
-	.link
-		color: $bulma
-
-		&:hover
-			color: $bulma-hover
-
-dl.list
-	display: grid
-	grid-template-columns: 18px auto
-	grid-gap: 10px
-	align-items: center
-	width: 100%
-
-	dt
-		grid-column: 1
-		text-align: center
-
-	dd
-		margin-left: 0
-		grid-column: 2
-
 .message
 	margin-top: 2 * $r
 
 	.v-button
 		width: 100%
 
-.edit
-	.v-buttons-holder
-		width: 100%
-
-.settings
-	padding: 8px 0
-
-	.link
-		display: inline-flex
-		align-items: center
-		gap: 8px
-		padding: 8px
-
-		i
-			font-size: 16px

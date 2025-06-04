@@ -5,17 +5,35 @@
 	align-items: center
 	flex-direction: row
 
+	.list
+		+resetList()
+		color: $bulma
+
+		.link
+			color: $bulma
+
+			&:hover
+				color: $bulma-hover
+
 	dl.list
+		display: grid
 		color: $popo
 		grid-template-columns: 24px auto
+		grid-gap: 10px
+		align-items: center
+		width: 100%
 
 		dt
 			color: $bulma
 			display: flex
 			align-items: center
 			font-size: 1.7em
+			grid-column: 1
+			text-align: center
 
 		dd
+			margin-left: 0
+			grid-column: 2
 			*
 				display: block
 

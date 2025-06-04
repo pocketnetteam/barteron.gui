@@ -37,6 +37,10 @@
 		.no-sidebar
 			display: none
 
+	.profile
+		.no-aside
+			display: none
+
 .pswp
 	.pswp__video-container
 		width: 100%
@@ -99,6 +103,10 @@
 			display: none
 		
 		#aside
+			&.profile
+				display: none
+
+		#aside
 			padding: $r
 			position: fixed
 			z-index: 1005
@@ -126,6 +134,10 @@
 
 		.barter-item-page
 			.no-sidebar
+				display: block
+
+		.profile
+			.no-aside
 				display: block
 
 		#container

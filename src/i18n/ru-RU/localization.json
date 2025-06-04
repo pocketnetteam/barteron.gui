@@ -99,11 +99,12 @@
 		"wallet": "Кошелёк",
 		"settings": "Настройки",
 		"contact_support": "Связаться с поддержкой",
-		"ads": "Объявления",
+		"offers": "Объявления",
 		"barters": "Обмены",
 		"viewed": "Просмотренные",
 		"favorites": "Избранное",
 		"votes": "Отзывы",
+		"offers_and_votes": "Объявления и отзывы",
 		"active": "Активные",
 		"inactive": "Неактивные",
 		"report_abuse": "Пожаловаться"

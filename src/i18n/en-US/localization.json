@@ -99,11 +99,12 @@
 		"wallet": "Wallet",
 		"settings": "Settings",
 		"contact_support": "Contact support",
-		"ads": "Ads",
+		"offers": "Offers",
 		"barters": "Barters",
 		"viewed": "Viewed",
 		"favorites": "Favorites",
 		"votes": "Votes",
+		"offers_and_votes": "Offers and votes",
 		"active": "Active",
 		"inactive": "Inactive",
 		"report_abuse": "Report abuse"
