@@ -148,7 +148,7 @@ export default {
 
 	methods: {
 		setVideoItem() {
-			if (!(this.videoItem)) {
+			if (this.sdk.videoOperationsAvailable() && !(this.videoItem)) {
 				const url = this.item.video;
 				if (url) {
 					Vue.set(this, "videoItem", {

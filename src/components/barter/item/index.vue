@@ -119,7 +119,11 @@
 				</div>
 			</div>
 
-			<div class="row title" v-if="item.caption">
+			<div
+				v-if="item.caption"
+				class="row title"
+				:title="item.caption"
+			>
 				<router-link :to="offerLink">{{ item.caption }}</router-link>
 			</div>
 
@@ -176,7 +180,11 @@
 		<template v-if="vType === 'row' && !(hideInfo)">
 			<div class="row descr">
 				<div class="row-holder">
-					<span class="title" v-if="item.caption">
+					<span 
+						v-if="item.caption" 
+						class="title"
+						:title="item.caption"
+					>
 						<router-link :to="offerLink">{{ item.caption }}</router-link>
 					</span>
 

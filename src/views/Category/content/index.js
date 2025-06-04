@@ -153,7 +153,12 @@ export default {
 		 * Reset account location
 		 */
 		reset() {
-			this.locationStore.reset({onlyBounds: true});
+			const canReset = (this.locationStore.bounds);
+			if (canReset) {
+				this.locationStore.reset({onlyBounds: true});
+			} else {
+				this.loadFirstPage(this.$route);
+			};
 		}
 	},
 

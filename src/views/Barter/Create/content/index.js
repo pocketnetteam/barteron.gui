@@ -100,13 +100,6 @@ export default {
 		},
 
 		/**
-		 * Adding video option is available
-		 */
-		addingVideoAvailable() {
-			return (this.sdk.getTransactionsApiVersion() >= 4);
-		},
-
-		/**
 		 * Format currencies to list
 		 */
 		currencies() {
@@ -534,7 +527,7 @@ export default {
 				url = "",
 				videoSettings = {};
 
-			if (this.addingVideoAvailable) {
+			if (this.sdk.videoOperationsAvailable()) {
 				url = this.$refs.videoUploader?.getData()?.url || "";
 				videoSettings = {
 					order: this.videoOrderVariant || "first",

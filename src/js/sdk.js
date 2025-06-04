@@ -777,8 +777,8 @@ class SDK {
 		})
 	}
 
-	uploadingVideoIsAvailable() {
-		return !!(this.sdk.videos.opendialog);
+	videoOperationsAvailable() {
+		return (this.getTransactionsApiVersion() >= 4);
 	}
 
 	uploadingVideoDialog() {

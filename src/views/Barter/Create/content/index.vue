@@ -68,7 +68,7 @@
 			</div>
 
 			<div 
-				v-if="addingVideoAvailable && offerCreationParams().isAllowed" 
+				v-if="sdk.videoOperationsAvailable() && offerCreationParams().isAllowed" 
 				class="row block sep"
 			>
 				<strong class="title">{{ $t('stepsLabels.video') }}</strong>
