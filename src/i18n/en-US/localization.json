@@ -243,6 +243,8 @@
 	"locationLabels": {
 		"enter_address": "Enter address",
 		"address_not_found": "Sorry, that address could not be found",
+		"geo_filter_disabled_part1": "Geolocation filter",
+		"geo_filter_disabled_part2": "is not enabled",
 		"preferred": "Location for new offers",
 		"static": "Static",
 		"dynamic": "Dynamic",
@@ -271,7 +273,7 @@
 		"opening_room": "The chat is opening. Please wait.",
 		"submit_rating": "Do you want to submit the rating?",
 		"submit_comment": "Do you want to submit the comment?",
-		"map_help_info": "Offers displayed in the lists (category content, exchange offers, etc.) can be filtered by the visible area of the map.\n\nSet it so that it covers the desired search area and click the \"Save\" button. To reset the selection, click the \"All regions\" button.",
+		"map_help_info": "To enable the offer filter by geolocation, set the visible area of ​​the map so that it covers the desired search region and click the \"Save\" button. To reset the filter, click the \"All regions\" button.",
 		"saving_region_warning_by_zoom": "The coverage of the visible map area is too small. Offer lists will be filtered by this area. Continue anyway?",
 		"survey_form": "Submitting, please wait...",
 		"survey_success": "Your answers have been sent",
