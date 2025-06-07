@@ -28,6 +28,7 @@
 				:visible="lightbox"
 				size="xl"
 				:title="$t('stepsLabels.location')"
+				:noBorders="true"
 				@onHide="hideLightbox"
 			>
 				<v-form ref="form">
@@ -36,7 +37,7 @@
 						<v-map
 							ref="map"
 							mapMode="search"
-							height="55vh"
+							height="60vh"
 							:center="geohash"
 							:zoom="locationStore.zoom || undefined"
 							:mapActionData="mapActionData"
@@ -50,7 +51,25 @@
 				</v-form>
 
 				<template #footer>
-					<div class="row full-width right">
+					<div 
+						:class="`row right align-center wrap gap-md ${searchRegionDefined ? 'right' : ''}`"
+
+					>
+						<div class="geo-filter-label-holder">
+							<label
+								v-if="!(searchRegionDefined)"
+								class="v-label warning-level no-margin"
+							>
+								<i class="fa fa-exclamation-triangle"></i>
+								{{ $t("locationLabels.geo_filter_disabled_part1") }}
+								<a
+									href="#"
+									@click.prevent="help"
+								>
+									<u>{{ $t("locationLabels.geo_filter_disabled_part2") }}</u>
+								</a>
+							</label>
+						</div>
 						<div class="buttons-holder">
 							<v-button
 								vType="stroke"

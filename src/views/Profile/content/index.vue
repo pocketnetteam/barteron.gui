@@ -1,11 +1,69 @@
 <template>
-	<v-content>
+	<v-content class="profile">
+
+		<!-- without aside -->
+		<div class="row no-aside title">
+			<section>
+				<h1>{{ $t("profileLabels.label") }}</h1>
+			</section>
+		</div>
+
+		<!-- without aside -->
+		<div class="row sep no-aside d-sep">
+			<Profile :hash="address">
+				<!-- State -->
+				<template #state>
+					<dl class="list">
+						<dt><i class="fa fa-user-shield"></i></dt>
+						<dd>{{ $t('profileLabels.account_confirmed') }}</dd>
+					</dl>
+				</template>
+			</Profile>
+
+			<div 
+				v-if="!(isMyProfile)" 
+				class="message"
+			>
+				<v-button
+					@click="createRoom"
+				>{{ $t('buttonLabels.send_message') }}</v-button>
+			</div>
+		</div>
+
+		<!-- without aside -->
+		<div 
+			v-if="isMyProfile" 
+			class="row sep no-aside"
+		>
+			<!-- Wallet -->
+			<div>
+				<Wallet />
+			</div>
+		</div>
+
+		<!-- without aside -->
+		<div class="row sep no-aside last">
+			<!-- Exchange -->
+			<div>
+				<ProfileExchangeList 
+					:hash="address"
+				/>
+			</div>
+		</div>
+
+		<!-- without aside -->
+		<div class="row no-aside title">
+			<section>
+				<h1>{{ $t("profileLabels.offers_and_votes") }}</h1>
+			</section>
+		</div>
+
 		<!-- Primary tabs level -->
 		<v-tabs
 			:tabset="[
 				{
 					tabId: 'ads',
-					title: `<i class='fa fa-list'></i> ${ $t('profileLabels.ads') } (${ offersList.length })`,
+					title: `<i class='fa fa-list'></i> ${ $t('profileLabels.offers') } (${ offersList.length })`,
 					active: initialActiveTab === 'ads',
 				},
 				/* // TODO: barters
@@ -109,12 +167,12 @@
 								</dl> -->
 							</template>
 
-							<!-- Edit and find exchange -->
+							<!-- Open and find exchange -->
 							<template #offer="{ item }" v-if="isMyProfile">
 								<v-button
-									:to="{ name: 'createBarter', params: { id: item.hash, from: $route.path } }"
+									:to="{ name: 'barterItem', params: { id: item.hash } }"
 									:disabled="item.relay || item.status === 'removed'"
-								>{{ $t('buttonLabels.edit') }}</v-button>
+								>{{ $t('buttonLabels.open') }}</v-button>
 
 								<v-button
 									vType="hit-stroke"
@@ -156,12 +214,12 @@
 								</dl> -->
 							</template>
 
-							<!-- Edit and find exchange -->
+							<!-- Open and find exchange -->
 							<template #offer="{ item }" v-if="isMyProfile">
 								<v-button
-									:to="{ name: 'createBarter', params: { id: item.hash, from: $route.path } }"
+									:to="{ name: 'barterItem', params: { id: item.hash } }"
 									:disabled="item.relay || item.status === 'removed'"
-								>{{ $t('buttonLabels.edit') }}</v-button>
+								>{{ $t('buttonLabels.open') }}</v-button>
 
 								<v-button
 									vType="hit-stroke"

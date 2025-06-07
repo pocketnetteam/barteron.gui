@@ -22,7 +22,7 @@
 		</section>
 
 		<section>
-			<h1>{{ $t('profileLabels.ads') }}</h1>
+			<h1>{{ $t('profileLabels.offers') }}</h1>
 		</section>
 	</div>
 </template>

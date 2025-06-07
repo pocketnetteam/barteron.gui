@@ -21,6 +21,10 @@ export default {
 
 	data() {
 		return {
+			sourceOffer: null,
+			offer: {},
+
+			videoOrderVariant: "first",
 			getting: "something",
 			condition: "new",
 			price: 0,
@@ -50,21 +54,6 @@ export default {
 	inject: ["dialog"],
 
 	computed: {
-		/**
-		 * Get offer data (edit mode)
-		 * 
-		 * @returns {@Offer}
-		 */
-		offer() {
-			let offer = this.sdk.barteron.offers[this.$route.params.id];
-
-			if (!offer.hash) offer = new this.sdk.models.Offer();
-
-			this.fillData(offer);
-
-			return offer;
-		},
-
 		pickupPoint() {
 			return this.offer?.delivery?.pickupPoint;
 		},
@@ -187,9 +176,10 @@ export default {
 		 * 
 		 * @param {Object} offer
 		 */
-		fillData(offer) {
+		fillDataAsync(offer) {
 			this.$nextTick(() => {
 				if (offer.hash?.length >= 64 || offer.hash === "draft") {
+					this.fillVideoData(offer);
 					this.fillTagsData(offer);
 					this.fillConditionData(offer);
 					this.fillPriceData(offer);
@@ -198,6 +188,10 @@ export default {
 					this.resetOfferFieldsToDefault();
 				}
 			});
+		},
+
+		fillVideoData(offer) {
+			this.videoOrderVariant = offer.videoSettings?.order || "first";
 		},
 
 		fillTagsData(offer) {
@@ -281,6 +275,7 @@ export default {
 		},
 
 		resetOfferFieldsToDefault() {
+			this.videoOrderVariant = "first";
 			this.tags = [];
 			this.getting = "something";
 			this.condition = "new";
@@ -321,6 +316,22 @@ export default {
 		currencyPriceLabel() {
 			const currency = this.$refs.currency?.selected?.toUpperCase();
 			return this.$t("currency_price_text", { currency });
+		},
+
+		newVideoAdded() {
+			this.offer.newVideoAdded = true;
+		},
+
+		changeVideoOrderVariant(value) {
+			const options = [
+				"first",
+				"last",
+			];
+
+			const isValid = options.includes(value);
+			if (isValid) {
+				this.videoOrderVariant = value;
+			};
 		},
 
 		currencyPriceEnabledStateChanged(value, e) {
@@ -511,6 +522,24 @@ export default {
 			return result;
 		},
 
+		serializeVideo() {
+			let 
+				url = "",
+				videoSettings = {};
+
+			if (this.sdk.videoOperationsAvailable()) {
+				url = this.$refs.videoUploader?.getData()?.url || "";
+				videoSettings = {
+					order: this.videoOrderVariant || "first",
+				};
+			};
+
+			return {
+				videoSettings,
+				video: url,
+			};
+		},
+
 		serializeDelivery(data) {
 			let result = {};
 
@@ -552,6 +581,21 @@ export default {
 		 * Create new offer model and fill data
 		 */
 		serializeForm() {
+			let metaData = {};
+
+			const 
+				videoUploader = this.$refs.videoUploader, // optional
+				videoCheckingResult = videoUploader?.canSerialize();
+
+			if (videoCheckingResult && !(videoCheckingResult.canSerialize)) {
+				metaData = {
+					completed: false,
+					message: videoCheckingResult.message,
+					field: videoUploader.$el,
+				};
+				return { metaData };
+			};
+
 			const
 				hash = this.offer.hash,
 				form = this.$refs.form,
@@ -559,6 +603,7 @@ export default {
 				center = this.$refs.map["marker"],
 				data = form.serialize(),
 				images = photos.serialize(),
+				serializedVideo = this.serializeVideo(),
 				delivery = this.serializeDelivery(data),
 				workSchedule = this.$refs.workSchedule, // optional
 				pickupPointList = this.$refs.pickupPointList, // optional
@@ -568,7 +613,7 @@ export default {
 					: [this.getting];
 
 			/* Fill offer data */
-			this.offer.update({
+			this.sourceOffer.update({
 				address: this.sdk.address,
 				language: this.$i18n.locale,
 				caption: data.title,
@@ -579,6 +624,8 @@ export default {
 				images: Object.values(images),
 				geohash: GeoHash.encodeGeoHash.apply(null, center),
 				currencyPrice,
+				video: serializedVideo.video,
+				videoSettings: serializedVideo.videoSettings,
 				delivery,
 				price: Number(data.pkoin || 0)
 			});
@@ -592,7 +639,9 @@ export default {
 				photos.$el.classList.remove(form.classes.passed);
 			}
 
-			return { hash, form, photos, center, data, images, workSchedule, pickupPointList };
+			metaData.completed = true;
+
+			return { metaData, hash, form, photos, center, data, images, workSchedule, pickupPointList };
 		},
 
 		updateAsideStepsAsync() {
@@ -665,24 +714,34 @@ export default {
 		 * Cancel an offer
 		 */
 		cancel() {
-			if (this.$route.params.from) {
-				this.$router.push({ path: this.$route.params.from });
-			} else {
-				this.$router.push({ name: "home" });
-			}
+			const to = this.$route.params.from 
+				? { path: this.$route.params.from } 
+				: { name: "home" };
+			
+			this.$router.push(to).catch(e => {
+				console.error(e);
+			});
 		},
 
 		/**
 		 * Preview an offer
 		 */
 		preview() {
-			this.serializeForm();
+			const data = this.serializeForm();
 
-			this.$router.push({
-				name: "barterItem",
-				params: { id: this.offer.hash, from: this.$route.params.from },
-				query: { preview: 1 }
-			});
+			if (data.metaData?.completed) {
+				this.$router.push({
+					name: "barterItem",
+					params: { id: this.offer.hash, from: this.$route.params.from },
+					query: { preview: 1 }
+				}).catch(e => {
+					console.error(e);
+				});
+			} else {
+				const { message, field } = data.metaData;
+				field && this.scrollTo(field);
+				message && this.showWarning(message);
+			};
 		},
 
 		/**
@@ -696,8 +755,19 @@ export default {
 				return;
 			};
 
+			const 
+				serializationData = this.serializeForm(),
+				serializationMetaData = serializationData.metaData;
+
+			if (serializationMetaData && !(serializationMetaData?.completed)) {
+				const { message, field } = serializationMetaData;
+				field && this.scrollTo(field);
+				message && this.showWarning(message);
+				return;
+			};
+
 			const
-				{ hash, form, photos, images, workSchedule, pickupPointList } = this.serializeForm(),
+				{ hash, form, photos, images, workSchedule, pickupPointList } = serializationData,
 				formValid = form.validate(),
 				photosValid = photos.validate(),
 				workScheduleValid = workSchedule?.validate(),
@@ -746,12 +816,13 @@ export default {
 						form.dialog.view("load", this.$t("dialogLabels.data_node"));
 
 						/* Send request to create or update(hash) an offer */
-						this.offer.set({
+						this.sourceOffer.set({
 							hash,
 							images: Object.values(images),
 							published: "published"
 						}).then((data) => {
 							if (data.transaction) {
+								this.offer.newVideoAdded = false;
 								form.dialog.hide();
 								this.$router.push({
 									name: "exchangeOptions",
@@ -814,6 +885,38 @@ export default {
 		mapErrorEvent(error) {
 			this.showError(error);
 		},
+
+		loadOffer() {
+			Promise.resolve().then(() => {
+				const
+					id = this.$route.params.id,
+					cached = this.sdk.barteron._offers[id],
+					loaded = cached?.address;
+				
+				if (cached && loaded) {
+					return cached;
+				} else if (!(id) || id === "draft") {
+					return new this.sdk.models.Offer();
+				} else if (id?.length >= 64) {					
+					return this.sdk.getBrtOffersByHashes([id]).then(items => {
+						const offer = items[0];
+						if (!(offer)) {
+							throw new Error(`Failed to load offer, hash: ${id})`);
+						};
+						return offer;
+					});
+				} else {
+					throw new Error(`Internal error: unknown type of $route.params.id = ${id}`);
+				};
+			}).then(offer => {
+				this.sourceOffer = offer;
+				const offerCopy = {...offer};
+				this.offer = offerCopy;
+				this.fillDataAsync(offerCopy);
+			}).catch(e => {
+				this.showError(e);
+			})
+		},
 	},
 
 	beforeCreate() {
@@ -822,10 +925,38 @@ export default {
 	},
 
 	mounted() {
-		this.updateAsideStepsAsync();
+		this.loadOffer();
 	},
 
 	updated() {
 		this.updateAsideStepsAsync();
-	}
+	},
+
+	beforeRouteLeave (to, from, next) {
+		const
+			isPreviewRoute = (to?.name === "barterItem" && to?.query?.preview),
+			videoData = this.$refs.videoUploader?.getData(),
+			unpublishedVideo = (videoData?.videoExists && this.offer.newVideoAdded);
+
+		if (isPreviewRoute) {
+			next();
+		} else if (unpublishedVideo) {
+			const dialog = this.dialog?.instance;
+			dialog.view("question", this.$t("dialogLabels.need_remove_unpublished_video")).then(state => {
+				if (state) {
+					this.$refs.videoUploader?.videoRemoving({disableStateChange: true}).then(() => {
+						this.offer.newVideoAdded = false;
+						next();
+					}).catch(e => {
+						next(false);
+						this.showError(e);
+					});
+				} else {
+					next(false);
+				};
+			});
+		} else {
+			next();
+		};
+	}	
 }

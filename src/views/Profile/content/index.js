@@ -1,3 +1,6 @@
+import Profile from "@/components/profile/index.vue";
+import Wallet from "@/components/wallet/index.vue";
+import ProfileExchangeList from "@/components/barter/exchange/profile-list/index.vue";
 import BarterList from "@/components/barter/list/index.vue";
 import Votes from "@/components/votes/index.vue";
 import likeStore from "@/stores/like.js";
@@ -14,6 +17,9 @@ export default {
 	name: "Content",
 
 	components: {
+		Profile,
+		Wallet,
+		ProfileExchangeList,
 		BarterList,
 		Votes
 	},
@@ -23,6 +29,7 @@ export default {
 			offersList: [],
 			favoriteList: [],
 			fetching: true,
+			isChatLoading: false,
 		}
 	},
 
@@ -133,6 +140,24 @@ export default {
 	},
 
 	methods: {
+		createRoom() {
+			if (this.isMyProfile) return;
+			if (this.sdk.willOpenRegistration()) return;
+			
+			this.isChatLoading = true;
+			this.dialog?.instance.view("load", this.$t("dialogLabels.opening_room"));
+			this.sendMessage({
+				members: [this.address],
+				openRoom: true
+			}).then(() => {
+				this.dialog?.instance.hide();
+			}).catch(e => {
+				this.showError(e);
+			}).finally(() => {
+				this.isChatLoading = false;
+			});
+		},
+
 		/**
 		 * Load all tabs contents based by user address
 		 * 
@@ -209,7 +234,7 @@ export default {
 					path: `/profile/${ this.address }`,
 					hash: `#${ tab }`
 				}).catch(e => {
-					this.showError(e);
+					console.error(e);
 				});
 			}
 		},

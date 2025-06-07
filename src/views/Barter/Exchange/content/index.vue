@@ -94,7 +94,7 @@
 					<v-button
 						vType="stroke"
 						:to="{ name: 'profile', params: { id: offer.address } }"
-					>{{ $t('profileLabels.ads') }}</v-button>
+					>{{ $t('profileLabels.offers') }}</v-button>
 					<v-button @click="expand">{{ $t('buttonLabels.find_exchange_options') }}</v-button>
 				</div>
 			</div>

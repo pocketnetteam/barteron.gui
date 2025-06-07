@@ -2,10 +2,8 @@ import Vue from "vue";
 import ImageLoad from "@/components/image-load/index.vue";
 import Loader from "@/components/loader/index.vue";
 import Caption from "@/components/barter/item/caption/index.vue";
-import PhotoSwipe from "photoswipe";
 import SelectPickupPointDialog from "@/components/pickup-point/select-dialog/index.vue";
 import Score from "@/components/score/index.vue";
-import "photoswipe/style.css";
 
 export default {
 	name: "PickupPointItem",
@@ -158,49 +156,6 @@ export default {
 	},
 
 	methods: {
-		/**
-		 * Click on image
-		 * 
-		 * @param {Number} index
-		 */
-		imageClick(index) {
-			const options = {
-				index,
-				initialZoomLevel: "fit",
-				secondaryZoomLevel: 2,
-				maxZoomLevel: 4,
-				wheelToZoom: true,
-				showHideAnimationType: "fade"
-			};
-
-			const promises = this.images.map(item => {
-				return new Promise(resolve => {
-					let image = new Image();
-					image.onload = () => resolve(image);
-					image.onerror = () => resolve(image);
-					image.src = item;
-				})
-			});
-
-			Promise.allSettled(promises).then(results => {
-				options.dataSource = results
-					.map(item => item.value)
-					.filter(image => image)
-					.map(image => {
-						return {
-							src:    image.src,
-							width:  image.width,
-							height: image.height
-						}
-					});
-
-				const gallery = new PhotoSwipe(options);
-				gallery.init();
-			}).catch(e => {
-				console.error(e);
-			});
-		},
-
 		showItem() {
 			this.showDialog();
 			this.$emit("showItem", this.item);

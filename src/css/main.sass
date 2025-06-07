@@ -49,21 +49,6 @@ span.link
 	flex-direction: column
 	min-height: 100%
 	background-color: $gohan
-	
-#main
-	flex: 1
-	margin: 0 auto $r * 10
-	padding: 0
-	width: 100%
-
-	#container
-		display: flex
-		justify-content: space-between
-
-	.v-details ~ .v-details
-		border-top: 1px solid $beerus
-		margin-top: $r * 2.5
-		padding-top: $r * 2.5
 
 	.v-label
 		color: $popo
@@ -82,6 +67,24 @@ span.link
 
 		&:last-child
 			margin: $r 0 $r * 2
+
+		&.no-margin
+			margin: 0
+
+#main
+	flex: 1
+	margin: 0 auto $r * 10
+	padding: 0
+	width: 100%
+
+	#container
+		display: flex
+		justify-content: space-between
+
+	.v-details ~ .v-details
+		border-top: 1px solid $beerus
+		margin-top: $r * 2.5
+		padding-top: $r * 2.5
 
 .fa.icon,
 .fab.icon,
@@ -187,6 +190,9 @@ span.link
 
 	&.block
 		display: block
+
+	&.align-center
+		align-items: center
 
 	&.center
 		justify-content: center

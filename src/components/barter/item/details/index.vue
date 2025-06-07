@@ -2,22 +2,22 @@
 	<div class="barter-item-page details">
 		<!-- Gallery -->
 		<picture
-			v-if="images?.length"
+			v-if="mediaItems?.length"
 			ref="picture"
 		>
 			<ul class="fade">
 				<li
-					v-for="(image, index) in images"
-					:key="image"
+					v-for="(mediaItem, index) in mediaItems"
+					:key="mediaItem.url"
 					:class="{ 'active': active === index }"
-					@click="imageClick(index)"
+					@click="mediaItemClick(index)"
 				>
 					<!-- First image -->
-					<image-load v-if="index === 0">
+					<image-load v-if="index === 0 && mediaItem.type === 'image'">
 						<!-- Image -->
 						<template #image>
 							<img
-								:src="imageUrl(images[0])"
+								:src="imageUrl(mediaItem.url)"
 								:alt="item.caption"
 							>
 						</template>
@@ -35,28 +35,45 @@
 					</image-load>
 
 					<!-- Next images -->
-					<div class="image" v-else>
+					<div class="image" v-if="index > 0 && mediaItem.type === 'image'">
 						<img
-							:src="imageUrl(image)"
+							:src="mediaItem.type === 'image' ? imageUrl(mediaItem.url) : imageUrl(mediaItem.data?.thumbnailUrl)"
 							:alt="`${ item.caption }#${ index+1 }`"
 						>
 					</div>
+
+					<!-- Video -->
+					<VideoPreview
+						v-if="mediaItem.type === 'video'"
+						:thumbnailUrl="mediaItem.data?.thumbnailUrl"
+						:alternateText="`${ item.caption }#${ index+1 }`"
+						:loadingDataError="mediaItem.error"
+					/>
 				</li>
 			</ul>
 			<ul
 				class="thumbnails"
-				v-if="images?.length > 1"
+				v-if="mediaItems?.length > 1"
 			>
 				<li
-					v-for="(image, index) in images"
-					:key="image"
+					v-for="(mediaItem, index) in mediaItems"
+					:key="mediaItem.url"
 					:class="{ 'active': active === index }"
 					@click="() => active = index"
 				>
 					<img
-						:src="imageUrl(image)"
+						v-if="mediaItem.type === 'image'"
+						:src="imageUrl(mediaItem.url)"
 						:alt="`${ item.caption }#${ index+1 }`"
 					>
+
+					<VideoPreview
+						v-if="mediaItem.type === 'video'"
+						:thumbnailUrl="mediaItem.data?.thumbnailUrl"
+						:alternateText="`${ item.caption }#${ index+1 }`"
+						:loadingDataError="mediaItem.error"
+						:disableLoader="true"
+					/>
 				</li>
 			</ul>
 		</picture>

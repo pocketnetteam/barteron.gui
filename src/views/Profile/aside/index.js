@@ -1,6 +1,6 @@
 import Profile from "@/components/profile/index.vue";
 import Wallet from "@/components/wallet/index.vue";
-import ExchangeList from "@/components/barter/exchange/list/index.vue";
+import ProfileExchangeList from "@/components/barter/exchange/profile-list/index.vue";
 
 export default {
 	name: "Aside",
@@ -8,7 +8,7 @@ export default {
 	components: {
 		Profile,
 		Wallet,
-		ExchangeList
+		ProfileExchangeList
 	},
 
 	inject: ['dialog'],
@@ -44,21 +44,7 @@ export default {
 
 	methods: {
 		createRoom() {
-			if (this.sdk.willOpenRegistration()) return;
-			
-			this.isLoading = true;
-			this.dialog?.instance.view("load", this.$t("dialogLabels.opening_room"));
-			this.sendMessage({
-				members: [this.address],
-				openRoom: true
-			}).then(() => {
-				this.dialog?.instance.hide();
-			}).catch(e => {
-				this.showError(e);
-			}).finally(() => {
-				this.isLoading = false;
-			});
+			this.$components.content?.createRoom();
 		},
-
 	}
 }
