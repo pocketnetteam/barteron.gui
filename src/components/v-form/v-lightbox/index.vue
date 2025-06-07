@@ -3,6 +3,7 @@
 		:class="{
 			'v-lightbox': true,
 			'v-lightbox-open': active,
+			'no-borders': noBorders,
 			[`v-lightbox-${ size ?? 'md' }`]: true
 		}"
 		:open="active"

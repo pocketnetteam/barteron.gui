@@ -12,6 +12,10 @@ export default {
 		},
 		size: String,
 		title: String,
+		noBorders: {
+			type: Boolean,
+			default: false
+		},
 		close: {
 			type: Boolean,
 			default: true

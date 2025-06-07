@@ -942,13 +942,7 @@ export default {
 			next();
 		} else if (unpublishedVideo) {
 			const dialog = this.dialog?.instance;
-			dialog.view("question", {
-				text: this.$t("dialogLabels.need_remove_unpublished_video"),
-				buttons: [
-					{ text: this.$t("buttonLabels.no"), vType: "blue", vSize: "sm", click: () => dialog.hide(false) },
-					{ text: this.$t("buttonLabels.yes"), vType: "dodoria", vSize: "sm", click: () => dialog.hide(true) }
-				]
-			}).then(state => {
+			dialog.view("question", this.$t("dialogLabels.need_remove_unpublished_video")).then(state => {
 				if (state) {
 					this.$refs.videoUploader?.videoRemoving({disableStateChange: true}).then(() => {
 						this.offer.newVideoAdded = false;

@@ -165,13 +165,7 @@ export default {
 
 		removeVideoEvent() {
 			const dialog = this.dialog?.instance;
-			dialog.view("question", {
-				text: this.$t("dialogLabels.video_delete"),
-				buttons: [
-					{ text: this.$t("buttonLabels.no"), vType: "blue", vSize: "sm", click: () => dialog.hide(false) },
-					{ text: this.$t("buttonLabels.yes"), vType: "dodoria", vSize: "sm", click: () => dialog.hide(true) }
-				]
-			}).then(state => {
+			dialog.view("question", this.$t("dialogLabels.video_delete")).then(state => {
 				if (state) {
 					this.removeVideo();
 				};
