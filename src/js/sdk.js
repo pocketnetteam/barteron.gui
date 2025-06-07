@@ -782,11 +782,7 @@ class SDK {
 	}
 
 	uploadingVideoDialog() {
-		const data = {
-			fileSizeMaxLimit: null, //50 * 1024 * 1024,
-		};
-
-		return this.sdk.videos.opendialog(data).then(result => {
+		return this.sdk.videos.opendialog().then(result => {
 			this.lastresult = "uploadingVideoDialog: success"
 			return result;
 		}).catch(e => {
