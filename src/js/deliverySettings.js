@@ -8,7 +8,18 @@ const
 
 	addressFilterAllowedItems = {
 		production: [
-
+			"PCJ2gYX2exnZtCnhE6maHTLQAfkJBFTgt9",
+			"PHdW4pwWbFdoofVhSEfPSHgradmrvZdbE5",
+			"PBjV827sqgz7dJybRb9MKbQKgzFGFzXWZc",
+			"PBJoaPASrV3FTMqx4uXnYhBRb8KxXMyABp",
+			"PUiSd363TKeeyH7c9bqMbQ77GJHPj2XcuR",
+			"PHoESoQYyUsmGLLgihBAyUaQeigMAT5ttx",
+			"PTHztc3NdJadFStNL3QZCX4JAF7f97LKHi",
+			"PF8UvEzMo7dEDraFVsJpvToruBV5D8u3X3",
+			"PSeRp7xPoK7cmHckjVqfET9hywerY78QA4",
+			"PTsyPfHwVLjm5SNH2ha4hYNWxcV2ZrELHC",
+			"PABuhvakoyaqsxaHDebNbPMdkqVA73ncnz",
+			"PErTt9VweRwQWfjc2sqq1eNixbfFzc85zD",
 		],
 		development: [
 			"TCBZP1MiPCCyevfa31wKp3xQedwVa7Tdn4",
