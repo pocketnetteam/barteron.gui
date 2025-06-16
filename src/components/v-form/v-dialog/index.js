@@ -44,8 +44,8 @@ export default {
 				case "question": {
 					this.icon = props?.icon || "fa-question-circle";
 					this.buttons = props?.buttons || [
-						{ text: this.$t("buttonLabels.no"), vType: "dodoria", vSize: "sm", click: () => this.hide(false) },
-						{ text: this.$t("buttonLabels.yes"), vType: "blue", vSize: "sm", click: () => this.hide(true) }
+						{ text: this.$t("buttonLabels.no"), vType: "blue", vSize: "sm", click: () => this.hide(false) },
+						{ text: this.$t("buttonLabels.yes"), vType: "dodoria", vSize: "sm", click: () => this.hide(true) }
 					];
 					break;
 				}

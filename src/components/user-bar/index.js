@@ -90,7 +90,7 @@ export default {
 				} else {
 					if (this.user?.name && to && to.path != to.params.from) {
 						this.$router.push(to).catch(e => {
-							this.showError(e);
+							console.error(e);
 						});
 					}
 				}

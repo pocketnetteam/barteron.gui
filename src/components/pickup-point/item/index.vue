@@ -13,6 +13,7 @@
 					<img
 						:src="imageUrl('self-pickup.png')"
 						:alt="'self-pickup'"
+						@click="showItem"
 					>
 				</div>
 			</picture>
@@ -70,7 +71,7 @@
 							:class="{ 'hover': hover === index }"
 							@mouseenter="() => hover = index"
 							@mouseleave="() => hover = 0"
-							@click="imageClick(index)"
+							@click="showItem"
 						>
 							<!-- First image -->
 							<image-load v-if="index === 0">

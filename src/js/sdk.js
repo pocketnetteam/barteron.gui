@@ -791,6 +791,56 @@ class SDK {
 		})
 	}
 
+	videoOperationsAvailable() {
+		return (this.getTransactionsApiVersion() >= 4);
+	}
+
+	uploadingVideoDialog() {
+		return this.sdk.videos.opendialog().then(result => {
+			this.lastresult = "uploadingVideoDialog: success"
+			return result;
+		}).catch(e => {
+			this.setLastResult(e);
+			console.error(e);
+		})
+	}
+
+	getVideoInfo(urls, update = false) {
+		return this.sdk.get.videos(urls, update).then(res => {
+			this.lastresult = "getVideoInfo: success";
+
+			return (res || []).map(m => {
+				const
+					infoExists = !!(m?.data),
+					name = m?.data?.original?.name,
+					state = m?.data?.original?.state,
+					playlistUrl = m?.data?.original?.streamingPlaylists[0]?.playlistUrl,
+					thumbnailUrl = m?.data?.thumbnail;
+
+				return infoExists ? 
+					{
+						name,
+						state,
+						playlistUrl,
+						thumbnailUrl,
+					} 
+					: null;
+			});
+		}).catch(e => {
+			this.setLastResult(e);
+			throw e;
+		});
+	}
+
+	removeVideo(url) {
+		return this.sdk.videos.remove({url}).then(() => {
+			this.lastresult = "removeVideo: success";
+		}).catch(e => {
+			this.setLastResult(e);
+			throw e;
+		});
+	}
+
 	/**
 	 * Manage bastyon image source
 	 * 

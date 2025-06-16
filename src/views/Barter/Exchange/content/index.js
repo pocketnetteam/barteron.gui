@@ -51,7 +51,7 @@ export default {
 		 */
 		expand() {
 			this.$router.replace({ query: { expanded: 1 } }).catch(e => {
-				this.showError(e);
+				console.error(e);
 			});
 		},
 

@@ -49,6 +49,12 @@ export default {
 		}
 	},
 
+	provide() {
+		return {
+			dialog: new Proxy({}, { get: () => this.dialog }),
+		};
+	},
+
 	methods: {
 		show() {
 			this.lightbox = true;

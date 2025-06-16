@@ -37,7 +37,7 @@ export default {
 				name: "category",
 				params: { id }
 			}).catch(e => {
-				this.showError(e);
+				console.error(e);
 			});
 		},
 
@@ -63,7 +63,7 @@ export default {
 
 			if (needReplace) {
 				this.$router.replace(to).catch(e => {
-					this.showError(e);
+					console.error(e);
 				});
 			};
 		},

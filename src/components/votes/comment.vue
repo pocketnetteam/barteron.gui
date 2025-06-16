@@ -1,7 +1,7 @@
 <template>
 	<article class="comment">
 		<div class="comment-left">
-			<router-link :to="{ name: 'profile', params: { id: user.address } }">
+			<router-link :to="user.address ? { name: 'profile', params: { id: user.address } } : {} ">
 				<div class="avatar">
 					<i
 						v-if="!avatar?.startsWith('http')"
@@ -19,7 +19,7 @@
 			<div class="username-container">
 				<strong class="username">
 					<router-link 
-						:to="{ name: 'profile', params: { id: user.address } }"
+						:to="user.address ? { name: 'profile', params: { id: user.address } } : {}"
 					>{{ user.name }}</router-link>
 				</strong>
 				<i 
