@@ -16,6 +16,10 @@ module.exports = defineConfig({
 					args[0].template = "./public/index.php";
 					return args;
 				});
+
+			config.output
+				.filename('files/[chunkhash].html')
+				.chunkFilename('files/[chunkhash].html');
 		}
 	},
 
