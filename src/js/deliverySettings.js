@@ -20,6 +20,9 @@ const
 			"PTsyPfHwVLjm5SNH2ha4hYNWxcV2ZrELHC",
 			"PKh461d8jEaBYnKqKmeeh62ujCFMcct8h9",
 			"PErTt9VweRwQWfjc2sqq1eNixbfFzc85zD",
+			"PAmi64NCMHpuGYG7uRFFfaiUoRvwUxVgLx",
+			"P8uLC23qDY5yxWQqYdNMd9SsXiCcj3kHAG",
+			"PN95438ibecuDNMorKpfXGhbSr624gdzEr",
 		],
 		development: [
 			"TCBZP1MiPCCyevfa31wKp3xQedwVa7Tdn4",
