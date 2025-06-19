@@ -10,8 +10,6 @@ jobs:
 
   build:
     runs-on: [ barteron.club ]
-    strategy:
-      max-parallel: 2
     steps:
       - name: Checkout git repository
         uses: actions/checkout@v3
@@ -29,3 +27,21 @@ jobs:
           rm -rf /data/barteron/*
           rsync -ah ./dist/ /data/barteron/
         
+  build-mirror:
+    runs-on: [ mirror.barteron.club ]
+    steps:
+      - name: Checkout git repository
+        uses: actions/checkout@v3
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Prepare
+        run: |
+          npm install --global yarn
+          yarn install
+          yarn build
+      - name: Copy
+        run: |
+          rm -rf /data/barteron/*
+          rsync -ah ./dist/ /data/barteron/
