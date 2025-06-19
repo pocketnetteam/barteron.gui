@@ -9,7 +9,10 @@ on:
 jobs:
 
   build:
-    runs-on: [ barteron.club, mirror.barteron.club ]
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        runner: [ barteron.club, mirror.barteron.club ]
     steps:
       - name: Checkout git repository
         uses: actions/checkout@v3
