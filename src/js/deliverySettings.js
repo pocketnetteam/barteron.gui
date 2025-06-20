@@ -23,6 +23,7 @@ const
 			"PAmi64NCMHpuGYG7uRFFfaiUoRvwUxVgLx",
 			"P8uLC23qDY5yxWQqYdNMd9SsXiCcj3kHAG",
 			"PN95438ibecuDNMorKpfXGhbSr624gdzEr",
+			"PDXHY9SvCoH2VQmukfWRqg9U5XyCsa11EB",
 		],
 		development: [
 			"TCBZP1MiPCCyevfa31wKp3xQedwVa7Tdn4",
