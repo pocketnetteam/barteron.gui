@@ -165,8 +165,8 @@
 		"outdated": "У этого объявления истёк срок публикации",
 		"share_on_bastyon": "Поделиться в Bastyon",
 		"offer_has_been_published": "Объявление опубликовано.",
-		"share_offer_on_bastyon_hint": "Поделитесь Вашим предложением в Bastyon! Вы также можете поднять пост в ленте на Bastyon.",
-		"share_offer_option_availability": "Данная опция также доступна на странице объявления. Подробнее о поднятии поста здесь:",
+		"share_offer_on_bastyon_hint": "Поделитесь Вашим предложением в Bastyon! Затем Вы можете поднять пост в ленте на Bastyon.",
+		"share_offer_option_availability": "Опция \"Поделиться в Bastyon\" также доступна на странице объявления. Подробнее о поднятии поста здесь:",
 		"dont_show_again": "Больше не показывать"
 	},
 
