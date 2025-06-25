@@ -678,19 +678,37 @@ class SDK {
 	}
 
 	/**
-	 * Get offer actions
+	 * Get pending offers
 	 * 
 	 * @returns {Promise}
 	 */
-	getOfferActions() {
+	getPendingOffers() {
 		return this.getActions().then(actions => {
 			return Promise.all(
 				(actions || [])
 					.filter(action => this.isOfferAction(action))
+					.filter(action => !(action.completed || action.rejected))
 					.map(async action => {
 
-						if (action.expObject?.type !== this.txTypes.contentDelete.name) {
-							return new Offer({
+						let result = null;
+
+						const isContentDelete = (action.expObject?.type === this.txTypes.contentDelete.name);
+						if (isContentDelete) {
+							const txid = action.expObject?.txidEdit;
+							
+							if (!this.barteron.offers[txid]) {
+								await this.getBrtOffersByHashes([txid]);
+							}
+
+							result = new Offer({
+								...this.barteron.offers[txid],
+								hash: action.transaction,
+								prevhash: txid,
+								published: "removed",
+								relay: !action?.completed
+							})
+						} else {
+							result = new Offer({
 								/* Normal Offer action */
 								...action.expObject,
 								price: action.expObject?.price / 100,
@@ -698,25 +716,9 @@ class SDK {
 								prevhash: action.expObject?.hash,
 								relay: !action?.completed
 							})
-						} else {
-							/* Deleted Offer action */
-							const txid = action.expObject?.txidEdit;
-							
-							if (!this.barteron.offers[txid]) {
-								await this.getBrtOffersByHashes([txid]);
-							}
+						};
 
-							const offer = new Offer({
-								...this.barteron.offers[txid],
-								hash: action.transaction,
-								prevhash: txid,
-								published: "removed",
-								relay: !action?.completed
-							})
-
-							return offer;
-						}
-
+						return result;
 			}) || []);
 		});
 	}
