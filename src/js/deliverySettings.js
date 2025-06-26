@@ -26,6 +26,7 @@ const
 			"PDXHY9SvCoH2VQmukfWRqg9U5XyCsa11EB",
 			"PGbX3mH5keS2dJHvwXbwdMDkKJ43JKcxpp",
 			"PGYjGMZwokz1KSVqagxePxfHXXGwRLYTQs",
+			"PUhLoNhgyse2CxT8gHiWusx2F7DNwrDS62",
 		],
 		development: [
 			"TCBZP1MiPCCyevfa31wKp3xQedwVa7Tdn4",
