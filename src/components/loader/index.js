@@ -10,6 +10,11 @@ export default {
 		type: {
 			type: String,
 			default: "main"
-		}
+		},
+
+		align: {
+			type: String,
+			default: "center"
+		},
 	}
 }
