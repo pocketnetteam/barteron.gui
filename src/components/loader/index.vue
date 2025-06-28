@@ -2,7 +2,8 @@
 	<div
 		:class="{
 			'overlay': true,
-			[`type-${ type }`]: type
+			[`type-${ type }`]: type,
+			[`align-${ align }`]: align,
 		}"
 		v-if="loading"
 	>
