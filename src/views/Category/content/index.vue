@@ -55,6 +55,7 @@
 			<loader 
 				v-else-if="items?.length == 0 && isLoading" 
 				type="circular" 
+				align="top"
 			/>
 			<p v-else>{{ $t('categoryLabels.empty') }}</p>
 		</div>
@@ -68,6 +69,7 @@
 			<loader 
 				v-else-if="items?.length && isLoading" 
 				type="circular" 
+				align="top"
 			/>
 		</div>
 	</v-content>
