@@ -430,7 +430,9 @@
 
 				<div class="row block">
 					<strong class="subtitle">{{ $t('deliveryLabels.financial_terms') }}</strong>
-					<p class="description">{{ pickupPoint.financialTerms }}</p>
+					<p class="description">
+						<LinkifiedText :text="pickupPoint.financialTerms"/>
+					</p>
 				</div>
 
 				<div class="row block">
@@ -453,13 +455,17 @@
 
 				<div class="row block">
 					<strong class="subtitle">{{ $t('deliveryLabels.how_to_get') }}</strong>
-					<p class="description">{{ pickupPoint.route }}</p>
+					<p class="description">
+						<LinkifiedText :text="pickupPoint.route"/>
+					</p>
 				</div>
 			</div>
 
 			<div class="row block sep" v-if="item.description">
 				<strong class="title">{{ $t('stepsLabels.description') }}</strong>
-				<p class="description">{{ item.description }}</p>
+				<p class="description">
+					<LinkifiedText :text="item.description"/>
+				</p>
 			</div>
 
 			<div

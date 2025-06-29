@@ -1,8 +1,13 @@
 import ThemeStore from "@/stores/theme.js";
+import LinkifiedText from "@/components/linkified-text/index.vue";
 import Vue from "vue";
 
 export default {
 	name: "WorkSchedule",
+
+	components: {
+		LinkifiedText,
+	},
 
 	props: {
 		workSchedule: {

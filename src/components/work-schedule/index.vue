@@ -115,8 +115,12 @@
 			>
 				<label>
 					<i class="fa fa-info-circle"></i>
-					{{ additionalInfo }}
+					{{ $t('deliveryLabels.work_schedule_additional_info_label') }}
 				</label>
+
+				<p class="description">
+					<LinkifiedText :text="additionalInfo"/>
+				</p>
 			</div>
 		</div>
 	</div>
