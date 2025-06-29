@@ -72,6 +72,7 @@
 		"shelf_life_hint": "Обратите внимание, срок хранения должен соответствовать указанному значению",
 		"work_schedule": "График работы",
 		"work_schedule_additional_info_placeholder": "Добавьте информацию об изменениях в графике работы (необязательно)",
+		"work_schedule_additional_info_label": "Дополнительная информация",
 		"all_day": "24 часа",
 		"around_the_clock": "Круглосуточно",
 		"address": "Адрес",

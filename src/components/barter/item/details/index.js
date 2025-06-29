@@ -1,7 +1,8 @@
 import ImageLoad from "@/components/image-load/index.vue";
 import Loader from "@/components/loader/index.vue";
 import VideoPreview from "@/components/video-preview/index.vue";
-import Price from "@/components/barter/item/price/index.vue"
+import Price from "@/components/barter/item/price/index.vue";
+import LinkifiedText from "@/components/linkified-text/index.vue";
 import WorkSchedule from "@/components/work-schedule/index.vue";
 import { showMediaItems } from "@/js/mediaUtils.js";
 import "photoswipe/style.css";
@@ -15,6 +16,7 @@ export default {
 		Loader,
 		VideoPreview,
 		Price,
+		LinkifiedText,
 		WorkSchedule
 	},
 

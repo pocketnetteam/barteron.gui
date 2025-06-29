@@ -23,6 +23,7 @@
 		"husky": "^8.0.3",
 		"leaflet": "^1.9.4",
 		"leaflet-geosearch": "^3.8.0",
+		"linkifyjs": "^4.3.1",
 		"ngeohash": "^0.6.3",
 		"photoswipe": "^5.4.4",
 		"pinia": "^2.1.7",
