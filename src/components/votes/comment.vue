@@ -29,7 +29,9 @@
 				></i>
 			</div>
 			<time :datetime="datetime">{{ $d(item.time, 'middle', $i18n.locale) }}</time>
-			<p>{{ item.message }}</p>
+			<p>
+				<LinkifiedText :text="item.message"/>
+			</p>
 		</div>
 
 		<div
@@ -50,13 +52,15 @@
 <style lang="sass" src="./index.sass"></style>
 <script>
 import Score from "@/components/score/index.vue";
+import LinkifiedText from "@/components/linkified-text/index.vue";
 import NameToHSL from "@/js/nametohsl.js";
 
 export default {
 	name: "Comment",
 
 	components: {
-		Score
+		Score,
+		LinkifiedText,
 	},
 
 	props: {

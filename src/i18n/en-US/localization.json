@@ -72,6 +72,7 @@
 		"shelf_life_hint": "Please note that the shelf life must match the specified value",
 		"work_schedule": "Work schedule",
 		"work_schedule_additional_info_placeholder": "Add information about changes in the work schedule (optional)",
+		"work_schedule_additional_info_label": "Additional information",
 		"all_day": "24 hours",
 		"around_the_clock": "Around the clock",
 		"address": "Address",
