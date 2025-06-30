@@ -2,6 +2,7 @@ import i18n from "@/i18n/index.js";
 import router from "@/router.js";
 import BarterItem from "@/components/barter/item/details/index.vue";
 import Votes from "@/components/votes/index.vue";
+import LinkifiedText from "@/components/linkified-text/index.vue";
 
 export default {
 	name: "SelectPickupPointDialog",
@@ -9,6 +10,7 @@ export default {
 	components: {
 		BarterItem,
 		Votes,
+		LinkifiedText,
 	},
 
 	i18n,

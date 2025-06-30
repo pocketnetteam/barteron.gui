@@ -8,7 +8,11 @@
 	>
 
 		<template v-if="item?.isSelfPickup">
-			<p class="additional-info">{{ item?.additionalInfo || $t('deliveryLabels.no_self_pickup_additional_info') }}</p>
+			<p class="additional-info">
+				<LinkifiedText 
+					:text="item?.additionalInfo || $t('deliveryLabels.no_self_pickup_additional_info')"
+				/>
+			</p>
 		</template>
 
 		<template v-else>
