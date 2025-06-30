@@ -580,7 +580,13 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	openExternalLink(url) {
-		return this.sdk.openExternalLink(url);
+		return this.sdk.openExternalLink(url).then(result => {
+			this.lastresult = "openExternalLink: success"
+			return result;
+		}).catch(e => {
+			this.setLastResult(e);
+			console.error(e);
+		});
 	}
 
 	/**

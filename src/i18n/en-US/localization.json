@@ -88,6 +88,7 @@
 
 	"ratingLabels": {
 		"label": "Rating",
+		"user_rating": "User rating",
 		"reviews": "Reviews"
 	},
 
@@ -332,7 +333,7 @@
 
 	"voteLabels": {
 		"label": "Votes",
-		"title": "Rating",
+		"offer_rating": "Offer rating",
 		"votes": "No votes | {count} vote | {count} votes",
 		"commentIsPublishing": "Comment is publishing",
 		"voteNotPublished": "Vote not published",
