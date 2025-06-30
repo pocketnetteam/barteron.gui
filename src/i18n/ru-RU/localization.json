@@ -88,6 +88,7 @@
 
 	"ratingLabels": {
 		"label": "Рейтинг",
+		"user_rating": "Рейтинг пользователя",
 		"reviews": "Отзывы"
 	},
 
@@ -332,7 +333,7 @@
 
 	"voteLabels": {
 		"label": "Отзывы",
-		"title": "Рейтинг",
+		"offer_rating": "Рейтинг объявления",
 		"votes": "Нет голосов | {count} голос | {count} голоса | {count} голосов",
 		"commentIsPublishing": "Комментарий публикуется",
 		"voteNotPublished": "Оценка не опубликована",
