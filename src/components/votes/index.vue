@@ -13,7 +13,7 @@
 		</header>
 
 		<header v-if="header">
-			<h1 v-if="!compact">{{ $t('voteLabels.title') }} - </h1>
+			<h1 v-if="!compact">{{ $t('voteLabels.offer_rating') }} - </h1>
 			<Score
 				ref="offerScore"
 				:rating="true"
