@@ -28,6 +28,8 @@ const
 			"PGYjGMZwokz1KSVqagxePxfHXXGwRLYTQs",
 			"PUhLoNhgyse2CxT8gHiWusx2F7DNwrDS62",
 			"PCNhr33kZKAEfnmtkjqBnuNkvhH177xEaJ",
+			"PBAE9DVjMmDtyCyXpSACGQ9CG7j8nN3cLb",
+			"PJyG6tYJsHo3TPUk1nWFcjUEpJRJEUyHfH",
 		],
 		development: [
 			"TCBZP1MiPCCyevfa31wKp3xQedwVa7Tdn4",
