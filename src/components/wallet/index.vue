@@ -9,6 +9,12 @@
 		</dl>
 
 		<!-- <v-button>{{ $t('profileLabels.wallet') }}</v-button> -->
+
+		<div class="referral-program">
+			<v-button
+				@click="showReferralProgramInfo"
+			>{{ $t('buttonLabels.referral_program') }}</v-button>
+		</div>
 	</div>
 </template>
 
