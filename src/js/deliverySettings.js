@@ -30,6 +30,7 @@ const
 			"PCNhr33kZKAEfnmtkjqBnuNkvhH177xEaJ",
 			"PBAE9DVjMmDtyCyXpSACGQ9CG7j8nN3cLb",
 			"PJyG6tYJsHo3TPUk1nWFcjUEpJRJEUyHfH",
+			"PTxfZyUJg5a1p8upYDfXKxkNYQ8a7kQ25S",
 		],
 		development: [
 			"TCBZP1MiPCCyevfa31wKp3xQedwVa7Tdn4",

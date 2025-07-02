@@ -51,6 +51,10 @@ class SDK {
 		return "https://bastyon.com/boost";
 	};
 
+	get referralProgramInfoURL() {
+		return "https://barteron.bastyon.com";
+	};
+
 	_appinfo = null;
 	get appinfo() {
 		if (!this._appinfo) this.getAppInfo();

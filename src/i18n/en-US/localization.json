@@ -124,6 +124,8 @@
 		"start_purchase": "Start purchase",
 		"go_to_selection": "Go to selection",
 		"send_message": "Send message",
+		"referral_program": "Referral program",
+		"copy_referral_link": "Copy referral link",
 		"my_announcements": "My announcements",
 		"find_exchange_options": "Find exchange options",
 		"find_exchange": "Find exchange",
@@ -361,6 +363,16 @@
 		"email": "You can specify an email for feedback",
 		"email_placeholder": "Email (OPTIONAL)",
 		"empty_answers": "You must answer at least one question"
+	},
+
+	"referralLabels": {
+		"title": "Referral program",
+		"earn_pkoin_by_promoting_barteron": "Earn PKOIN by promoting Barteron!",
+		"paragraph1": "Join our referral program and invite sellers. To do this, you need to register in the program and get your referral link.",
+		"paragraph2": "You can read the terms of the program and register for it here:",
+		"referral_link_copy_success": "Referral link copied to clipboard",
+		"referral_link_copy_fail": "Error getting referral link"
+
 	},
 
 	"themeLabels": {
