@@ -31,6 +31,7 @@ const
 			"PBAE9DVjMmDtyCyXpSACGQ9CG7j8nN3cLb",
 			"PJyG6tYJsHo3TPUk1nWFcjUEpJRJEUyHfH",
 			"PTxfZyUJg5a1p8upYDfXKxkNYQ8a7kQ25S",
+			"PPNo2xAggvntsFJhC71eFSvxb3dSG3YpXu",
 		],
 		development: [
 			"TCBZP1MiPCCyevfa31wKp3xQedwVa7Tdn4",
