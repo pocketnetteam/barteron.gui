@@ -285,6 +285,32 @@ export default {
 				instance.show();
 			});
 		},
+
+		handleSearchParams(searchString = "", excludedItems = []) {
+			let sourceParamsString = searchString;
+			let excludedParamsString = "";
+
+			if (searchString && excludedItems?.length > 0) {
+				const sourceParams = new URLSearchParams(searchString);
+				const excludedParams = new URLSearchParams();
+
+				excludedItems.forEach(item => {
+					const value = sourceParams.get(item);
+					if (value) {
+						sourceParams.delete(item);
+						excludedParams.append(item, value);
+					};
+				});
+
+				sourceParamsString = sourceParams.size ? `?${sourceParams}` : "";
+				excludedParamsString = excludedParams.size ? `&${excludedParams}` : "";
+			};
+
+			return {
+				sourceParamsString,
+				excludedParamsString,
+			};
+		},
 	},
 
 	mounted() {
@@ -295,9 +321,10 @@ export default {
 			this.manifest?.id &&
 			!location.origin.includes("test.barter.pocketnet.app")
 		) {
-			let restUrl = (location.pathname + location.search + location.hash).replace("/", "");
+			const { sourceParamsString, excludedParamsString } = this.handleSearchParams(location.search, ["ref"]);
+			let restUrl = (location.pathname + sourceParamsString + location.hash).replace("/", "");
 			restUrl = (restUrl ? "&p=" + this.sdk.hexEncode(restUrl) : "");
-			window.location.href = `https://bastyon.com/application?id=${ this.manifest.id }${ restUrl }`;
+			window.location.href = `https://bastyon.com/application?id=${ this.manifest.id }${ restUrl }${ excludedParamsString }`;
 		}
 
 		/* Watch for dialog */
