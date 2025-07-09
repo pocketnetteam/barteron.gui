@@ -59,13 +59,23 @@
 		<div class="v-button-dropdown" v-if="hasDropdown && !hideButton">
 			<slot name="dropdown" v-if="$slots.dropdown"></slot>
 			
+			<ul v-else-if="htmlDropdownMode">
+				<li
+					v-for="(item, index) in dropdown"
+					:key="index"
+					@click="$event => clickItem($event, item, index)"
+					v-html="item[dropdownItemKey] || item.text || item"
+				>
+				</li>
+			</ul>
+
 			<ul v-else>
 				<li
 					v-for="(item, index) in dropdown"
 					:key="index"
 					@click="$event => clickItem($event, item, index)"
+					v-text="item[dropdownItemKey] || item.text || item"
 				>
-					<span>{{ item[dropdownItemKey] || item.text || item }}</span>
 				</li>
 			</ul>
 		</div>

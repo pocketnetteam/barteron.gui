@@ -56,7 +56,7 @@ export default {
 				to = {
 					name: "category",
 					params: { id: this.id || "search" },
-					query: { search: this.query }
+					query: this.query ? { search: this.query } : {},
 				},
 				from = this.$route,
 				needReplace = !(this.routesAreEqual(to, from, ['name', 'params', 'query']));

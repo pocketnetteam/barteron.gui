@@ -16,6 +16,10 @@ export default {
 			type: Array,
 			default: () => []
 		},
+		htmlDropdownMode: {
+			type: Boolean,
+			default: false
+		},
 		valueSelector: {
 			type: String,
 			default: ".value"
