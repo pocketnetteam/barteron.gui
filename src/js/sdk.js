@@ -52,7 +52,10 @@ class SDK {
 	};
 
 	get referralProgramInfoURL() {
-		return "https://barteron.bastyon.com";
+		return {
+			link: "https://barteron.bastyon.com/#prom-part",
+			title: "https://barteron.bastyon.com",
+		}
 	};
 
 	_appinfo = null;

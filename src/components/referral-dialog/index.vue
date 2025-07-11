@@ -19,9 +19,9 @@
 			{{ $t('referralLabels.paragraph2') }}
 			<a 
 				class="link" 
-				:href="referralProgramInfoURL"
+				:href="referralProgramInfoURL.link"
 				@click.prevent="openReferralProgramInfo"
-			><b>{{ referralProgramInfoURL }}</b></a>
+			><b>{{ referralProgramInfoURL.title }}</b></a>
 		</h1>
 
 		<!-- Footer -->

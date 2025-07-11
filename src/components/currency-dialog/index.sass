@@ -1,0 +1,22 @@
+@import "@/css/vars.sass"
+
+.select-currency-dialog
+	.currencies-holder
+		display: flex
+		flex-wrap: wrap
+		column-gap: 36px
+		row-gap: $r * 2
+		justify-content: center
+
+		.currency-item
+			min-width: 64px
+			max-height: 40px
+
+			.text
+				color: $bulma
+				font-weight: bold
+				font-size: 1em
+
+			&.selected
+				.text
+					color: $blue
