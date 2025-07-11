@@ -183,12 +183,13 @@
 						justify-content: center
 
 					#location-switcher-button
-						max-width: 40%
-						
 						>.v-button
-							min-width: 80px
-							justify-content: flex-start
+							padding: .25em 1em
 
+		#footer
+			.footer-holder
+				.feedback
+					display: none
 
 	#survey-bar
 		.content
@@ -208,7 +209,7 @@
 					#location-switcher-button
 						>.v-button
 							span
-								gap: $r
+								gap: $r * 1.5
 
 		#main #container #content
 			.barter-list-holder
@@ -253,11 +254,6 @@
 
 						i.fa
 							margin-right: $r / 2
-
-				.feedback
-					.v-button
-						span.support
-							display: none
 
 		.vs-carousel
 			.vs-carousel__slide

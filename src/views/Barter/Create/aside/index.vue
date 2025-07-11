@@ -1,5 +1,8 @@
 <template>
-	<v-aside>
+	<v-aside
+		:hideOnScroll="true"
+		:hideOnOutsideClick="true"
+	>
 		<menu class="box steps">
 			<menuitem
 				v-for="(step, key) in steps"

@@ -18,18 +18,22 @@ export default {
 		showLightbox() {
 			this.query = this.$route.query.search || "";
 			this.lightbox = true;
-			
-			setTimeout(() => {
-				this.$refs.textField?.focus();
-			}, 100);
+			this.setFocusWithDelay(100); // without delay the focus doesn't work, nextTick also doesn't work
 		},
 
 		hideLightbox() {
 			this.lightbox = false;
 		},
 
+		setFocusWithDelay(delay = 0) {
+			setTimeout(() => {
+				this.$refs.textField?.focus();
+			}, delay);
+		},
+
 		reset() {
 			this.query = "";
+			this.setFocusWithDelay(0);
 		},
 
 		applyButtonEnabled() {

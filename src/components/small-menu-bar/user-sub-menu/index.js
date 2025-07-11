@@ -59,6 +59,11 @@ export default {
 					value: "select_currency",
 					default: false,
 				},
+				{
+					text: `<i class="fa fa-envelope"></i> ${this.$t('buttonLabels.support')}`,
+					value: "support",
+					default: false,
+				},
 			];
 		},
 	},
@@ -76,6 +81,10 @@ export default {
 
 				case "select_currency":
 					this.showCurrencyDialog();
+					break;
+
+				case "support":
+					this.support();
 					break;
 
 				default:
@@ -132,6 +141,14 @@ export default {
 			this.$nextTick(() => {
 				instance.show();
 			});
+		},
+
+		support() {
+			const
+				subject = this.$t("feedbackLabels.subject"),
+				link = `mailto:support@bastyon.com?subject=${subject}`;
+
+			this.sdk.openExternalLink(link);
 		},
 
 	},

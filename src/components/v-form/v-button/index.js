@@ -20,6 +20,10 @@ export default {
 			type: Boolean,
 			default: false
 		},
+		hideOnScroll: {
+			type: Boolean,
+			default: false
+		},
 		valueSelector: {
 			type: String,
 			default: ".value"
@@ -182,5 +186,11 @@ export default {
 		document.addEventListener("click", () => {
 			if (this.active) this.clickButton(null, false);
 		});
+
+		document.body.addEventListener("scroll", () => {
+			if (this.hideOnScroll && this.active) {
+				this.active = false;
+			};
+		}, { passive: true });
 	}
 }

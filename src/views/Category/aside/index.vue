@@ -2,6 +2,8 @@
 	<v-aside
 		v-if="!(isEmptyListFromFullSearch())"
 		ref="asideCategories"
+		:hideOnScroll="true"
+		:hideOnOutsideClick="true"
 	>
 		<v-details
 			v-if="category"

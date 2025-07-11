@@ -1,11 +1,10 @@
 <template>
 	<div class="small-menu-bar">
-		<Location />
 		<CategoriesOption />
-		<div class="right-side-group">
-			<SearchOption />
-			<UserSubMenu />
-		</div>
+		<Location />
+		<div class="space"></div>
+		<SearchOption />
+		<UserSubMenu />
 	</div>
 </template>
 

@@ -33,7 +33,7 @@
 						
 						<v-button
 							class="btn-reset"
-							:vType="applyButtonEnabled() ? 'transparent light-color' : 'hit'"
+							:vType="applyButtonEnabled() ? 'transparent light-color' : undefined"
 							vSize="md"
 							v-show="query"
 							@click="reset"

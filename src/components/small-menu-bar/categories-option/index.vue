@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="categories-option">
 		<CategorySelect
 			ref="categorySelect"
 			:marked="[id]"

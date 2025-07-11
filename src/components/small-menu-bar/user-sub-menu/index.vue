@@ -5,6 +5,7 @@
 		vSize="md"
 		:dropdown="itemsList"
 		:htmlDropdownMode="true"
+		:hideOnScroll="true"
 		:hideButton="false"
 		:rippleEffect="false"
 		@selected="selectItem"
