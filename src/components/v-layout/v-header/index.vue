@@ -27,7 +27,19 @@
 						<SearchBar />
 					</div>
 				</div>
-				
+
+				<!-- small -->
+				<div class="inner-small">
+					<div class="first-row">
+						<h1 class="logo">
+							<router-link to="/">Barteron</router-link>
+						</h1>
+					</div>
+					<div class="second-row">
+						<SmallMenuBar />
+					</div>
+				</div>
+
 			</div>
 		</div>
 	</header>

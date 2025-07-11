@@ -14,7 +14,8 @@
 				height: var(--bastyon-menu-height)
 				display: flex
 			
-			.inner-compact
+			.inner-compact,
+			.inner-small
 				display: none
 
 				.first-row,
@@ -172,12 +173,23 @@
 		#header
 			.bar
 				.inner-compact
-					.logo
-						a
-							background: url(@/assets/images/logo_compact.png) no-repeat 50% 50%
-							background-size: contain
-							height: 32px
-							width: 32px
+					display: none
+
+				.inner-small
+					display: block
+
+					.first-row
+						padding: 0 calc(var(--bastyon-menu-height) + 2px) 0
+						justify-content: center
+
+					#location-switcher-button
+						>.v-button
+							padding: .25em 1em
+
+		#footer
+			.footer-holder
+				.feedback
+					display: none
 
 	#survey-bar
 		.content
@@ -189,43 +201,15 @@
 	#app
 		#header
 			.bar
-				.inner-compact
-					.first-row
-						padding-right: calc(var(--bastyon-menu-height) + 2px)
-						padding-left: calc(var(--bastyon-menu-height) + 2px)
-
+				.inner-small
 					.first-row,
 					.second-row
 						gap: $r
 
-					.user-bar > ul > li:not(:last-child)
-						margin: 0 $r 0 0
-					
-					.user-bar
-						#create-offer-button
-							.v-button
-								white-space: pre-line
-								padding: $r
-
-								.text
-									gap: $r / 2
-					
-					.search-bar
-						#show-categories-button
-							.v-button
-								padding: $r * 1.5 $r
-
-								.text
-									gap: $r / 2
-
 					#location-switcher-button
-						max-width: 25%
-
 						>.v-button
-							padding: $r / 2
-
 							span
-								gap: $r
+								gap: $r * 1.5
 
 		#main #container #content
 			.barter-list-holder
@@ -271,11 +255,6 @@
 						i.fa
 							margin-right: $r / 2
 
-				.feedback
-					.v-button
-						span.support
-							display: none
-
 		.vs-carousel
 			.vs-carousel__slide
 				flex: 0 0 calc( 50% - 7px ) // Gap - 2px
@@ -301,23 +280,7 @@
 	#app
 		#header
 			.bar
-				.inner-compact
-					.user-bar
-						#create-offer-button
-							.v-button i
-								display: none
-
-					.search-bar
-						#show-categories-button
-							.v-button i
-								display: none
-						
-						.text-field
-							font-size: .9em
-
-							input
-								padding-left: $r / 2
-
+				.inner-small
 					#location-switcher-button
 						>.v-button
 							font-size: .8em

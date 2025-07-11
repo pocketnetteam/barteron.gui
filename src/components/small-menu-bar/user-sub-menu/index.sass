@@ -1,0 +1,51 @@
+@import "@/css/vars.sass"
+	
+.user-sub-menu
+	display: flex
+	align-items: center
+
+	/deep/ .v-button
+		background: none !important
+		padding: 0
+
+	/deep/ .v-button-dropdown
+		font-weight: normal
+		right: 0
+		width: max-content
+
+		li
+			i.fa
+				min-width: 24px
+				text-align: center
+
+	/deep/ .v-dropdown-arrow
+		display: none
+
+	.avatar
+		cursor: pointer
+		display: flex
+		border-radius: 50%
+		text-decoration: none
+		overflow: hidden
+		height: 32px
+		width: 32px
+
+		*
+			border-radius: 50%
+
+		i
+			background-color: var(--color, rgba(255, 179, 25, 1))
+			color: rgba(255, 255, 255, 1)
+			display: flex
+			font-size: .9em
+			font-style: normal
+			line-height: 0
+			align-items: center
+			justify-content: center
+			height: 100%
+			width: 100%
+			
+		img
+				display: block
+				height: 100%
+				width: 100%
