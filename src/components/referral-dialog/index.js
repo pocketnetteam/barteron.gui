@@ -37,7 +37,7 @@ export default {
 		},
 
 		openReferralProgramInfo() {
-			this.sdk.openExternalLink(this.referralProgramInfoURL);
+			this.sdk.openExternalLink(this.referralProgramInfoURL.link);
 		},
 
 		getReferralLink() {
