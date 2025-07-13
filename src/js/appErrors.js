@@ -33,9 +33,18 @@ class GeolocationRequestError extends Error {
 class UploadImagesError extends Error {
 	constructor(error) {
 		let message = error.message;
-		const imagesMaxCountExceeded = (/images:max:\d+$/.test(message)); // example "images:max:10"
+		const 
+			imagesMaxCountExceeded = (/images:max:\d+$/.test(message)), // example "images:max:10"
+			imagesFailedUploadNumbers = (/images:failedUploadNumbers:.+$/.test(message)); // example "images:failedUploadNumbers:2,3,5"
+
 		if (imagesMaxCountExceeded) {
-			message =  VueI18n.t("dialogLabels.images_max_count_exceeded_error");
+			message = VueI18n.t("dialogLabels.images_max_count_exceeded_error");
+		} else if (imagesFailedUploadNumbers) {
+			const 
+				rawNumbers = message.split(":").pop(),
+				numbers = rawNumbers.split(",").join(", ");
+
+			message = VueI18n.t("dialogLabels.images_failed_upload_numbers_error", {numbers});
 		}
 		super(message);
 		this.error = error;
