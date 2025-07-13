@@ -491,6 +491,7 @@
 				<!-- vButton: Cancel -->
 				<v-button
 					vType="bulma-stroke"
+					:disabled="offerPublished"
 					@click="cancel"
 				>{{ $t('buttonLabels.cancel') }}</v-button>
 
@@ -498,11 +499,15 @@
 					<!-- vButton: Preview -->
 					<v-button
 						vType="bulma-stroke"
+						:disabled="offerPublished"
 						@click="preview"
 					>{{ $t('buttonLabels.preview') }}</v-button>
 
 					<!-- vButton: Publish -->
-					<v-button @click="submit">{{ $t('buttonLabels.publish') }}</v-button>
+					<v-button 
+						:disabled="offerPublished"
+						@click="submit"
+					>{{ $t('buttonLabels.publish') }}</v-button>
 				</div>
 			</div>
 		</v-form>
