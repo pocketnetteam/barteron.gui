@@ -794,6 +794,15 @@ class SDK {
 	 */
 	uploadImagesToImgur(data, errorForwarding) {
 		return this.sdk.images.upload(data).then(result => {
+			const errorIndexes = result.reduce((acc, value, index) => {
+				return (value?.url ? acc : [...acc, index]);
+			}, []);
+
+			if (errorIndexes.length) {
+				const failedUploadNumbers = errorIndexes.map(m => m + 1).join(",");
+				throw new Error(`images:failedUploadNumbers:${failedUploadNumbers}`);
+			};
+
 			this.lastresult = "uploadImageToImgur: success (console.log)"
 			return result.map(m => m.url);
 		}).catch(e => {
