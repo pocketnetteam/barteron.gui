@@ -23,6 +23,7 @@ export default {
 		return {
 			sourceOffer: null,
 			offer: {},
+			offerPublished: false,
 
 			videoOrderVariant: "first",
 			getting: "something",
@@ -720,6 +721,7 @@ export default {
 			
 			this.$router.push(to).catch(e => {
 				console.error(e);
+				this.showVersionConflictIfNeeded(e);
 			});
 		},
 
@@ -736,6 +738,7 @@ export default {
 					query: { preview: 1 }
 				}).catch(e => {
 					console.error(e);
+					this.showVersionConflictIfNeeded(e);
 				});
 			} else {
 				const { message, field } = data.metaData;
@@ -823,12 +826,26 @@ export default {
 						}).then((data) => {
 							if (data.transaction) {
 								this.offer.newVideoAdded = false;
+								this.offerPublished = true;
 								form.dialog.hide();
 								this.$router.push({
 									name: "exchangeOptions",
 									params: {
 										id: hash?.length < 64 ? data.transaction : hash
 									}
+								}).catch(error => {
+									console.error(error);
+
+									const
+										options = { prefix: this.$t("barterLabels.offer_has_been_published") },
+										warningShown = this.showVersionConflictIfNeeded(
+											error, 
+											options
+										);
+
+									if (!(warningShown)) {
+										form.dialog.view("info", options.prefix);
+									};
 								});
 							} else {
 								const error = this.sdk.errorMessage(data.error?.code);

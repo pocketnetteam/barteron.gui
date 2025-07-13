@@ -112,6 +112,7 @@ export default {
 					if (this.user?.name && to && to.path != to.params.from) {
 						this.$router.push(to).catch(e => {
 							console.error(e);
+							this.showVersionConflictIfNeeded(e);
 						});
 					}
 				}

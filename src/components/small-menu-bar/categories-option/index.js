@@ -7,6 +7,8 @@ export default {
 		CategorySelect
 	},
 
+	inject: ["dialog"],
+
 	computed: {
 		id() {
 			return this.$route.name === "category" && this.$route.params.id || "";
@@ -20,6 +22,7 @@ export default {
 				params: { id }
 			}).catch(e => {
 				console.error(e);
+				this.showVersionConflictIfNeeded(e);
 			});
 		},
 	},

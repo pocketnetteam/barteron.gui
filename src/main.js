@@ -408,6 +408,7 @@ Vue.prototype.shared = Vue.observable({
 			if (needReplace) {
 				return this.$router.replace(to).catch(e => {
 					console.error(e);
+					this.showVersionConflictIfNeeded(e);
 				});
 			}
 		},
@@ -425,6 +426,16 @@ Vue.prototype.shared = Vue.observable({
 			return keys.reduce((result, item) => {
 				return result = result && JSON.stringify(route1[item]) === JSON.stringify(route2[item]);
 			}, true);
+		},
+
+		showVersionConflictIfNeeded(error, options = {}) {
+			let result = false;
+			if (error.name?.toLowerCase?.() === "chunkloaderror") {
+				result = true;
+				const message = (options?.prefix ? `${options?.prefix}\n\n` : "") + this.$t("dialogLabels.version_conflict_warning");
+				this.showWarning(message);
+			};
+			return result;
 		},
 
 		/**

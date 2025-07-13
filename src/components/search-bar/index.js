@@ -38,6 +38,7 @@ export default {
 				params: { id }
 			}).catch(e => {
 				console.error(e);
+				this.showVersionConflictIfNeeded(e);
 			});
 		},
 
@@ -64,6 +65,7 @@ export default {
 			if (needReplace) {
 				this.$router.replace(to).catch(e => {
 					console.error(e);
+					this.showVersionConflictIfNeeded(e);
 				});
 			};
 		},
