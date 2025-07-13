@@ -8,6 +8,8 @@ export default {
 		}
 	},
 
+	inject: ["dialog"],
+
 	computed: {
 		id() {
 			return this.$route.name === "category" && this.$route.params.id || "";
@@ -55,6 +57,7 @@ export default {
 			if (needReplace) {
 				this.$router.replace(to).catch(e => {
 					console.error(e);
+					this.showVersionConflictIfNeeded(e);
 				});
 			};
 		},

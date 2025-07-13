@@ -290,6 +290,7 @@
 		"saving_region_warning_by_zoom": "The coverage of the visible map area is too small. Offer lists will be filtered by this area. Continue anyway?",
 		"survey_form": "Submitting, please wait...",
 		"survey_success": "Your answers have been sent",
+		"version_conflict_warning": "Barteron version has changed! Please restart the application (reopen the application from Bastyon).",
 
 		"image_error": "Image upload error: {error}",
 		"node_error": "Node error has occured: {error}",

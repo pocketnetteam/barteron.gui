@@ -235,6 +235,7 @@ export default {
 					hash: `#${ tab }`
 				}).catch(e => {
 					console.error(e);
+					this.showVersionConflictIfNeeded(e);
 				});
 			}
 		},
