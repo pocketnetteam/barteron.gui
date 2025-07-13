@@ -299,6 +299,7 @@
 		"app_geolocation_permission_error": "You have restricted access to geolocation. Click the \"Application Settings\" button to allow the access.",
 		"platform_geolocation_permission_error": "Access to geolocation is restricted in the browser or operating system settings. You need to allow the access.",
 		"images_max_count_exceeded_error": "Maximum count of images exceeded",
+		"images_failed_upload_numbers_error": "Unable to upload images with numbers: {numbers}. If the images are larger than 1MB, please reduce their size.",
 		"error#-26": "Min relay fee not met",
 		"error#-1": "Error loading sdk library",
 		"error#0": "{error}",
