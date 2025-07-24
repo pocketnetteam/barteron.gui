@@ -1,7 +1,6 @@
 import Vue from "vue";
 import ImageLoad from "@/components/image-load/index.vue";
 import Loader from "@/components/loader/index.vue";
-import Caption from "@/components/barter/item/caption/index.vue";
 import SelectPickupPointDialog from "@/components/pickup-point/select-dialog/index.vue";
 import Score from "@/components/score/index.vue";
 
@@ -11,7 +10,6 @@ export default {
 	components: {
 		ImageLoad,
 		Loader,
-		Caption,
 		SelectPickupPointDialog,
 		Score,
 	},
