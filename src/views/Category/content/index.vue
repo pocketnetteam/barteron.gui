@@ -52,23 +52,38 @@
 				:items="items"
 				:vType="bartersView"
 			/>
+
 			<loader 
 				v-else-if="!(items?.length) && isLoading" 
 				type="circular" 
 				align="top"
 			/>
-			<p v-else>{{ $t('categoryLabels.empty') }}</p>
-			<div 
-				v-if="!(isLoading || isSearchEnabled() || isFiltersActive()) && (items?.length || 0) < Math.min(10, pageSize) && isSubcategory"
-				class="top-category-link-holder"
+
+			<p 
+				v-else 
+				class="category-label"
+			>{{ $t('categoryLabels.empty') }}</p>
+
+			<section 
+				v-if="!(isLoading || isSearchEnabled() || isFiltersActive()) 
+						&& (items?.length < 10) 
+						&& isSubcategory
+						&& topParentCategoriesToShowPrompt.includes(topParentCategory.id)"
 			>
-				<router-link 
-					class="link"
-					:to="{ name: 'category', params: { id: topParentCategory.id } }"
+				<i18n
+					class="top-category-link-holder category-label"
+					path="categoryLabels.view_top_parent"
+					tag="p"
 				>
-					<span>{{ $t("categoryLabels.show_top_parent", { category_name: $t(topParentCategory.name) }) }}</span>
-				</router-link>
-			</div>
+					<template #all_offers>
+						<v-button
+							:to="{ name: 'category', params: { id: topParentCategory.id } }"
+						>{{ $t('buttonLabels.all_offers') }}</v-button>
+					</template>
+
+					<template #category_name><span>"{{ $t(topParentCategory.name) }}"</span></template>
+				</i18n>
+			</section>
 		</div>
 
 		<div class="row center">

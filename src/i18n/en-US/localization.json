@@ -34,7 +34,7 @@
 		"label": "Category",
 		"empty": "No offers found :(",
 		"empty_details": "Try to set {all_regions} in your location, or expand your search area on the map and save it again",
-		"show_top_parent": "Show all offers in the category \"{category_name}\""
+		"view_top_parent": "View {all_offers} in the category {category_name}"
 	},
 
 	"stepsLabels": {
@@ -147,6 +147,7 @@
 		"close": "Close",
 		"repeat": "Repeat",
 		"all_regions": "All regions",
+		"all_offers": "All offers",
 		"renew": "Renew",
 		"withdraw": "Withdraw from publication",
 		"remove": "Remove",
