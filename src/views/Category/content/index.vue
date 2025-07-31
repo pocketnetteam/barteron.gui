@@ -48,16 +48,27 @@
 
 		<div class="row category-holder">
 			<BarterList
+				v-if="items?.length"
 				:items="items"
 				:vType="bartersView"
-				v-if="items?.length"
 			/>
 			<loader 
-				v-else-if="items?.length == 0 && isLoading" 
+				v-else-if="!(items?.length) && isLoading" 
 				type="circular" 
 				align="top"
 			/>
 			<p v-else>{{ $t('categoryLabels.empty') }}</p>
+			<div 
+				v-if="!(isLoading || isSearchEnabled() || isFiltersActive()) && (items?.length || 0) < Math.min(10, pageSize) && isSubcategory"
+				class="top-category-link-holder"
+			>
+				<router-link 
+					class="link"
+					:to="{ name: 'category', params: { id: topParentCategory.id } }"
+				>
+					<span>{{ $t("categoryLabels.show_top_parent", { category_name: $t(topParentCategory.name) }) }}</span>
+				</router-link>
+			</div>
 		</div>
 
 		<div class="row center">

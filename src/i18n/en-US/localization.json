@@ -33,7 +33,8 @@
 	"categoryLabels": {
 		"label": "Category",
 		"empty": "No offers found :(",
-		"empty_details": "Try to set {all_regions} in your location, or expand your search area on the map and save it again"
+		"empty_details": "Try to set {all_regions} in your location, or expand your search area on the map and save it again",
+		"show_top_parent": "Show all offers in the category \"{category_name}\""
 	},
 
 	"stepsLabels": {

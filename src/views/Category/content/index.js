@@ -49,6 +49,8 @@ export default {
 
 		...mapState(useOfferStore, [
 			"pageSize",
+			"isSubcategory",
+			"topParentCategory",
 		]),
 
 		...mapState(useLocaleStore, [
@@ -90,6 +92,8 @@ export default {
 			"loadMore",
 			"changeOrder",
 			"changeView",
+			"isSearchEnabled",
+			"isFiltersActive",
 			"changeFilters",
 			"getFilters"
 		]),
