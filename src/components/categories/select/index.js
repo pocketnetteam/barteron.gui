@@ -102,7 +102,8 @@ export default {
 		importChildren(ids) {
 			return ids
 				.filter(id => this.categories.items[id]/*  && this.$te(this.categories.items[id].name) */)
-				.map(id => ({ ...this.categories.items[id] }));
+				.map(id => ({ ...this.categories.items[id] }))
+				.sort((a, b) => (a.order ?? a.id) - (b.order ?? b.id));
 		},
 
 		/**
@@ -326,7 +327,6 @@ export default {
 		this.root = this.importChildren(
 			Object.entries(this.categories.items || {})
 				.filter(f => !f[1].parent)
-				.sort((a, b) => a[1].order - b[1].order)
 				.map(m => m[0])
 		);
 

@@ -24,6 +24,22 @@ const
 
         getters: {
             pageSize: () => defaultPageSize,
+
+            isSubcategory: (state) => {
+                const 
+                    id = state.itemsRoute?.params?.id,
+                    categories = new Categories();
+                
+                return categories.getParentsById(id).length;
+            },
+
+            topParentCategory: (state) => {
+                const 
+                    id = state.itemsRoute?.params?.id,
+                    categories = new Categories();
+                
+                return categories.getParentsById(id)[0];
+            },
         },        
         
         actions: {
@@ -254,6 +270,10 @@ const
                     params: { id: "search" },
                     query: { search: "" }
                 };
+            },
+
+            isSearchEnabled() {
+                return (this.loadingItemsRoute?.query?.search || this.itemsRoute?.query?.search);
             },
 
             isFiltersActive() {

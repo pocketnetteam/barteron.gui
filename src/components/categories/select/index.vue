@@ -56,34 +56,42 @@
 
 			<template v-else-if="!searching && !results.length">
 				<!-- History -->
-				<ul
-					class="history"
-					v-if="expanded?.history?.length"
+				<div
+					v-if="expanded?.history?.length" 
+					class="history-holder"
 				>
-					<!-- Root item -->
-					<li class="root">
-						<a @click="expand(null)">{{ $t('categoriesLabels.label') }}</a>
-					</li>
+					<ul class="history">
+						<!-- Root item -->
+						<li class="root">
+							<a @click="expand(null)">{{ $t('categoriesLabels.label') }}</a>
+						</li>
 
-					<!-- Dynamic items -->
-					<li
-						v-for="(parent, index) in expanded?.history"
-						:key="index"
-					>
-						<a
-							v-if="index < expanded.history.length - 1"
-							@click="expand(parent.id)"
-						>{{ $t(parent.name) }}</a>
-						<span v-else>{{ $t(parent.name) }}</span>
-					</li>
-				</ul>
+						<!-- Dynamic items -->
+						<li
+							v-for="(parent, index) in expanded?.history"
+							:key="index"
+						>
+							<a
+								v-if="index < expanded.history.length - 1"
+								@click="expand(parent.id)"
+							>{{ $t(parent.name) }}</a>
+							<span v-else>{{ $t(parent.name) }}</span>
+						</li>
+					</ul>
+				</div>
 
 				<!-- <ul v-else-if="!(query && changed)" class="history">
 					<li class="root">{{ $t('categoriesLabels.categoryNotSelected') }}</li>
 				</ul> -->
-				<ul v-else class="history">
-					<li class="root">{{ $t('categoriesLabels.categoryNotSelected') }}</li>
-				</ul>
+
+				<div 
+					v-else
+					class="history-holder"
+				>
+					<ul class="history">
+						<li class="root">{{ $t('categoriesLabels.categoryNotSelected') }}</li>
+					</ul>
+				</div>
 
 				<!-- Categories -->
 				<ul
