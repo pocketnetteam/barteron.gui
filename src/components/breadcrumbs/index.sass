@@ -1,28 +1,37 @@
 @import "@/css/vars.sass"
 
 .breadcrumbs
+	overflow-x: auto
+	width: 100%
+
 	menu
 		color: $trunks
 		cursor: default
 		display: flex
 		+resetList()
 		padding: $r * 2 0
+		flex-wrap: nowrap
 
-		menuitem:not(:first-child)
-			margin: 0 0 0 $r * 2
-			padding: 0 0 0 $r * 2
-			position: relative
+		menuitem
+			flex-shrink: 0
 
-			&:before
-				+fontAwesome("\f105")
-				position: absolute
-				top: 50%
-				left: -3px
-				transform: translateY(-50%)
+			&:not(:first-child)
+				margin: 0 0 0 $r * 2
+				padding: 0 0 0 $r * 2
+				position: relative
+
+				&:before
+					+fontAwesome("\f105")
+					position: absolute
+					top: 50%
+					left: -3px
+					transform: translateY(-50%)
 
 		a
 			color: $blue
 			text-decoration: none
+			display: inline-block
+			width: max-content
 
 			&:hover
 				text-decoration: underline

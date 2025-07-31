@@ -49,6 +49,8 @@ export default {
 
 		...mapState(useOfferStore, [
 			"pageSize",
+			"isSubcategory",
+			"topParentCategory",
 		]),
 
 		...mapState(useLocaleStore, [
@@ -82,6 +84,18 @@ export default {
 			return (this.items.length < (this.pageStart + 1) * this.pageSize)
 		},
 
+		/**
+		 * The top parent categories to show prompt.
+		 * The offers in these categories were created before 
+		 * they were detailed into subcategories, so the subcategories 
+		 * will be empty at first and we need to prompt the user 
+		 * to look at the top parent category.
+		 * 
+		 * @returns {Array}
+		 */
+		topParentCategoriesToShowPrompt() {
+			return [13587, 6000, 619, 888];
+		},
 	},
 
 	methods: {
@@ -90,6 +104,8 @@ export default {
 			"loadMore",
 			"changeOrder",
 			"changeView",
+			"isSearchEnabled",
+			"isFiltersActive",
 			"changeFilters",
 			"getFilters"
 		]),

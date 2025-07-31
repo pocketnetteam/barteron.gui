@@ -97,16 +97,26 @@ $columnWidth: 250px
 			&.no-result
 				color: $dodoria
 
+	.history-holder
+		overflow-x: scroll
+		width: 100%
+		padding-bottom: 16px
+
+		.history
+			flex-wrap: nowrap
+
+			li
+				flex-shrink: 0
+
+		~ .categories
+			border-top: 1px solid $beerus
+			padding-top: 16px
+
 	.history
 		display: flex
 		align-items: center
 		flex-wrap: wrap
 		gap: $r*2
-
-		~ .categories
-			border-top: 1px solid $beerus
-			margin-top: 16px
-			padding-top: 16px
 
 		li
 			color: $gray
