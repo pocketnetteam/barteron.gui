@@ -70,12 +70,15 @@
 						<li
 							v-for="(parent, index) in expanded?.history"
 							:key="index"
+							:title="$t(parent.name)"
 						>
 							<a
 								v-if="index < expanded.history.length - 1"
 								@click="expand(parent.id)"
 							>{{ $t(parent.name) }}</a>
-							<span v-else>{{ $t(parent.name) }}</span>
+							<span 
+								v-else
+							>{{ $t(parent.name) }}</span>
 						</li>
 					</ul>
 				</div>
@@ -102,6 +105,7 @@
 					<li
 						v-for="(category, index) in list"
 						:key="index"
+						:title="$t(category.name)"
 					>
 						<v-button
 							:class="{
@@ -134,7 +138,10 @@
 					>
 						<!-- Match -->
 						<details>
-							<summary class="text">
+							<summary 
+								class="text"
+								:title="$t(category.name)"
+							>
 								<span
 									v-html="highlightMatches($t(category.name))"
 									@click="expand(category.id)"
@@ -147,14 +154,17 @@
 
 							<!-- Related parents -->
 							<ul
-								class="history"
 								v-if="category.history?.length"
+								class="history"
+								:title="$t(parent.name)" 
 							>
 								<li
 									v-for="(parent, index) in category.history"
 									:key="index"
 								>
-									<a @click="expand(parent.id)">{{ $t(parent.name) }}</a>
+									<a 
+										@click="expand(parent.id)"
+									>{{ $t(parent.name) }}</a>
 								</li>
 							</ul>
 						</details>
