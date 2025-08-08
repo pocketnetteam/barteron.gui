@@ -156,7 +156,7 @@
 							<ul
 								v-if="category.history?.length"
 								class="history"
-								:title="$t(parent.name)" 
+								:title="$t(category.name)" 
 							>
 								<li
 									v-for="(parent, index) in category.history"
