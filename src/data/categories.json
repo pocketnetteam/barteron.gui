@@ -5864,7 +5864,7 @@
 		"order": 20
 	},
 	"3259": {
-		"name": "cereals",
+		"name": "porridges",
 		"id": 3259,
 		"parent": 3256,
 		"children": [
@@ -5874,14 +5874,14 @@
 		"order": 30
 	},
 	"3260": {
-		"name": "dry_cereals",
+		"name": "dry_porridges",
 		"id": 3260,
 		"parent": 3259,
 		"children": [],
 		"order": 10
 	},
 	"3261": {
-		"name": "liquid_cereals",
+		"name": "liquid_porridges",
 		"id": 3261,
 		"parent": 3259,
 		"children": [],
