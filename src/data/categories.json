@@ -2343,22 +2343,6 @@
 		"children": [],
 		"order": 100
 	},
-	"220": {
-		"name": "toys_hobbies",
-		"icon": "fa-car-side",
-		"id": 220,
-		"parent": null,
-		"children": [],
-		"order": 1400
-	},
-	"237": {
-		"name": "dolls_bears",
-		"icon": "fa-baby",
-		"id": 237,
-		"parent": null,
-		"children": [],
-		"order": 1500
-	},
 	"260": {
 		"name": "stamps",
 		"icon": "fa-stamp",
@@ -4014,12 +3998,2164 @@
 		"order": 2700
 	},
 	"2984": {
-		"name": "baby",
+		"name": "children’s_products",
 		"icon": "fa-baby-carriage",
 		"id": 2984,
 		"parent": null,
+		"children": [
+			2985,
+			3082,
+			3146,
+			3170,
+			3196,
+			3231,
+			3256,
+			3266,
+			3284
+		],
+		"order": 240
+	},
+	"2985": {
+		"name": "school_and_learning_supplies",
+		"id": 2985,
+		"parent": 2984,
+		"children": [
+			2986,
+			2993,
+			3047,
+			3052,
+			3059,
+			3060,
+			3061,
+			3062,
+			3075
+		],
+		"order": 10
+	},
+	"2986": {
+		"name": "backpacks_satchels_and_bags",
+		"id": 2986,
+		"parent": 2985,
+		"children": [
+			2987,
+			2988,
+			2989,
+			2990,
+			2991,
+			2992
+		],
+		"order": 10
+	},
+	"2987": {
+		"name": "school_backpacks",
+		"id": 2987,
+		"parent": 2986,
 		"children": [],
-		"order": 2800
+		"order": 10
+	},
+	"2988": {
+		"name": "satchels",
+		"id": 2988,
+		"parent": 2986,
+		"children": [],
+		"order": 20
+	},
+	"2989": {
+		"name": "preschool_backpacks",
+		"id": 2989,
+		"parent": 2986,
+		"children": [],
+		"order": 30
+	},
+	"2990": {
+		"name": "shoe_and_uniform_bags",
+		"id": 2990,
+		"parent": 2986,
+		"children": [],
+		"order": 40
+	},
+	"2991": {
+		"name": "lunch_bags",
+		"id": 2991,
+		"parent": 2986,
+		"children": [],
+		"order": 50
+	},
+	"2992": {
+		"name": "accessories",
+		"id": 2992,
+		"parent": 2986,
+		"children": [],
+		"order": 60
+	},
+	"2993": {
+		"name": "stationery_supplies",
+		"id": 2993,
+		"parent": 2985,
+		"children": [
+			2994,
+			2995,
+			2996,
+			2997,
+			2998,
+			2999,
+			3046
+		],
+		"order": 20
+	},
+	"2994": {
+		"name": "pencil_cases",
+		"id": 2994,
+		"parent": 2993,
+		"children": [],
+		"order": 10
+	},
+	"2995": {
+		"name": "erasers",
+		"id": 2995,
+		"parent": 2993,
+		"children": [],
+		"order": 20
+	},
+	"2996": {
+		"name": "sharpeners",
+		"id": 2996,
+		"parent": 2993,
+		"children": [],
+		"order": 30
+	},
+	"2997": {
+		"name": "correction_pens",
+		"id": 2997,
+		"parent": 2993,
+		"children": [],
+		"order": 40
+	},
+	"2998": {
+		"name": "glue_sticks",
+		"id": 2998,
+		"parent": 2993,
+		"children": [],
+		"order": 50
+	},
+	"2999": {
+		"name": "paper_clips",
+		"id": 2999,
+		"parent": 2993,
+		"children": [],
+		"order": 60
+	},
+	"3046": {
+		"name": "bookmarks",
+		"id": 3046,
+		"parent": 2993,
+		"children": [],
+		"order": 70
+	},
+	"3047": {
+		"name": "writing_instruments",
+		"id": 3047,
+		"parent": 2985,
+		"children": [
+			3048,
+			3049,
+			3050,
+			3051
+		],
+		"order": 30
+	},
+	"3048": {
+		"name": "pens",
+		"id": 3048,
+		"parent": 3047,
+		"children": [],
+		"order": 10
+	},
+	"3049": {
+		"name": "pencils",
+		"id": 3049,
+		"parent": 3047,
+		"children": [],
+		"order": 20
+	},
+	"3050": {
+		"name": "felt-tip_pens",
+		"id": 3050,
+		"parent": 3047,
+		"children": [],
+		"order": 30
+	},
+	"3051": {
+		"name": "markers",
+		"id": 3051,
+		"parent": 3047,
+		"children": [],
+		"order": 40
+	},
+	"3052": {
+		"name": "drawing_instruments",
+		"id": 3052,
+		"parent": 2985,
+		"children": [
+			3053,
+			3054,
+			3055,
+			3056,
+			3057,
+			3058
+		],
+		"order": 40
+	},
+	"3053": {
+		"name": "geometry_sets",
+		"id": 3053,
+		"parent": 3052,
+		"children": [],
+		"order": 10
+	},
+	"3054": {
+		"name": "drawing_tool_sets",
+		"id": 3054,
+		"parent": 3052,
+		"children": [],
+		"order": 20
+	},
+	"3055": {
+		"name": "rulers",
+		"id": 3055,
+		"parent": 3052,
+		"children": [],
+		"order": 30
+	},
+	"3056": {
+		"name": "protractors",
+		"id": 3056,
+		"parent": 3052,
+		"children": [],
+		"order": 40
+	},
+	"3057": {
+		"name": "set_squares",
+		"id": 3057,
+		"parent": 3052,
+		"children": [],
+		"order": 50
+	},
+	"3058": {
+		"name": "compasses",
+		"id": 3058,
+		"parent": 3052,
+		"children": [],
+		"order": 60
+	},
+	"3059": {
+		"name": "globes_and_planetariums",
+		"id": 3059,
+		"parent": 2985,
+		"children": [],
+		"order": 50
+	},
+	"3060": {
+		"name": "educational_materials_and_aids",
+		"id": 3060,
+		"parent": 2985,
+		"children": [],
+		"order": 60
+	},
+	"3061": {
+		"name": "counting_materials",
+		"id": 3061,
+		"parent": 2985,
+		"children": [],
+		"order": 70
+	},
+	"3062": {
+		"name": "school_art_supplies",
+		"id": 3062,
+		"parent": 2985,
+		"children": [
+			3063,
+			3064,
+			3065,
+			3066,
+			3067,
+			3068,
+			3069,
+			3070,
+			3071,
+			3072,
+			3073,
+			3074
+		],
+		"order": 80
+	},
+	"3063": {
+		"name": "chalk_and_pastels",
+		"id": 3063,
+		"parent": 3062,
+		"children": [],
+		"order": 10
+	},
+	"3064": {
+		"name": "watercolors",
+		"id": 3064,
+		"parent": 3062,
+		"children": [],
+		"order": 20
+	},
+	"3065": {
+		"name": "gouache_paints",
+		"id": 3065,
+		"parent": 3062,
+		"children": [],
+		"order": 30
+	},
+	"3066": {
+		"name": "brushes",
+		"id": 3066,
+		"parent": 3062,
+		"children": [],
+		"order": 40
+	},
+	"3067": {
+		"name": "drawing_albums",
+		"id": 3067,
+		"parent": 3062,
+		"children": [],
+		"order": 50
+	},
+	"3068": {
+		"name": "drawing_sets",
+		"id": 3068,
+		"parent": 3062,
+		"children": [],
+		"order": 60
+	},
+	"3069": {
+		"name": "cardstock",
+		"id": 3069,
+		"parent": 3062,
+		"children": [],
+		"order": 70
+	},
+	"3070": {
+		"name": "colored_paper",
+		"id": 3070,
+		"parent": 3062,
+		"children": [],
+		"order": 80
+	},
+	"3071": {
+		"name": "plasticine",
+		"id": 3071,
+		"parent": 3062,
+		"children": [],
+		"order": 90
+	},
+	"3072": {
+		"name": "modeling_clay_sets",
+		"id": 3072,
+		"parent": 3062,
+		"children": [],
+		"order": 100
+	},
+	"3073": {
+		"name": "polymer_clay",
+		"id": 3073,
+		"parent": 3062,
+		"children": [],
+		"order": 110
+	},
+	"3074": {
+		"name": "kinetic_sand",
+		"id": 3074,
+		"parent": 3062,
+		"children": [],
+		"order": 120
+	},
+	"3075": {
+		"name": "notebooks_notepads_and_diaries",
+		"id": 3075,
+		"parent": 2985,
+		"children": [
+			3076,
+			3077,
+			3078,
+			3079,
+			3080,
+			3081
+		],
+		"order": 90
+	},
+	"3076": {
+		"name": "class_schedules",
+		"id": 3076,
+		"parent": 3075,
+		"children": [],
+		"order": 10
+	},
+	"3077": {
+		"name": "school_notebooks",
+		"id": 3077,
+		"parent": 3075,
+		"children": [],
+		"order": 20
+	},
+	"3078": {
+		"name": "notepads",
+		"id": 3078,
+		"parent": 3075,
+		"children": [],
+		"order": 30
+	},
+	"3079": {
+		"name": "diaries",
+		"id": 3079,
+		"parent": 3075,
+		"children": [],
+		"order": 40
+	},
+	"3080": {
+		"name": "personal_diaries_and_journals",
+		"id": 3080,
+		"parent": 3075,
+		"children": [],
+		"order": 50
+	},
+	"3081": {
+		"name": "covers",
+		"id": 3081,
+		"parent": 3075,
+		"children": [],
+		"order": 60
+	},
+	"3082": {
+		"name": "toys_and_games",
+		"id": 3082,
+		"parent": 2984,
+		"children": [
+			3083,
+			3084,
+			3085,
+			3095,
+			3112,
+			3113,
+			3120,
+			3121,
+			3122,
+			3128,
+			3133,
+			3134,
+			3135,
+			220,
+			3143,
+			3144,
+			3145
+		],
+		"order": 20
+	},
+	"3083": {
+		"name": "soft_toys",
+		"id": 3083,
+		"parent": 3082,
+		"children": [],
+		"order": 10
+	},
+	"3084": {
+		"name": "toy_weapons",
+		"id": 3084,
+		"parent": 3082,
+		"children": [],
+		"order": 20
+	},
+	"3085": {
+		"name": "construction_sets",
+		"id": 3085,
+		"parent": 3082,
+		"children": [
+			3086,
+			3087,
+			3088,
+			3089,
+			3090,
+			3091,
+			3092,
+			3093,
+			3094
+		],
+		"order": 30
+	},
+	"3086": {
+		"name": "plastic_construction_sets",
+		"id": 3086,
+		"parent": 3085,
+		"children": [],
+		"order": 10
+	},
+	"3087": {
+		"name": "magnetic_construction_sets",
+		"id": 3087,
+		"parent": 3085,
+		"children": [],
+		"order": 20
+	},
+	"3088": {
+		"name": "electronic_construction_sets",
+		"id": 3088,
+		"parent": 3085,
+		"children": [],
+		"order": 30
+	},
+	"3089": {
+		"name": "wooden_construction_sets",
+		"id": 3089,
+		"parent": 3085,
+		"children": [],
+		"order": 40
+	},
+	"3090": {
+		"name": "metal_construction_sets",
+		"id": 3090,
+		"parent": 3085,
+		"children": [],
+		"order": 50
+	},
+	"3091": {
+		"name": "soft_construction_sets",
+		"id": 3091,
+		"parent": 3085,
+		"children": [],
+		"order": 60
+	},
+	"3092": {
+		"name": "paper_construction_sets",
+		"id": 3092,
+		"parent": 3085,
+		"children": [],
+		"order": 70
+	},
+	"3093": {
+		"name": "brick_construction_sets",
+		"id": 3093,
+		"parent": 3085,
+		"children": [],
+		"order": 80
+	},
+	"3094": {
+		"name": "velcro_construction_sets",
+		"id": 3094,
+		"parent": 3085,
+		"children": [],
+		"order": 90
+	},
+	"3095": {
+		"name": "toys_for_toddlers",
+		"id": 3095,
+		"parent": 3082,
+		"children": [
+			3096,
+			3097,
+			3098,
+			3099,
+			3100,
+			3101,
+			3102,
+			3103,
+			3104,
+			3105,
+			3106,
+			3107,
+			3108,
+			3109,
+			3110,
+			3111
+		],
+		"order": 40
+	},
+	"3096": {
+		"name": "play_and_activity_mats",
+		"id": 3096,
+		"parent": 3095,
+		"children": [],
+		"order": 10
+	},
+	"3097": {
+		"name": "rattles_and_teethers",
+		"id": 3097,
+		"parent": 3095,
+		"children": [],
+		"order": 20
+	},
+	"3098": {
+		"name": "shape_sorters",
+		"id": 3098,
+		"parent": 3095,
+		"children": [],
+		"order": 30
+	},
+	"3099": {
+		"name": "busy_boards",
+		"id": 3099,
+		"parent": 3095,
+		"children": [],
+		"order": 40
+	},
+	"3100": {
+		"name": "musical_toys",
+		"id": 3100,
+		"parent": 3095,
+		"children": [],
+		"order": 50
+	},
+	"3101": {
+		"name": "crib_mobiles_and_arches",
+		"id": 3101,
+		"parent": 3095,
+		"children": [],
+		"order": 60
+	},
+	"3102": {
+		"name": "toddler_puzzles",
+		"id": 3102,
+		"parent": 3095,
+		"children": [],
+		"order": 70
+	},
+	"3103": {
+		"name": "blocks_and_balls",
+		"id": 3103,
+		"parent": 3095,
+		"children": [],
+		"order": 80
+	},
+	"3104": {
+		"name": "stacking_toys_and_balancers",
+		"id": 3104,
+		"parent": 3095,
+		"children": [],
+		"order": 90
+	},
+	"3105": {
+		"name": "roly-poly_toys_and_spinning_tops",
+		"id": 3105,
+		"parent": 3095,
+		"children": [],
+		"order": 100
+	},
+	"3106": {
+		"name": "push-along_toys",
+		"id": 3106,
+		"parent": 3095,
+		"children": [],
+		"order": 110
+	},
+	"3107": {
+		"name": "toy_books",
+		"id": 3107,
+		"parent": 3095,
+		"children": [],
+		"order": 120
+	},
+	"3108": {
+		"name": "comforters",
+		"id": 3108,
+		"parent": 3095,
+		"children": [],
+		"order": 130
+	},
+	"3109": {
+		"name": "mazes",
+		"id": 3109,
+		"parent": 3095,
+		"children": [],
+		"order": 140
+	},
+	"3110": {
+		"name": "lacing_toys",
+		"id": 3110,
+		"parent": 3095,
+		"children": [],
+		"order": 150
+	},
+	"3111": {
+		"name": "wind-up_toys",
+		"id": 3111,
+		"parent": 3095,
+		"children": [],
+		"order": 160
+	},
+	"3112": {
+		"name": "bath_toys",
+		"id": 3112,
+		"parent": 3082,
+		"children": [],
+		"order": 50
+	},
+	"3113": {
+		"name": "dolls_and_accessories",
+		"id": 3113,
+		"parent": 3082,
+		"children": [
+			237,
+			3115,
+			3116,
+			3117,
+			3118,
+			3119
+		],
+		"order": 60
+	},
+	"237": {
+		"name": "dolls",
+		"id": 237,
+		"parent": 3113,
+		"children": [],
+		"order": 10
+	},
+	"3115": {
+		"name": "baby_dolls",
+		"id": 3115,
+		"parent": 3113,
+		"children": [],
+		"order": 20
+	},
+	"3116": {
+		"name": "dollhouses_and_furniture",
+		"id": 3116,
+		"parent": 3113,
+		"children": [],
+		"order": 30
+	},
+	"3117": {
+		"name": "doll_clothes_and_accessories",
+		"id": 3117,
+		"parent": 3113,
+		"children": [],
+		"order": 40
+	},
+	"3118": {
+		"name": "doll_transport",
+		"id": 3118,
+		"parent": 3113,
+		"children": [],
+		"order": 50
+	},
+	"3119": {
+		"name": "puppet_theater",
+		"id": 3119,
+		"parent": 3113,
+		"children": [],
+		"order": 60
+	},
+	"3120": {
+		"name": "figures_and_accessories",
+		"id": 3120,
+		"parent": 3082,
+		"children": [],
+		"order": 70
+	},
+	"3121": {
+		"name": "role-play_toys",
+		"id": 3121,
+		"parent": 3082,
+		"children": [],
+		"order": 80
+	},
+	"3122": {
+		"name": "toy_vehicles",
+		"id": 3122,
+		"parent": 3082,
+		"children": [
+			3123,
+			3124,
+			3125,
+			3126,
+			3127
+		],
+		"order": 90
+	},
+	"3123": {
+		"name": "cars_and_motorcycles",
+		"id": 3123,
+		"parent": 3122,
+		"children": [],
+		"order": 10
+	},
+	"3124": {
+		"name": "tracks_racetracks_and_garages",
+		"id": 3124,
+		"parent": 3122,
+		"children": [],
+		"order": 20
+	},
+	"3125": {
+		"name": "railways",
+		"id": 3125,
+		"parent": 3122,
+		"children": [],
+		"order": 30
+	},
+	"3126": {
+		"name": "air_and_water_transport",
+		"id": 3126,
+		"parent": 3122,
+		"children": [],
+		"order": 40
+	},
+	"3127": {
+		"name": "car_accessories_and_spare_parts",
+		"id": 3127,
+		"parent": 3122,
+		"children": [],
+		"order": 50
+	},
+	"3128": {
+		"name": "remote-controlled_toys",
+		"id": 3128,
+		"parent": 3082,
+		"children": [
+			3129,
+			3130,
+			3131,
+			3132
+		],
+		"order": 100
+	},
+	"3129": {
+		"name": "rc_vehicles",
+		"id": 3129,
+		"parent": 3128,
+		"children": [],
+		"order": 10
+	},
+	"3130": {
+		"name": "robots_and_transformers",
+		"id": 3130,
+		"parent": 3128,
+		"children": [],
+		"order": 20
+	},
+	"3131": {
+		"name": "other_remote-controlled_toys",
+		"id": 3131,
+		"parent": 3128,
+		"children": [],
+		"order": 30
+	},
+	"3132": {
+		"name": "spare_parts",
+		"id": 3132,
+		"parent": 3128,
+		"children": [],
+		"order": 40
+	},
+	"3133": {
+		"name": "interactive_and_electronic_toys",
+		"id": 3133,
+		"parent": 3082,
+		"children": [],
+		"order": 110
+	},
+	"3134": {
+		"name": "robots_and_transformers",
+		"id": 3134,
+		"parent": 3082,
+		"children": [],
+		"order": 120
+	},
+	"3135": {
+		"name": "educational_games",
+		"id": 3135,
+		"parent": 3082,
+		"children": [
+			3136,
+			3137,
+			3138,
+			3139,
+			3140,
+			3141
+		],
+		"order": 130
+	},
+	"3136": {
+		"name": "learning_games",
+		"id": 3136,
+		"parent": 3135,
+		"children": [],
+		"order": 10
+	},
+	"3137": {
+		"name": "science_and_experiment_kits",
+		"id": 3137,
+		"parent": 3135,
+		"children": [],
+		"order": 20
+	},
+	"3138": {
+		"name": "mosaics",
+		"id": 3138,
+		"parent": 3135,
+		"children": [],
+		"order": 30
+	},
+	"3139": {
+		"name": "musical_instruments",
+		"id": 3139,
+		"parent": 3135,
+		"children": [],
+		"order": 40
+	},
+	"3140": {
+		"name": "kids’_easels",
+		"id": 3140,
+		"parent": 3135,
+		"children": [],
+		"order": 50
+	},
+	"3141": {
+		"name": "slide_projectors_and_filmstrips",
+		"id": 3141,
+		"parent": 3135,
+		"children": [],
+		"order": 60
+	},
+	"220": {
+		"name": "board_games",
+		"id": 220,
+		"parent": 3082,
+		"children": [],
+		"order": 140
+	},
+	"3143": {
+		"name": "stress-relief_toys",
+		"id": 3143,
+		"parent": 3082,
+		"children": [],
+		"order": 150
+	},
+	"3144": {
+		"name": "gift_sets",
+		"id": 3144,
+		"parent": 3082,
+		"children": [],
+		"order": 160
+	},
+	"3145": {
+		"name": "handmade_toys",
+		"id": 3145,
+		"parent": 3082,
+		"children": [],
+		"order": 170
+	},
+	"3146": {
+		"name": "sports_and_outdoor_play",
+		"id": 3146,
+		"parent": 2984,
+		"children": [
+			3147,
+			3152,
+			3159,
+			3163,
+			3166,
+			3167
+		],
+		"order": 30
+	},
+	"3147": {
+		"name": "children’s_transport",
+		"id": 3147,
+		"parent": 3146,
+		"children": [
+			3148,
+			3149,
+			3150,
+			3151
+		],
+		"order": 10
+	},
+	"3148": {
+		"name": "electric_ride-ons",
+		"id": 3148,
+		"parent": 3147,
+		"children": [],
+		"order": 10
+	},
+	"3149": {
+		"name": "ride-on_bikes",
+		"id": 3149,
+		"parent": 3147,
+		"children": [],
+		"order": 20
+	},
+	"3150": {
+		"name": "balance_bikes",
+		"id": 3150,
+		"parent": 3147,
+		"children": [],
+		"order": 30
+	},
+	"3151": {
+		"name": "accessories",
+		"id": 3151,
+		"parent": 3147,
+		"children": [],
+		"order": 40
+	},
+	"3152": {
+		"name": "outdoor_games",
+		"id": 3152,
+		"parent": 3146,
+		"children": [
+			3153,
+			3154,
+			3155,
+			3156,
+			3157,
+			3158
+		],
+		"order": 20
+	},
+	"3153": {
+		"name": "toys",
+		"id": 3153,
+		"parent": 3152,
+		"children": [],
+		"order": 10
+	},
+	"3154": {
+		"name": "balls",
+		"id": 3154,
+		"parent": 3152,
+		"children": [],
+		"order": 20
+	},
+	"3155": {
+		"name": "sandboxes",
+		"id": 3155,
+		"parent": 3152,
+		"children": [],
+		"order": 30
+	},
+	"3156": {
+		"name": "sandbox_toys",
+		"id": 3156,
+		"parent": 3152,
+		"children": [],
+		"order": 40
+	},
+	"3157": {
+		"name": "trampolines",
+		"id": 3157,
+		"parent": 3152,
+		"children": [],
+		"order": 50
+	},
+	"3158": {
+		"name": "dry_pools_and_balls",
+		"id": 3158,
+		"parent": 3152,
+		"children": [],
+		"order": 60
+	},
+	"3159": {
+		"name": "playgrounds_and_sports_complexes",
+		"id": 3159,
+		"parent": 3146,
+		"children": [
+			3160,
+			3161,
+			3162
+		],
+		"order": 30
+	},
+	"3160": {
+		"name": "play_complexes_and_playgrounds",
+		"id": 3160,
+		"parent": 3159,
+		"children": [],
+		"order": 10
+	},
+	"3161": {
+		"name": "swings",
+		"id": 3161,
+		"parent": 3159,
+		"children": [],
+		"order": 20
+	},
+	"3162": {
+		"name": "sports_complexes",
+		"id": 3162,
+		"parent": 3159,
+		"children": [],
+		"order": 30
+	},
+	"3163": {
+		"name": "swimming_and_water_play",
+		"id": 3163,
+		"parent": 3146,
+		"children": [
+			3164,
+			3165
+		],
+		"order": 40
+	},
+	"3164": {
+		"name": "kids’_pools",
+		"id": 3164,
+		"parent": 3163,
+		"children": [],
+		"order": 10
+	},
+	"3165": {
+		"name": "inflatable_toys",
+		"id": 3165,
+		"parent": 3163,
+		"children": [],
+		"order": 20
+	},
+	"3166": {
+		"name": "sports_protection_gear",
+		"id": 3166,
+		"parent": 3146,
+		"children": [],
+		"order": 50
+	},
+	"3167": {
+		"name": "winter_goods",
+		"id": 3167,
+		"parent": 3146,
+		"children": [
+			3168,
+			3169
+		],
+		"order": 60
+	},
+	"3168": {
+		"name": "snow_toys",
+		"id": 3168,
+		"parent": 3167,
+		"children": [],
+		"order": 10
+	},
+	"3169": {
+		"name": "accessories",
+		"id": 3169,
+		"parent": 3167,
+		"children": [],
+		"order": 20
+	},
+	"3170": {
+		"name": "diapers_and_hygiene",
+		"id": 3170,
+		"parent": 2984,
+		"children": [
+			3171,
+			3176,
+			3177,
+			3178,
+			3184,
+			3192,
+			3195
+		],
+		"order": 40
+	},
+	"3171": {
+		"name": "diapers_and_training_pants",
+		"id": 3171,
+		"parent": 3170,
+		"children": [
+			3172,
+			3173,
+			3174,
+			3175
+		],
+		"order": 10
+	},
+	"3172": {
+		"name": "pull-up_diapers",
+		"id": 3172,
+		"parent": 3171,
+		"children": [],
+		"order": 10
+	},
+	"3173": {
+		"name": "diapers",
+		"id": 3173,
+		"parent": 3171,
+		"children": [],
+		"order": 20
+	},
+	"3174": {
+		"name": "reusable_diapers",
+		"id": 3174,
+		"parent": 3171,
+		"children": [],
+		"order": 30
+	},
+	"3175": {
+		"name": "diaper_storage_and_disposal",
+		"id": 3175,
+		"parent": 3171,
+		"children": [],
+		"order": 40
+	},
+	"3176": {
+		"name": "changing_pads_and_waterproof_sheets",
+		"id": 3176,
+		"parent": 3170,
+		"children": [],
+		"order": 20
+	},
+	"3177": {
+		"name": "potties_and_kids’_toilet_seats",
+		"id": 3177,
+		"parent": 3170,
+		"children": [],
+		"order": 30
+	},
+	"3178": {
+		"name": "baby_cosmetics",
+		"id": 3178,
+		"parent": 3170,
+		"children": [
+			3179,
+			3180,
+			3181,
+			3182,
+			3183
+		],
+		"order": 40
+	},
+	"3179": {
+		"name": "creams_and_oils",
+		"id": 3179,
+		"parent": 3178,
+		"children": [],
+		"order": 10
+	},
+	"3180": {
+		"name": "bath_products",
+		"id": 3180,
+		"parent": 3178,
+		"children": [],
+		"order": 20
+	},
+	"3181": {
+		"name": "soap",
+		"id": 3181,
+		"parent": 3178,
+		"children": [],
+		"order": 30
+	},
+	"3182": {
+		"name": "baby_powder_and_diaper_creams",
+		"id": 3182,
+		"parent": 3178,
+		"children": [],
+		"order": 40
+	},
+	"3183": {
+		"name": "hair_care_for_babies",
+		"id": 3183,
+		"parent": 3178,
+		"children": [],
+		"order": 50
+	},
+	"3184": {
+		"name": "health_and_baby_care",
+		"id": 3184,
+		"parent": 3170,
+		"children": [
+			3185,
+			3186,
+			3187,
+			3188,
+			3189,
+			3190,
+			3191
+		],
+		"order": 50
+	},
+	"3185": {
+		"name": "wet_wipes",
+		"id": 3185,
+		"parent": 3184,
+		"children": [],
+		"order": 10
+	},
+	"3186": {
+		"name": "baby_health_and_hygiene",
+		"id": 3186,
+		"parent": 3184,
+		"children": [],
+		"order": 20
+	},
+	"3187": {
+		"name": "toothbrushes",
+		"id": 3187,
+		"parent": 3184,
+		"children": [],
+		"order": 30
+	},
+	"3188": {
+		"name": "scissors",
+		"id": 3188,
+		"parent": 3184,
+		"children": [],
+		"order": 40
+	},
+	"3189": {
+		"name": "scales",
+		"id": 3189,
+		"parent": 3184,
+		"children": [],
+		"order": 50
+	},
+	"3190": {
+		"name": "combs_and_brushes",
+		"id": 3190,
+		"parent": 3184,
+		"children": [],
+		"order": 60
+	},
+	"3191": {
+		"name": "cotton_swabs_and_pads",
+		"id": 3191,
+		"parent": 3184,
+		"children": [],
+		"order": 70
+	},
+	"3192": {
+		"name": "baby_bathing",
+		"id": 3192,
+		"parent": 3170,
+		"children": [
+			3193,
+			3194
+		],
+		"order": 60
+	},
+	"3193": {
+		"name": "baby_baths",
+		"id": 3193,
+		"parent": 3192,
+		"children": [],
+		"order": 10
+	},
+	"3194": {
+		"name": "bath_accessories",
+		"id": 3194,
+		"parent": 3192,
+		"children": [],
+		"order": 20
+	},
+	"3195": {
+		"name": "household_cleaning_products",
+		"id": 3195,
+		"parent": 3170,
+		"children": [],
+		"order": 70
+	},
+	"3196": {
+		"name": "children’s_room",
+		"id": 3196,
+		"parent": 2984,
+		"children": [
+			3197,
+			3211,
+			3219,
+			3225,
+			3230
+		],
+		"order": 50
+	},
+	"3197": {
+		"name": "furniture",
+		"id": 3197,
+		"parent": 3196,
+		"children": [
+			3198,
+			3199,
+			3200,
+			3201,
+			3202,
+			3203,
+			3204,
+			3205,
+			3206,
+			3207,
+			3208,
+			3209,
+			3210
+		],
+		"order": 10
+	},
+	"3198": {
+		"name": "cradles",
+		"id": 3198,
+		"parent": 3197,
+		"children": [],
+		"order": 10
+	},
+	"3199": {
+		"name": "electric_swings_and_bouncers",
+		"id": 3199,
+		"parent": 3197,
+		"children": [],
+		"order": 20
+	},
+	"3200": {
+		"name": "changing_tables_and_dressers",
+		"id": 3200,
+		"parent": 3197,
+		"children": [],
+		"order": 30
+	},
+	"3201": {
+		"name": "high_chairs",
+		"id": 3201,
+		"parent": 3197,
+		"children": [],
+		"order": 40
+	},
+	"3202": {
+		"name": "beds",
+		"id": 3202,
+		"parent": 3197,
+		"children": [],
+		"order": 50
+	},
+	"3203": {
+		"name": "wardrobes_dressers_nightstands",
+		"id": 3203,
+		"parent": 3197,
+		"children": [],
+		"order": 60
+	},
+	"3204": {
+		"name": "desks_and_tables",
+		"id": 3204,
+		"parent": 3197,
+		"children": [],
+		"order": 70
+	},
+	"3205": {
+		"name": "chairs_and_stools",
+		"id": 3205,
+		"parent": 3197,
+		"children": [],
+		"order": 80
+	},
+	"3206": {
+		"name": "sofas",
+		"id": 3206,
+		"parent": 3197,
+		"children": [],
+		"order": 90
+	},
+	"3207": {
+		"name": "armchairs",
+		"id": 3207,
+		"parent": 3197,
+		"children": [],
+		"order": 100
+	},
+	"3208": {
+		"name": "kids’_furniture_sets",
+		"id": 3208,
+		"parent": 3197,
+		"children": [],
+		"order": 110
+	},
+	"3209": {
+		"name": "shelves",
+		"id": 3209,
+		"parent": 3197,
+		"children": [],
+		"order": 120
+	},
+	"3210": {
+		"name": "storage_solutions_for_kids’_rooms",
+		"id": 3210,
+		"parent": 3197,
+		"children": [],
+		"order": 130
+	},
+	"3211": {
+		"name": "bedding",
+		"id": 3211,
+		"parent": 3196,
+		"children": [
+			3212,
+			3213,
+			3214,
+			3215,
+			3216,
+			3217,
+			3218
+		],
+		"order": 20
+	},
+	"3212": {
+		"name": "mattresses",
+		"id": 3212,
+		"parent": 3211,
+		"children": [],
+		"order": 10
+	},
+	"3213": {
+		"name": "blankets_throws_bedspreads",
+		"id": 3213,
+		"parent": 3211,
+		"children": [],
+		"order": 20
+	},
+	"3214": {
+		"name": "crib_bumpers_and_rail_covers",
+		"id": 3214,
+		"parent": 3211,
+		"children": [],
+		"order": 30
+	},
+	"3215": {
+		"name": "baby_nests_and_positioners",
+		"id": 3215,
+		"parent": 3211,
+		"children": [],
+		"order": 40
+	},
+	"3216": {
+		"name": "pillows",
+		"id": 3216,
+		"parent": 3211,
+		"children": [],
+		"order": 50
+	},
+	"3217": {
+		"name": "canopies_and_mosquito_nets",
+		"id": 3217,
+		"parent": 3211,
+		"children": [],
+		"order": 60
+	},
+	"3218": {
+		"name": "bedding_sets",
+		"id": 3218,
+		"parent": 3211,
+		"children": [],
+		"order": 70
+	},
+	"3219": {
+		"name": "indoor_play",
+		"id": 3219,
+		"parent": 3196,
+		"children": [
+			3220,
+			3221,
+			3222,
+			3223,
+			3224
+		],
+		"order": 30
+	},
+	"3220": {
+		"name": "playpens",
+		"id": 3220,
+		"parent": 3219,
+		"children": [],
+		"order": 10
+	},
+	"3221": {
+		"name": "play_tents_and_playhouses",
+		"id": 3221,
+		"parent": 3219,
+		"children": [],
+		"order": 20
+	},
+	"3222": {
+		"name": "swings",
+		"id": 3222,
+		"parent": 3219,
+		"children": [],
+		"order": 30
+	},
+	"3223": {
+		"name": "rockers_and_jumpers",
+		"id": 3223,
+		"parent": 3219,
+		"children": [],
+		"order": 40
+	},
+	"3224": {
+		"name": "walkers_and_bouncers",
+		"id": 3224,
+		"parent": 3219,
+		"children": [],
+		"order": 50
+	},
+	"3225": {
+		"name": "baby_safety",
+		"id": 3225,
+		"parent": 3196,
+		"children": [
+			3226,
+			3227,
+			3228,
+			3229
+		],
+		"order": 40
+	},
+	"3226": {
+		"name": "baby_monitors_and_video_monitors",
+		"id": 3226,
+		"parent": 3225,
+		"children": [],
+		"order": 10
+	},
+	"3227": {
+		"name": "safety_locks_and_devices",
+		"id": 3227,
+		"parent": 3225,
+		"children": [],
+		"order": 20
+	},
+	"3228": {
+		"name": "safety_gates_and_barriers",
+		"id": 3228,
+		"parent": 3225,
+		"children": [],
+		"order": 30
+	},
+	"3229": {
+		"name": "baby_safety_accessories",
+		"id": 3229,
+		"parent": 3225,
+		"children": [],
+		"order": 40
+	},
+	"3230": {
+		"name": "decor",
+		"id": 3230,
+		"parent": 3196,
+		"children": [],
+		"order": 50
+	},
+	"3231": {
+		"name": "strollers_and_car_seats",
+		"id": 3231,
+		"parent": 2984,
+		"children": [
+			3232,
+			3242,
+			3253,
+			3254,
+			3255
+		],
+		"order": 60
+	},
+	"3232": {
+		"name": "strollers",
+		"id": 3232,
+		"parent": 3231,
+		"children": [
+			3233,
+			3234,
+			3235,
+			3236,
+			3237,
+			3238,
+			3239,
+			3240,
+			3241
+		],
+		"order": 10
+	},
+	"3233": {
+		"name": "lightweight_strollers",
+		"id": 3233,
+		"parent": 3232,
+		"children": [],
+		"order": 10
+	},
+	"3234": {
+		"name": "universal_strollers",
+		"id": 3234,
+		"parent": 3232,
+		"children": [],
+		"order": 20
+	},
+	"3235": {
+		"name": "transforming_strollers",
+		"id": 3235,
+		"parent": 3232,
+		"children": [],
+		"order": 30
+	},
+	"3236": {
+		"name": "2-in-1_strollers",
+		"id": 3236,
+		"parent": 3232,
+		"children": [],
+		"order": 40
+	},
+	"3237": {
+		"name": "3-in-1_strollers",
+		"id": 3237,
+		"parent": 3232,
+		"children": [],
+		"order": 50
+	},
+	"3238": {
+		"name": "carrycot_strollers",
+		"id": 3238,
+		"parent": 3232,
+		"children": [],
+		"order": 60
+	},
+	"3239": {
+		"name": "umbrella_strollers",
+		"id": 3239,
+		"parent": 3232,
+		"children": [],
+		"order": 70
+	},
+	"3240": {
+		"name": "sled-strollers",
+		"id": 3240,
+		"parent": 3232,
+		"children": [],
+		"order": 80
+	},
+	"3241": {
+		"name": "strollers_for_twins_and_children_of_the_same_age",
+		"id": 3241,
+		"parent": 3232,
+		"children": [],
+		"order": 90
+	},
+	"3242": {
+		"name": "car_seats",
+		"id": 3242,
+		"parent": 3231,
+		"children": [
+			3243,
+			3244,
+			3245,
+			3246,
+			3247,
+			3248,
+			3249,
+			3250,
+			3251
+		],
+		"order": 20
+	},
+	"3243": {
+		"name": "group_0_0–13_kg",
+		"id": 3243,
+		"parent": 3242,
+		"children": [],
+		"order": 10
+	},
+	"3244": {
+		"name": "group_0-1_0–18_kg",
+		"id": 3244,
+		"parent": 3242,
+		"children": [],
+		"order": 20
+	},
+	"3245": {
+		"name": "group_0-1-2_0–25_kg",
+		"id": 3245,
+		"parent": 3242,
+		"children": [],
+		"order": 30
+	},
+	"3246": {
+		"name": "group_0-1-2-3_0–36_kg",
+		"id": 3246,
+		"parent": 3242,
+		"children": [],
+		"order": 40
+	},
+	"3247": {
+		"name": "group_1_9–18_kg",
+		"id": 3247,
+		"parent": 3242,
+		"children": [],
+		"order": 50
+	},
+	"3248": {
+		"name": "group_1-2_9–25_kg",
+		"id": 3248,
+		"parent": 3242,
+		"children": [],
+		"order": 60
+	},
+	"3249": {
+		"name": "group_1-2-3_9–36_kg",
+		"id": 3249,
+		"parent": 3242,
+		"children": [],
+		"order": 70
+	},
+	"3250": {
+		"name": "group_2-3_15–36_kg",
+		"id": 3250,
+		"parent": 3242,
+		"children": [],
+		"order": 80
+	},
+	"3251": {
+		"name": "boosters",
+		"id": 3251,
+		"parent": 3242,
+		"children": [],
+		"order": 90
+	},
+	"3253": {
+		"name": "newborn_envelopes",
+		"id": 3253,
+		"parent": 3231,
+		"children": [],
+		"order": 30
+	},
+	"3254": {
+		"name": "stroller_accessories",
+		"id": 3254,
+		"parent": 3231,
+		"children": [],
+		"order": 40
+	},
+	"3255": {
+		"name": "car_seat_accessories",
+		"id": 3255,
+		"parent": 3231,
+		"children": [],
+		"order": 50
+	},
+	"3256": {
+		"name": "baby_food",
+		"id": 3256,
+		"parent": 2984,
+		"children": [
+			3257,
+			3258,
+			3259,
+			3262,
+			3263,
+			3264,
+			3265
+		],
+		"order": 70
+	},
+	"3257": {
+		"name": "milk_formula",
+		"id": 3257,
+		"parent": 3256,
+		"children": [],
+		"order": 10
+	},
+	"3258": {
+		"name": "purees",
+		"id": 3258,
+		"parent": 3256,
+		"children": [],
+		"order": 20
+	},
+	"3259": {
+		"name": "cereals",
+		"id": 3259,
+		"parent": 3256,
+		"children": [
+			3260,
+			3261
+		],
+		"order": 30
+	},
+	"3260": {
+		"name": "dry_cereals",
+		"id": 3260,
+		"parent": 3259,
+		"children": [],
+		"order": 10
+	},
+	"3261": {
+		"name": "liquid_cereals",
+		"id": 3261,
+		"parent": 3259,
+		"children": [],
+		"order": 20
+	},
+	"3262": {
+		"name": "desserts",
+		"id": 3262,
+		"parent": 3256,
+		"children": [],
+		"order": 40
+	},
+	"3263": {
+		"name": "dairy_products",
+		"id": 3263,
+		"parent": 3256,
+		"children": [],
+		"order": 50
+	},
+	"3264": {
+		"name": "water_and_drinks",
+		"id": 3264,
+		"parent": 3256,
+		"children": [],
+		"order": 60
+	},
+	"3265": {
+		"name": "ready-made_meals",
+		"id": 3265,
+		"parent": 3256,
+		"children": [],
+		"order": 70
+	},
+	"3266": {
+		"name": "feeding_products",
+		"id": 3266,
+		"parent": 2984,
+		"children": [
+			3267,
+			3268,
+			3269,
+			3270,
+			3271,
+			3272,
+			3273,
+			3274,
+			3275,
+			3278,
+			3279,
+			3280,
+			3281,
+			3282,
+			3283
+		],
+		"order": 80
+	},
+	"3267": {
+		"name": "pacifiers_and_accessories",
+		"id": 3267,
+		"parent": 3266,
+		"children": [],
+		"order": 10
+	},
+	"3268": {
+		"name": "bottles",
+		"id": 3268,
+		"parent": 3266,
+		"children": [],
+		"order": 20
+	},
+	"3269": {
+		"name": "bottle_nipples",
+		"id": 3269,
+		"parent": 3266,
+		"children": [],
+		"order": 30
+	},
+	"3270": {
+		"name": "bottle_warmers",
+		"id": 3270,
+		"parent": 3266,
+		"children": [],
+		"order": 40
+	},
+	"3271": {
+		"name": "sterilizers",
+		"id": 3271,
+		"parent": 3266,
+		"children": [],
+		"order": 50
+	},
+	"3272": {
+		"name": "bottle_accessories",
+		"id": 3272,
+		"parent": 3266,
+		"children": [],
+		"order": 60
+	},
+	"3273": {
+		"name": "sippy_cups",
+		"id": 3273,
+		"parent": 3266,
+		"children": [],
+		"order": 70
+	},
+	"3274": {
+		"name": "nibblers_and_teethers",
+		"id": 3274,
+		"parent": 3266,
+		"children": [],
+		"order": 80
+	},
+	"3275": {
+		"name": "breastfeeding_products",
+		"id": 3275,
+		"parent": 3266,
+		"children": [
+			3276,
+			3277
+		],
+		"order": 90
+	},
+	"3276": {
+		"name": "breast_pumps",
+		"id": 3276,
+		"parent": 3275,
+		"children": [],
+		"order": 10
+	},
+	"3277": {
+		"name": "accessories",
+		"id": 3277,
+		"parent": 3275,
+		"children": [],
+		"order": 20
+	},
+	"3278": {
+		"name": "feeding_tableware",
+		"id": 3278,
+		"parent": 3266,
+		"children": [],
+		"order": 100
+	},
+	"3279": {
+		"name": "blender-steamer_combos",
+		"id": 3279,
+		"parent": 3266,
+		"children": [],
+		"order": 110
+	},
+	"3280": {
+		"name": "tableware_for_children_3+",
+		"id": 3280,
+		"parent": 3266,
+		"children": [],
+		"order": 120
+	},
+	"3281": {
+		"name": "feeding_utensils",
+		"id": 3281,
+		"parent": 3266,
+		"children": [],
+		"order": 130
+	},
+	"3282": {
+		"name": "bibs_and_burp_cloths",
+		"id": 3282,
+		"parent": 3266,
+		"children": [],
+		"order": 140
+	},
+	"3283": {
+		"name": "high_chairs",
+		"id": 3283,
+		"parent": 3266,
+		"children": [],
+		"order": 150
+	},
+	"3284": {
+		"name": "products_for_moms",
+		"id": 3284,
+		"parent": 2984,
+		"children": [
+			3285,
+			3289,
+			3290,
+			3291,
+			3292,
+			3293,
+			3294,
+			3295
+		],
+		"order": 90
+	},
+	"3285": {
+		"name": "baby_carriers",
+		"id": 3285,
+		"parent": 3284,
+		"children": [
+			3286,
+			3287,
+			3288
+		],
+		"order": 10
+	},
+	"3286": {
+		"name": "baby_carrier_backpacks_and_slings",
+		"id": 3286,
+		"parent": 3285,
+		"children": [],
+		"order": 10
+	},
+	"3287": {
+		"name": "slings",
+		"id": 3287,
+		"parent": 3285,
+		"children": [],
+		"order": 20
+	},
+	"3288": {
+		"name": "carrycots",
+		"id": 3288,
+		"parent": 3285,
+		"children": [],
+		"order": 30
+	},
+	"3289": {
+		"name": "bags_and_backpacks",
+		"id": 3289,
+		"parent": 3284,
+		"children": [],
+		"order": 20
+	},
+	"3290": {
+		"name": "maternity_hospital_sets",
+		"id": 3290,
+		"parent": 3284,
+		"children": [],
+		"order": 30
+	},
+	"3291": {
+		"name": "maternity_pillows",
+		"id": 3291,
+		"parent": 3284,
+		"children": [],
+		"order": 40
+	},
+	"3292": {
+		"name": "maternity_support_belts",
+		"id": 3292,
+		"parent": 3284,
+		"children": [],
+		"order": 50
+	},
+	"3293": {
+		"name": "maternity_and_postpartum_underwear",
+		"id": 3293,
+		"parent": 3284,
+		"children": [],
+		"order": 60
+	},
+	"3294": {
+		"name": "cosmetics_and_personal_care",
+		"id": 3294,
+		"parent": 3284,
+		"children": [],
+		"order": 70
+	},
+	"3295": {
+		"name": "nutrition_for_moms",
+		"id": 3295,
+		"parent": 3284,
+		"children": [],
+		"order": 80
 	},
 	"3252": {
 		"name": "travel",
