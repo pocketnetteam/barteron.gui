@@ -2720,7 +2720,7 @@
 			1028,
 			1029
 		],
-		"order": 324
+		"order": 328
 	},
 	"889": {
 		"name": "fitness_and_gym_equipment",
@@ -3787,7 +3787,7 @@
 			1008,
 			1009
 		],
-		"order": 328
+		"order": 329
 	},
 	"1001": {
 		"name": "bikes",
@@ -6601,8 +6601,235 @@
 		"icon": "fa-building",
 		"id": 10542,
 		"parent": null,
+		"children": [
+			10543,
+			10560,
+			10563
+		],
+		"order": 327
+	},
+	"10543": {
+		"name": "residential_real_estate",
+		"id": 10543,
+		"parent": 10542,
+		"children": [
+			10544,
+			10550
+		],
+		"order": 10
+	},
+	"10544": {
+		"name": "for_sale",
+		"id": 10544,
+		"parent": 10543,
+		"children": [
+			10545,
+			10548,
+			10549
+		],
+		"order": 10
+	},
+	"10545": {
+		"name": "apartments",
+		"id": 10545,
+		"parent": 10544,
+		"children": [
+			10546,
+			10547
+		],
+		"order": 10
+	},
+	"10546": {
+		"name": "new_builds",
+		"id": 10546,
+		"parent": 10545,
 		"children": [],
-		"order": 3100
+		"order": 10
+	},
+	"10547": {
+		"name": "resale",
+		"id": 10547,
+		"parent": 10545,
+		"children": [],
+		"order": 20
+	},
+	"10548": {
+		"name": "rooms",
+		"id": 10548,
+		"parent": 10544,
+		"children": [],
+		"order": 20
+	},
+	"10549": {
+		"name": "houses_country_houses_cottages",
+		"id": 10549,
+		"parent": 10544,
+		"children": [],
+		"order": 30
+	},
+	"10550": {
+		"name": "for_rent",
+		"id": 10550,
+		"parent": 10543,
+		"children": [
+			10551,
+			10555
+		],
+		"order": 20
+	},
+	"10551": {
+		"name": "long-term_rent",
+		"id": 10551,
+		"parent": 10550,
+		"children": [
+			10552,
+			10553,
+			10554
+		],
+		"order": 10
+	},
+	"10552": {
+		"name": "apartments",
+		"id": 10552,
+		"parent": 10551,
+		"children": [],
+		"order": 10
+	},
+	"10553": {
+		"name": "houses_dachas_cottages",
+		"id": 10553,
+		"parent": 10551,
+		"children": [],
+		"order": 20
+	},
+	"10554": {
+		"name": "rooms_and_bed_spaces",
+		"id": 10554,
+		"parent": 10551,
+		"children": [],
+		"order": 30
+	},
+	"10555": {
+		"name": "short-term_rent",
+		"id": 10555,
+		"parent": 10550,
+		"children": [
+			10556,
+			10557,
+			10558,
+			10559
+		],
+		"order": 20
+	},
+	"10556": {
+		"name": "apartments",
+		"id": 10556,
+		"parent": 10555,
+		"children": [],
+		"order": 10
+	},
+	"10557": {
+		"name": "houses_dachas_cottages",
+		"id": 10557,
+		"parent": 10555,
+		"children": [],
+		"order": 20
+	},
+	"10558": {
+		"name": "rooms_and_bed_spaces",
+		"id": 10558,
+		"parent": 10555,
+		"children": [],
+		"order": 30
+	},
+	"10559": {
+		"name": "hotels",
+		"id": 10559,
+		"parent": 10555,
+		"children": [],
+		"order": 40
+	},
+	"10560": {
+		"name": "commercial_real_estate",
+		"id": 10560,
+		"parent": 10542,
+		"children": [
+			10561,
+			10562
+		],
+		"order": 20
+	},
+	"10561": {
+		"name": "for_sale",
+		"id": 10561,
+		"parent": 10560,
+		"children": [],
+		"order": 10
+	},
+	"10562": {
+		"name": "for_rent",
+		"id": 10562,
+		"parent": 10560,
+		"children": [],
+		"order": 20
+	},
+	"10563": {
+		"name": "other_categories",
+		"id": 10563,
+		"parent": 10542,
+		"children": [
+			10564,
+			10567
+		],
+		"order": 30
+	},
+	"10564": {
+		"name": "land_plots",
+		"id": 10564,
+		"parent": 10563,
+		"children": [
+			10565,
+			10566
+		],
+		"order": 10
+	},
+	"10565": {
+		"name": "for_sale",
+		"id": 10565,
+		"parent": 10564,
+		"children": [],
+		"order": 10
+	},
+	"10566": {
+		"name": "for_rent",
+		"id": 10566,
+		"parent": 10564,
+		"children": [],
+		"order": 20
+	},
+	"10567": {
+		"name": "garages_and_parking_spaces",
+		"id": 10567,
+		"parent": 10563,
+		"children": [
+			10568,
+			10569
+		],
+		"order": 20
+	},
+	"10568": {
+		"name": "for_sale",
+		"id": 10568,
+		"parent": 10567,
+		"children": [],
+		"order": 10
+	},
+	"10569": {
+		"name": "for_rent",
+		"id": 10569,
+		"parent": 10567,
+		"children": [],
+		"order": 20
 	},
 	"11116": {
 		"name": "paper_money",
