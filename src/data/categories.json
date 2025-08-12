@@ -2319,8 +2319,449 @@
 		"name": "textiles_and_carpets",
 		"id": 3042,
 		"parent": 3000,
+		"children": [
+			3114,
+			3304,
+			3310,
+			3315,
+			3316,
+			3319,
+			3320,
+			3328,
+			3336,
+			3346,
+			3347,
+			3348
+		],
+		"order": 70
+	},
+	"3114": {
+		"name": "curtains_and_curtain_rods",
+		"id": 3114,
+		"parent": 3042,
+		"children": [
+			3142,
+			3296,
+			3297,
+			3298,
+			3299,
+			3300,
+			3301,
+			3302,
+			3303
+		],
+		"order": 10
+	},
+	"3142": {
+		"name": "curtains_and_drapes",
+		"id": 3142,
+		"parent": 3114,
+		"children": [],
+		"order": 10
+	},
+	"3296": {
+		"name": "tulle_and_sheers",
+		"id": 3296,
+		"parent": 3114,
+		"children": [],
+		"order": 20
+	},
+	"3297": {
+		"name": "roman_and_roller_blinds",
+		"id": 3297,
+		"parent": 3114,
+		"children": [],
+		"order": 30
+	},
+	"3298": {
+		"name": "curtain_rods",
+		"id": 3298,
+		"parent": 3114,
+		"children": [],
+		"order": 40
+	},
+	"3299": {
+		"name": "electric_curtain_rods",
+		"id": 3299,
+		"parent": 3114,
+		"children": [],
+		"order": 50
+	},
+	"3300": {
+		"name": "blinds_and_pleated_blinds",
+		"id": 3300,
+		"parent": 3114,
+		"children": [],
+		"order": 60
+	},
+	"3301": {
+		"name": "string_curtains",
+		"id": 3301,
+		"parent": 3114,
 		"children": [],
 		"order": 70
+	},
+	"3302": {
+		"name": "photo_curtains",
+		"id": 3302,
+		"parent": 3114,
+		"children": [],
+		"order": 80
+	},
+	"3303": {
+		"name": "accessories",
+		"id": 3303,
+		"parent": 3114,
+		"children": [],
+		"order": 90
+	},
+	"3304": {
+		"name": "bed_linen",
+		"id": 3304,
+		"parent": 3042,
+		"children": [
+			3305,
+			3306,
+			3307,
+			3308,
+			3309
+		],
+		"order": 20
+	},
+	"3305": {
+		"name": "bed_linen_sets",
+		"id": 3305,
+		"parent": 3304,
+		"children": [],
+		"order": 10
+	},
+	"3306": {
+		"name": "duvet_covers",
+		"id": 3306,
+		"parent": 3304,
+		"children": [],
+		"order": 20
+	},
+	"3307": {
+		"name": "bed_sheets",
+		"id": 3307,
+		"parent": 3304,
+		"children": [],
+		"order": 30
+	},
+	"3308": {
+		"name": "pillowcases",
+		"id": 3308,
+		"parent": 3304,
+		"children": [],
+		"order": 40
+	},
+	"3310": {
+		"name": "pillows",
+		"id": 3310,
+		"parent": 3042,
+		"children": [
+			3311,
+			3312,
+			3313,
+			3314
+		],
+		"order": 30
+	},
+	"3311": {
+		"name": "sleeping_pillows",
+		"id": 3311,
+		"parent": 3310,
+		"children": [],
+		"order": 10
+	},
+	"3312": {
+		"name": "anatomical_and_orthopedic_pillows",
+		"id": 3312,
+		"parent": 3310,
+		"children": [],
+		"order": 20
+	},
+	"3313": {
+		"name": "chair_cushions",
+		"id": 3313,
+		"parent": 3310,
+		"children": [],
+		"order": 30
+	},
+	"3314": {
+		"name": "decorative_cushions",
+		"id": 3314,
+		"parent": 3310,
+		"children": [],
+		"order": 40
+	},
+	"3315": {
+		"name": "blankets",
+		"id": 3315,
+		"parent": 3042,
+		"children": [],
+		"order": 40
+	},
+	"3316": {
+		"name": "plaids_and_bedspreads",
+		"id": 3316,
+		"parent": 3042,
+		"children": [
+			3317,
+			3318
+		],
+		"order": 50
+	},
+	"3317": {
+		"name": "plaids",
+		"id": 3317,
+		"parent": 3316,
+		"children": [],
+		"order": 10
+	},
+	"3318": {
+		"name": "bedspreads",
+		"id": 3318,
+		"parent": 3316,
+		"children": [],
+		"order": 20
+	},
+	"3319": {
+		"name": "heated_textiles",
+		"id": 3319,
+		"parent": 3042,
+		"children": [],
+		"order": 60
+	},
+	"3320": {
+		"name": "carpets_and_runners",
+		"id": 3320,
+		"parent": 3042,
+		"children": [
+			3321,
+			3322,
+			3323,
+			3324,
+			3325,
+			3326,
+			3327
+		],
+		"order": 70
+	},
+	"3321": {
+		"name": "carpets",
+		"id": 3321,
+		"parent": 3320,
+		"children": [],
+		"order": 10
+	},
+	"3322": {
+		"name": "doormats",
+		"id": 3322,
+		"parent": 3320,
+		"children": [],
+		"order": 20
+	},
+	"3323": {
+		"name": "bedside_rugs",
+		"id": 3323,
+		"parent": 3320,
+		"children": [],
+		"order": 30
+	},
+	"3324": {
+		"name": "kitchen_rugs",
+		"id": 3324,
+		"parent": 3320,
+		"children": [],
+		"order": 40
+	},
+	"3325": {
+		"name": "rugs",
+		"id": 3325,
+		"parent": 3320,
+		"children": [],
+		"order": 50
+	},
+	"3326": {
+		"name": "protective_and_non-slip_mats",
+		"id": 3326,
+		"parent": 3320,
+		"children": [],
+		"order": 60
+	},
+	"3327": {
+		"name": "hides",
+		"id": 3327,
+		"parent": 3320,
+		"children": [],
+		"order": 70
+	},
+	"3328": {
+		"name": "towels",
+		"id": 3328,
+		"parent": 3042,
+		"children": [
+			3329,
+			3330,
+			3331,
+			3332,
+			3333,
+			3334,
+			3335
+		],
+		"order": 80
+	},
+	"3329": {
+		"name": "towel_sets",
+		"id": 3329,
+		"parent": 3328,
+		"children": [],
+		"order": 10
+	},
+	"3330": {
+		"name": "bath_towels",
+		"id": 3330,
+		"parent": 3328,
+		"children": [],
+		"order": 20
+	},
+	"3331": {
+		"name": "hand_and_face_towels",
+		"id": 3331,
+		"parent": 3328,
+		"children": [],
+		"order": 30
+	},
+	"3332": {
+		"name": "hair_towels",
+		"id": 3332,
+		"parent": 3328,
+		"children": [],
+		"order": 40
+	},
+	"3333": {
+		"name": "sports_towels",
+		"id": 3333,
+		"parent": 3328,
+		"children": [],
+		"order": 50
+	},
+	"3334": {
+		"name": "beach_towels",
+		"id": 3334,
+		"parent": 3328,
+		"children": [],
+		"order": 60
+	},
+	"3335": {
+		"name": "gift_towels",
+		"id": 3335,
+		"parent": 3328,
+		"children": [],
+		"order": 70
+	},
+	"3336": {
+		"name": "kitchen_textiles",
+		"id": 3336,
+		"parent": 3042,
+		"children": [
+			3337,
+			3338,
+			3339,
+			3340,
+			3341,
+			3342,
+			3343,
+			3344,
+			3345
+		],
+		"order": 90
+	},
+	"3337": {
+		"name": "flexible_glass_and_silicone_tablecloths",
+		"id": 3337,
+		"parent": 3336,
+		"children": [],
+		"order": 10
+	},
+	"3338": {
+		"name": "tablecloths",
+		"id": 3338,
+		"parent": 3336,
+		"children": [],
+		"order": 20
+	},
+	"3339": {
+		"name": "oilcloths",
+		"id": 3339,
+		"parent": 3336,
+		"children": [],
+		"order": 30
+	},
+	"3340": {
+		"name": "kitchen_towels",
+		"id": 3340,
+		"parent": 3336,
+		"children": [],
+		"order": 40
+	},
+	"3341": {
+		"name": "napkins",
+		"id": 3341,
+		"parent": 3336,
+		"children": [],
+		"order": 50
+	},
+	"3342": {
+		"name": "potholders",
+		"id": 3342,
+		"parent": 3336,
+		"children": [],
+		"order": 60
+	},
+	"3343": {
+		"name": "teapot_warmers",
+		"id": 3343,
+		"parent": 3336,
+		"children": [],
+		"order": 70
+	},
+	"3344": {
+		"name": "kitchen_sets",
+		"id": 3344,
+		"parent": 3336,
+		"children": [],
+		"order": 80
+	},
+	"3345": {
+		"name": "kitchen_aprons",
+		"id": 3345,
+		"parent": 3336,
+		"children": [],
+		"order": 90
+	},
+	"3346": {
+		"name": "furniture_covers",
+		"id": 3346,
+		"parent": 3042,
+		"children": [],
+		"order": 100
+	},
+	"3347": {
+		"name": "mattress_pads_and_mattress_covers",
+		"id": 3347,
+		"parent": 3042,
+		"children": [],
+		"order": 110
+	},
+	"3348": {
+		"name": "fabrics",
+		"id": 3348,
+		"parent": 3042,
+		"children": [],
+		"order": 120
 	},
 	"3043": {
 		"name": "lighting",
