@@ -2319,22 +2319,978 @@
 		"name": "textiles_and_carpets",
 		"id": 3042,
 		"parent": 3000,
+		"children": [
+			3114,
+			3304,
+			3310,
+			3315,
+			3316,
+			3319,
+			3320,
+			3328,
+			3336,
+			3346,
+			3347,
+			3348
+		],
+		"order": 70
+	},
+	"3114": {
+		"name": "curtains_and_curtain_rods",
+		"id": 3114,
+		"parent": 3042,
+		"children": [
+			3142,
+			3296,
+			3297,
+			3298,
+			3299,
+			3300,
+			3301,
+			3302,
+			3303
+		],
+		"order": 10
+	},
+	"3142": {
+		"name": "curtains_and_drapes",
+		"id": 3142,
+		"parent": 3114,
+		"children": [],
+		"order": 10
+	},
+	"3296": {
+		"name": "tulle_and_sheers",
+		"id": 3296,
+		"parent": 3114,
+		"children": [],
+		"order": 20
+	},
+	"3297": {
+		"name": "roman_and_roller_blinds",
+		"id": 3297,
+		"parent": 3114,
+		"children": [],
+		"order": 30
+	},
+	"3298": {
+		"name": "curtain_rods",
+		"id": 3298,
+		"parent": 3114,
+		"children": [],
+		"order": 40
+	},
+	"3299": {
+		"name": "electric_curtain_rods",
+		"id": 3299,
+		"parent": 3114,
+		"children": [],
+		"order": 50
+	},
+	"3300": {
+		"name": "blinds_and_pleated_blinds",
+		"id": 3300,
+		"parent": 3114,
+		"children": [],
+		"order": 60
+	},
+	"3301": {
+		"name": "string_curtains",
+		"id": 3301,
+		"parent": 3114,
 		"children": [],
 		"order": 70
+	},
+	"3302": {
+		"name": "photo_curtains",
+		"id": 3302,
+		"parent": 3114,
+		"children": [],
+		"order": 80
+	},
+	"3303": {
+		"name": "accessories",
+		"id": 3303,
+		"parent": 3114,
+		"children": [],
+		"order": 90
+	},
+	"3304": {
+		"name": "bed_linen",
+		"id": 3304,
+		"parent": 3042,
+		"children": [
+			3305,
+			3306,
+			3307,
+			3308,
+			3309
+		],
+		"order": 20
+	},
+	"3305": {
+		"name": "bed_linen_sets",
+		"id": 3305,
+		"parent": 3304,
+		"children": [],
+		"order": 10
+	},
+	"3306": {
+		"name": "duvet_covers",
+		"id": 3306,
+		"parent": 3304,
+		"children": [],
+		"order": 20
+	},
+	"3307": {
+		"name": "bed_sheets",
+		"id": 3307,
+		"parent": 3304,
+		"children": [],
+		"order": 30
+	},
+	"3308": {
+		"name": "pillowcases",
+		"id": 3308,
+		"parent": 3304,
+		"children": [],
+		"order": 40
+	},
+	"3310": {
+		"name": "pillows",
+		"id": 3310,
+		"parent": 3042,
+		"children": [
+			3311,
+			3312,
+			3313,
+			3314
+		],
+		"order": 30
+	},
+	"3311": {
+		"name": "sleeping_pillows",
+		"id": 3311,
+		"parent": 3310,
+		"children": [],
+		"order": 10
+	},
+	"3312": {
+		"name": "anatomical_and_orthopedic_pillows",
+		"id": 3312,
+		"parent": 3310,
+		"children": [],
+		"order": 20
+	},
+	"3313": {
+		"name": "chair_cushions",
+		"id": 3313,
+		"parent": 3310,
+		"children": [],
+		"order": 30
+	},
+	"3314": {
+		"name": "decorative_cushions",
+		"id": 3314,
+		"parent": 3310,
+		"children": [],
+		"order": 40
+	},
+	"3315": {
+		"name": "blankets",
+		"id": 3315,
+		"parent": 3042,
+		"children": [],
+		"order": 40
+	},
+	"3316": {
+		"name": "plaids_and_bedspreads",
+		"id": 3316,
+		"parent": 3042,
+		"children": [
+			3317,
+			3318
+		],
+		"order": 50
+	},
+	"3317": {
+		"name": "plaids",
+		"id": 3317,
+		"parent": 3316,
+		"children": [],
+		"order": 10
+	},
+	"3318": {
+		"name": "bedspreads",
+		"id": 3318,
+		"parent": 3316,
+		"children": [],
+		"order": 20
+	},
+	"3319": {
+		"name": "heated_textiles",
+		"id": 3319,
+		"parent": 3042,
+		"children": [],
+		"order": 60
+	},
+	"3320": {
+		"name": "carpets_and_runners",
+		"id": 3320,
+		"parent": 3042,
+		"children": [
+			3321,
+			3322,
+			3323,
+			3324,
+			3325,
+			3326,
+			3327
+		],
+		"order": 70
+	},
+	"3321": {
+		"name": "carpets",
+		"id": 3321,
+		"parent": 3320,
+		"children": [],
+		"order": 10
+	},
+	"3322": {
+		"name": "doormats",
+		"id": 3322,
+		"parent": 3320,
+		"children": [],
+		"order": 20
+	},
+	"3323": {
+		"name": "bedside_rugs",
+		"id": 3323,
+		"parent": 3320,
+		"children": [],
+		"order": 30
+	},
+	"3324": {
+		"name": "kitchen_rugs",
+		"id": 3324,
+		"parent": 3320,
+		"children": [],
+		"order": 40
+	},
+	"3325": {
+		"name": "rugs",
+		"id": 3325,
+		"parent": 3320,
+		"children": [],
+		"order": 50
+	},
+	"3326": {
+		"name": "protective_and_non-slip_mats",
+		"id": 3326,
+		"parent": 3320,
+		"children": [],
+		"order": 60
+	},
+	"3327": {
+		"name": "hides",
+		"id": 3327,
+		"parent": 3320,
+		"children": [],
+		"order": 70
+	},
+	"3328": {
+		"name": "towels",
+		"id": 3328,
+		"parent": 3042,
+		"children": [
+			3329,
+			3330,
+			3331,
+			3332,
+			3333,
+			3334,
+			3335
+		],
+		"order": 80
+	},
+	"3329": {
+		"name": "towel_sets",
+		"id": 3329,
+		"parent": 3328,
+		"children": [],
+		"order": 10
+	},
+	"3330": {
+		"name": "bath_towels",
+		"id": 3330,
+		"parent": 3328,
+		"children": [],
+		"order": 20
+	},
+	"3331": {
+		"name": "hand_and_face_towels",
+		"id": 3331,
+		"parent": 3328,
+		"children": [],
+		"order": 30
+	},
+	"3332": {
+		"name": "hair_towels",
+		"id": 3332,
+		"parent": 3328,
+		"children": [],
+		"order": 40
+	},
+	"3333": {
+		"name": "sports_towels",
+		"id": 3333,
+		"parent": 3328,
+		"children": [],
+		"order": 50
+	},
+	"3334": {
+		"name": "beach_towels",
+		"id": 3334,
+		"parent": 3328,
+		"children": [],
+		"order": 60
+	},
+	"3335": {
+		"name": "gift_towels",
+		"id": 3335,
+		"parent": 3328,
+		"children": [],
+		"order": 70
+	},
+	"3336": {
+		"name": "kitchen_textiles",
+		"id": 3336,
+		"parent": 3042,
+		"children": [
+			3337,
+			3338,
+			3339,
+			3340,
+			3341,
+			3342,
+			3343,
+			3344,
+			3345
+		],
+		"order": 90
+	},
+	"3337": {
+		"name": "flexible_glass_and_silicone_tablecloths",
+		"id": 3337,
+		"parent": 3336,
+		"children": [],
+		"order": 10
+	},
+	"3338": {
+		"name": "tablecloths",
+		"id": 3338,
+		"parent": 3336,
+		"children": [],
+		"order": 20
+	},
+	"3339": {
+		"name": "oilcloths",
+		"id": 3339,
+		"parent": 3336,
+		"children": [],
+		"order": 30
+	},
+	"3340": {
+		"name": "kitchen_towels",
+		"id": 3340,
+		"parent": 3336,
+		"children": [],
+		"order": 40
+	},
+	"3341": {
+		"name": "napkins",
+		"id": 3341,
+		"parent": 3336,
+		"children": [],
+		"order": 50
+	},
+	"3342": {
+		"name": "potholders",
+		"id": 3342,
+		"parent": 3336,
+		"children": [],
+		"order": 60
+	},
+	"3343": {
+		"name": "teapot_warmers",
+		"id": 3343,
+		"parent": 3336,
+		"children": [],
+		"order": 70
+	},
+	"3344": {
+		"name": "kitchen_sets",
+		"id": 3344,
+		"parent": 3336,
+		"children": [],
+		"order": 80
+	},
+	"3345": {
+		"name": "kitchen_aprons",
+		"id": 3345,
+		"parent": 3336,
+		"children": [],
+		"order": 90
+	},
+	"3346": {
+		"name": "furniture_covers",
+		"id": 3346,
+		"parent": 3042,
+		"children": [],
+		"order": 100
+	},
+	"3347": {
+		"name": "mattress_pads_and_mattress_covers",
+		"id": 3347,
+		"parent": 3042,
+		"children": [],
+		"order": 110
+	},
+	"3348": {
+		"name": "fabrics",
+		"id": 3348,
+		"parent": 3042,
+		"children": [],
+		"order": 120
 	},
 	"3043": {
 		"name": "lighting",
 		"id": 3043,
 		"parent": 3000,
+		"children": [
+			3309,
+			3351,
+			3356,
+			3360,
+			3361,
+			3362,
+			3363,
+			3364,
+			3365
+		],
+		"order": 80
+	},
+	"3309": {
+		"name": "ceiling_and_pendant_lights",
+		"id": 3309,
+		"parent": 3043,
+		"children": [
+			3349,
+			3350
+		],
+		"order": 10
+	},
+	"3349": {
+		"name": "chandeliers",
+		"id": 3349,
+		"parent": 3309,
+		"children": [],
+		"order": 10
+	},
+	"3350": {
+		"name": "wall_and_ceiling_lights",
+		"id": 3350,
+		"parent": 3309,
+		"children": [],
+		"order": 20
+	},
+	"3351": {
+		"name": "floor_and_table_lamps",
+		"id": 3351,
+		"parent": 3043,
+		"children": [
+			3352,
+			3353,
+			3354,
+			3355
+		],
+		"order": 20
+	},
+	"3352": {
+		"name": "table_lamps",
+		"id": 3352,
+		"parent": 3351,
+		"children": [],
+		"order": 10
+	},
+	"3353": {
+		"name": "floor_lamps",
+		"id": 3353,
+		"parent": 3351,
+		"children": [],
+		"order": 20
+	},
+	"3354": {
+		"name": "decorative_lamps_and_lanterns",
+		"id": 3354,
+		"parent": 3351,
+		"children": [],
+		"order": 30
+	},
+	"3355": {
+		"name": "night_lights",
+		"id": 3355,
+		"parent": 3351,
+		"children": [],
+		"order": 40
+	},
+	"3356": {
+		"name": "wall_lights",
+		"id": 3356,
+		"parent": 3043,
+		"children": [
+			3357,
+			3358,
+			3359
+		],
+		"order": 30
+	},
+	"3357": {
+		"name": "surface-mounted_lights",
+		"id": 3357,
+		"parent": 3356,
+		"children": [],
+		"order": 10
+	},
+	"3358": {
+		"name": "sconces",
+		"id": 3358,
+		"parent": 3356,
+		"children": [],
+		"order": 20
+	},
+	"3359": {
+		"name": "interior_accent_lighting",
+		"id": 3359,
+		"parent": 3356,
+		"children": [],
+		"order": 30
+	},
+	"3360": {
+		"name": "outdoor_lights",
+		"id": 3360,
+		"parent": 3043,
+		"children": [],
+		"order": 40
+	},
+	"3361": {
+		"name": "led_strips",
+		"id": 3361,
+		"parent": 3043,
+		"children": [],
+		"order": 50
+	},
+	"3362": {
+		"name": "spotlights_and_track_lights",
+		"id": 3362,
+		"parent": 3043,
+		"children": [],
+		"order": 60
+	},
+	"3363": {
+		"name": "work_lighting",
+		"id": 3363,
+		"parent": 3043,
+		"children": [],
+		"order": 70
+	},
+	"3364": {
+		"name": "light_bulbs",
+		"id": 3364,
+		"parent": 3043,
 		"children": [],
 		"order": 80
 	},
+	"3365": {
+		"name": "lighting_accessories",
+		"id": 3365,
+		"parent": 3043,
+		"children": [
+			3366,
+			3367,
+			3368,
+			3369,
+			3370,
+			3371,
+			3372
+		],
+		"order": 90
+	},
+	"3366": {
+		"name": "lampshades_and_shades",
+		"id": 3366,
+		"parent": 3365,
+		"children": [],
+		"order": 10
+	},
+	"3367": {
+		"name": "power_supplies",
+		"id": 3367,
+		"parent": 3365,
+		"children": [],
+		"order": 20
+	},
+	"3368": {
+		"name": "lamp_holders",
+		"id": 3368,
+		"parent": 3365,
+		"children": [],
+		"order": 30
+	},
+	"3369": {
+		"name": "for_led_strips",
+		"id": 3369,
+		"parent": 3365,
+		"children": [],
+		"order": 40
+	},
+	"3370": {
+		"name": "light_control",
+		"id": 3370,
+		"parent": 3365,
+		"children": [],
+		"order": 50
+	},
+	"3371": {
+		"name": "mounts_and_profiles",
+		"id": 3371,
+		"parent": 3365,
+		"children": [],
+		"order": 60
+	},
+	"3372": {
+		"name": "track_light_accessories",
+		"id": 3372,
+		"parent": 3365,
+		"children": [],
+		"order": 70
+	},
 	"3044": {
-		"name": "interior_items_art",
+		"name": "decor_and_interior",
 		"id": 3044,
 		"parent": 3000,
+		"children": [
+			3373,
+			3387,
+			3388,
+			3394,
+			3398,
+			3403,
+			3410
+		],
+		"order": 90
+	},
+	"3373": {
+		"name": "interior_decoration",
+		"id": 3373,
+		"parent": 3044,
+		"children": [
+			3374,
+			3375,
+			3376,
+			3377,
+			3378,
+			3379,
+			3380,
+			3381,
+			3382,
+			3383,
+			3384,
+			3385,
+			3386
+		],
+		"order": 10
+	},
+	"3374": {
+		"name": "vases",
+		"id": 3374,
+		"parent": 3373,
+		"children": [],
+		"order": 10
+	},
+	"3375": {
+		"name": "statuettes_and_figurines",
+		"id": 3375,
+		"parent": 3373,
+		"children": [],
+		"order": 20
+	},
+	"3376": {
+		"name": "artificial_plants_and_fruits",
+		"id": 3376,
+		"parent": 3373,
+		"children": [],
+		"order": 30
+	},
+	"3377": {
+		"name": "interior_stickers_and_stencils",
+		"id": 3377,
+		"parent": 3373,
+		"children": [],
+		"order": 40
+	},
+	"3378": {
+		"name": "jewelry_boxes",
+		"id": 3378,
+		"parent": 3373,
+		"children": [],
+		"order": 50
+	},
+	"3379": {
+		"name": "interior_decorations",
+		"id": 3379,
+		"parent": 3373,
+		"children": [],
+		"order": 60
+	},
+	"3380": {
+		"name": "fireplace_accessories",
+		"id": 3380,
+		"parent": 3373,
+		"children": [],
+		"order": 70
+	},
+	"3381": {
+		"name": "screens",
+		"id": 3381,
+		"parent": 3373,
+		"children": [],
+		"order": 80
+	},
+	"3382": {
+		"name": "door_stoppers",
+		"id": 3382,
+		"parent": 3373,
 		"children": [],
 		"order": 90
+	},
+	"3383": {
+		"name": "decorative_bars",
+		"id": 3383,
+		"parent": 3373,
+		"children": [],
+		"order": 100
+	},
+	"3384": {
+		"name": "decorative_fountains",
+		"id": 3384,
+		"parent": 3373,
+		"children": [],
+		"order": 110
+	},
+	"3385": {
+		"name": "decorative_tableware",
+		"id": 3385,
+		"parent": 3373,
+		"children": [],
+		"order": 120
+	},
+	"3386": {
+		"name": "decorative_stones",
+		"id": 3386,
+		"parent": 3373,
+		"children": [],
+		"order": 130
+	},
+	"3387": {
+		"name": "mirrors",
+		"id": 3387,
+		"parent": 3044,
+		"children": [],
+		"order": 20
+	},
+	"3388": {
+		"name": "paintings_and_wall_panels",
+		"id": 3388,
+		"parent": 3044,
+		"children": [
+			3389,
+			3390,
+			3391,
+			3392,
+			3393
+		],
+		"order": 30
+	},
+	"3389": {
+		"name": "paintings",
+		"id": 3389,
+		"parent": 3388,
+		"children": [],
+		"order": 10
+	},
+	"3390": {
+		"name": "modular_paintings",
+		"id": 3390,
+		"parent": 3388,
+		"children": [],
+		"order": 20
+	},
+	"3391": {
+		"name": "posters",
+		"id": 3391,
+		"parent": 3388,
+		"children": [],
+		"order": 30
+	},
+	"3392": {
+		"name": "wall_panels",
+		"id": 3392,
+		"parent": 3388,
+		"children": [],
+		"order": 40
+	},
+	"3393": {
+		"name": "engravings_lithographs_and_maps",
+		"id": 3393,
+		"parent": 3388,
+		"children": [],
+		"order": 50
+	},
+	"3394": {
+		"name": "photo_frames_and_photo_albums",
+		"id": 3394,
+		"parent": 3044,
+		"children": [
+			3395,
+			3396,
+			3397
+		],
+		"order": 40
+	},
+	"3395": {
+		"name": "photo_frames",
+		"id": 3395,
+		"parent": 3394,
+		"children": [],
+		"order": 10
+	},
+	"3396": {
+		"name": "photo_albums",
+		"id": 3396,
+		"parent": 3394,
+		"children": [],
+		"order": 20
+	},
+	"3397": {
+		"name": "accessories",
+		"id": 3397,
+		"parent": 3394,
+		"children": [],
+		"order": 30
+	},
+	"3398": {
+		"name": "home_fragrances",
+		"id": 3398,
+		"parent": 3044,
+		"children": [
+			3399,
+			3400,
+			3401,
+			3402
+		],
+		"order": 50
+	},
+	"3399": {
+		"name": "aroma_diffusers",
+		"id": 3399,
+		"parent": 3398,
+		"children": [],
+		"order": 10
+	},
+	"3400": {
+		"name": "incense",
+		"id": 3400,
+		"parent": 3398,
+		"children": [],
+		"order": 20
+	},
+	"3401": {
+		"name": "closet_fresheners",
+		"id": 3401,
+		"parent": 3398,
+		"children": [],
+		"order": 30
+	},
+	"3402": {
+		"name": "aroma_lamps",
+		"id": 3402,
+		"parent": 3398,
+		"children": [],
+		"order": 40
+	},
+	"3403": {
+		"name": "clocks_and_weather_stations",
+		"id": 3403,
+		"parent": 3044,
+		"children": [
+			3404,
+			3405,
+			3406,
+			3407,
+			3408,
+			3409
+		],
+		"order": 60
+	},
+	"3404": {
+		"name": "wall_clocks",
+		"id": 3404,
+		"parent": 3403,
+		"children": [],
+		"order": 10
+	},
+	"3405": {
+		"name": "table_clocks",
+		"id": 3405,
+		"parent": 3403,
+		"children": [],
+		"order": 20
+	},
+	"3406": {
+		"name": "floor_clocks",
+		"id": 3406,
+		"parent": 3403,
+		"children": [],
+		"order": 30
+	},
+	"3407": {
+		"name": "weather_stations_and_thermometers",
+		"id": 3407,
+		"parent": 3403,
+		"children": [],
+		"order": 40
+	},
+	"3408": {
+		"name": "hourglasses",
+		"id": 3408,
+		"parent": 3403,
+		"children": [],
+		"order": 50
+	},
+	"3409": {
+		"name": "barometers",
+		"id": 3409,
+		"parent": 3403,
+		"children": [],
+		"order": 60
+	},
+	"3410": {
+		"name": "holders_stands_and_trays",
+		"id": 3410,
+		"parent": 3044,
+		"children": [],
+		"order": 70
 	},
 	"3045": {
 		"name": "other",
