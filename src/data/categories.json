@@ -2767,8 +2767,213 @@
 		"name": "lighting",
 		"id": 3043,
 		"parent": 3000,
+		"children": [
+			3309,
+			3351,
+			3356,
+			3360,
+			3361,
+			3362,
+			3363,
+			3364,
+			3365
+		],
+		"order": 80
+	},
+	"3309": {
+		"name": "ceiling_and_pendant_lights",
+		"id": 3309,
+		"parent": 3043,
+		"children": [
+			3349,
+			3350
+		],
+		"order": 10
+	},
+	"3349": {
+		"name": "chandeliers",
+		"id": 3349,
+		"parent": 3309,
+		"children": [],
+		"order": 10
+	},
+	"3350": {
+		"name": "wall_and_ceiling_lights",
+		"id": 3350,
+		"parent": 3309,
+		"children": [],
+		"order": 20
+	},
+	"3351": {
+		"name": "floor_and_table_lamps",
+		"id": 3351,
+		"parent": 3043,
+		"children": [
+			3352,
+			3353,
+			3354,
+			3355
+		],
+		"order": 20
+	},
+	"3352": {
+		"name": "table_lamps",
+		"id": 3352,
+		"parent": 3351,
+		"children": [],
+		"order": 10
+	},
+	"3353": {
+		"name": "floor_lamps",
+		"id": 3353,
+		"parent": 3351,
+		"children": [],
+		"order": 20
+	},
+	"3354": {
+		"name": "decorative_lamps_and_lanterns",
+		"id": 3354,
+		"parent": 3351,
+		"children": [],
+		"order": 30
+	},
+	"3355": {
+		"name": "night_lights",
+		"id": 3355,
+		"parent": 3351,
+		"children": [],
+		"order": 40
+	},
+	"3356": {
+		"name": "wall_lights",
+		"id": 3356,
+		"parent": 3043,
+		"children": [
+			3357,
+			3358,
+			3359
+		],
+		"order": 30
+	},
+	"3357": {
+		"name": "surface-mounted_lights",
+		"id": 3357,
+		"parent": 3356,
+		"children": [],
+		"order": 10
+	},
+	"3358": {
+		"name": "sconces",
+		"id": 3358,
+		"parent": 3356,
+		"children": [],
+		"order": 20
+	},
+	"3359": {
+		"name": "interior_accent_lighting",
+		"id": 3359,
+		"parent": 3356,
+		"children": [],
+		"order": 30
+	},
+	"3360": {
+		"name": "outdoor_lights",
+		"id": 3360,
+		"parent": 3043,
+		"children": [],
+		"order": 40
+	},
+	"3361": {
+		"name": "led_strips",
+		"id": 3361,
+		"parent": 3043,
+		"children": [],
+		"order": 50
+	},
+	"3362": {
+		"name": "spotlights_and_track_lights",
+		"id": 3362,
+		"parent": 3043,
+		"children": [],
+		"order": 60
+	},
+	"3363": {
+		"name": "work_lighting",
+		"id": 3363,
+		"parent": 3043,
+		"children": [],
+		"order": 70
+	},
+	"3364": {
+		"name": "light_bulbs",
+		"id": 3364,
+		"parent": 3043,
 		"children": [],
 		"order": 80
+	},
+	"3365": {
+		"name": "lighting_accessories",
+		"id": 3365,
+		"parent": 3043,
+		"children": [
+			3366,
+			3367,
+			3368,
+			3369,
+			3370,
+			3371,
+			3372
+		],
+		"order": 90
+	},
+	"3366": {
+		"name": "lampshades_and_shades",
+		"id": 3366,
+		"parent": 3365,
+		"children": [],
+		"order": 10
+	},
+	"3367": {
+		"name": "power_supplies",
+		"id": 3367,
+		"parent": 3365,
+		"children": [],
+		"order": 20
+	},
+	"3368": {
+		"name": "lamp_holders",
+		"id": 3368,
+		"parent": 3365,
+		"children": [],
+		"order": 30
+	},
+	"3369": {
+		"name": "for_led_strips",
+		"id": 3369,
+		"parent": 3365,
+		"children": [],
+		"order": 40
+	},
+	"3370": {
+		"name": "light_control",
+		"id": 3370,
+		"parent": 3365,
+		"children": [],
+		"order": 50
+	},
+	"3371": {
+		"name": "mounts_and_profiles",
+		"id": 3371,
+		"parent": 3365,
+		"children": [],
+		"order": 60
+	},
+	"3372": {
+		"name": "track_light_accessories",
+		"id": 3372,
+		"parent": 3365,
+		"children": [],
+		"order": 70
 	},
 	"3044": {
 		"name": "interior_items_art",
