@@ -2976,11 +2976,321 @@
 		"order": 70
 	},
 	"3044": {
-		"name": "interior_items_art",
+		"name": "decor_and_interior",
 		"id": 3044,
 		"parent": 3000,
+		"children": [
+			3373,
+			3387,
+			3388,
+			3394,
+			3398,
+			3403,
+			3410
+		],
+		"order": 90
+	},
+	"3373": {
+		"name": "interior_decoration",
+		"id": 3373,
+		"parent": 3044,
+		"children": [
+			3374,
+			3375,
+			3376,
+			3377,
+			3378,
+			3379,
+			3380,
+			3381,
+			3382,
+			3383,
+			3384,
+			3385,
+			3386
+		],
+		"order": 10
+	},
+	"3374": {
+		"name": "vases",
+		"id": 3374,
+		"parent": 3373,
+		"children": [],
+		"order": 10
+	},
+	"3375": {
+		"name": "statuettes_and_figurines",
+		"id": 3375,
+		"parent": 3373,
+		"children": [],
+		"order": 20
+	},
+	"3376": {
+		"name": "artificial_plants_and_fruits",
+		"id": 3376,
+		"parent": 3373,
+		"children": [],
+		"order": 30
+	},
+	"3377": {
+		"name": "interior_stickers_and_stencils",
+		"id": 3377,
+		"parent": 3373,
+		"children": [],
+		"order": 40
+	},
+	"3378": {
+		"name": "jewelry_boxes",
+		"id": 3378,
+		"parent": 3373,
+		"children": [],
+		"order": 50
+	},
+	"3379": {
+		"name": "interior_decorations",
+		"id": 3379,
+		"parent": 3373,
+		"children": [],
+		"order": 60
+	},
+	"3380": {
+		"name": "fireplace_accessories",
+		"id": 3380,
+		"parent": 3373,
+		"children": [],
+		"order": 70
+	},
+	"3381": {
+		"name": "screens",
+		"id": 3381,
+		"parent": 3373,
+		"children": [],
+		"order": 80
+	},
+	"3382": {
+		"name": "door_stoppers",
+		"id": 3382,
+		"parent": 3373,
 		"children": [],
 		"order": 90
+	},
+	"3383": {
+		"name": "decorative_bars",
+		"id": 3383,
+		"parent": 3373,
+		"children": [],
+		"order": 100
+	},
+	"3384": {
+		"name": "decorative_fountains",
+		"id": 3384,
+		"parent": 3373,
+		"children": [],
+		"order": 110
+	},
+	"3385": {
+		"name": "decorative_tableware",
+		"id": 3385,
+		"parent": 3373,
+		"children": [],
+		"order": 120
+	},
+	"3386": {
+		"name": "decorative_stones",
+		"id": 3386,
+		"parent": 3373,
+		"children": [],
+		"order": 130
+	},
+	"3387": {
+		"name": "mirrors",
+		"id": 3387,
+		"parent": 3044,
+		"children": [],
+		"order": 20
+	},
+	"3388": {
+		"name": "paintings_and_wall_panels",
+		"id": 3388,
+		"parent": 3044,
+		"children": [
+			3389,
+			3390,
+			3391,
+			3392,
+			3393
+		],
+		"order": 30
+	},
+	"3389": {
+		"name": "paintings",
+		"id": 3389,
+		"parent": 3388,
+		"children": [],
+		"order": 10
+	},
+	"3390": {
+		"name": "modular_paintings",
+		"id": 3390,
+		"parent": 3388,
+		"children": [],
+		"order": 20
+	},
+	"3391": {
+		"name": "posters",
+		"id": 3391,
+		"parent": 3388,
+		"children": [],
+		"order": 30
+	},
+	"3392": {
+		"name": "wall_panels",
+		"id": 3392,
+		"parent": 3388,
+		"children": [],
+		"order": 40
+	},
+	"3393": {
+		"name": "engravings_lithographs_and_maps",
+		"id": 3393,
+		"parent": 3388,
+		"children": [],
+		"order": 50
+	},
+	"3394": {
+		"name": "photo_frames_and_photo_albums",
+		"id": 3394,
+		"parent": 3044,
+		"children": [
+			3395,
+			3396,
+			3397
+		],
+		"order": 40
+	},
+	"3395": {
+		"name": "photo_frames",
+		"id": 3395,
+		"parent": 3394,
+		"children": [],
+		"order": 10
+	},
+	"3396": {
+		"name": "photo_albums",
+		"id": 3396,
+		"parent": 3394,
+		"children": [],
+		"order": 20
+	},
+	"3397": {
+		"name": "accessories",
+		"id": 3397,
+		"parent": 3394,
+		"children": [],
+		"order": 30
+	},
+	"3398": {
+		"name": "home_fragrances",
+		"id": 3398,
+		"parent": 3044,
+		"children": [
+			3399,
+			3400,
+			3401,
+			3402
+		],
+		"order": 50
+	},
+	"3399": {
+		"name": "aroma_diffusers",
+		"id": 3399,
+		"parent": 3398,
+		"children": [],
+		"order": 10
+	},
+	"3400": {
+		"name": "incense",
+		"id": 3400,
+		"parent": 3398,
+		"children": [],
+		"order": 20
+	},
+	"3401": {
+		"name": "closet_fresheners",
+		"id": 3401,
+		"parent": 3398,
+		"children": [],
+		"order": 30
+	},
+	"3402": {
+		"name": "aroma_lamps",
+		"id": 3402,
+		"parent": 3398,
+		"children": [],
+		"order": 40
+	},
+	"3403": {
+		"name": "clocks_and_weather_stations",
+		"id": 3403,
+		"parent": 3044,
+		"children": [
+			3404,
+			3405,
+			3406,
+			3407,
+			3408,
+			3409
+		],
+		"order": 60
+	},
+	"3404": {
+		"name": "wall_clocks",
+		"id": 3404,
+		"parent": 3403,
+		"children": [],
+		"order": 10
+	},
+	"3405": {
+		"name": "table_clocks",
+		"id": 3405,
+		"parent": 3403,
+		"children": [],
+		"order": 20
+	},
+	"3406": {
+		"name": "floor_clocks",
+		"id": 3406,
+		"parent": 3403,
+		"children": [],
+		"order": 30
+	},
+	"3407": {
+		"name": "weather_stations_and_thermometers",
+		"id": 3407,
+		"parent": 3403,
+		"children": [],
+		"order": 40
+	},
+	"3408": {
+		"name": "hourglasses",
+		"id": 3408,
+		"parent": 3403,
+		"children": [],
+		"order": 50
+	},
+	"3409": {
+		"name": "barometers",
+		"id": 3409,
+		"parent": 3403,
+		"children": [],
+		"order": 60
+	},
+	"3410": {
+		"name": "holders_stands_and_trays",
+		"id": 3410,
+		"parent": 3044,
+		"children": [],
+		"order": 70
 	},
 	"3045": {
 		"name": "other",
