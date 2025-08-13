@@ -3355,7 +3355,7 @@
 			651,
 			652
 		],
-		"order": 322
+		"order": 330
 	},
 	"620": {
 		"name": "guitars_and_gear",
@@ -10243,12 +10243,523 @@
 		"order": 3520
 	},
 	"11700": {
-		"name": "home_garden",
+		"name": "home_&_garden",
 		"icon": "fa-home",
 		"id": 11700,
 		"parent": null,
+		"children": [
+			11748,
+			11764,
+			11774,
+			11783,
+			11796,
+			11804
+		],
+		"order": 234
+	},
+	"11748": {
+		"name": "tableware_&_kitchenware",
+		"id": 11748,
+		"parent": 11700,
+		"children": [
+			11749,
+			11750,
+			11751,
+			11752,
+			11753,
+			11754,
+			11755,
+			11756,
+			11757,
+			11758,
+			11759,
+			11760,
+			11761,
+			11762,
+			11763
+		],
+		"order": 10
+	},
+	"11749": {
+		"name": "cookware",
+		"id": 11749,
+		"parent": 11748,
 		"children": [],
-		"order": 3600
+		"order": 10
+	},
+	"11750": {
+		"name": "kitchen_utensils",
+		"id": 11750,
+		"parent": 11748,
+		"children": [],
+		"order": 20
+	},
+	"11751": {
+		"name": "knives_&_cutting_boards",
+		"id": 11751,
+		"parent": 11748,
+		"children": [],
+		"order": 30
+	},
+	"11752": {
+		"name": "tableware",
+		"id": 11752,
+		"parent": 11748,
+		"children": [],
+		"order": 40
+	},
+	"11753": {
+		"name": "teapots_&_coffee_pots",
+		"id": 11753,
+		"parent": 11748,
+		"children": [],
+		"order": 50
+	},
+	"11754": {
+		"name": "barware",
+		"id": 11754,
+		"parent": 11748,
+		"children": [],
+		"order": 60
+	},
+	"11755": {
+		"name": "cutlery",
+		"id": 11755,
+		"parent": 11748,
+		"children": [],
+		"order": 70
+	},
+	"11756": {
+		"name": "table_serving_items",
+		"id": 11756,
+		"parent": 11748,
+		"children": [],
+		"order": 80
+	},
+	"11757": {
+		"name": "canning_supplies",
+		"id": 11757,
+		"parent": 11748,
+		"children": [],
+		"order": 90
+	},
+	"11758": {
+		"name": "thermoses_&_travel_mugs",
+		"id": 11758,
+		"parent": 11748,
+		"children": [],
+		"order": 100
+	},
+	"11759": {
+		"name": "food_storage",
+		"id": 11759,
+		"parent": 11748,
+		"children": [],
+		"order": 110
+	},
+	"11760": {
+		"name": "designer_tableware",
+		"id": 11760,
+		"parent": 11748,
+		"children": [],
+		"order": 120
+	},
+	"11761": {
+		"name": "children’s_tableware",
+		"id": 11761,
+		"parent": 11748,
+		"children": [],
+		"order": 130
+	},
+	"11762": {
+		"name": "disposable_tableware_&_tablecloths",
+		"id": 11762,
+		"parent": 11748,
+		"children": [],
+		"order": 140
+	},
+	"11763": {
+		"name": "water_filters",
+		"id": 11763,
+		"parent": 11748,
+		"children": [],
+		"order": 150
+	},
+	"11764": {
+		"name": "household_goods",
+		"id": 11764,
+		"parent": 11700,
+		"children": [
+			11765,
+			11766,
+			11767,
+			11768,
+			11769,
+			11770,
+			11771,
+			11772,
+			11773
+		],
+		"order": 20
+	},
+	"11765": {
+		"name": "cleaning_supplies",
+		"id": 11765,
+		"parent": 11764,
+		"children": [],
+		"order": 10
+	},
+	"11766": {
+		"name": "bathroom_accessories",
+		"id": 11766,
+		"parent": 11764,
+		"children": [],
+		"order": 20
+	},
+	"11767": {
+		"name": "trash_bins_&_containers",
+		"id": 11767,
+		"parent": 11764,
+		"children": [],
+		"order": 30
+	},
+	"11768": {
+		"name": "clothing_&_footwear_care",
+		"id": 11768,
+		"parent": 11764,
+		"children": [],
+		"order": 40
+	},
+	"11769": {
+		"name": "packing_&_moving_supplies",
+		"id": 11769,
+		"parent": 11764,
+		"children": [],
+		"order": 50
+	},
+	"11770": {
+		"name": "shopping_bags",
+		"id": 11770,
+		"parent": 11764,
+		"children": [],
+		"order": 60
+	},
+	"11771": {
+		"name": "shopping_trolleys",
+		"id": 11771,
+		"parent": 11764,
+		"children": [],
+		"order": 70
+	},
+	"11772": {
+		"name": "ladders",
+		"id": 11772,
+		"parent": 11764,
+		"children": [],
+		"order": 80
+	},
+	"11773": {
+		"name": "laundry_accessories",
+		"id": 11773,
+		"parent": 11764,
+		"children": [],
+		"order": 90
+	},
+	"11774": {
+		"name": "storage_solutions",
+		"id": 11774,
+		"parent": 11700,
+		"children": [
+			11775,
+			11776,
+			11777,
+			11778,
+			11779,
+			11780,
+			11781,
+			11782
+		],
+		"order": 30
+	},
+	"11775": {
+		"name": "hangers",
+		"id": 11775,
+		"parent": 11774,
+		"children": [],
+		"order": 10
+	},
+	"11776": {
+		"name": "organizers_&_dividers",
+		"id": 11776,
+		"parent": 11774,
+		"children": [],
+		"order": 20
+	},
+	"11777": {
+		"name": "boxes_&_containers",
+		"id": 11777,
+		"parent": 11774,
+		"children": [],
+		"order": 30
+	},
+	"11778": {
+		"name": "garment_covers",
+		"id": 11778,
+		"parent": 11774,
+		"children": [],
+		"order": 40
+	},
+	"11779": {
+		"name": "shoe_covers",
+		"id": 11779,
+		"parent": 11774,
+		"children": [],
+		"order": 50
+	},
+	"11780": {
+		"name": "vacuum_storage_bags",
+		"id": 11780,
+		"parent": 11774,
+		"children": [],
+		"order": 60
+	},
+	"11781": {
+		"name": "pouches_&_bags",
+		"id": 11781,
+		"parent": 11774,
+		"children": [],
+		"order": 70
+	},
+	"11782": {
+		"name": "laundry_hampers",
+		"id": 11782,
+		"parent": 11774,
+		"children": [],
+		"order": 80
+	},
+	"11783": {
+		"name": "cottage_&_garden",
+		"id": 11783,
+		"parent": 11700,
+		"children": [
+			11784,
+			11785,
+			11786,
+			11787,
+			11788,
+			11789,
+			11790,
+			11791,
+			11792,
+			11793,
+			11794,
+			11795
+		],
+		"order": 40
+	},
+	"11784": {
+		"name": "garden_machinery",
+		"id": 11784,
+		"parent": 11783,
+		"children": [],
+		"order": 10
+	},
+	"11785": {
+		"name": "gardening_tools",
+		"id": 11785,
+		"parent": 11783,
+		"children": [],
+		"order": 20
+	},
+	"11786": {
+		"name": "garden_furniture",
+		"id": 11786,
+		"parent": 11783,
+		"children": [],
+		"order": 30
+	},
+	"11787": {
+		"name": "greenhouses_&_hothouses",
+		"id": 11787,
+		"parent": 11783,
+		"children": [],
+		"order": 40
+	},
+	"11788": {
+		"name": "outbuildings",
+		"id": 11788,
+		"parent": 11783,
+		"children": [],
+		"order": 50
+	},
+	"11789": {
+		"name": "garden_decor",
+		"id": 11789,
+		"parent": 11783,
+		"children": [],
+		"order": 60
+	},
+	"11790": {
+		"name": "country_house_water_supply",
+		"id": 11790,
+		"parent": 11783,
+		"children": [],
+		"order": 70
+	},
+	"11791": {
+		"name": "pools_&_accessories",
+		"id": 11791,
+		"parent": 11783,
+		"children": [],
+		"order": 80
+	},
+	"11792": {
+		"name": "portable_toilets_&_septic_systems",
+		"id": 11792,
+		"parent": 11783,
+		"children": [],
+		"order": 90
+	},
+	"11793": {
+		"name": "animal_&_insect_repellents",
+		"id": 11793,
+		"parent": 11783,
+		"children": [],
+		"order": 100
+	},
+	"11794": {
+		"name": "outdoor_leisure_&_picnic",
+		"id": 11794,
+		"parent": 11783,
+		"children": [],
+		"order": 110
+	},
+	"11795": {
+		"name": "snow_removal",
+		"id": 11795,
+		"parent": 11783,
+		"children": [],
+		"order": 120
+	},
+	"11796": {
+		"name": "flowers_plants_&_pots",
+		"id": 11796,
+		"parent": 11700,
+		"children": [
+			11797,
+			11798,
+			11799,
+			11800,
+			11801,
+			11802,
+			11803
+		],
+		"order": 50
+	},
+	"11797": {
+		"name": "soils_fertilizers_&_garden_chemicals",
+		"id": 11797,
+		"parent": 11796,
+		"children": [],
+		"order": 10
+	},
+	"11798": {
+		"name": "plant_protection_&_care",
+		"id": 11798,
+		"parent": 11796,
+		"children": [],
+		"order": 20
+	},
+	"11799": {
+		"name": "flowers",
+		"id": 11799,
+		"parent": 11796,
+		"children": [],
+		"order": 30
+	},
+	"11800": {
+		"name": "pots_&_planters",
+		"id": 11800,
+		"parent": 11796,
+		"children": [],
+		"order": 40
+	},
+	"11801": {
+		"name": "watering_cans_&_sprayers",
+		"id": 11801,
+		"parent": 11796,
+		"children": [],
+		"order": 50
+	},
+	"11802": {
+		"name": "stands_&_mounts",
+		"id": 11802,
+		"parent": 11796,
+		"children": [],
+		"order": 60
+	},
+	"11803": {
+		"name": "seeds_&_seedlings",
+		"id": 11803,
+		"parent": 11796,
+		"children": [],
+		"order": 70
+	},
+	"11804": {
+		"name": "bathhouse_&_sauna_products",
+		"id": 11804,
+		"parent": 11700,
+		"children": [
+			11805,
+			11806,
+			11807,
+			11808,
+			11809,
+			11810
+		],
+		"order": 60
+	},
+	"11805": {
+		"name": "bath_textiles",
+		"id": 11805,
+		"parent": 11804,
+		"children": [],
+		"order": 10
+	},
+	"11806": {
+		"name": "bathhouse_interior_items",
+		"id": 11806,
+		"parent": 11804,
+		"children": [],
+		"order": 20
+	},
+	"11807": {
+		"name": "ladles_tubs_&_buckets_for_bathhouses",
+		"id": 11807,
+		"parent": 11804,
+		"children": [],
+		"order": 30
+	},
+	"11808": {
+		"name": "sauna_brooms",
+		"id": 11808,
+		"parent": 11804,
+		"children": [],
+		"order": 40
+	},
+	"11809": {
+		"name": "herbal_infusions_salt_&_fragrances_for_bathhouses",
+		"id": 11809,
+		"parent": 11804,
+		"children": [],
+		"order": 50
+	},
+	"11810": {
+		"name": "plunge_tubs",
+		"id": 11810,
+		"parent": 11804,
+		"children": [],
+		"order": 60
 	},
 	"1": {
 		"name": "collectibles",
