@@ -94,7 +94,7 @@ export default {
 		 * @returns {Array}
 		 */
 		topParentCategoriesToShowPrompt() {
-			return [13587, 6000, 619, 888, 11450, 2984, 10542];
+			return [13587, 6000, 619, 888, 11450, 2984, 10542, 11700];
 		},
 	},
 
