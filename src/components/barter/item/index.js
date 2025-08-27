@@ -79,6 +79,7 @@ export default {
 
             exchangeAvailable: false,
             purchaseState: "startPurchase",
+			safeDealEnabled: false,
             isChatLoading: false,
 
 			pickupPointItems: [],
@@ -231,7 +232,7 @@ export default {
 			} else if (this.purchaseState === "pickupPointSelected") {
 				result.isEnabled = true;
 				result.iconClass = "fa fa-info-circle";
-				result.i18nKey = "deliveryLabels.hint_for_purchase_at_pickup_point"
+				result.i18nKey = `deliveryLabels.hint_for_purchase_at_pickup_point${ this.safeDealEnabled ? '_with_safe_deal' : '' }`;
 			};
 
 			return result;
@@ -591,6 +592,14 @@ export default {
 
 		selectedOfferIds() {
 			return this.selectedOfferId ? [this.selectedOfferId] : [];
+		},
+
+		getSafeDealState() {
+			return this.safeDealEnabled;
+		},
+
+		setSafeDealState(state) {
+			this.safeDealEnabled = state;
 		},
 
 		/**

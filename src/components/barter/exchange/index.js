@@ -1,5 +1,10 @@
+import SafeDealDialog from "@/components/safe-deal-dialog/index.vue";
+import Vue from 'vue';
+
 export default {
 	name: "BarterExchange",
+
+	inject: ['lightboxContainer'],
 
 	props: {
 		purchaseStateLabels: {
@@ -47,6 +52,31 @@ export default {
 
 		buyAtSelectedPickupPoint() {
 			this.mainComponent?.buyAtSelectedPickupPoint?.();
+		},
+
+		safeDealEnabled() {
+			return this.mainComponent?.getSafeDealState();
+		},
+
+		safeDealStateChanged(value, e) {
+			const newValue = e.target.checked;
+			this.mainComponent?.setSafeDealState(newValue);
+		},
+
+		showSafeDealInfo() {
+			const ComponentClass = Vue.extend(SafeDealDialog);
+			const instance = new ComponentClass({
+				propsData: {},
+			});
+			
+			instance.$on('onHide', vm => {
+			});
+
+			instance.$mount();
+			this.lightboxContainer().appendChild(instance.$el);
+			this.$nextTick(() => {
+				instance.show();
+			});
 		},
 	},
 

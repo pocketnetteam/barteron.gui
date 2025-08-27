@@ -71,13 +71,36 @@
 					class="v-label warning-level"
 				>
 					<i class="fa fa-info-circle"></i>
-					{{ $t('deliveryLabels.hint_for_purchase_at_pickup_point') }}
+					{{ $t(`deliveryLabels.hint_for_purchase_at_pickup_point${ safeDealEnabled() ? '_with_safe_deal' : '' }`) }}
 				</label>
 			</template>
 
 			<!-- <v-button vType="roshi">
 				<span>{{ $t('buttonLabels.buy_for', { cost: $n(item.price) }) }}</span>
 			</v-button> -->
+		</div>
+
+		<div class="row dir-column gap-md t-sep safe-deal-holder">
+			<v-switch
+				class="no-padding"
+				type="checkbox"
+				name="safeDeal"
+				:label="$t('safeDealLabels.label')"
+				:selected="safeDealEnabled() ? 'enabled' : ''"
+				:value="'enabled'"
+				vType="checkbox"
+				vSize="md"
+				@change="safeDealStateChanged"
+			/>
+
+			<a 
+				href="#" 
+				class="link" 
+				@click.prevent="showSafeDealInfo"
+			>
+				<i class="fa fa-info-circle"></i>
+				{{ $t('safeDealLabels.how_it_works') }}
+			</a>
 		</div>
 	</div>
 </template>
