@@ -1,6 +1,6 @@
 const banLists = {
 	isEnabled: {
-		development: true,
+		development: false,
 		production: true,
 	},
 
