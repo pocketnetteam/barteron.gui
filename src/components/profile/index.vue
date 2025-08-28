@@ -3,9 +3,9 @@
 		<div class="row author">
 			<div class="col">
 				<router-link
+					v-if="hash"
 					class="avatar"
 					:to="{ name: 'profile', params: { id: hash } }"
-					v-if="hash"
 				>
 					<i
 						v-if="!avatar?.startsWith('http')"
@@ -21,7 +21,13 @@
 			<div class="col user">
 				<ul class="list">
 					<li>
-						<strong class="label">{{ user?.name }}</strong>
+						<router-link
+							v-if="hash"
+							class="user-name"
+							:to="{ name: 'profile', params: { id: hash } }"
+						>
+							<strong class="label">{{ user?.name }}</strong>
+						</router-link>
 					</li>
 
 					<li>
