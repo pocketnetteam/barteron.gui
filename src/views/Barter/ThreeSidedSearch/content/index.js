@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Offer from "./offer.vue";
+import banProcessor from "@/js/banUtils.js";
 
 export default {
 	name: "Content",
@@ -78,7 +79,12 @@ export default {
 				}, []);
 			});
 
-			deals = dealsResult;
+			deals = (dealsResult || []).filter(f => 
+				!(f?.address && banProcessor.isBannedAddress(f.address) 
+					|| f?.source?.address && banProcessor.isBannedAddress(f.source.address)
+					|| f?.target?.address && banProcessor.isBannedAddress(f.target.address)
+				)
+			);
 
 		} catch (e) {
 			console.error(e);

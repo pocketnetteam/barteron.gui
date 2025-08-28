@@ -2,6 +2,7 @@ import PopularList from "@/components/categories/popular-list/index.vue";
 import BarterList from "@/components/barter/list/index.vue";
 import Banner from "@/components/banner/index.vue";
 import viewedStore from "@/stores/viewed.js";
+import banProcessor from "@/js/banUtils.js";
 
 export default {
 	name: "Home",
@@ -140,7 +141,10 @@ export default {
 						uniqTargets.push(item);
 					};
 				});
-				this.mayMatchExchanges = uniqTargets;
+				this.mayMatchExchanges = uniqTargets.filter(
+					f => !(f?.address && banProcessor.isBannedAddress(f.address) 
+						|| f?.source?.address && banProcessor.isBannedAddress(f.source.address))
+					);
 			}).catch(e => { 
 				console.error(e);
 			});
