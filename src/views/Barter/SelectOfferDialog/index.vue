@@ -8,7 +8,7 @@
 	>
 		<ul>
 			<li
-				v-for="(item, index) in items"
+				v-for="(item, index) in list"
 				:key="index"
 				:class="{ 'selected': selected === index }"
 				@click="() => selected = index"
@@ -23,7 +23,7 @@
 			<div class="row full-width right">
 				<div class="buttons-holder min-h-w">
 					<v-button
-						:disabled="!items[selected]"
+						:disabled="!list[selected]"
 						@click="select"
 					>
 						<span>{{ $t('buttonLabels.propose_exchange') }}</span>

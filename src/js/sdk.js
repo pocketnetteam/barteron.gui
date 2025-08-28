@@ -10,7 +10,8 @@ import Offer from "@/js/models/offer.js";
 import OfferScore from "@/js/models/offerScore.js";
 import Comment from "@/js/models/comment.js";
 import AppErrors from "@/js/appErrors.js";
-import deliverySettings from "@/js/deliverySettings.js"
+import deliverySettings from "@/js/deliverySettings.js";
+import banProcessor from "@/js/banUtils.js";
 
 /**
  * Allow work with bastyon
@@ -89,6 +90,16 @@ class SDK {
 		if (this.empty(this._currency)) this.getCurrency();
 
 		return this._currency;
+	}
+
+	get isBannedUser() {
+		return (typeof this._address === "string") 
+			&& this._address 
+			&& banProcessor.isBannedAddress(this._address);
+	}
+
+	get infiniteAction() {
+		return new Promise((resolve, reject) => {});
 	}
 
 	/**
@@ -507,6 +518,10 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	createRoom(request) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return new Promise((resolve, reject) => {
 			/* Request for permissons */
 			const items = ["chat"];
@@ -537,6 +552,10 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	openRoom(roomId) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return this.sdk.chat.openRoom(roomId);
 	}
 
@@ -552,6 +571,10 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	sendMessageInRoom(request) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return new Promise((resolve, reject) => {
 			/* Request for permissons */
 				const items = ["chat"];
@@ -587,6 +610,10 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	openExternalLink(url) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return this.sdk.openExternalLink(url).then(result => {
 			this.lastresult = "openExternalLink: success"
 			return result;
@@ -609,6 +636,10 @@ class SDK {
 	 * @returns {Void}
 	 */
 	share(data, options = { shareOnBastyon: false }) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		const formattedData = {
 			path: `barter/${ data.hash }`,
 			sharing: {
@@ -637,6 +668,10 @@ class SDK {
 	}
 
 	openComplaintDialog(data) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return this.sdk.helpers.complain(data).then(result => {
 			this.lastresult = "openComplaintDialog: success"
 			return result;
@@ -793,6 +828,10 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	uploadImagesToImgur(data, errorForwarding) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return this.sdk.images.upload(data).then(result => {
 			const errorIndexes = result.reduce((acc, value, index) => {
 				return (value?.url ? acc : [...acc, index]);
@@ -820,6 +859,10 @@ class SDK {
 	}
 
 	uploadingVideoDialog() {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return this.sdk.videos.opendialog().then(result => {
 			this.lastresult = "uploadingVideoDialog: success"
 			return result;
@@ -857,6 +900,10 @@ class SDK {
 	}
 
 	removeVideo(url) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return this.sdk.videos.remove({url}).then(() => {
 			this.lastresult = "removeVideo: success";
 		}).catch(e => {
@@ -1288,6 +1335,10 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	setSurveyData(data) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return fetch(`${this.surveyURL}/form`, {
 			method: 'POST',
 			headers: {
@@ -1728,6 +1779,10 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	setBrtAccount(data) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return this.sdk.barteron.account(data).then(result => result);
 	}
 
@@ -1752,6 +1807,10 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	setBrtOffer(data) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return this.sdk.barteron.offer({
 			...data,
 			...{ hash: data.hash?.length === 64 ? data.hash : null }
@@ -1767,6 +1826,10 @@ class SDK {
 	 * @param {String} param0
 	 */
 	delBrtOffer({ hash }) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return this.sdk.barteron.removeOffer({ hash }).then(action => {
 			this.offerUpdateActionId = action.id;
 			return action;
@@ -1787,6 +1850,10 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	setBrtOfferVote(data) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return this.sdk.barteron.vote({
 			share: data.offerId,
 			vsaddress: data.address,
@@ -1811,6 +1878,10 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	setBrtComment(data) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return this.sdk.barteron.comment(data);
 	}
 }

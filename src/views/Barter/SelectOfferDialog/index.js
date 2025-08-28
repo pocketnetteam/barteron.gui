@@ -1,4 +1,5 @@
 import i18n from "@/i18n/index.js";
+import banProcessor from "@/js/banUtils.js";
 
 export default {
 	name: "SelectOfferDialog",
@@ -17,6 +18,12 @@ export default {
 		return {
 			lightbox: false,
 			selected: null,
+		}
+	},
+
+	computed: {
+		list() {
+			return banProcessor.filteredOffers(this.items);
 		}
 	},
 
