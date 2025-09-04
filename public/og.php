@@ -47,7 +47,7 @@ class OG {
 		if (isset($uri)) {
 			@list($page, $id) = explode('/', $uri);
 
-			if ($id && substr($id, 0, strlen('search')) == 'search') {
+			if ($id && (substr($id, 0, strlen('search')) == 'search' || substr($id, 0, strlen('safedeal')) == 'safedeal')) {
 				@list($page, $id) = explode('?', $id);
 				parse_str($id, $id);
 			}
@@ -108,6 +108,54 @@ class OG {
 					}
 
 					break;
+				}
+
+				case 'safedeal': {
+					$title = false;
+					$description = false;
+					$image = false;
+					
+					$lang = $this->getBrowserLang();
+
+					$offerTitle = '';
+					$sellerAddress = false;
+					$result = $this->rpc->brtoffersbyhashes(array_filter([
+						@$id['offer'] ? $id['offer'] : null
+					]));
+					if ($result != false){
+						$offer = $result[0];
+						$offerTitle = urldecode($offer->p->s2);
+						$sellerAddress = ($offer->s1) ? urldecode($offer->s1) : false;
+					}
+
+					$buyerName = $this->getSafeDealUserName($id, 'buyer');
+					$validatorName = $this->getSafeDealUserName($id, 'validator');
+
+					$sellerName = '';
+					if ($sellerAddress != false) {
+						$result = $this->rpc->getuserprofile($this->clean($sellerAddress));
+						if ($result != false){
+							$profile = $result[0];
+							$sellerName = urldecode($profile->name);
+						}
+					}
+
+					$validatorPercent = @$id['percent'] ? $id['percent'] : '?';
+
+					switch ($lang) {
+						case 'en':
+							$title = 'Safe deal';
+							$description = "Validator: {$validatorName}, percent: {$validatorPercent}%; Seller: {$sellerName}; Buyer: {$buyerName}; Subject of the deal: {$offerTitle}";
+							break;
+
+						case 'ru':
+							$title = 'Безопасная сделка';
+							$description = "Валидатор: {$validatorName}, процент: {$validatorPercent}%; Продавец: {$sellerName}; Покупатель: {$buyerName}; Предмет сделки: {$offerTitle}";
+							break;
+
+						default:
+							break;
+					}
 				}
 
 				case 'profile': {
@@ -176,5 +224,61 @@ class OG {
 
 	public function getIconLink() {
 		echo "<link rel=\"icon\" href=\"https://{$this->manifest['scope']}/{$this->manifest['icon']}\">";
+	}
+
+	public function getBrowserLang(array $available = ['en', 'ru'], $default = 'en') {
+		if (empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+			return $default;
+		}
+
+		$header = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+
+		// Search all langs + q-factors
+		preg_match_all(
+			'/([a-z]{1,8}(?:-[a-z]{1,8})?)(?:;q=([0-9\.]+))?/i',
+			$header,
+			$matches,
+			PREG_SET_ORDER
+		);
+
+		$prefs = [];
+		foreach ($matches as $m) {
+			$lang = strtolower($m[1]);
+			$q    = isset($m[2]) ? (float)$m[2] : 1.0;
+			$prefs[$lang] = $q;
+		}
+
+		// Sort by q descending
+		arsort($prefs, SORT_NUMERIC);
+
+		// Looking for matches
+		foreach ($prefs as $lang => $q) {
+			// Full match
+			if (in_array($lang, $available)) {
+				return $lang;
+			}
+			// Compare by the first 2 letters (for example, en = en-US)
+			$short = substr($lang, 0, 2);
+			foreach ($available as $avail) {
+				if ($short === substr($avail, 0, 2)) {
+					return $avail;
+				}
+			}
+		}
+
+		return $default;
+	}
+
+	public function getSafeDealUserName($id, $key) {
+		$result = '';
+		$address = @$id[$key] ? $id[$key] : false;
+		if ($address != false) {
+			$rpcResult = $this->rpc->getuserprofile($this->clean($address));
+			if ($rpcResult != false) {
+				$user = $rpcResult[0];
+				$result = urldecode($user->name);
+			}
+		}
+		return $result;
 	}
 }

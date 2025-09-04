@@ -219,6 +219,29 @@ class SDK {
 		return result;
 	}	
 
+	createId(options = {}) {
+		function s4() {
+			return Math.floor((1 + Math.random()) * 0x10000)
+			.toString(16)
+			.substring(1);
+		}
+
+		let result = "";
+
+		const target = options?.target || "";
+		switch (target) {
+			case "safeDeal":
+				result = s4() + s4() + s4() + s4();
+				break;
+
+			default:
+				result = s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+				break;
+		}
+
+		return result;
+	}
+
 	constructor() {
 		if (SDK._instance) {
 			return SDK._instance;

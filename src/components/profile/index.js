@@ -12,7 +12,11 @@ export default {
 	props: {
 		hash: {
 			type: String
-		}
+		},
+		showValidationConditions: {
+			type: Boolean,
+			default: false
+		},
 	},
 
 	data() {
@@ -125,6 +129,12 @@ export default {
 					this.addr.city || this.addr.town || this.addr.state || this.addr.county
 				].filter(f => f).join(", ");
 			}
-		}
+		},
+
+		validationConditions() {
+			const percent = this.account?.validatorSettings?.percent || 10;
+			return this.$t("safeDealLabels.validation_conditions", { percent });
+		},
+
 	}
 }

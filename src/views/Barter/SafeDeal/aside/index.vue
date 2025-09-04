@@ -1,0 +1,64 @@
+<template>
+	<v-aside 
+		v-if="userHasAccess"
+		class="safe-deal"
+	>
+		<strong class="subtitle">{{ $t('safeDealLabels.deal_validator') }}</strong>
+
+		<!-- Profile stats -->
+		<div class="box">
+			<Profile :hash="validatorAddress">
+
+				<!-- State -->
+				<template #state>
+					<dl class="list">
+						<dt><i class="fa fa-user-shield"></i></dt>
+						<dd>{{ $t('profileLabels.account_confirmed') }}</dd>
+					</dl>
+				</template>
+			</Profile>
+
+			<div 
+				class="message"
+			>
+				<v-button
+					vType="bulma-stroke"
+					@click="openSafeDealRoom"
+				>{{ $t('safeDealLabels.open_deal_chat') }}</v-button>
+			</div>
+		</div>
+
+		<strong class="subtitle">{{ $t('safeDealLabels.deal_status') }}</strong>
+
+		<div class="box">
+			<SafeDealStatus
+				:items="statusItems"
+				:currentStatus="currentStatus"
+			/>
+
+			<div class="safe-deal-sep"></div>
+
+			<div 
+				class="update-status"
+			>
+				<v-button
+					@click="updateDealStatus"
+				>
+					<i class="fa fa-sync"></i>
+					<span>{{ $t('safeDealLabels.update_status') }}</span>
+				</v-button>
+			</div>
+
+			<label
+				class="v-label info-level top-margin"
+			>
+				<i class="fa fa-info-circle"></i>
+				{{ $t('safeDealLabels.hint_for_update_status') }}
+			</label>
+
+		</div>
+	</v-aside>
+</template>
+
+<style lang="sass" src="./index.sass"></style>
+<script src="./index.js"></script>

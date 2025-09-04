@@ -16,6 +16,7 @@ import Complain from "@/components/barter/item/complain/index.vue";
 import LegalInfo from "@/components/legal-info/index.vue";
 import LikeStore from "@/stores/like.js";
 import SelectOfferDialog from "@/views/Barter/SelectOfferDialog/index.vue";
+import SelectValidatorDialog from "@/components/safe-deal/select-validator-dialog/index.vue";
 import Score from "@/components/score/index.vue";
 import { showMediaItems } from "@/js/mediaUtils.js";
 import "photoswipe/style.css";
@@ -505,6 +506,8 @@ export default {
 		 * Select your offer to propose exchange seller's offer
 		 */
 		selectOfferToExchange() {
+			this.safeDealEnabled = false;
+
 			var ComponentClass = Vue.extend(SelectOfferDialog);
 			var instance = new ComponentClass({
 				propsData: {
@@ -594,10 +597,6 @@ export default {
 			return this.selectedOfferId ? [this.selectedOfferId] : [];
 		},
 
-		getSafeDealState() {
-			return this.safeDealEnabled;
-		},
-
 		setSafeDealState(state) {
 			this.safeDealEnabled = state;
 		},
@@ -606,7 +605,55 @@ export default {
 		 * Start purchase
 		 */
 		startPurchase() {
-			this.createRoom(this.item, {isPurchase: true});
+			if (this.sdk.willOpenRegistration()) return;
+
+			let 
+				needStart = true,
+				isPurchase = true,
+				pickupPoint = null;
+
+			if (this.deliveryOptionsAvailable) {
+				pickupPoint = this.getSelectedPickupPoint();
+				if (!(pickupPoint)) {
+					needStart = false;
+					this.purchaseState = "waitForPickupPoint";
+					this.goToPickupPointList();
+				}
+			};
+
+			if (needStart) {
+				if (this.safeDealEnabled) {
+					const callback = (validator) => {
+						validator && this.createRoom(
+							this.item, 
+							{isPurchase, pickupPoint, validator}
+						);
+					};
+					this.selectValidator(callback);
+				} else {
+					this.createRoom(
+						this.item, 
+						{isPurchase, pickupPoint}
+					);
+				}
+			}
+		},
+
+		selectValidator(callback) {
+			const ComponentClass = Vue.extend(SelectValidatorDialog);
+			const instance = new ComponentClass({
+				propsData: {
+					excludedAddresses: [this.item.address, this.sdk.address],
+				},
+			});
+			
+			instance.$on('onSelect', callback);
+
+			instance.$mount();
+			this.lightboxContainer().appendChild(instance.$el);
+			this.$nextTick(() => {
+				instance.show();
+			});
 		},
 
 		waitForPickupPoint() {
@@ -630,6 +677,12 @@ export default {
 			this.startPurchase();
 		},
 
+		getSelectedPickupPoint() {
+			return this.deliveryOptionsAvailable 
+				? (this.selectedOfferId && this.pickupPointItems.find(f => f.hash === this.selectedOfferId))
+				: null;
+		},
+
 		/**
 		 * Create room and send message
 		 * 
@@ -648,43 +701,75 @@ export default {
 				openRoom: true,
 			};
 
-			if (this.deliveryOptionsAvailable && options?.isPurchase) {
-				const pickupPoint = this.selectedOfferId && this.pickupPointItems.find(f => f.hash === this.selectedOfferId);
-				if (pickupPoint?.isSelfPickup) {
-					data.messages.push(this.$t("deliveryLabels.chat_message_self_pickup_selected"));
-				} else if (pickupPoint?.hash) {
+			if (options?.isPurchase && (options?.validator || options?.pickupPoint)) {
+				const 
+					pickupPoint = options?.pickupPoint,
+					validator = options?.validator;
+
+				if (pickupPoint) {
+					if (pickupPoint.isSelfPickup) {
+						data.messages.push(this.$t("deliveryLabels.chat_message_self_pickup_selected"));
+					} else if (pickupPoint.hash) {
+						const 
+							address = pickupPoint.address,
+							hash = pickupPoint.hash;
+						
+						if (address && hash) {
+							if (!(data.members.includes(address))) {
+								data.members.push(address);
+							}
+							data.messages.push(this.sdk.appLink(`barter/${ hash }`));
+							data.messages.push(this.$t("deliveryLabels.chat_message_pickup_point_selected"));
+						}
+					} else {
+						needCreateRoom = false;
+						const error = new Error(`Internal error: pickupPoint id must be defined`);
+						this.showError(error);
+					}
+				};
+
+				if (validator) {
 					const 
-						address = pickupPoint.address,
-						hash = pickupPoint.hash;
-					
-					if (address && hash) {
+						address = validator.address,
+						percent = validator.settings?.percent || 10;
+
+					if (address) {
 						if (!(data.members.includes(address))) {
 							data.members.push(address);
-						}
-						data.messages.push(this.sdk.appLink(`barter/${ hash }`));
-						data.messages.push(this.$t("deliveryLabels.chat_message_pickup_point_selected"));
+						};
+						data.messages.push(this.$t("safeDealLabels.chat_message_purchase_option"));
+
+						const params = {
+							id: this.sdk.createId({target: "safeDeal"}),
+							offer: offer.hash,
+							buyer: this.sdk.address,
+							validator: address,
+							percent,
+						};
+						const paramsString = new URLSearchParams(params).toString();
+
+						data.messages.push(this.sdk.appLink(`barter/safedeal?${ paramsString }`));
 					}
-				} else {
-					needCreateRoom = false;
-					this.purchaseState = "waitForPickupPoint";
-					this.goToPickupPointList();
-				}
+				};
+
 			} else if (options?.isExchange && this.item?.hash) {
+
 				data.messages.push(this.sdk.appLink(`barter/${ this.item?.hash }`));
 				data.messages.push(this.$t("deliveryLabels.chat_message_exchange_proposed"));
+
 			}
 			
-			if (!(needCreateRoom)) return;
-
-			this.isChatLoading = true;
-			this.dialog?.instance.view("load", this.$t("dialogLabels.opening_room"));
-			this.sendMessage(data).then(() => {
-				this.dialog?.instance.hide();
-			}).catch(e => {
-				this.showError(e);
-			}).finally(() => {
-				this.isChatLoading = false;
-			});
+			if (needCreateRoom) {
+				this.isChatLoading = true;
+				this.dialog?.instance.view("load", this.$t("dialogLabels.opening_room"));
+				this.sendMessage(data).then(() => {
+					this.dialog?.instance.hide();
+				}).catch(e => {
+					this.showError(e);
+				}).finally(() => {
+					this.isChatLoading = false;
+				});
+			}
 		},
 
 		/**

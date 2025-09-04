@@ -358,7 +358,23 @@
 		"faq_question1": "What is a \"Safe Deal\"",
 		"faq_answer1": "It is a deal involving an intermediary (validator), who acts as a guarantor of the deal. The buyer pays the deal amount to the validator, and after the seller fulfills the agreed conditions, the validator transfers the payment to the seller. At the same time, the validator withholds a pre-defined commission as a percentage of the deal amount for their service. Payment is made in PKOIN cryptocurrency.\n\nIf the conditions of the deal are not met — for example, if the buyer does not receive the goods or services — the validator returns the payment to the buyer. In case of a dispute between the seller and the buyer, the validator evaluates both sides’ arguments and makes a decision regarding the deal.",
 		"faq_question2": "How does a safe deal work?",
-		"faq_answer2": "Select the \"Safe Deal\" checkbox and click the \"Start Purchase\" button. During the purchase process, you will be asked to choose a deal validator. Then a chat will open with all participants added, as well as a link to the safe deal page. Follow this link and follow the instructions.\n\nA new link is generated for each purchase. To return to an unfinished deal later, open the chat of the deal and click the link."
+		"faq_answer2": "Select the \"Safe Deal\" checkbox and click the \"Start Purchase\" button. During the purchase process, you will be asked to choose a deal validator. Then a chat will open with all participants added, as well as a link to the safe deal page. Follow this link and follow the instructions.\n\nA new link is generated for each purchase. To return to an unfinished deal later, open the chat of the deal and click the link.",
+		"select_validator": "Select a validator",
+		"validation_conditions": "Validator fee: {percent}% of the deal amount",
+		"chat_message_purchase_option": "Purchase option: safe deal",
+		"open_deal_chat": "Open deal chat",
+		"deal_validator": "The deal validator",
+		"deal_status": "The deal status",
+		"status_1": "The deal was created",
+		"status_2": "The buyer transferred the payment to the validator",
+		"status_3a": "The validator transferred the payment to the seller",
+		"status_3b": "The validator returned the payment to the buyer",
+		"status_4a": "The deal was completed",
+		"status_4b": "The deal was completed",
+		"update_status": "Update status",
+		"hint_for_update_status": "Updating the deal status after payment may take some time (typically up to 10 minutes)",
+		"user_has_no_access": "You do not have access to the deal",
+		"follow_the_steps": "Follow the steps"
 	},
 
 	"feedbackLabels": {

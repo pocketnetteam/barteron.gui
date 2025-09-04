@@ -1,4 +1,4 @@
-import SafeDealDialog from "@/components/safe-deal-dialog/index.vue";
+import SafeDealDialog from "@/components/safe-deal/safe-deal-dialog/index.vue";
 import Vue from 'vue';
 
 export default {
@@ -55,7 +55,7 @@ export default {
 		},
 
 		safeDealEnabled() {
-			return this.mainComponent?.getSafeDealState();
+			return this.mainComponent?.safeDealEnabled;
 		},
 
 		safeDealStateChanged(value, e) {

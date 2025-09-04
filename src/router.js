@@ -47,6 +47,15 @@ const routes = [
 		}
 	},
 	{
+		path: "/barter/safedeal",
+		name: "SafeDeal",
+		components: {
+			default: () => import("@/views/Barter/SafeDeal/index.vue"),
+			aside: () => import("@/views/Barter/SafeDeal/aside/index.vue"),
+			content: () => import("@/views/Barter/SafeDeal/content/index.vue"),
+		}
+	},
+	{
 		path: "/barter/:id",
 		name: "barterItem",
 		components: {

@@ -61,6 +61,17 @@
 		<div class="row state" v-if="$slots.state">
 			<slot name="state"></slot>
 		</div>
+
+		<!-- Validation conditions -->
+		<div 
+			v-if="showValidationConditions"
+			class="row validation-conditions"
+		>
+			<span>
+				<i class="fa fa-info-circle"></i>
+				{{ validationConditions }}
+			</span>
+		</div>
 	</div>
 </template>
 

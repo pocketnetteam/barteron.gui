@@ -1,0 +1,47 @@
+@import "@/css/vars.sass"
+
+.select-validator-dialog
+	.validators-list
+		+resetList()
+		display: flex
+		flex-direction: column
+		gap: $r * 3
+
+		.validator-item
+			border: 1px solid $beerus
+			border-radius: 12px
+			position: relative
+			padding: $r * 2
+			cursor: pointer
+			transition: border 0.1s
+
+			i.check
+				display: none
+
+			.profile
+				pointer-events: none
+				transition: padding 0.1s
+
+			&.selected
+				border: 2px solid $piccolo
+
+				i.check
+					background: $gohan
+					border: 1px solid $gohan
+					border-radius: 50%
+					color: $piccolo
+					display: block
+					font-size: 20px
+					position: absolute
+					top: 6px
+					right: 6px
+					height: 20px
+					width: 20px
+
+					&::before
+						position: relative
+						top: -1px
+						left: -1px
+
+				.profile
+					padding: 1px
