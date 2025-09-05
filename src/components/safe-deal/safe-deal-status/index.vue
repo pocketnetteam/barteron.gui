@@ -33,7 +33,7 @@
 							<div 
 								:class="{
 									'line': true,
-									'checked': statusChecked(item),
+									'checked': nextStatusChecked(item),
 									'negative': statusNegative(item),
 								}"
 							></div>

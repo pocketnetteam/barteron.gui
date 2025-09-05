@@ -14,7 +14,10 @@ export default {
 	data() {
 		return {
 			statusItems: [],
-			currentStatus: "2",
+			currentStatus: "1",
+			buyerCheckStatus1Enabled: false,
+			status1BuyerSafeDealValue: 0,
+			status1BuyerValidatorFeeVariant: "",
 		}
 	},
 
@@ -42,6 +45,26 @@ export default {
 			}
 
 			return result;
+		},
+
+		isBuyer() {
+			return this.userRole === "buyer";
+		},
+
+		isSeller() {
+			return this.userRole === "seller";
+		},
+
+		isValidator() {
+			return this.userRole === "validator";
+		},
+
+		validatorFeePercent() {
+			return this.$route.query.percent || 10;
+		},
+
+		isStatus1() {
+			return this.currentStatus === "1";
 		},
 
 		userHasAccess() {
@@ -85,6 +108,31 @@ export default {
 			return result;
 		},
 
+		status1BuyerTransferAmount() {
+			let result = 0;
+
+			switch (this.status1BuyerValidatorFeeVariant) {
+				case "buyer":
+					result = this.status1BuyerSafeDealValue * (1 + this.validatorFeePercent / 100);
+					break;
+			
+				case "seller":
+					result = this.status1BuyerSafeDealValue;
+					break;
+
+				case "inHalf":
+					result = this.status1BuyerSafeDealValue * (1 + 0.5 * this.validatorFeePercent / 100);
+					break;
+
+				default:
+					break;
+			}
+
+			result = result.toFixed(2);
+
+			return result;
+		},
+
 		dealCompleted() {
 			return (this.currentStatus === "4a" || this.currentStatus === "4b");
 		},
@@ -92,6 +140,27 @@ export default {
 	},
 
 	methods: {
+		buyerCheckStatus1StateChanged(value, e) {
+			this.buyerCheckStatus1Enabled = e.target.checked;
+		},
+
+		changeStatus1BuyerSafeDealValue(e) {
+			const
+				inputs = this.$refs.status1BuyerSafeDealValue?.inputs,
+				input = inputs[0].value;
+			
+			this.status1BuyerSafeDealValue = !(Number.isNaN(Number(input))) ? Math.max(Number(input),0) : 0;
+		},
+
+		changeStatus1BuyerValidatorFeeVariant(value) {			
+			const options = ["buyer", "seller", "inHalf"];
+			const isValid = options.includes(value);
+			if (isValid) {
+				this.status1BuyerValidatorFeeVariant = value;
+			} else {
+				this.status1BuyerValidatorFeeVariant = "";
+			};
+		},
 	},
 
 	mounted() {

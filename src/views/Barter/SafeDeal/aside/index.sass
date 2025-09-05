@@ -1,29 +1,22 @@
 @import "@/css/vars.sass"
 	
-#aside
-	&.safe-deal
-		strong
-			&.subtitle
-				// margin: $r * 1.5 auto 
-				// color: $bulma
+#aside.safe-deal
+	strong
+		&.subtitle
+			margin-bottom: $r * 3
+			color: $bulma			
 
-				&:not(:first-child)
-					margin-top: $r * 3
+	.message,
+	.update-status
+		.v-button
+			width: 100%
 
-		.box
-			margin-top: $r * 2
+	.message
+		margin-top: $r * 2
 
-		.message,
-		.update-status
-			.v-button
-				width: 100%
+	.update-status
+		margin-top: $r * 4
 
-		.message
-			margin-top: 2 * $r
-
-		.update-status
-			margin-top: 4 * $r
-
-		.safe-deal-sep
-			margin-top: $r * 2
-			border-top: 1px solid $beerus
+	.safe-deal-sep
+		margin-top: $r * 2
+		border-top: 1px solid $beerus

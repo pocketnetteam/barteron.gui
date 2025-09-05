@@ -29,6 +29,14 @@ export default {
 			return (currentIndex >= 0 && itemIndex <= currentIndex);
 		},
 
+		nextStatusChecked(item) {
+			const 
+				itemIndex = this.items.indexOf(item),
+				currentIndex = this.items.indexOf(this.currentStatus);
+
+			return (currentIndex >= 0 && itemIndex + 1 <= currentIndex);
+		},
+
 		statusNegative(item) {
 			return item.includes("b");
 		},

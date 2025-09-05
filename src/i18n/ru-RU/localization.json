@@ -142,6 +142,11 @@
 		"select": "Выбрать",
 		"buy": "Купить",
 		"buy_for": "Купить за {cost} PKOIN",
+		"open_deal_chat": "Открыть чат сделки",
+		"update_status": "Обновить статус",
+		"transfer_payment_to_validator": "Перевести оплату валидатору",
+		"transfer_payment_to_seller": "Перевести оплату продавцу",
+		"return_payment_to_buyer": "Возвратить оплату покупателю",
 		"open": "Открыть",
 		"edit": "Редактировать",
 		"save": "Сохранить",
@@ -362,7 +367,6 @@
 		"select_validator": "Выберите валидатора",
 		"validation_conditions": "Комиссия валидатора: {percent}% от суммы сделки",
 		"chat_message_purchase_option": "Вариант покупки: безопасная сделка",
-		"open_deal_chat": "Открыть чат сделки",
 		"deal_validator": "Валидатор сделки",
 		"deal_status": "Статус сделки",
 		"status_1": "Сделка создана",
@@ -371,7 +375,6 @@
 		"status_3b": "Валидатор вернул оплату покупателю",
 		"status_4a": "Сделка завершена",
 		"status_4b": "Сделка отменена",
-		"update_status": "Обновить статус",
 		"hint_for_update_status": "Изменение статуса сделки после выполнения оплаты может занимать некоторое время (обычно не более 10 минут)",
 		"user_has_no_access": "У Вас нет доступа к этой сделке",
 		"follow_the_steps": "Выполните действия",
@@ -400,7 +403,16 @@
 		"status_4b_role_buyer_info_1": "Валидатор признал условия сделки не выполненными и сделал возврат оплаты на Ваш адрес аккаунта.",
 		"status_4b_role_buyer_info_2": "Проверьте зачисление оплаты в полном объеме и подтвердите это в чате",
 		"status_4b_role_seller_info_1": "Валидатор признал условия сделки не выполненными и сделал возврат оплаты покупателю.",
-		"status_4b_role_validator_info_1": "Ожидайте подтверждения в чате от покупателя о зачислении оплаты на его адрес в полном объеме."
+		"status_4b_role_validator_info_1": "Ожидайте подтверждения в чате от покупателя о зачислении оплаты на его адрес в полном объеме.",
+		"status_1_role_buyer_confirmation": "Подтверждаю выполнение указанных действий и готов перевести оплату валидатору",
+		"status_1_role_buyer_deal_value_field_text": "Введите окончательную стоимость сделки, PKOIN",
+		"status_1_role_buyer_validator_fee_field_text": "Укажите, кто оплачивает комиссию валидатора ({percent}%)",
+		"status_1_role_buyer_validator_fee_variant1": "Покупатель",
+		"status_1_role_buyer_validator_fee_variant2": "Продавец",
+		"status_1_role_buyer_validator_fee_variant3": "Пополам",
+		"status_1_role_buyer_transfer_amount_field_text": "Сумма оплаты составит: {payment} PKOIN",
+		"hint_for_payment_transfer": "Оплата выполняется одной транзакцией и только здесь, иначе она не будет учтена!"
+
 	},
 
 	"feedbackLabels": {

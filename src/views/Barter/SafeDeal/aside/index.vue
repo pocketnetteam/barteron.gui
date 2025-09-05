@@ -3,10 +3,11 @@
 		v-if="userHasAccess"
 		class="safe-deal"
 	>
-		<strong class="subtitle">{{ $t('safeDealLabels.deal_validator') }}</strong>
 
 		<!-- Profile stats -->
 		<div class="box">
+			<strong class="subtitle">{{ $t('safeDealLabels.deal_validator') }}</strong>
+
 			<Profile :hash="validatorAddress">
 
 				<!-- State -->
@@ -24,13 +25,13 @@
 				<v-button
 					vType="bulma-stroke"
 					@click="openSafeDealRoom"
-				>{{ $t('safeDealLabels.open_deal_chat') }}</v-button>
+				>{{ $t('buttonLabels.open_deal_chat') }}</v-button>
 			</div>
 		</div>
 
-		<strong class="subtitle">{{ $t('safeDealLabels.deal_status') }}</strong>
-
 		<div class="box">
+			<strong class="subtitle">{{ $t('safeDealLabels.deal_status') }}</strong>
+
 			<SafeDealStatus
 				:items="statusItems"
 				:currentStatus="currentStatus"
@@ -45,7 +46,7 @@
 					@click="updateDealStatus"
 				>
 					<i class="fa fa-sync"></i>
-					<span>{{ $t('safeDealLabels.update_status') }}</span>
+					<span>{{ $t('buttonLabels.update_status') }}</span>
 				</v-button>
 			</div>
 

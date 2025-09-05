@@ -1,17 +1,40 @@
 @import "@/css/vars.sass"
 	
-#content
-	&.safe-deal-content
-		strong.subtitle
+#content.safe-deal-content
+	strong.subtitle
+		font-weight: bold
+
+	ul.actions-list
+		line-height: 1.5em
+		font-size: 1.2em
+
+		li:not(:last-child)
+			margin-bottom: 0.5em
+
+	div.info-list
+		&.after-actions
+			padding-left: 2.8em
+
+		&:not(.after-actions)
+			margin-top: $r * 2
+
+	.confirmation-switch
+		label
 			font-weight: bold
 
-		ul.actions-list
-			line-height: 1.5em
-			font-size: 1.2em
+	.field-block
+		margin-top: $r * 6
 
-			li:not(:last-child)
-				margin-bottom: 1.0em
+		p
+			color: $popo
 
-		div.info-list
-			label
-				// padding-left: 3em
+			&.amount
+				font-weight: bold
+				font-size: 1.1em
+			
+			&.disabled
+				color: $trunks
+
+		.transfer
+			&.disabled
+				opacity: 0.5
