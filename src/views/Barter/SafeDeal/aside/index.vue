@@ -33,6 +33,8 @@
 			<strong class="subtitle">{{ $t('safeDealLabels.deal_status') }}</strong>
 
 			<SafeDealStatus
+				:statusesLoading="statusesLoading"
+				:statusesLoadingError="statusesLoadingError"
 				:items="statusItems"
 				:currentStatus="currentStatus"
 			/>
@@ -43,7 +45,7 @@
 				class="update-status"
 			>
 				<v-button
-					@click="updateDealStatus"
+					@click="updateSafeDealStatus"
 				>
 					<i class="fa fa-sync"></i>
 					<span>{{ $t('buttonLabels.update_status') }}</span>

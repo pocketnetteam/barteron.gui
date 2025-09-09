@@ -1,7 +1,21 @@
+import Loader from "@/components/loader/index.vue";
+
 export default {
 	name: "SafeDealStatus",
 
+	components: {
+		Loader,
+	},
+
 	props: {
+		statusesLoading: {
+			type: Boolean,
+			default: false
+		},
+		statusesLoadingError: {
+			type: Error,
+			default: null
+		},
 		items: {
 			type: Array,
 			default: () => []

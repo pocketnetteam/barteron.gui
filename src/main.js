@@ -448,6 +448,15 @@ Vue.prototype.shared = Vue.observable({
 		},
 
 		/**
+		 * Show success
+		 * 
+		 * @param {String} message
+		 */
+		showSuccess(message) {
+			this.dialog?.instance.view("success", message);
+		},
+
+		/**
 		 * Show warning
 		 * 
 		 * @param {String} message

@@ -146,7 +146,7 @@
 		"update_status": "Обновить статус",
 		"transfer_payment_to_validator": "Перевести оплату валидатору",
 		"transfer_payment_to_seller": "Перевести оплату продавцу",
-		"return_payment_to_buyer": "Возвратить оплату покупателю",
+		"return_payment_to_buyer": "Вернуть оплату покупателю",
 		"open": "Открыть",
 		"edit": "Редактировать",
 		"save": "Сохранить",
@@ -299,6 +299,10 @@
 		"survey_form": "Отправка, пожалуйста, подождите...",
 		"survey_success": "Ваши ответы отправлены",
 		"version_conflict_warning": "Версия Barteron изменилась! Пожалуйста, перезапустите приложение (повторно откройте приложение из Bastyon).",
+		"transfer_payment_to_validator": "Вы хотите выполнить перевод оплаты валидатору?",
+		"transfer_complete": "Перевод выполнен",
+		"transfer_canceled": "Вы отменили перевод",
+		"transfer_forbidden": "Вы запретили перевод",
 		
 		"image_error": "Ошибка загрузки изображений: {error}",
 		"node_error": "Произошла ошибка на ноде: {error}",
@@ -308,6 +312,11 @@
 		"platform_geolocation_permission_error": "Доступ к геолокации запрещен в настройках браузера или операционной системы. Включите доступ.",
 		"images_max_count_exceeded_error": "Превышено максимальное количество изображений",
 		"images_failed_upload_numbers_error": "Не удалось загрузить изображения с номерами: {numbers}. Если объем изображений превышает 1 Мб, уменьшите их.",
+		"payment_error": "Произошла ошибка при переводе суммы",
+		"total_amount_smaller_amount_error": "У вас на счету меньше денег чем вы хотите отправить",
+		"total_amount_smaller_amount_wait_error": "У вас на счету меньше денег чем вы хотите отправить. Пожалуйста подождите.",
+		"total_amount_smaller_amount_fee_error": "У вас на счету меньше денег чем вы хотите отправить (включая коммиссию)",
+		"total_amount_smaller_amount_fee_wait_error": "У вас на счету меньше денег чем вы хотите отправить (включая коммиссию). Пожалуйста подождите.",
 		"error#-26": "Минимальная плата за ретрансляцию не достигнута",
 		"error#-1": "Ошибка загрузки библиотеки SDK.",
 		"error#0": "{error}",
@@ -410,9 +419,15 @@
 		"status_1_role_buyer_validator_fee_variant1": "Покупатель",
 		"status_1_role_buyer_validator_fee_variant2": "Продавец",
 		"status_1_role_buyer_validator_fee_variant3": "Пополам",
-		"status_1_role_buyer_transfer_amount_field_text": "Сумма оплаты составит: {payment} PKOIN",
-		"hint_for_payment_transfer": "Оплата выполняется одной транзакцией и только здесь, иначе она не будет учтена!"
-
+		"status_2_role_validator_confirmation": "Подтверждаю выполнение указанных действий и готов принять решение по сделке",
+		"status_2_role_validator_deal_result_field_text": "Условия сделки выполнены?",
+		"status_2_role_validator_deal_result_variant1": "Да",
+		"status_2_role_validator_deal_result_variant2": "Нет",
+		"transfer_amount_field_text": "Сумма оплаты составит: {payment} PKOIN",
+		"hint_for_payment_transfer": "Оплата выполняется одной транзакцией и только здесь, иначе она не будет учтена! Сумма будет списана с адреса аккаунта.",
+		"status_loading_error_short_message": "Ошибка загрузки данных",
+		"status_loading_error_full_message": "При обновлении статуса произошла ошибка: {error}. Нажмите кнопку \"Обновить статус\", чтобы повторить попытку.",
+		"calculation": "Расчет"
 	},
 
 	"feedbackLabels": {

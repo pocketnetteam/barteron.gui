@@ -1,6 +1,22 @@
 <template>
 	<div class="safe-deal-status">
-		<div>
+		<div v-if="statusesLoading">
+			<loader 
+				type="circular" 
+				align="top"
+			/>
+		</div>
+
+		<div v-if="statusesLoadingError">
+			<label
+				class="v-label error-level"
+			>
+				<i class="fa fa-info-circle"></i>
+				{{ $t("safeDealLabels.status_loading_error_short_message") }}
+			</label>
+		</div>
+
+		<div v-if="!(statusesLoading || statusesLoadingError)">
 			<ul class="items-holder">
 				<li
 					v-for="(item, index) in items"

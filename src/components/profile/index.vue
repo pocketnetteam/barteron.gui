@@ -3,9 +3,9 @@
 		<div class="row author">
 			<div class="col">
 				<router-link
+					v-if="hash"
 					class="avatar"
 					:to="{ name: 'profile', params: { id: hash } }"
-					v-if="hash"
 				>
 					<i
 						v-if="!avatar?.startsWith('http')"
@@ -43,7 +43,7 @@
 		<!-- Profile info -->
 		<div class="row info">
 			<dl class="list">
-				<template v-if="account.regdate">
+				<template v-if="account?.regdate">
 					<dt><i class="fa fa-calendar-day"></i></dt>
 					<dd>{{
 					$t('profileLabels.on_barteron_from', { date: $d(account.regdate, 'middle', $i18n.locale) })

@@ -51,9 +51,40 @@ class UploadImagesError extends Error {
 	}
 }
 
+class PaymentError extends Error {
+	constructor(error) {
+		let message = VueI18n.t("dialogLabels.payment_error");
+		const 
+			canceled = (error === "cancel"),
+			forbidden = (error === "forbid"),
+			knownErrors = {
+				"actions_totalAmountSmaller_amount": "total_amount_smaller_amount_error",
+				"actions_totalAmountSmaller_amount_wait": "total_amount_smaller_amount_wait_error",
+				"actions_totalAmountSmaller_amount_fee": "total_amount_smaller_amount_fee_error",
+				"actions_totalAmountSmaller_amount_fee_wait": "total_amount_smaller_amount_fee_wait_error",
+			};
+
+		if (canceled) {
+			message = VueI18n.t("dialogLabels.transfer_canceled");
+		} else if (forbidden) {
+			message = VueI18n.t("dialogLabels.transfer_forbidden");
+		} else if (error?.message && knownErrors[error?.message]) {
+			const key = knownErrors[error?.message];
+			message = VueI18n.t(`dialogLabels.${key}`);
+		} else {
+			message += (error?.message ? `: ${error.message}` : "");
+		};
+		super(message);
+		this.error = error;
+		this.canceled = canceled;
+		this.forbidden = forbidden;
+	}
+}
+
 export default { 
 	RequestIdError, 
 	AppGeolocationPermissionError, 
 	GeolocationRequestError,
-	UploadImagesError
+	UploadImagesError,
+	PaymentError,
 }

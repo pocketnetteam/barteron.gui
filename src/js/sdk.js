@@ -990,24 +990,38 @@ class SDK {
 		}).catch(e => this.setLastResult(e));
 	}
 
+	getFromToTransactionsIsAvailable() {
+		return !!(this.sdk.get.fromToTransactions);
+	}
+
+	getFromToTransactions(addressFrom, addressTo, update, depth, opreturn) {
+		return this.sdk.get.fromToTransactions(addressFrom, addressTo, update, depth, opreturn).then(result => {
+			this.lastresult = "transactions: success";
+			return result;
+		}).catch(e => {
+			this.setLastResult(e);
+			throw e;
+		});
+	}
+
 	/**
 	 * Make payment
 	 * 
+	 * @param {Object} data
+	 * @param {Array[Object]} data.recievers
+	 * @param {String} data.feemode
+	 * @param {String} data.message
+	 * 
 	 * @returns {Promise}
 	 */
-	makePayment() {
-		var data = {
-			"recievers" : [{
-				address : "PR7srzZt4EfcNb3s27grgmiG8aB9vYNV82",
-				amount : 0.01
-			}], 
-			"feemode" : "include", 
-			"message" : ""
-		}
-
-		this.sdk.payment(data).then(data => {
-			this.lastresult = JSON.stringify(data, null, "\t")
-		}).catch(e => this.setLastResult(e));
+	makePayment(data, options = {}) {
+		return this.sdk.payment(data).then(result => {
+			this.lastresult = JSON.stringify(result, null, "\t");
+			return result;
+		}).catch(e => {
+			this.setLastResult(e);
+			throw new AppErrors.PaymentError(e);
+		});
 	}
 
 	/**

@@ -23,7 +23,7 @@ export default {
 		},
 
 		validatorAddress() {
-			return this.$route.query.validator;
+			return this.content?.validatorAddress;
 		},
 
 		account() {
@@ -32,6 +32,14 @@ export default {
 
 		userHasAccess() {
 			return this.content?.userHasAccess;
+		},
+
+		statusesLoading() {
+			return this.content?.statusesLoading;
+		},
+
+		statusesLoadingError() {
+			return this.content?.statusesLoadingError;
 		},
 
 		statusItems() {
@@ -48,8 +56,8 @@ export default {
 			this.content?.openSafeDealRoom();
 		},
 
-		updateDealStatus() {
-			this.content?.updateDealStatus();
+		updateSafeDealStatus() {
+			this.content?.updateStatus();
 		}
 	},
 
