@@ -95,33 +95,6 @@
 				<div class="row dir-column gap-md field-block">
 					<p
 						:class="{
-							'disabled': !(buyerCheckStatus1Enabled),
-						}"
-					>{{ $t('safeDealLabels.status_1_role_buyer_validator_fee_field_text', {percent: validatorFeePercent}) }}</p>
-
-					<v-switch
-						type="radio"
-						name="status1BuyerValidatorFeeVariant"
-						vSize="sm"
-						:value="['buyer', 'seller', 'inHalf']"
-						:selected="status1BuyerValidatorFeeVariant"
-						:label="[
-							$t('safeDealLabels.status_1_role_buyer_validator_fee_variant1'),
-							$t('safeDealLabels.status_1_role_buyer_validator_fee_variant2'),
-							$t('safeDealLabels.status_1_role_buyer_validator_fee_variant3'),
-						]"
-						:disabled="[
-							!(buyerCheckStatus1Enabled),
-							!(buyerCheckStatus1Enabled),
-							!(buyerCheckStatus1Enabled),
-						]"
-						@change="changeStatus1BuyerValidatorFeeVariant"
-					/>
-				</div>
-
-				<div class="row dir-column gap-md field-block">
-					<p
-						:class="{
 							'amount': true,
 							'disabled': !(buyerCheckStatus1Enabled),
 						}"
@@ -189,25 +162,30 @@
 					/>
 				</div>
 
-				<!-- <div 
-					v-if="status2ValidatorDealResultVariant === 'yes'"
+				<div 
+					v-if="status2ValidatorDealResultVariant === 'yes' && status2ValidatorCalculationList.length"
 					class="row dir-column field-block"
 				>
-					<strong class="subtitle">
-						{{ $t("safeDealLabels.calculation") }}:
-					</strong>
+					<p
+						:class="{
+							'disabled': !(validatorCheckStatus2Enabled),
+						}"
+					>{{ $t('safeDealLabels.calculation') }}</p>
 
-					<div v-if="status2ValidatorCalculationList.length">
-						<ul class="calculation-list">
-							<li 
-								v-for="value in status2ValidatorCalculationList"
-								:key="value"
-							>
-								<span>{{ value }}</span>
-							</li>
-						</ul>
-					</div>
-				</div> -->
+					<ul 
+						:class="{
+							'calculation-list': true,
+							'disabled': !(validatorCheckStatus2Enabled),
+						}"
+					>
+						<li 
+							v-for="value in status2ValidatorCalculationList"
+							:key="value"
+						>
+							<span>{{ value }}</span>
+						</li>
+					</ul>
+				</div>
 
 				<div class="row dir-column gap-md field-block">
 					<p
@@ -218,13 +196,14 @@
 					>{{ $t('safeDealLabels.transfer_amount_field_text', {payment: $n(status2ValidatorTransferAmount, 'shortPkoin')}) }}</p>
 
 					<v-button
+						:vType="status2ValidatorDealResultVariant === 'no' ? 'dodoria' : 'blue'"
 						:disabled="!(validatorCheckStatus2Enabled) || (status2ValidatorTransferAmount === 0)"
 						@click="transferPaymentFromValidator"
 					>
 						<span>{{ 
-							status2ValidatorDealResultVariant === 'yes' 
-							? $t('buttonLabels.transfer_payment_to_seller') 
-							: $t('buttonLabels.return_payment_to_buyer') 
+							status2ValidatorDealResultVariant === 'no' 
+							? $t('buttonLabels.return_payment_to_buyer') 
+							: $t('buttonLabels.transfer_payment_to_seller') 
 							}}</span>
 					</v-button>
 

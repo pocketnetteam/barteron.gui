@@ -27,6 +27,10 @@
 					@click="openSafeDealRoom"
 				>{{ $t('buttonLabels.open_deal_chat') }}</v-button>
 			</div>
+
+			<div class="row t-sep id-holder">
+				<span>№ {{ id }}</span>
+			</div>
 		</div>
 
 		<div class="box">

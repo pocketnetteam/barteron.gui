@@ -4,8 +4,7 @@
 	strong.subtitle
 		font-weight: bold
 
-	ul.actions-list,
-	ul.calculation-list
+	ul.actions-list
 		line-height: 1.5em
 		font-size: 1.2em
 		padding-inline-start: 20px
@@ -14,7 +13,12 @@
 			margin-bottom: 0.5em
 
 	ul.calculation-list
-		margin-top: $r
+		margin: $r 0 0 0
+		padding-inline-start: 20px
+		line-height: 1.5em
+
+		&.disabled
+			color: $trunks
 
 	div.info-list
 		&.after-actions

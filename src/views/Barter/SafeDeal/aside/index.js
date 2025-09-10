@@ -22,6 +22,10 @@ export default {
 			return this.isLoaded ? this.$components.content : null;
 		},
 
+		id() {
+			return this.content?.id;
+		},
+
 		validatorAddress() {
 			return this.content?.validatorAddress;
 		},

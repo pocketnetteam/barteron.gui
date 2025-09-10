@@ -388,8 +388,8 @@
 		"user_has_no_access": "У Вас нет доступа к этой сделке",
 		"follow_the_steps": "Выполните действия",
 		"status_1_role_buyer_step_1": "Получите подтверждение в чате от валидатора о его участии в сделке.",
-		"status_1_role_buyer_step_2": "Согласуйте с продавцом окончательную стоимость сделки и вариант оплаты комиссии валидатора: оплачивает покупатель, продавец или пополам.",
-		"status_1_role_seller_step_1": "Согласуйте с продавцом окончательную стоимость сделки и вариант оплаты комиссии валидатора: оплачивает покупатель, прадавец или пополам.",
+		"status_1_role_buyer_step_2": "Согласуйте с продавцом окончательную стоимость сделки.",
+		"status_1_role_seller_step_1": "Согласуйте с продавцом окончательную стоимость сделки.",
 		"status_1_role_seller_step_2": "После изменения статуса ожидайте подтверждения в чате от валидатора о выполнении оплаты покупателем в полном объеме.",
 		"status_1_role_validator_step_1": "Сообщите в чат о готовности быть валидатором сделки.",
 		"status_1_role_validator_step_2": "Ожидайте перевода стоимости сделки покупателем (с учетом комиссии) на свой адрес аккаунта.",
@@ -415,10 +415,6 @@
 		"status_4b_role_validator_info_1": "Ожидайте подтверждения в чате от покупателя о зачислении оплаты на его адрес в полном объеме.",
 		"status_1_role_buyer_confirmation": "Подтверждаю выполнение указанных действий и готов перевести оплату валидатору",
 		"status_1_role_buyer_deal_value_field_text": "Введите окончательную стоимость сделки, PKOIN",
-		"status_1_role_buyer_validator_fee_field_text": "Укажите, кто оплачивает комиссию валидатора ({percent}%)",
-		"status_1_role_buyer_validator_fee_variant1": "Покупатель",
-		"status_1_role_buyer_validator_fee_variant2": "Продавец",
-		"status_1_role_buyer_validator_fee_variant3": "Пополам",
 		"status_2_role_validator_confirmation": "Подтверждаю выполнение указанных действий и готов принять решение по сделке",
 		"status_2_role_validator_deal_result_field_text": "Условия сделки выполнены?",
 		"status_2_role_validator_deal_result_variant1": "Да",
@@ -427,7 +423,15 @@
 		"hint_for_payment_transfer": "Оплата выполняется одной транзакцией и только здесь, иначе она не будет учтена! Сумма будет списана с адреса аккаунта.",
 		"status_loading_error_short_message": "Ошибка загрузки данных",
 		"status_loading_error_full_message": "При обновлении статуса произошла ошибка: {error}. Нажмите кнопку \"Обновить статус\", чтобы повторить попытку.",
-		"calculation": "Расчет"
+		"validator_fee_variant_buyer": "Покупатель",
+		"validator_fee_variant_seller": "Продавец",
+		"validator_fee_variant_in_half": "Пополам (покупатель и продавец)",
+		"calculation": "Расчет",
+		"calculation_success_deal_item1": "Стоимость сделки: {value} PKOIN",
+		"calculation_success_deal_item2": "Комиссия валидатора: {value1}% ({value2} PKOIN)",
+		"calculation_success_deal_item3": "Кто платит комиссию: {variant}",
+		"calculation_success_deal_item4": "Покупатель оплатил: {value} PKOIN",
+		"calculation_success_deal_item5": "Оплата продавцу: {value} PKOIN"
 	},
 
 	"feedbackLabels": {

@@ -23,12 +23,11 @@ export default {
 			currentStatus: "",
 			buyerCheckStatus1Enabled: false,
 			status1BuyerSafeDealValue: 0,
-			status1BuyerValidatorFeeVariant: "",
 			validatorCheckStatus2Enabled: false,
 			status2ValidatorDealResultVariant: "",
 			txFromBuyerToValidator: [],
-			txfromValidatorToSeller: [],
-			txfromValidatorToBuyer: []
+			txFromValidatorToSeller: [],
+			txFromValidatorToBuyer: []
 		}
 	},
 
@@ -51,6 +50,65 @@ export default {
 
 		validatorFeePercent() {
 			return this.$route.query.percent || 10;
+		},
+
+		validatorFeeVariant() {
+			let result = "buyer";
+
+			// // after adding this option in offer entity
+			// const safeDeal = this.offer?.safeDeal
+			// if (safeDeal?.isEnabled) {
+			// 	const isValid = ["seller", "inHalf"].includes(safeDeal?.validatorFeeVariant);
+			// 	result = isValid ? safeDeal?.validatorFeeVariant : result;
+			// }
+
+			return result;
+		},
+
+		validatorFeeVariantTitle() {
+			let key = "";
+			
+			switch (this.validatorFeeVariant) {
+				case "buyer":
+					key = "validator_fee_variant_buyer";
+					break;
+
+				case "seller":
+					key = "validator_fee_variant_seller";
+					break;
+					
+				case "inHalf":
+					key = "validator_fee_variant_in_half";
+					break;
+
+				default:
+					break;
+			}
+
+			return key ? this.$t(`safeDealLabels.${key}`) : "";
+		},
+
+		buyerPaymentPercent() {
+			let result = null;
+
+			switch (this.validatorFeeVariant) {
+				case "buyer":
+					result = 100;
+					break;
+			
+				case "seller":
+					result = 0;
+					break;
+
+				case "inHalf":
+					result = 50;
+					break;
+
+				default:
+					break;
+			}
+
+			return result;
 		},
 
 		userRole() {
@@ -133,63 +191,55 @@ export default {
 			return result;
 		},
 
-		status1BuyerPaymentPercent() {
-			let result = null;
+		paymentTransferMessage() {
+			return `Safe deal ${this.id}`;
+		},
 
-			switch (this.status1BuyerValidatorFeeVariant) {
-				case "buyer":
-					result = 100;
-					break;
-			
-				case "seller":
-					result = 0;
-					break;
+		status1BuyerTransferAmount() {
+			let result = 0;
+			const k = (this.buyerPaymentPercent !== null ? (this.buyerPaymentPercent / 100) : null);
+			if (k !== null) {
+				const amount = (this.status1BuyerSafeDealValue * (1 + k * this.validatorFeePercent / 100));
+				result = Number(amount.toFixed(2));
+			};
+			return result;
+		},
 
-				case "inHalf":
-					result = 50;
-					break;
+		status2ValidatorCalculationList() {
+			let result = [];
 
-				default:
-					break;
+			const yesVariant = this.status2ValidatorDealResultVariant === "yes";
+			if (yesVariant) {
+				const 
+					payment = this.txFromBuyerToValidator.reduce((acc, item) => acc + item.amount, 0) * 1E-8,
+					k = this.buyerPaymentPercent !== null ? (this.buyerPaymentPercent / 100) : 1,
+					safeDealValue = payment / (1 + k * this.validatorFeePercent / 100),
+					validatorFee = safeDealValue * this.validatorFeePercent / 100;
+
+				result = [
+					this.$t("safeDealLabels.calculation_success_deal_item1", {value: this.$n(safeDealValue, 'shortPkoin')}),
+					this.$t("safeDealLabels.calculation_success_deal_item2", {value1: this.validatorFeePercent, value2: this.$n(validatorFee, 'shortPkoin')}),
+					this.$t("safeDealLabels.calculation_success_deal_item3", {variant: this.validatorFeeVariantTitle}),
+					this.$t("safeDealLabels.calculation_success_deal_item4", {value: this.$n(payment, 'shortPkoin')}),					
+					this.$t("safeDealLabels.calculation_success_deal_item5", {value: this.$n(this.status2ValidatorTransferAmount, 'shortPkoin')}),
+				];
 			}
 
 			return result;
 		},
 
-
-		status1BuyerTransferAmount() {
-			const
-				paymentPercent =  this.status1BuyerPaymentPercent,
-				k = (paymentPercent !== null ? (paymentPercent / 100) : null);
-
-			let result = 0;
-			if (k !== null) {
-				const amount = (this.status1BuyerSafeDealValue * (1 + k * this.validatorFeePercent / 100));
-				result = Number(amount.toFixed(2));
-			};
-
-			return result;
-		},
-
-		status2ValidatorCalculationList() {
-			return [
-				"item 1",
-				"item 2",
-				"item 3",
-			];
-		},
-
 		status2ValidatorTransferAmount() {
 			let amount = 0;
+
 			const 
-				s = this.txFromBuyerToValidator.reduce((acc, item) => acc + item.amount, 0) * 1E-8,
-				yes = this.status2ValidatorDealResultVariant === "yes",
-				no = this.status2ValidatorDealResultVariant === "no";
+				payment = this.txFromBuyerToValidator.reduce((acc, item) => acc + item.amount, 0) * 1E-8,
+				yesVariant = this.status2ValidatorDealResultVariant === "yes",
+				noVariant = this.status2ValidatorDealResultVariant === "no";
 			
-			if (yes) {
-				amount = s / (1 + this.validatorFeePercent / 100);
-			} else if (no) {
-				amount = s;
+			if (yesVariant) {
+				amount = payment / (1 + this.validatorFeePercent / 100);
+			} else if (noVariant) {
+				amount = payment;
 			}
 
 			return  Number(amount.toFixed(2));
@@ -212,8 +262,15 @@ export default {
 
 			const 
 				depth = 3461065, // there is no need to analyze transactions before this block (approximate start block of the safe deal feature)
-				idHex = this.sdk.hexEncode(this.id),
-				opreturn = [`6a10${idHex}`, `6a1b${idHex}`, `6a20${idHex}`];
+				payloadLength = this.paymentTransferMessage.length,
+				OP_RETURN = 106,
+				concatSymbol = (payloadLength & 0xff),
+				message = [
+					String.fromCodePoint(OP_RETURN),
+					String.fromCodePoint(concatSymbol),
+					this.paymentTransferMessage
+				].join(""),
+				opreturn = this.sdk.hexEncode(message);
 
 			Promise.all([
 				this.sdk.getFromToTransactions(this.buyerAddress, this.validatorAddress, true, depth, opreturn),
@@ -222,8 +279,8 @@ export default {
 			]).then(results => {
 				[
 					this.txFromBuyerToValidator  = [],
-					this.txfromValidatorToSeller = [],
-					this.txfromValidatorToBuyer  = [],
+					this.txFromValidatorToSeller = [],
+					this.txFromValidatorToBuyer  = [],
 				] = results;
 
 				this.statusItems = "1,2,3a,4a".split(",");
@@ -233,15 +290,12 @@ export default {
 					this.currentStatus = "2";
 				};
 
-				if (this.txfromValidatorToSeller.length) {
-					this.currentStatus = "4a";
-				} else if (this.txfromValidatorToBuyer.length) {
+				if (this.txFromValidatorToSeller.length) {
+					this.currentStatus = this.statusItems[this.statusItems.length - 1];
+				} else if (this.txFromValidatorToBuyer.length) {
 					this.statusItems = "1,2,3b,4b".split(",");
-					this.currentStatus = "4b";
+					this.currentStatus = this.statusItems[this.statusItems.length - 1];
 				};
-				
-				console.log('Promise.all(getFromToTransactions)', results);
-
 			}).catch(e => {
 				this.statusesLoadingError = e;
 				this.statusItems = [];
@@ -261,12 +315,6 @@ export default {
 				input = inputs[0].value;
 			
 			this.status1BuyerSafeDealValue = !(Number.isNaN(Number(input))) ? Math.max(Number(input),0) : 0;
-		},
-
-		changeStatus1BuyerValidatorFeeVariant(value) {
-			const variants = ["buyer", "seller", "inHalf"];
-			const isValid = variants.includes(value);
-			this.status1BuyerValidatorFeeVariant = isValid ? value : "";
 		},
 
 		validatorCheckStatus2StateChanged(value, e) {
@@ -291,12 +339,11 @@ export default {
 
 		transferPaymentToValidator() {
 			const 
-				id = this.id,
 				amount = this.status1BuyerTransferAmount,
 				percent = this.validatorFeePercent,
-				paymentPercent = this.status1BuyerPaymentPercent;
+				message = this.paymentTransferMessage;
 			
-			if (paymentPercent === null || !(id && amount && percent)) {
+			if (this.buyerPaymentPercent === null || !(amount && percent && message)) {
 				const error = new Error("Internal error: payment parameters not defined");
 				this.showError(error);
 				return;
@@ -304,8 +351,7 @@ export default {
 
 			const 
 				address = this.validatorAddress,
-				feemode = "exclude",
-				message = `${id}`;
+				feemode = "exclude";
 
 			const data = {
 				recievers: [{
@@ -332,7 +378,43 @@ export default {
 		},
 
 		transferPaymentFromValidator() {
-			
+			const 
+				amount = this.status2ValidatorTransferAmount,
+				message = this.paymentTransferMessage;
+
+			if (!(amount && message)) {
+				const error = new Error("Internal error: payment parameters not defined");
+				this.showError(error);
+				return;
+			};
+
+			const 
+				yesVariant = (this.status2ValidatorDealResultVariant === "yes"),
+				address = (yesVariant ? this.sellerAddress : this.buyerAddress),
+				feemode = yesVariant ? "exclude" : "include";
+
+			const data = {
+				recievers: [{
+					address,
+					amount,
+				}],
+				feemode,
+				message,
+			};
+
+			this.sdk.makePayment(data).then(result => {
+				this.showSuccess(this.$t("dialogLabels.transfer_complete"));
+			}).catch(e => {
+				const 
+					isPaymentError = (e instanceof AppErrors.PaymentError),
+					needShow = !(isPaymentError && e.canceled);
+
+				if (needShow) {
+					this.showError(e);
+				} else {
+					console.error(e);
+				};
+			});			
 		},
 	},
 
