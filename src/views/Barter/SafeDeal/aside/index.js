@@ -26,13 +26,17 @@ export default {
 			return this.content?.id;
 		},
 
+		shownUserData() {
+			return this.content?.shownUserData;
+		},
+
 		validatorAddress() {
 			return this.content?.validatorAddress;
 		},
 
-		account() {
-			return this.sdk.barteron.accounts[this.validatorAddress];
-		},
+		// account() {
+		// 	return this.sdk.barteron.accounts[this.validatorAddress];
+		// },
 
 		userHasAccess() {
 			return this.content?.userHasAccess;
@@ -60,7 +64,7 @@ export default {
 			this.content?.openSafeDealRoom();
 		},
 
-		updateSafeDealStatus() {
+		updateStatus() {
 			this.content?.updateStatus();
 		}
 	},

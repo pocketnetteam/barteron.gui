@@ -3,13 +3,11 @@
 		v-if="userHasAccess"
 		class="safe-deal"
 	>
-
 		<!-- Profile stats -->
 		<div class="box">
-			<strong class="subtitle">{{ $t('safeDealLabels.deal_validator') }}</strong>
+			<strong class="subtitle">{{ shownUserData.title }}</strong>
 
-			<Profile :hash="validatorAddress">
-
+			<Profile :hash="shownUserData.address">
 				<!-- State -->
 				<template #state>
 					<dl class="list">
@@ -19,12 +17,10 @@
 				</template>
 			</Profile>
 
-			<div 
-				class="message"
-			>
-				<v-button
-					@click="openSafeDealRoom"
-				>{{ $t('buttonLabels.open_deal_chat') }}</v-button>
+			<div class="message">
+				<v-button @click="openSafeDealRoom">
+					{{ $t('buttonLabels.open_deal_chat') }}
+				</v-button>
 			</div>
 
 			<div class="row t-sep id-holder">
@@ -44,24 +40,17 @@
 
 			<div class="safe-deal-sep"></div>
 
-			<div 
-				class="update-status"
-			>
-				<v-button
-					@click="updateSafeDealStatus"
-				>
+			<div class="update-status">
+				<v-button @click="updateStatus">
 					<i class="fa fa-sync"></i>
 					<span>{{ $t('buttonLabels.update_status') }}</span>
 				</v-button>
 			</div>
 
-			<label
-				class="v-label info-level top-margin"
-			>
+			<label class="v-label info-level top-margin">
 				<i class="fa fa-info-circle"></i>
 				{{ $t('safeDealLabels.hint_for_update_status') }}
 			</label>
-
 		</div>
 	</v-aside>
 </template>

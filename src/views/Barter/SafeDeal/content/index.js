@@ -165,6 +165,24 @@ export default {
 			return !!(this.userRole);
 		},
 
+		shownUserData() {
+			let 
+				title = "",
+				address = null;
+
+			if (this.userRole) {
+				const key = this.isValidator ? "buyer" : "deal_validator";
+				title = this.$t(`safeDealLabels.${key}`)
+
+				address = this.isValidator ? this.buyerAddress : this.validatorAddress;
+			};
+
+			return {
+				title, 
+				address,
+			};
+		},
+
 		actionsListTitle() {
 			const 
 				key = (this.dealCompleted ? `status_${ this.completionStatus }` : "follow_the_steps"),
