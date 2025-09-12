@@ -31,6 +31,18 @@ export default {
 	},
 
 	computed: {
+		successfulStatusItems() {
+			return "1,2,3a,4a".split(",");
+		},
+
+		failedStatusItems() {
+			return "1,2,3b,4b".split(",");
+		},
+
+		completionStatus() {
+			return this.statusItems[this.statusItems.length - 1];
+		},
+
 		offer() {
 			return this.sdk.barteron.offers[this.$route.query?.offer];
 		},
@@ -154,18 +166,22 @@ export default {
 		},
 
 		actionsListTitle() {
-			const key = (this.dealCompleted ? `status_${ this.currentStatus }` : "follow_the_steps");
-			return this.$t(`safeDealLabels.${key}`) + (key === "follow_the_steps" ? ":" : "");
+			const 
+				key = (this.dealCompleted ? `status_${ this.completionStatus }` : "follow_the_steps"),
+				postfix = (key === "follow_the_steps" ? ":" : ""),
+				statusUpdated = (this.currentStatus);
+
+			return statusUpdated ? (this.$t(`safeDealLabels.${key}`) + postfix) : "";
 		},
 
 		actionsList() {
 			let result = [];
-			let step = 1;
 
 			const i18nKey = (step) => {
 				return `safeDealLabels.status_${ this.currentStatus }_role_${ this.userRole }_step_${ step }`;
 			}
 
+			let step = 1;
 			while (this.$te(i18nKey(step))) {
 				result.push(this.$t(i18nKey(step)));
 				step++;
@@ -245,7 +261,7 @@ export default {
 		},
 
 		dealCompleted() {
-			return (this.currentStatus === "4a" || this.currentStatus === "4b");
+			return (this.currentStatus === this.completionStatus);
 		},
 
 	},
@@ -268,7 +284,7 @@ export default {
 			this.statusesLoading = true;
 
 			const 
-				minDepthForSafeDealFeature = 3461065, // there is no need to analyze transactions before this block (approximate start block of the safe deal feature)
+				minDepthForSafeDealFeature = 3466240, // there is no need to analyze transactions before this block (approximate start block of the safe deal feature)
 				minConfirmationsForPayment = 6;
 			
 			const
@@ -300,21 +316,29 @@ export default {
 					this.txFromValidatorToBuyer  = [],
 				] = results;
 
-				this.statusItems = "1,2,3a,4a".split(",");
+				this.statusItems = this.successfulStatusItems;
 				this.currentStatus = "1";
 
 				if (this.txFromBuyerToValidator.length) {
 					this.currentStatus = "2";
 				};
 
-				if (this.txFromValidatorToSeller.length) {
-					this.currentStatus = "4a";
-				} else if (this.txFromValidatorToBuyer.length) {
-					this.statusItems = "1,2,3b,4b".split(",");
-					this.currentStatus = "4b";
-				};
+				const 
+					successfulCompletion = this.txFromValidatorToSeller.length,
+					failedCompletion = this.txFromValidatorToBuyer.length,
+					isCompleted = (successfulCompletion || failedCompletion);
 
-				this.checkPaymentStatus();
+				if (isCompleted) {
+					if (successfulCompletion) {
+						this.statusItems = this.successfulStatusItems;
+					} else if (failedCompletion) {
+						this.statusItems = this.failedStatusItems;
+					};
+					this.currentStatus = this.completionStatus;
+					this.removeStoredSafeDeal();
+				} else {
+					this.checkPaymentStatus();
+				};
 
 			}).catch(e => {
 				this.statusesLoadingError = e;
@@ -327,17 +351,18 @@ export default {
 
 		checkPaymentStatus() {
 			const 
-				lastStatus = this.statusItems[this.statusItems.length - 1],
-				isFinished = (lastStatus === this.currentStatus),
-				storedSafeDeal = SafeDealStore.get(this.id);
+				storedSafeDeal = SafeDealStore.get(this.id),
+				waitingIntervalMs = 15 * 60 * 1000;
 
-			if (storedSafeDeal && !(isFinished)) {
-				const waitingIntervalMs = 15 * 60 * 1000;
+			this.waitingForPaymentConfirmation = (storedSafeDeal ? 
+				(storedSafeDeal.currentStatus === this.currentStatus 
+					&& (Date.now() - storedSafeDeal.timestamp) < waitingIntervalMs) 
+				: false
+			);
+		},
 
-				this.waitingForPaymentConfirmation = 
-					(storedSafeDeal.currentStatus === this.currentStatus 
-					|| ((Date.now() - storedSafeDeal.timestamp) < waitingIntervalMs));
-			};
+		removeStoredSafeDeal() {
+			SafeDealStore.remove(this.id);
 		},
 
 		openSafeDealRoom() {

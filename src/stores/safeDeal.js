@@ -26,17 +26,22 @@ const
 				}
 			},
 
-			get(id) {
-				return this.safeDeal[id];
-			},
-
 			add(data) {
 				this.safeDeal = {
 					...this.safeDeal,
 					...data
 				};
 				Pinia.set(storageId, this.safeDeal);
-			}
+			},
+
+			get(id) {
+				return this.safeDeal[id];
+			},
+
+			remove(id) {
+				delete this.safeDeal[id];
+				Pinia.set(storageId, this.safeDeal);
+			},
 		}
 	}),
 	store = storage();
