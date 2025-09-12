@@ -109,6 +109,25 @@ const router = new VueRouter({
 		}
 
 		if (to.hash) {
+			const el = document.querySelector(to.hash);
+			if (el) {
+				const
+					docEl = document.documentElement,
+					docRect = docEl.getBoundingClientRect(),
+					elRect = el.getBoundingClientRect(),
+					position = {
+						x: 0, //elRect.left - docRect.left,
+						y: elRect.top - docRect.top
+					};
+
+				document.body.scrollTo({
+					top: position.y,
+					left: position.x,
+					behavior: "smooth",
+				});
+
+				return;
+			};
 			return {selector: to.hash}
 		} else if(savedPosition) {
 			return savedPosition;

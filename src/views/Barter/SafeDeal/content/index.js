@@ -1,10 +1,8 @@
 import AppErrors from "@/js/appErrors.js";
 import Loader from "@/components/loader/index.vue";
+import SafeDealStore from "@/stores/safeDeal.js";
 
 // TODO: localization
-// TODO: check if getFromToTransactions is available
-// TODO: show status complete preview after success tx
-// TODO: chat button implamentation
 
 export default {
 	name: "Content",
@@ -27,7 +25,8 @@ export default {
 			status2ValidatorDealResultVariant: "",
 			txFromBuyerToValidator: [],
 			txFromValidatorToSeller: [],
-			txFromValidatorToBuyer: []
+			txFromValidatorToBuyer: [],
+			waitingForPaymentConfirmation: false,
 		}
 	},
 
@@ -257,11 +256,22 @@ export default {
 		},
 
 		updateStatus() {
+			if (!(this.sdk.getFromToTransactionsIsAvailable())) {
+				const error = new Error(this.$t("dialogLabels.get_from_to_transactions_availability_error"));
+				this.showError(error, null, () => {
+					this.showOffer();
+				});
+				return;
+			};
+
 			this.statusesLoadingError = null;
 			this.statusesLoading = true;
 
 			const 
-				depth = 3461065, // there is no need to analyze transactions before this block (approximate start block of the safe deal feature)
+				minDepthForSafeDealFeature = 3461065, // there is no need to analyze transactions before this block (approximate start block of the safe deal feature)
+				minConfirmationsForPayment = 6;
+			
+			const
 				payloadLength = this.paymentTransferMessage.length,
 				OP_RETURN = 106,
 				concatSymbol = (payloadLength & 0xff),
@@ -272,10 +282,17 @@ export default {
 				].join(""),
 				opreturn = this.sdk.hexEncode(message);
 
+			const options = {
+				update: true,
+				depth: minDepthForSafeDealFeature,
+				opreturn,
+				confirmations: minConfirmationsForPayment,
+			};
+
 			Promise.all([
-				this.sdk.getFromToTransactions(this.buyerAddress, this.validatorAddress, true, depth, opreturn),
-				this.sdk.getFromToTransactions(this.validatorAddress, this.sellerAddress, true, depth, opreturn),
-				this.sdk.getFromToTransactions(this.validatorAddress, this.buyerAddress, true, depth, opreturn),
+				this.sdk.getFromToTransactions(this.buyerAddress, this.validatorAddress, options),
+				this.sdk.getFromToTransactions(this.validatorAddress, this.sellerAddress, options),
+				this.sdk.getFromToTransactions(this.validatorAddress, this.buyerAddress, options),
 			]).then(results => {
 				[
 					this.txFromBuyerToValidator  = [],
@@ -291,17 +308,55 @@ export default {
 				};
 
 				if (this.txFromValidatorToSeller.length) {
-					this.currentStatus = this.statusItems[this.statusItems.length - 1];
+					this.currentStatus = "4a";
 				} else if (this.txFromValidatorToBuyer.length) {
 					this.statusItems = "1,2,3b,4b".split(",");
-					this.currentStatus = this.statusItems[this.statusItems.length - 1];
+					this.currentStatus = "4b";
 				};
+
+				this.checkPaymentStatus();
+
 			}).catch(e => {
 				this.statusesLoadingError = e;
 				this.statusItems = [];
 				this.currentStatus = "";
 			}).finally(() => {
 				this.statusesLoading = false;
+			});
+		},
+
+		checkPaymentStatus() {
+			const 
+				lastStatus = this.statusItems[this.statusItems.length - 1],
+				isFinished = (lastStatus === this.currentStatus),
+				storedSafeDeal = SafeDealStore.get(this.id);
+
+			if (storedSafeDeal && !(isFinished)) {
+				const waitingIntervalMs = 15 * 60 * 1000;
+
+				this.waitingForPaymentConfirmation = 
+					(storedSafeDeal.currentStatus === this.currentStatus 
+					|| ((Date.now() - storedSafeDeal.timestamp) < waitingIntervalMs));
+			};
+		},
+
+		openSafeDealRoom() {
+			if (this.sdk.willOpenRegistration()) return;
+
+			const data = {
+				name: this.id,
+				members: [this.buyerAddress, this.sellerAddress, this.validatorAddress],
+				openRoom: true,
+			};
+
+			this.isChatLoading = true;
+			this.dialog?.instance.view("load", this.$t("dialogLabels.opening_room"));
+			this.sendMessage(data).then(() => {
+				this.dialog?.instance.hide();
+			}).catch(e => {
+				this.showError(e);
+			}).finally(() => {
+				this.isChatLoading = false;
 			});
 		},
 
@@ -362,19 +417,7 @@ export default {
 				message,
 			};
 
-			this.sdk.makePayment(data).then(result => {
-				this.showSuccess(this.$t("dialogLabels.transfer_complete"));
-			}).catch(e => {
-				const 
-					isPaymentError = (e instanceof AppErrors.PaymentError),
-					needShow = !(isPaymentError && e.canceled);
-
-				if (needShow) {
-					this.showError(e);
-				} else {
-					console.error(e);
-				};
-			});
+			this.makePayment(data);
 		},
 
 		transferPaymentFromValidator() {
@@ -402,8 +445,15 @@ export default {
 				message,
 			};
 
+			this.makePayment(data);
+		},
+
+		makePayment(data) {
 			this.sdk.makePayment(data).then(result => {
-				this.showSuccess(this.$t("dialogLabels.transfer_complete"));
+				this.storeSafeDealData(result.transaction);
+				this.showSuccess(this.$t("dialogLabels.transfer_complete"), null, () => {
+					this.waitingForPaymentConfirmation = true;	
+				});
 			}).catch(e => {
 				const 
 					isPaymentError = (e instanceof AppErrors.PaymentError),
@@ -414,8 +464,42 @@ export default {
 				} else {
 					console.error(e);
 				};
-			});			
+			});
 		},
+
+		storeSafeDealData(transaction) {
+			const data = {
+				[this.id]: {
+					currentStatus: this.currentStatus,
+					timestamp: Date.now(),
+					transaction,
+				},
+			};
+			SafeDealStore.add(data);
+		},
+
+		evaluatePurchase() {
+			this.showOffer({anchorSelector: "section.votes"});
+		},
+
+		showOffer(options = {anchorSelector: null}) {
+			let to = {
+				name: "barterItem",
+				params: { id: this.offer?.hash },
+			};
+
+			if (options?.anchorSelector) {
+				to = {
+					...to,
+					hash: options?.anchorSelector,
+				};
+			};
+
+			this.$router.push(to).catch(e => {
+				console.error(e);
+				this.showVersionConflictIfNeeded(e);
+			});
+		}
 	},
 
 	mounted() {

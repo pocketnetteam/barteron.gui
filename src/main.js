@@ -452,8 +452,10 @@ Vue.prototype.shared = Vue.observable({
 		 * 
 		 * @param {String} message
 		 */
-		showSuccess(message) {
-			this.dialog?.instance.view("success", message);
+		showSuccess(message, options, callback) {
+			this.dialog?.instance.view("success", message).then(() => {
+				callback?.();
+			});
 		},
 
 		/**
@@ -470,8 +472,10 @@ Vue.prototype.shared = Vue.observable({
 		 * 
 		 * @param {Object} e
 		 */
-		showError(e, options) {
-			this.dialog?.instance.view("error", this.sdk.errorMessage(e, options));
+		showError(e, options, callback) {
+			this.dialog?.instance.view("error", this.sdk.errorMessage(e, options)).then(() => {
+				callback?.();
+			});
 		}
 	}
 });

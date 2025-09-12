@@ -994,8 +994,16 @@ class SDK {
 		return !!(this.sdk.get.fromToTransactions);
 	}
 
-	getFromToTransactions(addressFrom, addressTo, update, depth, opreturn) {
-		return this.sdk.get.fromToTransactions(addressFrom, addressTo, update, depth, opreturn).then(result => {
+	getFromToTransactions(
+		addressFrom, 
+		addressTo, 
+		options = { 
+			update: false, 
+			depth: null, 
+			opreturn: null
+		}
+	) {
+		return this.sdk.get.fromToTransactions(addressFrom, addressTo, options).then(result => {
 			this.lastresult = "transactions: success";
 			return result;
 		}).catch(e => {

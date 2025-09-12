@@ -23,7 +23,6 @@
 				class="message"
 			>
 				<v-button
-					vType="bulma-stroke"
 					@click="openSafeDealRoom"
 				>{{ $t('buttonLabels.open_deal_chat') }}</v-button>
 			</div>
