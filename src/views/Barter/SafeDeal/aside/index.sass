@@ -1,10 +1,9 @@
 @import "@/css/vars.sass"
 	
 #aside.safe-deal
-	strong
-		&.subtitle
-			margin-bottom: $r * 3
-			color: $bulma			
+	.part-title
+		margin-bottom: $r * 3
+		color: $bulma			
 
 	.id-holder
 		margin-top: $r * 2.5
@@ -19,8 +18,11 @@
 		margin-top: $r * 2
 
 	.update-status
-		margin-top: $r * 4
+		margin-top: $r * 2
 
 	.safe-deal-sep
-		margin-top: $r * 2
+		margin: $r * 2 0 0 0
 		border-top: 1px solid $beerus
+
+		&.bottom
+			margin: 0 0 $r * 2 0

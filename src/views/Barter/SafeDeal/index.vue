@@ -1,6 +1,8 @@
 <template>
 	<v-page-header class="safe-deal-header">
-		<h1>{{ $t('safeDealLabels.label') }}</h1>
+		<section>
+			<h1>{{ $t('safeDealLabels.label') }}</h1>
+		</section>
 
 		<router-link 
 			:to="{ name: 'barterItem', params: { id: this.offer.hash } }"

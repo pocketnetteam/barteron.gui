@@ -4,6 +4,58 @@
 		class="safe-deal-content"
 	>
 
+		<!-- without sidebar -->
+		<div class="no-aside">
+			<!-- <div class="safe-deal-sep bottom"></div> -->
+
+			<strong class="subtitle part-title">{{ shownUserData.title }}</strong>
+
+			<Profile :hash="shownUserData.address">
+				<!-- State -->
+				<template #state>
+					<dl class="list">
+						<dt><i class="fa fa-user-shield"></i></dt>
+						<dd>{{ $t('profileLabels.account_confirmed') }}</dd>
+					</dl>
+				</template>
+			</Profile>
+
+			<div class="message">
+				<v-button @click="openSafeDealRoom">
+					{{ $t('buttonLabels.open_deal_chat') }}
+				</v-button>
+			</div>
+		</div>
+
+		<div class="no-aside">
+			<strong class="subtitle part-title">{{ $t('safeDealLabels.deal_status') }}</strong>
+
+			<SafeDealStatus
+				:statusesLoading="statusesLoading"
+				:statusesLoadingError="statusesLoadingError"
+				:items="statusItems"
+				:currentStatus="currentStatus"
+			/>
+
+			<div class="safe-deal-sep"></div>
+
+			<div class="update-status">
+				<v-button @click="updateStatus">
+					<i class="fa fa-sync"></i>
+					<span>{{ $t('buttonLabels.update_status') }}</span>
+				</v-button>
+			</div>
+
+			<label class="v-label info-level top-margin">
+				<i class="fa fa-info-circle"></i>
+				{{ $t('safeDealLabels.hint_for_update_status') }}
+			</label>
+
+			<div class="row t-sep id-holder">
+				<span>№ {{ id }}</span>
+			</div>
+		</div>
+
 		<div v-if="statusesLoading">
 			<div>
 				<loader 
@@ -62,7 +114,7 @@
 			<template v-if="isBuyer && isStatus('1')">
 				<div v-if="waitingForPaymentConfirmation">
 					<strong class="subtitle">
-						{{ $t("safeDealLabels.waiting_for_payment_confirmation") }}
+						<span>{{ $t("safeDealLabels.waiting_for_payment_confirmation") }}</span>
 					</strong>
 				</div>
 
@@ -136,7 +188,7 @@
 			<template v-if="isValidator && isStatus('2')">
 				<div v-if="waitingForPaymentConfirmation">
 					<strong class="subtitle">
-						{{ $t("safeDealLabels.waiting_for_payment_confirmation") }}
+						<span>{{ $t("safeDealLabels.waiting_for_payment_confirmation") }}</span>
 					</strong>
 				</div>
 

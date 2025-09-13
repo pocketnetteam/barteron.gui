@@ -1,8 +1,41 @@
 @import "@/css/vars.sass"
 	
 #content.safe-deal-content
+	.no-aside
+		&:first-child
+			margin-top: $r * 3
+
+		margin-bottom: $r * 8
+
+		.part-title
+			margin-bottom: $r * 3
+			color: $bulma			
+
+		.id-holder
+			margin-top: $r * 2.5
+			color: $trunks
+
+		.message,
+		.update-status
+			.v-button
+				width: 100%
+
+		.message
+			margin-top: $r * 2
+
+		.update-status
+			margin-top: $r * 2
+
+		.safe-deal-sep
+			margin: $r * 2 0 0 0
+			border-top: 1px solid $beerus
+
+			&.bottom
+				margin: 0 0 $r * 2 0
+
 	strong.subtitle
-		font-weight: bold
+		&:not(.part-title)
+			font-weight: bold
 
 	ul.actions-list
 		line-height: 1.5em

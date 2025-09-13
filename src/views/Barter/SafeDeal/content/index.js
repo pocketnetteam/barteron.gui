@@ -1,6 +1,8 @@
 import AppErrors from "@/js/appErrors.js";
 import Loader from "@/components/loader/index.vue";
 import SafeDealStore from "@/stores/safeDeal.js";
+import Profile from "@/components/profile/index.vue";
+import SafeDealStatus from "@/components/safe-deal/safe-deal-status/index.vue";
 
 // TODO: localization
 
@@ -9,6 +11,8 @@ export default {
 
 	components: {
 		Loader,
+		Profile,
+		SafeDealStatus,
 	},
 
 	inject: ["dialog"],

@@ -9,8 +9,6 @@ export default {
 		SafeDealStatus,
 	},
 
-	inject: ['dialog'],
-
 	data() {
 		return {
 			isLoaded: false,
@@ -33,10 +31,6 @@ export default {
 		validatorAddress() {
 			return this.content?.validatorAddress;
 		},
-
-		// account() {
-		// 	return this.sdk.barteron.accounts[this.validatorAddress];
-		// },
 
 		userHasAccess() {
 			return this.content?.userHasAccess;

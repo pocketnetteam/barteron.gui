@@ -38,7 +38,8 @@
 		.no-sidebar
 			display: none
 
-	.profile
+	.profile,
+	.safe-deal-content
 		.no-aside
 			display: none
 
@@ -107,6 +108,9 @@
 			&.profile
 				display: none
 
+			&.safe-deal
+				display: none
+
 		#aside
 			padding: $r
 			position: fixed
@@ -137,9 +141,21 @@
 			.no-sidebar
 				display: block
 
-		.profile
+		.profile,
+		.safe-deal-content
 			.no-aside
 				display: block
+
+		.safe-deal-content
+			&:not(.no-aside)
+				.v-input-holder
+					width: 100%
+
+				.v-button-holder
+					width: 100%
+
+					.v-button
+						width: 100%
 
 		#container
 			&:has(#aside)
