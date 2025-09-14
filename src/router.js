@@ -109,7 +109,10 @@ const router = new VueRouter({
 		}
 
 		if (to.hash) {
-			const el = document.querySelector(to.hash);
+			const 
+				selector = to.hash.replace("#", ""),
+				el = document.querySelector(selector);
+
 			if (el) {
 				el.scrollIntoView({
 					behavior: "smooth",

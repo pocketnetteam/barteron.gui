@@ -199,13 +199,15 @@ export default {
 		actionsList() {
 			let result = [];
 
-			const i18nKey = (step) => {
-				return `safeDealLabels.status_${ this.currentStatus }_role_${ this.userRole }_step_${ step }`;
+			const key = (step) => {
+				return this.waitingForPaymentConfirmation ? 
+					`safeDealLabels.waiting_for_payment_confirmation_step_${ step }`
+					: `safeDealLabels.status_${ this.currentStatus }_role_${ this.userRole }_step_${ step }`;
 			}
 
 			let step = 1;
-			while (this.$te(i18nKey(step))) {
-				result.push(this.$t(i18nKey(step)));
+			while (this.$te(key(step))) {
+				result.push(this.$t(key(step)));
 				step++;
 			}
 
@@ -216,16 +218,25 @@ export default {
 			let result = [];
 			let info = 1;
 
-			const i18nKey = (step) => {
-				return `safeDealLabels.status_${ this.currentStatus }_role_${ this.userRole }_info_${ info }`;
+			const key = (info) => {
+				return this.waitingForPaymentConfirmation ? 
+					`safeDealLabels.waiting_for_payment_confirmation_info_${ info }`
+					: `safeDealLabels.status_${ this.currentStatus }_role_${ this.userRole }_info_${ info }`;
 			}
 
-			while (this.$te(i18nKey(info))) {
-				result.push(this.$t(i18nKey(info)));
+			while (this.$te(key(info))) {
+				result.push(this.$t(key(info)));
 				info++;
 			}
 
 			return result;
+		},
+
+		transactionsRequestParams() {
+			return {
+				minConfirmationsForPayment: 6,
+				minDepthForSafeDealFeature: 3466240, // there is no need to analyze transactions before this block (approximate start block of the safe deal feature)
+			};
 		},
 
 		paymentTransferMessage() {
@@ -240,6 +251,19 @@ export default {
 				result = Number(amount.toFixed(2));
 			};
 			return result;
+		},
+
+		status1BuyerCalculationList() {
+			const
+				validatorFee = this.status1BuyerSafeDealValue * this.validatorFeePercent / 100,
+				payment = this.status1BuyerTransferAmount;
+
+			return [
+				this.$t("safeDealLabels.calculation_start_deal_item1", {value: this.$n(this.status1BuyerSafeDealValue, 'shortPkoin')}),
+				this.$t("safeDealLabels.calculation_start_deal_item2", {value1: this.validatorFeePercent, value2: this.$n(validatorFee, 'shortPkoin')}),
+				this.$t("safeDealLabels.calculation_start_deal_item3", {variant: this.validatorFeeVariantTitle}),
+				this.$t("safeDealLabels.calculation_start_deal_item4", {value: this.$n(payment, 'shortPkoin')}),					
+			];
 		},
 
 		status2ValidatorCalculationList() {
@@ -306,26 +330,13 @@ export default {
 			this.statusesLoading = true;
 
 			const 
-				minDepthForSafeDealFeature = 3466240, // there is no need to analyze transactions before this block (approximate start block of the safe deal feature)
-				minConfirmationsForPayment = 6;
-			
-			const
-				payloadLength = this.paymentTransferMessage.length,
-				OP_RETURN = 106,
-				concatSymbol = (payloadLength & 0xff),
-				message = [
-					String.fromCodePoint(OP_RETURN),
-					String.fromCodePoint(concatSymbol),
-					this.paymentTransferMessage
-				].join(""),
-				opreturn = this.sdk.hexEncode(message);
-
-			const options = {
-				update: true,
-				depth: minDepthForSafeDealFeature,
-				opreturn,
-				confirmations: minConfirmationsForPayment,
-			};
+				params = this.transactionsRequestParams,
+				options = {
+					update: true,
+					depth: params.minDepthForSafeDealFeature,
+					opreturn: this.getOpreturnMessage(),
+					confirmations: params.minConfirmationsForPayment,
+				};
 
 			Promise.all([
 				this.sdk.getFromToTransactions(this.buyerAddress, this.validatorAddress, options),
@@ -371,6 +382,22 @@ export default {
 			});
 		},
 
+		getOpreturnMessage() {
+			const 
+				payloadMessage = this.paymentTransferMessage, 
+				payloadLength = payloadMessage.length,
+				OP_RETURN = 106,
+				concatSymbol = (payloadLength & 0xff),
+				message = [
+					String.fromCodePoint(OP_RETURN),
+					String.fromCodePoint(concatSymbol),
+					payloadMessage
+				].join(""),
+				result = this.sdk.hexEncode(message);
+
+			return result;
+		},
+
 		checkPaymentStatus() {
 			const 
 				storedSafeDeal = SafeDealStore.get(this.id),
@@ -388,16 +415,41 @@ export default {
 		},
 
 		openSafeDealRoom() {
+			this.sendSafeDealMessage();
+		},
+
+		shareSafeDealTransaction(txid) {
+			const 
+				messages = [`bastyon://transactionview?stx=${txid}`],
+				options = {
+					openRoom: false,
+					dialogMessage: this.$t("dialogLabels.sending_transaction")
+				};
+
+			this.sendSafeDealMessage(messages, options);
+		},
+
+		sendSafeDealMessage(
+			messages = [], 
+			options = {}
+		) {
 			if (this.sdk.willOpenRegistration()) return;
 
 			const data = {
 				name: this.id,
 				members: [this.buyerAddress, this.sellerAddress, this.validatorAddress],
-				openRoom: true,
+				messages: (messages || []),
+				openRoom: (options?.openRoom ?? true),
 			};
 
+			const 
+				defaultDialogMessage = data.openRoom ? 
+					this.$t("dialogLabels.opening_room")
+					: this.$t("dialogLabels.sending_message"),
+				dialogMessage = options?.dialogMessage || defaultDialogMessage;
+
 			this.isChatLoading = true;
-			this.dialog?.instance.view("load", this.$t("dialogLabels.opening_room"));
+			this.dialog?.instance.view("load", dialogMessage);
 			this.sendMessage(data).then(() => {
 				this.dialog?.instance.hide();
 			}).catch(e => {
@@ -498,8 +550,9 @@ export default {
 		makePayment(data) {
 			this.sdk.makePayment(data).then(result => {
 				this.storeSafeDealData(result.transaction);
-				this.showSuccess(this.$t("dialogLabels.transfer_complete"), null, () => {
-					this.waitingForPaymentConfirmation = true;	
+				this.showSuccess(this.$t("dialogLabels.transfer_complete_with_transaction_link"), null, () => {
+					this.waitingForPaymentConfirmation = true;
+					this.shareSafeDealTransaction(result.transaction);
 				});
 			}).catch(e => {
 				const 
@@ -535,10 +588,11 @@ export default {
 				params: { id: this.offer?.hash },
 			};
 
-			if (options?.anchorSelector) {
+			const selector = options?.anchorSelector;
+			if (selector) {
 				to = {
 					...to,
-					hash: options?.anchorSelector,
+					hash: `#${selector}`,
 				};
 			};
 

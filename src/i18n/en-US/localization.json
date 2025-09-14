@@ -293,6 +293,8 @@
 		"need_remove_unpublished_video": "The video has been uploaded but not published. It will be removed. Continue?",
 		"pending_reg": "Please wait until your account being activacted",
 		"opening_room": "The chat is opening. Please wait.",
+		"sending_message": "Sending message to the chat. Please wait.",
+		"sending_transaction": "Sending transaction to the chat. Please wait.",
 		"submit_rating": "Do you want to submit the rating?",
 		"submit_comment": "Do you want to submit the comment?",
 		"map_help_info": "To enable the offer filter by geolocation, set the visible area of ​​the map so that it covers the desired search region and click the \"Save\" button.\n\nTo reset the filter, click the \"All regions\" button.",
@@ -301,7 +303,7 @@
 		"survey_success": "Your answers have been sent",
 		"version_conflict_warning": "Barteron version has changed! Please restart the application (reopen the application from Bastyon).",
 		"transfer_payment_to_validator": "Do you want to make a payment transfer to the validator?",
-		"transfer_complete": "Transfer complete",
+		"transfer_complete_with_transaction_link": "Transfer complete",
 		"transfer_canceled": "You canceled the transfer",
 		"transfer_forbidden": "You have forbade the transfer",
 
