@@ -1,6 +1,6 @@
 <template>
 	<v-page-header class="safe-deal-header">
-		<section>
+		<section class="title">
 			<h1>{{ $t('safeDealLabels.label') }}</h1>
 		</section>
 

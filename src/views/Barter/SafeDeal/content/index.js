@@ -326,6 +326,13 @@ export default {
 				return;
 			};
 
+			const settings = this.sdk.getSafeDealSettings();
+			if (!(settings.validatorAddresses.includes(this.validatorAddress))) {
+				const error = new Error("validator address is invalid");
+				this.showError(error);
+				return;
+			};
+
 			this.statusesLoadingError = null;
 			this.statusesLoading = true;
 

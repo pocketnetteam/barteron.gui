@@ -10,7 +10,8 @@ import Offer from "@/js/models/offer.js";
 import OfferScore from "@/js/models/offerScore.js";
 import Comment from "@/js/models/comment.js";
 import AppErrors from "@/js/appErrors.js";
-import deliverySettings from "@/js/deliverySettings.js"
+import deliverySettings from "@/js/deliverySettings.js";
+import safeDealSettings from "@/js/safeDealSettings.js";
 
 /**
  * Allow work with bastyon
@@ -1244,6 +1245,10 @@ class SDK {
 
 	getDeliverySettings() {
 		return deliverySettings;
+	}
+
+	getSafeDealSettings() {
+		return safeDealSettings;
 	}
 
 	/**

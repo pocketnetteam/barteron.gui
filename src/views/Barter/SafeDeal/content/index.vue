@@ -6,8 +6,6 @@
 
 		<!-- without sidebar -->
 		<div class="no-aside">
-			<!-- <div class="safe-deal-sep bottom"></div> -->
-
 			<strong class="subtitle part-title">{{ shownUserData.title }}</strong>
 
 			<Profile :hash="shownUserData.address">
