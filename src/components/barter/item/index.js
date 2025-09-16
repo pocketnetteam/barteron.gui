@@ -19,6 +19,7 @@ import SelectOfferDialog from "@/views/Barter/SelectOfferDialog/index.vue";
 import SelectValidatorDialog from "@/components/safe-deal/select-validator-dialog/index.vue";
 import Score from "@/components/score/index.vue";
 import { showMediaItems } from "@/js/mediaUtils.js";
+import SafeDealUtils from "@/js/safeDealUtils.js";
 import "photoswipe/style.css";
 import Vue from 'vue';
 
@@ -739,12 +740,25 @@ export default {
 						};
 						data.messages.push(this.$t("safeDealLabels.chat_message_purchase_option"));
 
-						const params = {
-							id: this.sdk.createId({target: "safeDeal"}),
+						const idCreationData = {
 							offer: offer.hash,
 							buyer: this.sdk.address,
 							validator: address,
 							percent,
+						};
+
+						let safeDealId = null;
+						try {
+							const idHelper = new SafeDealUtils.IdHelper();
+							safeDealId = idHelper.createId(idCreationData);
+						} catch (e) {
+							this.showError(e);
+							return;
+						};
+						
+						const params = {
+							id: safeDealId,
+							...idCreationData,
 						};
 						const paramsString = new URLSearchParams(params).toString();
 

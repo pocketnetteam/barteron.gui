@@ -3,6 +3,7 @@ import Loader from "@/components/loader/index.vue";
 import SafeDealStore from "@/stores/safeDeal.js";
 import Profile from "@/components/profile/index.vue";
 import SafeDealStatus from "@/components/safe-deal/safe-deal-status/index.vue";
+import SafeDealUtils from "@/js/safeDealUtils.js";
 
 // TODO: localization
 
@@ -318,20 +319,9 @@ export default {
 		},
 
 		updateStatus() {
-			if (!(this.sdk.getFromToTransactionsIsAvailable())) {
-				const error = new Error(this.$t("dialogLabels.get_from_to_transactions_availability_error"));
-				this.showError(error, null, () => {
-					this.showOffer();
-				});
+			if (!(this.checkSafeDealData())) {
 				return;
-			};
-
-			const settings = this.sdk.getSafeDealSettings();
-			if (!(settings.validatorAddresses.includes(this.validatorAddress))) {
-				const error = new Error("validator address is invalid");
-				this.showError(error);
-				return;
-			};
+			}
 
 			this.statusesLoadingError = null;
 			this.statusesLoading = true;
@@ -375,6 +365,7 @@ export default {
 						this.statusItems = this.failedStatusItems;
 					};
 					this.currentStatus = this.completionStatus;
+					this.waitingForPaymentConfirmation = false;
 					this.removeStoredSafeDeal();
 				} else {
 					this.checkPaymentStatus();
@@ -387,6 +378,40 @@ export default {
 			}).finally(() => {
 				this.statusesLoading = false;
 			});
+		},
+
+		checkSafeDealData() {
+			if (!(this.sdk.getFromToTransactionsIsAvailable())) {
+				const error = new Error(this.$t("dialogLabels.get_from_to_transactions_availability_error"));
+				this.showError(error, null, () => {
+					this.showOffer();
+				});
+				return false;
+			};
+
+			const settings = this.sdk.getSafeDealSettings();
+			if (!(settings.validatorAddresses.includes(this.validatorAddress))) {
+				const error = new Error("Validator address is invalid");
+				this.showError(error);
+				return false;
+			};
+
+			let isValidId = false;
+			try {
+				const 
+					idHelper = new SafeDealUtils.IdHelper(),
+					data = this.$route.query;
+
+				isValidId = idHelper.checkId(this.id, data);
+				if (!(isValidId)) {
+					throw new Error("Control hash does not match the deal parameters");
+				}
+			} catch (error) {
+				this.showError(error);
+				return false;
+			}
+
+			return true;
 		},
 
 		getOpreturnMessage() {
@@ -441,6 +466,8 @@ export default {
 			options = {}
 		) {
 			if (this.sdk.willOpenRegistration()) return;
+
+			if (!(this.checkSafeDealData())) return;
 
 			const data = {
 				name: this.id,
@@ -555,6 +582,8 @@ export default {
 		},
 
 		makePayment(data) {
+			if (!(this.checkSafeDealData())) return;
+
 			this.sdk.makePayment(data).then(result => {
 				this.storeSafeDealData(result.transaction);
 				this.showSuccess(this.$t("dialogLabels.transfer_complete_with_transaction_link"), null, () => {
