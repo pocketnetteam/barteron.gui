@@ -568,6 +568,18 @@
 				/>
 			</div>
 
+			<!-- Safe deal -->
+			<div 
+				v-if="item.safeDeal?.validatorFeeVariant"
+				class="row block top-sep"
+			>
+				<strong class="title">{{ $t('safeDealLabels.label') }}</strong>
+				<SafeDeal
+					mode="view"
+					:safeDeal="item.safeDeal"
+				/>
+			</div>
+
 			<!-- Legal info -->
 			<div 
 				v-if="legalInfoAvailable"

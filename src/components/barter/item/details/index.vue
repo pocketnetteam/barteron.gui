@@ -173,6 +173,15 @@
 				:offers="[item]"
 			/>
 		</div>
+
+		<!-- Safe deal -->
+		<div class="row block sep" v-if="item.safeDeal?.validatorFeeVariant">
+			<strong class="title">{{ $t('safeDealLabels.label') }}</strong>
+			<SafeDeal
+				mode="view"
+				:safeDeal="item.safeDeal"
+			/>
+		</div>
 	</div>
 </template>
 

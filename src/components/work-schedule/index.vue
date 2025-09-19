@@ -113,11 +113,6 @@
 				v-if="additionalInfo"
 				class="work-schedule-additional-info"
 			>
-				<label>
-					<i class="fa fa-info-circle"></i>
-					{{ $t('deliveryLabels.work_schedule_additional_info_label') }}
-				</label>
-
 				<p class="description">
 					<LinkifiedText :text="additionalInfo"/>
 				</p>

@@ -49,7 +49,8 @@
 		"route": "How to get",
 		"description": "Description",
 		"location": "Location",
-		"pickup-point-list": "Pickup points"
+		"pickup-point-list": "Pickup points",
+		"safe-deal": "Safe deal"
 	},
 
 	"deliveryLabels": {
@@ -73,7 +74,6 @@
 		"shelf_life_hint": "Please note that the shelf life must match the specified value",
 		"work_schedule": "Work schedule",
 		"work_schedule_additional_info_placeholder": "Add information about changes in the work schedule (optional)",
-		"work_schedule_additional_info_label": "Additional information",
 		"all_day": "24 hours",
 		"around_the_clock": "Around the clock",
 		"address": "Address",
@@ -315,7 +315,7 @@
 		"platform_geolocation_permission_error": "Access to geolocation is restricted in the browser or operating system settings. You need to allow the access.",
 		"images_max_count_exceeded_error": "Maximum count of images exceeded",
 		"images_failed_upload_numbers_error": "Unable to upload images with numbers: {numbers}. If the images are larger than 1MB, please reduce their size.",
-		"get_from_to_transactions_availability_error": "The current version of the Bastyon app does not contain safe deal functionality",
+		"get_from_to_transactions_availability_error": "The current version of the Bastyon app does not contain safe deal option. Use the web version or update the app (if a new version is available)",
 		"payment_error": "An error occurred while transferring the amount",
 		"current_block_not_defined": "Failed to get the current block number in the blockchain",
 		"total_amount_smaller_amount_error": "You have less money in your account than you want to send",
@@ -374,6 +374,12 @@
 	"safeDealLabels": {
 		"label": "Safe deal",
 		"how_it_works": "How it works",
+		"add_validator_fee_payment_options": "Add validator fee payment options",
+		"ready_to_pay_validator_fee": "Ready to pay validator fee:",
+		"offer_validator_fee_variant_seller": "Fully",
+		"offer_validator_fee_variant_in_half": "In half with buyer",
+		"offer_validator_fee_variant_seller_description": "The seller can pay a validator's fee in full",
+		"offer_validator_fee_variant_in_half_description": "The seller can pay half of a validator's fee",
 		"faq_question1": "What is a \"Safe Deal\"",
 		"faq_answer1": "It is a deal involving an intermediary (validator), who acts as a guarantor of the deal. The buyer pays the deal amount to the validator, and after the seller fulfills the agreed conditions, the validator transfers the payment to the seller. At the same time, the validator withholds a pre-defined commission as a percentage of the deal amount for their service. Payment is made in PKOIN cryptocurrency.\n\nIf the conditions of the deal are not met — for example, if the buyer does not receive the goods or services — the validator returns the payment to the buyer. In case of a dispute between the seller and the buyer, the validator evaluates both sides’ arguments and makes a decision regarding the deal.",
 		"faq_question2": "How does a safe deal work?",
@@ -435,7 +441,7 @@
 		"status_loading_error_full_message": "An error occurred while updating the status: {error}. Click the \"Update status\" button to try again.",
 		"validator_fee_variant_buyer": "Buyer",
 		"validator_fee_variant_seller": "Seller",
-		"validator_fee_variant_in_half": "In half (buyer and seller)",
+		"validator_fee_variant_in_half": "Buyer and seller, in half",
 		"calculation": "Calculation",
 		"calculation_start_deal_item1": "Deal amount: {value} PKOIN",
 		"calculation_start_deal_item2": "Validator fee: {value1}% ({value2} PKOIN)",
@@ -476,7 +482,6 @@
 		"paragraph2": "You can read the terms of the program and register for it here:",
 		"referral_link_copy_success": "Referral link copied to clipboard",
 		"referral_link_copy_fail": "Error getting referral link"
-
 	},
 
 	"themeLabels": {

@@ -227,5 +227,11 @@ export default {
 
 	mounted() {
 		this.fillWorkSchedule();
-	}
+	},
+
+	watch: {
+		workSchedule() {
+			this.fillWorkSchedule();
+		}
+	},
 }

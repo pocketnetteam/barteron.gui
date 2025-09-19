@@ -5,8 +5,6 @@ import Profile from "@/components/profile/index.vue";
 import SafeDealStatus from "@/components/safe-deal/safe-deal-status/index.vue";
 import SafeDealUtils from "@/js/safeDealUtils.js";
 
-// TODO: localization
-
 export default {
 	name: "Content",
 
@@ -69,16 +67,12 @@ export default {
 		},
 
 		validatorFeeVariant() {
-			let result = "buyer";
+			const 
+				defaultValue = "buyer",
+				value = this.offer?.safeDeal?.validatorFeeVariant,
+				isValid = ["seller", "inHalf"].includes(value);
 
-			// // after adding this option in offer entity
-			// const safeDeal = this.offer?.safeDeal
-			// if (safeDeal?.isEnabled) {
-			// 	const isValid = ["seller", "inHalf"].includes(safeDeal?.validatorFeeVariant);
-			// 	result = isValid ? safeDeal?.validatorFeeVariant : result;
-			// }
-
-			return result;
+			return isValid ? value : defaultValue;
 		},
 
 		validatorFeeVariantTitle() {

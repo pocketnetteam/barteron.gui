@@ -17,6 +17,7 @@ import LegalInfo from "@/components/legal-info/index.vue";
 import LikeStore from "@/stores/like.js";
 import SelectOfferDialog from "@/views/Barter/SelectOfferDialog/index.vue";
 import SelectValidatorDialog from "@/components/safe-deal/select-validator-dialog/index.vue";
+import SafeDeal from "@/components/safe-deal/safe-deal-offer/index.vue";
 import Score from "@/components/score/index.vue";
 import { showMediaItems } from "@/js/mediaUtils.js";
 import SafeDealUtils from "@/js/safeDealUtils.js";
@@ -42,6 +43,7 @@ export default {
 		Profile,
 		Complain,
 		CurrencySwitcher,
+		SafeDeal,
 		LegalInfo,
 		SelectOfferDialog,
 		Score,

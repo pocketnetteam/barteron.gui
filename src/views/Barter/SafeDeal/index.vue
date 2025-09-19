@@ -7,7 +7,9 @@
 		<router-link 
 			:to="{ name: 'barterItem', params: { id: this.offer.hash } }"
 			class="link"
-		>{{ offer.caption }}</router-link>
+		>
+			<span>{{ offer.caption }}</span>
+		</router-link>
 
 	</v-page-header>
 </template>

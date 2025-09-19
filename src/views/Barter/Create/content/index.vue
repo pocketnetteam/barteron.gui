@@ -483,6 +483,23 @@
 				</div>
 			</div>
 
+			<div
+				class="row block sep"
+				v-if="safeDealAvailable && !(isPickupPointCategory()) && offerCreationParams().isAllowed""
+			>
+				<!-- Title: Safe deal -->
+				<strong class="title">{{ $t('safeDealLabels.label') }}</strong>
+
+				<SafeDeal
+					ref="safeDeal"
+					mode="edit"
+					holderClass="field"
+					name="safeDeal"
+					:safeDeal="offer.safeDeal"
+					@safeDealVisibilityUpdated="updateAsideStepsAsync"
+				/>
+			</div>
+
 			<div 
 				v-if="offerCreationParams().isAllowed" 
 				id="offer-options" 
