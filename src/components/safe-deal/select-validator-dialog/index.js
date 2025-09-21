@@ -17,16 +17,64 @@ export default {
 		excludedAddresses: {
 			type: Array,
 			default: () => []
+		},
+		forcedSelectedAddress: {
+			type: String,
+			default: null
 		}
 	},
 
 	data() {
 		return {
 			lightbox: false,
-			selected: null,
-			items: [],
+			selectedIndex: null,
 			isLoading: false,
 		}
+	},
+
+	computed: {
+		items() {
+			const settings = this.sdk.getSafeDealSettings();
+			return settings.validatorAddresses.filter(f => !(this.excludedAddresses.includes(f)));
+		},
+
+		accounts() {
+			return this.items.map(m => this.sdk.barteron.accounts[m]);
+		},
+
+ 		filteredItems() {
+			const result = this.accounts
+				.filter(f => f?.safeDeal?.validator?.status === "available" && f?.safeDeal?.validator?.fee)
+				.sort((a,b) => {
+					const 
+						aValue = (a.safeDeal?.validator?.fee || 100),
+						bValue = (b.safeDeal?.validator?.fee || 100);
+					
+					return (aValue !== bValue) ? 
+						(aValue - bValue)
+						: (a.address > b.address ? 1 : -1);
+				})
+				.map(m => m.address);
+			
+			const needShiftToTheTopAndSelect = this.forcedSelectedAddress;
+			if (needShiftToTheTopAndSelect) {
+				const index = result.findIndex(f => f === this.forcedSelectedAddress);
+				if (index > -1) {
+					const 
+						removedItems = result.splice(index, 1),
+						target = removedItems[0];
+
+					if (target) {
+						result.unshift(target);
+						if (!(this.selectedIndex)) {
+							this.selectedIndex = 0;
+						}
+					};
+				};
+			};
+
+			return result;
+		},
 	},
 
 	methods: {
@@ -45,9 +93,9 @@ export default {
 
 		select() {
 			const 
-				profile = this.$refs[`profile-${this.selected}`]?.[0],
+				profile = this.$refs[`profile-${this.selectedIndex}`]?.[0],
 				account = profile?.account,
-				validator = {address: account?.address, settings: account?.validatorSettings};
+				validator = {address: account?.address, settings: account?.safeDeal?.validator};
 
 			this.$emit('onSelect', validator);
 			this.hide();
@@ -57,10 +105,5 @@ export default {
 			this.$destroy();
 			this.$el.parentNode.removeChild(this.$el);			
 		},
-	},
-
-	mounted() {
-		const settings = this.sdk.getSafeDealSettings();
-		this.items = settings.validatorAddresses.filter(f => !(this.excludedAddresses.includes(f)));
 	},
 }

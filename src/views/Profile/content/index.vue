@@ -42,6 +42,16 @@
 		</div>
 
 		<!-- without aside -->
+		<div 
+			v-if="isValidator" 
+			class="row sep no-aside"
+		>
+			<SafeDealProfile
+				:hash="address"
+			/>
+		</div>
+
+		<!-- without aside -->
 		<div class="row sep no-aside last">
 			<!-- Exchange -->
 			<div>

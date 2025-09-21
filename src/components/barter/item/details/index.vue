@@ -84,7 +84,10 @@
 		</div>
 
 		<!-- Price -->
-		<div class="info">
+		<div 
+			v-if="mode !== 'selection'"
+			class="info"
+		>
 			<div class="col">
 				<span class="title">{{ $t('priceLabels.label') }}</span>
 				<Price :item="item" />
@@ -101,7 +104,10 @@
 		>
 			<strong class="title">{{ $t('deliveryLabels.pickup_point_info') }}</strong>
 
-			<div class="row block">
+			<div 
+				v-if="mode !== 'selection'"
+				class="row block"
+			>
 				<strong class="subtitle">{{ $t('deliveryLabels.financial_terms') }}</strong>
 				<p class="description">
 					<LinkifiedText :text="pickupPoint.financialTerms"/>

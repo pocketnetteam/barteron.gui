@@ -12,14 +12,18 @@ const safeDealData = {
 
 		],
 	},
+
+	defaultValidatorValues: {
+		fee: 5,
+	},
 }
 
 const 
 	env = process.env.NODE_ENV,
-	validatorAddresses = safeDealData.validatorAddresses[env] || [];
+	validatorAddresses = safeDealData.validatorAddresses[env] || [],
+	defaultValidatorValues = safeDealData.defaultValidatorValues;
 
-const safeDealSettings = {
+export default {
 	validatorAddresses,
+	defaultValidatorValues,
 };
-
-export default safeDealSettings;

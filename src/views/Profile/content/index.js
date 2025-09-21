@@ -1,5 +1,6 @@
 import Profile from "@/components/profile/index.vue";
 import Wallet from "@/components/wallet/index.vue";
+import SafeDealProfile from "@/components/safe-deal/safe-deal-profile/index.vue";
 import ProfileExchangeList from "@/components/barter/exchange/profile-list/index.vue";
 import BarterList from "@/components/barter/list/index.vue";
 import Votes from "@/components/votes/index.vue";
@@ -19,6 +20,7 @@ export default {
 	components: {
 		Profile,
 		Wallet,
+		SafeDealProfile,
 		ProfileExchangeList,
 		BarterList,
 		Votes
@@ -58,6 +60,16 @@ export default {
 		 */
 		isMyProfile() {
 			return this.address === this.sdk.address;
+		},
+
+		/**
+		 * Check if the user is a validator
+		 * 
+		 * @returns {Boolean}
+		 */
+		isValidator() {
+			const settings = this.sdk.getSafeDealSettings();
+			return settings.validatorAddresses.includes(this.address);
 		},
 
 		/**

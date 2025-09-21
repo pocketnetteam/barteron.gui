@@ -626,13 +626,38 @@ export default {
 
 			if (needStart) {
 				if (this.safeDealEnabled) {
-					const callback = (validator) => {
-						validator && this.createRoom(
-							this.item, 
-							{isPurchase, pickupPoint, validator}
-						);
+					let selectedValidatorAddress = null;
+					if (pickupPoint?.address) {
+						const 
+							settings = this.sdk.getSafeDealSettings(),
+							pickupPointOwnerAddress = pickupPoint?.address,
+							pickupPointOwnerIsValidator = settings.validatorAddresses.includes(pickupPointOwnerAddress),
+							buyerAddress = this.sdk.address,
+							sellerAddress = this.address;
+
+						if (pickupPointOwnerIsValidator
+							&& pickupPointOwnerAddress !== buyerAddress
+							&& pickupPointOwnerAddress !== sellerAddress
+						) {
+							selectedValidatorAddress = pickupPointOwnerAddress;
+						}
 					};
-					this.selectValidator(callback);
+
+					const callback = (validator) => {
+						const 
+							validatorSelected = (validator),
+							needContinue = validatorSelected;
+
+						if (needContinue) {
+							this.createRoom(
+								this.item, 
+								{isPurchase, pickupPoint, validator}
+							);
+						}
+					};
+
+					const options = {forcedSelectedAddress: selectedValidatorAddress};
+					this.selectValidator(callback, options);
 				} else {
 					this.createRoom(
 						this.item, 
@@ -642,11 +667,12 @@ export default {
 			}
 		},
 
-		selectValidator(callback) {
+		selectValidator(callback, options = {}) {
 			const ComponentClass = Vue.extend(SelectValidatorDialog);
 			const instance = new ComponentClass({
 				propsData: {
 					excludedAddresses: [this.item.address, this.sdk.address],
+					forcedSelectedAddress: options?.forcedSelectedAddress,
 				},
 			});
 			
@@ -734,7 +760,7 @@ export default {
 				if (validator) {
 					const 
 						address = validator.address,
-						percent = validator.settings?.percent || 10;
+						percent = validator.settings?.fee || 10;
 
 					if (address) {
 						if (!(data.members.includes(address))) {

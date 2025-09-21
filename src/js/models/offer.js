@@ -32,7 +32,7 @@ class Offer {
 		this.images = (data?.images || images || []).filter(f => f);
 		this.delivery = (data?.delivery ?? d ?? {});
 		this.videoSettings = (data?.videoSettings ?? v ?? {});
-		this.safeDeal = (data?.safeDeal ?? s ?? {});
+		this.safeDeal = (data?.safeDeal || s || {});
 		this.geohash = data?.geohash || data?.p?.s6 || "";
 		this.video = data?.video || data?.p?.s7 || "";
 		this.currencyPrice = data?.currencyPrice || f || {};

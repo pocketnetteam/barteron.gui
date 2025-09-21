@@ -1,5 +1,6 @@
 import Profile from "@/components/profile/index.vue";
 import Wallet from "@/components/wallet/index.vue";
+import SafeDealProfile from "@/components/safe-deal/safe-deal-profile/index.vue";
 import ProfileExchangeList from "@/components/barter/exchange/profile-list/index.vue";
 
 export default {
@@ -8,6 +9,7 @@ export default {
 	components: {
 		Profile,
 		Wallet,
+		SafeDealProfile,
 		ProfileExchangeList
 	},
 
@@ -39,7 +41,12 @@ export default {
 		 */
 		account() {
 			return this.sdk.barteron.accounts[this.address];
-		}
+		},
+
+		isValidator() {
+			const settings = this.sdk.getSafeDealSettings();
+			return settings.validatorAddresses.includes(this.address);
+		},
 	},
 
 	methods: {

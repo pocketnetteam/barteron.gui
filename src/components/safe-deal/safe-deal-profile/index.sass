@@ -1,0 +1,30 @@
+@import "@/css/vars.sass"
+
+.safe-deal-profile
+	.status-holder,
+	.fee-holder
+		align-items: center
+		flex-wrap: wrap
+		justify-content: start
+		gap: $r * 1.5
+
+		.fee
+			.v-input
+				width: 50px
+	
+	i.icon
+		&.available
+			color: $roshi !important
+
+		&.unavailable
+			color: $dodoria !important
+
+	.edit
+		margin: 1em 0 0
+		
+		.v-button
+			width: 100%
+			height: 40px
+
+	.message
+		margin-top: $r * 2

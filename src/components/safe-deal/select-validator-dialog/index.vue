@@ -6,14 +6,16 @@
 		:title="$t('safeDealLabels.select_validator')"
 		@onHide="hide"
 	>
-
-		<ul class="validators-list">
+		<ul 
+			v-if="filteredItems?.length"
+			class="validators-list"
+		>
 			<li
-				v-for="(item, index) in items"
+				v-for="(item, index) in filteredItems"
 				:key="index"
 				class="validator-item"
-				:class="{ 'selected': selected === index }"
-				@click="() => selected = index"
+				:class="{ 'selected': selectedIndex === index }"
+				@click="() => selectedIndex = index"
 			>
 				<i class="check fa fa-check-circle"></i>
 				<Profile 
@@ -24,12 +26,16 @@
 			</li>
 		</ul>
 
+		<div v-else>
+			<p>{{ $t("safeDealLabels.empty_validators_list") }}</p>
+		</div>
+
 		<!-- Footer -->
 		<template #footer>
 			<div class="row full-width right">
 				<div class="buttons-holder min-h-w">
 					<v-button 
-						:disabled="!items[selected]"
+						:disabled="!filteredItems[selectedIndex]"
 						@click="select"
 					>
 						<span>{{ $t('buttonLabels.select') }}</span>

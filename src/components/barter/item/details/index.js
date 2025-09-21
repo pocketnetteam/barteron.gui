@@ -26,7 +26,11 @@ export default {
 		item: {
 			type: Object,
 			default: () => ({})
-		}
+		},
+		mode: {
+			type: String,
+			default: null
+		},
 	},
 
 	data() {

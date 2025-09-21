@@ -9,6 +9,7 @@ export default {
 	props: {
 		id: String,
 		name: String,
+		disabled: [String, Boolean],
 		vAlign: String,
 		vType: String,
 		vSize: String,
