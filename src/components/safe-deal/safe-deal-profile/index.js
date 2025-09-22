@@ -20,7 +20,7 @@ export default {
 	data() {
 		return {
 			status: null,
-			fee: 0,
+			feePercent: 0,
 			editing: false,
 			isLoading: false,
 		}
@@ -82,7 +82,7 @@ export default {
 				defaultValues = settings.defaultValidatorValues;
 
 			this.status = this.account?.safeDeal?.validator?.status || this.statuses.unavailable;
-			this.fee = this.account?.safeDeal?.validator?.fee || defaultValues.fee;
+			this.feePercent = this.account?.safeDeal?.validator?.feePercent || defaultValues.feePercent;
 		},
 
 		edit() {
@@ -96,7 +96,7 @@ export default {
 
 			const validator = {
 				status: this.status,
-				fee: this.fee,
+				feePercent: this.feePercent,
 			};
 
 			let safeDeal = this.account?.safeDeal || {};
@@ -118,7 +118,7 @@ export default {
 		},
 
 		checkData() {
-			const result = (0 < this.fee && this.fee < 99);
+			const result = (0 < this.feePercent && this.feePercent < 99);
 			if (!(result)) {
 				this.showError(this.$t("dialogLabels.validator_fee_value_error"));
 			}
@@ -140,12 +140,12 @@ export default {
 			};
 		},
 
-		changeFeeEvent(e) {
+		changeFeePercentEvent(e) {
 			const
-				inputs = this.$refs.fee?.inputs,
+				inputs = this.$refs.feePercent?.inputs,
 				input = inputs[0].value;
 			
-			this.fee = !(Number.isNaN(Number(input))) ? Math.min( Math.max(Number(input),0), 99) : 0;
+			this.feePercent = !(Number.isNaN(Number(input))) ? Math.min( Math.max(Number(input),0), 99) : 0;
 		},
 
 	},

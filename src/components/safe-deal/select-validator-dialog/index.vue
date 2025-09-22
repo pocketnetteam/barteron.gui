@@ -26,6 +26,13 @@
 			</li>
 		</ul>
 
+		<div v-else-if="isLoading">
+			<loader 
+				type="circular" 
+				align="top"
+			/>
+		</div>
+
 		<div v-else>
 			<p>{{ $t("safeDealLabels.empty_validators_list") }}</p>
 		</div>

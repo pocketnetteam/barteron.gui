@@ -1,6 +1,7 @@
 import i18n from "@/i18n/index.js";
 import router from "@/router.js";
 import Profile from "@/components/profile/index.vue";
+import Loader from "@/components/loader/index.vue";
 
 export default {
 	name: "SelectValidatorDialog",
@@ -10,7 +11,8 @@ export default {
 	router,
 
 	components: {
-		Profile
+		Profile,
+		Loader,
 	},
 
 	props: {
@@ -29,26 +31,26 @@ export default {
 			lightbox: false,
 			selectedIndex: null,
 			isLoading: false,
+			loadingTimerId: null,
 		}
 	},
 
 	computed: {
-		items() {
-			const settings = this.sdk.getSafeDealSettings();
-			return settings.validatorAddresses.filter(f => !(this.excludedAddresses.includes(f)));
-		},
-
 		accounts() {
-			return this.items.map(m => this.sdk.barteron.accounts[m]);
+			const 
+				settings = this.sdk.getSafeDealSettings(),
+				allItems = settings.validatorAddresses.filter(f => !(this.excludedAddresses.includes(f)));
+
+			return allItems.map(m => this.sdk.barteron.accounts[m]);
 		},
 
  		filteredItems() {
 			const result = this.accounts
-				.filter(f => f?.safeDeal?.validator?.status === "available" && f?.safeDeal?.validator?.fee)
+				.filter(f => f?.safeDeal?.validator?.status === "available" && f?.safeDeal?.validator?.feePercent)
 				.sort((a,b) => {
 					const 
-						aValue = (a.safeDeal?.validator?.fee || 100),
-						bValue = (b.safeDeal?.validator?.fee || 100);
+						aValue = (a.safeDeal?.validator?.feePercent || 100),
+						bValue = (b.safeDeal?.validator?.feePercent || 100);
 					
 					return (aValue !== bValue) ? 
 						(aValue - bValue)
@@ -102,8 +104,17 @@ export default {
 		},
 
 		remove() {
+			clearTimeout(this.loadingTimerId);
+			
 			this.$destroy();
 			this.$el.parentNode.removeChild(this.$el);			
 		},
 	},
+
+	mounted() {
+		this.isLoading = true;
+		this.loadingTimerId = setTimeout(() => {
+			this.isLoading = false;
+		}, 10000);
+	}
 }

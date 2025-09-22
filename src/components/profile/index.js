@@ -132,8 +132,12 @@ export default {
 		},
 
 		validationConditions() {
-			const percent = this.account?.safeDeal?.validator?.fee || 10;
-			return this.$t("safeDealLabels.validation_conditions", { percent });
+			const 
+				settings = this.sdk.getSafeDealSettings(),
+				defaultValues = settings.defaultValidatorValues;
+			
+			const feePercent = this.account?.safeDeal?.validator?.feePercent || defaultValues.feePercent;
+			return this.$t("safeDealLabels.validation_conditions", { feePercent });
 		},
 
 	}

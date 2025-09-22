@@ -14,7 +14,7 @@ const safeDealData = {
 	},
 
 	defaultValidatorValues: {
-		fee: 5,
+		feePercent: 5,
 	},
 }
 

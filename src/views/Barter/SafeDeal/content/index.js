@@ -63,7 +63,7 @@ export default {
 		},
 
 		validatorFeePercent() {
-			return this.$route.query.percent || 10;
+			return this.$route.query.fee;
 		},
 
 		validatorFeeVariant() {
@@ -390,6 +390,12 @@ export default {
 				return false;
 			};
 
+			if (!(this.validatorFeePercent)) {
+				const error = new Error("Validator fee percent not defined");
+				this.showError(error);
+				return false;
+			};
+
 			let isValidId = false;
 			try {
 				const 
@@ -522,10 +528,10 @@ export default {
 		transferPaymentToValidator() {
 			const 
 				amount = this.status1BuyerTransferAmount,
-				percent = this.validatorFeePercent,
+				feePercent = this.validatorFeePercent,
 				message = this.paymentTransferMessage;
 			
-			if (this.buyerPaymentPercent === null || !(amount && percent && message)) {
+			if (this.buyerPaymentPercent === null || !(amount && feePercent && message)) {
 				const error = new Error("Internal error: payment parameters not defined");
 				this.showError(error);
 				return;

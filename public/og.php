@@ -140,17 +140,17 @@ class OG {
 						}
 					}
 
-					$validatorPercent = @$id['percent'] ? $id['percent'] : '?';
+					$validatorFeePercent = @$id['fee'] ? $id['fee'] : '?';
 
 					switch ($lang) {
 						case 'en':
 							$title = 'Safe deal';
-							$description = "Validator: {$validatorName}, percent: {$validatorPercent}%; Seller: {$sellerName}; Buyer: {$buyerName}; Subject of the deal: {$offerTitle}";
+							$description = "Validator: {$validatorName}, fee: {$validatorFeePercent}%; Seller: {$sellerName}; Buyer: {$buyerName}; Subject of the deal: {$offerTitle}";
 							break;
 
 						case 'ru':
 							$title = 'Безопасная сделка';
-							$description = "Валидатор: {$validatorName}, процент: {$validatorPercent}%; Продавец: {$sellerName}; Покупатель: {$buyerName}; Предмет сделки: {$offerTitle}";
+							$description = "Валидатор: {$validatorName}, процент: {$validatorFeePercent}%; Продавец: {$sellerName}; Покупатель: {$buyerName}; Предмет сделки: {$offerTitle}";
 							break;
 
 						default:

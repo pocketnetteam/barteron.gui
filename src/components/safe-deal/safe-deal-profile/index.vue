@@ -18,25 +18,25 @@
 			</div>
 		</div>
 
-		<div class="row fee-holder">
+		<div class="row fee-percent-holder">
 			<div class="col no-offset">
-				<span>{{ $t("safeDealLabels.fee") }}:</span>
+				<span>{{ $t("safeDealLabels.fee_percent") }}:</span>
 			</div>
 
 			<div class="col">
 				<v-input
-					class="fee"
-					:id="['fee']"
-					:value="[fee]"
-					ref="fee"
+					class="fee-percent"
+					:id="['fee-percent']"
+					:value="[feePercent]"
+					ref="feePercent"
 					min="0"
 					max="99"
 					type="number"
 					vSize="md"
 					:disabled="!(editing) || isLoading"
 					:vEvents="{
-						change: changeFeeEvent,
-						input: changeFeeEvent,
+						change: changeFeePercentEvent,
+						input: changeFeePercentEvent,
 					}"
 				/>
 			</div>

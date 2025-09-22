@@ -760,9 +760,9 @@ export default {
 				if (validator) {
 					const 
 						address = validator.address,
-						percent = validator.settings?.fee || 10;
+						feePercent = validator.settings?.feePercent;
 
-					if (address) {
+					if (address && feePercent) {
 						if (!(data.members.includes(address))) {
 							data.members.push(address);
 						};
@@ -772,7 +772,7 @@ export default {
 							offer: offer.hash,
 							buyer: this.sdk.address,
 							validator: address,
-							percent,
+							fee: feePercent,
 						};
 
 						let safeDealId = null;
@@ -791,14 +791,16 @@ export default {
 						const paramsString = new URLSearchParams(params).toString();
 
 						data.messages.push(this.sdk.appLink(`barter/safedeal?${ paramsString }`));
+					} else {
+						const error = new Error("Internal error: address or feePercent not defined");
+						this.showError(error);
+						return;
 					}
 				};
 
 			} else if (options?.isExchange && this.item?.hash) {
-
 				data.messages.push(this.sdk.appLink(`barter/${ this.item?.hash }`));
 				data.messages.push(this.$t("deliveryLabels.chat_message_exchange_proposed"));
-
 			}
 			
 			if (needCreateRoom) {

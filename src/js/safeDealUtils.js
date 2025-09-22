@@ -25,7 +25,7 @@ class IdHelper{
 			case 1:
 				const 
 					idRandomPart = this.sdk.createId({format: "16chars"}),
-					source = `${idRandomPart}${data.offer}${data.buyer}${data.validator}${data.percent}${idVersion}`,
+					source = `${idRandomPart}${data.offer}${data.buyer}${data.validator}${data.fee}${idVersion}`,
 					idHashPart = this.sdk.MD5(source).slice(0, 8),
 					idVersionHex = this.getHexIdVersion(idVersion);
 
@@ -59,7 +59,7 @@ class IdHelper{
 				const 
 					idRandomPart = id.slice(0, 16),
 					idHashPart = id.slice(16, 24),
-					source = `${idRandomPart}${data.offer}${data.buyer}${data.validator}${data.percent}${idVersion}`,
+					source = `${idRandomPart}${data.offer}${data.buyer}${data.validator}${data.fee}${idVersion}`,
 					calculatedIdHashPart = this.sdk.MD5(source).slice(0, 8);
 
 				result = (idHashPart === calculatedIdHashPart);
