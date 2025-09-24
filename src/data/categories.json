@@ -10235,12 +10235,825 @@
 		"order": 3510
 	},
 	"20": {
-		"name": "cosmetics_perfumery_hygiene",
+		"name": "cosmetics_perfumes_hygiene",
 		"icon": "fa-pump-soap",
 		"id": 20,
 		"parent": null,
+		"children": [
+			42,
+			54,
+			64,
+			78,
+			88,
+			101,
+			111,
+			118,
+			141
+		],
+		"order": 340
+	},
+	"42": {
+		"name": "hair_care_products",
+		"id": 42,
+		"parent": 20,
+		"children": [
+			43,
+			44,
+			45,
+			46,
+			47,
+			48,
+			49,
+			50,
+			51,
+			52,
+			53
+		],
+		"order": 10
+	},
+	"43": {
+		"name": "shampoos_&_conditioners",
+		"id": 43,
+		"parent": 42,
 		"children": [],
-		"order": 3520
+		"order": 10
+	},
+	"44": {
+		"name": "oils_&_serums",
+		"id": 44,
+		"parent": 42,
+		"children": [],
+		"order": 20
+	},
+	"45": {
+		"name": "styling_products",
+		"id": 45,
+		"parent": 42,
+		"children": [],
+		"order": 30
+	},
+	"46": {
+		"name": "combs_&_brushes",
+		"id": 46,
+		"parent": 42,
+		"children": [],
+		"order": 40
+	},
+	"47": {
+		"name": "hair_coloring_&_perming",
+		"id": 47,
+		"parent": 42,
+		"children": [],
+		"order": 50
+	},
+	"48": {
+		"name": "cosmetic_sets",
+		"id": 48,
+		"parent": 42,
+		"children": [],
+		"order": 60
+	},
+	"49": {
+		"name": "hair_extensions",
+		"id": 49,
+		"parent": 42,
+		"children": [],
+		"order": 70
+	},
+	"50": {
+		"name": "shower_caps",
+		"id": 50,
+		"parent": 42,
+		"children": [],
+		"order": 80
+	},
+	"51": {
+		"name": "hair_rollers",
+		"id": 51,
+		"parent": 42,
+		"children": [],
+		"order": 90
+	},
+	"52": {
+		"name": "wigs_&_hairpieces",
+		"id": 52,
+		"parent": 42,
+		"children": [],
+		"order": 100
+	},
+	"53": {
+		"name": "professional_hairdressing_tools",
+		"id": 53,
+		"parent": 42,
+		"children": [],
+		"order": 110
+	},
+	"54": {
+		"name": "face_care",
+		"id": 54,
+		"parent": 20,
+		"children": [
+			55,
+			56,
+			57,
+			58,
+			59,
+			60,
+			61,
+			62,
+			63
+		],
+		"order": 20
+	},
+	"55": {
+		"name": "cleansers_&_face_wash",
+		"id": 55,
+		"parent": 54,
+		"children": [],
+		"order": 10
+	},
+	"56": {
+		"name": "scrubs_&_peelings",
+		"id": 56,
+		"parent": 54,
+		"children": [],
+		"order": 20
+	},
+	"57": {
+		"name": "moisturizers_&_nourishing_products",
+		"id": 57,
+		"parent": 54,
+		"children": [],
+		"order": 30
+	},
+	"58": {
+		"name": "face_masks",
+		"id": 58,
+		"parent": 54,
+		"children": [],
+		"order": 40
+	},
+	"59": {
+		"name": "eye_patches",
+		"id": 59,
+		"parent": 54,
+		"children": [],
+		"order": 50
+	},
+	"60": {
+		"name": "products_for_problem_skin",
+		"id": 60,
+		"parent": 54,
+		"children": [],
+		"order": 60
+	},
+	"61": {
+		"name": "anti-aging_care",
+		"id": 61,
+		"parent": 54,
+		"children": [],
+		"order": 70
+	},
+	"62": {
+		"name": "face_care_sets",
+		"id": 62,
+		"parent": 54,
+		"children": [],
+		"order": 80
+	},
+	"63": {
+		"name": "cosmetic_tools",
+		"id": 63,
+		"parent": 54,
+		"children": [],
+		"order": 90
+	},
+	"64": {
+		"name": "body_care",
+		"id": 64,
+		"parent": 20,
+		"children": [
+			65,
+			66,
+			67,
+			68,
+			69,
+			70,
+			71,
+			72,
+			73,
+			74,
+			75,
+			76,
+			77
+		],
+		"order": 30
+	},
+	"65": {
+		"name": "creams",
+		"id": 65,
+		"parent": 64,
+		"children": [],
+		"order": 10
+	},
+	"66": {
+		"name": "moisturizers_&_nourishing_products",
+		"id": 66,
+		"parent": 64,
+		"children": [],
+		"order": 20
+	},
+	"67": {
+		"name": "shower_products",
+		"id": 67,
+		"parent": 64,
+		"children": [],
+		"order": 30
+	},
+	"68": {
+		"name": "soap",
+		"id": 68,
+		"parent": 64,
+		"children": [],
+		"order": 40
+	},
+	"69": {
+		"name": "sponges_&_loofahs",
+		"id": 69,
+		"parent": 64,
+		"children": [],
+		"order": 50
+	},
+	"70": {
+		"name": "body_scrubs_&_peelings",
+		"id": 70,
+		"parent": 64,
+		"children": [],
+		"order": 60
+	},
+	"71": {
+		"name": "bath_care_products",
+		"id": 71,
+		"parent": 64,
+		"children": [],
+		"order": 70
+	},
+	"72": {
+		"name": "deodorants",
+		"id": 72,
+		"parent": 64,
+		"children": [],
+		"order": 80
+	},
+	"73": {
+		"name": "anti-cellulite_&_stretch_mark_products",
+		"id": 73,
+		"parent": 64,
+		"children": [],
+		"order": 90
+	},
+	"74": {
+		"name": "dry_body_brush",
+		"id": 74,
+		"parent": 64,
+		"children": [],
+		"order": 100
+	},
+	"75": {
+		"name": "depilation_&_epilation",
+		"id": 75,
+		"parent": 64,
+		"children": [],
+		"order": 110
+	},
+	"76": {
+		"name": "body_care_sets",
+		"id": 76,
+		"parent": 64,
+		"children": [],
+		"order": 120
+	},
+	"77": {
+		"name": "body_sticks",
+		"id": 77,
+		"parent": 64,
+		"children": [],
+		"order": 130
+	},
+	"78": {
+		"name": "makeup",
+		"id": 78,
+		"parent": 20,
+		"children": [
+			79,
+			80,
+			81,
+			82,
+			83,
+			84,
+			85,
+			86,
+			87
+		],
+		"order": 40
+	},
+	"79": {
+		"name": "face",
+		"id": 79,
+		"parent": 78,
+		"children": [],
+		"order": 10
+	},
+	"80": {
+		"name": "eyes",
+		"id": 80,
+		"parent": 78,
+		"children": [],
+		"order": 20
+	},
+	"81": {
+		"name": "lips",
+		"id": 81,
+		"parent": 78,
+		"children": [],
+		"order": 30
+	},
+	"82": {
+		"name": "eyebrows",
+		"id": 82,
+		"parent": 78,
+		"children": [],
+		"order": 40
+	},
+	"83": {
+		"name": "makeup_accessories",
+		"id": 83,
+		"parent": 78,
+		"children": [],
+		"order": 50
+	},
+	"84": {
+		"name": "makeup_sets",
+		"id": 84,
+		"parent": 78,
+		"children": [],
+		"order": 60
+	},
+	"85": {
+		"name": "atomizers_&_bottles",
+		"id": 85,
+		"parent": 78,
+		"children": [],
+		"order": 70
+	},
+	"86": {
+		"name": "permanent_makeup",
+		"id": 86,
+		"parent": 78,
+		"children": [],
+		"order": 80
+	},
+	"87": {
+		"name": "temporary_tattoos_&_rhinestones",
+		"id": 87,
+		"parent": 78,
+		"children": [],
+		"order": 90
+	},
+	"88": {
+		"name": "manicure_&_pedicure",
+		"id": 88,
+		"parent": 20,
+		"children": [
+			89,
+			90,
+			91,
+			92,
+			93,
+			94,
+			95,
+			100
+		],
+		"order": 50
+	},
+	"89": {
+		"name": "gel_polishes_&_gel_systems",
+		"id": 89,
+		"parent": 88,
+		"children": [],
+		"order": 10
+	},
+	"90": {
+		"name": "nail_design",
+		"id": 90,
+		"parent": 88,
+		"children": [],
+		"order": 20
+	},
+	"91": {
+		"name": "tools_&_accessories",
+		"id": 91,
+		"parent": 88,
+		"children": [],
+		"order": 30
+	},
+	"92": {
+		"name": "manicure_&_pedicure_equipment",
+		"id": 92,
+		"parent": 88,
+		"children": [],
+		"order": 40
+	},
+	"93": {
+		"name": "tips_&_forms_for_nail_extensions",
+		"id": 93,
+		"parent": 88,
+		"children": [],
+		"order": 50
+	},
+	"94": {
+		"name": "hand_&_nail_care",
+		"id": 94,
+		"parent": 88,
+		"children": [],
+		"order": 60
+	},
+	"95": {
+		"name": "antiseptic_products",
+		"id": 95,
+		"parent": 88,
+		"children": [],
+		"order": 70
+	},
+	"100": {
+		"name": "baths_&_paraffin_therapy",
+		"id": 100,
+		"parent": 88,
+		"children": [],
+		"order": 80
+	},
+	"101": {
+		"name": "perfumes",
+		"id": 101,
+		"parent": 20,
+		"children": [
+			102,
+			103,
+			104,
+			105,
+			106,
+			107,
+			108,
+			109,
+			110
+		],
+		"order": 60
+	},
+	"102": {
+		"name": "eau_de_parfum",
+		"id": 102,
+		"parent": 101,
+		"children": [],
+		"order": 10
+	},
+	"103": {
+		"name": "eau_de_toilette",
+		"id": 103,
+		"parent": 101,
+		"children": [],
+		"order": 20
+	},
+	"104": {
+		"name": "perfume",
+		"id": 104,
+		"parent": 101,
+		"children": [],
+		"order": 30
+	},
+	"105": {
+		"name": "dry_&_oil_perfumes",
+		"id": 105,
+		"parent": 101,
+		"children": [],
+		"order": 40
+	},
+	"106": {
+		"name": "niche_perfumes",
+		"id": 106,
+		"parent": 101,
+		"children": [],
+		"order": 50
+	},
+	"107": {
+		"name": "perfume_mists_&_veils",
+		"id": 107,
+		"parent": 101,
+		"children": [],
+		"order": 60
+	},
+	"108": {
+		"name": "refillable_perfumes",
+		"id": 108,
+		"parent": 101,
+		"children": [],
+		"order": 70
+	},
+	"109": {
+		"name": "colognes",
+		"id": 109,
+		"parent": 101,
+		"children": [],
+		"order": 80
+	},
+	"110": {
+		"name": "perfume_sets",
+		"id": 110,
+		"parent": 101,
+		"children": [],
+		"order": 90
+	},
+	"111": {
+		"name": "tanning_&_sun_protection",
+		"id": 111,
+		"parent": 20,
+		"children": [
+			112,
+			113,
+			114,
+			115,
+			116,
+			117
+		],
+		"order": 70
+	},
+	"112": {
+		"name": "sunscreens",
+		"id": 112,
+		"parent": 111,
+		"children": [],
+		"order": 10
+	},
+	"113": {
+		"name": "skincare_with_spf",
+		"id": 113,
+		"parent": 111,
+		"children": [],
+		"order": 20
+	},
+	"114": {
+		"name": "tanning_products",
+		"id": 114,
+		"parent": 111,
+		"children": [],
+		"order": 30
+	},
+	"115": {
+		"name": "after-sun_products",
+		"id": 115,
+		"parent": 111,
+		"children": [],
+		"order": 40
+	},
+	"116": {
+		"name": "tanning_bed_products",
+		"id": 116,
+		"parent": 111,
+		"children": [],
+		"order": 50
+	},
+	"117": {
+		"name": "self-tanners",
+		"id": 117,
+		"parent": 111,
+		"children": [],
+		"order": 60
+	},
+	"118": {
+		"name": "men’s_grooming",
+		"id": 118,
+		"parent": 20,
+		"children": [
+			119,
+			129,
+			135,
+			138,
+			139,
+			140
+		],
+		"order": 80
+	},
+	"119": {
+		"name": "shaving_&_beard_care",
+		"id": 119,
+		"parent": 118,
+		"children": [
+			120,
+			121,
+			122,
+			123,
+			124,
+			125,
+			126,
+			127,
+			128
+		],
+		"order": 10
+	},
+	"120": {
+		"name": "razors",
+		"id": 120,
+		"parent": 119,
+		"children": [],
+		"order": 10
+	},
+	"121": {
+		"name": "replacement_cartridges",
+		"id": 121,
+		"parent": 119,
+		"children": [],
+		"order": 20
+	},
+	"122": {
+		"name": "classic_razor_blades",
+		"id": 122,
+		"parent": 119,
+		"children": [],
+		"order": 30
+	},
+	"123": {
+		"name": "shaving_products",
+		"id": 123,
+		"parent": 119,
+		"children": [],
+		"order": 40
+	},
+	"124": {
+		"name": "aftershaves",
+		"id": 124,
+		"parent": 119,
+		"children": [],
+		"order": 50
+	},
+	"125": {
+		"name": "beard_care",
+		"id": 125,
+		"parent": 119,
+		"children": [],
+		"order": 60
+	},
+	"126": {
+		"name": "shaving_kits",
+		"id": 126,
+		"parent": 119,
+		"children": [],
+		"order": 70
+	},
+	"127": {
+		"name": "straight_razors_blades_&_scissors",
+		"id": 127,
+		"parent": 119,
+		"children": [],
+		"order": 80
+	},
+	"128": {
+		"name": "accessories",
+		"id": 128,
+		"parent": 119,
+		"children": [],
+		"order": 90
+	},
+	"129": {
+		"name": "fragrances",
+		"id": 129,
+		"parent": 118,
+		"children": [
+			130,
+			131,
+			132,
+			133,
+			134
+		],
+		"order": 20
+	},
+	"130": {
+		"name": "eau_de_toilette",
+		"id": 130,
+		"parent": 129,
+		"children": [],
+		"order": 10
+	},
+	"131": {
+		"name": "eau_de_parfum",
+		"id": 131,
+		"parent": 129,
+		"children": [],
+		"order": 20
+	},
+	"132": {
+		"name": "perfume",
+		"id": 132,
+		"parent": 129,
+		"children": [],
+		"order": 30
+	},
+	"133": {
+		"name": "colognes",
+		"id": 133,
+		"parent": 129,
+		"children": [],
+		"order": 40
+	},
+	"134": {
+		"name": "perfume_sets",
+		"id": 134,
+		"parent": 129,
+		"children": [],
+		"order": 50
+	},
+	"135": {
+		"name": "hair_care",
+		"id": 135,
+		"parent": 118,
+		"children": [
+			136,
+			137
+		],
+		"order": 30
+	},
+	"136": {
+		"name": "shampoos_&_conditioners",
+		"id": 136,
+		"parent": 135,
+		"children": [],
+		"order": 10
+	},
+	"137": {
+		"name": "hair_styling_products",
+		"id": 137,
+		"parent": 135,
+		"children": [],
+		"order": 20
+	},
+	"138": {
+		"name": "shower_gels",
+		"id": 138,
+		"parent": 118,
+		"children": [],
+		"order": 40
+	},
+	"139": {
+		"name": "deodorants",
+		"id": 139,
+		"parent": 118,
+		"children": [],
+		"order": 50
+	},
+	"140": {
+		"name": "hygiene_kits",
+		"id": 140,
+		"parent": 118,
+		"children": [],
+		"order": 60
+	},
+	"141": {
+		"name": "beauty_devices_&_massage",
+		"id": 141,
+		"parent": 20,
+		"children": [
+			142,
+			143,
+			144,
+			145
+		],
+		"order": 90
+	},
+	"142": {
+		"name": "massagers",
+		"id": 142,
+		"parent": 141,
+		"children": [],
+		"order": 10
+	},
+	"143": {
+		"name": "cosmetology_devices",
+		"id": 143,
+		"parent": 141,
+		"children": [],
+		"order": 20
+	},
+	"144": {
+		"name": "epilators",
+		"id": 144,
+		"parent": 141,
+		"children": [],
+		"order": 30
+	},
+	"145": {
+		"name": "contact_gels",
+		"id": 145,
+		"parent": 141,
+		"children": [],
+		"order": 40
 	},
 	"11700": {
 		"name": "home_&_garden",
