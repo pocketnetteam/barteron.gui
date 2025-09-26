@@ -4940,12 +4940,646 @@
 		"order": 40
 	},
 	"625": {
-		"name": "cameras_photo",
+		"name": "photo_video_&_audio_electronics",
 		"icon": "fa-camera",
 		"id": 625,
 		"parent": null,
+		"children": [
+			657,
+			669,
+			688,
+			716
+		],
+		"order": 238
+	},
+	"657": {
+		"name": "televisions_&_video_equipment",
+		"id": 657,
+		"parent": 625,
+		"children": [
+			658,
+			659,
+			660,
+			661,
+			662,
+			663,
+			664,
+			665,
+			666,
+			667,
+			668
+		],
+		"order": 10
+	},
+	"658": {
+		"name": "televisions",
+		"id": 658,
+		"parent": 657,
 		"children": [],
-		"order": 2200
+		"order": 10
+	},
+	"659": {
+		"name": "tv_boxes_&_media_players",
+		"id": 659,
+		"parent": 657,
+		"children": [],
+		"order": 20
+	},
+	"660": {
+		"name": "mounts_&_brackets",
+		"id": 660,
+		"parent": 657,
+		"children": [],
+		"order": 30
+	},
+	"661": {
+		"name": "digital_&_satellite_tv",
+		"id": 661,
+		"parent": 657,
+		"children": [],
+		"order": 40
+	},
+	"662": {
+		"name": "remote_controls",
+		"id": 662,
+		"parent": 657,
+		"children": [],
+		"order": 50
+	},
+	"663": {
+		"name": "antennas",
+		"id": 663,
+		"parent": 657,
+		"children": [],
+		"order": 60
+	},
+	"664": {
+		"name": "dvd_players",
+		"id": 664,
+		"parent": 657,
+		"children": [],
+		"order": 70
+	},
+	"665": {
+		"name": "projectors",
+		"id": 665,
+		"parent": 657,
+		"children": [],
+		"order": 80
+	},
+	"666": {
+		"name": "projection_screens",
+		"id": 666,
+		"parent": 657,
+		"children": [],
+		"order": 90
+	},
+	"667": {
+		"name": "interactive_panels_&_led_screens",
+		"id": 667,
+		"parent": 657,
+		"children": [],
+		"order": 100
+	},
+	"668": {
+		"name": "spare_parts_&_accessories",
+		"id": 668,
+		"parent": 657,
+		"children": [],
+		"order": 110
+	},
+	"669": {
+		"name": "audio_equipment",
+		"id": 669,
+		"parent": 625,
+		"children": [
+			670,
+			671,
+			672,
+			673,
+			679,
+			680,
+			681,
+			682,
+			683,
+			684,
+			685,
+			686,
+			687
+		],
+		"order": 20
+	},
+	"670": {
+		"name": "headphones_&_accessories",
+		"id": 670,
+		"parent": 669,
+		"children": [],
+		"order": 10
+	},
+	"671": {
+		"name": "wireless_speakers",
+		"id": 671,
+		"parent": 669,
+		"children": [],
+		"order": 20
+	},
+	"672": {
+		"name": "smart_speakers",
+		"id": 672,
+		"parent": 669,
+		"children": [],
+		"order": 30
+	},
+	"673": {
+		"name": "speaker_systems",
+		"id": 673,
+		"parent": 669,
+		"children": [
+			674,
+			675,
+			676,
+			677,
+			678
+		],
+		"order": 40
+	},
+	"674": {
+		"name": "home_theaters_music_centers_&_subwoofers",
+		"id": 674,
+		"parent": 673,
+		"children": [],
+		"order": 10
+	},
+	"675": {
+		"name": "computer_speakers",
+		"id": 675,
+		"parent": 673,
+		"children": [],
+		"order": 20
+	},
+	"676": {
+		"name": "soundbars",
+		"id": 676,
+		"parent": 673,
+		"children": [],
+		"order": 30
+	},
+	"677": {
+		"name": "karaoke_systems",
+		"id": 677,
+		"parent": 673,
+		"children": [],
+		"order": 40
+	},
+	"678": {
+		"name": "pa_speakers",
+		"id": 678,
+		"parent": 673,
+		"children": [],
+		"order": 50
+	},
+	"679": {
+		"name": "studio_&_stage_equipment",
+		"id": 679,
+		"parent": 669,
+		"children": [],
+		"order": 50
+	},
+	"680": {
+		"name": "microphones",
+		"id": 680,
+		"parent": 669,
+		"children": [],
+		"order": 60
+	},
+	"681": {
+		"name": "walkie-talkies_&_radio_stations",
+		"id": 681,
+		"parent": 669,
+		"children": [],
+		"order": 70
+	},
+	"682": {
+		"name": "radios",
+		"id": 682,
+		"parent": 669,
+		"children": [],
+		"order": 80
+	},
+	"683": {
+		"name": "turntables_&_accessories",
+		"id": 683,
+		"parent": 669,
+		"children": [],
+		"order": 90
+	},
+	"684": {
+		"name": "amplifiers_receivers_&_dacs",
+		"id": 684,
+		"parent": 669,
+		"children": [],
+		"order": 100
+	},
+	"685": {
+		"name": "mp3_players",
+		"id": 685,
+		"parent": 669,
+		"children": [],
+		"order": 110
+	},
+	"686": {
+		"name": "voice_recorders",
+		"id": 686,
+		"parent": 669,
+		"children": [],
+		"order": 120
+	},
+	"687": {
+		"name": "spare_parts_&_accessories",
+		"id": 687,
+		"parent": 669,
+		"children": [],
+		"order": 130
+	},
+	"688": {
+		"name": "photo_&_video_cameras",
+		"id": 688,
+		"parent": 625,
+		"children": [
+			689,
+			695,
+			698,
+			699,
+			700,
+			701,
+			702,
+			703,
+			704,
+			705
+		],
+		"order": 30
+	},
+	"689": {
+		"name": "cameras",
+		"id": 689,
+		"parent": 688,
+		"children": [
+			690,
+			691,
+			692,
+			693,
+			694
+		],
+		"order": 10
+	},
+	"690": {
+		"name": "dslr_cameras",
+		"id": 690,
+		"parent": 689,
+		"children": [],
+		"order": 10
+	},
+	"691": {
+		"name": "mirrorless_cameras",
+		"id": 691,
+		"parent": 689,
+		"children": [],
+		"order": 20
+	},
+	"692": {
+		"name": "compact_cameras",
+		"id": 692,
+		"parent": 689,
+		"children": [],
+		"order": 30
+	},
+	"693": {
+		"name": "instant_cameras",
+		"id": 693,
+		"parent": 689,
+		"children": [],
+		"order": 40
+	},
+	"694": {
+		"name": "kids_cameras",
+		"id": 694,
+		"parent": 689,
+		"children": [],
+		"order": 50
+	},
+	"695": {
+		"name": "action_cameras_&_accessories",
+		"id": 695,
+		"parent": 688,
+		"children": [
+			696,
+			697
+		],
+		"order": 20
+	},
+	"696": {
+		"name": "action_cameras",
+		"id": 696,
+		"parent": 695,
+		"children": [],
+		"order": 10
+	},
+	"697": {
+		"name": "action_camera_accessories",
+		"id": 697,
+		"parent": 695,
+		"children": [],
+		"order": 20
+	},
+	"698": {
+		"name": "camcorders",
+		"id": 698,
+		"parent": 688,
+		"children": [],
+		"order": 30
+	},
+	"699": {
+		"name": "lenses",
+		"id": 699,
+		"parent": 688,
+		"children": [],
+		"order": 40
+	},
+	"700": {
+		"name": "backdrops",
+		"id": 700,
+		"parent": 688,
+		"children": [],
+		"order": 50
+	},
+	"701": {
+		"name": "studio_equipment",
+		"id": 701,
+		"parent": 688,
+		"children": [],
+		"order": 60
+	},
+	"702": {
+		"name": "cartridges_&_film",
+		"id": 702,
+		"parent": 688,
+		"children": [],
+		"order": 70
+	},
+	"703": {
+		"name": "compact_photo_printers",
+		"id": 703,
+		"parent": 688,
+		"children": [],
+		"order": 80
+	},
+	"704": {
+		"name": "digital_photo_frames",
+		"id": 704,
+		"parent": 688,
+		"children": [],
+		"order": 90
+	},
+	"705": {
+		"name": "photo_&_video_accessories",
+		"id": 705,
+		"parent": 688,
+		"children": [
+			706,
+			707,
+			708,
+			709,
+			710,
+			711,
+			712,
+			713,
+			714,
+			715
+		],
+		"order": 100
+	},
+	"706": {
+		"name": "tripods_&_heads",
+		"id": 706,
+		"parent": 705,
+		"children": [],
+		"order": 10
+	},
+	"707": {
+		"name": "chargers_for_cameras_&_camcorders",
+		"id": 707,
+		"parent": 705,
+		"children": [],
+		"order": 20
+	},
+	"708": {
+		"name": "selfie_sticks_&_monopods",
+		"id": 708,
+		"parent": 705,
+		"children": [],
+		"order": 30
+	},
+	"709": {
+		"name": "camera_batteries",
+		"id": 709,
+		"parent": 705,
+		"children": [],
+		"order": 40
+	},
+	"710": {
+		"name": "camera_backpacks_&_bags",
+		"id": 710,
+		"parent": 705,
+		"children": [],
+		"order": 50
+	},
+	"711": {
+		"name": "lens_filters",
+		"id": 711,
+		"parent": 705,
+		"children": [],
+		"order": 60
+	},
+	"712": {
+		"name": "lens_hoods_caps_&_adapter_rings",
+		"id": 712,
+		"parent": 705,
+		"children": [],
+		"order": 70
+	},
+	"713": {
+		"name": "camera_cases_&_covers",
+		"id": 713,
+		"parent": 705,
+		"children": [],
+		"order": 80
+	},
+	"714": {
+		"name": "flashes",
+		"id": 714,
+		"parent": 705,
+		"children": [],
+		"order": 90
+	},
+	"715": {
+		"name": "other_accessories",
+		"id": 715,
+		"parent": 705,
+		"children": [],
+		"order": 100
+	},
+	"716": {
+		"name": "electronics_accessories",
+		"id": 716,
+		"parent": 625,
+		"children": [
+			717,
+			726,
+			727,
+			728,
+			729,
+			730,
+			731,
+			732,
+			733,
+			734
+		],
+		"order": 40
+	},
+	"717": {
+		"name": "cables_&_adapters",
+		"id": 717,
+		"parent": 716,
+		"children": [
+			718,
+			719,
+			720,
+			721,
+			722,
+			723,
+			724,
+			725
+		],
+		"order": 10
+	},
+	"718": {
+		"name": "usb_hubs_&_docking_stations",
+		"id": 718,
+		"parent": 717,
+		"children": [],
+		"order": 10
+	},
+	"719": {
+		"name": "video_cables",
+		"id": 719,
+		"parent": 717,
+		"children": [],
+		"order": 20
+	},
+	"720": {
+		"name": "cable_accessories",
+		"id": 720,
+		"parent": 717,
+		"children": [],
+		"order": 30
+	},
+	"721": {
+		"name": "peripheral_cables",
+		"id": 721,
+		"parent": 717,
+		"children": [],
+		"order": 40
+	},
+	"722": {
+		"name": "power_cords",
+		"id": 722,
+		"parent": 717,
+		"children": [],
+		"order": 50
+	},
+	"723": {
+		"name": "audio_cables",
+		"id": 723,
+		"parent": 717,
+		"children": [],
+		"order": 60
+	},
+	"724": {
+		"name": "connectors",
+		"id": 724,
+		"parent": 717,
+		"children": [],
+		"order": 70
+	},
+	"725": {
+		"name": "splitters",
+		"id": 725,
+		"parent": 717,
+		"children": [],
+		"order": 80
+	},
+	"726": {
+		"name": "power_adapters",
+		"id": 726,
+		"parent": 716,
+		"children": [],
+		"order": 20
+	},
+	"727": {
+		"name": "power_banks",
+		"id": 727,
+		"parent": 716,
+		"children": [],
+		"order": 30
+	},
+	"728": {
+		"name": "batteries",
+		"id": 728,
+		"parent": 716,
+		"children": [],
+		"order": 40
+	},
+	"729": {
+		"name": "rechargeable_batteries",
+		"id": 729,
+		"parent": 716,
+		"children": [],
+		"order": 50
+	},
+	"730": {
+		"name": "battery_chargers_&_testers",
+		"id": 730,
+		"parent": 716,
+		"children": [],
+		"order": 60
+	},
+	"731": {
+		"name": "wall_chargers",
+		"id": 731,
+		"parent": 716,
+		"children": [],
+		"order": 70
+	},
+	"732": {
+		"name": "wireless_chargers",
+		"id": 732,
+		"parent": 716,
+		"children": [],
+		"order": 80
+	},
+	"733": {
+		"name": "car_chargers",
+		"id": 733,
+		"parent": 716,
+		"children": [],
+		"order": 90
+	},
+	"734": {
+		"name": "cleaning_solutions_&_wipes",
+		"id": 734,
+		"parent": 716,
+		"children": [],
+		"order": 100
 	},
 	"870": {
 		"name": "pottery_glass",
