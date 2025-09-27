@@ -6901,7 +6901,7 @@
 			3266,
 			3284
 		],
-		"order": 240
+		"order": 250
 	},
 	"2985": {
 		"name": "school_and_learning_supplies",
@@ -13547,12 +13547,607 @@
 		"order": 4100
 	},
 	"58058": {
-		"name": "computers_tablets_networking",
+		"name": "computers_tablets_&_networking_equipment",
 		"icon": "fa-laptop",
 		"id": 58058,
 		"parent": null,
+		"children": [
+			58059,
+			58067,
+			58083,
+			58090,
+			58104,
+			58132
+		],
+		"order": 240
+	},
+	"58059": {
+		"name": "computers",
+		"id": 58059,
+		"parent": 58058,
+		"children": [
+			58060,
+			58061,
+			58062,
+			58063,
+			58064,
+			58065,
+			58066
+		],
+		"order": 10
+	},
+	"58060": {
+		"name": "monitors",
+		"id": 58060,
+		"parent": 58059,
 		"children": [],
-		"order": 4200
+		"order": 10
+	},
+	"58061": {
+		"name": "desktop_pcs",
+		"id": 58061,
+		"parent": 58059,
+		"children": [],
+		"order": 20
+	},
+	"58062": {
+		"name": "all-in-one_pcs",
+		"id": 58062,
+		"parent": 58059,
+		"children": [],
+		"order": 30
+	},
+	"58063": {
+		"name": "nettops_&_mini_pcs",
+		"id": 58063,
+		"parent": 58059,
+		"children": [],
+		"order": 40
+	},
+	"58064": {
+		"name": "microcomputers_&_components",
+		"id": 58064,
+		"parent": 58059,
+		"children": [],
+		"order": 50
+	},
+	"58065": {
+		"name": "industrial_pcs_&_servers",
+		"id": 58065,
+		"parent": 58059,
+		"children": [],
+		"order": 60
+	},
+	"58066": {
+		"name": "monitor_spare_parts",
+		"id": 58066,
+		"parent": 58059,
+		"children": [],
+		"order": 70
+	},
+	"58067": {
+		"name": "laptops_tablets_&_e-readers",
+		"id": 58067,
+		"parent": 58058,
+		"children": [
+			58068,
+			58069,
+			58070,
+			58071,
+			58072,
+			58073,
+			58074,
+			58075,
+			58079,
+			58080,
+			58081,
+			58082
+		],
+		"order": 20
+	},
+	"58068": {
+		"name": "laptops",
+		"id": 58068,
+		"parent": 58067,
+		"children": [],
+		"order": 10
+	},
+	"58069": {
+		"name": "tablets",
+		"id": 58069,
+		"parent": 58067,
+		"children": [],
+		"order": 20
+	},
+	"58070": {
+		"name": "e-readers",
+		"id": 58070,
+		"parent": 58067,
+		"children": [],
+		"order": 30
+	},
+	"58071": {
+		"name": "graphics_tablets",
+		"id": 58071,
+		"parent": 58067,
+		"children": [],
+		"order": 40
+	},
+	"58072": {
+		"name": "tablet_cases_&_stands",
+		"id": 58072,
+		"parent": 58067,
+		"children": [],
+		"order": 50
+	},
+	"58073": {
+		"name": "e-reader_cases",
+		"id": 58073,
+		"parent": 58067,
+		"children": [],
+		"order": 60
+	},
+	"58074": {
+		"name": "styluses",
+		"id": 58074,
+		"parent": 58067,
+		"children": [],
+		"order": 70
+	},
+	"58075": {
+		"name": "laptop_accessories",
+		"id": 58075,
+		"parent": 58067,
+		"children": [
+			58076,
+			58077,
+			58078
+		],
+		"order": 80
+	},
+	"58076": {
+		"name": "backpacks_sleeves_&_bags",
+		"id": 58076,
+		"parent": 58075,
+		"children": [],
+		"order": 10
+	},
+	"58077": {
+		"name": "stands",
+		"id": 58077,
+		"parent": 58075,
+		"children": [],
+		"order": 20
+	},
+	"58078": {
+		"name": "stickers_&_skins",
+		"id": 58078,
+		"parent": 58075,
+		"children": [],
+		"order": 30
+	},
+	"58079": {
+		"name": "laptop_batteries",
+		"id": 58079,
+		"parent": 58067,
+		"children": [],
+		"order": 90
+	},
+	"58080": {
+		"name": "chargers_&_power_adapters",
+		"id": 58080,
+		"parent": 58067,
+		"children": [],
+		"order": 100
+	},
+	"58081": {
+		"name": "electronic_translators_&_dictionaries",
+		"id": 58081,
+		"parent": 58067,
+		"children": [],
+		"order": 110
+	},
+	"58082": {
+		"name": "spare_parts",
+		"id": 58082,
+		"parent": 58067,
+		"children": [],
+		"order": 120
+	},
+	"58083": {
+		"name": "networking_equipment",
+		"id": 58083,
+		"parent": 58058,
+		"children": [
+			58084,
+			58085,
+			58086,
+			58087,
+			58088,
+			58089
+		],
+		"order": 30
+	},
+	"58084": {
+		"name": "routers_&_modems",
+		"id": 58084,
+		"parent": 58083,
+		"children": [],
+		"order": 10
+	},
+	"58085": {
+		"name": "antennas_&_signal_boosters",
+		"id": 58085,
+		"parent": 58083,
+		"children": [],
+		"order": 20
+	},
+	"58086": {
+		"name": "network_adapters_&_poe_injectors",
+		"id": 58086,
+		"parent": 58083,
+		"children": [],
+		"order": 30
+	},
+	"58087": {
+		"name": "network_cables",
+		"id": 58087,
+		"parent": 58083,
+		"children": [],
+		"order": 40
+	},
+	"58088": {
+		"name": "switches",
+		"id": 58088,
+		"parent": 58083,
+		"children": [],
+		"order": 50
+	},
+	"58089": {
+		"name": "powerline_adapters_kvm_consoles_&_splitters",
+		"id": 58089,
+		"parent": 58083,
+		"children": [],
+		"order": 60
+	},
+	"58090": {
+		"name": "peripherals",
+		"id": 58090,
+		"parent": 58058,
+		"children": [
+			58091,
+			58092,
+			58093,
+			58094,
+			58095,
+			58096,
+			58097,
+			58098,
+			58099,
+			58100,
+			58101,
+			58102,
+			58103
+		],
+		"order": 40
+	},
+	"58091": {
+		"name": "gaming_headsets",
+		"id": 58091,
+		"parent": 58090,
+		"children": [],
+		"order": 10
+	},
+	"58092": {
+		"name": "keyboards",
+		"id": 58092,
+		"parent": 58090,
+		"children": [],
+		"order": 20
+	},
+	"58093": {
+		"name": "mice",
+		"id": 58093,
+		"parent": 58090,
+		"children": [],
+		"order": 30
+	},
+	"58095": {
+		"name": "memory_cards",
+		"id": 58095,
+		"parent": 58090,
+		"children": [],
+		"order": 50
+	},
+	"58096": {
+		"name": "usb_flash_drives",
+		"id": 58096,
+		"parent": 58090,
+		"children": [],
+		"order": 60
+	},
+	"58097": {
+		"name": "ups_&_accessories",
+		"id": 58097,
+		"parent": 58090,
+		"children": [],
+		"order": 70
+	},
+	"58098": {
+		"name": "webcams",
+		"id": 58098,
+		"parent": 58090,
+		"children": [],
+		"order": 80
+	},
+	"58099": {
+		"name": "external_optical_drives",
+		"id": 58099,
+		"parent": 58090,
+		"children": [],
+		"order": 90
+	},
+	"58100": {
+		"name": "conference_&_congress_systems",
+		"id": 58100,
+		"parent": 58090,
+		"children": [],
+		"order": 100
+	},
+	"58101": {
+		"name": "keyboard_&_mouse_accessories",
+		"id": 58101,
+		"parent": 58090,
+		"children": [],
+		"order": 40
+	},
+	"58102": {
+		"name": "card_readers",
+		"id": 58102,
+		"parent": 58090,
+		"children": [],
+		"order": 120
+	},
+	"58103": {
+		"name": "discs",
+		"id": 58103,
+		"parent": 58090,
+		"children": [],
+		"order": 130
+	},
+	"58104": {
+		"name": "pc_components",
+		"id": 58104,
+		"parent": 58058,
+		"children": [
+			58105,
+			58109,
+			58116,
+			58117,
+			58118,
+			58119,
+			58125,
+			58126,
+			58127,
+			58128,
+			58129,
+			58130,
+			58131
+		],
+		"order": 50
+	},
+	"58105": {
+		"name": "graphics_cards_&_accelerators",
+		"id": 58105,
+		"parent": 58104,
+		"children": [
+			58106,
+			58107,
+			58108
+		],
+		"order": 10
+	},
+	"58106": {
+		"name": "graphics_cards",
+		"id": 58106,
+		"parent": 58105,
+		"children": [],
+		"order": 10
+	},
+	"58107": {
+		"name": "capture_cards",
+		"id": 58107,
+		"parent": 58105,
+		"children": [],
+		"order": 20
+	},
+	"58108": {
+		"name": "gpu_holders",
+		"id": 58108,
+		"parent": 58105,
+		"children": [],
+		"order": 30
+	},
+	"58109": {
+		"name": "hard_drives_ssds_&_nas",
+		"id": 58109,
+		"parent": 58104,
+		"children": [
+			58110,
+			58111,
+			58112,
+			58113,
+			58114,
+			58115
+		],
+		"order": 20
+	},
+	"58110": {
+		"name": "internal_ssds",
+		"id": 58110,
+		"parent": 58109,
+		"children": [],
+		"order": 10
+	},
+	"58111": {
+		"name": "internal_hard_drives",
+		"id": 58111,
+		"parent": 58109,
+		"children": [],
+		"order": 20
+	},
+	"58112": {
+		"name": "external_hard_drives",
+		"id": 58112,
+		"parent": 58109,
+		"children": [],
+		"order": 30
+	},
+	"58113": {
+		"name": "external_ssds",
+		"id": 58113,
+		"parent": 58109,
+		"children": [],
+		"order": 40
+	},
+	"58114": {
+		"name": "enclosures_adapters_&_docking_stations",
+		"id": 58114,
+		"parent": 58109,
+		"children": [],
+		"order": 50
+	},
+	"58115": {
+		"name": "network_storage_nas",
+		"id": 58115,
+		"parent": 58109,
+		"children": [],
+		"order": 60
+	},
+	"58116": {
+		"name": "processors",
+		"id": 58116,
+		"parent": 58104,
+		"children": [],
+		"order": 30
+	},
+	"58117": {
+		"name": "motherboards",
+		"id": 58117,
+		"parent": 58104,
+		"children": [],
+		"order": 40
+	},
+	"58118": {
+		"name": "ram_memory",
+		"id": 58118,
+		"parent": 58104,
+		"children": [],
+		"order": 50
+	},
+	"58119": {
+		"name": "cooling_systems",
+		"id": 58119,
+		"parent": 58104,
+		"children": [
+			58120,
+			58121,
+			58122,
+			58123,
+			58124
+		],
+		"order": 60
+	},
+	"58120": {
+		"name": "cpu_coolers",
+		"id": 58120,
+		"parent": 58119,
+		"children": [],
+		"order": 10
+	},
+	"58121": {
+		"name": "fans",
+		"id": 58121,
+		"parent": 58119,
+		"children": [],
+		"order": 20
+	},
+	"58122": {
+		"name": "liquid_cooling",
+		"id": 58122,
+		"parent": 58119,
+		"children": [],
+		"order": 30
+	},
+	"58123": {
+		"name": "accessories",
+		"id": 58123,
+		"parent": 58119,
+		"children": [],
+		"order": 40
+	},
+	"58124": {
+		"name": "thermal_paste_&_pads",
+		"id": 58124,
+		"parent": 58119,
+		"children": [],
+		"order": 50
+	},
+	"58125": {
+		"name": "power_supplies",
+		"id": 58125,
+		"parent": 58104,
+		"children": [],
+		"order": 70
+	},
+	"58126": {
+		"name": "pc_cases",
+		"id": 58126,
+		"parent": 58104,
+		"children": [],
+		"order": 80
+	},
+	"58127": {
+		"name": "sound_cards",
+		"id": 58127,
+		"parent": 58104,
+		"children": [],
+		"order": 90
+	},
+	"58128": {
+		"name": "electronic_modules",
+		"id": 58128,
+		"parent": 58104,
+		"children": [],
+		"order": 100
+	},
+	"58129": {
+		"name": "interface_controllers",
+		"id": 58129,
+		"parent": 58104,
+		"children": [],
+		"order": 110
+	},
+	"58130": {
+		"name": "microcontrollers",
+		"id": 58130,
+		"parent": 58104,
+		"children": [],
+		"order": 120
+	},
+	"58131": {
+		"name": "component_testers",
+		"id": 58131,
+		"parent": 58104,
+		"children": [],
+		"order": 130
+	},
+	"58132": {
+		"name": "software",
+		"id": 58132,
+		"parent": 58058,
+		"children": [],
+		"order": 60
 	},
 	"64482": {
 		"name": "sports_mem_cards_fan_shop",
