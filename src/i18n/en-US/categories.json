@@ -1479,7 +1479,27 @@
 	"plunge_tubs": "Plunge tubs",
 
 	"crafts": "Crafts",
-	"cell_phones_accessories": "Cell Phones & Accessories",
+
+	"phones_smartwatches_and_accessories": "Phones, Smartwatches, and Accessories",
+	"smartphones": "Smartphones",
+	"mobile_phones": "Mobile Phones",
+	"accessories_for_smartphones_and_mobile_phones": "Accessories for Smartphones and Mobile Phones",
+	"cases": "Cases",
+	"screen_protectors_glass": "Screen Protectors (Glass)",
+	"screen_protectors_film": "Screen Protectors (Film)",
+	"cables": "Cables",
+	"stands_and_holders": "Stands and Holders",
+	"car_and_motorcycle_mounts": "Car and Motorcycle Mounts",
+	"mobile_photography_accessories": "Mobile Photography Accessories",
+	"bluetooth_tags_keychains_and_smart_business_cards": "Bluetooth Tags, Keychains, and Smart Business Cards",
+	"virtual_reality_glasses": "Virtual Reality Glasses",
+	"stickers": "Stickers",
+	"smartwatches": "Smartwatches",
+	"fitness_trackers": "Fitness Trackers",
+	"straps_for_smartwatches_and_fitness_trackers": "Straps for Smartwatches and Fitness Trackers",
+	"accessories_for_smartwatches_and_fitness_trackers": "Accessories for Smartwatches and Fitness Trackers",
+	"corded_and_cordless_phones": "Corded and Cordless Phones",
+
 	"antiques": "Antiques",
 	"entertainment_memorabilia": "Entertainment Memorabilia",
 

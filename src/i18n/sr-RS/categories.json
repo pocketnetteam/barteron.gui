@@ -1479,7 +1479,27 @@
 	"plunge_tubs": "Купатила на отвореном",
 
 	"crafts": "Занати",
-	"cell_phones_accessories": "Мобилни телефони и додаци",
+
+	"phones_smartwatches_and_accessories": "Телефони, паметни сатови и аксесоари",
+	"smartphones": "Смартфони",
+	"mobile_phones": "Мобилни телефони",
+	"accessories_for_smartphones_and_mobile_phones": "Аксесоари за смартфоне и телефоне",
+	"cases": "Футроле",
+	"screen_protectors_glass": "Заштитна стакла",
+	"screen_protectors_film": "Заштитне фолије",
+	"cables": "Каблови",
+	"stands_and_holders": "Држачи и постоља",
+	"car_and_motorcycle_mounts": "Ауто и мото држачи",
+	"mobile_photography_accessories": "Аксесоари за мобилно снимање",
+	"bluetooth_tags_keychains_and_smart_business_cards": "Bluetooth ознаке, привесци и паметне визит карте",
+	"virtual_reality_glasses": "Наочаре за виртуелну реалност",
+	"stickers": "Налепнице",
+	"smartwatches": "Паметни сатови",
+	"fitness_trackers": "Фитнес наруквице",
+	"straps_for_smartwatches_and_fitness_trackers": "Каишеви за паметне сатове и фитнес наруквице",
+	"accessories_for_smartwatches_and_fitness_trackers": "Аксесоари за паметне сатове и фитнес наруквице",
+	"corded_and_cordless_phones": "Жични и бежични телефони",
+
 	"antiques": "Антиквитети",
 	"entertainment_memorabilia": "Забавно меморабилија",
 

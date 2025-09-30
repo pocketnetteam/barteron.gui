@@ -13523,12 +13523,174 @@
 		"order": 3800
 	},
 	"15032": {
-		"name": "cell_phones_accessories",
+		"name": "phones_smartwatches_and_accessories",
 		"icon": "fa-mobile",
 		"id": 15032,
 		"parent": null,
+		"children": [
+			15033,
+			15034,
+			15035,
+			15047,
+			15048,
+			15049,
+			15050,
+			15051,
+			15052
+		],
+		"order": 242
+	},
+	"15033": {
+		"name": "smartphones",
+		"id": 15033,
+		"parent": 15032,
 		"children": [],
-		"order": 3900
+		"order": 10
+	},
+	"15034": {
+		"name": "mobile_phones",
+		"id": 15034,
+		"parent": 15032,
+		"children": [],
+		"order": 20
+	},
+	"15035": {
+		"name": "accessories_for_smartphones_and_mobile_phones",
+		"id": 15035,
+		"parent": 15032,
+		"children": [
+			15036,
+			15037,
+			15038,
+			15039,
+			15040,
+			15041,
+			15042,
+			15043,
+			15044,
+			15045,
+			15046
+		],
+		"order": 30
+	},
+	"15036": {
+		"name": "cases",
+		"id": 15036,
+		"parent": 15035,
+		"children": [],
+		"order": 10
+	},
+	"15037": {
+		"name": "screen_protectors_glass",
+		"id": 15037,
+		"parent": 15035,
+		"children": [],
+		"order": 20
+	},
+	"15038": {
+		"name": "screen_protectors_film",
+		"id": 15038,
+		"parent": 15035,
+		"children": [],
+		"order": 30
+	},
+	"15039": {
+		"name": "cables",
+		"id": 15039,
+		"parent": 15035,
+		"children": [],
+		"order": 40
+	},
+	"15040": {
+		"name": "stands_and_holders",
+		"id": 15040,
+		"parent": 15035,
+		"children": [],
+		"order": 50
+	},
+	"15041": {
+		"name": "car_and_motorcycle_mounts",
+		"id": 15041,
+		"parent": 15035,
+		"children": [],
+		"order": 60
+	},
+	"15042": {
+		"name": "batteries",
+		"id": 15042,
+		"parent": 15035,
+		"children": [],
+		"order": 70
+	},
+	"15043": {
+		"name": "mobile_photography_accessories",
+		"id": 15043,
+		"parent": 15035,
+		"children": [],
+		"order": 80
+	},
+	"15044": {
+		"name": "bluetooth_tags_keychains_and_smart_business_cards",
+		"id": 15044,
+		"parent": 15035,
+		"children": [],
+		"order": 90
+	},
+	"15045": {
+		"name": "virtual_reality_glasses",
+		"id": 15045,
+		"parent": 15035,
+		"children": [],
+		"order": 100
+	},
+	"15046": {
+		"name": "stickers",
+		"id": 15046,
+		"parent": 15035,
+		"children": [],
+		"order": 110
+	},
+	"15047": {
+		"name": "smartwatches",
+		"id": 15047,
+		"parent": 15032,
+		"children": [],
+		"order": 40
+	},
+	"15048": {
+		"name": "fitness_trackers",
+		"id": 15048,
+		"parent": 15032,
+		"children": [],
+		"order": 50
+	},
+	"15049": {
+		"name": "straps_for_smartwatches_and_fitness_trackers",
+		"id": 15049,
+		"parent": 15032,
+		"children": [],
+		"order": 60
+	},
+	"15050": {
+		"name": "accessories_for_smartwatches_and_fitness_trackers",
+		"id": 15050,
+		"parent": 15032,
+		"children": [],
+		"order": 70
+	},
+	"15051": {
+		"name": "corded_and_cordless_phones",
+		"id": 15051,
+		"parent": 15032,
+		"children": [],
+		"order": 80
+	},
+	"15052": {
+		"name": "spare_parts",
+		"id": 15052,
+		"parent": 15032,
+		"children": [],
+		"order": 90
 	},
 	"20081": {
 		"name": "antiques",

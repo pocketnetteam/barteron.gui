@@ -1479,7 +1479,27 @@
 	"plunge_tubs": "Купели",
 
 	"crafts": "Ремесла",
-	"cell_phones_accessories": "Сотовые телефоны и аксессуары",
+
+	"phones_smartwatches_and_accessories": "Телефоны, смарт-часы и аксессуары",
+	"smartphones": "Смартфоны",
+	"mobile_phones": "Мобильные телефоны",
+	"accessories_for_smartphones_and_mobile_phones": "Аксессуары для смартфонов и телефонов",
+	"cases": "Чехлы",
+	"screen_protectors_glass": "Защитные стекла",
+	"screen_protectors_film": "Защитные пленки",
+	"cables": "Кабели",
+	"stands_and_holders": "Подставки и держатели",
+	"car_and_motorcycle_mounts": "Автомобильные и мотоциклетные держатели",
+	"mobile_photography_accessories": "Аксессуары для мобильной съемки",
+	"bluetooth_tags_keychains_and_smart_business_cards": "Bluetooth-метки, брелки и умные визитки",
+	"virtual_reality_glasses": "Очки виртуальной реальности",
+	"stickers": "Наклейки",
+	"smartwatches": "Смарт-часы",
+	"fitness_trackers": "Фитнес-браслеты",
+	"straps_for_smartwatches_and_fitness_trackers": "Ремешки для смарт-часов и фитнес-браслетов",
+	"accessories_for_smartwatches_and_fitness_trackers": "Аксессуары для смарт-часов и фитнес-браслетов",
+	"corded_and_cordless_phones": "Проводные и радиотелефоны",
+
 	"antiques": "Антиквариат",
 	"entertainment_memorabilia": "Развлекательная меморабилия",
 
