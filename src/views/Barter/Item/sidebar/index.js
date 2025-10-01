@@ -6,6 +6,7 @@ import Caption from "@/components/barter/item/caption/index.vue";
 import Price from "@/components/barter/item/price/index.vue";
 import BoostInfo from "@/components/barter/item/boost-info/index.vue";
 import MyOptions from "@/components/barter/item/my-options/index.vue";
+import banProcessor from "@/js/banUtils.js";
 
 export default {
 	name: "Sidebar",
@@ -30,7 +31,13 @@ export default {
 		 * @returns {@Offer}
 		 */
 		item() {
-			return (Number.isInteger(this.$route.params.id) ? this.barters.items : this.sdk.barteron.offers)[this.$route.params.id];
+			let offer = (Number.isInteger(this.$route.params.id) ? this.barters.items : this.sdk.barteron.offers)[this.$route.params.id];
+			
+			if (banProcessor.isBannedAddress(offer?.address)) {
+				offer = {};
+			};
+
+			return offer;
 		},
 
 		/**
