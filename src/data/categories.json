@@ -6748,12 +6748,265 @@
 		"order": 30
 	},
 	"1249": {
-		"name": "video_games_consoles",
+		"name": "video_games_consoles_&_accessories",
 		"icon": "fa-gamepad",
 		"id": 1249,
 		"parent": null,
+		"children": [
+			1250,
+			1258,
+			1263,
+			1269,
+			1270,
+			1272,
+			1273,
+			1274,
+			1275,
+			1276,
+			1277,
+			1278,
+			1279,
+			1280
+		],
+		"order": 244
+	},
+	"1250": {
+		"name": "playstation",
+		"id": 1250,
+		"parent": 1249,
+		"children": [
+			1251,
+			1252,
+			1253,
+			1254,
+			1255,
+			1256,
+			1257
+		],
+		"order": 10
+	},
+	"1251": {
+		"name": "consoles",
+		"id": 1251,
+		"parent": 1250,
 		"children": [],
-		"order": 2500
+		"order": 10
+	},
+	"1252": {
+		"name": "games_for_playstation_5",
+		"id": 1252,
+		"parent": 1250,
+		"children": [],
+		"order": 20
+	},
+	"1253": {
+		"name": "games_for_playstation_4",
+		"id": 1253,
+		"parent": 1250,
+		"children": [],
+		"order": 30
+	},
+	"1254": {
+		"name": "games_for_playstation_2/3",
+		"id": 1254,
+		"parent": 1250,
+		"children": [],
+		"order": 40
+	},
+	"1255": {
+		"name": "games_for_playstation_portable/vita",
+		"id": 1255,
+		"parent": 1250,
+		"children": [],
+		"order": 50
+	},
+	"1256": {
+		"name": "gift_cards",
+		"id": 1256,
+		"parent": 1250,
+		"children": [],
+		"order": 60
+	},
+	"1257": {
+		"name": "accessories",
+		"id": 1257,
+		"parent": 1250,
+		"children": [],
+		"order": 70
+	},
+	"1258": {
+		"name": "nintendo",
+		"id": 1258,
+		"parent": 1249,
+		"children": [
+			1259,
+			1260,
+			1261,
+			1262
+		],
+		"order": 20
+	},
+	"1259": {
+		"name": "consoles",
+		"id": 1259,
+		"parent": 1258,
+		"children": [],
+		"order": 10
+	},
+	"1260": {
+		"name": "games_for_nintendo_switch",
+		"id": 1260,
+		"parent": 1258,
+		"children": [],
+		"order": 20
+	},
+	"1261": {
+		"name": "games_for_nintendo_wii/3ds",
+		"id": 1261,
+		"parent": 1258,
+		"children": [],
+		"order": 30
+	},
+	"1262": {
+		"name": "accessories",
+		"id": 1262,
+		"parent": 1258,
+		"children": [],
+		"order": 40
+	},
+	"1263": {
+		"name": "xbox",
+		"id": 1263,
+		"parent": 1249,
+		"children": [
+			1264,
+			1265,
+			1266,
+			1267,
+			1268
+		],
+		"order": 30
+	},
+	"1264": {
+		"name": "consoles",
+		"id": 1264,
+		"parent": 1263,
+		"children": [],
+		"order": 10
+	},
+	"1265": {
+		"name": "games_for_xbox_one",
+		"id": 1265,
+		"parent": 1263,
+		"children": [],
+		"order": 20
+	},
+	"1266": {
+		"name": "games_for_xbox_360",
+		"id": 1266,
+		"parent": 1263,
+		"children": [],
+		"order": 30
+	},
+	"1267": {
+		"name": "games_for_xbox_series",
+		"id": 1267,
+		"parent": 1263,
+		"children": [],
+		"order": 40
+	},
+	"1268": {
+		"name": "accessories",
+		"id": 1268,
+		"parent": 1263,
+		"children": [],
+		"order": 50
+	},
+	"1269": {
+		"name": "game_consoles",
+		"id": 1269,
+		"parent": 1249,
+		"children": [],
+		"order": 40
+	},
+	"1270": {
+		"name": "pc",
+		"id": 1270,
+		"parent": 1249,
+		"children": [
+			1271
+		],
+		"order": 50
+	},
+	"1271": {
+		"name": "games",
+		"id": 1271,
+		"parent": 1270,
+		"children": [],
+		"order": 10
+	},
+	"1272": {
+		"name": "game_cartridges",
+		"id": 1272,
+		"parent": 1249,
+		"children": [],
+		"order": 60
+	},
+	"1273": {
+		"name": "gaming_merchandise",
+		"id": 1273,
+		"parent": 1249,
+		"children": [],
+		"order": 70
+	},
+	"1274": {
+		"name": "gamepads",
+		"id": 1274,
+		"parent": 1249,
+		"children": [],
+		"order": 80
+	},
+	"1275": {
+		"name": "racing_wheels_&_pedals",
+		"id": 1275,
+		"parent": 1249,
+		"children": [],
+		"order": 90
+	},
+	"1276": {
+		"name": "accessories_for_game_consoles",
+		"id": 1276,
+		"parent": 1249,
+		"children": [],
+		"order": 100
+	},
+	"1277": {
+		"name": "esports_accessories",
+		"id": 1277,
+		"parent": 1249,
+		"children": [],
+		"order": 110
+	},
+	"1278": {
+		"name": "batteries_&_chargers",
+		"id": 1278,
+		"parent": 1249,
+		"children": [],
+		"order": 120
+	},
+	"1279": {
+		"name": "bags_&_cases",
+		"id": 1279,
+		"parent": 1249,
+		"children": [],
+		"order": 130
+	},
+	"1280": {
+		"name": "spare_parts_for_game_consoles",
+		"id": 1280,
+		"parent": 1249,
+		"children": [],
+		"order": 140
 	},
 	"24": {
 		"name": "pets",
@@ -9047,7 +9300,7 @@
 	},
 	"3252": {
 		"name": "travel",
-		"icon": "fa-fighter-jet",
+		"icon": "fa-plane",
 		"id": 3252,
 		"parent": null,
 		"children": [],
