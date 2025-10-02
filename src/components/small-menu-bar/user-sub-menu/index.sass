@@ -7,6 +7,7 @@
 	/deep/ .v-button
 		background: none !important
 		padding: 0
+		overflow: visible
 
 	/deep/ .v-button-dropdown
 		font-weight: normal
@@ -21,14 +22,35 @@
 	/deep/ .v-dropdown-arrow
 		display: none
 
+	.avatar-holder
+		display: inline-block
+		width: min-content
+		height: min-content
+		position: relative
+
+		.sub-menu-icon
+			display: block
+			font-size: 12px
+			width: 16px
+			height: 16px
+			position: absolute
+			bottom: -1px
+			right: -1px
+			pointer-events: none
+			color: $white
+			background: $blue
+			border-radius: 50%
+			border: 2px solid $blue
+
 	.avatar
 		cursor: pointer
 		display: flex
 		border-radius: 50%
 		text-decoration: none
 		overflow: hidden
-		height: 32px
-		width: 32px
+		height: 36px
+		width: 36px
+		background-color: $beerus
 
 		*
 			border-radius: 50%
@@ -46,6 +68,7 @@
 			width: 100%
 			
 		img
-				display: block
-				height: 100%
-				width: 100%
+			display: block
+			height: 100%
+			width: 100%
+
