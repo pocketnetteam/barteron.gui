@@ -19,6 +19,7 @@ import PickupPointItem from "@/components/pickup-point/item/index.vue";
 import { mapState } from "pinia";
 import { useLocaleStore } from "@/stores/locale.js";
 import ThemeStore from "@/stores/theme.js";
+import banProcessor from "@/js/banUtils.js";
 
 delete Icon.Default.prototype._getIconUrl;
 Icon.Default.mergeOptions({
@@ -552,11 +553,14 @@ export default {
 
 		showLoadedOffers() {
 			if (this.isSearchMode || this.isDeliveryInputMode) {
-				const res = this.mapActionData;
+				const 
+					res = this.mapActionData,
+					filteredOffers = banProcessor.filteredOffers(res.offers);
+
 				if (res.isNextPage) {
-					this.foundOffers = this.foundOffers.concat(res.offers);
+					this.foundOffers = this.foundOffers.concat(filteredOffers);
 				} else {
-					this.foundOffers = res.offers;
+					this.foundOffers = filteredOffers;
 				}
 			}
 		},

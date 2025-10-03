@@ -3,6 +3,7 @@ import BarterList from "@/components/barter/list/index.vue";
 import {
 	default as profileStore,
 } from "@/stores/profile.js";
+import banProcessor from "@/js/banUtils.js";
 
 export default {
 	name: "Content",
@@ -32,7 +33,13 @@ export default {
 		 * @returns {@Offer}
 		 */
 		offer() {
-			return this.sdk.barteron.offers[this.$route.params.id];
+			let offer = this.sdk.barteron.offers[this.$route.params.id];
+
+			if (banProcessor.isBannedAddress(offer?.address)) {
+				offer = {};
+			};
+
+			return offer;
 		},
 
 		/**
