@@ -383,7 +383,29 @@
 	"barometers": "Барометры",
 	"holders_stands_and_trays": "Держатели, подставки и подносы",
 
-	"collectibles": "Коллекционные предметы",
+	"collectibles_&_antiques": "Коллекционирование и антиквариат",
+	"coins": "Монеты",
+	"banknotes": "Банкноты",
+	"securities": "Ценные бумаги",
+	"calendars": "Календари",
+	"postcards": "Открытки",
+	"envelopes_&_postal_cards": "Конверты, почтовые карточки",
+	"photographs_&_letters": "Фотографии, письма",
+	"tokens_medals_&_badges": "Жетоны, медали, значки",
+	"tickets": "Билеты",
+	"celebrity_memorabilia_&_autographs": "Вещи знаменитостей, автографы",
+	"military_items": "Военные вещи",
+	"vinyl_records": "Грампластинки",
+	"models_&_figurines": "Модели, фигурки",
+	"plastic_cards": "Пластиковые карточки",
+	"sports_cards": "Спортивные карточки",
+	"ashtrays_&_lighters": "Пепельницы, зажигалки",
+	"labels_bottles_&_caps": "Этикетки, бутылки, пробки",
+	"minerals_&_fossils": "Минералы, окаменелости",
+	"insects": "Насекомые",
+	"care_products": "Средства для ухода",
+	"collection_storage": "Хранение коллекций",
+
 	"everything_else": "Все остальное",
 	"stamps": "Марки",
 	"books_magazines": "Книги и журналы",
@@ -1526,9 +1548,6 @@
 	"accessories_for_smartwatches_and_fitness_trackers": "Аксессуары для смарт-часов и фитнес-браслетов",
 	"corded_and_cordless_phones": "Проводные и радиотелефоны",
 
-	"antiques": "Антиквариат",
-	"entertainment_memorabilia": "Развлекательная меморабилия",
-
 	"computers_tablets_&_networking_equipment": "Компьютеры, планшеты и сетевое оборудование",
 	"computers": "Компьютеры",
 	"monitors": "Мониторы",
@@ -1600,7 +1619,6 @@
 	"component_testers": "Тестеры для комплектующих",
 	"software": "Программное обеспечение",
 
-	"sports_mem_cards_fan_shop": "Спортивная меморабилия",
 	"gift_cards_coupons": "Подарочные карты и купоны",
 	"bank_transfer": "Банковский перевод",
 
