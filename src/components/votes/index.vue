@@ -28,7 +28,7 @@
 			/>
 			<span>{{ $tc('voteLabels.votes', offerScoresCount()) }}</span>
 			<div v-if="hasRejectedOfferScore()" class="vote-rejected">{{ $t('voteLabels.voteNotPublished') }}</div>
-			<div v-if="hasRejectedComment()" class="comment-rejected">{{ $t('voteLabels.commentNotPublished') }}</div>
+			<div v-if="hasRejectedComment()" class="comment-rejected">{{ $t('voteLabels.reviewNotPublished') }}</div>
 		</header>
 
 		<main>
