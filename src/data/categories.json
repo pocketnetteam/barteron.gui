@@ -3299,14 +3299,6 @@
 		"children": [],
 		"order": 100
 	},
-	"260": {
-		"name": "stamps",
-		"icon": "fa-stamp",
-		"id": 260,
-		"parent": null,
-		"children": [],
-		"order": 1600
-	},
 	"267": {
 		"name": "books_magazines",
 		"icon": "fa-book",
@@ -13760,12 +13752,197 @@
 		"order": 60
 	},
 	"1": {
-		"name": "collectibles",
-		"icon": "fa-archway",
+		"name": "collectibles_&_antiques",
+		"icon": "fa-scroll",
 		"id": 1,
 		"parent": null,
+		"children": [
+			146,
+			147,
+			148,
+			260,
+			150,
+			151,
+			152,
+			153,
+			154,
+			155,
+			156,
+			157,
+			158,
+			159,
+			45100,
+			64482,
+			162,
+			163,
+			164,
+			165,
+			166,
+			167,
+			20081
+		],
+		"order": 360
+	},
+	"146": {
+		"name": "coins",
+		"id": 146,
+		"parent": 1,
 		"children": [],
-		"order": 3700
+		"order": 10
+	},
+	"147": {
+		"name": "banknotes",
+		"id": 147,
+		"parent": 1,
+		"children": [],
+		"order": 20
+	},
+	"148": {
+		"name": "securities",
+		"id": 148,
+		"parent": 1,
+		"children": [],
+		"order": 30
+	},
+	"260": {
+		"name": "stamps",
+		"id": 260,
+		"parent": 1,
+		"children": [],
+		"order": 40
+	},
+	"150": {
+		"name": "calendars",
+		"id": 150,
+		"parent": 1,
+		"children": [],
+		"order": 50
+	},
+	"151": {
+		"name": "postcards",
+		"id": 151,
+		"parent": 1,
+		"children": [],
+		"order": 60
+	},
+	"152": {
+		"name": "envelopes_&_postal_cards",
+		"id": 152,
+		"parent": 1,
+		"children": [],
+		"order": 70
+	},
+	"153": {
+		"name": "photographs_&_letters",
+		"id": 153,
+		"parent": 1,
+		"children": [],
+		"order": 80
+	},
+	"154": {
+		"name": "tokens_medals_&_badges",
+		"id": 154,
+		"parent": 1,
+		"children": [],
+		"order": 90
+	},
+	"155": {
+		"name": "tickets",
+		"id": 155,
+		"parent": 1,
+		"children": [],
+		"order": 100
+	},
+	"156": {
+		"name": "celebrity_memorabilia_&_autographs",
+		"id": 156,
+		"parent": 1,
+		"children": [],
+		"order": 110
+	},
+	"157": {
+		"name": "military_items",
+		"id": 157,
+		"parent": 1,
+		"children": [],
+		"order": 120
+	},
+	"158": {
+		"name": "vinyl_records",
+		"id": 158,
+		"parent": 1,
+		"children": [],
+		"order": 130
+	},
+	"159": {
+		"name": "models_&_figurines",
+		"id": 159,
+		"parent": 1,
+		"children": [],
+		"order": 140
+	},
+	"45100": {
+		"name": "plastic_cards",
+		"id": 45100,
+		"parent": 1,
+		"children": [],
+		"order": 150
+	},
+	"64482": {
+		"name": "sports_cards",
+		"id": 64482,
+		"parent": 1,
+		"children": [],
+		"order": 160
+	},
+	"162": {
+		"name": "ashtrays_&_lighters",
+		"id": 162,
+		"parent": 1,
+		"children": [],
+		"order": 170
+	},
+	"163": {
+		"name": "labels_bottles_&_caps",
+		"id": 163,
+		"parent": 1,
+		"children": [],
+		"order": 180
+	},
+	"164": {
+		"name": "minerals_&_fossils",
+		"id": 164,
+		"parent": 1,
+		"children": [],
+		"order": 190
+	},
+	"165": {
+		"name": "insects",
+		"id": 165,
+		"parent": 1,
+		"children": [],
+		"order": 200
+	},
+	"166": {
+		"name": "care_products",
+		"id": 166,
+		"parent": 1,
+		"children": [],
+		"order": 210
+	},
+	"167": {
+		"name": "collection_storage",
+		"id": 167,
+		"parent": 1,
+		"children": [],
+		"order": 220
+	},
+	"20081": {
+		"name": "other",
+		"id": 20081,
+		"parent": 1,
+		"children": [],
+		"order": 230
 	},
 	"14339": {
 		"name": "crafts",
@@ -13944,22 +14121,6 @@
 		"parent": 15032,
 		"children": [],
 		"order": 90
-	},
-	"20081": {
-		"name": "antiques",
-		"icon": "fa-trophy",
-		"id": 20081,
-		"parent": null,
-		"children": [],
-		"order": 4000
-	},
-	"45100": {
-		"name": "entertainment_memorabilia",
-		"icon": "fa-scroll",
-		"id": 45100,
-		"parent": null,
-		"children": [],
-		"order": 4100
 	},
 	"58058": {
 		"name": "computers_tablets_&_networking_equipment",
@@ -14563,14 +14724,6 @@
 		"parent": 58058,
 		"children": [],
 		"order": 60
-	},
-	"64482": {
-		"name": "sports_mem_cards_fan_shop",
-		"icon": "fa-medal",
-		"id": 64482,
-		"parent": null,
-		"children": [],
-		"order": 4300
 	},
 	"172008": {
 		"name": "gift_cards_coupons",

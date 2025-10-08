@@ -383,7 +383,29 @@
 	"barometers": "Барометри",
 	"holders_stands_and_trays": "Држачи, постоља и послужавници",
 
-	"collectibles": "Колекционарски предмети",
+	"collectibles_&_antiques": "Колекционарство и антиквитети",
+	"coins": "Новчићи",
+	"banknotes": "Новчанице",
+	"securities": "Хартије од вредности",
+	"calendars": "Календари",
+	"postcards": "Разгледнице",
+	"envelopes_&_postal_cards": "Коверте, поштанске картице",
+	"photographs_&_letters": "Фотографије, писма",
+	"tokens_medals_&_badges": "Жетони, медаље, значке",
+	"tickets": "Карте (билети)",
+	"celebrity_memorabilia_&_autographs": "Предмети познатих личности, аутограми",
+	"military_items": "Војни предмети",
+	"vinyl_records": "Грамофонске плоче",
+	"models_&_figurines": "Модели, фигурице",
+	"plastic_cards": "Пластичне картице",
+	"sports_cards": "Спортске картице",
+	"ashtrays_&_lighters": "Пепељаре, упаљачи",
+	"labels_bottles_&_caps": "Етикете, боце, чепови",
+	"minerals_&_fossils": "Минерали, фосили",
+	"insects": "Инсекти",
+	"care_products": "Средства за негу",
+	"collection_storage": "Чување колекција",
+
 	"everything_else": "Све остало",
 	"stamps": "Марке",
 	"books_magazines": "Књиге и часописи",
@@ -1526,9 +1548,6 @@
 	"accessories_for_smartwatches_and_fitness_trackers": "Аксесоари за паметне сатове и фитнес наруквице",
 	"corded_and_cordless_phones": "Жични и бежични телефони",
 
-	"antiques": "Антиквитети",
-	"entertainment_memorabilia": "Забавно меморабилија",
-
 	"computers_tablets_&_networking_equipment": "Рачунари, таблети и мрежна опрема",
 	"computers": "Рачунари",
 	"monitors": "Монитори",
@@ -1600,7 +1619,6 @@
 	"component_testers": "Тестери за компоненте",
 	"software": "Софтвер",
 
-	"sports_mem_cards_fan_shop": "Спортски меморабилији",
 	"gift_cards_coupons": "Поклон картице и купони",
 	"bank_transfer": "Банковни трансфер",
 
