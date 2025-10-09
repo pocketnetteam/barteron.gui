@@ -9729,6 +9729,793 @@
 		"children": [],
 		"order": 110
 	},	
+	"8000": {
+		"name": "business_and_equipment",
+		"icon": "fa-warehouse",
+		"id": 8000,
+		"parent": null,
+		"children": [
+			8001,
+			8056,
+			8071,
+			8086
+		],
+		"order": 216
+	},
+	"8001": {
+		"name": "equipment_for_business",
+		"id": 8001,
+		"parent": 8000,
+		"children": [
+			8002,
+			8014,
+			8018,
+			8027,
+			8035,
+			8044,
+			8052,
+			8053,
+			8054,
+			8055
+		],
+		"order": 10
+	},
+	"8002": {
+		"name": "industrial",
+		"id": 8002,
+		"parent": 8001,
+		"children": [
+			8003,
+			8004,
+			8005,
+			8006,
+			8007,
+			8008,
+			8009,
+			8010,
+			8011,
+			8012,
+			8013
+		],
+		"order": 10
+	},
+	"8003": {
+		"name": "drive_equipment",
+		"id": 8003,
+		"parent": 8002,
+		"children": [],
+		"order": 10
+	},
+	"8004": {
+		"name": "electrical_equipment",
+		"id": 8004,
+		"parent": 8002,
+		"children": [],
+		"order": 20
+	},
+	"8005": {
+		"name": "machine_tools",
+		"id": 8005,
+		"parent": 8002,
+		"children": [],
+		"order": 30
+	},
+	"8006": {
+		"name": "pumps_and_compressors",
+		"id": 8006,
+		"parent": 8002,
+		"children": [],
+		"order": 40
+	},
+	"8007": {
+		"name": "measuring_and_control_equipment",
+		"id": 8007,
+		"parent": 8002,
+		"children": [],
+		"order": 50
+	},
+	"8008": {
+		"name": "conveyors_and_transport_systems",
+		"id": 8008,
+		"parent": 8002,
+		"children": [],
+		"order": 60
+	},
+	"8009": {
+		"name": "soldering_and_welding_equipment",
+		"id": 8009,
+		"parent": 8002,
+		"children": [],
+		"order": 70
+	},
+	"8010": {
+		"name": "climate_control_equipment",
+		"id": 8010,
+		"parent": 8002,
+		"children": [],
+		"order": 80
+	},
+	"8011": {
+		"name": "packaging_and_filling_equipment",
+		"id": 8011,
+		"parent": 8002,
+		"children": [],
+		"order": 90
+	},
+	"8012": {
+		"name": "specialized_equipment",
+		"id": 8012,
+		"parent": 8002,
+		"children": [],
+		"order": 100
+	},
+	"8013": {
+		"name": "other",
+		"id": 8013,
+		"parent": 8002,
+		"children": [],
+		"order": 110
+	},
+	"8014": {
+		"name": "logistics_and_warehousing",
+		"id": 8014,
+		"parent": 8001,
+		"children": [
+			8015,
+			8016,
+			8017
+		],
+		"order": 20
+	},
+	"8015": {
+		"name": "containers",
+		"id": 8015,
+		"parent": 8014,
+		"children": [],
+		"order": 10
+	},
+	"8016": {
+		"name": "lifting_equipment",
+		"id": 8016,
+		"parent": 8014,
+		"children": [],
+		"order": 20
+	},
+	"8017": {
+		"name": "warehouses_and_storage",
+		"id": 8017,
+		"parent": 8014,
+		"children": [],
+		"order": 30
+	},
+	"8018": {
+		"name": "commercial_equipment",
+		"id": 8018,
+		"parent": 8001,
+		"children": [
+			8019,
+			8020,
+			8021,
+			8022,
+			8023,
+			8024,
+			8025,
+			8026
+		],
+		"order": 30
+	},
+	"8019": {
+		"name": "furniture",
+		"id": 8019,
+		"parent": 8018,
+		"children": [],
+		"order": 10
+	},
+	"8020": {
+		"name": "cash_register_and_payment_systems",
+		"id": 8020,
+		"parent": 8018,
+		"children": [],
+		"order": 20
+	},
+	"8021": {
+		"name": "advertising_equipment",
+		"id": 8021,
+		"parent": 8018,
+		"children": [],
+		"order": 30
+	},
+	"8022": {
+		"name": "pavilions_and_food_trucks",
+		"id": 8022,
+		"parent": 8018,
+		"children": [],
+		"order": 40
+	},
+	"8023": {
+		"name": "vending_and_trade_machines",
+		"id": 8023,
+		"parent": 8018,
+		"children": [],
+		"order": 50
+	},
+	"8024": {
+		"name": "entertainment_equipment",
+		"id": 8024,
+		"parent": 8018,
+		"children": [],
+		"order": 60
+	},
+	"8025": {
+		"name": "retail_inventory",
+		"id": 8025,
+		"parent": 8018,
+		"children": [],
+		"order": 70
+	},
+	"8026": {
+		"name": "other",
+		"id": 8026,
+		"parent": 8018,
+		"children": [],
+		"order": 80
+	},
+	"8027": {
+		"name": "food_industry_equipment",
+		"id": 8027,
+		"parent": 8001,
+		"children": [
+			8028,
+			8029,
+			8030,
+			8031,
+			8032,
+			8033,
+			8034
+		],
+		"order": 40
+	},
+	"8028": {
+		"name": "thermal_equipment",
+		"id": 8028,
+		"parent": 8027,
+		"children": [],
+		"order": 10
+	},
+	"8029": {
+		"name": "beverage_production_equipment",
+		"id": 8029,
+		"parent": 8027,
+		"children": [],
+		"order": 20
+	},
+	"8030": {
+		"name": "refrigeration_equipment",
+		"id": 8030,
+		"parent": 8027,
+		"children": [],
+		"order": 30
+	},
+	"8031": {
+		"name": "neutral_equipment",
+		"id": 8031,
+		"parent": 8027,
+		"children": [],
+		"order": 40
+	},
+	"8032": {
+		"name": "bakery_equipment",
+		"id": 8032,
+		"parent": 8027,
+		"children": [],
+		"order": 50
+	},
+	"8033": {
+		"name": "electromechanical_equipment",
+		"id": 8033,
+		"parent": 8027,
+		"children": [],
+		"order": 60
+	},
+	"8034": {
+		"name": "kitchen_utensils_and_tools",
+		"id": 8034,
+		"parent": 8027,
+		"children": [],
+		"order": 70
+	},
+	"8035": {
+		"name": "beauty_salon_equipment",
+		"id": 8035,
+		"parent": 8001,
+		"children": [
+			8036,
+			8037,
+			8038,
+			8039,
+			8040,
+			8041,
+			8042,
+			8043
+		],
+		"order": 50
+	},
+	"8036": {
+		"name": "tanning_equipment",
+		"id": 8036,
+		"parent": 8035,
+		"children": [],
+		"order": 10
+	},
+	"8037": {
+		"name": "hair_removal_equipment",
+		"id": 8037,
+		"parent": 8035,
+		"children": [],
+		"order": 20
+	},
+	"8038": {
+		"name": "cosmetology_equipment",
+		"id": 8038,
+		"parent": 8035,
+		"children": [],
+		"order": 30
+	},
+	"8039": {
+		"name": "tattoo_and_permanent_makeup",
+		"id": 8039,
+		"parent": 8035,
+		"children": [],
+		"order": 40
+	},
+	"8040": {
+		"name": "massage_and_body_shaping",
+		"id": 8040,
+		"parent": 8035,
+		"children": [],
+		"order": 50
+	},
+	"8041": {
+		"name": "manicure_and_pedicure_equipment",
+		"id": 8041,
+		"parent": 8035,
+		"children": [],
+		"order": 60
+	},
+	"8042": {
+		"name": "hairdressing_equipment",
+		"id": 8042,
+		"parent": 8035,
+		"children": [],
+		"order": 70
+	},
+	"8043": {
+		"name": "accessories_and_tools",
+		"id": 8043,
+		"parent": 8035,
+		"children": [],
+		"order": 80
+	},
+	"8044": {
+		"name": "automotive_business_equipment",
+		"id": 8044,
+		"parent": 8001,
+		"children": [
+			8045,
+			8046,
+			8047,
+			8048,
+			8049,
+			8050,
+			8051
+		],
+		"order": 60
+	},
+	"8045": {
+		"name": "washing_equipment",
+		"id": 8045,
+		"parent": 8044,
+		"children": [],
+		"order": 10
+	},
+	"8046": {
+		"name": "tire_service_equipment",
+		"id": 8046,
+		"parent": 8044,
+		"children": [],
+		"order": 20
+	},
+	"8047": {
+		"name": "wheel_alignment_equipment",
+		"id": 8047,
+		"parent": 8044,
+		"children": [],
+		"order": 30
+	},
+	"8048": {
+		"name": "painting_and_bodywork_equipment",
+		"id": 8048,
+		"parent": 8044,
+		"children": [],
+		"order": 40
+	},
+	"8049": {
+		"name": "fueling_equipment",
+		"id": 8049,
+		"parent": 8044,
+		"children": [],
+		"order": 50
+	},
+	"8050": {
+		"name": "diagnostics_and_repair_equipment",
+		"id": 8050,
+		"parent": 8044,
+		"children": [],
+		"order": 60
+	},
+	"8051": {
+		"name": "lifting_equipment",
+		"id": 8051,
+		"parent": 8044,
+		"children": [],
+		"order": 70
+	},
+	"8052": {
+		"name": "laboratory_equipment",
+		"id": 8052,
+		"parent": 8001,
+		"children": [],
+		"order": 70
+	},
+	"8053": {
+		"name": "medical_equipment",
+		"id": 8053,
+		"parent": 8001,
+		"children": [],
+		"order": 80
+	},
+	"8054": {
+		"name": "telecommunication_equipment",
+		"id": 8054,
+		"parent": 8001,
+		"children": [],
+		"order": 90
+	},
+	"8055": {
+		"name": "other",
+		"id": 8055,
+		"parent": 8001,
+		"children": [],
+		"order": 100
+	},
+	"8056": {
+		"name": "franchises",
+		"id": 8056,
+		"parent": 8000,
+		"children": [
+			8057,
+			8058,
+			8059,
+			8060,
+			8061,
+			8062,
+			8063,
+			8064,
+			8065,
+			8066,
+			8067,
+			8068,
+			8069,
+			8070
+		],
+		"order": 20
+	},
+	"8057": {
+		"name": "automotive_business",
+		"id": 8057,
+		"parent": 8056,
+		"children": [],
+		"order": 10
+	},
+	"8058": {
+		"name": "rental_business",
+		"id": 8058,
+		"parent": 8056,
+		"children": [],
+		"order": 20
+	},
+	"8059": {
+		"name": "beauty_and_health",
+		"id": 8059,
+		"parent": 8056,
+		"children": [],
+		"order": 30
+	},
+	"8060": {
+		"name": "food_service",
+		"id": 8060,
+		"parent": 8056,
+		"children": [],
+		"order": 40
+	},
+	"8061": {
+		"name": "manufacturing",
+		"id": 8061,
+		"parent": 8056,
+		"children": [],
+		"order": 50
+	},
+	"8062": {
+		"name": "order_pickup_points",
+		"id": 8062,
+		"parent": 8056,
+		"children": [],
+		"order": 60
+	},
+	"8063": {
+		"name": "agriculture",
+		"id": 8063,
+		"parent": 8056,
+		"children": [],
+		"order": 70
+	},
+	"8064": {
+		"name": "construction",
+		"id": 8064,
+		"parent": 8056,
+		"children": [],
+		"order": 80
+	},
+	"8065": {
+		"name": "entertainment_industry",
+		"id": 8065,
+		"parent": 8056,
+		"children": [],
+		"order": 90
+	},
+	"8066": {
+		"name": "service_industry",
+		"id": 8066,
+		"parent": 8056,
+		"children": [],
+		"order": 100
+	},
+	"8067": {
+		"name": "retail",
+		"id": 8067,
+		"parent": 8056,
+		"children": [],
+		"order": 110
+	},
+	"8068": {
+		"name": "tourism",
+		"id": 8068,
+		"parent": 8056,
+		"children": [],
+		"order": 120
+	},
+	"8069": {
+		"name": "it_business",
+		"id": 8069,
+		"parent": 8056,
+		"children": [],
+		"order": 130
+	},
+	"8070": {
+		"name": "other",
+		"id": 8070,
+		"parent": 8056,
+		"children": [],
+		"order": 140
+	},
+	"8071": {
+		"name": "ready-made_business",
+		"id": 8071,
+		"parent": 8000,
+		"children": [
+			8072,
+			8073,
+			8074,
+			8075,
+			8076,
+			8077,
+			8078,
+			8079,
+			8080,
+			8081,
+			8082,
+			8083,
+			8084,
+			8085
+		],
+		"order": 30
+	},
+	"8072": {
+		"name": "automotive_business",
+		"id": 8072,
+		"parent": 8071,
+		"children": [],
+		"order": 10
+	},
+	"8073": {
+		"name": "rental_business",
+		"id": 8073,
+		"parent": 8071,
+		"children": [],
+		"order": 20
+	},
+	"8074": {
+		"name": "beauty_and_health",
+		"id": 8074,
+		"parent": 8071,
+		"children": [],
+		"order": 30
+	},
+	"8075": {
+		"name": "food_service",
+		"id": 8075,
+		"parent": 8071,
+		"children": [],
+		"order": 40
+	},
+	"8076": {
+		"name": "manufacturing",
+		"id": 8076,
+		"parent": 8071,
+		"children": [],
+		"order": 50
+	},
+	"8077": {
+		"name": "order_pickup_points",
+		"id": 8077,
+		"parent": 8071,
+		"children": [],
+		"order": 60
+	},
+	"8078": {
+		"name": "agriculture",
+		"id": 8078,
+		"parent": 8071,
+		"children": [],
+		"order": 70
+	},
+	"8079": {
+		"name": "construction",
+		"id": 8079,
+		"parent": 8071,
+		"children": [],
+		"order": 80
+	},
+	"8080": {
+		"name": "entertainment_industry",
+		"id": 8080,
+		"parent": 8071,
+		"children": [],
+		"order": 90
+	},
+	"8081": {
+		"name": "service_industry",
+		"id": 8081,
+		"parent": 8071,
+		"children": [],
+		"order": 100
+	},
+	"8082": {
+		"name": "retail",
+		"id": 8082,
+		"parent": 8071,
+		"children": [],
+		"order": 110
+	},
+	"8083": {
+		"name": "tourism",
+		"id": 8083,
+		"parent": 8071,
+		"children": [],
+		"order": 120
+	},
+	"8084": {
+		"name": "it_business",
+		"id": 8084,
+		"parent": 8071,
+		"children": [],
+		"order": 130
+	},
+	"8085": {
+		"name": "other",
+		"id": 8085,
+		"parent": 8071,
+		"children": [],
+		"order": 140
+	},
+	"8086": {
+		"name": "business_software",
+		"id": 8086,
+		"parent": 8000,
+		"children": [
+			8087,
+			8088,
+			8089,
+			8090,
+			8091,
+			8092,
+			8093,
+			8094,
+			8095,
+			8096
+		],
+		"order": 40
+	},
+	"8087": {
+		"name": "analytics",
+		"id": 8087,
+		"parent": 8086,
+		"children": [],
+		"order": 10
+	},
+	"8088": {
+		"name": "security",
+		"id": 8088,
+		"parent": 8086,
+		"children": [],
+		"order": 20
+	},
+	"8089": {
+		"name": "procurement_warehouse_logistics",
+		"id": 8089,
+		"parent": 8086,
+		"children": [],
+		"order": 30
+	},
+	"8090": {
+		"name": "industry-specific_software",
+		"id": 8090,
+		"parent": 8086,
+		"children": [],
+		"order": 40
+	},
+	"8091": {
+		"name": "office_software",
+		"id": 8091,
+		"parent": 8086,
+		"children": [],
+		"order": 50
+	},
+	"8092": {
+		"name": "sales_and_marketing",
+		"id": 8092,
+		"parent": 8086,
+		"children": [],
+		"order": 60
+	},
+	"8093": {
+		"name": "hr_management_and_training",
+		"id": 8093,
+		"parent": 8086,
+		"children": [],
+		"order": 70
+	},
+	"8094": {
+		"name": "enterprise_and_production_management",
+		"id": 8094,
+		"parent": 8086,
+		"children": [],
+		"order": 80
+	},
+	"8095": {
+		"name": "it_infrastructure_management",
+		"id": 8095,
+		"parent": 8086,
+		"children": [],
+		"order": 90
+	},
+	"8096": {
+		"name": "other",
+		"id": 8096,
+		"parent": 8086,
+		"children": [],
+		"order": 100
+	},	
 	"10542": {
 		"name": "real_estate",
 		"icon": "fa-building",
