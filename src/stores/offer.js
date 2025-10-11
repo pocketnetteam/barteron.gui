@@ -5,6 +5,7 @@ import Categories from "@/js/categories.js";
 const 
     defaultPageSize = 18,
     storageId = "offer",
+    categories = new Categories(),
     storage = Pinia.defineStore(storageId, {
         state: () => ({
             items: [],
@@ -25,20 +26,21 @@ const
         getters: {
             pageSize: () => defaultPageSize,
 
+            parentCategories: (state) => {
+                const id = state.itemsRoute?.params?.id;
+                return categories.getParentsById(id);
+            },
+
             isSubcategory: (state) => {
-                const 
-                    id = state.itemsRoute?.params?.id,
-                    categories = new Categories();
-                
-                return categories.getParentsById(id).length;
+                return state.parentCategories?.length;
             },
 
             topParentCategory: (state) => {
-                const 
-                    id = state.itemsRoute?.params?.id,
-                    categories = new Categories();
-                
-                return categories.getParentsById(id)[0];
+                return state.parentCategories?.[0];
+            },
+
+            secondLevelParentCategory: (state) => {
+                return state.parentCategories?.[1];
             },
         },        
         
@@ -130,20 +132,14 @@ const
             _getRequestTags(data) {
                 let result = [];
                 if (Number.isInteger(+data?.id)) {
-                    const
-                        id = String(+data.id),
-                        categories = new Categories();
-
+                    const id = String(+data.id);
                     result = categories.findChildrenRecursivelyById(id).map(item => Number(item.id));
                 }
                 return result;
             },
 
             _getExchangeOptionsTags() {
-                const
-                    tags = this.filters.exchangeOptionsTags || [],
-                    categories = tags.length && (new Categories());
-
+                const tags = this.filters.exchangeOptionsTags || [];
                 const result = tags.reduce(
                     (res, id) => {
                         const foundTags = categories.findChildrenRecursivelyById(id).map(item => Number(item.id));

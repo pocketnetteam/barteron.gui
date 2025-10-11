@@ -4,7 +4,7 @@
 	"3": { "id": 62230, "name": "shoes", "image": "categories/shoes.svg" },
 	"4": { "id": 63861, "name": "dresses", "image": "categories/clothes.svg" },
 	"5": { "id": 888, "name": "sporting_goods", "image": "categories/sport.svg" },
-	"6": { "id": 21136, "name": "health_beauty", "image": "categories/beauty.svg" },
+	"6": { "id": 257, "name": "beauty", "image": "categories/beauty.svg" },
 	"7": { "id": 165298, "name": "small_pets", "image": "categories/pets.svg" },
 	"8": { "id": 293, "name": "home_appliances", "image": "categories/electronics.svg" },
 	"9": { "id": 299, "name": "household_supplies_cleaning", "image": "categories/house.svg" },
