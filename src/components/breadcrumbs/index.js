@@ -72,15 +72,17 @@ export default {
 			setTimeout(async () => {
 				const 
 					fullPath = this.$route?.fullPath,
-					needReloadOffers = !(
+					isCategoryRoute = this.$route?.name === "category",
+					routeHasChanged = (
 						offerStore.loadingItemsRoute?.fullPath === fullPath
 						|| offerStore.itemsRoute?.fullPath === fullPath
-					);
+					),
+					needReloadOffers = isCategoryRoute && !(routeHasChanged);
 
 				if (needReloadOffers) {
 					await offerStore.loadFirstPage(this.$route);
 				}
-			}, 50);
+			}, 100);
 		},
 	}
 }
