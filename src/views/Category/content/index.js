@@ -51,6 +51,7 @@ export default {
 			"pageSize",
 			"isSubcategory",
 			"topParentCategory",
+			"secondLevelParentCategory",
 		]),
 
 		...mapState(useLocaleStore, [
@@ -95,6 +96,30 @@ export default {
 		 */
 		topParentCategoriesToShowPrompt() {
 			return [13587, 6000, 619, 888, 11450, 2984, 10542, 11700, 20, 293, 625, 58058, 15032, 1249, 1];
+		},
+
+		/**
+		 * The service category unites many subcategories, 
+		 * each with a different theme, which contain child categories. 
+		 * Previously existing subcategories within the Services category 
+		 * have been moved as child categories within the new structure. 
+		 * Therefore, users should be prompted to view the parent category 
+		 * within Services if its subcategories contain few offers or empty.
+		 * 
+		 * @returns {Array}
+		 */
+		servicesSubcategoriesToShowPrompt() {
+			return [3, 40, 4, 5, 26395, 7, 8, 9, 10, 22];
+		},
+
+		viewingParentCategory() {
+			return !(this.isLoading || this.isSearchEnabled() || this.isFiltersActive()) 
+				&& (this.items?.length < 10) 
+				&& this.isSubcategory
+				&& (
+					 this.topParentCategoriesToShowPrompt.includes(this.topParentCategory.id) && this.topParentCategory
+					|| this.servicesSubcategoriesToShowPrompt.includes(this.secondLevelParentCategory?.id) && this.secondLevelParentCategory
+				);
 		},
 	},
 
@@ -175,7 +200,7 @@ export default {
 			} else {
 				this.loadFirstPage(this.$route);
 			};
-		}
+		},
 	},
 
 	watch: {
