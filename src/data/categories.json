@@ -1076,128 +1076,1683 @@
 		"id": 2,
 		"parent": null,
 		"children": [
+			149,
 			3,
+			40,
+			203,
+			206,
 			4,
 			5,
-			39,
+			246,
+			249,
+			257,
 			26395,
-			6,
 			7,
-			8,
-			9,
-			12576,
-			10,
+			292,
 			11,
-			22,
-			40,
-			41
+			8,
+			10,
+			9,
+			494,
+			495,
+			496,
+			497,
+			6,
+			506,
+			507,
+			513,
+			518,
+			522,
+			526,
+			527,
+			528,
+			533,
+			12576
 		],
 		"order": 200
+	},
+	"149": {
+		"name": "auto_service_rental",
+		"id": 149,
+		"parent": 2,
+		"children": [
+			160,
+			177,
+			178,
+			179,
+			184
+		],
+		"order": 10
+	},
+	"160": {
+		"name": "auto_services_for_cars",
+		"id": 160,
+		"parent": 149,
+		"children": [
+			161,
+			168,
+			169,
+			170,
+			171,
+			172,
+			173,
+			174,
+			175,
+			176
+		],
+		"order": 10
+	},
+	"161": {
+		"name": "scheduled_maintenance",
+		"id": 161,
+		"parent": 160,
+		"children": [],
+		"order": 10
+	},
+	"168": {
+		"name": "body_repair_and_painting",
+		"id": 168,
+		"parent": 160,
+		"children": [],
+		"order": 20
+	},
+	"169": {
+		"name": "diagnostics_and_auto_repair",
+		"id": 169,
+		"parent": 160,
+		"children": [],
+		"order": 30
+	},
+	"170": {
+		"name": "tuning_and_equipment",
+		"id": 170,
+		"parent": 160,
+		"children": [],
+		"order": 40
+	},
+	"171": {
+		"name": "car_wash_and_care",
+		"id": 171,
+		"parent": 160,
+		"children": [],
+		"order": 50
+	},
+	"172": {
+		"name": "tire_fitting_and_wheel_repair",
+		"id": 172,
+		"parent": 160,
+		"children": [],
+		"order": 60
+	},
+	"173": {
+		"name": "roadside_assistance",
+		"id": 173,
+		"parent": 160,
+		"children": [],
+		"order": 70
+	},
+	"174": {
+		"name": "self-service_garages",
+		"id": 174,
+		"parent": 160,
+		"children": [],
+		"order": 80
+	},
+	"175": {
+		"name": "car_purchase_assistance",
+		"id": 175,
+		"parent": 160,
+		"children": [],
+		"order": 90
+	},
+	"176": {
+		"name": "other",
+		"id": 176,
+		"parent": 160,
+		"children": [],
+		"order": 100
+	},
+	"177": {
+		"name": "truck_and_heavy_machinery_services",
+		"id": 177,
+		"parent": 149,
+		"children": [],
+		"order": 20
+	},
+	"178": {
+		"name": "services_for_other_vehicles",
+		"id": 178,
+		"parent": 149,
+		"children": [],
+		"order": 30
+	},
+	"179": {
+		"name": "car_rental",
+		"id": 179,
+		"parent": 149,
+		"children": [
+			180,
+			181,
+			182,
+			183
+		],
+		"order": 40
+	},
+	"180": {
+		"name": "personal_use_cars",
+		"id": 180,
+		"parent": 179,
+		"children": [],
+		"order": 10
+	},
+	"181": {
+		"name": "taxi_cars",
+		"id": 181,
+		"parent": 179,
+		"children": [],
+		"order": 20
+	},
+	"182": {
+		"name": "car_lease_with_buyout_option",
+		"id": 182,
+		"parent": 179,
+		"children": [],
+		"order": 30
+	},
+	"183": {
+		"name": "motorcycle_water_and_air_vehicle_rental",
+		"id": 183,
+		"parent": 179,
+		"children": [],
+		"order": 40
+	},
+	"184": {
+		"name": "special_equipment_rental",
+		"id": 184,
+		"parent": 149,
+		"children": [
+			185,
+			186,
+			187,
+			188,
+			189,
+			190,
+			191,
+			192,
+			193,
+			194
+		],
+		"order": 50
+	},
+	"185": {
+		"name": "lifting_equipment",
+		"id": 185,
+		"parent": 184,
+		"children": [],
+		"order": 10
+	},
+	"186": {
+		"name": "earthmoving_equipment",
+		"id": 186,
+		"parent": 184,
+		"children": [],
+		"order": 20
+	},
+	"187": {
+		"name": "municipal_equipment",
+		"id": 187,
+		"parent": 184,
+		"children": [],
+		"order": 30
+	},
+	"188": {
+		"name": "road_construction_equipment",
+		"id": 188,
+		"parent": 184,
+		"children": [],
+		"order": 40
+	},
+	"189": {
+		"name": "freight_transport",
+		"id": 189,
+		"parent": 184,
+		"children": [],
+		"order": 50
+	},
+	"190": {
+		"name": "loading_equipment",
+		"id": 190,
+		"parent": 184,
+		"children": [],
+		"order": 60
+	},
+	"191": {
+		"name": "attachments",
+		"id": 191,
+		"parent": 184,
+		"children": [],
+		"order": 70
+	},
+	"192": {
+		"name": "trailers",
+		"id": 192,
+		"parent": 184,
+		"children": [],
+		"order": 80
+	},
+	"193": {
+		"name": "agricultural_machinery",
+		"id": 193,
+		"parent": 184,
+		"children": [],
+		"order": 90
+	},
+	"194": {
+		"name": "other",
+		"id": 194,
+		"parent": 184,
+		"children": [],
+		"order": 100
 	},
 	"3": {
 		"name": "cargo_transportation",
 		"id": 3,
 		"parent": 2,
-		"children": [],
-		"order": 300
+		"children": [
+			196,
+			197,
+			198
+		],
+		"order": 20
 	},
-	"4": {
-		"name": "repair_finishing",
-		"id": 4,
-		"parent": 2,
+	"196": {
+		"name": "within_the_city",
+		"id": 196,
+		"parent": 3,
 		"children": [],
-		"order": 400
+		"order": 10
 	},
-	"5": {
-		"name": "construction",
-		"id": 5,
-		"parent": 2,
+	"197": {
+		"name": "intercity",
+		"id": 197,
+		"parent": 3,
 		"children": [],
-		"order": 500
+		"order": 20
 	},
-	"39": {
-		"name": "landscape_design",
-		"id": 39,
-		"parent": 2,
+	"198": {
+		"name": "international",
+		"id": 198,
+		"parent": 3,
 		"children": [],
-		"order": 510
-	},
-	"26395": {
-		"name": "health_beauty",
-		"id": 26395,
-		"parent": 2,
-		"children": [],
-		"order": 600
-	},
-	"6": {
-		"name": "cleaning_disinfection",
-		"id": 6,
-		"parent": 2,
-		"children": [],
-		"order": 700
-	},
-	"7": {
-		"name": "appliance_repair",
-		"id": 7,
-		"parent": 2,
-		"children": [],
-		"order": 800
-	},
-	"8": {
-		"name": "equipment_manufacturing",
-		"id": 8,
-		"parent": 2,
-		"children": [],
-		"order": 900
-	},
-	"9": {
-		"name": "business_services",
-		"id": 9,
-		"parent": 2,
-		"children": [],
-		"order": 1000
-	},
-	"12576": {
-		"name": "business_industrial",
-		"id": 12576,
-		"parent": 2,
-		"children": [],
-		"order": 1100
-	},
-	"10": {
-		"name": "education_courses",
-		"id": 10,
-		"parent": 2,
-		"children": [],
-		"order": 1200
-	},
-	"11": {
-		"name": "appliance_installation",
-		"id": 11,
-		"parent": 2,
-		"children": [],
-		"order": 1300
-	},
-	"22": {
-		"name": "marketing",
-		"id": 22,
-		"parent": 2,
-		"children": [],
-		"order": 1310
+		"order": 30
 	},
 	"40": {
 		"name": "passenger_transportation",
 		"id": 40,
 		"parent": 2,
+		"children": [
+			200,
+			201,
+			202
+		],
+		"order": 30
+	},
+	"200": {
+		"name": "transfers",
+		"id": 200,
+		"parent": 40,
 		"children": [],
-		"order": 310
+		"order": 10
+	},
+	"201": {
+		"name": "cars_on_request",
+		"id": 201,
+		"parent": 40,
+		"children": [],
+		"order": 20
+	},
+	"202": {
+		"name": "other",
+		"id": 202,
+		"parent": 40,
+		"children": [],
+		"order": 30
+	},
+	"203": {
+		"name": "movers_warehouse_services",
+		"id": 203,
+		"parent": 2,
+		"children": [
+			204,
+			205
+		],
+		"order": 40
+	},
+	"204": {
+		"name": "movers",
+		"id": 204,
+		"parent": 203,
+		"children": [],
+		"order": 10
+	},
+	"205": {
+		"name": "fulfillment_services",
+		"id": 205,
+		"parent": 203,
+		"children": [],
+		"order": 20
+	},
+	"206": {
+		"name": "tow_truck_services",
+		"id": 206,
+		"parent": 2,
+		"children": [],
+		"order": 50
+	},
+	"4": {
+		"name": "repair_and_finishing",
+		"id": 4,
+		"parent": 2,
+		"children": [
+			208,
+			209,
+			210,
+			211,
+			212,
+			213,
+			214,
+			215,
+			216,
+			217,
+			218,
+			219,
+			221,
+			222,
+			223,
+			224,
+			225,
+			226,
+			227
+		],
+		"order": 60
+	},
+	"208": {
+		"name": "turnkey_apartment_and_house_renovation",
+		"id": 208,
+		"parent": 4,
+		"children": [],
+		"order": 10
+	},
+	"209": {
+		"name": "interior_design",
+		"id": 209,
+		"parent": 4,
+		"children": [],
+		"order": 20
+	},
+	"210": {
+		"name": "plumbing",
+		"id": 210,
+		"parent": 4,
+		"children": [],
+		"order": 30
+	},
+	"211": {
+		"name": "electrical_work",
+		"id": 211,
+		"parent": 4,
+		"children": [],
+		"order": 40
+	},
+	"212": {
+		"name": "furniture_assembly_and_repair",
+		"id": 212,
+		"parent": 4,
+		"children": [],
+		"order": 50
+	},
+	"213": {
+		"name": "windows_and_balconies",
+		"id": 213,
+		"parent": 4,
+		"children": [],
+		"order": 60
+	},
+	"214": {
+		"name": "wallpapering_and_painting",
+		"id": 214,
+		"parent": 4,
+		"children": [],
+		"order": 70
+	},
+	"215": {
+		"name": "ceilings",
+		"id": 215,
+		"parent": 4,
+		"children": [],
+		"order": 80
+	},
+	"216": {
+		"name": "floors_and_floor_coverings",
+		"id": 216,
+		"parent": 4,
+		"children": [],
+		"order": 90
+	},
+	"217": {
+		"name": "plastering",
+		"id": 217,
+		"parent": 4,
+		"children": [],
+		"order": 100
+	},
+	"218": {
+		"name": "doors",
+		"id": 218,
+		"parent": 4,
+		"children": [],
+		"order": 110
+	},
+	"219": {
+		"name": "tiling",
+		"id": 219,
+		"parent": 4,
+		"children": [],
+		"order": 120
+	},
+	"221": {
+		"name": "carpentry_and_joinery",
+		"id": 221,
+		"parent": 4,
+		"children": [],
+		"order": 130
+	},
+	"222": {
+		"name": "drywall_work",
+		"id": 222,
+		"parent": 4,
+		"children": [],
+		"order": 140
+	},
+	"223": {
+		"name": "high-altitude_work",
+		"id": 223,
+		"parent": 4,
+		"children": [],
+		"order": 150
+	},
+	"224": {
+		"name": "insulation_and_thermal_protection",
+		"id": 224,
+		"parent": 4,
+		"children": [],
+		"order": 160
+	},
+	"225": {
+		"name": "commercial_space_repair",
+		"id": 225,
+		"parent": 4,
+		"children": [],
+		"order": 170
+	},
+	"226": {
+		"name": "ventilation",
+		"id": 226,
+		"parent": 4,
+		"children": [],
+		"order": 180
+	},
+	"227": {
+		"name": "other",
+		"id": 227,
+		"parent": 4,
+		"children": [],
+		"order": 190
+	},
+	"5": {
+		"name": "construction",
+		"id": 5,
+		"parent": 2,
+		"children": [
+			229,
+			230,
+			231,
+			232,
+			233,
+			234,
+			235,
+			236,
+			238,
+			239,
+			240,
+			241,
+			242,
+			243,
+			244,
+			245
+		],
+		"order": 70
+	},
+	"229": {
+		"name": "turnkey_house_construction",
+		"id": 229,
+		"parent": 5,
+		"children": [],
+		"order": 10
+	},
+	"230": {
+		"name": "garage_bathhouse_and_veranda_construction",
+		"id": 230,
+		"parent": 5,
+		"children": [],
+		"order": 20
+	},
+	"231": {
+		"name": "finishing_of_wooden_houses_baths_and_saunas",
+		"id": 231,
+		"parent": 5,
+		"children": [],
+		"order": 30
+	},
+	"232": {
+		"name": "masonry_work",
+		"id": 232,
+		"parent": 5,
+		"children": [],
+		"order": 40
+	},
+	"233": {
+		"name": "roofing_work",
+		"id": 233,
+		"parent": 5,
+		"children": [],
+		"order": 50
+	},
+	"234": {
+		"name": "welding_forging_metal_structures",
+		"id": 234,
+		"parent": 5,
+		"children": [],
+		"order": 60
+	},
+	"235": {
+		"name": "foundation_and_concrete_work",
+		"id": 235,
+		"parent": 5,
+		"children": [],
+		"order": 70
+	},
+	"236": {
+		"name": "diamond_drilling_and_cutting",
+		"id": 236,
+		"parent": 5,
+		"children": [],
+		"order": 80
+	},
+	"238": {
+		"name": "demolition_and_dismantling",
+		"id": 238,
+		"parent": 5,
+		"children": [],
+		"order": 90
+	},
+	"239": {
+		"name": "facade_work",
+		"id": 239,
+		"parent": 5,
+		"children": [],
+		"order": 100
+	},
+	"240": {
+		"name": "design_and_estimates",
+		"id": 240,
+		"parent": 5,
+		"children": [],
+		"order": 110
+	},
+	"241": {
+		"name": "general_laborers",
+		"id": 241,
+		"parent": 5,
+		"children": [],
+		"order": 120
+	},
+	"242": {
+		"name": "surveying_work",
+		"id": 242,
+		"parent": 5,
+		"children": [],
+		"order": 130
+	},
+	"243": {
+		"name": "staircases",
+		"id": 243,
+		"parent": 5,
+		"children": [],
+		"order": 140
+	},
+	"244": {
+		"name": "gasification",
+		"id": 244,
+		"parent": 5,
+		"children": [],
+		"order": 150
+	},
+	"245": {
+		"name": "other",
+		"id": 245,
+		"parent": 5,
+		"children": [],
+		"order": 160
+	},
+	"246": {
+		"name": "handyman_&_lock_opening",
+		"id": 246,
+		"parent": 2,
+		"children": [
+			247,
+			248
+		],
+		"order": 80
+	},
+	"247": {
+		"name": "lock_opening_and_repair",
+		"id": 247,
+		"parent": 246,
+		"children": [],
+		"order": 10
+	},
+	"248": {
+		"name": "handyman_services",
+		"id": 248,
+		"parent": 246,
+		"children": [],
+		"order": 20
+	},
+	"249": {
+		"name": "garden_landscaping",
+		"id": 249,
+		"parent": 2,
+		"children": [
+			39,
+			250,
+			251,
+			252,
+			253,
+			254,
+			255,
+			256
+		],
+		"order": 90
+	},
+	"39": {
+		"name": "landscape_design",
+		"id": 39,
+		"parent": 249,
+		"children": [],
+		"order": 5
+	},
+	"250": {
+		"name": "wells_septic_tanks_and_boreholes",
+		"id": 250,
+		"parent": 249,
+		"children": [],
+		"order": 10
+	},
+	"251": {
+		"name": "ponds_and_fountains",
+		"id": 251,
+		"parent": 249,
+		"children": [],
+		"order": 20
+	},
+	"252": {
+		"name": "road_construction",
+		"id": 252,
+		"parent": 249,
+		"children": [],
+		"order": 30
+	},
+	"253": {
+		"name": "fences_canopies_roller_shutters",
+		"id": 253,
+		"parent": 249,
+		"children": [],
+		"order": 40
+	},
+	"254": {
+		"name": "earthworks",
+		"id": 254,
+		"parent": 249,
+		"children": [],
+		"order": 50
+	},
+	"255": {
+		"name": "landscaping_and_garden_care",
+		"id": 255,
+		"parent": 249,
+		"children": [],
+		"order": 60
+	},
+	"256": {
+		"name": "other",
+		"id": 256,
+		"parent": 249,
+		"children": [],
+		"order": 70
+	},
+	"257": {
+		"name": "beauty",
+		"id": 257,
+		"parent": 2,
+		"children": [
+			258,
+			259,
+			261,
+			262,
+			263,
+			264,
+			265,
+			266,
+			268,
+			269,
+			270
+		],
+		"order": 100
+	},
+	"258": {
+		"name": "manicure_pedicure",
+		"id": 258,
+		"parent": 257,
+		"children": [],
+		"order": 10
+	},
+	"259": {
+		"name": "hairdresser_services",
+		"id": 259,
+		"parent": 257,
+		"children": [],
+		"order": 20
+	},
+	"261": {
+		"name": "eyelashes_and_eyebrows",
+		"id": 261,
+		"parent": 257,
+		"children": [],
+		"order": 30
+	},
+	"262": {
+		"name": "permanent_makeup",
+		"id": 262,
+		"parent": 257,
+		"children": [],
+		"order": 40
+	},
+	"263": {
+		"name": "cosmetology",
+		"id": 263,
+		"parent": 257,
+		"children": [],
+		"order": 50
+	},
+	"264": {
+		"name": "epilation",
+		"id": 264,
+		"parent": 257,
+		"children": [],
+		"order": 60
+	},
+	"265": {
+		"name": "makeup",
+		"id": 265,
+		"parent": 257,
+		"children": [],
+		"order": 70
+	},
+	"266": {
+		"name": "spa_services_massage",
+		"id": 266,
+		"parent": 257,
+		"children": [],
+		"order": 80
+	},
+	"268": {
+		"name": "tattoo_piercing",
+		"id": 268,
+		"parent": 257,
+		"children": [],
+		"order": 90
+	},
+	"269": {
+		"name": "workplace_rental",
+		"id": 269,
+		"parent": 257,
+		"children": [],
+		"order": 100
+	},
+	"270": {
+		"name": "other",
+		"id": 270,
+		"parent": 257,
+		"children": [],
+		"order": 110
+	},
+	"26395": {
+		"name": "health",
+		"id": 26395,
+		"parent": 2,
+		"children": [
+			272,
+			273,
+			274,
+			275,
+			276,
+			277
+		],
+		"order": 110
+	},
+	"272": {
+		"name": "psychology",
+		"id": 272,
+		"parent": 26395,
+		"children": [],
+		"order": 10
+	},
+	"273": {
+		"name": "dietology",
+		"id": 273,
+		"parent": 26395,
+		"children": [],
+		"order": 20
+	},
+	"274": {
+		"name": "fitness_yoga",
+		"id": 274,
+		"parent": 26395,
+		"children": [],
+		"order": 30
+	},
+	"275": {
+		"name": "dentistry",
+		"id": 275,
+		"parent": 26395,
+		"children": [],
+		"order": 40
+	},
+	"276": {
+		"name": "podology",
+		"id": 276,
+		"parent": 26395,
+		"children": [],
+		"order": 50
+	},
+	"277": {
+		"name": "other",
+		"id": 277,
+		"parent": 26395,
+		"children": [],
+		"order": 60
+	},
+	"7": {
+		"name": "appliance_repair_and_maintenance",
+		"id": 7,
+		"parent": 2,
+		"children": [
+			279,
+			280,
+			282,
+			283,
+			284,
+			285,
+			286,
+			287,
+			288,
+			289,
+			290,
+			291
+		],
+		"order": 120
+	},
+	"279": {
+		"name": "tvs",
+		"id": 279,
+		"parent": 7,
+		"children": [],
+		"order": 10
+	},
+	"280": {
+		"name": "mobile_devices",
+		"id": 280,
+		"parent": 7,
+		"children": [],
+		"order": 20
+	},
+	"282": {
+		"name": "photo_audio_video_equipment",
+		"id": 282,
+		"parent": 7,
+		"children": [],
+		"order": 30
+	},
+	"283": {
+		"name": "air_conditioners_ventilation",
+		"id": 283,
+		"parent": 7,
+		"children": [],
+		"order": 40
+	},
+	"284": {
+		"name": "washing_and_drying_machines",
+		"id": 284,
+		"parent": 7,
+		"children": [],
+		"order": 50
+	},
+	"285": {
+		"name": "dishwashers",
+		"id": 285,
+		"parent": 7,
+		"children": [],
+		"order": 60
+	},
+	"286": {
+		"name": "refrigerators_and_freezers",
+		"id": 286,
+		"parent": 7,
+		"children": [],
+		"order": 70
+	},
+	"287": {
+		"name": "cooktops_and_ovens",
+		"id": 287,
+		"parent": 7,
+		"children": [],
+		"order": 80
+	},
+	"288": {
+		"name": "gas_boilers_water_heaters",
+		"id": 288,
+		"parent": 7,
+		"children": [],
+		"order": 90
+	},
+	"289": {
+		"name": "coffee_machines",
+		"id": 289,
+		"parent": 7,
+		"children": [],
+		"order": 100
+	},
+	"290": {
+		"name": "sewing_machines_overlocks",
+		"id": 290,
+		"parent": 7,
+		"children": [],
+		"order": 110
+	},
+	"291": {
+		"name": "other",
+		"id": 291,
+		"parent": 7,
+		"children": [],
+		"order": 120
+	},
+	"292": {
+		"name": "computer_assistance",
+		"id": 292,
+		"parent": 2,
+		"children": [
+			453,
+			454,
+			455,
+			456,
+			457,
+			458
+		],
+		"order": 130
+	},
+	"453": {
+		"name": "computers",
+		"id": 453,
+		"parent": 292,
+		"children": [],
+		"order": 10
+	},
+	"454": {
+		"name": "printers",
+		"id": 454,
+		"parent": 292,
+		"children": [],
+		"order": 20
+	},
+	"455": {
+		"name": "mining_equipment",
+		"id": 455,
+		"parent": 292,
+		"children": [],
+		"order": 30
+	},
+	"456": {
+		"name": "game_consoles",
+		"id": 456,
+		"parent": 292,
+		"children": [],
+		"order": 40
+	},
+	"457": {
+		"name": "operating_systems_and_software",
+		"id": 457,
+		"parent": 292,
+		"children": [],
+		"order": 50
+	},
+	"458": {
+		"name": "internet_and_other_networks",
+		"id": 458,
+		"parent": 292,
+		"children": [],
+		"order": 60
+	},
+	"11": {
+		"name": "installation_and_setup_of_equipment",
+		"id": 11,
+		"parent": 2,
+		"children": [],
+		"order": 140
+	},
+	"8": {
+		"name": "equipment_manufacturing",
+		"id": 8,
+		"parent": 2,
+		"children": [
+			461,
+			462
+		],
+		"order": 150
+	},
+	"461": {
+		"name": "equipment_rental",
+		"id": 461,
+		"parent": 8,
+		"children": [],
+		"order": 10
+	},
+	"462": {
+		"name": "production_and_processing",
+		"id": 462,
+		"parent": 8,
+		"children": [],
+		"order": 20
+	},
+	"10": {
+		"name": "training_courses",
+		"id": 10,
+		"parent": 2,
+		"children": [
+			464,
+			465,
+			466,
+			467,
+			468,
+			469,
+			470,
+			471,
+			472,
+			473,
+			474,
+			475
+		],
+		"order": 160
+	},
+	"464": {
+		"name": "school_and_university_subjects",
+		"id": 464,
+		"parent": 10,
+		"children": [],
+		"order": 10
+	},
+	"465": {
+		"name": "foreign_languages",
+		"id": 465,
+		"parent": 10,
+		"children": [],
+		"order": 20
+	},
+	"466": {
+		"name": "child_development_speech_therapy",
+		"id": 466,
+		"parent": 10,
+		"children": [],
+		"order": 30
+	},
+	"467": {
+		"name": "it",
+		"id": 467,
+		"parent": 10,
+		"children": [],
+		"order": 40
+	},
+	"468": {
+		"name": "business",
+		"id": 468,
+		"parent": 10,
+		"children": [],
+		"order": 50
+	},
+	"469": {
+		"name": "design_drawing",
+		"id": 469,
+		"parent": 10,
+		"children": [],
+		"order": 60
+	},
+	"470": {
+		"name": "beauty_health",
+		"id": 470,
+		"parent": 10,
+		"children": [],
+		"order": 70
+	},
+	"471": {
+		"name": "sports_dance",
+		"id": 471,
+		"parent": 10,
+		"children": [],
+		"order": 80
+	},
+	"472": {
+		"name": "driving",
+		"id": 472,
+		"parent": 10,
+		"children": [],
+		"order": 90
+	},
+	"473": {
+		"name": "music_theater",
+		"id": 473,
+		"parent": 10,
+		"children": [],
+		"order": 100
+	},
+	"474": {
+		"name": "professional_training",
+		"id": 474,
+		"parent": 10,
+		"children": [],
+		"order": 110
+	},
+	"475": {
+		"name": "other",
+		"id": 475,
+		"parent": 10,
+		"children": [],
+		"order": 120
+	},
+	"9": {
+		"name": "business_services",
+		"id": 9,
+		"parent": 2,
+		"children": [
+			477,
+			478,
+			479,
+			22,
+			41,
+			486,
+			493
+		],
+		"order": 170
+	},
+	"477": {
+		"name": "accounting_finance",
+		"id": 477,
+		"parent": 9,
+		"children": [],
+		"order": 10
+	},
+	"478": {
+		"name": "consulting",
+		"id": 478,
+		"parent": 9,
+		"children": [],
+		"order": 20
+	},
+	"479": {
+		"name": "real_estate_consulting",
+		"id": 479,
+		"parent": 9,
+		"children": [],
+		"order": 30
+	},
+	"22": {
+		"name": "marketing_and_promotion",
+		"id": 22,
+		"parent": 9,
+		"children": [
+			481,
+			482,
+			483,
+			484
+		],
+		"order": 40
+	},
+	"481": {
+		"name": "marketplaces_classifieds_maps",
+		"id": 481,
+		"parent": 22,
+		"children": [],
+		"order": 10
+	},
+	"482": {
+		"name": "promotion_social_media",
+		"id": 482,
+		"parent": 22,
+		"children": [],
+		"order": 20
+	},
+	"483": {
+		"name": "seo_contextual_advertising",
+		"id": 483,
+		"parent": 22,
+		"children": [],
+		"order": 30
+	},
+	"484": {
+		"name": "pr_advertising",
+		"id": 484,
+		"parent": 22,
+		"children": [],
+		"order": 40
 	},
 	"41": {
 		"name": "legal_services",
 		"id": 41,
+		"parent": 9,
+		"children": [],
+		"order": 50
+	},
+	"486": {
+		"name": "it_design_texts",
+		"id": 486,
+		"parent": 9,
+		"children": [
+			487,
+			488,
+			489,
+			490,
+			491,
+			492
+		],
+		"order": 60
+	},
+	"487": {
+		"name": "programming_crm_setup",
+		"id": 487,
+		"parent": 486,
+		"children": [],
+		"order": 10
+	},
+	"488": {
+		"name": "website_and_app_development",
+		"id": 488,
+		"parent": 486,
+		"children": [],
+		"order": 20
+	},
+	"489": {
+		"name": "texts_translations",
+		"id": 489,
+		"parent": 486,
+		"children": [],
+		"order": 30
+	},
+	"490": {
+		"name": "graphic_design",
+		"id": 490,
+		"parent": 486,
+		"children": [],
+		"order": 40
+	},
+	"491": {
+		"name": "web_and_mobile_design",
+		"id": 491,
+		"parent": 486,
+		"children": [],
+		"order": 50
+	},
+	"492": {
+		"name": "marketplace_infographics",
+		"id": 492,
+		"parent": 486,
+		"children": [],
+		"order": 60
+	},
+	"493": {
+		"name": "other",
+		"id": 493,
+		"parent": 9,
+		"children": [],
+		"order": 70
+	},
+	"494": {
+		"name": "insurance",
+		"id": 494,
 		"parent": 2,
 		"children": [],
-		"order": 1010
+		"order": 180
+	},
+	"495": {
+		"name": "brokerage_services",
+		"id": 495,
+		"parent": 2,
+		"children": [],
+		"order": 190
+	},
+	"496": {
+		"name": "printing_outdoor_advertising",
+		"id": 496,
+		"parent": 2,
+		"children": [],
+		"order": 200
+	},
+	"497": {
+		"name": "garbage_and_recycling_removal",
+		"id": 497,
+		"parent": 2,
+		"children": [
+			498,
+			499
+		],
+		"order": 210
+	},
+	"498": {
+		"name": "garbage_removal",
+		"id": 498,
+		"parent": 497,
+		"children": [],
+		"order": 10
+	},
+	"499": {
+		"name": "recycling_collection",
+		"id": 499,
+		"parent": 497,
+		"children": [],
+		"order": 20
+	},
+	"6": {
+		"name": "cleaning",
+		"id": 6,
+		"parent": 2,
+		"children": [
+			501,
+			502,
+			503,
+			504,
+			505
+		],
+		"order": 220
+	},
+	"501": {
+		"name": "deep_cleaning",
+		"id": 501,
+		"parent": 6,
+		"children": [],
+		"order": 10
+	},
+	"502": {
+		"name": "window_washing",
+		"id": 502,
+		"parent": 6,
+		"children": [],
+		"order": 20
+	},
+	"503": {
+		"name": "basic_cleaning",
+		"id": 503,
+		"parent": 6,
+		"children": [],
+		"order": 30
+	},
+	"504": {
+		"name": "carpet_cleaning",
+		"id": 504,
+		"parent": 6,
+		"children": [],
+		"order": 40
+	},
+	"505": {
+		"name": "upholstery_cleaning",
+		"id": 505,
+		"parent": 6,
+		"children": [],
+		"order": 50
+	},
+	"506": {
+		"name": "disinfection_pest_control_special_cleaning",
+		"id": 506,
+		"parent": 2,
+		"children": [],
+		"order": 230
+	},
+	"507": {
+		"name": "household_services",
+		"id": 507,
+		"parent": 2,
+		"children": [
+			508,
+			509,
+			510,
+			511,
+			512
+		],
+		"order": 240
+	},
+	"508": {
+		"name": "key_making_and_sharpening",
+		"id": 508,
+		"parent": 507,
+		"children": [],
+		"order": 10
+	},
+	"509": {
+		"name": "tailoring_and_clothing_repair",
+		"id": 509,
+		"parent": 507,
+		"children": [],
+		"order": 20
+	},
+	"510": {
+		"name": "watch_repair",
+		"id": 510,
+		"parent": 507,
+		"children": [],
+		"order": 30
+	},
+	"511": {
+		"name": "dry_cleaning_laundry",
+		"id": 511,
+		"parent": 507,
+		"children": [],
+		"order": 40
+	},
+	"512": {
+		"name": "jewelry_services",
+		"id": 512,
+		"parent": 507,
+		"children": [],
+		"order": 50
+	},
+	"513": {
+		"name": "events_and_celebrations",
+		"id": 513,
+		"parent": 2,
+		"children": [
+			514,
+			515,
+			516,
+			517
+		],
+		"order": 250
+	},
+	"514": {
+		"name": "event_planning_and_organization",
+		"id": 514,
+		"parent": 513,
+		"children": [],
+		"order": 10
+	},
+	"515": {
+		"name": "decor_and_design",
+		"id": 515,
+		"parent": 513,
+		"children": [],
+		"order": 20
+	},
+	"516": {
+		"name": "event_rental_services",
+		"id": 516,
+		"parent": 513,
+		"children": [],
+		"order": 30
+	},
+	"517": {
+		"name": "leisure_and_entertainment_organization",
+		"id": 517,
+		"parent": 513,
+		"children": [],
+		"order": 40
+	},
+	"518": {
+		"name": "food_delivery_desserts_catering",
+		"id": 518,
+		"parent": 2,
+		"children": [
+			519,
+			520,
+			521
+		],
+		"order": 260
+	},
+	"519": {
+		"name": "ready_meal_delivery",
+		"id": 519,
+		"parent": 518,
+		"children": [],
+		"order": 10
+	},
+	"520": {
+		"name": "custom_cakes_and_desserts",
+		"id": 520,
+		"parent": 518,
+		"children": [],
+		"order": 20
+	},
+	"521": {
+		"name": "catering_waiters_chefs_bartenders",
+		"id": 521,
+		"parent": 518,
+		"children": [],
+		"order": 30
+	},
+	"522": {
+		"name": "photo_and_video_shooting",
+		"id": 522,
+		"parent": 2,
+		"children": [
+			523,
+			524,
+			525
+		],
+		"order": 270
+	},
+	"523": {
+		"name": "photography",
+		"id": 523,
+		"parent": 522,
+		"children": [],
+		"order": 10
+	},
+	"524": {
+		"name": "videography",
+		"id": 524,
+		"parent": 522,
+		"children": [],
+		"order": 20
+	},
+	"525": {
+		"name": "photo_studio_rental",
+		"id": 525,
+		"parent": 522,
+		"children": [],
+		"order": 30
+	},
+	"526": {
+		"name": "nannies_caregivers",
+		"id": 526,
+		"parent": 2,
+		"children": [],
+		"order": 280
+	},
+	"527": {
+		"name": "pet_care",
+		"id": 527,
+		"parent": 2,
+		"children": [],
+		"order": 290
+	},
+	"528": {
+		"name": "art",
+		"id": 528,
+		"parent": 2,
+		"children": [
+			529,
+			530,
+			531,
+			532
+		],
+		"order": 300
+	},
+	"529": {
+		"name": "music_poetry_songs_on_order",
+		"id": 529,
+		"parent": 528,
+		"children": [],
+		"order": 10
+	},
+	"530": {
+		"name": "artist_services",
+		"id": 530,
+		"parent": 528,
+		"children": [],
+		"order": 20
+	},
+	"531": {
+		"name": "customization",
+		"id": 531,
+		"parent": 528,
+		"children": [],
+		"order": 30
+	},
+	"532": {
+		"name": "handmade_crafts_on_order",
+		"id": 532,
+		"parent": 528,
+		"children": [],
+		"order": 40
+	},
+	"533": {
+		"name": "security_and_protection",
+		"id": 533,
+		"parent": 2,
+		"children": [],
+		"order": 310
+	},
+	"12576": {
+		"name": "other",
+		"id": 12576,
+		"parent": 2,
+		"children": [],
+		"order": 320
 	},
 	"4000": {
 		"name": "job",
@@ -12981,7 +14536,7 @@
 		"order": 110
 	},
 	"11722": {
-		"name": "**for_newborns",
+		"name": "for_newborns",
 		"id": 11722,
 		"parent": 11644,
 		"children": [

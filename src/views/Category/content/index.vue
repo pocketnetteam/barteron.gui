@@ -64,12 +64,7 @@
 				class="category-label"
 			>{{ $t('categoryLabels.empty') }}</p>
 
-			<section 
-				v-if="!(isLoading || isSearchEnabled() || isFiltersActive()) 
-						&& (items?.length < 10) 
-						&& isSubcategory
-						&& topParentCategoriesToShowPrompt.includes(topParentCategory.id)"
-			>
+			<section v-if="viewingParentCategory">
 				<i18n
 					class="top-category-link-holder category-label"
 					path="categoryLabels.view_top_parent"
@@ -77,11 +72,11 @@
 				>
 					<template #all_offers>
 						<v-button
-							:to="{ name: 'category', params: { id: topParentCategory.id } }"
+							:to="{ name: 'category', params: { id: viewingParentCategory.id } }"
 						>{{ $t('buttonLabels.all_offers') }}</v-button>
 					</template>
 
-					<template #category_name><span>"{{ $t(topParentCategory.name) }}"</span></template>
+					<template #category_name><span>"{{ $t(viewingParentCategory.name) }}"</span></template>
 				</i18n>
 			</section>
 		</div>
