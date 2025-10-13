@@ -1,6 +1,7 @@
 import Pinia from "@/stores/store.js";
 import Vue from "vue";
 import Categories from "@/js/categories.js";
+import AppErrors from "@/js/appErrors.js";
 
 const 
     defaultPageSize = 18,
@@ -87,6 +88,15 @@ const
             },
 
             _requestItems(data) {
+				const checkingData = {
+					requestSource: "offerStorage",
+					requestId: Math.round(Math.random() * 1e+10),
+					checkRequestId: true,
+				};
+
+				const ids = Vue.prototype.sdk.requestServiceData.ids;
+				ids[checkingData.requestSource] = checkingData.requestId;
+
                 const
                     mixin = Vue.prototype.shared,
                     tagsData = this._getTagsData(data),
@@ -99,7 +109,8 @@ const
                     location: mixin.methods.getStoredLocation() || [],
                     topHeight: data?.topHeight,
                     pageStart: data?.pageStart || 0,
-                    pageSize: data?.pageSize || this.pageSize
+                    pageSize: data?.pageSize || this.pageSize,
+                    checkingData,
                 };
             
                 if (tagsData.isDealRequest) {
@@ -190,8 +201,16 @@ const
                     this._setTopHeight();
                     this.itemsRoute = route;
                 } catch (e) {
-                    console.error(e);
-                    this.currentError = e;
+                    const
+                        requestRejected = (e instanceof AppErrors.RequestIdError),
+                        needHandleError = !(requestRejected);
+
+                    if (needHandleError) {
+                        console.error(e);
+                        this.currentError = e;
+                    } else {
+                        console.info(e.message);
+                    }
                 } finally {
                     this.isLoading = false;
                     this.loadingItemsRoute = null;
@@ -214,8 +233,16 @@ const
                     this.pageStart++;
                     this.items = this.items.concat(items);
                 } catch (e) {
-                    console.error(e);
-                    this.currentError = e;
+                    const
+                        requestRejected = (e instanceof AppErrors.RequestIdError),
+                        needHandleError = !(requestRejected);
+
+                    if (needHandleError) {
+                        console.error(e);
+                        this.currentError = e;
+                    } else {
+                        console.info(e.message);
+                    }
                 } finally {
                     this.isLoading = false;
                 }
