@@ -23,9 +23,7 @@ class SDK {
 	emitted = [];
 	localstorage = "";
 	requestServiceData = {
-		ids: {
-			getBrtOffersFeed: 0,
-		},
+		ids: {},
 	};
 	offerUpdateActionId = null;
 	lastPublishedOfferId = null;
@@ -1355,6 +1353,26 @@ class SDK {
 		});
 	}
 
+	throwRequestIdErrorIfNeeded(checkingData, requestName) {
+		if (checkingData?.checkRequestId) {
+			const 
+				requestSource = checkingData?.requestSource,
+				requestId = checkingData?.requestId,
+				ids = this.requestServiceData.ids,
+				currentId = ids[requestSource],
+				needReject = (requestId !== currentId);
+			
+			if (needReject) {
+				throw new AppErrors.RequestIdError(
+					requestName,
+					requestSource,
+					requestId, 
+					currentId
+				);
+			}
+		}
+	}
+
 	/**
 	 * RPC requests
 	 * 
@@ -1632,10 +1650,7 @@ class SDK {
 		request = {}, 
 		options = { disabledAverageOfferScores: false }
 	) {
-		const
-			checkingData = request.checkingData,
-			requestName = "getBrtOffersFeed";
-
+		const checkingData = request.checkingData;
 		delete request.checkingData;
 
 		if (this.isBrighteonProject()) {
@@ -1649,20 +1664,7 @@ class SDK {
 
 		return this.rpc("getbarteronfeed", request).then(feed => {
 
-			if (checkingData?.checkRequestId) {
-				const 
-					ids = this.requestServiceData.ids,
-					requestId = checkingData?.requestId,
-					needReject = (requestId !== ids[requestName]);
-				
-				if (needReject) {
-					throw new AppErrors.RequestIdError(
-						requestName, 
-						requestId, 
-						ids.getBrtOffersFeed
-					);
-				}
-			}
+			this.throwRequestIdErrorIfNeeded(checkingData, "getbarteronfeed");
 
 			const offers = feed?.map(offer => new Offer(offer)) || [];
 
@@ -1702,6 +1704,9 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	getBrtOfferDeals(request, options = { disabledAverageOfferScores: false }) {
+		const checkingData = request.checkingData;
+		delete request.checkingData;
+
 		if (this.isBrighteonProject()) {
 			this.setupRequestForBrighteon(request);
 
@@ -1711,11 +1716,16 @@ class SDK {
 			}
 		};
 		
-		return this.rpc("getbarterondeals", {
+		request = {
 			...request,
 			myTags: (request?.myTags || []).map(tag => +tag),
 			theirTags: (request?.theirTags || []).map(tag => +tag)
-		}).then(deals => {
+		};
+
+		return this.rpc("getbarterondeals", request).then(deals => {
+
+			this.throwRequestIdErrorIfNeeded(checkingData, "getbarterondeals");
+
 			const offers = deals?.map(offer => new Offer(offer)) || [];
 
 			if (!(options?.disabledAverageOfferScores)) {
@@ -1742,6 +1752,9 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	getBrtOfferComplexDeals(request) {
+		const checkingData = request.checkingData;
+		delete request.checkingData;
+
 		if (this.isBrighteonProject()) {
 			this.setupRequestForBrighteon(request);
 
@@ -1751,11 +1764,16 @@ class SDK {
 			}
 		};
 
-		return this.rpc("getbarteroncomplexdeals", {
+		request = {
 			...request,
 			myTag: +request?.myTag,
 			theirTags: (request?.theirTags || []).map(tag => +tag)
-		}).then(data => {
+		};
+
+		return this.rpc("getbarteroncomplexdeals", request).then(data => {
+
+			this.throwRequestIdErrorIfNeeded(checkingData, "getbarteroncomplexdeals");
+
 			data?.map(match => {
 				if (match.target) {
 					match.target = new Offer(match.target);
