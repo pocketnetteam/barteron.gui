@@ -228,8 +228,14 @@ export default {
 					topHeight = (actionName === "loadNextPage") ? this.offersRequestData.topHeight : null,
 					pageSize = this.offersRequestData.pageSize;
 
+				const checkingData = {
+					requestSource: "locationSwitcher",
+					requestId: Math.round(Math.random() * 1e+10),
+					checkRequestId: true,
+				};
+
 				const ids = this.sdk.requestServiceData.ids;
-				ids.getBrtOffersFeed += 1;
+				ids[checkingData.requestSource] = checkingData.requestId;
 
 				const
 					approximator = new GeoHashApproximator(actionParams.bounds),
@@ -240,10 +246,7 @@ export default {
 					pageSize,
 					pageStart,
 					topHeight, 
-					checkingData: {
-						requestId: ids.getBrtOffersFeed,
-						checkRequestId: true,
-					}
+					checkingData,
 				}
 
 				this.offersRequestData.isLoading = true;
@@ -269,7 +272,7 @@ export default {
 						this.offersRequestData.isLoading = false;
 						this.setMapActionData(null, e);
 					} else {
-						console.info(`Location component, map action ${actionName}:`, e.message);
+						console.info(e.message);
 					}
 				});				
 			} else if (actionName === "moveMap") {

@@ -7,6 +7,7 @@ import PickupPointList from "@/components/pickup-point/list/index.vue";
 import { currencies, numberFormats } from "@/i18n/index.js";
 import CurrencyStore from "@/stores/currency.js";
 import { GeoHashApproximator } from "@/js/geohashUtils.js";
+import AppErrors from "@/js/appErrors.js";
 
 export default {
 	name: "Content",
@@ -379,9 +380,15 @@ export default {
 					topHeight = (actionName === "loadNextPage") ? this.pickupPointsRequestData.topHeight : null,
 					pageSize = this.pickupPointsRequestData.pageSize;
 
-				const ids = this.sdk.requestServiceData.ids;
-				ids.getBrtOffersFeed += 1;
+				const checkingData = {
+					requestSource: "offerCreation",
+					requestId: Math.round(Math.random() * 1e+10),
+					checkRequestId: true,
+				};
 
+				const ids = this.sdk.requestServiceData.ids;
+				ids[checkingData.requestSource] = checkingData.requestId;
+				
 				const
 					approximator = new GeoHashApproximator(actionParams.bounds),
 					location = approximator.getGeohashItems();
@@ -392,10 +399,7 @@ export default {
 					pageSize,
 					pageStart,
 					topHeight, 
-					checkingData: {
-						requestId: ids.getBrtOffersFeed,
-						checkRequestId: true,
-					}
+					checkingData,
 				}
 
 				this.pickupPointsRequestData.isLoading = true;
@@ -422,7 +426,7 @@ export default {
 						this.pickupPointsRequestData.isLoading = false;
 						this.setMapActionData(null, e);
 					} else {
-						console.info(`Location component, map action ${actionName}:`, e.message);
+						console.info(e.message);
 					}
 				});				
 			} else if (actionName === "moveMap") {
