@@ -145,12 +145,12 @@ class OG {
 					switch ($lang) {
 						case 'en':
 							$title = 'Safe deal';
-							$description = "Validator: {$validatorName}, fee: {$validatorFeePercent}%; Seller: {$sellerName}; Buyer: {$buyerName}; Subject of the deal: {$offerTitle}";
+							$description = "Guarantor: {$validatorName}, fee: {$validatorFeePercent}%; Seller: {$sellerName}; Buyer: {$buyerName}; Subject of the deal: {$offerTitle}";
 							break;
 
 						case 'ru':
 							$title = 'Безопасная сделка';
-							$description = "Валидатор: {$validatorName}, процент: {$validatorFeePercent}%; Продавец: {$sellerName}; Покупатель: {$buyerName}; Предмет сделки: {$offerTitle}";
+							$description = "Гарант: {$validatorName}, процент: {$validatorFeePercent}%; Продавец: {$sellerName}; Покупатель: {$buyerName}; Предмет сделки: {$offerTitle}";
 							break;
 
 						default:
