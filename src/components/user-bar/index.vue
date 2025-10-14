@@ -29,8 +29,7 @@
 					vType="light"
 					@click="$event => requestPermissions($event, { path: '/barter/create' })"
 				>
-					<i class="fa fa-plus"></i>
-					<span>{{ $t('pageLabels.createBarter') }}</span>
+					<span>{{ $t('buttonLabels.create_barter') }}</span>
 				</v-button>
 			</li>
 		</ul>

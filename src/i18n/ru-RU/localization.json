@@ -2,8 +2,8 @@
 	"pageLabels": {
 		"label": "Страница",
 		"home": "Домашняя",
-		"createBarter": "Создать обмен",
-		"editBarter": "Редактировать обмен",
+		"createBarter": "Создать объявление",
+		"editBarter": "Редактировать объявление",
 		"search": "Результаты поиска"
 	},
 
@@ -117,7 +117,7 @@
 		"categories": "Категории",
 		"go_to_profile": "Перейти в профиль",
 		"select_currency": "Выбрать валюту",
-		"create_barter": "Создать обмен",
+		"create_barter": "Создать объявление",
 		"cancel": "Отменить",
 		"preview": "Предпросмотр",
 		"publish": "Опубликовать",
