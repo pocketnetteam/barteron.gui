@@ -2,8 +2,8 @@
 	"pageLabels": {
 		"label": "Page",
 		"home": "Home",
-		"createBarter": "Create barter",
-		"editBarter": "Edit barter",
+		"createBarter": "Create offer",
+		"editBarter": "Edit offer",
 		"search": "Search results"
 	},
 
@@ -117,7 +117,7 @@
 		"categories": "Categories",
 		"go_to_profile": "Go to profile",
 		"select_currency": "Select currency",
-		"create_barter": "Create barter",
+		"create_barter": "Create offer",
 		"cancel": "Cancel",
 		"preview": "Preview",
 		"publish": "Publish",
