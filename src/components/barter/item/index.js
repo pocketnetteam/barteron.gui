@@ -16,6 +16,7 @@ import Complain from "@/components/barter/item/complain/index.vue";
 import LegalInfo from "@/components/legal-info/index.vue";
 import LikeStore from "@/stores/like.js";
 import SelectOfferDialog from "@/views/Barter/SelectOfferDialog/index.vue";
+import SelectDealTypeDialog from "@/components/safe-deal/select-deal-type-dialog/index.vue";
 import SelectValidatorDialog from "@/components/safe-deal/select-validator-dialog/index.vue";
 import SafeDeal from "@/components/safe-deal/safe-deal-offer/index.vue";
 import Score from "@/components/score/index.vue";
@@ -83,7 +84,6 @@ export default {
 
             exchangeAvailable: false,
             purchaseState: "startPurchase",
-			safeDealEnabled: false,
             isChatLoading: false,
 
 			pickupPointItems: [],
@@ -236,7 +236,7 @@ export default {
 			} else if (this.purchaseState === "pickupPointSelected") {
 				result.isEnabled = true;
 				result.iconClass = "fa fa-info-circle";
-				result.i18nKey = `deliveryLabels.hint_for_purchase_at_pickup_point${ this.safeDealEnabled ? '_with_safe_deal' : '' }`;
+				result.i18nKey = "deliveryLabels.hint_for_purchase_at_pickup_point";
 			};
 
 			return result;
@@ -509,8 +509,6 @@ export default {
 		 * Select your offer to propose exchange seller's offer
 		 */
 		selectOfferToExchange() {
-			this.safeDealEnabled = false;
-
 			var ComponentClass = Vue.extend(SelectOfferDialog);
 			var instance = new ComponentClass({
 				propsData: {
@@ -600,10 +598,6 @@ export default {
 			return this.selectedOfferId ? [this.selectedOfferId] : [];
 		},
 
-		setSafeDealState(state) {
-			this.safeDealEnabled = state;
-		},
-
 		/**
 		 * Start purchase
 		 */
@@ -611,77 +605,94 @@ export default {
 			if (this.sdk.willOpenRegistration()) return;
 
 			let 
-				needStart = true,
 				isPurchase = true,
 				pickupPoint = null;
 
 			if (this.deliveryOptionsAvailable) {
 				pickupPoint = this.getSelectedPickupPoint();
 				if (!(pickupPoint)) {
-					needStart = false;
 					this.purchaseState = "waitForPickupPoint";
 					this.goToPickupPointList();
+					return;
 				}
 			};
 
-			if (needStart) {
-				if (this.safeDealEnabled) {
-					let selectedValidatorAddress = null;
-					if (pickupPoint?.address) {
-						const 
-							settings = this.sdk.getSafeDealSettings(),
-							pickupPointOwnerAddress = pickupPoint?.address,
-							pickupPointOwnerIsValidator = settings.validatorAddresses.includes(pickupPointOwnerAddress),
-							buyerAddress = this.sdk.address,
-							sellerAddress = this.address;
+			Promise.resolve().then(() => {
 
-						if (pickupPointOwnerIsValidator
-							&& pickupPointOwnerAddress !== buyerAddress
-							&& pickupPointOwnerAddress !== sellerAddress
-						) {
-							selectedValidatorAddress = pickupPointOwnerAddress;
-						}
-					};
+				const needSelectDealType = (!(pickupPoint) || pickupPoint?.isSelfPickup);
+				return needSelectDealType ? this.selectDealTypePromise() : "regularDeal";
 
-					const callback = (validator) => {
-						const 
-							validatorSelected = (validator),
-							needContinue = validatorSelected;
+			}).then(dealType => {
 
-						if (needContinue) {
-							this.createRoom(
-								this.item, 
-								{isPurchase, pickupPoint, validator}
-							);
-						}
-					};
-
-					const options = {forcedSelectedAddress: selectedValidatorAddress};
-					this.selectValidator(callback, options);
-				} else {
+				if (dealType === "regularDeal") {
 					this.createRoom(
 						this.item, 
 						{isPurchase, pickupPoint}
 					);
+				} else if (dealType === "safeDeal") {
+					return this.selectValidatorPromise();
+				};
+
+			}).then(validator => {
+
+				if (validator) {
+					this.createRoom(
+						this.item, 
+						{isPurchase, validator, pickupPoint}
+					);
 				}
-			}
+
+			}).catch(e => {
+				this.showError(e);
+			});
 		},
 
-		selectValidator(callback, options = {}) {
-			const ComponentClass = Vue.extend(SelectValidatorDialog);
-			const instance = new ComponentClass({
-				propsData: {
-					excludedAddresses: [this.item.address, this.sdk.address],
-					forcedSelectedAddress: options?.forcedSelectedAddress,
-				},
-			});
-			
-			instance.$on('onSelect', callback);
+		selectDealTypePromise() {
+			return new Promise(resolve => {
+				const ComponentClass = Vue.extend(SelectDealTypeDialog);
+				const instance = new ComponentClass({
+					propsData: {
+						lightboxContainer: this.lightboxContainer,
+					},
+				});
+				
+				instance.$on('onSelect', (dealType) => {
+					resolve(dealType);
+				});
+				instance.$on('onHide', () => {
+					resolve();
+				});
 
-			instance.$mount();
-			this.lightboxContainer().appendChild(instance.$el);
-			this.$nextTick(() => {
-				instance.show();
+				instance.$mount();
+				this.lightboxContainer().appendChild(instance.$el);
+				this.$nextTick(() => {
+					instance.show();
+				});
+			});
+		},
+
+		selectValidatorPromise(options = {}) {
+			return new Promise(resolve => {
+				const ComponentClass = Vue.extend(SelectValidatorDialog);
+				const instance = new ComponentClass({
+					propsData: {
+						excludedAddresses: [this.item.address, this.sdk.address],
+						forcedSelectedAddress: options?.forcedSelectedAddress,
+					},
+				});
+				
+				instance.$on('onSelect', (validator) => {
+					resolve(validator);
+				});
+				instance.$on('onHide', () => {
+					resolve();
+				});
+
+				instance.$mount();
+				this.lightboxContainer().appendChild(instance.$el);
+				this.$nextTick(() => {
+					instance.show();
+				});
 			});
 		},
 

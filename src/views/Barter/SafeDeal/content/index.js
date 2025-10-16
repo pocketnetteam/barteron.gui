@@ -433,7 +433,7 @@ export default {
 		checkPaymentStatus() {
 			const 
 				storedSafeDeal = SafeDealStore.get(this.id),
-				waitingIntervalMs = 15 * 60 * 1000;
+				waitingIntervalMs = 20 * 60 * 1000;
 
 			this.waitingForPaymentConfirmation = (storedSafeDeal ? 
 				(storedSafeDeal.currentStatus === this.currentStatus 
@@ -454,7 +454,7 @@ export default {
 			const 
 				messages = [`bastyon://transactionview?stx=${txid}`],
 				options = {
-					openRoom: false,
+					openRoom: true,
 					dialogMessage: this.$t("dialogLabels.sending_transaction")
 				};
 
@@ -469,9 +469,15 @@ export default {
 
 			if (!(this.checkSafeDealData())) return;
 
+			const members = [
+				this.buyerAddress, 
+				this.sellerAddress, 
+				this.validatorAddress
+			].filter(f => f !== this.address);
+
 			const data = {
-				name: this.id,
-				members: [this.buyerAddress, this.sellerAddress, this.validatorAddress],
+				name: this.offer?.caption,
+				members,
 				messages: (messages || []),
 				openRoom: (options?.openRoom ?? true),
 			};

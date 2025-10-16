@@ -54,13 +54,15 @@ export default {
 			this.mainComponent?.buyAtSelectedPickupPoint?.();
 		},
 
-		safeDealEnabled() {
-			return this.mainComponent?.safeDealEnabled;
-		},
-
-		safeDealStateChanged(value, e) {
-			const newValue = e.target.checked;
-			this.mainComponent?.setSafeDealState(newValue);
+		getSafeDealHint() {
+			let key = "hint_for_purchase";
+			const variant = this.mainComponent?.item?.safeDeal?.validatorFeeVariant;
+			if (variant === "seller") {
+				key = "offer_validator_fee_variant_seller_description";
+			} else if (variant === "inHalf") {
+				key = "offer_validator_fee_variant_in_half_description";
+			};
+			return this.$t(`safeDealLabels.${key}`);
 		},
 
 		showSafeDealInfo() {
