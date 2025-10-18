@@ -1464,6 +1464,22 @@ class SDK {
 	}
 
 	/**
+	 * Get barteron accounts
+	 * 
+	 * @param {Array} addresses
+	 * 
+	 * @returns {Promise}
+	 */
+	getBrtAccounts(addresses) {
+
+		addresses = addresses || [];
+
+		return this.rpc("getbarteronaccounts", addresses).then(items => {
+			return (items || []).map(item => new Account(item));
+		});
+	}
+
+	/**
 	 * Get barteron offers by address
 	 * 
 	 * @param {String} address

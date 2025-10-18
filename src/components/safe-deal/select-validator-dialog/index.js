@@ -30,22 +30,69 @@ export default {
 		return {
 			lightbox: false,
 			selectedIndex: null,
+			filteredAdresses: null,
 			isLoading: false,
-			loadingTimerId: null,
+			loadingError: null,
 		}
 	},
 
-	computed: {
-		accounts() {
-			const 
-				settings = this.sdk.getSafeDealSettings(),
-				allItems = settings.validatorAddresses.filter(f => !(this.excludedAddresses.includes(f)));
-
-			return allItems.map(m => this.sdk.barteron.accounts[m]);
+	methods: {
+		show() {
+			this.lightbox = true;
+			this.$emit("onShow", this);
 		},
 
- 		filteredItems() {
-			const result = this.accounts
+		hide() {
+			this.lightbox = false;
+			setTimeout(() => {
+				this.$emit("onHide", this);
+				this.remove();
+			}, 300);
+		},
+
+		select() {
+			const 
+				profile = this.$refs[`profile-${this.selectedIndex}`]?.[0],
+				account = profile?.account,
+				validator = {address: account?.address, settings: account?.safeDeal?.validator};
+
+			this.$emit('onSelect', validator);
+			this.hide();
+		},
+
+		remove() {
+			this.$destroy();
+			this.$el.parentNode.removeChild(this.$el);
+		},
+
+		repeatLoading() {
+			this.loadValidatorAdresses();
+		},
+
+		loadValidatorAdresses() {
+			this.resetData();
+			this.isLoading = true;
+			Promise.resolve().then(() => {
+				const settings = this.sdk.getSafeDealSettings();
+				return settings.validatorAddresses.filter(f => !(this.excludedAddresses.includes(f)));
+			}).then(adresses => {
+				return this.sdk.getBrtAccounts(adresses);
+			}).then(accounts => {
+				this.filteredAdresses = this.getFilteredAdresses(accounts);
+			}).catch(e => {
+				this.loadingError = e;
+			}).finally(() => {
+				this.isLoading = false;
+			})
+		},
+
+		resetData() {
+			this.filteredAdresses = null;
+			this.loadingError = null;
+		},
+
+ 		getFilteredAdresses(accounts) {
+			const result = accounts
 				.filter(f => f?.safeDeal?.validator?.status === "available" && f?.safeDeal?.validator?.feePercent)
 				.sort((a,b) => {
 					const 
@@ -77,44 +124,10 @@ export default {
 
 			return result;
 		},
-	},
 
-	methods: {
-		show() {
-			this.lightbox = true;
-			this.$emit("onShow", this);
-		},
-
-		hide() {
-			this.lightbox = false;
-			setTimeout(() => {
-				this.$emit("onHide", this);
-				this.remove();
-			}, 300);
-		},
-
-		select() {
-			const 
-				profile = this.$refs[`profile-${this.selectedIndex}`]?.[0],
-				account = profile?.account,
-				validator = {address: account?.address, settings: account?.safeDeal?.validator};
-
-			this.$emit('onSelect', validator);
-			this.hide();
-		},
-
-		remove() {
-			clearTimeout(this.loadingTimerId);
-			
-			this.$destroy();
-			this.$el.parentNode.removeChild(this.$el);			
-		},
 	},
 
 	mounted() {
-		this.isLoading = true;
-		this.loadingTimerId = setTimeout(() => {
-			this.isLoading = false;
-		}, 10000);
+		this.loadValidatorAdresses();
 	}
 }
