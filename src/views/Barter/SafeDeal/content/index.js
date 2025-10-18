@@ -62,6 +62,14 @@ export default {
 			return this.$route.query.validator;
 		},
 
+		roomMembers() {
+			return [
+				this.buyerAddress, 
+				this.sellerAddress, 
+				this.validatorAddress
+			].filter(f => f !== this.address);
+		},
+
 		validatorFeePercent() {
 			return this.$route.query.fee;
 		},
@@ -461,6 +469,24 @@ export default {
 			this.sendSafeDealMessage(messages, options);
 		},
 
+		openSafeDealRoom() {
+			if (this.sdk.willOpenRegistration()) return;
+
+			if (!(this.checkSafeDealData())) return;
+
+			const data = {
+				name: this.offer?.caption,
+				members: this.roomMembers,
+			};
+
+			this.isChatLoading = true;
+			this.openRoom(data).catch(e => {
+				this.showError(e);
+			}).finally(() => {
+				this.isChatLoading = false;
+			});
+		},
+		
 		sendSafeDealMessage(
 			messages = [], 
 			options = {}
@@ -469,15 +495,9 @@ export default {
 
 			if (!(this.checkSafeDealData())) return;
 
-			const members = [
-				this.buyerAddress, 
-				this.sellerAddress, 
-				this.validatorAddress
-			].filter(f => f !== this.address);
-
 			const data = {
 				name: this.offer?.caption,
-				members,
+				members: this.roomMembers,
 				messages: (messages || []),
 				openRoom: (options?.openRoom ?? true),
 			};
@@ -590,6 +610,7 @@ export default {
 		makePayment(data) {
 			if (!(this.checkSafeDealData())) return;
 
+			this.dialog?.instance.view("load", this.$t("dialogLabels.payment_transfer_is_in_progress"));
 			this.sdk.makePayment(data).then(result => {
 				this.storeSafeDealData(result.transaction);
 				this.showSuccess(this.$t("dialogLabels.transfer_complete_with_transaction_link"), null, () => {
@@ -605,6 +626,7 @@ export default {
 					this.showError(e);
 				} else {
 					console.error(e);
+					this.dialog?.instance.hide();
 				};
 			});
 		},

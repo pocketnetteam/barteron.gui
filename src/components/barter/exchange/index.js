@@ -34,6 +34,10 @@ export default {
 			return this.mainComponent?.exchangeAvailable;
 		},
 
+		safeDealAvailableForOffer() {
+			return this.mainComponent?.safeDealAvailableForOffer?.();
+		},
+
 		isChatLoading() {
 			return this.mainComponent?.isChatLoading;
 		},

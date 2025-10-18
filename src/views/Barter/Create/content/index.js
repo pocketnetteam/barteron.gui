@@ -106,11 +106,23 @@ export default {
 		 * Safe deal option available
 		 */
 		safeDealAvailable() {
-			if (process.env.NODE_ENV === "development") {
-				return true;
+			let result = false;
+
+			const 
+				settings = this.sdk.getSafeDealSettings(),
+				filter = settings.allowedAddressFilter;
+
+			if (filter.isEnabled && !(filter.items.includes(this.sdk.address))) {
+				result = false;
+			} else {
+				if (this.sdk.getTransactionsApiVersion() >= 5 
+					|| process.env.NODE_ENV === "development"
+				) {
+					result = true;
+				};
 			};
 
-			return (this.sdk.getTransactionsApiVersion() >= 5);
+			return result;
 		},
 
 		/**

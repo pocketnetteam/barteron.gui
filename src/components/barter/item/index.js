@@ -598,6 +598,31 @@ export default {
 			return this.selectedOfferId ? [this.selectedOfferId] : [];
 		},
 
+		safeDealAvailableForOffer() {
+			let result = true;
+			const 
+				settings = this.sdk.getSafeDealSettings(),
+				filter = settings.allowedAddressFilter;
+
+			if (filter.isEnabled && !(filter.items.includes(this.sdk.address))) {
+				result = false;
+			}; 
+			
+			if (result && this.deliveryOptionsAvailable) {
+				const 
+					options = this.deliveryOptions,
+					onlyPickupPoints = (
+						options.pickupPoints?.isEnabled 
+						&& !(options.selfPickup?.isEnabled)
+					);
+
+				if (onlyPickupPoints) {
+					result = false;
+				}
+			}
+			return result;
+		},
+
 		/**
 		 * Start purchase
 		 */

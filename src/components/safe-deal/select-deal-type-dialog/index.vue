@@ -13,6 +13,7 @@
 					vType="roshi"
 					@click="selectDealType('safeDeal')"
 				>
+					<i class="fa fa-shield-alt"></i>
 					<span>{{ $t('buttonLabels.safe_deal') }}*</span>
 				</v-button>
 

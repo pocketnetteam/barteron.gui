@@ -80,7 +80,11 @@
 			</v-button> -->
 		</div>
 
-		<div class="row dir-column gap-md t-sep safe-deal-holder">
+		<div 
+			v-if="safeDealAvailableForOffer()"
+			class="row align-center gap-md t-sep safe-deal-holder"
+		>
+			<i class="fa fa-shield-alt icon"></i>
 			<div class="hint">
 				<span>
 					<span>{{ getSafeDealHint() }}. </span>
@@ -92,7 +96,6 @@
 						<u>{{ $t('safeDealLabels.details') }}</u>
 					</a>
 				</span>
-				
 			</div>
 		</div>
 	</div>

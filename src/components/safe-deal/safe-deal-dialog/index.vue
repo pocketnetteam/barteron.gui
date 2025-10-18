@@ -25,6 +25,24 @@
 			v-html="($t('safeDealLabels.faq_answer2')).replaceAll('\n','<br>')"
 		></h1>
 
+		<h1 class="title">
+			{{ $t('safeDealLabels.faq_question3') }}
+		</h1>
+
+		<h1 
+			class="info" 
+			v-html="($t('safeDealLabels.faq_answer3')).replaceAll('\n','<br>')"
+		></h1>
+
+		<h1 class="title">
+			{{ $t('safeDealLabels.faq_question4') }}
+		</h1>
+
+		<h1 
+			class="info" 
+			v-html="($t('safeDealLabels.faq_answer4')).replaceAll('\n','<br>')"
+		></h1>
+
 		<!-- Footer -->
 		<template #footer>
 			<div class="row full-width right">

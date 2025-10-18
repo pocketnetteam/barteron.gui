@@ -236,6 +236,24 @@ Vue.prototype.shared = Vue.observable({
 		},
 
 		/**
+		 * Create or open room
+		 * 
+		 * @param {Object} data
+		 * @param {String} data.name
+		 * @param {Array} data.members
+		 * 
+		 * @returns {Promise}
+		 */
+		openRoom(data) {
+			return this.sdk.createRoom({
+				name: data.name,
+				members: data.members
+			}).then(({roomid}) => {
+				return this.sdk.openRoom(roomid).then(() => roomid);
+			});
+		},
+
+		/**
 		 * Create or open room and send message
 		 * 
 		 * @param {Object} data
@@ -263,7 +281,7 @@ Vue.prototype.shared = Vue.observable({
 						images: data.images || []
 					}
 				});
-			})
+			});
 		},
 
 		/**
