@@ -1086,25 +1086,97 @@ class SDK {
 	}
 
 	/**
-	 * Currency from min-api
+	 * Currency rates from third-party API's
 	 */
 	getCurrency() {
 		this._currency.pending = true;
+		const currencyIds = currencies.map(currency => currency);
+		let allRates = null;
 
+		this.getCurrencyRates().then(rates => {
+			allRates = rates;
+			const 
+				missingIds = currencyIds?.filter(f => !(rates[f])),
+				USD_Rate = rates["USD"],
+				needCalculate = missingIds?.length && USD_Rate;
+			
+			return needCalculate 
+				? this.getMissingCurrencyСrossRates(missingIds, USD_Rate)
+				: {};
+		}).then(rates => {
+			allRates = {
+				...allRates,
+				...rates,
+			};
+		}).catch(e => {
+			console.error(e);
+		}).finally(() => {
+			if (allRates) {
+				Vue.set(this, "_currency", allRates);
+				return allRates;
+			}
+		});
+	}
+
+	/**
+	 * Currency rates from coingecko API.
+	 * The most accurate values, but some are missing.
+	 */
+	getCurrencyRates() {
+		const 
+			pkoinId = "pocketcoin",
+			currencyIds = currencies.map(currency => currency);
+
+		return fetch(`
+			https://api.coingecko.com/api/v3/simple/price?
+			${ new URLSearchParams({
+				ids: pkoinId,
+				vs_currencies: currencyIds,
+			}).toString() }
+		`, 
+			{ timeout: 5000 }
+		)
+		.then(result => result.json())
+		.then(data => {
+			const 
+				rawRates = data?.[pkoinId] || {},
+				keys = Object.keys(rawRates),
+				rates = keys.reduce((obj, key) => {
+					obj[key.toUpperCase()] = rawRates[key];
+					return obj;
+				}, {});
+			
+			return rates;
+		});
+	}
+
+	/**
+	 * Currency rates from cryptocompare API.
+	 * Adequate values ​​can only be obtained through 
+	 * the cross rate (relative to the US dollar, for example).
+	 * Direct values ​​of the PKOIN exchange rate differ 
+	 * greatly from the acceptable ones.
+	 */
+	getMissingCurrencyСrossRates(missingCurrencyIds, USD_Rate) {
 		return fetch(`
 			https://min-api.cryptocompare.com/data/price?
 			${ new URLSearchParams({
-				fsym: "PKOIN",
-				tsyms: currencies.map(currency => currency)
+				fsym: "USD",
+				tsyms: missingCurrencyIds
 			}).toString() }
 		`)
-			.then(result => result.json())
-			.then(currency => {
-				this.lastresult = currency;
-				Vue.set(this, "_currency", currency);
-				return currency;
-			})
-			.catch(e => this.setLastResult(e));
+		.then(result => result.json())
+		.then(data => {
+			const 
+				rawRates = data,
+				keys = Object.keys(rawRates),
+				rates = keys.reduce((obj, key) => {
+					obj[key.toUpperCase()] = Number((rawRates[key] * USD_Rate).toFixed(6));
+					return obj;
+				}, {});
+
+			return rates;
+		});
 	}
 
 	/**
