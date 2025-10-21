@@ -14762,6 +14762,7 @@
 			42,
 			54,
 			64,
+			195,
 			78,
 			88,
 			101,
@@ -15058,6 +15059,78 @@
 		"parent": 64,
 		"children": [],
 		"order": 130
+	},
+	"195": {
+		"name": "oral_care",
+		"id": 195,
+		"parent": 20,
+		"children": [
+			199,
+			207,
+			228,
+			271,
+			278,
+			459,
+			460,
+			463
+		],
+		"order": 34
+	},
+	"199": {
+		"name": "toothbrushes",
+		"id": 199,
+		"parent": 195,
+		"children": [],
+		"order": 10
+	},
+	"207": {
+		"name": "dental_floss",
+		"id": 207,
+		"parent": 195,
+		"children": [],
+		"order": 20
+	},
+	"228": {
+		"name": "interdental_brushes",
+		"id": 228,
+		"parent": 195,
+		"children": [],
+		"order": 30
+	},
+	"271": {
+		"name": "tongue_cleaners",
+		"id": 271,
+		"parent": 195,
+		"children": [],
+		"order": 40
+	},
+	"278": {
+		"name": "toothpastes_and_powders",
+		"id": 278,
+		"parent": 195,
+		"children": [],
+		"order": 50
+	},
+	"459": {
+		"name": "oral_hygiene_products",
+		"id": 459,
+		"parent": 195,
+		"children": [],
+		"order": 60
+	},
+	"460": {
+		"name": "toothbrush_accessories",
+		"id": 460,
+		"parent": 195,
+		"children": [],
+		"order": 70
+	},
+	"463": {
+		"name": "toothpicks",
+		"id": 463,
+		"parent": 195,
+		"children": [],
+		"order": 80
 	},
 	"78": {
 		"name": "makeup",
