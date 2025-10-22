@@ -95,7 +95,7 @@ export default {
 		 * @returns {Array}
 		 */
 		topParentCategoriesToShowPrompt() {
-			return [13587, 6000, 619, 888, 11450, 2984, 10542, 11700, 20, 293, 625, 58058, 15032, 1249, 1];
+			return [13587, 6000, 619, 888, 2984, 10542, 11700, 20, 293, 625, 58058, 15032, 1249, 1, 21];
 		},
 
 		/**
@@ -112,6 +112,10 @@ export default {
 			return [3, 40, 4, 5, 26395, 7, 8, 9, 10, 22];
 		},
 
+		clothingFootwearAccessoriesSubcategoriesToShowPrompt() {
+			return [11451, 11534, 11644];
+		},
+
 		viewingParentCategory() {
 			return !(this.isLoading || this.isSearchEnabled() || this.isFiltersActive()) 
 				&& (this.items?.length < 10) 
@@ -119,6 +123,7 @@ export default {
 				&& (
 					 this.topParentCategoriesToShowPrompt.includes(this.topParentCategory.id) && this.topParentCategory
 					|| this.servicesSubcategoriesToShowPrompt.includes(this.secondLevelParentCategory?.id) && this.secondLevelParentCategory
+					|| this.clothingFootwearAccessoriesSubcategoriesToShowPrompt.includes(this.secondLevelParentCategory?.id) && this.secondLevelParentCategory
 				);
 		},
 	},
