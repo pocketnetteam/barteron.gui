@@ -12813,7 +12813,8 @@
 			11521,
 			11522,
 			11527,
-			11533
+			11533,
+			11811
 		],
 		"order": 30
 	},
@@ -13015,6 +13016,13 @@
 		"parent": 11507,
 		"children": [],
 		"order": 120
+	},
+	"11811": {
+		"name": "watches_and_accessories",
+		"id": 11811,
+		"parent": 11507,
+		"children": [],
+		"order": 130
 	},
 	"11534": {
 		"name": "for_women",
@@ -13666,7 +13674,8 @@
 			11634,
 			11635,
 			11636,
-			11637
+			11637,
+			11812
 		],
 		"order": 30
 	},
@@ -13909,6 +13918,13 @@
 		"parent": 11637,
 		"children": [],
 		"order": 60
+	},
+	"11812": {
+		"name": "watches_and_accessories",
+		"id": 11812,
+		"parent": 11612,
+		"children": [],
+		"order": 130
 	},
 	"11644": {
 		"name": "for_children",
