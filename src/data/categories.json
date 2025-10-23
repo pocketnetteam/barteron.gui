@@ -2661,7 +2661,8 @@
 		"children": [
 			523,
 			524,
-			525
+			525,
+			586
 		],
 		"order": 270
 	},
@@ -2685,6 +2686,13 @@
 		"parent": 522,
 		"children": [],
 		"order": 30
+	},
+	"586": {
+		"name": "accessory_rental",
+		"id": 586,
+		"parent": 522,
+		"children": [],
+		"order": 40
 	},
 	"526": {
 		"name": "nannies_caregivers",
