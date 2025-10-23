@@ -2661,7 +2661,8 @@
 		"children": [
 			523,
 			524,
-			525
+			525,
+			586
 		],
 		"order": 270
 	},
@@ -2685,6 +2686,13 @@
 		"parent": 522,
 		"children": [],
 		"order": 30
+	},
+	"586": {
+		"name": "accessory_rental",
+		"id": 586,
+		"parent": 522,
+		"children": [],
+		"order": 40
 	},
 	"526": {
 		"name": "nannies_caregivers",
@@ -4855,20 +4863,695 @@
 		"order": 100
 	},
 	"267": {
-		"name": "books_magazines",
+		"name": "books_and_magazines",
 		"icon": "fa-book",
 		"id": 267,
 		"parent": null,
-		"children": [],
+		"children": [
+			587,
+			600,
+			737,
+			743,
+			749,
+			750,
+			751,
+			752,
+			753
+		],
 		"order": 1700
 	},
+	"587": {
+		"name": "fiction",
+		"id": 587,
+		"parent": 267,
+		"children": [
+			588,
+			589,
+			590,
+			591,
+			592,
+			593,
+			594,
+			595,
+			596,
+			597,
+			598,
+			599
+		],
+		"order": 10
+	},
+	"588": {
+		"name": "prose",
+		"id": 588,
+		"parent": 587,
+		"children": [],
+		"order": 10
+	},
+	"589": {
+		"name": "detective_stories",
+		"id": 589,
+		"parent": 587,
+		"children": [],
+		"order": 20
+	},
+	"590": {
+		"name": "fantasy",
+		"id": 590,
+		"parent": 587,
+		"children": [],
+		"order": 30
+	},
+	"591": {
+		"name": "science_fiction",
+		"id": 591,
+		"parent": 587,
+		"children": [],
+		"order": 40
+	},
+	"592": {
+		"name": "young_adult_and_teen_literature",
+		"id": 592,
+		"parent": 587,
+		"children": [],
+		"order": 50
+	},
+	"593": {
+		"name": "horror_and_thrillers",
+		"id": 593,
+		"parent": 587,
+		"children": [],
+		"order": 60
+	},
+	"594": {
+		"name": "sentimental_prose",
+		"id": 594,
+		"parent": 587,
+		"children": [],
+		"order": 70
+	},
+	"595": {
+		"name": "folklore",
+		"id": 595,
+		"parent": 587,
+		"children": [],
+		"order": 80
+	},
+	"596": {
+		"name": "poetry",
+		"id": 596,
+		"parent": 587,
+		"children": [],
+		"order": 90
+	},
+	"597": {
+		"name": "adventure",
+		"id": 597,
+		"parent": 587,
+		"children": [],
+		"order": 100
+	},
+	"598": {
+		"name": "action",
+		"id": 598,
+		"parent": 587,
+		"children": [],
+		"order": 110
+	},
+	"599": {
+		"name": "plays_and_dramaturgy",
+		"id": 599,
+		"parent": 587,
+		"children": [],
+		"order": 120
+	},
+	"600": {
+		"name": "non-fiction",
+		"id": 600,
+		"parent": 267,
+		"children": [
+			601,
+			602,
+			603,
+			604,
+			605,
+			606,
+			607,
+			608,
+			609,
+			610,
+			611,
+			612,
+			613,
+			614,
+			615,
+			616,
+			617,
+			618,
+			735,
+			736
+		],
+		"order": 20
+	},
+	"601": {
+		"name": "business_literature",
+		"id": 601,
+		"parent": 600,
+		"children": [],
+		"order": 10
+	},
+	"602": {
+		"name": "self-development",
+		"id": 602,
+		"parent": 600,
+		"children": [],
+		"order": 20
+	},
+	"603": {
+		"name": "psychology",
+		"id": 603,
+		"parent": 600,
+		"children": [],
+		"order": 30
+	},
+	"604": {
+		"name": "scientific_and_popular_science_literature",
+		"id": 604,
+		"parent": 600,
+		"children": [],
+		"order": 40
+	},
+	"605": {
+		"name": "medicine",
+		"id": 605,
+		"parent": 600,
+		"children": [],
+		"order": 50
+	},
+	"606": {
+		"name": "law_literature",
+		"id": 606,
+		"parent": 600,
+		"children": [],
+		"order": 60
+	},
+	"607": {
+		"name": "art_and_culture",
+		"id": 607,
+		"parent": 600,
+		"children": [],
+		"order": 70
+	},
+	"608": {
+		"name": "history",
+		"id": 608,
+		"parent": 600,
+		"children": [],
+		"order": 80
+	},
+	"609": {
+		"name": "military_affairs",
+		"id": 609,
+		"parent": 600,
+		"children": [],
+		"order": 90
+	},
+	"610": {
+		"name": "politics_and_political_science",
+		"id": 610,
+		"parent": 600,
+		"children": [],
+		"order": 100
+	},
+	"611": {
+		"name": "journalism_and_essays",
+		"id": 611,
+		"parent": 600,
+		"children": [],
+		"order": 110
+	},
+	"612": {
+		"name": "esotericism_and_spiritualism",
+		"id": 612,
+		"parent": 600,
+		"children": [],
+		"order": 120
+	},
+	"613": {
+		"name": "cookbooks",
+		"id": 613,
+		"parent": 600,
+		"children": [],
+		"order": 130
+	},
+	"614": {
+		"name": "hobbies_and_crafts",
+		"id": 614,
+		"parent": 600,
+		"children": [],
+		"order": 140
+	},
+	"615": {
+		"name": "home_and_garden",
+		"id": 615,
+		"parent": 600,
+		"children": [],
+		"order": 150
+	},
+	"616": {
+		"name": "beauty_health_and_sports",
+		"id": 616,
+		"parent": 600,
+		"children": [],
+		"order": 160
+	},
+	"617": {
+		"name": "religious_books",
+		"id": 617,
+		"parent": 600,
+		"children": [],
+		"order": 170
+	},
+	"618": {
+		"name": "computer_technologies",
+		"id": 618,
+		"parent": 600,
+		"children": [],
+		"order": 180
+	},
+	"735": {
+		"name": "encyclopedias_and_reference_books",
+		"id": 735,
+		"parent": 600,
+		"children": [],
+		"order": 190
+	},
+	"736": {
+		"name": "travel._guidebooks",
+		"id": 736,
+		"parent": 600,
+		"children": [],
+		"order": 200
+	},
+	"737": {
+		"name": "for_children_and_parents",
+		"id": 737,
+		"parent": 267,
+		"children": [
+			738,
+			739,
+			740,
+			741,
+			742
+		],
+		"order": 30
+	},
+	"738": {
+		"name": "fiction",
+		"id": 738,
+		"parent": 737,
+		"children": [],
+		"order": 10
+	},
+	"739": {
+		"name": "child_development",
+		"id": 739,
+		"parent": 737,
+		"children": [],
+		"order": 20
+	},
+	"740": {
+		"name": "educational_literature",
+		"id": 740,
+		"parent": 737,
+		"children": [],
+		"order": 30
+	},
+	"741": {
+		"name": "leisure_and_creativity",
+		"id": 741,
+		"parent": 737,
+		"children": [],
+		"order": 40
+	},
+	"742": {
+		"name": "comics",
+		"id": 742,
+		"parent": 737,
+		"children": [],
+		"order": 50
+	},
+	"743": {
+		"name": "educational_literature",
+		"id": 743,
+		"parent": 267,
+		"children": [
+			744,
+			745,
+			746,
+			747,
+			748
+		],
+		"order": 40
+	},
+	"744": {
+		"name": "foreign_language_learning",
+		"id": 744,
+		"parent": 743,
+		"children": [],
+		"order": 10
+	},
+	"745": {
+		"name": "school_guides_and_workbooks",
+		"id": 745,
+		"parent": 743,
+		"children": [],
+		"order": 20
+	},
+	"746": {
+		"name": "exam_preparation",
+		"id": 746,
+		"parent": 743,
+		"children": [],
+		"order": 30
+	},
+	"747": {
+		"name": "for_applicants_students_and_postgraduates",
+		"id": 747,
+		"parent": 743,
+		"children": [],
+		"order": 40
+	},
+	"748": {
+		"name": "pedagogy_and_speech_therapy",
+		"id": 748,
+		"parent": 743,
+		"children": [],
+		"order": 50
+	},
+	"749": {
+		"name": "comics",
+		"id": 749,
+		"parent": 267,
+		"children": [],
+		"order": 50
+	},
+	"750": {
+		"name": "manga",
+		"id": 750,
+		"parent": 267,
+		"children": [],
+		"order": 60
+	},
+	"751": {
+		"name": "magazines_and_newspapers",
+		"id": 751,
+		"parent": 267,
+		"children": [],
+		"order": 70
+	},
+	"752": {
+		"name": "gift_editions_of_books",
+		"id": 752,
+		"parent": 267,
+		"children": [],
+		"order": 80
+	},
+	"753": {
+		"name": "antique_books",
+		"id": 753,
+		"parent": 267,
+		"children": [],
+		"order": 90
+	},
 	"281": {
-		"name": "jewelry_watches",
+		"name": "jewelry_and_watches",
 		"icon": "fa-gem",
 		"id": 281,
 		"parent": null,
+		"children": [
+			554,
+			561,
+			566,
+			570,
+			574,
+			575,
+			576,
+			577,
+			578,
+			581,
+			582,
+			583,
+			584,
+			585
+		],
+		"order": 346
+	},
+	"554": {
+		"name": "rings",
+		"id": 554,
+		"parent": 281,
+		"children": [
+			555,
+			556,
+			557,
+			558,
+			559,
+			560
+		],
+		"order": 10
+	},
+	"555": {
+		"name": "gold",
+		"id": 555,
+		"parent": 554,
 		"children": [],
-		"order": 1800
+		"order": 10
+	},
+	"556": {
+		"name": "silver",
+		"id": 556,
+		"parent": 554,
+		"children": [],
+		"order": 20
+	},
+	"557": {
+		"name": "platinum",
+		"id": 557,
+		"parent": 554,
+		"children": [],
+		"order": 30
+	},
+	"558": {
+		"name": "with_diamonds",
+		"id": 558,
+		"parent": 554,
+		"children": [],
+		"order": 40
+	},
+	"559": {
+		"name": "wedding_rings",
+		"id": 559,
+		"parent": 554,
+		"children": [],
+		"order": 50
+	},
+	"560": {
+		"name": "engagement_rings",
+		"id": 560,
+		"parent": 554,
+		"children": [],
+		"order": 60
+	},
+	"561": {
+		"name": "earrings",
+		"id": 561,
+		"parent": 281,
+		"children": [
+			562,
+			563,
+			564,
+			565
+		],
+		"order": 20
+	},
+	"562": {
+		"name": "gold",
+		"id": 562,
+		"parent": 561,
+		"children": [],
+		"order": 10
+	},
+	"563": {
+		"name": "silver",
+		"id": 563,
+		"parent": 561,
+		"children": [],
+		"order": 20
+	},
+	"564": {
+		"name": "platinum",
+		"id": 564,
+		"parent": 561,
+		"children": [],
+		"order": 30
+	},
+	"565": {
+		"name": "with_diamonds",
+		"id": 565,
+		"parent": 561,
+		"children": [],
+		"order": 40
+	},
+	"566": {
+		"name": "bracelets",
+		"id": 566,
+		"parent": 281,
+		"children": [
+			567,
+			568,
+			569
+		],
+		"order": 30
+	},
+	"567": {
+		"name": "gold",
+		"id": 567,
+		"parent": 566,
+		"children": [],
+		"order": 10
+	},
+	"568": {
+		"name": "silver",
+		"id": 568,
+		"parent": 566,
+		"children": [],
+		"order": 20
+	},
+	"569": {
+		"name": "platinum",
+		"id": 569,
+		"parent": 566,
+		"children": [],
+		"order": 30
+	},
+	"570": {
+		"name": "neck_jewelry",
+		"id": 570,
+		"parent": 281,
+		"children": [
+			571,
+			572,
+			573
+		],
+		"order": 40
+	},
+	"571": {
+		"name": "gold",
+		"id": 571,
+		"parent": 570,
+		"children": [],
+		"order": 10
+	},
+	"572": {
+		"name": "silver",
+		"id": 572,
+		"parent": 570,
+		"children": [],
+		"order": 20
+	},
+	"573": {
+		"name": "platinum",
+		"id": 573,
+		"parent": 570,
+		"children": [],
+		"order": 30
+	},
+	"574": {
+		"name": "jewelry_sets",
+		"id": 574,
+		"parent": 281,
+		"children": [],
+		"order": 50
+	},
+	"575": {
+		"name": "charms",
+		"id": 575,
+		"parent": 281,
+		"children": [],
+		"order": 60
+	},
+	"576": {
+		"name": "brooches_and_pins",
+		"id": 576,
+		"parent": 281,
+		"children": [],
+		"order": 70
+	},
+	"577": {
+		"name": "piercings",
+		"id": 577,
+		"parent": 281,
+		"children": [],
+		"order": 80
+	},
+	"578": {
+		"name": "watches",
+		"id": 578,
+		"parent": 281,
+		"children": [
+			579,
+			580
+		],
+		"order": 90
+	},
+	"579": {
+		"name": "gold",
+		"id": 579,
+		"parent": 578,
+		"children": [],
+		"order": 10
+	},
+	"580": {
+		"name": "silver",
+		"id": 580,
+		"parent": 578,
+		"children": [],
+		"order": 20
+	},
+	"581": {
+		"name": "children’s_jewelry",
+		"id": 581,
+		"parent": 281,
+		"children": [],
+		"order": 100
+	},
+	"582": {
+		"name": "cufflinks_and_tie_clips",
+		"id": 582,
+		"parent": 281,
+		"children": [],
+		"order": 110
+	},
+	"583": {
+		"name": "souvenirs",
+		"id": 583,
+		"parent": 281,
+		"children": [],
+		"order": 120
+	},
+	"584": {
+		"name": "hair_accessories",
+		"id": 584,
+		"parent": 281,
+		"children": [],
+		"order": 130
+	},
+	"585": {
+		"name": "other",
+		"id": 585,
+		"parent": 281,
+		"children": [],
+		"order": 140
 	},
 	"293": {
 		"name": "home_appliances",
@@ -16564,7 +17247,7 @@
 	},
 	"14339": {
 		"name": "crafts",
-		"icon": "fa-rocket",
+		"icon": "fa-hammer",
 		"id": 14339,
 		"parent": null,
 		"children": [],
