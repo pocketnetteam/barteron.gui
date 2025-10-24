@@ -116,6 +116,10 @@ export default {
 			return [11451, 11534, 11644];
 		},
 
+		musicAndVideoSubcategoriesToShowPrompt() {
+			return [11233, 11232];
+		},
+
 		viewingParentCategory() {
 			return !(this.isLoading || this.isSearchEnabled() || this.isFiltersActive()) 
 				&& (this.items?.length < 10) 
@@ -124,6 +128,7 @@ export default {
 					 this.topParentCategoriesToShowPrompt.includes(this.topParentCategory.id) && this.topParentCategory
 					|| this.servicesSubcategoriesToShowPrompt.includes(this.secondLevelParentCategory?.id) && this.secondLevelParentCategory
 					|| this.clothingFootwearAccessoriesSubcategoriesToShowPrompt.includes(this.secondLevelParentCategory?.id) && this.secondLevelParentCategory
+					|| this.musicAndVideoSubcategoriesToShowPrompt.includes(this.secondLevelParentCategory?.id) && this.secondLevelParentCategory
 				);
 		},
 	},
