@@ -7811,14 +7811,6 @@
 		"children": [],
 		"order": 100
 	},
-	"870": {
-		"name": "pottery_glass",
-		"icon": "fa-glass-cheers",
-		"id": 870,
-		"parent": null,
-		"children": [],
-		"order": 2300
-	},
 	"888": {
 		"name": "sporting_goods",
 		"icon": "fa-baseball-ball",
@@ -16730,7 +16722,8 @@
 			11760,
 			11761,
 			11762,
-			11763
+			11763,
+			870
 		],
 		"order": 10
 	},
@@ -16838,6 +16831,13 @@
 		"parent": 11748,
 		"children": [],
 		"order": 150
+	},
+	"870": {
+		"name": "other",
+		"id": 870,
+		"parent": 11748,
+		"children": [],
+		"order": 160
 	},
 	"11764": {
 		"name": "household_goods",
