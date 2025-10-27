@@ -6864,8 +6864,393 @@
 		"icon": "fa-palette",
 		"id": 550,
 		"parent": null,
-		"children": [],
+		"children": [
+			754,
+			760,
+			780,
+			784,
+			791,
+			796
+		],
 		"order": 2000
+	},
+	"754": {
+		"name": "paintings_&_graphics",
+		"id": 754,
+		"parent": 550,
+		"children": [
+			755,
+			756,
+			757,
+			758,
+			759
+		],
+		"order": 10
+	},
+	"755": {
+		"name": "painting",
+		"id": 755,
+		"parent": 754,
+		"children": [],
+		"order": 10
+	},
+	"756": {
+		"name": "graphics",
+		"id": 756,
+		"parent": 754,
+		"children": [],
+		"order": 20
+	},
+	"757": {
+		"name": "reproductions",
+		"id": 757,
+		"parent": 754,
+		"children": [],
+		"order": 30
+	},
+	"758": {
+		"name": "posters_&_prints",
+		"id": 758,
+		"parent": 754,
+		"children": [],
+		"order": 40
+	},
+	"759": {
+		"name": "photography",
+		"id": 759,
+		"parent": 754,
+		"children": [],
+		"order": 50
+	},
+	"760": {
+		"name": "art_supplies",
+		"id": 760,
+		"parent": 550,
+		"children": [
+			761,
+			769,
+			770,
+			775,
+			776,
+			777,
+			778,
+			779
+		],
+		"order": 20
+	},
+	"761": {
+		"name": "paints",
+		"id": 761,
+		"parent": 760,
+		"children": [
+			762,
+			763,
+			764,
+			765,
+			766,
+			767,
+			768
+		],
+		"order": 10
+	},
+	"762": {
+		"name": "oil_paints",
+		"id": 762,
+		"parent": 761,
+		"children": [],
+		"order": 10
+	},
+	"763": {
+		"name": "acrylic_paints",
+		"id": 763,
+		"parent": 761,
+		"children": [],
+		"order": 20
+	},
+	"764": {
+		"name": "watercolors",
+		"id": 764,
+		"parent": 761,
+		"children": [],
+		"order": 30
+	},
+	"765": {
+		"name": "gouache",
+		"id": 765,
+		"parent": 761,
+		"children": [],
+		"order": 40
+	},
+	"766": {
+		"name": "tempera",
+		"id": 766,
+		"parent": 761,
+		"children": [],
+		"order": 50
+	},
+	"767": {
+		"name": "acrylic_markers_&_inks",
+		"id": 767,
+		"parent": 761,
+		"children": [],
+		"order": 60
+	},
+	"768": {
+		"name": "special_paints",
+		"id": 768,
+		"parent": 761,
+		"children": [],
+		"order": 70
+	},
+	"769": {
+		"name": "brushes",
+		"id": 769,
+		"parent": 760,
+		"children": [],
+		"order": 20
+	},
+	"770": {
+		"name": "drawing_&_graphic_tools",
+		"id": 770,
+		"parent": 760,
+		"children": [
+			771,
+			772,
+			773,
+			774
+		],
+		"order": 30
+	},
+	"771": {
+		"name": "pencils_&_crayons",
+		"id": 771,
+		"parent": 770,
+		"children": [],
+		"order": 10
+	},
+	"772": {
+		"name": "pen_&_ink",
+		"id": 772,
+		"parent": 770,
+		"children": [],
+		"order": 20
+	},
+	"773": {
+		"name": "charcoal_&_pastels",
+		"id": 773,
+		"parent": 770,
+		"children": [],
+		"order": 30
+	},
+	"774": {
+		"name": "accessories_&_auxiliary_materials",
+		"id": 774,
+		"parent": 770,
+		"children": [],
+		"order": 40
+	},
+	"775": {
+		"name": "canvases_&_stretcher_bars",
+		"id": 775,
+		"parent": 760,
+		"children": [],
+		"order": 40
+	},
+	"776": {
+		"name": "paper_&_sketchbooks",
+		"id": 776,
+		"parent": 760,
+		"children": [],
+		"order": 50
+	},
+	"777": {
+		"name": "easels",
+		"id": 777,
+		"parent": 760,
+		"children": [],
+		"order": 60
+	},
+	"778": {
+		"name": "palettes_palette_knives_&_accessories",
+		"id": 778,
+		"parent": 760,
+		"children": [],
+		"order": 70
+	},
+	"779": {
+		"name": "mixed_art_sets",
+		"id": 779,
+		"parent": 760,
+		"children": [],
+		"order": 80
+	},
+	"780": {
+		"name": "framing_&_decoration",
+		"id": 780,
+		"parent": 550,
+		"children": [
+			781,
+			782,
+			783
+		],
+		"order": 30
+	},
+	"781": {
+		"name": "mouldings_&_frames",
+		"id": 781,
+		"parent": 780,
+		"children": [],
+		"order": 10
+	},
+	"782": {
+		"name": "passe-partout_mat_boards",
+		"id": 782,
+		"parent": 780,
+		"children": [],
+		"order": 20
+	},
+	"783": {
+		"name": "mounting_&_hanging_systems",
+		"id": 783,
+		"parent": 780,
+		"children": [],
+		"order": 30
+	},
+	"784": {
+		"name": "decorative_&_applied_arts",
+		"id": 784,
+		"parent": 550,
+		"children": [
+			785,
+			786,
+			787,
+			788,
+			789,
+			790
+		],
+		"order": 40
+	},
+	"785": {
+		"name": "ceramics_&_porcelain",
+		"id": 785,
+		"parent": 784,
+		"children": [],
+		"order": 10
+	},
+	"786": {
+		"name": "glass_&_stained_glass",
+		"id": 786,
+		"parent": 784,
+		"children": [],
+		"order": 20
+	},
+	"787": {
+		"name": "wood_carving",
+		"id": 787,
+		"parent": 784,
+		"children": [],
+		"order": 30
+	},
+	"788": {
+		"name": "artistic_metalwork",
+		"id": 788,
+		"parent": 784,
+		"children": [],
+		"order": 40
+	},
+	"789": {
+		"name": "textiles_&_batik",
+		"id": 789,
+		"parent": 784,
+		"children": [],
+		"order": 50
+	},
+	"790": {
+		"name": "handcrafted_art_pieces",
+		"id": 790,
+		"parent": 784,
+		"children": [],
+		"order": 60
+	},
+	"791": {
+		"name": "sculpture",
+		"id": 791,
+		"parent": 550,
+		"children": [
+			792,
+			793,
+			794,
+			795
+		],
+		"order": 50
+	},
+	"792": {
+		"name": "bronze_stone_&_plaster",
+		"id": 792,
+		"parent": 791,
+		"children": [],
+		"order": 10
+	},
+	"793": {
+		"name": "miniatures",
+		"id": 793,
+		"parent": 791,
+		"children": [],
+		"order": 20
+	},
+	"794": {
+		"name": "contemporary_art_objects",
+		"id": 794,
+		"parent": 791,
+		"children": [],
+		"order": 30
+	},
+	"795": {
+		"name": "plaster_models_for_décor",
+		"id": 795,
+		"parent": 791,
+		"children": [],
+		"order": 40
+	},
+	"796": {
+		"name": "contemporary_art_&_design",
+		"id": 796,
+		"parent": 550,
+		"children": [
+			797,
+			798,
+			799,
+			801
+		],
+		"order": 60
+	},
+	"797": {
+		"name": "nfts_&_digital_art",
+		"id": 797,
+		"parent": 796,
+		"children": [],
+		"order": 10
+	},
+	"798": {
+		"name": "installations_&_art_objects",
+		"id": 798,
+		"parent": 796,
+		"children": [],
+		"order": 20
+	},
+	"799": {
+		"name": "conceptual_design",
+		"id": 799,
+		"parent": 796,
+		"children": [],
+		"order": 30
+	},
+	"801": {
+		"name": "limited_editions_&_prints",
+		"id": 801,
+		"parent": 796,
+		"children": [],
+		"order": 40
 	},
 	"619": {
 		"name": "musical_instruments_and_equipment",
