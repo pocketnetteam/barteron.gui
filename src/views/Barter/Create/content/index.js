@@ -474,6 +474,15 @@ export default {
 			}
 		},
 
+		categoryHasChildren() {
+			const id = this.$refs.category?.id;
+			return this.categories.hasChildren(id);
+		},
+
+		categoryIsEmpty() {
+			return !(this.$refs.category?.id);
+		},
+
 		setMapActionData(offers, error) {
 			this.mapActionData = {
 				actionName: this.pickupPointsRequestData.actionName,
@@ -588,6 +597,15 @@ export default {
 		serializeForm() {
 			let metaData = {};
 
+			if (this.categoryHasChildren()) {
+				metaData = {
+					completed: false,
+					message: this.$t("categoriesLabels.invalid_category_value"),
+					field: this.$refs.category.$el,
+				};
+				return { metaData };
+			};
+
 			const 
 				videoUploader = this.$refs.videoUploader, // optional
 				videoCheckingResult = videoUploader?.canSerialize();
@@ -596,6 +614,7 @@ export default {
 				metaData = {
 					completed: false,
 					message: videoCheckingResult.message,
+					isWarning: videoCheckingResult.isWarning,
 					field: videoUploader.$el,
 				};
 				return { metaData };
@@ -745,9 +764,9 @@ export default {
 					this.showVersionConflictIfNeeded(e);
 				});
 			} else {
-				const { message, field } = data.metaData;
+				const { message, isWarning, field } = data.metaData;
 				field && this.scrollTo(field);
-				message && this.showWarning(message);
+				message && (isWarning ? this.showWarning(message) : this.showError(message));
 			};
 		},
 
@@ -767,9 +786,9 @@ export default {
 				serializationMetaData = serializationData.metaData;
 
 			if (serializationMetaData && !(serializationMetaData?.completed)) {
-				const { message, field } = serializationMetaData;
+				const { message, isWarning, field } = serializationMetaData;
 				field && this.scrollTo(field);
-				message && this.showWarning(message);
+				message && (isWarning ? this.showWarning(message) : this.showError(message));
 				return;
 			};
 

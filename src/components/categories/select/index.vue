@@ -69,7 +69,7 @@
 						<!-- Dynamic items -->
 						<li
 							v-for="(parent, index) in expanded?.history"
-							:key="index"
+							:key="parent.id"
 							:title="$t(parent.name)"
 						>
 							<a
@@ -104,7 +104,7 @@
 					<!-- Children -->
 					<li
 						v-for="(category, index) in list"
-						:key="index"
+						:key="category.id"
 						:title="$t(category.name)"
 					>
 						<v-button
@@ -133,7 +133,7 @@
 				<ul class="results">
 					<li
 						v-for="(category, index) in results"
-						:key="index"
+						:key="category.id"
 						:class="index % 2 ? 'even' : 'odd'"
 					>
 						<!-- Match -->
@@ -160,7 +160,7 @@
 							>
 								<li
 									v-for="(parent, index) in category.history"
-									:key="index"
+									:key="parent.id"
 								>
 									<a 
 										@click="expand(parent.id)"
@@ -178,6 +178,7 @@
 			<div class="row full-width right">
 				<div class="buttons-holder h-w">
 					<v-button
+						:disabled="selectionDisabled()"
 						@click="select"
 					>{{ $t('categoriesLabels.select') }}</v-button>
 				</div>

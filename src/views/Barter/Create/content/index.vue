@@ -35,6 +35,22 @@
 					<i class="fa fa-info-circle"></i>
 					{{ offerCreationParams().blockingMessage }}
 				</label>
+
+				<label
+					v-else-if="categoryHasChildren()"
+					class="v-label error-level"
+				>
+					<i class="fa fa-info-circle"></i>
+					{{ $t("categoriesLabels.category_has_children_error_hint", {default_category_name: $t("everything_else")}) }}
+				</label>
+
+				<label
+					v-else-if="categoryIsEmpty()"
+					class="v-label info-level"
+				>
+					<i class="fa fa-info-circle"></i>
+					{{ $t("categoriesLabels.empty_category_hint") }}
+				</label>
 			</div>
 
 			<div 

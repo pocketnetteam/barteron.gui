@@ -25,7 +25,12 @@ export default {
 		title: {
 			type: String,
 			default: ""
-		}
+		},
+
+		mode: {
+			type: String,
+			default: ""
+		},
 	},
 
 	data() {
@@ -284,6 +289,18 @@ export default {
 			} else {
 				this.expanded = false;
 			}
+		},
+
+		selectionDisabled() {
+			let result = false;
+			if (this.mode === "offer") {
+				result = true;
+				const id = this.expanded?.id;
+				if (id && !(this.categories.items[id]?.children?.length)) {
+					result = false;
+				};
+			};
+			return result;
 		},
 
 		/**

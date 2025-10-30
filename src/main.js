@@ -372,6 +372,11 @@ Vue.prototype.shared = Vue.observable({
 		 * @param {@Offer} offer
 		 */
 		renewOffer(offer) {
+			if (this.categories.hasChildren(offer?.tag)) {
+				this.showError(this.$t("categoriesLabels.category_has_children_renew_error"));
+				return;
+			};
+
 			this.dialog?.instance.view("load", this.$t("dialogLabels.data_node"));
 
 			offer.set({
