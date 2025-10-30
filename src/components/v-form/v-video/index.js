@@ -210,17 +210,21 @@ export default {
 			];
 
 			if (!(serializationStates.includes(this.state))) {
-				let i18nVideosKey = "finish_working_with_video";
+				let 
+					i18nVideosKey = "finish_working_with_video",
+					isWarning = true;
 
 				if (this.state === "processingOfUploadedVideo") {
 					i18nVideosKey = "wait_until_video_processed";
 				} else if (this.state === "videoProcessingFailed") {
 					i18nVideosKey = "video_processing_failed";
+					isWarning = false;
 				};
 
 				result = {
 					canSerialize: false,
 					message: this.$t(`videosLabels.${i18nVideosKey}`),
+					isWarning,
 				};
 			}
 

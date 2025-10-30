@@ -43,6 +43,7 @@
 			ref="categorySelect"
 			:marked="[id]"
 			:value="id"
+			mode="offer"
 			@selected="selected"
 		/>
 	</div>
