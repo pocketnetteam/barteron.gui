@@ -40,6 +40,7 @@ export default {
 			isOfferScoreLoading: false,
 			isCommentLoading: false,
 			score: 0,
+			isChatLoading: false,
 		}
 	},
 
@@ -60,6 +61,10 @@ export default {
 
 		offerExists() {
 			return (this.item?.hash?.length >= 64);
+		},
+
+		isMyOffer() {
+			return this.item?.address === this.sdk.address;
 		},
 	},
 
@@ -252,6 +257,29 @@ export default {
 
 		commentable() {
 			return this.offerExists && this.form;
+		},
+
+		contactSeller() {
+			if (this.isMyOffer) return;
+			if (this.sdk.willOpenRegistration()) return;
+			
+			const 
+				sellerAddress = this.item?.address,
+				offerLink = this.sdk.appLink(`barter/${ this.item?.hash }`);
+
+			this.isChatLoading = true;
+			this.dialog?.instance.view("load", this.$t("dialogLabels.opening_room"));
+			this.sendMessage({
+				members: [sellerAddress],
+				messages: [offerLink],
+				openRoom: true
+			}).then(() => {
+				this.dialog?.instance.hide();
+			}).catch(e => {
+				this.showError(e);
+			}).finally(() => {
+				this.isChatLoading = false;
+			});
 		},
 	},
 

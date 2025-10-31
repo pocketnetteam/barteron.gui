@@ -51,6 +51,16 @@
 				ref="form"
 				v-if="commentable()"
 			>
+				<v-button 
+					v-if="!(isMyOffer)"
+					class="contact-seller"
+					:disabled="isChatLoading"
+					@click="contactSeller"
+				>
+					<i class="fa fa-question-circle"></i>
+					<span>{{ $t('buttonLabels.ask_seller') }}</span>
+				</v-button>
+
 				<v-textarea
 					ref="vote"
 					class="field"

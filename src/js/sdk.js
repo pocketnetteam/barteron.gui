@@ -641,7 +641,7 @@ class SDK {
 		const formattedData = {
 			path: `barter/${ data.hash }`,
 			sharing: {
-				title: VueI18n.t("itemLabels.label"),
+				title: "",
 				text: { body: data.caption },
 				images: data.images,
 			},
