@@ -164,7 +164,7 @@ export default {
 
 			this.setSurveyBarVisibility();
 
-			this.attachKeyboardObserver();
+			//this.attachKeyboardObserver();
 
 			/* Hide preloader */
 			this.loading = false;
@@ -293,7 +293,7 @@ export default {
 							canChangeKeyboardHeight = activeElementInsideMainSection;
 
 						const value = getComputedStyle(targetNode).getPropertyValue('--keyboardheight') || 0;
-						this.keyboardHeight = value; //canChangeKeyboardHeight ? value : 0;
+						this.keyboardHeight = canChangeKeyboardHeight ? value : 0;
 					}
 				}
 			});
