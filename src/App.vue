@@ -293,7 +293,7 @@ export default {
 							canChangeKeyboardHeight = activeElementInsideMainSection;
 
 						const value = getComputedStyle(targetNode).getPropertyValue('--keyboardheight') || 0;
-						this.keyboardHeight = canChangeKeyboardHeight ? value : 0;
+						this.keyboardHeight = value; //canChangeKeyboardHeight ? value : 0;
 					}
 				}
 			});
