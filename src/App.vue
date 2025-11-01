@@ -20,7 +20,10 @@
 					:class="{ 'header-hidden': !isHeaderVisible }" 
 				/>
 
-				<section id="main">
+				<section 
+					ref="main"
+					id="main"
+				>
 					<keep-alive>
 						<survey-bar
 							v-if="isSurveyBarVisible"
@@ -55,6 +58,11 @@
 				<v-footer />
 			</template>
 		</template>
+
+		<div 
+			class="bottom-keyboard-space"
+			:style="{ 'height': keyboardHeight, 'width': '100%'}"
+		></div>
 	</div>
 </template>
 
@@ -106,6 +114,8 @@ export default {
 			lastRoute: null,
 			isHeaderVisible: true,
 			surveyTimerId: null,
+			keyboardObserver: null,
+			keyboardHeight: 0,
 		}
 	},
 
@@ -153,6 +163,8 @@ export default {
 			});
 
 			this.setSurveyBarVisibility();
+
+			this.attachKeyboardObserver();
 
 			/* Hide preloader */
 			this.loading = false;
@@ -268,6 +280,31 @@ export default {
 			});
 		},
 
+		attachKeyboardObserver() {
+			const 
+				targetNode = document.documentElement,
+				config = { attributes: true, attributeFilter: ['style'] };
+
+			this.keyboardObserver = new MutationObserver(mutationsList => {
+				for (const mutation of mutationsList) {
+					if (mutation.type === "attributes" && mutation.attributeName === "style") {
+						const 
+							activeElementInsideMainSection = this.$refs.main?.contains(document.activeElement),
+							canChangeKeyboardHeight = activeElementInsideMainSection;
+
+						const value = getComputedStyle(targetNode).getPropertyValue('--keyboardheight') || 0;
+						this.keyboardHeight = canChangeKeyboardHeight ? value : 0;
+					}
+				}
+			});
+
+			this.keyboardObserver.observe(targetNode, config);
+		},
+
+		detachKeyboardObserver() {
+			this.keyboardObserver?.disconnect();
+		},
+
 		showOfferShareDialog() {
 			if (!(this.sdk.shareOnBastyonIsAvailable()) || profileStore.offerShareDisabled) {
 				return;
@@ -363,6 +400,10 @@ export default {
 		"sdk.lastPublishedOfferId"() {
 			this.showOfferShareDialog();
 		},
+	},
+
+	beforeDestroy() {
+		this.detachKeyboardObserver();
 	},
 
 	destroyed() {
