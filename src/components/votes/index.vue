@@ -54,6 +54,7 @@
 				<v-button 
 					v-if="!(isMyOffer)"
 					class="contact-seller"
+					vSize="sm"
 					:disabled="isChatLoading"
 					@click="contactSeller"
 				>
