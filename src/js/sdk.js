@@ -1598,7 +1598,7 @@ class SDK {
 						} else if (key === "offerScores") {
 							data[key] = details[key]?.filter(f => f.s2 === hash).map(item => new OfferScore(item)) || [];
 						} else if (key === "comments") {
-							data[key] = details[key]?.filter(f => f.s3 === hash).map(item => new Comment(item)) || [];
+							data[key] = details[key]?.filter(f => f.s3 === hash).map(item => new Comment(item)).sort((a,b) => a.time - b.time) || [];
 						} else if (key === "commentScores") {
 							data[key] = details[key]?.filter(f => f.s2 === hash) || [];
 						}
