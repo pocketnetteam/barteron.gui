@@ -10,15 +10,7 @@
 
 		<!-- without aside -->
 		<div class="row sep no-aside d-sep">
-			<Profile :hash="address">
-				<!-- State -->
-				<template #state>
-					<dl class="list">
-						<dt><i class="fa fa-user-shield"></i></dt>
-						<dd>{{ $t('profileLabels.account_confirmed') }}</dd>
-					</dl>
-				</template>
-			</Profile>
+			<Profile :hash="address"/>
 
 			<div 
 				v-if="!(isMyProfile)" 
