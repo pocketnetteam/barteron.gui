@@ -38,6 +38,7 @@ export default {
 			"items",
 			"itemsRoute",
 			"pageStart",
+			"pageSize",
 			"isLoading",
 			"bartersView",
 		]),
@@ -48,7 +49,6 @@ export default {
 		]),
 
 		...mapState(useOfferStore, [
-			"pageSize",
 			"isSubcategory",
 			"topParentCategory",
 			"secondLevelParentCategory",
@@ -57,6 +57,10 @@ export default {
 		...mapState(useLocaleStore, [
 			"locale",
 		]),
+
+		isHomeRoute() {
+			return this.$route?.name === "home";
+		},
 
 		/**
 		 * Make list of order by
@@ -252,12 +256,14 @@ export default {
 	},
 
 	mounted() {
-		this.waitForRefs("order, bartersView").then(() => {
-			this.setOrderValueToElement();
-			this.setBartersViewToElement();
-		}).catch(e => { 
-			console.error(e);
-		});
+		if (!(this.isHomeRoute)) {
+			this.waitForRefs("order, bartersView").then(() => {
+				this.setOrderValueToElement();
+				this.setBartersViewToElement();
+			}).catch(e => { 
+				console.error(e);
+			});
+		}
 	},
 
 	beforeRouteEnter (to, from, next) {

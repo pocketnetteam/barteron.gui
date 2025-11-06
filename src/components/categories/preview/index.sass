@@ -2,31 +2,25 @@
 
 $item-width-max: 284px
 
-.pickup-point-carousel-holder
-	font-size: 0.75rem
-
+.categories-preview-carousel
 	.vs-carousel
 		.vs-carousel__wrapper
-			border-radius: 11px 11px 0 0
-			gap: 9px
+			gap: 56px
+		// 	border-radius: 11px 11px 0 0
 	
 		.vs-carousel__slide
-			flex: 0 0 calc( 33.3% - 7px ) // Gap - 2px
-			width: calc( 33.3% - 7px ) // Gap - 2px
-			min-width: 160px
-			
-			&.compact-view
-				flex: 0 0 calc( 25% - 7px ) // Gap - 2px
-				width: calc( 25% - 7px ) // Gap - 2px
+			width: 100px
+			display: block
+			flex: none
 
-			font-size: 1.08333em
-			line-height: 1.5
+		// 	flex: 0 0 calc( 25% - 7px ) // Gap - 2px
+		// 	width: calc( 25% - 7px ) // Gap - 2px
 
-			& > *
-				box-sizing: content-box
-				display: block
-				margin: 0 auto
-				max-width: $item-width-max
+		// 	& > *
+		// 		box-sizing: content-box
+		// 		display: block
+		// 		margin: 0 auto
+		// 		max-width: $item-width-max
 
 	.vs-carousel__arrows
 		+fontAwesome("")
@@ -43,7 +37,8 @@ $item-width-max: 284px
 		padding: 8px
 		opacity: .8
 		outline: none
-		top: 72px
+		top: 50%
+		transform: translate(0, -50%)
 		height: 36px
 		width: 36px
 		z-index: 10
@@ -73,21 +68,3 @@ $item-width-max: 284px
 		&:before
 			content: "\f105"
 			margin: 0 0 0 3px
-
-.pickup-point-empty-list
-	.pickup-point-empty-list-area
-		height: 180px
-		width: 100%
-		padding: 2 * $r
-		display: flex
-		flex-direction: column
-		gap: 2 * $r
-		align-items: center
-		justify-content: center
-		text-align: center
-
-		p
-			color: $popo
-
-			&.error
-				color: $dodoria

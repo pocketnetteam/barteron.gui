@@ -5,6 +5,7 @@ import AppErrors from "@/js/appErrors.js";
 
 const 
     defaultPageSize = 18,
+    homePageSize = 24,
     storageId = "offer",
     categories = new Categories(),
     storage = Pinia.defineStore(storageId, {
@@ -14,6 +15,7 @@ const
             loadingItemsRoute: null,
             topHeight: null,
             pageStart: 0,
+            pageSize: defaultPageSize,
             isLoading: false,
             filters: {
                 orderBy: "height",
@@ -25,8 +27,6 @@ const
         }),
 
         getters: {
-            pageSize: () => defaultPageSize,
-
             parentCategories: (state) => {
                 const id = state.itemsRoute?.params?.id;
                 return categories.getParentsById(id);
@@ -88,36 +88,57 @@ const
             },
 
             _requestItems(data) {
-				const checkingData = {
+				const 
+                    ids = Vue.prototype.sdk.requestServiceData.ids,
+                    checkingData = this._createRequestCheckingData();
+
+				ids[checkingData.requestSource] = checkingData.requestId;
+
+                const 
+                    mixin = Vue.prototype.shared,
+                    isHomeRoute = (data?.route?.name === "home"),
+                    disableFilterAndSearch = isHomeRoute;
+
+                if (disableFilterAndSearch) {
+                    const request = {
+                        orderBy: "height",
+                        orderDesc: true,
+                        location: mixin.methods.getStoredLocation() || [],
+                        topHeight: data?.topHeight,
+                        pageStart: data?.pageStart || 0,
+                        pageSize: this.pageSize,
+                        checkingData,
+                    };
+                
+                    return Vue.prototype.sdk.getBrtOffersFeed(request);
+                } else {
+                    const
+                        tagsData = this._getTagsData(data),
+                        search = data?.route?.query?.search;
+
+                    const request = {
+                        ...this._filtersForRequest(),
+                        ...tagsData.tagsProps,
+                        ...(search && { search: `%${ search }%` }),
+                        location: mixin.methods.getStoredLocation() || [],
+                        topHeight: data?.topHeight,
+                        pageStart: data?.pageStart || 0,
+                        pageSize: this.pageSize,
+                        checkingData,
+                    };
+
+                    return tagsData.isDealRequest ? 
+                        Vue.prototype.sdk.getBrtOfferDeals(request)
+                        : Vue.prototype.sdk.getBrtOffersFeed(request);
+                }
+            },
+
+            _createRequestCheckingData() {
+                return {
 					requestSource: "offerStorage",
 					requestId: Math.round(Math.random() * 1e+10),
 					checkRequestId: true,
 				};
-
-				const ids = Vue.prototype.sdk.requestServiceData.ids;
-				ids[checkingData.requestSource] = checkingData.requestId;
-
-                const
-                    mixin = Vue.prototype.shared,
-                    tagsData = this._getTagsData(data),
-                    search = data?.route?.query?.search;
-
-                const request = {
-                    ...this._filtersForRequest(),
-                    ...tagsData.tagsProps,
-                    ...(search && { search: `%${ search }%` }),
-                    location: mixin.methods.getStoredLocation() || [],
-                    topHeight: data?.topHeight,
-                    pageStart: data?.pageStart || 0,
-                    pageSize: data?.pageSize || this.pageSize,
-                    checkingData,
-                };
-            
-                if (tagsData.isDealRequest) {
-                    return Vue.prototype.sdk.getBrtOfferDeals(request);
-                } else {
-                    return Vue.prototype.sdk.getBrtOffersFeed(request);
-                }
             },
 
             _getTagsData(data) {
@@ -170,12 +191,16 @@ const
                 return result;
             },
 
-            _setTopHeight() {
+            _setTopHeight(data) {
                 this.topHeight = null;
-                if (this.pageStart === 0 
-                    && this.filters.orderBy === "height" 
-                    && this.filters.orderDesc
-                ) {
+
+                const 
+                    isFirstPage = this.pageStart === 0,
+                    isHomeRoute = data?.route?.name === "home",
+                    isHeightDescOrder = (this.filters.orderBy === "height" 
+                        && this.filters.orderDesc);
+
+                if (isFirstPage && (isHomeRoute || isHeightDescOrder)) {
                     this.topHeight = this.items?.[0]?.height;
                 }
             },
@@ -187,6 +212,7 @@ const
                 
                 this.topHeight = null;
                 this.pageStart = 0;
+                this.pageSize = (route?.name === "home" ? homePageSize : defaultPageSize);
                 this.scrollOffset = null;
 
                 const data = {
@@ -198,7 +224,7 @@ const
                 try {
                     this.isLoading = true;
                     this.items = await this._requestItems(data);
-                    this._setTopHeight();
+                    this._setTopHeight(data);
                     this.itemsRoute = route;
                 } catch (e) {
                     const
@@ -306,10 +332,14 @@ const
             },
 
             isEmptyListFromFullSearch(currentRoute) {
-                const fullSearchPaths = ["/", "/category/search?search="];
+                const 
+                    fullSearchPaths = ["/", "/category/search?search="],
+                    isHomeRoute = currentRoute?.name === "home",
+                    isFiltersActive = isHomeRoute ? false : this.isFiltersActive();
+
                 return !(this.isLoading) 
                     && !(this.items.length) 
-                    && !(this.isFiltersActive())
+                    && !(isFiltersActive)
                     && this.itemsRoute
                     && this.itemsRoute.fullPath === currentRoute?.fullPath
                     && fullSearchPaths.includes(this.itemsRoute.fullPath);

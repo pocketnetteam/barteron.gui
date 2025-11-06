@@ -1,6 +1,5 @@
 import CategoriesHierarchy from "@/components/categories/categories-hierarchy/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
-import LegalInfo from "@/components/legal-info/index.vue";
 import offerStore from "@/stores/offer.js";
 
 export default {
@@ -9,7 +8,6 @@ export default {
 	components: {
 		CategoriesHierarchy,
 		ExchangeList,
-		LegalInfo,
 	},
 
 	data() {
@@ -30,23 +28,6 @@ export default {
 	computed: {
 		category() {
 			return this.categories.findById(this.$route.params.id);
-		},
-
-		requiredLegalInfoItemKeys() {
-			return [
-				"user_agreement", 
-				"personal_data_processing_policy"
-			];
-		},
-
-		legalInfoAvailable() {
-			const
-				isHomePage = (this.$route.name === "home"),
-				locale = this.$root.$i18n.locale,
-				data = (isHomePage && LegalInfo.methods.allDocumentsWithoutContext?.()) || {},
-				existingKeys = (data[locale] || []).map(m => m.i18nKey);
-
-			return this.requiredLegalInfoItemKeys.some(f => existingKeys.includes(f));
 		},
 	},
 

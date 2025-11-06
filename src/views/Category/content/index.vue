@@ -1,6 +1,9 @@
 <template>
 	<v-content v-if="!(isEmptyListFromFullSearch())">
-		<div class="row">
+		<div 
+			v-if="!(isHomeRoute)"
+			class="row"
+		>
 			<div class="col no-offset">
 				<v-select
 					ref="order"
@@ -50,7 +53,7 @@
 			<BarterList
 				v-if="items?.length"
 				:items="items"
-				:vType="bartersView"
+				:vType="isHomeRoute ? 'tile' : bartersView"
 			/>
 
 			<loader 

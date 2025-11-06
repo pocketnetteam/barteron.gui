@@ -160,21 +160,6 @@
 			/>
 		</v-details> -->
 
-		<v-details 
-			v-if="legalInfoAvailable"
-			:open="true"
-		>
-			<template #title>
-				<strong class="summary">
-					<span class="filter-title">{{ $t('legalLabels.label') }}</span>
-				</strong>
-			</template>
-
-			<LegalInfo
-				:i18nDocumentKeys="requiredLegalInfoItemKeys"
-			/>
-		</v-details>
-
 		<div class="v-details" id="action-buttons">
 			<div class="row">
 				<div class="buttons-holder full-width">
