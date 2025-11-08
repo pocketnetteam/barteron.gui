@@ -1,7 +1,7 @@
 <template>
 	<div class="small-menu-bar">
-		<CategoriesOption />
 		<Location />
+		<CategoriesOption />
 		<div class="space"></div>
 		<SearchOption />
 		<UserSubMenu />

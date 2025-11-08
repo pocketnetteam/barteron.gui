@@ -2,69 +2,84 @@
 
 $item-width-max: 284px
 
-.categories-preview-carousel
-	.vs-carousel
-		.vs-carousel__wrapper
-			gap: 56px
-		// 	border-radius: 11px 11px 0 0
-	
-		.vs-carousel__slide
-			width: 100px
-			display: block
-			flex: none
+.categories-preview
+	margin-top: $r * 4
+	margin-bottom: $r * 12
 
-		// 	flex: 0 0 calc( 25% - 7px ) // Gap - 2px
-		// 	width: calc( 25% - 7px ) // Gap - 2px
-
-		// 	& > *
-		// 		box-sizing: content-box
-		// 		display: block
-		// 		margin: 0 auto
-		// 		max-width: $item-width-max
-
-	.vs-carousel__arrows
-		+fontAwesome("")
-		background: $primary
-		border: 1px solid $beerus
-		border-radius: 8px
-		cursor: pointer
-		display: flex
-		align-items: center
-		justify-content: center
-		font-size: 0
+	h1.title
 		text-align: center
-		margin: 0
-		padding: 8px
-		opacity: .8
-		outline: none
-		top: 50%
-		transform: translate(0, -50%)
-		height: 36px
-		width: 36px
-		z-index: 10
+		// color: $bulma
+		margin-bottom: $r * 4
+		font-size: 1.6em
 
-		&:not(:disabled)
-			&:hover
+
+	.categories-preview-carousel
+		.vs-carousel
+			// border: 1px solid $beerus
+			// padding: 20px
+			// border-radius: 20px
+
+			.vs-carousel__wrapper
+				gap: 56px
+			// 	border-radius: 11px 11px 0 0
+		
+			.vs-carousel__slide
+				width: 100px
+				display: block
+				flex: none
+
+			// 	flex: 0 0 calc( 25% - 7px ) // Gap - 2px
+			// 	width: calc( 25% - 7px ) // Gap - 2px
+
+			// 	& > *
+			// 		box-sizing: content-box
+			// 		display: block
+			// 		margin: 0 auto
+			// 		max-width: $item-width-max
+
+		.vs-carousel__arrows
+			+fontAwesome("")
+			background: $primary
+			border: 1px solid $beerus
+			border-radius: 8px
+			cursor: pointer
+			display: flex
+			align-items: center
+			justify-content: center
+			font-size: 0
+			text-align: center
+			margin: 0
+			padding: 8px
+			opacity: .8
+			outline: none
+			top: 50%
+			transform: translate(0, -50%)
+			height: 36px
+			width: 36px
+			z-index: 10
+
+			&:not(:disabled)
+				&:hover
+					&:before
+						color: $blue
+
+			&:disabled
+				display: none
+				cursor: default
+
 				&:before
-					color: $blue
-
-		&:disabled
-			display: none
-			cursor: default
+					color: $trunks
 
 			&:before
-				color: $trunks
+				+transition()
+				color: $bulma
+				font-size: 1.4rem
 
-		&:before
-			+transition()
-			color: $bulma
-			font-size: 1.4rem
+		.vs-carousel__arrows--left
+			&:before
+				content: "\f104"
 
-	.vs-carousel__arrows--left
-		&:before
-			content: "\f104"
-
-	.vs-carousel__arrows--right
-		&:before
-			content: "\f105"
-			margin: 0 0 0 3px
+		.vs-carousel__arrows--right
+			&:before
+				content: "\f105"
+				margin: 0 0 0 3px

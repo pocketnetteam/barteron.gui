@@ -1,15 +1,19 @@
 <template>
-	<div class="categories-preview-carousel">
-		<carousel>
-			<slide
-				v-for="(groupedItem, index) in groupedList()"
-				:key="groupedItem.map(m => m.key).join('_')"
-			>
-				<PreviewSlide
-					:groupedItem="groupedItem"
-				/>
-			</slide>
-		</carousel>
+	<div class="categories-preview">
+		<h1 class="title">{{ $t('categoriesLabels.label') }}</h1>
+		<div class="categories-preview-carousel">
+			<carousel ref="carousel">
+				<slide
+					v-for="(groupedItem, index) in groupedList()"
+					:key="groupedItem.map(m => m.key).join('_')"
+				>
+					<PreviewSlide
+						:groupedItem="groupedItem"
+						@selectItem="selectItem"
+					/>
+				</slide>
+			</carousel>
+		</div>
 	</div>
 </template>
 

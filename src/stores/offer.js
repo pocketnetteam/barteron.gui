@@ -5,7 +5,7 @@ import AppErrors from "@/js/appErrors.js";
 
 const 
     defaultPageSize = 18,
-    homePageSize = 24,
+    homePageSize = 12,
     storageId = "offer",
     categories = new Categories(),
     storage = Pinia.defineStore(storageId, {

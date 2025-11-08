@@ -55,7 +55,7 @@
 			:tabset="[
 				{
 					tabId: 'ads',
-					title: `<i class='fa fa-list'></i> ${ $t('profileLabels.offers') } (${ offersList.length })`,
+					title: `<i class='fa fa-bars'></i> ${ $t('profileLabels.offers') } (${ offersList.length })`,
 					active: initialActiveTab === 'ads',
 				},
 				/* // TODO: barters

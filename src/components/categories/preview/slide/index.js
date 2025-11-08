@@ -1,6 +1,8 @@
 export default {
 	name: "PreviewSlide",
 
+	inject: ["dialog"],
+	
 	props: {
 		groupedItem: {
 			type: Array,
@@ -9,6 +11,8 @@ export default {
 	},
 
 	methods: {
-
+		selectItem(item) {
+			this.$emit("selectItem", item);
+		},
 	},
 }

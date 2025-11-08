@@ -4,11 +4,21 @@
 			v-for="item in groupedItem"
 			:key="item.key"
 			class="preview-item"
+			@click="selectItem(item)"
 		>
-			<div class="icon">
+			<div 
+				:class="{
+					'icon': true,
+					'subcategory': item.parent,
+					'back': item.type === 'back',
+					'link': item.type === 'link',
+				}"
+			>
 				<i :class="`fa ${item.icon}`"></i>
 			</div>
-			<div class="title">
+			<div 
+				class="title"
+			>
 				<span>{{ $t(item.name) }}</span>
 			</div>
 		</div>

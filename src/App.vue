@@ -3,6 +3,13 @@
 		id="app"
 		:class="theme"
 	>
+		<CategorySelect
+			ref="categorySelectDialog"
+			:marked="categorySelectProps.marked"
+			:value="categorySelectProps.value"
+			:title="categorySelectProps.title"
+			:mode="categorySelectProps.mode"
+		/>
 		<v-dialog ref="dialog" />
 		<div ref="lightboxContainer"></div>
 
@@ -83,6 +90,7 @@ import {
 	useLocaleStore
 } from "@/stores/locale.js";
 import { useSurveyStore } from "@/stores/survey.js";
+import CategorySelect from "@/components/categories/select/index.vue";
 
 export default {
 	name: "Barteron",
@@ -91,6 +99,7 @@ export default {
 		Loader,
 		SurveyBar,
 		OfferShareDialog,
+		CategorySelect,
 	},
 
 	computed: {
@@ -109,6 +118,8 @@ export default {
 			loading: true,
 			dialog: null,
 			lightboxContainer: null,
+			categorySelectDialog: null,
+			categorySelectProps: {},
 			minHeaderScrollPosition: 35,
 			lastScrollPosition: 0,
 			lastRoute: null,
@@ -123,6 +134,8 @@ export default {
 		return {
 			dialog: new Proxy({}, { get: () => this.dialog }),
 			lightboxContainer: () => this.lightboxContainer,
+			categorySelectDialog: () => this.categorySelectDialog,
+			setCategorySelectProps: (data) => this.setCategorySelectProps(data),
 		};
 	},
 
@@ -280,6 +293,10 @@ export default {
 			});
 		},
 
+		setCategorySelectProps(data) {
+			Vue.set(this, "categorySelectProps", (data || {}));
+		},
+
 		attachKeyboardObserver() {
 			const 
 				targetNode = document.documentElement,
@@ -379,9 +396,11 @@ export default {
 			}
 		}, 100);
 
-		this.$2watch("$refs.lightboxContainer").then(ref => {
-			this.lightboxContainer = ref;
-		}).catch(e => {
+
+		this.waitForRefs("lightboxContainer, categorySelectDialog").then(() => {
+			this.lightboxContainer = this.$refs.lightboxContainer;
+			this.categorySelectDialog = this.$refs.categorySelectDialog;
+		}).catch(e => { 
 			console.error(e);
 		});
 
