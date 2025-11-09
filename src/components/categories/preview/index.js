@@ -1,7 +1,6 @@
 import { Carousel, Slide } from "@/components/vue-snap/index.js";
 import "@/components/vue-snap/vue-snap.css";
 import PreviewSlide from "./slide/index.vue";
-import Vue from 'vue';
 
 export default {
 	name: "CategoriesPreview",
@@ -18,6 +17,7 @@ export default {
 		return {
 			parentItem: null,
 			carouselCurrentPages: {},
+			previewWidth: null,
 		};
 	},
 
@@ -45,7 +45,7 @@ export default {
 			} else if (subPreview?.length) {
 				categoryIds = subPreview
 			} else {
-				categoryIds = "13587,2,4000,2000,3000,293,619,625,888,2984,6000,8000,10542,11450,20,11700,15032,58058,12".split(",");
+				categoryIds = "13587,2,2000,3000,293,625,888,2984,6000,8000,10542,11450,20,11700,15032,58058,12".split(",");
 			};
 
 			const result = categoryIds
@@ -99,7 +99,18 @@ export default {
 			let items = this.previewItems();
 			const 
 				rows = [],
-				columnCount = 10; //Math.round(items.length / 2);
+				slideWidth = 136,
+				defaultColumnCount = 9,
+				visibleColumnCount = (this.previewWidth ? Math.floor(this.previewWidth / slideWidth) : defaultColumnCount);
+
+			let columnCount = defaultColumnCount;
+			if (items.length <= visibleColumnCount) {
+				columnCount = items.length;
+			} else if (Math.round(items.length / 2) <= visibleColumnCount) {
+				columnCount = visibleColumnCount;
+			} else {
+				columnCount = Math.round(items.length / 2);
+			};
 
 			while (items.length) {
 				const part = items.splice(0, columnCount);
@@ -186,6 +197,20 @@ export default {
 				this.showVersionConflictIfNeeded(e);
 			});
 		},
+
+		updatePreviewWidth() {
+			this.previewWidth = this.$refs.carousel?.$el?.clientWidth;
+		},
+	},
+
+	mounted() {
+		this.$2watch("$refs.carousel").then(() => {
+			this.updatePreviewWidth();
+		});
+	},
+
+	updated() {
+		this.updatePreviewWidth();
 	},
 
 	activated() {

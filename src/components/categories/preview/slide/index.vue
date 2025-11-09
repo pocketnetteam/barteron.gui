@@ -19,7 +19,7 @@
 			<div 
 				class="title"
 			>
-				<span>{{ $t(item.name) }}</span>
+				<span :title="$t(item.name)">{{ $t(item.name) }}</span>
 			</div>
 		</div>
 	</div>

@@ -1,11 +1,12 @@
 <template>
 	<div class="categories-preview">
-		<h1 class="title">{{ $t('categoriesLabels.label') }}</h1>
+		<h1 class="title">{{ $t('offer_categories') }}</h1>
 		<div class="categories-preview-carousel">
 			<carousel ref="carousel">
 				<slide
 					v-for="(groupedItem, index) in groupedList()"
 					:key="groupedItem.map(m => m.key).join('_')"
+					class="fixed-layout"
 				>
 					<PreviewSlide
 						:groupedItem="groupedItem"

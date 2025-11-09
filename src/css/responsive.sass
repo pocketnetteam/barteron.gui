@@ -257,8 +257,9 @@
 
 		.vs-carousel
 			.vs-carousel__slide
-				flex: 0 0 calc( 50% - 7px ) // Gap - 2px
-				width: calc( 50% - 7px ) // Gap - 2px
+				&:not(.fixed-layout)
+					flex: 0 0 calc( 50% - 7px ) // Gap - 2px
+					width: calc( 50% - 7px ) // Gap - 2px
 
 			.vs-carousel__arrows
 				display: none
@@ -266,8 +267,9 @@
 		.compact-view
 			.vs-carousel
 				.vs-carousel__slide
-					flex: 0 0 calc( 33% - 7px ) // Gap - 2px
-					width: calc( 33% - 7px ) // Gap - 2px
+					&:not(.fixed-layout)
+						flex: 0 0 calc( 33% - 7px ) // Gap - 2px
+						width: calc( 33% - 7px ) // Gap - 2px
 
 		div[class^="barter-item-"].barter-item-row
 			flex-direction: column
@@ -295,8 +297,9 @@
 	#app
 		.vs-carousel
 			.vs-carousel__slide
-				flex: 0 0 calc( 33.33% - 7px ) // Gap - 2px
-				width: calc( 33.33% - 7px ) // Gap - 2px
+				&:not(.fixed-layout)
+					flex: 0 0 calc( 33.33% - 7px ) // Gap - 2px
+					width: calc( 33.33% - 7px ) // Gap - 2px
 
 			.vs-carousel__arrows
 				display: none
@@ -304,5 +307,6 @@
 		.compact-view
 			.vs-carousel
 				.vs-carousel__slide
-					flex: 0 0 calc( 25% - 7px ) // Gap - 2px
-					width: calc( 25% - 7px ) // Gap - 2px
+					&:not(.fixed-layout)
+						flex: 0 0 calc( 25% - 7px ) // Gap - 2px
+						width: calc( 25% - 7px ) // Gap - 2px
