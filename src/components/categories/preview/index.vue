@@ -1,6 +1,6 @@
 <template>
 	<div class="categories-preview">
-		<h1 class="title">{{ $t('offer_categories') }}</h1>
+		<h1 class="title">{{ $t(parentItem?.name || 'offer_categories') }}</h1>
 		<div class="categories-preview-carousel">
 			<carousel ref="carousel">
 				<slide
