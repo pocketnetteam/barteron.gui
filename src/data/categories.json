@@ -18277,6 +18277,13 @@
 		"children": [],
 		"order": 30
 	},
+	"58094": {
+		"name": "mouse_pads",
+		"id": 58094,
+		"parent": 58090,
+		"children": [],
+		"order": 40
+	},
 	"58095": {
 		"name": "memory_cards",
 		"id": 58095,
