@@ -41,6 +41,7 @@ export default {
 					6,
 					507,
 					522,
+					526,
 					527,
 				],
 				"11450": [
@@ -92,10 +93,12 @@ export default {
 				}))
 				.map(m => this.previewItem(m));
 
-			if (this.parentItem?.id) {
+			const isSubcategory = this.parentItem?.id;
+
+			if (isSubcategory) {
 				const backItem = {
 					name: "back_to_preview",
-					icon: "fa-chevron-left", //"fa-chevron-circle-left", //"fa-chevron-left", //, //"fa-arrow-alt-circle-left", //
+					icon: "fa-chevron-left",
 					type: "back",
 				};
 
@@ -105,11 +108,22 @@ export default {
 			const allCategoriesItem = {
 				name: "all_categories",
 				icon: "fa-bars",
-				type: "link",
+				type: "select",
 				parentItemId: this.parentItem?.id,
 			};
 
 			result.push(this.previewItem(allCategoriesItem));
+
+			if (isSubcategory) {
+				const allOffersItem = {
+					name: "all_offers",
+					icon: "fa-arrow-alt-circle-right",
+					type: "offers",
+					parentItemId: this.parentItem?.id,
+				};
+
+				result.push(this.previewItem(allOffersItem));
+			}
 
 			return result;
 		},
@@ -119,7 +133,7 @@ export default {
 				isCategory = rawItem.type === "category",
 				data = isCategory ? this.categories.findById(rawItem.id) : {},
 				key = (data.name || rawItem.name),
-				defaultIcon = "fa-th-large";
+				defaultIcon = "fa-folder-open";
 
 			const result = {
 				...data,
@@ -171,19 +185,14 @@ export default {
 				if (subPreview) {
 					this.setParentItem(item);
 				} else {
-					this.setCarouselCurrentPage();
-					this.$router.push({
-						name: "category",
-						params: { id: item.id }
-					}).catch(e => {
-						console.error(e);
-						this.showVersionConflictIfNeeded(e);
-					});
+					this.goToCategory(item.id);
 				}
 			} else if (item.type === "back") {
 				this.setParentItem(null);
-			} else if (item.type === "link") {
+			} else if (item.type === "select") {
 				this.showCategorySelectDialog(item.parentItemId);
+			} else if (item.type === "offers") {
+				this.goToCategory(item.parentItemId);
 			};
 		},
 
@@ -209,10 +218,18 @@ export default {
 			});
 		},
 
+		goToCategory(id) {
+			this.setCarouselCurrentPage();
+			this.categorySelected(id);
+		},
+
 		showCategorySelectDialog(parentId) {
+			this.setCarouselCurrentPage();
+			
 			this.setCategorySelectProps({
 				value: parentId,
 				marked: undefined,
+				resetScroll: true,
 			});
 			const dialog = this.categorySelectDialog();
 			dialog.$once("selected", (id) => {

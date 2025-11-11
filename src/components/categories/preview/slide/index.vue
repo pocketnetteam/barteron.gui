@@ -10,8 +10,7 @@
 				:class="{
 					'icon': true,
 					'subcategory': item.parent,
-					'back': item.type === 'back',
-					'link': item.type === 'link',
+					[`item-type-${item.type}`]: true,
 				}"
 			>
 				<i :class="`fa ${item.icon}`"></i>

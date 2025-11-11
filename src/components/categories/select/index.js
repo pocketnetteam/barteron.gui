@@ -31,6 +31,11 @@ export default {
 			type: String,
 			default: ""
 		},
+
+		resetScroll: {
+			type: Boolean,
+			default: false
+		},
 	},
 
 	data() {
@@ -94,6 +99,10 @@ export default {
 		 */
 		hide() {
 			this.visible = false;
+
+			if (this.resetScroll) {
+				this.$refs.lightbox?.resetScroll();
+			};
 
 			if (this.belongsToAsideComponent()) {
 				const el = this.$components.aside.$el;

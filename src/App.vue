@@ -9,6 +9,7 @@
 			:value="categorySelectProps.value"
 			:title="categorySelectProps.title"
 			:mode="categorySelectProps.mode"
+			:resetScroll="categorySelectProps.resetScroll"
 		/>
 		<v-dialog ref="dialog" />
 		<div ref="lightboxContainer"></div>

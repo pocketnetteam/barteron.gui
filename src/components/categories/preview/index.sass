@@ -1,6 +1,6 @@
 @import "@/css/vars.sass"
 
-$item-width-max: 284px
+$item-slide-width: 136px
 
 .categories-preview
 	margin-top: $r * 4
@@ -8,7 +8,6 @@ $item-width-max: 284px
 
 	h1.title
 		text-align: center
-		// color: $bulma
 		margin-bottom: $r * 4
 		font-size: 1.6em
 		overflow: hidden
@@ -18,27 +17,13 @@ $item-width-max: 284px
 
 	.categories-preview-carousel
 		.vs-carousel
-			// border: 1px solid $beerus
-			// padding: 20px
-			// border-radius: 20px
-
 			.vs-carousel__wrapper
-				gap: 0 //40px
-			// 	border-radius: 11px 11px 0 0
+				gap: 0
 		
 			.vs-carousel__slide
-				width: 136px
+				width: $item-slide-width
 				display: block
 				flex: none
-
-			// 	flex: 0 0 calc( 25% - 7px ) // Gap - 2px
-			// 	width: calc( 25% - 7px ) // Gap - 2px
-
-			// 	& > *
-			// 		box-sizing: content-box
-			// 		display: block
-			// 		margin: 0 auto
-			// 		max-width: $item-width-max
 
 		.vs-carousel__arrows
 			+fontAwesome("")

@@ -381,7 +381,6 @@
 		"paragraph2": "You can read the terms of the program and register for it here:",
 		"referral_link_copy_success": "Referral link copied to clipboard",
 		"referral_link_copy_fail": "Error getting referral link"
-
 	},
 
 	"themeLabels": {
@@ -423,6 +422,7 @@
 	"offer_categories": "Offer categories",
 	"new_offers": "New offers",
 	"all_categories": "All categories",
+	"all_offers": "All offers",
 	"back_to_preview": "Back",
 	"title": "Title",
 	"my_list": "My list",

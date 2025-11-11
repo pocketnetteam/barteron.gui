@@ -1,8 +1,8 @@
 @import "@/css/vars.sass"
 
 .categories-preview-slide
-	margin: 0 18px
-	width: 100px //100%
+	margin: 0 8px
+	width: 120px
 	display: flex
 	flex-direction: column
 	justify-content: start
@@ -13,27 +13,26 @@
 		width: 100%
 		display: flex
 		flex-direction: column
+		align-items: center
 		gap: 10px
 		cursor: pointer
 
 		.icon
-			width: 100%
+			width: 100px
 			height: 100px
-			background: $beerus // #03477812 //
+			background: $beerus
 			display: flex
 			align-items: center
 			justify-content: center
-			font-size: 28px
+			font-size: 32px
 			color: $bulma
 			border-radius: 50px
 			+transition(color)
 			+transition(background-color)
-
-			&.subcategory
-				font-size: 20px
 			
-			&.back,
-			&.link
+			&.item-type-back,
+			&.item-type-select,
+			&.item-type-offers,
 				border: 2px solid $bulma
 				background: none
 		
@@ -46,7 +45,6 @@
 			overflow: hidden
 			white-space: pre-wrap
 			text-overflow: ellipsis
-			// font-weight: 300
 
 		&:hover
 			.icon
