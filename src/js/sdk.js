@@ -242,6 +242,16 @@ class SDK {
 		this.sdk = new window.BastyonSdk();
 		this.sdk.init();
 
+		this.sdk.serviceWorker?.register().then((registration) => {
+			if (registration) {
+				console.log("🔒 Service Worker registered - external requests will use Tor when available");
+			} else {
+				console.log("ℹ️ Service Worker not available or Tor not supported");
+			}
+		}).catch(error => {
+			console.error("Service Worker registration failed:", error);
+		});
+
 		this.emit = this.sdk.emit;
 		this.on = this.sdk.on;
 		this.off = this.sdk.off;
