@@ -229,17 +229,24 @@ export default {
 			this.setCategorySelectProps({
 				value: parentId,
 				marked: undefined,
+				title: undefined,
+				mode: undefined,
 				resetScroll: true,
 			});
-			const dialog = this.categorySelectDialog();
-			dialog.$once("selected", (id) => {
-				this.categorySelected(id);
-			});
-			dialog.$once("onHide", () => {
-				dialog.$off();
-				this.setCategorySelectProps(null);
-			});
-			dialog.show();
+
+			const showAfterPropsSetting = () => {
+				const dialog = this.categorySelectDialog();
+				dialog.$once("selected", (id) => {
+					this.categorySelected(id);
+				});
+				dialog.$once("onHide", () => {
+					dialog.$off();
+					this.setCategorySelectProps(null);
+				});
+				dialog.show();
+			}
+
+			this.$nextTick(showAfterPropsSetting);
 		},
 
 		categorySelected(id) {

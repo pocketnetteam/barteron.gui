@@ -86,6 +86,12 @@ export default {
 		show() {
 			this.clear().visible = true;
 
+			this.$nextTick(() => {
+				if (this.resetScroll) {
+					this.$refs.lightbox?.resetScroll();
+				};
+			});
+
 			if (this.belongsToAsideComponent()) {
 				const el = this.$components.aside.$el;
 				el.classList.add("showing-lightbox");
