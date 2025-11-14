@@ -164,17 +164,15 @@ export default {
 		},
 
 		priceFilterEnabled() {
-			const source = this.$components.content?.getFilters();
-			return source && (source.priceMin || source.priceMax);
+			return this.$components.content?.priceFilterEnabled();
 		},
 
 		exchangeOptionsFilterEnabled() {
-			const source = this.$components.content?.getFilters();
-			return source?.exchangeOptionsTags?.length;
+			return this.$components.content?.exchangeOptionsFilterEnabled();
 		},
 
 		filtersEnabled() {
-			return this.priceFilterEnabled() || this.exchangeOptionsFilterEnabled();
+			return this.$components.content?.filtersEnabled();
 		},
 
 		resetFilters() {
@@ -205,6 +203,13 @@ export default {
 				value = this.filtersEnabled();
 
 			ref?.mark(value);
+		},
+
+		openIfNeeded() {
+			const ref = this.$refs.asideCategories;
+			if (ref && !(ref.active)) {
+				ref.toggle();
+			}
 		},
 
 		hideIfNeeded() {

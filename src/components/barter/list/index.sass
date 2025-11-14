@@ -1,6 +1,7 @@
 @import "@/css/vars.sass"
 
-$item-width-max: 284px
+$item-width-max: 294px
+$item-width-max-home-page: 284px
 $compact-item-width-max: 180px
 
 .barter-carousel-holder
@@ -93,6 +94,12 @@ $compact-item-width-max: 180px
 		grid-template-rows: 1fr
 		justify-content: flex-start
 		grid-gap: 24px
+
+.barter-list-tile
+	&.home-page
+		.barter-list-holder
+			.barter-track
+				grid-template-columns: repeat(auto-fit, $item-width-max-home-page)
 
 .barter-list-row
 	width: 100%

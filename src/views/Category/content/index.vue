@@ -2,56 +2,54 @@
 	<v-content v-if="!(isEmptyListFromFullSearch())">
 		<div 
 			v-if="!(isHomeRoute)"
-			class="row"
+			class="barter-list-settings row"
 		>
-			<div class="col no-offset">
-				<v-select
-					ref="order"
-					:dropdown="orders.map(order => ({
-						text: `
-							<i class='fa icon ${ 
-								(() => {
-									switch (order.value) {
-										case 'height_asc': return 'fa-sort-alpha-up-alt';
-										case 'height_desc': return 'fa-sort-alpha-down';
-										case 'price_asc': return 'fa-sort-numeric-down';
-										case 'price_desc': return 'fa-sort-numeric-up-alt';
-									}
-								})()
-							}'></i>
-							${ $t(`orderLabels.${ order.value }`) }
-						`,
-						value: order.value
-					}))"
-					@selected="selectOrderEvent"
-				/>
+			<div class="filter">
+				<v-button
+					:vType="filtersEnabled() ? 'hit' : 'stroke'"
+					vSize="md"
+					@click="filterClick"
+				>
+					<i class="fa fa-filter"></i>
+					<span class="title">Фильтр</span>
+				</v-button>
 			</div>
 
-			<div class="col right">
-				<v-select
-					ref="bartersView"
-					:dropdown="views.map(view => ({
-						text: `
-							<i class='fa icon ${ 
-								(() => {
-									switch (view.value) {
-										case 'tile': return 'fa-th-large';
-										case 'row': return 'fa-align-justify';
-									}
-								})()
-							}'></i>
-							${ $t(`viewLabels.${ view.value }`) }
-						`,
-						value: view.value
-					}))"
-					@selected="selectViewEvent"
-				/>
+			<div class="orders-barters-view-group">
+				<div class="orders">
+					<v-select
+						ref="order"
+						:dropdown="orders.map(order => ({
+							text: `
+								<i class='fa icon ${ ordersIcon[order.value] }'></i>
+								<span class='title'>${ $t(`orderLabels.${ order.value }`) }</span>
+							`,
+							value: order.value
+						}))"
+						@selected="selectOrderEvent"
+					/>
+				</div>
+
+				<div class="barters-view">
+					<v-select
+						ref="bartersView"
+						:dropdown="views.map(view => ({
+							text: `
+								<i class='fa icon ${ bartersViewIcon[view.value] }'></i>
+								<span class='title'>${ $t(`viewLabels.${ view.value }`) }</span>
+							`,
+							value: view.value
+						}))"
+						@selected="selectViewEvent"
+					/>
+				</div>
 			</div>
 		</div>
 
 		<div class="row category-holder">
 			<BarterList
 				v-if="items?.length"
+				:class="isHomeRoute ? 'home-page' : ''"
 				:items="items"
 				:vType="isHomeRoute ? 'tile' : bartersView"
 			/>
