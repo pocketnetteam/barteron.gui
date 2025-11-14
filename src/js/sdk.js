@@ -1144,7 +1144,7 @@ class SDK {
 				vs_currencies: currencyIds,
 			}).toString() }
 		`, 
-			{ timeout: 5000 }
+			{ timeout: 60000 }
 		)
 		.then(result => result.json())
 		.then(data => {
@@ -1174,7 +1174,9 @@ class SDK {
 				fsym: "USD",
 				tsyms: missingCurrencyIds
 			}).toString() }
-		`)
+		`,
+			{ timeout: 60000 }
+		)
 		.then(result => result.json())
 		.then(data => {
 			const 
