@@ -12,6 +12,7 @@ export default {
 
 	data() {
 		return {
+			swipeGestureData: {},
 			applyDisabled: true,
 			priceVariant: '-',
 			lastPriceInputId: null,
@@ -222,6 +223,51 @@ export default {
 		isEmptyListFromFullSearch() {
 			return offerStore.isEmptyListFromFullSearch(this.$route);
 		},
+
+		addSwipeGesture() {
+			const 
+				data = this.swipeGestureData,
+				threshold = 50,
+				zeroPoint = {
+					x: 0,
+					y: 0
+				};
+
+			data.startPoint = {...zeroPoint};
+			data.finishPoint = {...zeroPoint};
+
+			data.touchstartHandler = (e) => {
+				data.startPoint.x = e.touches[0].clientX;
+				data.startPoint.y = e.touches[0].clientY;
+			};
+
+			data.touchendHandler = (e) => {
+				data.finishPoint.x = e.changedTouches[0].clientX;
+				data.finishPoint.y = e.changedTouches[0].clientY;
+				
+				const delta = {
+					x: data.finishPoint.x - data.startPoint.x,
+					y: data.finishPoint.y - data.startPoint.y,
+				};
+
+				if (delta.x < 0 && Math.abs(delta.x) > threshold && Math.abs(delta.y) < threshold) {
+					this.hideIfNeeded();
+				}
+			};
+
+			const target = this.$el;
+			target.addEventListener("touchstart", data.touchstartHandler, { passive: true });
+			target.addEventListener("touchend", data.touchendHandler, { passive: true });
+		},
+
+		removeSwipeGesture() {
+			const 
+				target = this.$el,
+				data = this.swipeGestureData;
+
+			target.removeEventListener("touchstart", data.touchstartHandler);
+			target.removeEventListener("touchend", data.touchendHandler);
+		},
 	},
 
 	mounted() {
@@ -229,9 +275,15 @@ export default {
 
 		this.$2watch("$refs.asideCategories").then(() => {
 			this.markIfNeeded();
+			this.addSwipeGesture();
 		}).catch(e => { 
 			console.error(e);
 		});
+
+	},
+
+	beforeDestroy() {
+		this.removeSwipeGesture();
 	},
 
 	watch: {

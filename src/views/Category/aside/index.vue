@@ -168,6 +168,7 @@
 						@click="resetFilters"
 					>{{ $t('buttonLabels.reset') }}</v-button>
 					<v-button
+						vType="hit"
 						:disabled="applyDisabled"
 						@click="applyFilters"
 					>{{ $t('buttonLabels.apply') }}</v-button>

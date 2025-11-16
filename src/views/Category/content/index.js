@@ -63,8 +63,8 @@ export default {
 
 		ordersIcon() {
 			return {
-				"height_asc": "fa-sort-alpha-up-alt",
-				"height_desc": "fa-sort-alpha-down",
+				"height_asc": "fa-sort-amount-down-alt",
+				"height_desc": "fa-sort-amount-up",
 				"price_asc": "fa-sort-numeric-down",
 				"price_desc": "fa-sort-numeric-up-alt",
 			};
