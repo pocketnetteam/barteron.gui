@@ -49,6 +49,7 @@
 		<div class="row category-holder">
 			<BarterList
 				v-if="items?.length"
+				keyPrefix="category"
 				:items="items"
 				:vType="bartersView"
 			/>

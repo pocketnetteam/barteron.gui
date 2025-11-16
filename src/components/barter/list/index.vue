@@ -13,16 +13,14 @@
 				class="barter-track"
 				ref="track"
 			>
-				<li
-					v-for="(item, index) in list"
-					:key="index"
-				>
+				<li v-for="item in list">
 					<loader
 						type="offer-tile"
 						v-if="loaderState"
 					/>
 					<BarterItem
 						v-else
+						:key="`${keyPrefix}_${item?.hash}`"
 						:item="item"
 						:vType="vType"
 						:hideInfo="hideInfo"
@@ -53,16 +51,14 @@
 			v-else
 		>
 			<carousel>
-				<slide
-					v-for="(item, index) in list"
-					:key="index"
-				>
+				<slide v-for="item in list">
 					<loader
 						type="offer-tile"
 						v-if="loaderState"
 					/>
 					<BarterItem
 						v-else
+						:key="`${keyPrefix}_${item?.hash}`"
 						:item="item"
 						:vType="vType"
 						:hideInfo="hideInfo"
