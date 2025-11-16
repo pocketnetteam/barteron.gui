@@ -15,6 +15,10 @@ export default {
 	},
 
 	props: {
+		keyPrefix: {
+			type: String,
+			default: ""
+		},
 		items: {
 			type: Array,
 			default: () => []

@@ -184,15 +184,7 @@ export default {
 					viewedStore.updateInPatchMode(filteredHashes);
 				};
 
-				const newViewedList = filteredHashes.map(hash => allOffers.filter(f => f.hash === hash).pop());
-
-				// to avoid re-render bug for images we change viewedList twice
-				// we left first item in list to prevent disappear viewedList
-				// and then in setTimeout we put all items to viewedList
-				this.viewedList = newViewedList.slice(0,1);
-				setTimeout(() => {
-					this.viewedList = newViewedList;
-				});
+				this.viewedList = filteredHashes.map(hash => allOffers.filter(f => f.hash === hash).pop());
 			}
 		},
 	},
