@@ -203,6 +203,15 @@
 							</li>
 						</ul>
 					</div>
+
+					<p 
+						v-if="item.description" 
+						class="description-row"
+					>
+						<router-link :to="offerLink">
+							<LinkifiedText :text="item.description"/>
+						</router-link>
+					</p>
 				</div>
 
 				<div class="pricing">
