@@ -128,7 +128,7 @@
 			</div>
 
 			<div class="row to" v-if="item?.tags?.length">
-				<ul :style="exchangeList.length > 2 ? `--count: '+${ exchangeList.length - 2 }'; --len: ${ exchangeList.length.toString().length + 1 }` : ''">
+				<ul :style="exchangeList.length > 2 ? `--count: '+${ exchangeList.length - 2 }'; --len: ${ (exchangeList.length - 2).toString().length + 1 }` : ''">
 					<li><span>{{ $t('barterLabels.exchange') }}: </span></li>
 					<li
 						v-for="(link, index) in exchangeList.slice(0, 2)"
@@ -189,7 +189,7 @@
 					</span>
 
 					<div class="to" v-if="item?.tags?.length">
-						<ul :style="exchangeList.length > 2 ? `--count: '+${ exchangeList.length - 2 }'; --len: ${ exchangeList.length.toString().length + 1 }` : ''">
+						<ul :style="exchangeList.length > 2 ? `--count: '+${ exchangeList.length - 2 }'; --len: ${ (exchangeList.length - 2).toString().length + 1 }` : ''">
 							<li><span>{{ $t('barterLabels.exchange') }}: </span></li>
 							<li
 								v-for="(link, index) in exchangeList.slice(0, 2)"
