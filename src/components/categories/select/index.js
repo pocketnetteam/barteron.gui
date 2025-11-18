@@ -31,6 +31,11 @@ export default {
 			type: String,
 			default: ""
 		},
+
+		resetScroll: {
+			type: Boolean,
+			default: false
+		},
 	},
 
 	data() {
@@ -81,10 +86,18 @@ export default {
 		show() {
 			this.clear().visible = true;
 
+			this.$nextTick(() => {
+				if (this.resetScroll) {
+					this.$refs.lightbox?.resetScroll();
+				};
+			});
+
 			if (this.belongsToAsideComponent()) {
 				const el = this.$components.aside.$el;
 				el.classList.add("showing-lightbox");
-			}
+			};
+
+			this.$emit("onShow", this);
 		},
 
 		/**
@@ -93,10 +106,16 @@ export default {
 		hide() {
 			this.visible = false;
 
+			if (this.resetScroll) {
+				this.$refs.lightbox?.resetScroll();
+			};
+
 			if (this.belongsToAsideComponent()) {
 				const el = this.$components.aside.$el;
 				el.classList.remove("showing-lightbox");
-			}
+			};
+
+			this.$emit("onHide", this);
 		},
 
 		/**

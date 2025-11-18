@@ -1,5 +1,7 @@
+import CategoriesPreview from "@/components/categories/preview/index.vue";
 import PopularList from "@/components/categories/popular-list/index.vue";
 import BarterList from "@/components/barter/list/index.vue";
+import LegalInfo from "@/components/legal-info/index.vue";
 import Banner from "@/components/banner/index.vue";
 import viewedStore from "@/stores/viewed.js";
 import banProcessor from "@/js/banUtils.js";
@@ -8,8 +10,10 @@ export default {
 	name: "Home",
 
 	components: {
+		CategoriesPreview,
 		PopularList,
 		BarterList,
+		LegalInfo,
 		Banner
 	},
 
@@ -19,6 +23,25 @@ export default {
 			viewedList: [],
 			needForceUpdate: false,
 		}
+	},
+
+	computed: {
+		requiredLegalInfoItemKeys() {
+			return [
+				"user_agreement", 
+				"personal_data_processing_policy"
+			];
+		},
+
+		legalInfoAvailable() {
+			const
+				isHomePage = (this.$route.name === "home"),
+				locale = this.$root.$i18n.locale,
+				data = (isHomePage && LegalInfo.methods.allDocumentsWithoutContext?.()) || {},
+				existingKeys = (data[locale] || []).map(m => m.i18nKey);
+
+			return this.requiredLegalInfoItemKeys.some(f => existingKeys.includes(f));
+		},
 	},
 
 	methods: {
