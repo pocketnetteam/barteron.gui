@@ -4,25 +4,6 @@ import offerStore, { useOfferStore } from "@/stores/offer.js";
 import { mapState, mapWritableState, mapActions } from "pinia";
 import { useLocaleStore } from "@/stores/locale.js";
 
-function setValueToVSelect(ref, value) {
-	const
-		items = ref?.items || [],
-		targetItem = items.filter(item => item.value === value)[0];
-
-	if (targetItem) {
-		ref.setValue(targetItem);
-	}
-}
-
-function getOrderFromString(value) {
-	const state = (value || "").split("_");
-
-	return {
-		orderBy: state[0] ?? "height",
-		orderDesc: state[1] === "desc"
-	};
-}
-
 export default {
 	name: "Content",
 
@@ -38,6 +19,7 @@ export default {
 			"items",
 			"itemsRoute",
 			"pageStart",
+			"pageSize",
 			"isLoading",
 			"bartersView",
 		]),
@@ -48,7 +30,6 @@ export default {
 		]),
 
 		...mapState(useOfferStore, [
-			"pageSize",
 			"isSubcategory",
 			"topParentCategory",
 			"secondLevelParentCategory",
@@ -57,6 +38,10 @@ export default {
 		...mapState(useLocaleStore, [
 			"locale",
 		]),
+
+		isHomeRoute() {
+			return this.$route?.name === "home";
+		},
 
 		/**
 		 * Make list of order by
@@ -74,6 +59,22 @@ export default {
 		 */
 		views() {
 			return this.parseLabels("viewLabels");
+		},
+
+		ordersIcon() {
+			return {
+				"height_asc": "fa-sort-amount-down-alt",
+				"height_desc": "fa-sort-amount-up",
+				"price_asc": "fa-sort-numeric-down",
+				"price_desc": "fa-sort-numeric-up-alt",
+			};
+		},
+
+		bartersViewIcon() {
+			return {
+				"tile": "fa-th-large",
+				"row": "fa-align-justify",
+			};
 		},
 
 		/**
@@ -145,12 +146,30 @@ export default {
 			"getFilters"
 		]),
 
+		priceFilterEnabled() {
+			const source = this.getFilters();
+			return (source?.priceMin || source?.priceMax);
+		},
+
+		exchangeOptionsFilterEnabled() {
+			const source = this.getFilters();
+			return source?.exchangeOptionsTags?.length;
+		},
+
+		filtersEnabled() {
+			return this.priceFilterEnabled() || this.exchangeOptionsFilterEnabled();
+		},
+
+		filterClick() {
+			this.$components.aside?.openIfNeeded();
+		},
+
 		showMoreEvent() {
 			this.loadMore(this.$route);
 		},
 
 		selectOrderEvent(newValue) {
-			const newOrder = getOrderFromString(newValue?.value);
+			const newOrder = this.getOrderFromString(newValue?.value);
 			this.changeOrder(newOrder, this.$route);
 		},
 
@@ -186,14 +205,33 @@ export default {
 		 */
 		setOrderValueToElement() {
 			const value = this.getOrderStringFromFilter();
-			setValueToVSelect(this.$refs.order, value);
+			this.setValueToVSelect(this.$refs.order, value);
 		},
 
 		/**
 		 * Set barters view to element
 		 */
 		setBartersViewToElement() {
-			setValueToVSelect(this.$refs.bartersView, this.bartersView);
+			this.setValueToVSelect(this.$refs.bartersView, this.bartersView);
+		},
+
+		setValueToVSelect(ref, value) {
+			const
+				items = ref?.items || [],
+				targetItem = items.filter(item => item.value === value)[0];
+
+			if (targetItem) {
+				ref.setValue(targetItem);
+			}
+		},
+
+		getOrderFromString(value) {
+			const state = (value || "").split("_");
+
+			return {
+				orderBy: state[0] ?? "height",
+				orderDesc: state[1] === "desc"
+			};
 		},
 
 		isEmptyListFromFullSearch() {
@@ -252,12 +290,14 @@ export default {
 	},
 
 	mounted() {
-		this.waitForRefs("order, bartersView").then(() => {
-			this.setOrderValueToElement();
-			this.setBartersViewToElement();
-		}).catch(e => { 
-			console.error(e);
-		});
+		if (!(this.isHomeRoute)) {
+			this.waitForRefs("order, bartersView").then(() => {
+				this.setOrderValueToElement();
+				this.setBartersViewToElement();
+			}).catch(e => { 
+				console.error(e);
+			});
+		}
 	},
 
 	beforeRouteEnter (to, from, next) {

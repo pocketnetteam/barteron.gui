@@ -8,7 +8,6 @@ const routes = [
 		name: "home",
 		components: {
 			default: () => import("@/views/Home/index.vue"),
-			aside: () => import("@/views/Category/aside/index.vue"),
 			content: () => import("@/views/Category/content/index.vue")
 		}
 	},

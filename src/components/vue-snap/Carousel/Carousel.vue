@@ -157,7 +157,7 @@ export default {
       this.$refs.vsWrapper.addEventListener('scroll', this.onScrollFn)
       window.addEventListener('resize', this.onResizeFn, false)
 
-      this.$on('go-to-page', index => this.goToSlide(index))
+      this.$on('go-to-page', (index, options) => this.goToSlide(index, options))
 
       /**
        * Carousel mounted
@@ -267,14 +267,15 @@ export default {
     changeSlide(direction) {
       this.goToSlide(this.currentPage + direction)
     },
-    goToSlide(index) {
+    goToSlide(index, options = {}) {
       if (!this.slidesWidth[index]) {
         return
       }
 
       this.$refs.vsWrapper.scrollTo({
         left: this.slidesWidth[index].offsetLeft,
-        behavior: 'smooth'
+        behavior: 'smooth',
+        ...options,
       })
 
       this.setCurrentPage(index)

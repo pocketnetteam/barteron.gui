@@ -10,7 +10,7 @@
 			id="show-categories-button"
 			@click="$refs.categorySelect.show()"
 		>
-			<i class="fa fa-list"></i>
+			<i class="fa fa-bars"></i>
 		</v-button>
 	</div>
 </template>

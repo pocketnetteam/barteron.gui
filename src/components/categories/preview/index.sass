@@ -1,0 +1,73 @@
+@import "@/css/vars.sass"
+
+$item-slide-width: 136px
+
+.categories-preview
+	margin-top: $r * 4
+	margin-bottom: $r * 12
+
+	h1.title
+		text-align: center
+		margin-bottom: $r * 4
+		font-size: 1.6em
+		overflow: hidden
+		white-space: nowrap
+		text-overflow: ellipsis
+
+
+	.categories-preview-carousel
+		.vs-carousel
+			.vs-carousel__wrapper
+				gap: 0
+		
+			.vs-carousel__slide
+				width: $item-slide-width
+				display: block
+				flex: none
+
+		.vs-carousel__arrows
+			+fontAwesome("")
+			background: $primary
+			border: 1px solid $beerus
+			border-radius: 8px
+			cursor: pointer
+			display: flex
+			align-items: center
+			justify-content: center
+			font-size: 0
+			text-align: center
+			margin: 0
+			padding: 8px
+			opacity: .8
+			outline: none
+			top: 50%
+			transform: translate(0, -50%)
+			height: 36px
+			width: 36px
+			z-index: 10
+
+			&:not(:disabled)
+				&:hover
+					&:before
+						color: $blue
+
+			&:disabled
+				display: none
+				cursor: default
+
+				&:before
+					color: $trunks
+
+			&:before
+				+transition()
+				color: $bulma
+				font-size: 1.4rem
+
+		.vs-carousel__arrows--left
+			&:before
+				content: "\f104"
+
+		.vs-carousel__arrows--right
+			&:before
+				content: "\f105"
+				margin: 0 0 0 3px
