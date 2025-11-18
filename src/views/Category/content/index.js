@@ -123,7 +123,7 @@ export default {
 
 		viewingParentCategory() {
 			return !(this.isLoading || this.isSearchEnabled() || this.isFiltersActive()) 
-				&& (this.items?.length < 10) 
+				&& (this.items?.length < 20) 
 				&& this.isSubcategory
 				&& (
 					 this.topParentCategoriesToShowPrompt.includes(this.topParentCategory.id) && this.topParentCategory
