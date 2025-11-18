@@ -50,6 +50,7 @@
 			<BarterList
 				v-if="items?.length"
 				:class="isHomeRoute ? 'home-page' : ''"
+				keyPrefix="category"
 				:items="items"
 				:vType="isHomeRoute ? 'tile' : bartersView"
 			/>

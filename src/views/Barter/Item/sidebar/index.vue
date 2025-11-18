@@ -1,5 +1,5 @@
 <template>
-	<v-sidebar>
+	<v-sidebar :key="item?.hash">
 		<div class="box">
 			<Caption :item="item"/>
 			<Price :item="item"/>

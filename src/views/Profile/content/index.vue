@@ -130,6 +130,7 @@
 					<template #active>
 						<BarterList
 							class="tabcontent-holder"
+							keyPrefix="profile_active"
 							:items="offersActive"
 							:vType="bartersView"
 							:loaderState="fetching"
@@ -179,6 +180,7 @@
 					<template #inactive>
 						<BarterList
 							class="tabcontent-holder"
+							keyPrefix="profile_inactive"
 							:items="offersInactive"
 							:vType="bartersView"
 						>
@@ -237,6 +239,7 @@
 			<template #favorites v-if="isMyProfile">
 				<BarterList
 					class="tabcontent-holder"
+					keyPrefix="profile_favorites"
 					:items="favoriteList"
 					:vType="bartersView"
 					:loaderState="fetching"
