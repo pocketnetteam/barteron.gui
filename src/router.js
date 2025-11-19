@@ -101,7 +101,12 @@ const router = new VueRouter({
 		if (to.hash) {
 			return {selector: to.hash}
 		} else if(savedPosition) {
-			return savedPosition;
+			document.body.scrollTo({
+				top: savedPosition.y || 0,
+				left: savedPosition.x || 0,
+				behavior: "instant",
+			});
+			return;
 		} else {
 			Vue.nextTick(() => {
 				const mixin = Vue.prototype.shared;
