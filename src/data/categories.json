@@ -17073,6 +17073,209 @@
 		"children": [],
 		"order": 40
 	},
+	"5000": {
+		"name": "health",
+		"icon": "fa-heartbeat",
+		"id": 5000,
+		"parent": null,
+		"children": [
+			5001,
+			5002,
+			5019,
+			5020
+		],
+		"order": 342
+	},
+	"5001": {
+		"name": "medicinal_plants",
+		"id": 5001,
+		"parent": 5000,
+		"children": [],
+		"order": 10
+	},
+	"5002": {
+		"name": "dietary_supplements_ds",
+		"id": 5002,
+		"parent": 5000,
+		"children": [
+			5003,
+			5004,
+			5005,
+			5006,
+			5007,
+			5008,
+			5009,
+			5010,
+			5011,
+			5012,
+			5013,
+			5014,
+			5015,
+			5016,
+			5017,
+			5018
+		],
+		"order": 20
+	},
+	"5003": {
+		"name": "ds_for_the_gastrointestinal_tract_and_metabolism",
+		"id": 5003,
+		"parent": 5002,
+		"children": [],
+		"order": 10
+	},
+	"5004": {
+		"name": "ds_for_weight_management",
+		"id": 5004,
+		"parent": 5002,
+		"children": [],
+		"order": 20
+	},
+	"5005": {
+		"name": "toning_and_general_strengthening_ds",
+		"id": 5005,
+		"parent": 5002,
+		"children": [],
+		"order": 30
+	},
+	"5006": {
+		"name": "fish_oil_and_omega_ds",
+		"id": 5006,
+		"parent": 5002,
+		"children": [],
+		"order": 40
+	},
+	"5007": {
+		"name": "ds_for_bones_and_joints",
+		"id": 5007,
+		"parent": 5002,
+		"children": [],
+		"order": 50
+	},
+	"5008": {
+		"name": "sedative_calming_ds",
+		"id": 5008,
+		"parent": 5002,
+		"children": [],
+		"order": 60
+	},
+	"5009": {
+		"name": "ds_for_women",
+		"id": 5009,
+		"parent": 5002,
+		"children": [],
+		"order": 70
+	},
+	"5010": {
+		"name": "ds_for_men",
+		"id": 5010,
+		"parent": 5002,
+		"children": [],
+		"order": 80
+	},
+	"5011": {
+		"name": "ds_for_veins_and_blood_vessels",
+		"id": 5011,
+		"parent": 5002,
+		"children": [],
+		"order": 90
+	},
+	"5012": {
+		"name": "ds_for_urological_conditions",
+		"id": 5012,
+		"parent": 5002,
+		"children": [],
+		"order": 100
+	},
+	"5013": {
+		"name": "ds_for_colds",
+		"id": 5013,
+		"parent": 5002,
+		"children": [],
+		"order": 110
+	},
+	"5014": {
+		"name": "ds_for_enhancing_mental_performance",
+		"id": 5014,
+		"parent": 5002,
+		"children": [],
+		"order": 120
+	},
+	"5015": {
+		"name": "anti-parasitic_ds",
+		"id": 5015,
+		"parent": 5002,
+		"children": [],
+		"order": 130
+	},
+	"5016": {
+		"name": "amino_acid_ds",
+		"id": 5016,
+		"parent": 5002,
+		"children": [],
+		"order": 140
+	},
+	"5017": {
+		"name": "ds_for_vision_support",
+		"id": 5017,
+		"parent": 5002,
+		"children": [],
+		"order": 150
+	},
+	"5018": {
+		"name": "ds_for_harmful_habits",
+		"id": 5018,
+		"parent": 5002,
+		"children": [],
+		"order": 160
+	},
+	"5019": {
+		"name": "complex_food_supplements",
+		"id": 5019,
+		"parent": 5000,
+		"children": [],
+		"order": 30
+	},
+	"5020": {
+		"name": "extracts_and_tinctures",
+		"id": 5020,
+		"parent": 5000,
+		"children": [
+			5021,
+			5022,
+			5023,
+			5024
+		],
+		"order": 40
+	},
+	"5021": {
+		"name": "alcohol-based_tinctures",
+		"id": 5021,
+		"parent": 5020,
+		"children": [],
+		"order": 10
+	},
+	"5022": {
+		"name": "water_extracts",
+		"id": 5022,
+		"parent": 5020,
+		"children": [],
+		"order": 20
+	},
+	"5023": {
+		"name": "oil_extracts",
+		"id": 5023,
+		"parent": 5020,
+		"children": [],
+		"order": 30
+	},
+	"5024": {
+		"name": "concentrated_phyto-complexes",
+		"id": 5024,
+		"parent": 5020,
+		"children": [],
+		"order": 40
+	},
 	"11700": {
 		"name": "home_&_garden",
 		"icon": "fa-home",
