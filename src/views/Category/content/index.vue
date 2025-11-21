@@ -7,6 +7,9 @@
 			<div class="filter">
 				<v-button
 					:vType="filtersEnabled() ? 'hit' : 'stroke'"
+					:class="{
+						'filter-enabled': filtersEnabled(),
+					}"
 					vSize="md"
 					@click="filterClick"
 				>
