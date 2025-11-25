@@ -26,6 +26,7 @@ export default {
 			offer: {},
 			offerPublished: false,
 
+			pricePrefix: null,
 			videoOrderVariant: "first",
 			getting: "something",
 			condition: "new",
@@ -181,6 +182,7 @@ export default {
 		fillDataAsync(offer) {
 			this.$nextTick(() => {
 				if (offer.hash?.length >= 64 || offer.hash === "draft") {
+					this.fillMetaData(offer);
 					this.fillVideoData(offer);
 					this.fillTagsData(offer);
 					this.fillConditionData(offer);
@@ -192,7 +194,12 @@ export default {
 			});
 		},
 
+		fillMetaData(offer) {
+			this.pricePrefix = offer.metaData?.price?.prefix;
+		},
+
 		fillVideoData(offer) {
+			// videoSettings - deprecated, metaData.video will be used instead in the future
 			this.videoOrderVariant = offer.videoSettings?.order || "first";
 		},
 
@@ -277,6 +284,7 @@ export default {
 		},
 
 		resetOfferFieldsToDefault() {
+			this.pricePrefix = null;
 			this.videoOrderVariant = "first";
 			this.tags = [];
 			this.getting = "something";
@@ -320,6 +328,18 @@ export default {
 			return this.$t("currency_price_text", { currency });
 		},
 
+		pricePrefixAvailable() {
+			return this.sdk.offerMetaDataAvailable() && this.isCategoryForPricePrefix();
+		},
+
+		isCategoryForPricePrefix() {
+			const 
+				id = this.$refs.category?.id,
+				topParent = id && this.categories.getParentsById(id)?.[0];
+
+			return (id === 2 || topParent?.id === 2);
+		},
+
 		newVideoAdded() {
 			this.offer.newVideoAdded = true;
 		},
@@ -334,6 +354,10 @@ export default {
 			if (isValid) {
 				this.videoOrderVariant = value;
 			};
+		},
+
+		pricePrefixValueChanged(value, e) {
+			this.pricePrefix = e.target.checked ? "from" : null;
 		},
 
 		currencyPriceEnabledStateChanged(value, e) {
@@ -554,6 +578,18 @@ export default {
 			};
 		},
 
+		serializeMetaData() {
+			const 
+				metaData = this.offer.metaData || {},
+				prefix = this.isCategoryForPricePrefix() ? this.pricePrefix : null,
+				price = prefix ? { prefix } : null;
+			
+			return {
+				...metaData,
+				...(price && { price }),
+			};
+		},
+
 		serializeDelivery(data) {
 			let result = {};
 
@@ -595,15 +631,15 @@ export default {
 		 * Create new offer model and fill data
 		 */
 		serializeForm() {
-			let metaData = {};
+			let formMetaData = {};
 
 			if (this.categoryHasChildren()) {
-				metaData = {
+				formMetaData = {
 					completed: false,
 					message: this.$t("categoriesLabels.invalid_category_value"),
 					field: this.$refs.category.$el,
 				};
-				return { metaData };
+				return { formMetaData };
 			};
 
 			const 
@@ -611,13 +647,13 @@ export default {
 				videoCheckingResult = videoUploader?.canSerialize();
 
 			if (videoCheckingResult && !(videoCheckingResult.canSerialize)) {
-				metaData = {
+				formMetaData = {
 					completed: false,
 					message: videoCheckingResult.message,
 					isWarning: videoCheckingResult.isWarning,
 					field: videoUploader.$el,
 				};
-				return { metaData };
+				return { formMetaData };
 			};
 
 			const
@@ -628,6 +664,7 @@ export default {
 				data = form.serialize(),
 				images = photos.serialize(),
 				serializedVideo = this.serializeVideo(),
+				serializedMetaData = this.serializeMetaData(),
 				delivery = this.serializeDelivery(data),
 				workSchedule = this.$refs.workSchedule, // optional
 				pickupPointList = this.$refs.pickupPointList, // optional
@@ -650,6 +687,7 @@ export default {
 				currencyPrice,
 				video: serializedVideo.video,
 				videoSettings: serializedVideo.videoSettings,
+				metaData: serializedMetaData,
 				delivery,
 				price: Number(data.pkoin || 0)
 			});
@@ -663,9 +701,9 @@ export default {
 				photos.$el.classList.remove(form.classes.passed);
 			}
 
-			metaData.completed = true;
+			formMetaData.completed = true;
 
-			return { metaData, hash, form, photos, center, data, images, workSchedule, pickupPointList };
+			return { formMetaData, hash, form, photos, center, data, images, workSchedule, pickupPointList };
 		},
 
 		updateAsideStepsAsync() {
@@ -754,7 +792,7 @@ export default {
 		preview() {
 			const data = this.serializeForm();
 
-			if (data.metaData?.completed) {
+			if (data.formMetaData?.completed) {
 				this.$router.push({
 					name: "barterItem",
 					params: { id: this.offer.hash, from: this.$route.params.from },
@@ -764,7 +802,7 @@ export default {
 					this.showVersionConflictIfNeeded(e);
 				});
 			} else {
-				const { message, isWarning, field } = data.metaData;
+				const { message, isWarning, field } = data.formMetaData;
 				field && this.scrollTo(field);
 				message && (isWarning ? this.showWarning(message) : this.showError(message));
 			};
@@ -783,10 +821,10 @@ export default {
 
 			const 
 				serializationData = this.serializeForm(),
-				serializationMetaData = serializationData.metaData;
+				serializationFormMetaData = serializationData.formMetaData;
 
-			if (serializationMetaData && !(serializationMetaData?.completed)) {
-				const { message, isWarning, field } = serializationMetaData;
+			if (serializationFormMetaData && !(serializationFormMetaData?.completed)) {
+				const { message, isWarning, field } = serializationFormMetaData;
 				field && this.scrollTo(field);
 				message && (isWarning ? this.showWarning(message) : this.showError(message));
 				return;

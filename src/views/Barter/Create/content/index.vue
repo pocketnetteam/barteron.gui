@@ -275,11 +275,30 @@
 					/>
 				</div>
 
+				<!-- vSwitch: price prefix -->
+				<div 
+					v-if="pricePrefixAvailable()"
+					class="row" 
+					id="price-prefix-holder"
+				>
+					<v-switch
+						class="no-padding"
+						type="checkbox"
+						name="pricePrefix"
+						:label="$t('price_prefix_text')"
+						:selected="pricePrefix ? 'enabled' : ''"
+						:value="'enabled'"
+						vType="checkbox"
+						vSize="xl"
+						@change="pricePrefixValueChanged"
+					/>
+				</div>
+
 			</div>
 
 			<div 
 				v-if="offerCreationParams().isAllowed" 
-				class="row block sep"
+				class="row block sep condition-holder"
 			>
 				<!-- vSwitch (Radio) -->
 				<v-switch
