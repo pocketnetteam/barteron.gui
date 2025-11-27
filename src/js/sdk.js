@@ -1474,7 +1474,10 @@ class SDK {
 		};
 		return this.sdk.rpc(method, [props], options).then(result => {
 			return this.lastresult = result;
-		}).catch(e => this.setLastResult(e));
+		}).catch(e => {
+			this.setLastResult(e);
+			throw e;
+		});
 	}
 
 	/**

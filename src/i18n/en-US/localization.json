@@ -38,7 +38,8 @@
 		"label": "Category",
 		"empty": "No offers found :(",
 		"empty_details": "Try to set {all_regions} in your location, or expand your search area on the map and save it again",
-		"view_top_parent": "View {all_offers} in the category {category_name}"
+		"view_top_parent": "View {all_offers} in the category {category_name}",
+		"loading_error": "An error occurred while loading offers: {error}"
 	},
 
 	"stepsLabels": {

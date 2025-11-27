@@ -23,7 +23,7 @@ const
             },
             bartersView: "tile",
             scrollOffset: null,
-            currentError: null,
+            loadingError: null,
         }),
 
         getters: {
@@ -206,6 +206,7 @@ const
             },
 
             async loadFirstPage(route) {
+                this.loadingError = null;
                 this.loadingItemsRoute = route;
                 this.itemsRoute = null;
                 this.items = [];
@@ -233,7 +234,7 @@ const
 
                     if (needHandleError) {
                         console.error(e);
-                        this.currentError = e;
+                        this.loadingError = e;
                     } else {
                         console.info(e.message);
                     }
@@ -252,6 +253,7 @@ const
                 };
 
                 try {
+                    this.loadingError = null;
                     this.isLoading = true;
                     const items = await this._requestItems(data);
                     this.itemsRoute = route;
@@ -265,7 +267,7 @@ const
 
                     if (needHandleError) {
                         console.error(e);
-                        this.currentError = e;
+                        this.loadingError = e;
                     } else {
                         console.info(e.message);
                     }
