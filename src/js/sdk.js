@@ -920,6 +920,10 @@ class SDK {
 		});
 	}
 
+	offerMetaDataAvailable() {
+		return (this.getTransactionsApiVersion() >= 6);
+	}
+
 	/**
 	 * Manage bastyon image source
 	 * 

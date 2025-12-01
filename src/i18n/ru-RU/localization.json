@@ -432,6 +432,7 @@
 	"currency_price_text": "Фиксировать цену в валюте {currency}",
 	"currency_price_enabled_hint": "Цена в PKOIN будет обновляться автоматически по текущему курсу валюты {currency}",
 	"currency_price_disabled_hint": "Цена в валюте {currency} будет обновляться автоматически по текущему курсу PKOIN",
+	"price_prefix_text": "Пометить цену как минимальную (перед ценой добавится слово \"От\")",
 	"select_currency_dialog": "Выберите валюту",
 
 	"may_match_exchanges": "Может совпадать с вашими обменами",
