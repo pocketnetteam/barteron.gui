@@ -909,7 +909,10 @@ export default {
 									};
 								});
 							} else {
-								const error = this.sdk.errorMessage(data.error?.code);
+								const 
+									code = data.error?.code ?? (typeof(data.rejected) === "number" ? data.rejected : undefined),
+									error = this.sdk.errorMessage(code);
+
 								form.dialog.view("error", this.$t("dialogLabels.node_error", { error }));
 							}
 						}).catch(e => {

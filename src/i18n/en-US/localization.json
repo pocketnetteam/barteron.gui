@@ -38,7 +38,8 @@
 		"label": "Category",
 		"empty": "No offers found :(",
 		"empty_details": "Try to set {all_regions} in your location, or expand your search area on the map and save it again",
-		"view_top_parent": "View {all_offers} in the category {category_name}"
+		"view_top_parent": "View {all_offers} in the category {category_name}",
+		"loading_error": "An error occurred while loading offers: {error}"
 	},
 
 	"stepsLabels": {
@@ -312,7 +313,7 @@
 		"error#12": "Object not found",
 		"error#21": "Failed OpReturn",
 		"error#28": "Too many transactions",
-		"error#60": "Your reputation does not yet allow you to rate offers low",
+		"error#60": "Your Bastyon reputation does not yet allow you to rate offers low",
 		"error#65": "Exceeded limit"
 	},
 

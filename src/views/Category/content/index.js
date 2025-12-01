@@ -22,11 +22,11 @@ export default {
 			"pageSize",
 			"isLoading",
 			"bartersView",
+			"loadingError",
 		]),
 
 		...mapWritableState(useOfferStore, [
 			"scrollOffset",
-			"currentError",
 		]),
 
 		...mapState(useOfferStore, [
@@ -249,6 +249,19 @@ export default {
 				this.loadFirstPage(this.$route);
 			};
 		},
+
+		loadingErrorMessage() {
+			const message = this.loadingError?.message || this.loadingError?.error?.message || "";
+			return this.$t("categoryLabels.loading_error", {error: message});
+		},
+
+		repeatLoading() {
+			if (this.items?.length) {
+				this.loadMore(this.$route);
+			} else {
+				this.loadFirstPage(this.$route);
+			}
+		},
 	},
 
 	watch: {
@@ -269,16 +282,6 @@ export default {
 		 */
 		async "locationStore.bounds"() {
 			await this.loadFirstPage(this.$route);
-		},
-
-		/**
-		 * Watch for current error change to show dialog
-		 */
-		currentError() {
-			if (this.currentError) {
-				this.showError(this.currentError)
-				this.currentError = null;
-			}
 		},
 
 		locale() {
