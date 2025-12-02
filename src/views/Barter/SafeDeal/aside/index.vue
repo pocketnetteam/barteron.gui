@@ -6,17 +6,7 @@
 		<!-- Profile stats -->
 		<div class="box">
 			<strong class="subtitle part-title">{{ shownUserData.title }}</strong>
-
-			<Profile :hash="shownUserData.address">
-				<!-- State -->
-				<template #state>
-					<dl class="list">
-						<dt><i class="fa fa-user-shield"></i></dt>
-						<dd>{{ $t('profileLabels.account_confirmed') }}</dd>
-					</dl>
-				</template>
-			</Profile>
-
+			<Profile :hash="shownUserData.address"/>
 			<div class="message">
 				<v-button @click="openSafeDealRoom">
 					{{ $t('buttonLabels.open_deal_chat') }}
