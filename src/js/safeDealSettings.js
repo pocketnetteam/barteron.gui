@@ -9,6 +9,7 @@ const safeDealData = {
 
 		production: [
 			"PBjV827sqgz7dJybRb9MKbQKgzFGFzXWZc",
+			"PPbNqCweFnTePQyXWR21B9jXWCiDJa2yYu",
 		],
 	},
 
@@ -23,18 +24,19 @@ const safeDealData = {
 		},
 
 		items: {
+			development: [
+				"TWEE5wJDL2EjR6iryH5mTyebDZWRbPZ733",
+				"TCBZP1MiPCCyevfa31wKp3xQedwVa7Tdn4",
+				"TVSeQiPd94EHuE5KVX986V4d1qw4ZdU4L1",
+			],
+
 			production: [
 				"PPbNqCweFnTePQyXWR21B9jXWCiDJa2yYu",
 				"PBjV827sqgz7dJybRb9MKbQKgzFGFzXWZc",
 				"PXYhCbTwPaUHrP6spJM5NY84TBpLQJtZi5",
 				"PR7srzZt4EfcNb3s27grgmiG8aB9vYNV82",
 				"PCJ2gYX2exnZtCnhE6maHTLQAfkJBFTgt9",
-			],
-
-			development: [
-				"TWEE5wJDL2EjR6iryH5mTyebDZWRbPZ733",
-				"TCBZP1MiPCCyevfa31wKp3xQedwVa7Tdn4",
-				"TVSeQiPd94EHuE5KVX986V4d1qw4ZdU4L1",
+				"PEmxMUL35Z5rtULmHMuYLNYsQGu23HXBeX",
 			],
 		}
 	}
