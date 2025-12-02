@@ -225,6 +225,9 @@ div[class^="barter-item-"]
 			cursor: pointer
 			margin: 0
 
+			&.disabled
+				pointer-events: none
+
 			&:hover
 				color: $bulma
 
@@ -237,6 +240,9 @@ div[class^="barter-item-"]
 	.title
 		color: $popo
 		font-weight: 700
+
+		&.disabled
+			pointer-events: none
 
 		a
 			display: block
@@ -357,6 +363,9 @@ div[class^="barter-item-"]
 		.title
 			display: grid
 			margin: 0 0 .85em
+
+			&.disabled
+				pointer-events: none
 
 		.to
 			display: grid
