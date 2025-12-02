@@ -25,7 +25,7 @@
 				<i 
 					v-if="item.relay" 
 					class="comment-relay fa fa-spinner fa-spin"
-					:title="$t('voteLabels.commentIsPublishing')"
+					:title="$t('voteLabels.reviewIsPublishing')"
 				></i>
 			</div>
 			<time :datetime="datetime">{{ $d(item.time, 'middle', $i18n.locale) }}</time>

@@ -1,5 +1,8 @@
 <template>
-	<v-content class="overflow-auto">
+	<v-content 
+		class="overflow-auto" 
+		:key="item?.hash"
+	>
 		<BarterItem
 			ref="barterItem"
 			:item="item"

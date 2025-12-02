@@ -1,10 +1,13 @@
 import Pinia from "@/stores/store.js";
 import Vue from "vue";
 import Categories from "@/js/categories.js";
+import AppErrors from "@/js/appErrors.js";
 
 const 
     defaultPageSize = 18,
+    homePageSize = 12,
     storageId = "offer",
+    categories = new Categories(),
     storage = Pinia.defineStore(storageId, {
         state: () => ({
             items: [],
@@ -12,6 +15,7 @@ const
             loadingItemsRoute: null,
             topHeight: null,
             pageStart: 0,
+            pageSize: defaultPageSize,
             isLoading: false,
             filters: {
                 orderBy: "height",
@@ -19,26 +23,25 @@ const
             },
             bartersView: "tile",
             scrollOffset: null,
-            currentError: null,
+            loadingError: null,
         }),
 
         getters: {
-            pageSize: () => defaultPageSize,
+            parentCategories: (state) => {
+                const id = state.itemsRoute?.params?.id;
+                return categories.getParentsById(id);
+            },
 
             isSubcategory: (state) => {
-                const 
-                    id = state.itemsRoute?.params?.id,
-                    categories = new Categories();
-                
-                return categories.getParentsById(id).length;
+                return state.parentCategories?.length;
             },
 
             topParentCategory: (state) => {
-                const 
-                    id = state.itemsRoute?.params?.id,
-                    categories = new Categories();
-                
-                return categories.getParentsById(id)[0];
+                return state.parentCategories?.[0];
+            },
+
+            secondLevelParentCategory: (state) => {
+                return state.parentCategories?.[1];
             },
         },        
         
@@ -85,26 +88,57 @@ const
             },
 
             _requestItems(data) {
-                const
-                    mixin = Vue.prototype.shared,
-                    tagsData = this._getTagsData(data),
-                    search = data?.route?.query?.search;
+				const 
+                    ids = Vue.prototype.sdk.requestServiceData.ids,
+                    checkingData = this._createRequestCheckingData();
 
-                const request = {
-                    ...this._filtersForRequest(),
-                    ...tagsData.tagsProps,
-                    ...(search && { search: `%${ search }%` }),
-                    location: mixin.methods.getStoredLocation() || [],
-                    topHeight: data?.topHeight,
-                    pageStart: data?.pageStart || 0,
-                    pageSize: data?.pageSize || this.pageSize
-                };
-            
-                if (tagsData.isDealRequest) {
-                    return Vue.prototype.sdk.getBrtOfferDeals(request);
-                } else {
+				ids[checkingData.requestSource] = checkingData.requestId;
+
+                const 
+                    mixin = Vue.prototype.shared,
+                    isHomeRoute = (data?.route?.name === "home"),
+                    disableFilterAndSearch = isHomeRoute;
+
+                if (disableFilterAndSearch) {
+                    const request = {
+                        orderBy: "height",
+                        orderDesc: true,
+                        location: mixin.methods.getStoredLocation() || [],
+                        topHeight: data?.topHeight,
+                        pageStart: data?.pageStart || 0,
+                        pageSize: this.pageSize,
+                        checkingData,
+                    };
+                
                     return Vue.prototype.sdk.getBrtOffersFeed(request);
+                } else {
+                    const
+                        tagsData = this._getTagsData(data),
+                        search = data?.route?.query?.search;
+
+                    const request = {
+                        ...this._filtersForRequest(),
+                        ...tagsData.tagsProps,
+                        ...(search && { search: `%${ search }%` }),
+                        location: mixin.methods.getStoredLocation() || [],
+                        topHeight: data?.topHeight,
+                        pageStart: data?.pageStart || 0,
+                        pageSize: this.pageSize,
+                        checkingData,
+                    };
+
+                    return tagsData.isDealRequest ? 
+                        Vue.prototype.sdk.getBrtOfferDeals(request)
+                        : Vue.prototype.sdk.getBrtOffersFeed(request);
                 }
+            },
+
+            _createRequestCheckingData() {
+                return {
+					requestSource: "offerStorage",
+					requestId: Math.round(Math.random() * 1e+10),
+					checkRequestId: true,
+				};
             },
 
             _getTagsData(data) {
@@ -130,20 +164,14 @@ const
             _getRequestTags(data) {
                 let result = [];
                 if (Number.isInteger(+data?.id)) {
-                    const
-                        id = String(+data.id),
-                        categories = new Categories();
-
+                    const id = String(+data.id);
                     result = categories.findChildrenRecursivelyById(id).map(item => Number(item.id));
                 }
                 return result;
             },
 
             _getExchangeOptionsTags() {
-                const
-                    tags = this.filters.exchangeOptionsTags || [],
-                    categories = tags.length && (new Categories());
-
+                const tags = this.filters.exchangeOptionsTags || [];
                 const result = tags.reduce(
                     (res, id) => {
                         const foundTags = categories.findChildrenRecursivelyById(id).map(item => Number(item.id));
@@ -163,23 +191,29 @@ const
                 return result;
             },
 
-            _setTopHeight() {
+            _setTopHeight(data) {
                 this.topHeight = null;
-                if (this.pageStart === 0 
-                    && this.filters.orderBy === "height" 
-                    && this.filters.orderDesc
-                ) {
+
+                const 
+                    isFirstPage = this.pageStart === 0,
+                    isHomeRoute = data?.route?.name === "home",
+                    isHeightDescOrder = (this.filters.orderBy === "height" 
+                        && this.filters.orderDesc);
+
+                if (isFirstPage && (isHomeRoute || isHeightDescOrder)) {
                     this.topHeight = this.items?.[0]?.height;
                 }
             },
 
             async loadFirstPage(route) {
+                this.loadingError = null;
                 this.loadingItemsRoute = route;
                 this.itemsRoute = null;
                 this.items = [];
                 
                 this.topHeight = null;
                 this.pageStart = 0;
+                this.pageSize = (route?.name === "home" ? homePageSize : defaultPageSize);
                 this.scrollOffset = null;
 
                 const data = {
@@ -191,11 +225,19 @@ const
                 try {
                     this.isLoading = true;
                     this.items = await this._requestItems(data);
-                    this._setTopHeight();
+                    this._setTopHeight(data);
                     this.itemsRoute = route;
                 } catch (e) {
-                    console.error(e);
-                    this.currentError = e;
+                    const
+                        requestRejected = (e instanceof AppErrors.RequestIdError),
+                        needHandleError = !(requestRejected);
+
+                    if (needHandleError) {
+                        console.error(e);
+                        this.loadingError = e;
+                    } else {
+                        console.info(e.message);
+                    }
                 } finally {
                     this.isLoading = false;
                     this.loadingItemsRoute = null;
@@ -211,6 +253,7 @@ const
                 };
 
                 try {
+                    this.loadingError = null;
                     this.isLoading = true;
                     const items = await this._requestItems(data);
                     this.itemsRoute = route;
@@ -218,8 +261,16 @@ const
                     this.pageStart++;
                     this.items = this.items.concat(items);
                 } catch (e) {
-                    console.error(e);
-                    this.currentError = e;
+                    const
+                        requestRejected = (e instanceof AppErrors.RequestIdError),
+                        needHandleError = !(requestRejected);
+
+                    if (needHandleError) {
+                        console.error(e);
+                        this.loadingError = e;
+                    } else {
+                        console.info(e.message);
+                    }
                 } finally {
                     this.isLoading = false;
                 }
@@ -283,10 +334,14 @@ const
             },
 
             isEmptyListFromFullSearch(currentRoute) {
-                const fullSearchPaths = ["/", "/category/search?search="];
+                const 
+                    fullSearchPaths = ["/", "/category/search?search="],
+                    isHomeRoute = currentRoute?.name === "home",
+                    isFiltersActive = isHomeRoute ? false : this.isFiltersActive();
+
                 return !(this.isLoading) 
                     && !(this.items.length) 
-                    && !(this.isFiltersActive())
+                    && !(isFiltersActive)
                     && this.itemsRoute
                     && this.itemsRoute.fullPath === currentRoute?.fullPath
                     && fullSearchPaths.includes(this.itemsRoute.fullPath);

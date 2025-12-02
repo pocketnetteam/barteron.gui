@@ -113,6 +113,10 @@ class Categories {
 
 		return result;
 	}
+
+	hasChildren(id) {
+		return this.items[id]?.children?.length;
+	}
 };
 
 export default Categories;

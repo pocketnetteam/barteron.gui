@@ -196,7 +196,11 @@ export default {
 		 * @returns {String}
 		 */
 		pricePrefix() {
-			return this.pickupPoint ? (this.$t("priceLabels.from") + " ") : "";
+			return this.pricePrefixFrom ? (this.$t("priceLabels.from") + " ") : "";
+		},
+
+		pricePrefixFrom() {
+			return this.pickupPoint || this.item.metaData?.price?.prefix === "from";
 		},
 
 		/**

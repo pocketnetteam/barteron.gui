@@ -44,7 +44,10 @@
 				<v-button
 					v-if="loadingError"
 					@click="repeatLoading"
-				>{{ $t('buttonLabels.repeat') }}</v-button>
+				>
+					<i class="fa fa-redo"></i>
+					<span>{{ $t("buttonLabels.repeat") }}</span>
+				</v-button>
 			</div>
 		</div>
 	</div>

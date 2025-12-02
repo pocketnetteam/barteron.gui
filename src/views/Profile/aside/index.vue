@@ -2,16 +2,7 @@
 	<v-aside class="profile">
 		<!-- Profile stats -->
 		<div class="box">
-			<Profile :hash="address">
-
-				<!-- State -->
-				<template #state>
-					<dl class="list">
-						<dt><i class="fa fa-user-shield"></i></dt>
-						<dd>{{ $t('profileLabels.account_confirmed') }}</dd>
-					</dl>
-				</template>
-			</Profile>
+			<Profile :hash="address"/>
 
 			<div 
 				v-if="!(isMyProfile)" 

@@ -2,6 +2,7 @@ import Loader from "@/components/loader/index.vue";
 import BarterItem from "../item/index.vue";
 import { Carousel, Slide } from "@/components/vue-snap/index.js";
 import "@/components/vue-snap/vue-snap.css";
+import banProcessor from "@/js/banUtils.js";
 
 export default {
 	name: "BarterList",
@@ -14,6 +15,10 @@ export default {
 	},
 
 	props: {
+		keyPrefix: {
+			type: String,
+			default: ""
+		},
 		items: {
 			type: Array,
 			default: () => []
@@ -44,7 +49,7 @@ export default {
 
 	computed: {
 		list() {
-			return this.loaderState ? this.loaderItems : this.items;
+			return this.loaderState ? this.loaderItems : banProcessor.filteredOffers(this.items);
 		}
 	},
 }

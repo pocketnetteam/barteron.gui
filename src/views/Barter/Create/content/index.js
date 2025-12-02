@@ -8,6 +8,7 @@ import SafeDeal from "@/components/safe-deal/safe-deal-offer/index.vue";
 import { currencies, numberFormats } from "@/i18n/index.js";
 import CurrencyStore from "@/stores/currency.js";
 import { GeoHashApproximator } from "@/js/geohashUtils.js";
+import AppErrors from "@/js/appErrors.js";
 
 export default {
 	name: "Content",
@@ -27,6 +28,7 @@ export default {
 			offer: {},
 			offerPublished: false,
 
+			pricePrefix: null,
 			videoOrderVariant: "first",
 			getting: "something",
 			condition: "new",
@@ -211,6 +213,7 @@ export default {
 		fillDataAsync(offer) {
 			this.$nextTick(() => {
 				if (offer.hash?.length >= 64 || offer.hash === "draft") {
+					this.fillMetaData(offer);
 					this.fillVideoData(offer);
 					this.fillTagsData(offer);
 					this.fillConditionData(offer);
@@ -222,7 +225,12 @@ export default {
 			});
 		},
 
+		fillMetaData(offer) {
+			this.pricePrefix = offer.metaData?.price?.prefix;
+		},
+
 		fillVideoData(offer) {
+			// videoSettings - deprecated, metaData.video will be used instead in the future
 			this.videoOrderVariant = offer.videoSettings?.order || "first";
 		},
 
@@ -307,6 +315,7 @@ export default {
 		},
 
 		resetOfferFieldsToDefault() {
+			this.pricePrefix = null;
 			this.videoOrderVariant = "first";
 			this.tags = [];
 			this.getting = "something";
@@ -350,6 +359,18 @@ export default {
 			return this.$t("currency_price_text", { currency });
 		},
 
+		pricePrefixAvailable() {
+			return this.sdk.offerMetaDataAvailable() && this.isCategoryForPricePrefix();
+		},
+
+		isCategoryForPricePrefix() {
+			const 
+				id = this.$refs.category?.id,
+				topParent = id && this.categories.getParentsById(id)?.[0];
+
+			return (id === 2 || topParent?.id === 2);
+		},
+
 		newVideoAdded() {
 			this.offer.newVideoAdded = true;
 		},
@@ -364,6 +385,10 @@ export default {
 			if (isValid) {
 				this.videoOrderVariant = value;
 			};
+		},
+
+		pricePrefixValueChanged(value, e) {
+			this.pricePrefix = e.target.checked ? "from" : null;
 		},
 
 		currencyPriceEnabledStateChanged(value, e) {
@@ -410,9 +435,15 @@ export default {
 					topHeight = (actionName === "loadNextPage") ? this.pickupPointsRequestData.topHeight : null,
 					pageSize = this.pickupPointsRequestData.pageSize;
 
-				const ids = this.sdk.requestServiceData.ids;
-				ids.getBrtOffersFeed += 1;
+				const checkingData = {
+					requestSource: "offerCreation",
+					requestId: Math.round(Math.random() * 1e+10),
+					checkRequestId: true,
+				};
 
+				const ids = this.sdk.requestServiceData.ids;
+				ids[checkingData.requestSource] = checkingData.requestId;
+				
 				const
 					approximator = new GeoHashApproximator(actionParams.bounds),
 					location = approximator.getGeohashItems();
@@ -423,10 +454,7 @@ export default {
 					pageSize,
 					pageStart,
 					topHeight, 
-					checkingData: {
-						requestId: ids.getBrtOffersFeed,
-						checkRequestId: true,
-					}
+					checkingData,
 				}
 
 				this.pickupPointsRequestData.isLoading = true;
@@ -453,7 +481,7 @@ export default {
 						this.pickupPointsRequestData.isLoading = false;
 						this.setMapActionData(null, e);
 					} else {
-						console.info(`Location component, map action ${actionName}:`, e.message);
+						console.info(e.message);
 					}
 				});				
 			} else if (actionName === "moveMap") {
@@ -499,6 +527,15 @@ export default {
 				isAllowed,
 				blockingMessage,
 			}
+		},
+
+		categoryHasChildren() {
+			const id = this.$refs.category?.id;
+			return this.categories.hasChildren(id);
+		},
+
+		categoryIsEmpty() {
+			return !(this.$refs.category?.id);
 		},
 
 		setMapActionData(offers, error) {
@@ -572,6 +609,18 @@ export default {
 			};
 		},
 
+		serializeMetaData() {
+			const 
+				metaData = this.offer.metaData || {},
+				prefix = this.isCategoryForPricePrefix() ? this.pricePrefix : null,
+				price = prefix ? { prefix } : null;
+			
+			return {
+				...metaData,
+				...(price && { price }),
+			};
+		},
+
 		serializeDelivery(data) {
 			let result = {};
 
@@ -613,19 +662,29 @@ export default {
 		 * Create new offer model and fill data
 		 */
 		serializeForm() {
-			let metaData = {};
+			let formMetaData = {};
+
+			if (this.categoryHasChildren()) {
+				formMetaData = {
+					completed: false,
+					message: this.$t("categoriesLabels.invalid_category_value"),
+					field: this.$refs.category.$el,
+				};
+				return { formMetaData };
+			};
 
 			const 
 				videoUploader = this.$refs.videoUploader, // optional
 				videoCheckingResult = videoUploader?.canSerialize();
 
 			if (videoCheckingResult && !(videoCheckingResult.canSerialize)) {
-				metaData = {
+				formMetaData = {
 					completed: false,
 					message: videoCheckingResult.message,
+					isWarning: videoCheckingResult.isWarning,
 					field: videoUploader.$el,
 				};
-				return { metaData };
+				return { formMetaData };
 			};
 
 			const
@@ -636,6 +695,7 @@ export default {
 				data = form.serialize(),
 				images = photos.serialize(),
 				serializedVideo = this.serializeVideo(),
+				serializedMetaData = this.serializeMetaData(),
 				delivery = this.serializeDelivery(data),
 				workSchedule = this.$refs.workSchedule, // optional
 				pickupPointList = this.$refs.pickupPointList, // optional
@@ -660,6 +720,7 @@ export default {
 				currencyPrice,
 				video: serializedVideo.video,
 				videoSettings: serializedVideo.videoSettings,
+				metaData: serializedMetaData,
 				delivery,
 				safeDeal: serializedSafeDeal,
 				price: Number(data.pkoin || 0)
@@ -674,9 +735,9 @@ export default {
 				photos.$el.classList.remove(form.classes.passed);
 			}
 
-			metaData.completed = true;
+			formMetaData.completed = true;
 
-			return { metaData, hash, form, photos, center, data, images, workSchedule, pickupPointList, safeDeal };
+			return { formMetaData, hash, form, photos, center, data, images, workSchedule, pickupPointList, safeDeal };
 		},
 
 		updateAsideStepsAsync() {
@@ -770,7 +831,7 @@ export default {
 		preview() {
 			const data = this.serializeForm();
 
-			if (data.metaData?.completed) {
+			if (data.formMetaData?.completed) {
 				this.$router.push({
 					name: "barterItem",
 					params: { id: this.offer.hash, from: this.$route.params.from },
@@ -780,9 +841,9 @@ export default {
 					this.showVersionConflictIfNeeded(e);
 				});
 			} else {
-				const { message, field } = data.metaData;
+				const { message, isWarning, field } = data.formMetaData;
 				field && this.scrollTo(field);
-				message && this.showWarning(message);
+				message && (isWarning ? this.showWarning(message) : this.showError(message));
 			};
 		},
 
@@ -799,12 +860,12 @@ export default {
 
 			const 
 				serializationData = this.serializeForm(),
-				serializationMetaData = serializationData.metaData;
+				serializationFormMetaData = serializationData.formMetaData;
 
-			if (serializationMetaData && !(serializationMetaData?.completed)) {
-				const { message, field } = serializationMetaData;
+			if (serializationFormMetaData && !(serializationFormMetaData?.completed)) {
+				const { message, isWarning, field } = serializationFormMetaData;
 				field && this.scrollTo(field);
-				message && this.showWarning(message);
+				message && (isWarning ? this.showWarning(message) : this.showError(message));
 				return;
 			};
 
@@ -889,7 +950,10 @@ export default {
 									};
 								});
 							} else {
-								const error = this.sdk.errorMessage(data.error?.code);
+								const 
+									code = data.error?.code ?? (typeof(data.rejected) === "number" ? data.rejected : undefined),
+									error = this.sdk.errorMessage(code);
+
 								form.dialog.view("error", this.$t("dialogLabels.node_error", { error }));
 							}
 						}).catch(e => {

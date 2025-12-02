@@ -2,8 +2,8 @@
 	"pageLabels": {
 		"label": "Page",
 		"home": "Home",
-		"createBarter": "Create barter",
-		"editBarter": "Edit barter",
+		"createBarter": "Create offer",
+		"editBarter": "Edit offer",
 		"search": "Search results"
 	},
 
@@ -27,14 +27,19 @@
 		"choose": "Choose a category",
 		"popular": "Most popular categories",
 		"select": "Select",
-		"categoryNotSelected": "Category not selected"
+		"categoryNotSelected": "Category not selected",
+		"empty_category_hint": "Select the most relevant category to make it easier for users to find your offer",
+		"invalid_category_value": "Invalid category value",
+		"category_has_children_error_hint": "Select a more specific category. If there is no suitable category, choose \"{default_category_name}\" or contact support to request adding a new category.",
+		"category_has_children_renew_error": "Set a more specific category for your offer. Open the offer for editing and change the category."
 	},
 
 	"categoryLabels": {
 		"label": "Category",
 		"empty": "No offers found :(",
 		"empty_details": "Try to set {all_regions} in your location, or expand your search area on the map and save it again",
-		"view_top_parent": "View {all_offers} in the category {category_name}"
+		"view_top_parent": "View {all_offers} in the category {category_name}",
+		"loading_error": "An error occurred while loading offers: {error}"
 	},
 
 	"stepsLabels": {
@@ -98,7 +103,6 @@
 		"label": "Profile",
 		"edit": "Edit profile",
 		"on_barteron_from": "On Barteron from {date}",
-		"account_confirmed": "Account confirmed",
 		"coins": "PKOIN",
 		"wallet": "Wallet",
 		"settings": "Settings",
@@ -118,7 +122,7 @@
 		"categories": "Categories",
 		"go_to_profile": "Go to profile",
 		"select_currency": "Select currency",
-		"create_barter": "Create barter",
+		"create_barter": "Create offer",
 		"cancel": "Cancel",
 		"preview": "Preview",
 		"publish": "Publish",
@@ -128,6 +132,7 @@
 		"group_exchange": "Group exchange",
 		"start_purchase": "Start purchase",
 		"go_to_selection": "Go to selection",
+		"ask_seller": "Ask seller",
 		"send_message": "Send message",
 		"referral_program": "Referral program",
 		"copy_referral_link": "Copy referral link",
@@ -336,7 +341,7 @@
 		"error#12": "Object not found",
 		"error#21": "Failed OpReturn",
 		"error#28": "Too many transactions",
-		"error#60": "Your reputation does not yet allow you to rate offers low",
+		"error#60": "Your Bastyon reputation does not yet allow you to rate offers low",
 		"error#65": "Exceeded limit"
 	},
 
@@ -355,7 +360,7 @@
 
 	"videosLabels": {
 		"upload_video": "Upload video",
-		"upload_video_text": "You can upload up to one video. Recommended video parameters: duration up to 2 minutes, resolution up to 720p. Uploading a video is optional. Uploaded videos can be found in the \"My Videos\" list on Bastyon.",
+		"upload_video_text": "You can upload up to one video. Recommended video parameters: duration up to 2 minutes, resolution up to 720p. Uploading a video is optional.",
 		"video_is_being_processed": "Video is being processed",
 		"video_processing_failed": "Video processing failed. Please delete the video and try again.",
 		"wait_until_video_processed": "Please wait until the video is processed",
@@ -370,11 +375,11 @@
 		"label": "Votes",
 		"offer_rating": "Offer rating",
 		"votes": "No votes | {count} vote | {count} votes",
-		"commentIsPublishing": "Comment is publishing",
+		"reviewIsPublishing": "Review is publishing",
 		"voteNotPublished": "Vote not published",
-		"commentNotPublished": "Comment not published",
-		"placeholder": "Leave your comment here",
-		"empty": "There is no comments yet"
+		"reviewNotPublished": "Review not published",
+		"placeholder": "Leave your review of your purchase here",
+		"empty": "There is no reviews yet"
 	},
 
 	"safeDealLabels": {
@@ -539,6 +544,11 @@
 		"viber": "Viber"
 	},
 
+	"offer_categories": "Offer categories",
+	"new_offers": "New offers",
+	"all_categories": "All categories",
+	"all_offers": "All offers",
+	"back_to_preview": "Back",
 	"title": "Title",
 	"my_list": "My list",
 	"something": "Something",
@@ -547,6 +557,7 @@
 	"currency_price_text": "Fix the price in {currency} currency",
 	"currency_price_enabled_hint": "The price in PKOIN will be updating automatically at the current rate of {currency} currency",
 	"currency_price_disabled_hint": "The price in {currency} currency will be updating automatically at the current PKOIN rate",
+	"price_prefix_text": "Mark the price as minimum (the word \"From\" will be added before the price)",
 	"select_currency_dialog": "Select currency",
 
 	"may_match_exchanges": "May match with your exchanges",

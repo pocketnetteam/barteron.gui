@@ -12,7 +12,7 @@
 			<router-link :to="!(hasRelay || isRemoved) ? offerLink : {}">
 				<span
 					class="state"
-					v-if="item.used"
+					v-if="item.condition === 'used'"
 				>{{ $t('conditionLabels.used') }}</span>
 			
 				<!-- Images -->
@@ -128,7 +128,7 @@
 			</div>
 
 			<div class="row to" v-if="item?.tags?.length">
-				<ul :style="exchangeList.length > 2 ? `--count: '+${ exchangeList.length - 2 }'; --len: ${ exchangeList.length.toString().length + 1 }` : ''">
+				<ul :style="exchangeList.length > 2 ? `--count: '+${ exchangeList.length - 2 }'; --len: ${ (exchangeList.length - 2).toString().length + 1 }` : ''">
 					<li><span>{{ $t('barterLabels.exchange') }}: </span></li>
 					<li
 						v-for="(link, index) in exchangeList.slice(0, 2)"
@@ -189,7 +189,7 @@
 					</span>
 
 					<div class="to" v-if="item?.tags?.length">
-						<ul :style="exchangeList.length > 2 ? `--count: '+${ exchangeList.length - 2 }'; --len: ${ exchangeList.length.toString().length + 1 }` : ''">
+						<ul :style="exchangeList.length > 2 ? `--count: '+${ exchangeList.length - 2 }'; --len: ${ (exchangeList.length - 2).toString().length + 1 }` : ''">
 							<li><span>{{ $t('barterLabels.exchange') }}: </span></li>
 							<li
 								v-for="(link, index) in exchangeList.slice(0, 2)"
@@ -203,6 +203,15 @@
 							</li>
 						</ul>
 					</div>
+
+					<p 
+						v-if="item.description" 
+						class="description-row"
+					>
+						<router-link :to="offerLink">
+							<LinkifiedText :text="item.description"/>
+						</router-link>
+					</p>
 				</div>
 
 				<div class="pricing">
@@ -461,10 +470,13 @@
 				</div>
 			</div>
 
-			<div class="row block sep" v-if="item.description">
+			<div class="row block sep" v-if="item.description || item.condition === 'used'">
 				<strong class="title">{{ $t('stepsLabels.description') }}</strong>
-				<p class="description">
+				<p v-if="item.description" class="description">
 					<LinkifiedText :text="item.description"/>
+				</p>
+				<p v-if="item.condition === 'used'" class="description">
+					<span>{{ $t('conditionLabels.label') }}: {{ $t('conditionLabels.used') }}</span>
 				</p>
 			</div>
 

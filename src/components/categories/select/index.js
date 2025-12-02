@@ -25,7 +25,17 @@ export default {
 		title: {
 			type: String,
 			default: ""
-		}
+		},
+
+		mode: {
+			type: String,
+			default: ""
+		},
+
+		resetScroll: {
+			type: Boolean,
+			default: false
+		},
 	},
 
 	data() {
@@ -76,10 +86,18 @@ export default {
 		show() {
 			this.clear().visible = true;
 
+			this.$nextTick(() => {
+				if (this.resetScroll) {
+					this.$refs.lightbox?.resetScroll();
+				};
+			});
+
 			if (this.belongsToAsideComponent()) {
 				const el = this.$components.aside.$el;
 				el.classList.add("showing-lightbox");
-			}
+			};
+
+			this.$emit("onShow", this);
 		},
 
 		/**
@@ -88,10 +106,16 @@ export default {
 		hide() {
 			this.visible = false;
 
+			if (this.resetScroll) {
+				this.$refs.lightbox?.resetScroll();
+			};
+
 			if (this.belongsToAsideComponent()) {
 				const el = this.$components.aside.$el;
 				el.classList.remove("showing-lightbox");
-			}
+			};
+
+			this.$emit("onHide", this);
 		},
 
 		/**
@@ -284,6 +308,18 @@ export default {
 			} else {
 				this.expanded = false;
 			}
+		},
+
+		selectionDisabled() {
+			let result = false;
+			if (this.mode === "offer") {
+				result = true;
+				const id = this.expanded?.id;
+				if (id && !(this.categories.items[id]?.children?.length)) {
+					result = false;
+				};
+			};
+			return result;
 		},
 
 		/**

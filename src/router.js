@@ -8,7 +8,6 @@ const routes = [
 		name: "home",
 		components: {
 			default: () => import("@/views/Home/index.vue"),
-			aside: () => import("@/views/Category/aside/index.vue"),
 			content: () => import("@/views/Category/content/index.vue")
 		}
 	},
@@ -122,7 +121,12 @@ const router = new VueRouter({
 			};
 			return {selector: to.hash}
 		} else if(savedPosition) {
-			return savedPosition;
+			document.body.scrollTo({
+				top: savedPosition.y || 0,
+				left: savedPosition.x || 0,
+				behavior: "instant",
+			});
+			return;
 		} else {
 			Vue.nextTick(() => {
 				const mixin = Vue.prototype.shared;

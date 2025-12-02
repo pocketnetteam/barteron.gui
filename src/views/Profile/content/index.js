@@ -4,6 +4,7 @@ import SafeDealProfile from "@/components/safe-deal/safe-deal-profile/index.vue"
 import ProfileExchangeList from "@/components/barter/exchange/profile-list/index.vue";
 import BarterList from "@/components/barter/list/index.vue";
 import Votes from "@/components/votes/index.vue";
+import banProcessor from "@/js/banUtils.js";
 import likeStore from "@/stores/like.js";
 import {
 	default as profileStore,
@@ -80,6 +81,7 @@ export default {
 		offersActive() {
 			return this.offersList
 				.map(hash => this.sdk.barteron.offers[hash])
+				.filter(f => !(banProcessor.isBannedAddress(f.address)))
 				.filter(f => f.active || f.relay)
 				.sort((a, b) => {
 					/* Offers with relay first */
@@ -101,8 +103,9 @@ export default {
 		offersInactive() {
 			return this.offersList
 				.map(hash => this.sdk.barteron.offers[hash])
+				.filter(f => !(banProcessor.isBannedAddress(f.address)))
 				.filter(f => !f.active && !f.relay)
-				.sort((a, b) => (b?.time || 0) - (a?.time || 0));;
+				.sort((a, b) => (b?.time || 0) - (a?.time || 0));
 		},
 
 		/**

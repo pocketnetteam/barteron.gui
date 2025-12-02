@@ -4,25 +4,6 @@ import offerStore, { useOfferStore } from "@/stores/offer.js";
 import { mapState, mapWritableState, mapActions } from "pinia";
 import { useLocaleStore } from "@/stores/locale.js";
 
-function setValueToVSelect(ref, value) {
-	const
-		items = ref?.items || [],
-		targetItem = items.filter(item => item.value === value)[0];
-
-	if (targetItem) {
-		ref.setValue(targetItem);
-	}
-}
-
-function getOrderFromString(value) {
-	const state = (value || "").split("_");
-
-	return {
-		orderBy: state[0] ?? "height",
-		orderDesc: state[1] === "desc"
-	};
-}
-
 export default {
 	name: "Content",
 
@@ -38,24 +19,29 @@ export default {
 			"items",
 			"itemsRoute",
 			"pageStart",
+			"pageSize",
 			"isLoading",
 			"bartersView",
+			"loadingError",
 		]),
 
 		...mapWritableState(useOfferStore, [
 			"scrollOffset",
-			"currentError",
 		]),
 
 		...mapState(useOfferStore, [
-			"pageSize",
 			"isSubcategory",
 			"topParentCategory",
+			"secondLevelParentCategory",
 		]),
 
 		...mapState(useLocaleStore, [
 			"locale",
 		]),
+
+		isHomeRoute() {
+			return this.$route?.name === "home";
+		},
 
 		/**
 		 * Make list of order by
@@ -73,6 +59,22 @@ export default {
 		 */
 		views() {
 			return this.parseLabels("viewLabels");
+		},
+
+		ordersIcon() {
+			return {
+				"height_asc": "fa-sort-amount-down-alt",
+				"height_desc": "fa-sort-amount-up",
+				"price_asc": "fa-sort-numeric-down",
+				"price_desc": "fa-sort-numeric-up-alt",
+			};
+		},
+
+		bartersViewIcon() {
+			return {
+				"tile": "fa-th-large",
+				"row": "fa-align-justify",
+			};
 		},
 
 		/**
@@ -94,7 +96,41 @@ export default {
 		 * @returns {Array}
 		 */
 		topParentCategoriesToShowPrompt() {
-			return [13587, 6000, 619, 888, 11450, 2984, 10542, 11700];
+			return [13587, 6000, 619, 888, 2984, 10542, 11700, 20, 293, 625, 58058, 15032, 1249, 1, 21, 281, 267, 550];
+		},
+
+		/**
+		 * The service category unites many subcategories, 
+		 * each with a different theme, which contain child categories. 
+		 * Previously existing subcategories within the Services category 
+		 * have been moved as child categories within the new structure. 
+		 * Therefore, users should be prompted to view the parent category 
+		 * within Services if its subcategories contain few offers or empty.
+		 * 
+		 * @returns {Array}
+		 */
+		servicesSubcategoriesToShowPrompt() {
+			return [3, 40, 4, 5, 26395, 7, 8, 9, 10, 22];
+		},
+
+		clothingFootwearAccessoriesSubcategoriesToShowPrompt() {
+			return [11451, 11534, 11644];
+		},
+
+		musicAndVideoSubcategoriesToShowPrompt() {
+			return [11233, 11232];
+		},
+
+		viewingParentCategory() {
+			return !(this.isLoading || this.isSearchEnabled() || this.isFiltersActive()) 
+				&& (this.items?.length < 20) 
+				&& this.isSubcategory
+				&& (
+					 this.topParentCategoriesToShowPrompt.includes(this.topParentCategory.id) && this.topParentCategory
+					|| this.servicesSubcategoriesToShowPrompt.includes(this.secondLevelParentCategory?.id) && this.secondLevelParentCategory
+					|| this.clothingFootwearAccessoriesSubcategoriesToShowPrompt.includes(this.secondLevelParentCategory?.id) && this.secondLevelParentCategory
+					|| this.musicAndVideoSubcategoriesToShowPrompt.includes(this.secondLevelParentCategory?.id) && this.secondLevelParentCategory
+				);
 		},
 	},
 
@@ -110,12 +146,30 @@ export default {
 			"getFilters"
 		]),
 
+		priceFilterEnabled() {
+			const source = this.getFilters();
+			return (source?.priceMin || source?.priceMax);
+		},
+
+		exchangeOptionsFilterEnabled() {
+			const source = this.getFilters();
+			return source?.exchangeOptionsTags?.length;
+		},
+
+		filtersEnabled() {
+			return this.priceFilterEnabled() || this.exchangeOptionsFilterEnabled();
+		},
+
+		filterClick() {
+			this.$components.aside?.openIfNeeded();
+		},
+
 		showMoreEvent() {
 			this.loadMore(this.$route);
 		},
 
 		selectOrderEvent(newValue) {
-			const newOrder = getOrderFromString(newValue?.value);
+			const newOrder = this.getOrderFromString(newValue?.value);
 			this.changeOrder(newOrder, this.$route);
 		},
 
@@ -151,14 +205,33 @@ export default {
 		 */
 		setOrderValueToElement() {
 			const value = this.getOrderStringFromFilter();
-			setValueToVSelect(this.$refs.order, value);
+			this.setValueToVSelect(this.$refs.order, value);
 		},
 
 		/**
 		 * Set barters view to element
 		 */
 		setBartersViewToElement() {
-			setValueToVSelect(this.$refs.bartersView, this.bartersView);
+			this.setValueToVSelect(this.$refs.bartersView, this.bartersView);
+		},
+
+		setValueToVSelect(ref, value) {
+			const
+				items = ref?.items || [],
+				targetItem = items.filter(item => item.value === value)[0];
+
+			if (targetItem) {
+				ref.setValue(targetItem);
+			}
+		},
+
+		getOrderFromString(value) {
+			const state = (value || "").split("_");
+
+			return {
+				orderBy: state[0] ?? "height",
+				orderDesc: state[1] === "desc"
+			};
 		},
 
 		isEmptyListFromFullSearch() {
@@ -175,7 +248,20 @@ export default {
 			} else {
 				this.loadFirstPage(this.$route);
 			};
-		}
+		},
+
+		loadingErrorMessage() {
+			const message = this.loadingError?.message || this.loadingError?.error?.message || "";
+			return this.$t("categoryLabels.loading_error", {error: message});
+		},
+
+		repeatLoading() {
+			if (this.items?.length) {
+				this.loadMore(this.$route);
+			} else {
+				this.loadFirstPage(this.$route);
+			}
+		},
 	},
 
 	watch: {
@@ -198,16 +284,6 @@ export default {
 			await this.loadFirstPage(this.$route);
 		},
 
-		/**
-		 * Watch for current error change to show dialog
-		 */
-		currentError() {
-			if (this.currentError) {
-				this.showError(this.currentError)
-				this.currentError = null;
-			}
-		},
-
 		locale() {
 			this.$nextTick(() => {
 				this.setOrderValueToElement();
@@ -217,12 +293,14 @@ export default {
 	},
 
 	mounted() {
-		this.waitForRefs("order, bartersView").then(() => {
-			this.setOrderValueToElement();
-			this.setBartersViewToElement();
-		}).catch(e => { 
-			console.error(e);
-		});
+		if (!(this.isHomeRoute)) {
+			this.waitForRefs("order, bartersView").then(() => {
+				this.setOrderValueToElement();
+				this.setBartersViewToElement();
+			}).catch(e => { 
+				console.error(e);
+			});
+		}
 	},
 
 	beforeRouteEnter (to, from, next) {

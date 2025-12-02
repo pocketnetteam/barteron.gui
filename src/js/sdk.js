@@ -12,6 +12,7 @@ import Comment from "@/js/models/comment.js";
 import AppErrors from "@/js/appErrors.js";
 import deliverySettings from "@/js/deliverySettings.js";
 import safeDealSettings from "@/js/safeDealSettings.js";
+import banProcessor from "@/js/banUtils.js";
 
 /**
  * Allow work with bastyon
@@ -23,9 +24,7 @@ class SDK {
 	emitted = [];
 	localstorage = "";
 	requestServiceData = {
-		ids: {
-			getBrtOffersFeed: 0,
-		},
+		ids: {},
 	};
 	offerUpdateActionId = null;
 	lastPublishedOfferId = null;
@@ -145,6 +144,16 @@ class SDK {
 		if (this.empty(this._currency)) this.getCurrency();
 
 		return this._currency;
+	}
+
+	get isBannedUser() {
+		return (typeof this._address === "string") 
+			&& this._address 
+			&& banProcessor.isBannedAddress(this._address);
+	}
+
+	get infiniteAction() {
+		return new Promise((resolve, reject) => {});
 	}
 
 	/**
@@ -311,6 +320,16 @@ class SDK {
 
 		this.sdk = new window.BastyonSdk();
 		this.sdk.init();
+
+		this.sdk.serviceWorker?.register().then((registration) => {
+			if (registration) {
+				console.log("🔒 Service Worker registered - external requests will use Tor when available");
+			} else {
+				console.log("ℹ️ Service Worker not available or Tor not supported");
+			}
+		}).catch(error => {
+			console.error("Service Worker registration failed:", error);
+		});
 
 		this.emit = this.sdk.emit;
 		this.on = this.sdk.on;
@@ -586,6 +605,10 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	createRoom(request) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return new Promise((resolve, reject) => {
 			/* Request for permissons */
 			const items = ["chat"];
@@ -616,6 +639,10 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	openRoom(roomId) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return this.sdk.chat.openRoom(roomId);
 	}
 
@@ -631,6 +658,10 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	sendMessageInRoom(request) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return new Promise((resolve, reject) => {
 			/* Request for permissons */
 				const items = ["chat"];
@@ -666,6 +697,10 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	openExternalLink(url) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return this.sdk.openExternalLink(url).then(result => {
 			this.lastresult = "openExternalLink: success"
 			return result;
@@ -688,10 +723,14 @@ class SDK {
 	 * @returns {Void}
 	 */
 	share(data, options = { shareOnBastyon: false }) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		const formattedData = {
 			path: `barter/${ data.hash }`,
 			sharing: {
-				title: VueI18n.t("itemLabels.label"),
+				title: "",
 				text: { body: data.caption },
 				images: data.images,
 			},
@@ -716,6 +755,10 @@ class SDK {
 	}
 
 	openComplaintDialog(data) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return this.sdk.helpers.complain(data).then(result => {
 			this.lastresult = "openComplaintDialog: success"
 			return result;
@@ -872,6 +915,10 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	uploadImagesToImgur(data, errorForwarding) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return this.sdk.images.upload(data).then(result => {
 			const errorIndexes = result.reduce((acc, value, index) => {
 				return (value?.url ? acc : [...acc, index]);
@@ -899,6 +946,10 @@ class SDK {
 	}
 
 	uploadingVideoDialog() {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return this.sdk.videos.opendialog().then(result => {
 			this.lastresult = "uploadingVideoDialog: success"
 			return result;
@@ -936,12 +987,20 @@ class SDK {
 	}
 
 	removeVideo(url) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return this.sdk.videos.remove({url}).then(() => {
 			this.lastresult = "removeVideo: success";
 		}).catch(e => {
 			this.setLastResult(e);
 			throw e;
 		});
+	}
+
+	offerMetaDataAvailable() {
+		return (this.getTransactionsApiVersion() >= 6);
 	}
 
 	/**
@@ -1142,25 +1201,99 @@ class SDK {
 	}
 
 	/**
-	 * Currency from min-api
+	 * Currency rates from third-party API's
 	 */
 	getCurrency() {
 		this._currency.pending = true;
+		const currencyIds = currencies.map(currency => currency);
+		let allRates = null;
 
+		this.getCurrencyRates().then(rates => {
+			allRates = rates;
+			const 
+				missingIds = currencyIds?.filter(f => !(rates[f])),
+				USD_Rate = rates["USD"],
+				needCalculate = missingIds?.length && USD_Rate;
+			
+			return needCalculate 
+				? this.getMissingCurrencyСrossRates(missingIds, USD_Rate)
+				: {};
+		}).then(rates => {
+			allRates = {
+				...allRates,
+				...rates,
+			};
+		}).catch(e => {
+			console.error(e);
+		}).finally(() => {
+			if (allRates) {
+				Vue.set(this, "_currency", allRates);
+				return allRates;
+			}
+		});
+	}
+
+	/**
+	 * Currency rates from coingecko API.
+	 * The most accurate values, but some are missing.
+	 */
+	getCurrencyRates() {
+		const 
+			pkoinId = "pocketcoin",
+			currencyIds = currencies.map(currency => currency);
+
+		return fetch(`
+			https://api.coingecko.com/api/v3/simple/price?
+			${ new URLSearchParams({
+				ids: pkoinId,
+				vs_currencies: currencyIds,
+			}).toString() }
+		`, 
+			{ timeout: 60000 }
+		)
+		.then(result => result.json())
+		.then(data => {
+			const 
+				rawRates = data?.[pkoinId] || {},
+				keys = Object.keys(rawRates),
+				rates = keys.reduce((obj, key) => {
+					obj[key.toUpperCase()] = rawRates[key];
+					return obj;
+				}, {});
+			
+			return rates;
+		});
+	}
+
+	/**
+	 * Currency rates from cryptocompare API.
+	 * Adequate values ​​can only be obtained through 
+	 * the cross rate (relative to the US dollar, for example).
+	 * Direct values ​​of the PKOIN exchange rate differ 
+	 * greatly from the acceptable ones.
+	 */
+	getMissingCurrencyСrossRates(missingCurrencyIds, USD_Rate) {
 		return fetch(`
 			https://min-api.cryptocompare.com/data/price?
 			${ new URLSearchParams({
-				fsym: "PKOIN",
-				tsyms: currencies.map(currency => currency)
+				fsym: "USD",
+				tsyms: missingCurrencyIds
 			}).toString() }
-		`)
-			.then(result => result.json())
-			.then(currency => {
-				this.lastresult = currency;
-				Vue.set(this, "_currency", currency);
-				return currency;
-			})
-			.catch(e => this.setLastResult(e));
+		`,
+			{ timeout: 60000 }
+		)
+		.then(result => result.json())
+		.then(data => {
+			const 
+				rawRates = data,
+				keys = Object.keys(rawRates),
+				rates = keys.reduce((obj, key) => {
+					obj[key.toUpperCase()] = Number((rawRates[key] * USD_Rate).toFixed(6));
+					return obj;
+				}, {});
+
+			return rates;
+		});
 	}
 
 	/**
@@ -1352,7 +1485,7 @@ class SDK {
 		}
 
 		return result;
-	}
+}
 
 	/**
 	 * Get Survey data
@@ -1393,6 +1526,10 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	setSurveyData(data) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return fetch(`${this.surveyURL}/form`, {
 			method: 'POST',
 			headers: {
@@ -1407,6 +1544,26 @@ class SDK {
 				throw new Error("Survey data request failed");
 			};
 		});
+	}
+
+	throwRequestIdErrorIfNeeded(checkingData, requestName) {
+		if (checkingData?.checkRequestId) {
+			const 
+				requestSource = checkingData?.requestSource,
+				requestId = checkingData?.requestId,
+				ids = this.requestServiceData.ids,
+				currentId = ids[requestSource],
+				needReject = (requestId !== currentId);
+			
+			if (needReject) {
+				throw new AppErrors.RequestIdError(
+					requestName,
+					requestSource,
+					requestId, 
+					currentId
+				);
+			}
+		}
 	}
 
 	/**
@@ -1426,7 +1583,10 @@ class SDK {
 		};
 		return this.sdk.rpc(method, [props], options).then(result => {
 			return this.lastresult = result;
-		}).catch(e => this.setLastResult(e));
+		}).catch(e => {
+			this.setLastResult(e);
+			throw e;
+		});
 	}
 
 	/**
@@ -1578,7 +1738,7 @@ class SDK {
 						} else if (key === "offerScores") {
 							data[key] = details[key]?.filter(f => f.s2 === hash).map(item => new OfferScore(item)) || [];
 						} else if (key === "comments") {
-							data[key] = details[key]?.filter(f => f.s3 === hash).map(item => new Comment(item)) || [];
+							data[key] = details[key]?.filter(f => f.s3 === hash).map(item => new Comment(item)).sort((a,b) => a.time - b.time) || [];
 						} else if (key === "commentScores") {
 							data[key] = details[key]?.filter(f => f.s2 === hash) || [];
 						}
@@ -1702,10 +1862,7 @@ class SDK {
 		request = {}, 
 		options = { disabledAverageOfferScores: false }
 	) {
-		const
-			checkingData = request.checkingData,
-			requestName = "getBrtOffersFeed";
-
+		const checkingData = request.checkingData;
 		delete request.checkingData;
 
 		if (this.isBrighteonProject()) {
@@ -1719,20 +1876,7 @@ class SDK {
 
 		return this.rpc("getbarteronfeed", request).then(feed => {
 
-			if (checkingData?.checkRequestId) {
-				const 
-					ids = this.requestServiceData.ids,
-					requestId = checkingData?.requestId,
-					needReject = (requestId !== ids[requestName]);
-				
-				if (needReject) {
-					throw new AppErrors.RequestIdError(
-						requestName, 
-						requestId, 
-						ids.getBrtOffersFeed
-					);
-				}
-			}
+			this.throwRequestIdErrorIfNeeded(checkingData, "getbarteronfeed");
 
 			const offers = feed?.map(offer => new Offer(offer)) || [];
 
@@ -1772,6 +1916,9 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	getBrtOfferDeals(request, options = { disabledAverageOfferScores: false }) {
+		const checkingData = request.checkingData;
+		delete request.checkingData;
+
 		if (this.isBrighteonProject()) {
 			this.setupRequestForBrighteon(request);
 
@@ -1781,11 +1928,16 @@ class SDK {
 			}
 		};
 		
-		return this.rpc("getbarterondeals", {
+		request = {
 			...request,
 			myTags: (request?.myTags || []).map(tag => +tag),
 			theirTags: (request?.theirTags || []).map(tag => +tag)
-		}).then(deals => {
+		};
+
+		return this.rpc("getbarterondeals", request).then(deals => {
+
+			this.throwRequestIdErrorIfNeeded(checkingData, "getbarterondeals");
+
 			const offers = deals?.map(offer => new Offer(offer)) || [];
 
 			if (!(options?.disabledAverageOfferScores)) {
@@ -1812,6 +1964,9 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	getBrtOfferComplexDeals(request) {
+		const checkingData = request.checkingData;
+		delete request.checkingData;
+
 		if (this.isBrighteonProject()) {
 			this.setupRequestForBrighteon(request);
 
@@ -1821,11 +1976,16 @@ class SDK {
 			}
 		};
 
-		return this.rpc("getbarteroncomplexdeals", {
+		request = {
 			...request,
 			myTag: +request?.myTag,
 			theirTags: (request?.theirTags || []).map(tag => +tag)
-		}).then(data => {
+		};
+
+		return this.rpc("getbarteroncomplexdeals", request).then(data => {
+
+			this.throwRequestIdErrorIfNeeded(checkingData, "getbarteroncomplexdeals");
+
 			data?.map(match => {
 				if (match.target) {
 					match.target = new Offer(match.target);
@@ -1849,6 +2009,10 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	setBrtAccount(data) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return this.sdk.barteron.account(data).then(result => result);
 	}
 
@@ -1873,6 +2037,10 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	setBrtOffer(data) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return this.sdk.barteron.offer({
 			...data,
 			...{ hash: data.hash?.length === 64 ? data.hash : null }
@@ -1888,6 +2056,10 @@ class SDK {
 	 * @param {String} param0
 	 */
 	delBrtOffer({ hash }) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return this.sdk.barteron.removeOffer({ hash }).then(action => {
 			this.offerUpdateActionId = action.id;
 			return action;
@@ -1908,6 +2080,10 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	setBrtOfferVote(data) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return this.sdk.barteron.vote({
 			share: data.offerId,
 			vsaddress: data.address,
@@ -1932,6 +2108,10 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	setBrtComment(data) {
+		if (this.isBannedUser) {
+			return this.infiniteAction;
+		};
+
 		return this.sdk.barteron.comment(data);
 	}
 }

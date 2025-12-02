@@ -1,11 +1,12 @@
 import VueI18n from "@/i18n/index.js";
 
 class RequestIdError extends Error {
-	constructor(requestName, id, currentId) {
-		const message = `Request "${requestName}" rejected by id = ${id}, current id = ${currentId}`;
+	constructor(requestName, requestSource, id, currentId) {
+		const message = `Request "${requestName}" from source "${requestSource}" rejected by id = ${id}, current id = ${currentId}`;
 		super(message);
 		this.name = this.constructor.name;
 		this.requestName = requestName;
+		this.requestSource = requestSource;
 		this.id = id;
 		this.currentId = currentId;
 	}

@@ -21,7 +21,13 @@
 			<div class="col user">
 				<ul class="list">
 					<li>
-						<strong class="label">{{ user?.name }}</strong>
+						<router-link
+							v-if="hash"
+							class="user-name"
+							:to="{ name: 'profile', params: { id: hash } }"
+						>
+							<strong class="label">{{ user?.name }}</strong>
+						</router-link>
 					</li>
 
 					<li>

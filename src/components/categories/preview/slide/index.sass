@@ -1,0 +1,57 @@
+@import "@/css/vars.sass"
+
+.categories-preview-slide
+	margin: 0 8px
+	width: 120px
+	display: flex
+	flex-direction: column
+	justify-content: start
+	align-items: center
+	gap: 20px
+
+	.preview-item
+		width: 100%
+		display: flex
+		flex-direction: column
+		align-items: center
+		gap: 10px
+		font-size: 14px
+		cursor: pointer
+
+		.icon
+			width: 100px
+			height: 100px
+			background: $beerma
+			display: flex
+			align-items: center
+			justify-content: center
+			font-size: 32px
+			color: $bulma
+			border-radius: 50px
+			+transition(color)
+			+transition(background-color)
+			
+			&.item-type-back,
+			&.item-type-select,
+			&.item-type-offers,
+				border: 2px solid $bulma
+				background: none
+		
+		.title
+			width: 100%
+			height: 3.6em
+			color: $bulma
+			font-size: 1em
+			line-height: 1.2em
+			text-align: center
+			overflow: hidden
+			white-space: pre-wrap
+			text-overflow: ellipsis
+
+		&:hover
+			.icon
+				color: $gohma
+				background: $bulma-hover
+
+			.title
+				text-decoration: underline

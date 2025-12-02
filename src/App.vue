@@ -3,6 +3,14 @@
 		id="app"
 		:class="theme"
 	>
+		<CategorySelect
+			ref="categorySelectDialog"
+			:marked="categorySelectProps.marked"
+			:value="categorySelectProps.value"
+			:title="categorySelectProps.title"
+			:mode="categorySelectProps.mode"
+			:resetScroll="categorySelectProps.resetScroll"
+		/>
 		<v-dialog ref="dialog" />
 		<div ref="lightboxContainer"></div>
 
@@ -20,7 +28,10 @@
 					:class="{ 'header-hidden': !isHeaderVisible }" 
 				/>
 
-				<section id="main">
+				<section 
+					ref="main"
+					id="main"
+				>
 					<keep-alive>
 						<survey-bar
 							v-if="isSurveyBarVisible"
@@ -31,19 +42,19 @@
 						<router-view />
 					</keep-alive>
 
+					<!-- props "key" used here for this reason: https://github.com/pocketnetteam/barteron.gui/issues/425 -->
 					<div
 						id="container"
 						v-if="hasComponents(['aside', 'content', 'sidebar'])"
+						:key="$route?.name"
 					>
 						<router-view
 							name="aside"
 							v-if="hasComponents(['aside'])"
 						/>
-						<!-- props "key" used here for this reason: https://github.com/pocketnetteam/barteron.gui/issues/425 -->
 						<router-view
 							name="content"
 							v-if="hasComponents(['content'])"
-							:key="$route?.name"
 						/>
 						<router-view
 							name="sidebar"
@@ -55,6 +66,11 @@
 				<v-footer />
 			</template>
 		</template>
+
+		<div 
+			class="bottom-keyboard-space"
+			:style="{ 'height': keyboardHeight, 'width': '100%'}"
+		></div>
 	</div>
 </template>
 
@@ -75,6 +91,7 @@ import {
 	useLocaleStore
 } from "@/stores/locale.js";
 import { useSurveyStore } from "@/stores/survey.js";
+import CategorySelect from "@/components/categories/select/index.vue";
 
 export default {
 	name: "Barteron",
@@ -83,6 +100,7 @@ export default {
 		Loader,
 		SurveyBar,
 		OfferShareDialog,
+		CategorySelect,
 	},
 
 	computed: {
@@ -101,11 +119,15 @@ export default {
 			loading: true,
 			dialog: null,
 			lightboxContainer: null,
+			categorySelectDialog: null,
+			categorySelectProps: {},
 			minHeaderScrollPosition: 35,
 			lastScrollPosition: 0,
 			lastRoute: null,
 			isHeaderVisible: true,
 			surveyTimerId: null,
+			keyboardObserver: null,
+			keyboardHeight: 0,
 		}
 	},
 
@@ -113,6 +135,8 @@ export default {
 		return {
 			dialog: new Proxy({}, { get: () => this.dialog }),
 			lightboxContainer: () => this.lightboxContainer,
+			categorySelectDialog: () => this.categorySelectDialog,
+			setCategorySelectProps: (data) => this.setCategorySelectProps(data),
 		};
 	},
 
@@ -121,13 +145,24 @@ export default {
 		 * Initialize app
 		 */
 		async setup() {
-			const
+			let 
+				address = null,
+				account = null;
+
+			try {
 				address = await this.sdk.getAddress(),
 				account = await this.sdk.getBrtAccount(address);
+			} catch (e) {
+				console.error(e);
+			};
 
-			/* Get appInfo and bastyon profile */
-			await this.sdk.getAppInfo();
-			await this.sdk.getUserProfile(address);
+			try {
+				/* Get appInfo and bastyon profile */
+				await this.sdk.getAppInfo();
+				await this.sdk.getUserProfile(address);
+			} catch (e) {
+				console.error(e);
+			};
 
 			/* Create barteron account automatically */
 			if (address && account && !account[0]) {
@@ -153,6 +188,8 @@ export default {
 			});
 
 			this.setSurveyBarVisibility();
+
+			//this.attachKeyboardObserver();
 
 			/* Hide preloader */
 			this.loading = false;
@@ -268,6 +305,35 @@ export default {
 			});
 		},
 
+		setCategorySelectProps(data) {
+			Vue.set(this, "categorySelectProps", (data || {}));
+		},
+
+		attachKeyboardObserver() {
+			const 
+				targetNode = document.documentElement,
+				config = { attributes: true, attributeFilter: ['style'] };
+
+			this.keyboardObserver = new MutationObserver(mutationsList => {
+				for (const mutation of mutationsList) {
+					if (mutation.type === "attributes" && mutation.attributeName === "style") {
+						const 
+							activeElementInsideMainSection = this.$refs.main?.contains(document.activeElement),
+							canChangeKeyboardHeight = activeElementInsideMainSection;
+
+						const value = getComputedStyle(targetNode).getPropertyValue('--keyboardheight') || 0;
+						this.keyboardHeight = canChangeKeyboardHeight ? value : 0;
+					}
+				}
+			});
+
+			this.keyboardObserver.observe(targetNode, config);
+		},
+
+		detachKeyboardObserver() {
+			this.keyboardObserver?.disconnect();
+		},
+
 		showOfferShareDialog() {
 			if (!(this.sdk.shareOnBastyonIsAvailable()) || profileStore.offerShareDisabled) {
 				return;
@@ -342,9 +408,11 @@ export default {
 			}
 		}, 100);
 
-		this.$2watch("$refs.lightboxContainer").then(ref => {
-			this.lightboxContainer = ref;
-		}).catch(e => {
+
+		this.waitForRefs("lightboxContainer, categorySelectDialog").then(() => {
+			this.lightboxContainer = this.$refs.lightboxContainer;
+			this.categorySelectDialog = this.$refs.categorySelectDialog;
+		}).catch(e => { 
 			console.error(e);
 		});
 
@@ -363,6 +431,10 @@ export default {
 		"sdk.lastPublishedOfferId"() {
 			this.showOfferShareDialog();
 		},
+	},
+
+	beforeDestroy() {
+		this.detachKeyboardObserver();
 	},
 
 	destroyed() {

@@ -105,6 +105,7 @@
 					v-if="deals?.length"
 				>
 					<BarterList
+						keyPrefix="deals"
 						:items="deals"
 						vType="row"
 					>

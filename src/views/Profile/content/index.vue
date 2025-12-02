@@ -10,15 +10,7 @@
 
 		<!-- without aside -->
 		<div class="row sep no-aside d-sep">
-			<Profile :hash="address">
-				<!-- State -->
-				<template #state>
-					<dl class="list">
-						<dt><i class="fa fa-user-shield"></i></dt>
-						<dd>{{ $t('profileLabels.account_confirmed') }}</dd>
-					</dl>
-				</template>
-			</Profile>
+			<Profile :hash="address"/>
 
 			<div 
 				v-if="!(isMyProfile)" 
@@ -73,7 +65,7 @@
 			:tabset="[
 				{
 					tabId: 'ads',
-					title: `<i class='fa fa-list'></i> ${ $t('profileLabels.offers') } (${ offersList.length })`,
+					title: `<i class='fa fa-bars'></i> ${ $t('profileLabels.offers') } (${ offersList.length })`,
 					active: initialActiveTab === 'ads',
 				},
 				/* // TODO: barters
@@ -148,6 +140,7 @@
 					<template #active>
 						<BarterList
 							class="tabcontent-holder"
+							keyPrefix="profile_active"
 							:items="offersActive"
 							:vType="bartersView"
 							:loaderState="fetching"
@@ -197,6 +190,7 @@
 					<template #inactive>
 						<BarterList
 							class="tabcontent-holder"
+							keyPrefix="profile_inactive"
 							:items="offersInactive"
 							:vType="bartersView"
 						>
@@ -255,6 +249,7 @@
 			<template #favorites v-if="isMyProfile">
 				<BarterList
 					class="tabcontent-holder"
+					keyPrefix="profile_favorites"
 					:items="favoriteList"
 					:vType="bartersView"
 					:loaderState="fetching"

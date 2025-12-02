@@ -1,14 +1,19 @@
+import CategoriesPreview from "@/components/categories/preview/index.vue";
 import PopularList from "@/components/categories/popular-list/index.vue";
 import BarterList from "@/components/barter/list/index.vue";
+import LegalInfo from "@/components/legal-info/index.vue";
 import Banner from "@/components/banner/index.vue";
 import viewedStore from "@/stores/viewed.js";
+import banProcessor from "@/js/banUtils.js";
 
 export default {
 	name: "Home",
 
 	components: {
+		CategoriesPreview,
 		PopularList,
 		BarterList,
+		LegalInfo,
 		Banner
 	},
 
@@ -18,6 +23,25 @@ export default {
 			viewedList: [],
 			needForceUpdate: false,
 		}
+	},
+
+	computed: {
+		requiredLegalInfoItemKeys() {
+			return [
+				"user_agreement", 
+				"personal_data_processing_policy"
+			];
+		},
+
+		legalInfoAvailable() {
+			const
+				isHomePage = (this.$route.name === "home"),
+				locale = this.$root.$i18n.locale,
+				data = (isHomePage && LegalInfo.methods.allDocumentsWithoutContext?.()) || {},
+				existingKeys = (data[locale] || []).map(m => m.i18nKey);
+
+			return this.requiredLegalInfoItemKeys.some(f => existingKeys.includes(f));
+		},
 	},
 
 	methods: {
@@ -140,7 +164,10 @@ export default {
 						uniqTargets.push(item);
 					};
 				});
-				this.mayMatchExchanges = uniqTargets;
+				this.mayMatchExchanges = uniqTargets.filter(
+					f => !(f?.address && banProcessor.isBannedAddress(f.address) 
+						|| f?.source?.address && banProcessor.isBannedAddress(f.source.address))
+					);
 			}).catch(e => { 
 				console.error(e);
 			});
@@ -180,15 +207,7 @@ export default {
 					viewedStore.updateInPatchMode(filteredHashes);
 				};
 
-				const newViewedList = filteredHashes.map(hash => allOffers.filter(f => f.hash === hash).pop());
-
-				// to avoid re-render bug for images we change viewedList twice
-				// we left first item in list to prevent disappear viewedList
-				// and then in setTimeout we put all items to viewedList
-				this.viewedList = newViewedList.slice(0,1);
-				setTimeout(() => {
-					this.viewedList = newViewedList;
-				});
+				this.viewedList = filteredHashes.map(hash => allOffers.filter(f => f.hash === hash).pop());
 			}
 		},
 	},

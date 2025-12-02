@@ -49,6 +49,14 @@ export default {
 			this.$emit("onHide", this);
 		},
 
+		resetScroll() {
+			this.$refs.main?.scrollTo({
+				top: 0,
+				left: 0,
+				behavior: "instant",
+			});
+		},
+
 		overlay() {
 			if (this.overlayClick) this.hide();
 		}

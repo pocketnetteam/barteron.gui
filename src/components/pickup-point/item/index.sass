@@ -148,11 +148,12 @@ $pd: 3px // selected item padding
 			background: $overlay-half
 			border-radius: 6px
 			position: absolute
-			padding: 0 $r 0
+			padding: 0 4px
 			left: 8px
 			bottom: 8px
 			color: $white
 			font-size: 0.8em
+			+unselectable()
 
 	.row:not(:last-child)
 		margin: 0 0 .6em

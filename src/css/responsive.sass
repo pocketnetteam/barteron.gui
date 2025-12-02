@@ -47,6 +47,14 @@
 		.no-aside
 			display: none
 
+	.barter-list-settings
+		.filter
+			display: none
+		
+		.orders-barters-view-group
+			justify-content: space-between
+			width: 100%
+
 .pswp
 	.pswp__video-container
 		width: 100%
@@ -132,7 +140,8 @@
 				display: block
 
 		#aside
-			left: -$sidebar-width
+			width: $sliding-sidebar-width
+			left: -$sliding-sidebar-width
 			box-shadow: none
 			+transition()
 			transition-property: box-shadow, left
@@ -168,6 +177,14 @@
 		#container
 			&:has(#aside)
 				padding-left: $r * 0
+
+		.barter-list-settings
+			.filter
+				display: flex
+			
+			.orders-barters-view-group
+				justify-content: space-between
+				width: unset
 
 		.v-lightbox section
 			max-width: 100%
@@ -209,6 +226,37 @@
 					#location-switcher-button
 						>.v-button
 							padding: .25em 1em
+
+		.barter-list-settings
+			.filter
+				.v-button
+					.title
+						display: none
+			
+			.orders-barters-view-group
+				.v-select-holder
+					.v-select-dropdown
+						right: 0
+						width: min-content
+
+						span.title
+							overflow: hidden
+							white-space: nowrap
+							text-overflow: ellipsis
+
+				.v-select
+					.v-dropdown-arrow
+						display: none
+
+					.value
+						width: min-content
+						min-width: unset
+
+						.icon
+							margin: 0
+
+						span.title
+							display: none
 
 		#footer
 			.footer-holder
@@ -281,8 +329,9 @@
 
 		.vs-carousel
 			.vs-carousel__slide
-				flex: 0 0 calc( 50% - 7px ) // Gap - 2px
-				width: calc( 50% - 7px ) // Gap - 2px
+				&:not(.fixed-layout)
+					flex: 0 0 calc( 50% - 7px ) // Gap - 2px
+					width: calc( 50% - 7px ) // Gap - 2px
 
 			.vs-carousel__arrows
 				display: none
@@ -290,8 +339,13 @@
 		.compact-view
 			.vs-carousel
 				.vs-carousel__slide
-					flex: 0 0 calc( 33% - 7px ) // Gap - 2px
-					width: calc( 33% - 7px ) // Gap - 2px
+					&:not(.fixed-layout)
+						flex: 0 0 calc( 33% - 7px ) // Gap - 2px
+						width: calc( 33% - 7px ) // Gap - 2px
+
+		.categories-preview-carousel
+			.vs-carousel__wrapper
+				scroll-snap-type: none
 
 		div[class^="barter-item-"].barter-item-row
 			flex-direction: column
@@ -319,8 +373,9 @@
 	#app
 		.vs-carousel
 			.vs-carousel__slide
-				flex: 0 0 calc( 33.33% - 7px ) // Gap - 2px
-				width: calc( 33.33% - 7px ) // Gap - 2px
+				&:not(.fixed-layout)
+					flex: 0 0 calc( 33.33% - 7px ) // Gap - 2px
+					width: calc( 33.33% - 7px ) // Gap - 2px
 
 			.vs-carousel__arrows
 				display: none
@@ -328,5 +383,10 @@
 		.compact-view
 			.vs-carousel
 				.vs-carousel__slide
-					flex: 0 0 calc( 25% - 7px ) // Gap - 2px
-					width: calc( 25% - 7px ) // Gap - 2px
+					&:not(.fixed-layout)
+						flex: 0 0 calc( 25% - 7px ) // Gap - 2px
+						width: calc( 25% - 7px ) // Gap - 2px
+
+		.categories-preview-carousel
+			.vs-carousel__wrapper
+				scroll-snap-type: none

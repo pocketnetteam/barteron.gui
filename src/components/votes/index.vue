@@ -28,7 +28,7 @@
 			/>
 			<span>{{ $tc('voteLabels.votes', offerScoresCount()) }}</span>
 			<div v-if="hasRejectedOfferScore()" class="vote-rejected">{{ $t('voteLabels.voteNotPublished') }}</div>
-			<div v-if="hasRejectedComment()" class="comment-rejected">{{ $t('voteLabels.commentNotPublished') }}</div>
+			<div v-if="hasRejectedComment()" class="comment-rejected">{{ $t('voteLabels.reviewNotPublished') }}</div>
 		</header>
 
 		<main>
@@ -51,6 +51,17 @@
 				ref="form"
 				v-if="commentable()"
 			>
+				<v-button 
+					v-if="!(isMyOffer)"
+					class="contact-seller"
+					vSize="sm"
+					:disabled="isChatLoading"
+					@click="contactSeller"
+				>
+					<i class="fa fa-question-circle"></i>
+					<span>{{ $t('buttonLabels.ask_seller') }}</span>
+				</v-button>
+
 				<v-textarea
 					ref="vote"
 					class="field"

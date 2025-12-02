@@ -35,6 +35,22 @@
 					<i class="fa fa-info-circle"></i>
 					{{ offerCreationParams().blockingMessage }}
 				</label>
+
+				<label
+					v-else-if="categoryHasChildren()"
+					class="v-label error-level"
+				>
+					<i class="fa fa-info-circle"></i>
+					{{ $t("categoriesLabels.category_has_children_error_hint", {default_category_name: $t("everything_else")}) }}
+				</label>
+
+				<label
+					v-else-if="categoryIsEmpty()"
+					class="v-label info-level"
+				>
+					<i class="fa fa-info-circle"></i>
+					{{ $t("categoriesLabels.empty_category_hint") }}
+				</label>
 			</div>
 
 			<div 
@@ -259,11 +275,30 @@
 					/>
 				</div>
 
+				<!-- vSwitch: price prefix -->
+				<div 
+					v-if="pricePrefixAvailable()"
+					class="row" 
+					id="price-prefix-holder"
+				>
+					<v-switch
+						class="no-padding"
+						type="checkbox"
+						name="pricePrefix"
+						:label="$t('price_prefix_text')"
+						:selected="pricePrefix ? 'enabled' : ''"
+						:value="'enabled'"
+						vType="checkbox"
+						vSize="xl"
+						@change="pricePrefixValueChanged"
+					/>
+				</div>
+
 			</div>
 
 			<div 
 				v-if="offerCreationParams().isAllowed" 
-				class="row block sep"
+				class="row block sep condition-holder"
 			>
 				<!-- vSwitch (Radio) -->
 				<v-switch
