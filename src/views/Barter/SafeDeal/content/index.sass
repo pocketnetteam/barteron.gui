@@ -1,0 +1,85 @@
+@import "@/css/vars.sass"
+	
+#content.safe-deal-content
+	.no-aside
+		&:first-child
+			margin-top: $r * 3
+
+		margin-bottom: $r * 8
+
+		.part-title
+			margin-bottom: $r * 3
+			color: $bulma			
+
+		.id-holder
+			margin-top: $r * 2.5
+			color: $trunks
+
+		.message,
+		.update-status
+			.v-button
+				width: 100%
+
+		.message
+			margin-top: $r * 2
+
+		.update-status
+			margin-top: $r * 2
+
+		.safe-deal-sep
+			margin: $r * 2 0 0 0
+			border-top: 1px solid $beerus
+
+			&.bottom
+				margin: 0 0 $r * 2 0
+
+	strong.subtitle
+		&:not(.part-title)
+			font-weight: bold
+
+	ul.actions-list
+		line-height: 1.5em
+		font-size: 1.2em
+		padding-inline-start: 20px
+
+		li:not(:last-child)
+			margin-bottom: 0.5em
+
+	ul.calculation-list
+		margin: $r 0 0 0
+		padding-inline-start: 20px
+		line-height: 1.5em
+
+		&.disabled
+			color: $trunks
+
+	div.info-list
+		&.after-actions
+			padding-left: 2.8em
+
+		&:not(.after-actions)
+			margin-top: $r * 2
+
+	.confirmation-switch
+		label
+			font-weight: bold
+
+	.field-block
+		margin-top: $r * 6
+
+		p
+			color: $popo
+
+			&.amount
+				font-weight: bold
+				font-size: 1.1em
+			
+			&.disabled
+				color: $trunks
+
+		.transfer
+			&.disabled
+				opacity: 0.5
+
+	.evaluate-purchase
+		margin: $r * 2 0

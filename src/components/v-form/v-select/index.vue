@@ -36,6 +36,7 @@
 				active
 			}"
 			ref="button"
+			:disabled="disabled"
 			@click="clickSelect"
 		>
 			<slot v-if="$slots.default || $scopedSlots.default" :instance="instance"></slot>

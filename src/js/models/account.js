@@ -14,7 +14,7 @@ class Account {
 	 */
 	constructor(data) {
 		/* Extract JSON values and format object */
-		const { a, g, s, r } = JSON.parse(data?.p?.s4 || '{"a":[],"g":"","s":false,"r":0}');
+		const { a, g, s, r, d } = JSON.parse(data?.p?.s4 || '{"a":[],"g":"","s":false,"r":0, "d":{}}');
 		
 		/* Iterable properties */
 		this.address = data?.address || data?.s1 || "";
@@ -25,6 +25,7 @@ class Account {
 		this.geohash = data?.geohash || g || "";
 		this.static = data?.static || s || false;
 		this.radius = data?.radius || r || 0;
+		this.safeDeal = data?.safeDeal || d || {};
 		this.time = data?.time || 0;
 		this.type = data?.type || 0;
 

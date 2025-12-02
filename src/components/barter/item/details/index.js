@@ -4,6 +4,7 @@ import VideoPreview from "@/components/video-preview/index.vue";
 import Price from "@/components/barter/item/price/index.vue";
 import LinkifiedText from "@/components/linkified-text/index.vue";
 import WorkSchedule from "@/components/work-schedule/index.vue";
+import SafeDeal from "@/components/safe-deal/safe-deal-offer/index.vue";
 import { showMediaItems } from "@/js/mediaUtils.js";
 import "photoswipe/style.css";
 import Vue from 'vue';
@@ -17,14 +18,19 @@ export default {
 		VideoPreview,
 		Price,
 		LinkifiedText,
-		WorkSchedule
+		WorkSchedule,
+		SafeDeal,
 	},
 
 	props: {
 		item: {
 			type: Object,
 			default: () => ({})
-		}
+		},
+		mode: {
+			type: String,
+			default: null
+		},
 	},
 
 	data() {

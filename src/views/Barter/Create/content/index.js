@@ -4,6 +4,7 @@ import Category from "@/components/categories/field/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
 import WorkSchedule from "@/components/work-schedule/index.vue";
 import PickupPointList from "@/components/pickup-point/list/index.vue";
+import SafeDeal from "@/components/safe-deal/safe-deal-offer/index.vue";
 import { currencies, numberFormats } from "@/i18n/index.js";
 import CurrencyStore from "@/stores/currency.js";
 import { GeoHashApproximator } from "@/js/geohashUtils.js";
@@ -18,6 +19,7 @@ export default {
 		ExchangeList,
 		WorkSchedule,
 		PickupPointList,
+		SafeDeal,
 	},
 
 	data() {
@@ -103,6 +105,29 @@ export default {
 		},
 
 		/**
+		 * Safe deal option available
+		 */
+		safeDealAvailable() {
+			let result = false;
+
+			const 
+				settings = this.sdk.getSafeDealSettings(),
+				filter = settings.allowedAddressFilter;
+
+			if (filter.isEnabled && !(filter.items.includes(this.sdk.address))) {
+				result = false;
+			} else {
+				if (this.sdk.getTransactionsApiVersion() >= 5 
+					|| process.env.NODE_ENV === "development"
+				) {
+					result = true;
+				};
+			};
+
+			return result;
+		},
+
+		/**
 		 * Format currencies to list
 		 */
 		currencies() {
@@ -131,7 +156,13 @@ export default {
 					regex: false, /* Validate with regex */
 					prop: "validatedvalue", /* Check field prop */
 					isCustomDataAttr: true,
-				}
+				},
+				".validator-fee-variants-box": {
+					empty: true, /* Validate for emptity */
+					regex: false, /* Validate with regex */
+					prop: "validatedvalue", /* Check field prop */
+					isCustomDataAttr: true,
+				},
 			}
 		},
 	},
@@ -668,6 +699,8 @@ export default {
 				delivery = this.serializeDelivery(data),
 				workSchedule = this.$refs.workSchedule, // optional
 				pickupPointList = this.$refs.pickupPointList, // optional
+				safeDeal = this.$refs.safeDeal, // optional
+				serializedSafeDeal = safeDeal?.serialize() || {},
 				currencyPrice = this.serializeCurrencyPrice(),
 				tags = this.getting === "something" 
 					? (data.tags ? data.tags.split(",").map(tag => Number(tag)) : [])
@@ -689,6 +722,7 @@ export default {
 				videoSettings: serializedVideo.videoSettings,
 				metaData: serializedMetaData,
 				delivery,
+				safeDeal: serializedSafeDeal,
 				price: Number(data.pkoin || 0)
 			});
 
@@ -703,7 +737,7 @@ export default {
 
 			formMetaData.completed = true;
 
-			return { formMetaData, hash, form, photos, center, data, images, workSchedule, pickupPointList };
+			return { formMetaData, hash, form, photos, center, data, images, workSchedule, pickupPointList, safeDeal };
 		},
 
 		updateAsideStepsAsync() {
@@ -730,6 +764,7 @@ export default {
 		 * @param {Boolean} scope.photosValid
 		 * @param {Boolean|undefined} scope.workScheduleValid
 		 * @param {Boolean|undefined} scope.pickupPointListValid
+		 * @param {Boolean|undefined} scope.safeDealValid
 		 */
 		stepState(scope) {
 			this.$components.aside.steps.forEach(step => {
@@ -760,6 +795,10 @@ export default {
 
 							case "pickup-point-list": {
 								return scope.pickupPointListValid;
+							}
+
+							case "safe-deal": {
+								return scope.safeDealValid;
 							}
 
 							default: {
@@ -831,11 +870,12 @@ export default {
 			};
 
 			const
-				{ hash, form, photos, images, workSchedule, pickupPointList } = serializationData,
+				{ hash, form, photos, images, workSchedule, pickupPointList, safeDeal } = serializationData,
 				formValid = form.validate(),
 				photosValid = photos.validate(),
 				workScheduleValid = workSchedule?.validate(),
-				pickupPointListValid = pickupPointList?.validate();
+				pickupPointListValid = pickupPointList?.validate(),
+				safeDealValid = safeDeal?.validate();
 
 			/* Set steps validity at aside */
 			this.stepState({
@@ -844,6 +884,7 @@ export default {
 				photosValid,
 				workScheduleValid,
 				pickupPointListValid,
+				safeDealValid,
 			});
 
 			/* Check all fields validity */

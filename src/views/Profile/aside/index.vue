@@ -19,6 +19,13 @@
 			<Wallet />
 		</div>
 
+		<!-- Safe deal -->
+		<div class="box" v-if="isValidator">
+			<SafeDealProfile
+				:hash="address"
+			/>
+		</div>
+
 		<!-- Exchange -->
 		<div class="box">
 			<ProfileExchangeList 

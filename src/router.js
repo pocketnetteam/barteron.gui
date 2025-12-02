@@ -46,6 +46,15 @@ const routes = [
 		}
 	},
 	{
+		path: "/barter/safedeal",
+		name: "SafeDeal",
+		components: {
+			default: () => import("@/views/Barter/SafeDeal/index.vue"),
+			aside: () => import("@/views/Barter/SafeDeal/aside/index.vue"),
+			content: () => import("@/views/Barter/SafeDeal/content/index.vue"),
+		}
+	},
+	{
 		path: "/barter/:id",
 		name: "barterItem",
 		components: {
@@ -99,6 +108,17 @@ const router = new VueRouter({
 		}
 
 		if (to.hash) {
+			const 
+				selector = to.hash.replace("#", ""),
+				el = document.querySelector(selector);
+
+			if (el) {
+				el.scrollIntoView({
+					behavior: "smooth",
+					block: "start",
+				});
+				return;
+			};
 			return {selector: to.hash}
 		} else if(savedPosition) {
 			document.body.scrollTo({

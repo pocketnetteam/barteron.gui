@@ -16,6 +16,14 @@
 	&.dropdown-open
 		z-index: 10
 
+	button
+		&:disabled,
+		&[disabled]
+			background: $beerus !important
+			border: 1px solid $beerus !important
+			color: $gray !important
+			cursor: default
+
 	.v-hidden
 		border: 0
 		position: absolute
