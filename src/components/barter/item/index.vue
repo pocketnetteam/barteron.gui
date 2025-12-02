@@ -9,7 +9,7 @@
 		<picture 
 			v-if="images?.length && vType !== 'page'"
 		>
-			<router-link :to="!(hasRelay || isRemoved) ? offerLink : {}">
+			<router-link :to="offerLink">
 				<span
 					class="state"
 					v-if="item.condition === 'used'"
@@ -100,6 +100,7 @@
 					<slot name="favorite" v-if="$slots.favorite"></slot>
 					<i
 						:class="{
+							'disabled': !(offerAvailable),
 							'fa fa-heart': true,
 							'active': hasLike
 						}"
@@ -122,6 +123,7 @@
 			<div
 				v-if="item.caption"
 				class="row title"
+				:class="!(offerAvailable) ? 'disabled' : ''"
 				:title="item.caption"
 			>
 				<router-link :to="offerLink">{{ item.caption }}</router-link>
@@ -183,6 +185,7 @@
 					<span 
 						v-if="item.caption" 
 						class="title"
+						:class="!(offerAvailable) ? 'disabled' : ''"
 						:title="item.caption"
 					>
 						<router-link :to="offerLink">{{ item.caption }}</router-link>
@@ -243,6 +246,7 @@
 				<div class="favorite">
 					<i
 						:class="{
+							'disabled': !(offerAvailable),
 							'fa fa-heart': true,
 							'active': hasLike
 						}"
