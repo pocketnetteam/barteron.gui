@@ -156,6 +156,8 @@ class OG {
 						default:
 							break;
 					}
+
+					break;
 				}
 
 				case 'profile': {
@@ -175,6 +177,8 @@ class OG {
 						if($description) $this->currentOg['description'] = $description;
 						if($image) $this->currentOg['image'] = $image;
 					}
+
+					break;
 				}
 			}
 		}
