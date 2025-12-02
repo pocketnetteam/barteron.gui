@@ -329,13 +329,19 @@ export default {
 			return parseFloat((R * c).toFixed(1));
 		},
 
+		offerAvailable() {
+			return !(this.hasRelay || this.isRemoved);
+		},
+
 		/**
 		 * Customize offer link
 		 * 
 		 * @returns {Object|String}
 		 */
 		offerLink() {
-			if (!this.customLink) {
+			if (!(this.offerAvailable)) {
+				return {};
+			} else if (!this.customLink) {
 				return { name: "barterItem", params: { id: this.item.hash } };
 			} else if (typeof this.customLink === "function") {
 				return this.customLink(this.item, this);

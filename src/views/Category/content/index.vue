@@ -121,7 +121,7 @@
 		</template>
 
 		<template v-if="loadingError">
-			<div class="loading-error-holder">
+			<div class="categories-loading-error-holder">
 				<p class="error">{{ loadingErrorMessage() }}</p>
 				<v-button
 					@click="repeatLoading"
