@@ -143,19 +143,20 @@ class OG {
 					$validatorFeePercent = @$id['fee'] ? $id['fee'] : '?';
 
 					switch ($lang) {
-						case 'en':
-							$title = 'Safe deal';
-							$description = "Guarantor: {$validatorName}, fee: {$validatorFeePercent}%; Seller: {$sellerName}; Buyer: {$buyerName}; Subject of the deal: {$offerTitle}";
-							break;
-
 						case 'ru':
 							$title = 'Безопасная сделка';
 							$description = "Гарант: {$validatorName}, процент: {$validatorFeePercent}%; Продавец: {$sellerName}; Покупатель: {$buyerName}; Предмет сделки: {$offerTitle}";
 							break;
 
 						default:
+							$title = 'Safe deal';
+							$description = "Guarantor: {$validatorName}, fee: {$validatorFeePercent}%; Seller: {$sellerName}; Buyer: {$buyerName}; Subject of the deal: {$offerTitle}";
 							break;
 					}
+
+					if($title) $this->currentOg['title'] = $title;
+					if($description) $this->currentOg['description'] = $description;
+					if($image) $this->currentOg['image'] = $image;
 
 					break;
 				}
