@@ -134,11 +134,12 @@ div[class^="barter-item-"]
 			background: $overlay-half
 			border-radius: 6px
 			position: absolute
-			padding: 0 $r 0
+			padding: 2px 8px
 			left: 8px
 			bottom: 8px
 			color: $white
 			font-size: 0.85em
+			+unselectable()
 
 	&.compact-view
 		font-size: 0.8em
@@ -155,11 +156,10 @@ div[class^="barter-item-"]
 				display: none
 
 	.state
-		background: $goku
-		border: 1px solid $primary
+		background: $overlay-half
 		border-radius: 6px
-		color: $trunks
-		padding: 2px 4px
+		color: $white
+		padding: 2px 8px
 		position: absolute
 		top: $r
 		right: $r

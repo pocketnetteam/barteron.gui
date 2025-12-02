@@ -49,7 +49,7 @@
 		<!-- Profile info -->
 		<div class="row info">
 			<dl class="list">
-				<template v-if="account.regdate">
+				<template v-if="account?.regdate">
 					<dt><i class="fa fa-calendar-day"></i></dt>
 					<dd>{{
 					$t('profileLabels.on_barteron_from', { date: $d(account.regdate, 'middle', $i18n.locale) })
@@ -66,6 +66,17 @@
 		<!-- Account state -->
 		<div class="row state" v-if="$slots.state">
 			<slot name="state"></slot>
+		</div>
+
+		<!-- Validation conditions -->
+		<div 
+			v-if="showValidationConditions"
+			class="row validation-conditions"
+		>
+			<span>
+				<i class="fa fa-info-circle"></i>
+				{{ validationConditions }}
+			</span>
 		</div>
 	</div>
 </template>

@@ -236,6 +236,24 @@ Vue.prototype.shared = Vue.observable({
 		},
 
 		/**
+		 * Create or open room
+		 * 
+		 * @param {Object} data
+		 * @param {String} data.name
+		 * @param {Array} data.members
+		 * 
+		 * @returns {Promise}
+		 */
+		openRoom(data) {
+			return this.sdk.createRoom({
+				name: data.name,
+				members: data.members
+			}).then(({roomid}) => {
+				return this.sdk.openRoom(roomid).then(() => roomid);
+			});
+		},
+
+		/**
 		 * Create or open room and send message
 		 * 
 		 * @param {Object} data
@@ -263,7 +281,7 @@ Vue.prototype.shared = Vue.observable({
 						images: data.images || []
 					}
 				});
-			})
+			});
 		},
 
 		/**
@@ -453,6 +471,17 @@ Vue.prototype.shared = Vue.observable({
 		},
 
 		/**
+		 * Show success
+		 * 
+		 * @param {String} message
+		 */
+		showSuccess(message, options, callback) {
+			this.dialog?.instance.view("success", message).then(() => {
+				callback?.();
+			});
+		},
+
+		/**
 		 * Show warning
 		 * 
 		 * @param {String} message
@@ -466,8 +495,10 @@ Vue.prototype.shared = Vue.observable({
 		 * 
 		 * @param {Object} e
 		 */
-		showError(e, options) {
-			this.dialog?.instance.view("error", this.sdk.errorMessage(e, options));
+		showError(e, options, callback) {
+			this.dialog?.instance.view("error", this.sdk.errorMessage(e, options)).then(() => {
+				callback?.();
+			});
 		}
 	}
 });

@@ -19,6 +19,7 @@
 			<BarterItem
 				:item="item"
 				vType="page"
+				:mode="mode"
 			/>
 
 			<div class="row block top-sep">

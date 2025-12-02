@@ -23,7 +23,10 @@
 				@change="change"
 			/>
 			<div class="v-switch">
-				<span class="v-control"></span>
+				<span 
+					class="v-control"
+					:class="{'disabled': sw.disabled}"
+				></span>
 				<img
 					v-if="sw.image"
 					class="label-image"

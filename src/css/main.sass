@@ -63,7 +63,10 @@ span.link
 		display: block
 		font-size: 1em
 		margin: 0 0 1.75em
-		
+
+		&.info-level
+			color: $trunks
+
 		&.warning-level
 			color: $hit
 
@@ -75,6 +78,9 @@ span.link
 
 		&:last-child
 			margin: $r 0 $r * 2
+
+		&.top-margin
+			margin: $r * 2 0 0
 
 		&.no-margin
 			margin: 0

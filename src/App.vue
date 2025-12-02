@@ -145,13 +145,24 @@ export default {
 		 * Initialize app
 		 */
 		async setup() {
-			const
+			let 
+				address = null,
+				account = null;
+
+			try {
 				address = await this.sdk.getAddress(),
 				account = await this.sdk.getBrtAccount(address);
+			} catch (e) {
+				console.error(e);
+			};
 
-			/* Get appInfo and bastyon profile */
-			await this.sdk.getAppInfo();
-			await this.sdk.getUserProfile(address);
+			try {
+				/* Get appInfo and bastyon profile */
+				await this.sdk.getAppInfo();
+				await this.sdk.getUserProfile(address);
+			} catch (e) {
+				console.error(e);
+			};
 
 			/* Create barteron account automatically */
 			if (address && account && !account[0]) {

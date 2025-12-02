@@ -71,13 +71,32 @@
 					class="v-label warning-level"
 				>
 					<i class="fa fa-info-circle"></i>
-					{{ $t('deliveryLabels.hint_for_purchase_at_pickup_point') }}
+					{{ $t(`deliveryLabels.hint_for_purchase_at_pickup_point`) }}
 				</label>
 			</template>
 
 			<!-- <v-button vType="roshi">
 				<span>{{ $t('buttonLabels.buy_for', { cost: $n(item.price) }) }}</span>
 			</v-button> -->
+		</div>
+
+		<div 
+			v-if="safeDealAvailableForOffer()"
+			class="row align-center gap-md t-sep safe-deal-holder"
+		>
+			<i class="fa fa-shield-alt icon"></i>
+			<div class="hint">
+				<span>
+					<span>{{ getSafeDealHint() }}. </span>
+					<a 
+						href="#" 
+						class="link" 
+						@click.prevent="showSafeDealInfo"
+					>
+						<u>{{ $t('safeDealLabels.details') }}</u>
+					</a>
+				</span>
+			</div>
 		</div>
 	</div>
 </template>

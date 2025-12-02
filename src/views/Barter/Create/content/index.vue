@@ -275,11 +275,30 @@
 					/>
 				</div>
 
+				<!-- vSwitch: price prefix -->
+				<div 
+					v-if="pricePrefixAvailable()"
+					class="row" 
+					id="price-prefix-holder"
+				>
+					<v-switch
+						class="no-padding"
+						type="checkbox"
+						name="pricePrefix"
+						:label="$t('price_prefix_text')"
+						:selected="pricePrefix ? 'enabled' : ''"
+						:value="'enabled'"
+						vType="checkbox"
+						vSize="xl"
+						@change="pricePrefixValueChanged"
+					/>
+				</div>
+
 			</div>
 
 			<div 
 				v-if="offerCreationParams().isAllowed" 
-				class="row block sep"
+				class="row block sep condition-holder"
 			>
 				<!-- vSwitch (Radio) -->
 				<v-switch
@@ -497,6 +516,23 @@
 						:value="deliveryOptions?.selfPickup?.additionalInfo"
 					/>
 				</div>
+			</div>
+
+			<div
+				class="row block sep"
+				v-if="safeDealAvailable && !(isPickupPointCategory()) && offerCreationParams().isAllowed""
+			>
+				<!-- Title: Safe deal -->
+				<strong class="title">{{ $t('safeDealLabels.label') }}</strong>
+
+				<SafeDeal
+					ref="safeDeal"
+					mode="edit"
+					holderClass="field"
+					name="safeDeal"
+					:safeDeal="offer.safeDeal"
+					@safeDealVisibilityUpdated="updateAsideStepsAsync"
+				/>
 			</div>
 
 			<div 

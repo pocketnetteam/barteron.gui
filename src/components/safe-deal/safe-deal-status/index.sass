@@ -1,0 +1,55 @@
+@import "@/css/vars.sass"
+
+$status-item-size: 36px
+
+.safe-deal-status
+	ul
+		&.items-holder
+			display: flex
+			flex-direction: column
+			gap: 0
+			overflow: hidden
+			+resetList()
+
+			.item-with-line
+				.item
+					display: flex
+					flex-wrap: nowrap
+					align-items: center
+					gap: $r * 2
+
+					.marker
+						width: min-content
+						height: min-content
+
+						i.fa
+							font-size: $status-item-size
+							color: $beerus
+
+							&.checked
+								color: $roshi
+							
+							&.checked.negative
+								color: $dodoria
+
+					.title
+						color: $trunks
+
+						&.checked
+							color: $popo
+
+				.line-holder
+					width: $status-item-size
+					height: $status-item-size / 2
+					display: flex
+					align-items: stretch
+					justify-content: center
+
+					.line
+						border: .5px solid $beerus
+
+						&.checked
+							border-color: $roshi
+
+						&.checked.negative
+							border-color: $dodoria

@@ -12,7 +12,11 @@ export default {
 	props: {
 		hash: {
 			type: String
-		}
+		},
+		showValidationConditions: {
+			type: Boolean,
+			default: false
+		},
 	},
 
 	data() {
@@ -90,7 +94,7 @@ export default {
 		 * @returns {Array|null}
 		 */
 		geohash() {
-			if (this.account.geohash) {
+			if (this.account?.geohash) {
 				const { latitude, longitude } = GeoHash.decodeGeoHash(this.account.geohash);
 				return [latitude[0], longitude[0]];
 			} else {
@@ -125,6 +129,16 @@ export default {
 					this.addr.city || this.addr.town || this.addr.state || this.addr.county
 				].filter(f => f).join(", ");
 			}
-		}
+		},
+
+		validationConditions() {
+			const 
+				settings = this.sdk.getSafeDealSettings(),
+				defaultValues = settings.defaultValidatorValues;
+			
+			const feePercent = this.account?.safeDeal?.validator?.feePercent || defaultValues.feePercent;
+			return this.$t("safeDealLabels.validation_conditions", { feePercent });
+		},
+
 	}
 }

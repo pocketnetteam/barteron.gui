@@ -45,6 +45,7 @@
 			~ .v-switch
 					.v-control
 						border-radius: 4px
+						flex-shrink: 0
 
 			&:checked ~ .v-switch
 				.v-control
@@ -58,12 +59,17 @@
 						height: 7px
 						width: 3px
 						pointer-events: none
+				
+					&.disabled
+						&::after
+							border-color: $trunks
 
 		/* Radio */
 		&[type="radio"]
 			~ .v-switch
 					.v-control
 						border-radius: 50%
+						flex-shrink: 0
 
 			&:checked ~ .v-switch
 				.v-control
@@ -71,6 +77,10 @@
 						background: $blue
 						border-radius: 50%
 						display: block
+
+					&.disabled
+						&::after
+							background: $trunks
 
 		/* Control default */
 		~ .v-switch

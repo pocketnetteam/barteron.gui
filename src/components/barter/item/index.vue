@@ -12,7 +12,7 @@
 			<router-link :to="!(hasRelay || isRemoved) ? offerLink : {}">
 				<span
 					class="state"
-					v-if="item.used"
+					v-if="item.condition === 'used'"
 				>{{ $t('conditionLabels.used') }}</span>
 			
 				<!-- Images -->
@@ -470,10 +470,13 @@
 				</div>
 			</div>
 
-			<div class="row block sep" v-if="item.description">
+			<div class="row block sep" v-if="item.description || item.condition === 'used'">
 				<strong class="title">{{ $t('stepsLabels.description') }}</strong>
-				<p class="description">
+				<p v-if="item.description" class="description">
 					<LinkifiedText :text="item.description"/>
+				</p>
+				<p v-if="item.condition === 'used'" class="description">
+					<span>{{ $t('conditionLabels.label') }}: {{ $t('conditionLabels.used') }}</span>
 				</p>
 			</div>
 

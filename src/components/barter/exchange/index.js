@@ -1,5 +1,10 @@
+import SafeDealDialog from "@/components/safe-deal/safe-deal-dialog/index.vue";
+import Vue from 'vue';
+
 export default {
 	name: "BarterExchange",
+
+	inject: ['lightboxContainer'],
 
 	props: {
 		purchaseStateLabels: {
@@ -29,6 +34,10 @@ export default {
 			return this.mainComponent?.exchangeAvailable;
 		},
 
+		safeDealAvailableForOffer() {
+			return this.mainComponent?.safeDealAvailableForOffer?.();
+		},
+
 		isChatLoading() {
 			return this.mainComponent?.isChatLoading;
 		},
@@ -47,6 +56,33 @@ export default {
 
 		buyAtSelectedPickupPoint() {
 			this.mainComponent?.buyAtSelectedPickupPoint?.();
+		},
+
+		getSafeDealHint() {
+			let key = "hint_for_purchase";
+			const variant = this.mainComponent?.item?.safeDeal?.validatorFeeVariant;
+			if (variant === "seller") {
+				key = "offer_validator_fee_variant_seller_description";
+			} else if (variant === "inHalf") {
+				key = "offer_validator_fee_variant_in_half_description";
+			};
+			return this.$t(`safeDealLabels.${key}`);
+		},
+
+		showSafeDealInfo() {
+			const ComponentClass = Vue.extend(SafeDealDialog);
+			const instance = new ComponentClass({
+				propsData: {},
+			});
+			
+			instance.$on('onHide', vm => {
+			});
+
+			instance.$mount();
+			this.lightboxContainer().appendChild(instance.$el);
+			this.$nextTick(() => {
+				instance.show();
+			});
 		},
 	},
 
