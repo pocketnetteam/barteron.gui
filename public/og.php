@@ -113,8 +113,8 @@ class OG {
 				case 'safedeal': {
 					$title = false;
 					$description = false;
-					$image = false;
-					
+					$image = "https://{$this->manifest['scope']}/s_icon.png";
+
 					$lang = $this->getBrowserLang();
 
 					$offerTitle = '';

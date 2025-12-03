@@ -9,7 +9,7 @@
     },
     "author": "PUJjhGLa7KesEa3Ee8K9pi49u1mW9xqQZB",
     "develop": true,
-    "scope" : "test.barter.pocketnet.app",
+    "scope" : "barteron.club",
     "start_url" : "index.html",
     "icon": "b_icon.png",
     "permissions" : ["account", "notifications", "chat", "messaging", "payment", "sign", "mobilecamera", "geolocation", "externallink"]
