@@ -42,11 +42,14 @@
 						<router-view />
 					</keep-alive>
 
-					<!-- props "key" used here for this reason: https://github.com/pocketnetteam/barteron.gui/issues/425 -->
+					<!-- props "key" used here for this reasons: 
+						https://github.com/pocketnetteam/barteron.gui/issues/425 
+						https://github.com/pocketnetteam/barteron.gui/issues/689
+					-->
 					<div
 						id="container"
 						v-if="hasComponents(['aside', 'content', 'sidebar'])"
-						:key="$route?.name"
+						:key="mainContainerKey"
 					>
 						<router-view
 							name="aside"
@@ -111,6 +114,19 @@ export default {
 
 		surveyDisplayInterval() {
 			return 600_000;
+		},
+
+		mainContainerKey() {
+			const 
+				routeName = this.$route?.name,
+				fullPath = this.$route?.fullPath,
+				routesWithQueryParams = [
+					"ThreeSidedSearch",
+					"SafeDeal"
+				],
+				needExtendedKey = routesWithQueryParams.includes(routeName);
+			
+			return needExtendedKey ? fullPath : routeName;
 		},
 	},
 
@@ -181,8 +197,9 @@ export default {
 
 			/* Support urls from parent window */
 			this.sdk.on("changestate", (data) => {
-				console.log('bastyon -> barteron: ' + data, this.sdk.getRoute(data));
-				this.$router.push(this.sdk.getRoute(data)).catch(e => {
+				console.log('bastyon -> barteron: ' + data?.route);
+				const to = this.sdk.getRoute(data);
+				this.$router.push(to).catch(e => {
 					console.error(e);
 				});
 			});

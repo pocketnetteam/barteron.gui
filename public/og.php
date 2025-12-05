@@ -120,7 +120,7 @@ class OG {
 					$offerTitle = '';
 					$sellerAddress = false;
 					$result = $this->rpc->brtoffersbyhashes(array_filter([
-						@$id['offer'] ? $id['offer'] : null
+						@$id['offer'] ? $this->clean($id['offer']) : null
 					]));
 					if ($result != false){
 						$offer = $result[0];
