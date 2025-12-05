@@ -206,7 +206,7 @@ export default {
 
 			this.setSurveyBarVisibility();
 
-			//this.attachKeyboardObserver();
+			this.attachKeyboardObserver();
 
 			/* Hide preloader */
 			this.loading = false;
@@ -340,6 +340,12 @@ export default {
 
 						const value = getComputedStyle(targetNode).getPropertyValue('--keyboardheight') || 0;
 						this.keyboardHeight = canChangeKeyboardHeight ? value : 0;
+
+						if (this.address === "PPbNqCweFnTePQyXWR21B9jXWCiDJa2yYu") {
+							setTimer(() => {
+								this.dialog?.instance.view("info", `keyboardHeight = ${this.keyboardHeight}`);
+							}, 3000)
+						};
 					}
 				}
 			});
@@ -410,25 +416,16 @@ export default {
 			window.location.href = `https://bastyon.com/application?id=${ this.manifest.id }${ restUrl }${ excludedParamsString }`;
 		}
 
-		/* Watch for dialog */
-		const interval = setInterval(() => {
-			if (this.$refs.dialog) {
-				clearInterval(interval);
-				this.dialog = this.$refs.dialog;
-
-				/* Sdk is unavailable */
-				if (!this.sdk?.sdk) {
-					this.dialog?.instance.view("error", this.$t("dialogLabels.error#-1"));
-				} else {
-					this.setup();
-				}
-			}
-		}, 100);
-
-
-		this.waitForRefs("lightboxContainer, categorySelectDialog").then(() => {
+		this.waitForRefs("dialog, lightboxContainer, categorySelectDialog").then(() => {
+			this.dialog = this.$refs.dialog;
 			this.lightboxContainer = this.$refs.lightboxContainer;
 			this.categorySelectDialog = this.$refs.categorySelectDialog;
+		}).then(() => {
+			if (this.sdk?.sdk) {
+				this.setup();
+			} else {
+				this.dialog?.instance.view("error", this.$t("dialogLabels.error#-1"));
+			};
 		}).catch(e => { 
 			console.error(e);
 		});

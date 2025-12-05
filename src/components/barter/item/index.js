@@ -654,7 +654,7 @@ export default {
 
 			Promise.resolve().then(() => {
 
-				const needSelectDealType = (!(pickupPoint) || pickupPoint?.isSelfPickup);
+				const needSelectDealType = this.safeDealAvailableForOffer() && (!(pickupPoint) || pickupPoint?.isSelfPickup);
 				return needSelectDealType ? this.selectDealTypePromise() : "regularDeal";
 
 			}).then(dealType => {
