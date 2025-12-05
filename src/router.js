@@ -144,4 +144,9 @@ router.beforeEach((to, from, next) => {
 	next();
 });
 
+router.onError(e => {
+	console.error(e);
+	router.app.showVersionConflictIfNeeded?.(e); // becomes available after the app is mounted
+});
+
 export default router;
