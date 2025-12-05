@@ -111,47 +111,50 @@ class OG {
 				}
 
 				case 'safedeal': {
-					$title = false;
-					$description = false;
+					$title = 'Safe deal';
+					$description = 'Open the deal to check the current status';
 					$image = "https://{$this->manifest['scope']}/s_icon.png";
-
-					$lang = $this->getBrowserLang();
 
 					$offerTitle = '';
 					$sellerAddress = false;
-					$result = $this->rpc->brtoffersbyhashes(array_filter([
+
+					$offerResult = $this->rpc->brtoffersbyhashes(array_filter([
 						@$id['offer'] ? $this->clean($id['offer']) : null
 					]));
-					if ($result != false){
-						$offer = $result[0];
+
+					if ($offerResult != false){
+						$offer = $offerResult[0];
 						$offerTitle = urldecode($offer->p->s2);
 						$sellerAddress = ($offer->s1) ? urldecode($offer->s1) : false;
-					}
 
-					$buyerName = $this->getSafeDealUserName($id, 'buyer');
-					$validatorName = $this->getSafeDealUserName($id, 'validator');
+						$buyerName = $this->getSafeDealUserName($id, 'buyer');
+						$validatorName = $this->getSafeDealUserName($id, 'validator');
 
-					$sellerName = '';
-					if ($sellerAddress != false) {
-						$result = $this->rpc->getuserprofile($this->clean($sellerAddress));
-						if ($result != false){
-							$profile = $result[0];
-							$sellerName = urldecode($profile->name);
+						$sellerName = '';
+						if ($sellerAddress != false) {
+							$sellerResult = $this->rpc->getuserprofile($this->clean($sellerAddress));
+							if ($sellerResult != false){
+								$profile = $sellerResult[0];
+								$sellerName = urldecode($profile->name);
+
+								$validatorFeePercent = @$id['fee'] ? $id['fee'] : '?';
+
+								$lang = $this->getBrowserLang();
+
+								switch ($lang) {
+									case 'ru':
+										$title = 'Безопасная сделка';
+										$description = "Гарант: {$validatorName}, процент: {$validatorFeePercent}%; Продавец: {$sellerName}; Покупатель: {$buyerName}; Предмет сделки: {$offerTitle}";
+										break;
+
+									default:
+										$title = 'Safe deal';
+										$description = "Guarantor: {$validatorName}, fee: {$validatorFeePercent}%; Seller: {$sellerName}; Buyer: {$buyerName}; Subject of the deal: {$offerTitle}";
+										break;
+								}
+							}
 						}
-					}
 
-					$validatorFeePercent = @$id['fee'] ? $id['fee'] : '?';
-
-					switch ($lang) {
-						case 'ru':
-							$title = 'Безопасная сделка';
-							$description = "Гарант: {$validatorName}, процент: {$validatorFeePercent}%; Продавец: {$sellerName}; Покупатель: {$buyerName}; Предмет сделки: {$offerTitle}";
-							break;
-
-						default:
-							$title = 'Safe deal';
-							$description = "Guarantor: {$validatorName}, fee: {$validatorFeePercent}%; Seller: {$sellerName}; Buyer: {$buyerName}; Subject of the deal: {$offerTitle}";
-							break;
 					}
 
 					if($title) $this->currentOg['title'] = $title;
@@ -232,11 +235,11 @@ class OG {
 	}
 
 	public function getBrowserLang(array $available = ['en', 'ru'], $default = 'en') {
-		if (empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+		$header = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+		
+		if (empty($header)) {
 			return $default;
 		}
-
-		$header = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
 
 		// Search all langs + q-factors
 		preg_match_all(
