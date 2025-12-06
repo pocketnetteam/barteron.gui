@@ -10,6 +10,7 @@
 		/>
 
 		<Votes
+			class="temporary-adding-margin-bottom"
 			:item="item"
 			:form="!!(item)"
 		/>

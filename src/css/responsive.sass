@@ -178,6 +178,11 @@
 			&:has(#aside)
 				padding-left: $r * 0
 
+			/* margin-bottom will be removed after bug fix https://github.com/pocketnetteam/barteron.gui/issues/493 */
+			.votes
+				&.temporary-adding-margin-bottom
+					margin-bottom: 75px
+
 		.barter-list-settings
 			.filter
 				display: flex
