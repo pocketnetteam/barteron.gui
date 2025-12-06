@@ -2,6 +2,10 @@
 	<div
 		id="app"
 		:class="theme"
+		:style="{
+			'margin-bottom': keyboardHeight,
+			'transition': 'margin-bottom .2s ease-out'
+		}"
 	>
 		<CategorySelect
 			ref="categorySelectDialog"
@@ -69,11 +73,6 @@
 				<v-footer />
 			</template>
 		</template>
-
-		<div 
-			class="bottom-keyboard-space"
-			:style="{ 'height': keyboardHeight, 'width': '100%'}"
-		></div>
 	</div>
 </template>
 
@@ -340,12 +339,6 @@ export default {
 
 						const value = getComputedStyle(targetNode).getPropertyValue('--keyboardheight') || 0;
 						this.keyboardHeight = canChangeKeyboardHeight ? value : 0;
-
-						if (this.address === "PPbNqCweFnTePQyXWR21B9jXWCiDJa2yYu") {
-							setTimer(() => {
-								this.dialog?.instance.view("info", `keyboardHeight = ${this.keyboardHeight}`);
-							}, 3000)
-						};
 					}
 				}
 			});
