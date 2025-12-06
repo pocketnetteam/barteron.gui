@@ -205,7 +205,8 @@ export default {
 
 			this.setSurveyBarVisibility();
 
-			this.attachKeyboardObserver();
+			// will be uncomment after bug fix https://github.com/pocketnetteam/barteron.gui/issues/493
+			// this.attachKeyboardObserver();
 
 			/* Hide preloader */
 			this.loading = false;
