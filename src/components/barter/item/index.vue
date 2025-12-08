@@ -139,6 +139,7 @@
 						<router-link
 							v-if="link.id"
 							:to="{ 'name': 'category', params: { id: link.id } }"
+							:title="link.value"
 						>{{ link.value }}</router-link>
 						<span v-else>{{ link.value }}</span>
 					</li>
@@ -201,6 +202,7 @@
 								<router-link
 									v-if="link.id"
 									:to="{ 'name': 'category', params: { id: link.id } }"
+									:title="link.value"
 								>{{ link.value }}</router-link>
 								<span v-else>{{ link.value }}</span>
 							</li>
