@@ -39,6 +39,7 @@ const safeDealData = {
 				"PEmxMUL35Z5rtULmHMuYLNYsQGu23HXBeX",
 				"PMkhdDuCM3k8xLRDBUnmBDcUMWjhfPbWbE",
 				"PQ412SrFxSH1UZchG14FZ3ZsydHfcEh8o7",
+				"PUfQUZUoHiaUeSWyLWZVWMHAffQ96zZArq",
 			],
 		}
 	}
