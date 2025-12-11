@@ -1,9 +1,14 @@
+import SafeDealDialog from "@/components/safe-deal/safe-deal-dialog/index.vue";
+import Vue from 'vue';
+
 export default {
 	name: "SafeDeal",
 
 	components: {
 		
 	},
+
+	inject: ['lightboxContainer'],
 
 	props: {
 		safeDeal: {
@@ -46,6 +51,22 @@ export default {
 	},
 
 	methods: {
+		showSafeDealInfo() {
+			const ComponentClass = Vue.extend(SafeDealDialog);
+			const instance = new ComponentClass({
+				propsData: {},
+			});
+			
+			instance.$on('onHide', vm => {
+			});
+
+			instance.$mount();
+			this.lightboxContainer().appendChild(instance.$el);
+			this.$nextTick(() => {
+				instance.show();
+			});
+		},
+
 		validate() {
 			let result = true;
 			if (this.validatorFeeVariantsEnabled && !(this.validatorFeeVariant)) {

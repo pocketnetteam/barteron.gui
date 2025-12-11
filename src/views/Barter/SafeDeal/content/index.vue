@@ -62,7 +62,7 @@
 			</label>
 		</div>
 
-		<template v-if="!(statusesLoading || statusesLoadingError) && sdk.getFromToTransactionsIsAvailable()">
+		<template v-if="!(statusesLoading || statusesLoadingError) && sdk.safeDealAvailable()">
 			<strong class="subtitle">
 				{{ actionsListTitle }}
 			</strong>

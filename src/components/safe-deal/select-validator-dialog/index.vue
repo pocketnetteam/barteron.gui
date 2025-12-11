@@ -17,7 +17,12 @@
 				:class="{ 'selected': selectedIndex === index }"
 				@click="() => selectedIndex = index"
 			>
-				<i class="check fa fa-check-circle"></i>
+				<i 
+					:class="{
+						'check': true,
+						'fa fa-check-circle': selectedIndex === index,
+					}"
+				></i>
 				<Profile 
 					:ref="`profile-${index}`"
 					:hash="item"
