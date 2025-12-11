@@ -1105,8 +1105,8 @@ class SDK {
 		}).catch(e => this.setLastResult(e));
 	}
 
-	getFromToTransactionsIsAvailable() {
-		return !!(this.sdk.get.fromToTransactions);
+	safeDealAvailable() {
+		return (this.getTransactionsApiVersion() >= 5);
 	}
 
 	getFromToTransactions(

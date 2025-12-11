@@ -383,7 +383,7 @@ export default {
 		},
 
 		checkSafeDealData() {
-			if (!(this.sdk.getFromToTransactionsIsAvailable())) {
+			if (!(this.sdk.safeDealAvailable())) {
 				const error = new Error(this.$t("dialogLabels.get_from_to_transactions_availability_error"));
 				this.showError(error, null, () => {
 					this.showOffer();
