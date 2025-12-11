@@ -1,6 +1,19 @@
 <template>
 	<div class="safe-deal">
 		<div v-if="isEditMode">
+			<div class="row">
+				<span class="how-it-works">
+					<a 
+						href="#" 
+						class="link" 
+						@click.prevent="showSafeDealInfo"
+					>
+						<i class="fa fa-info-circle"></i>
+						{{ $t('safeDealLabels.how_it_works') }}
+					</a>
+				</span>
+			</div>
+
 			<v-switch
 				class="no-padding"
 				type="checkbox"
