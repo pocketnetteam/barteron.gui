@@ -427,7 +427,7 @@
 					id="location"
 					class="map"
 					ref="map"
-					:height="mapHeight()"
+					:height="mapHeight"
 					:mapMode="mapMode()"
 					:pickupPointPopupMode="'input'"
 					:selectedOfferIds="selectedOfferIds()"

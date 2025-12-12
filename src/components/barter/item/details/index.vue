@@ -169,11 +169,13 @@
 		<div
 			class="row"
 			:class="{ 'sep': false }"
+			:style="{ 'max-width': mapWidth }"
 			v-if="item.geohash"
 		>
 			<!-- Component: Map -->
 			<v-map
 				mapMode="view"
+				:height="mapHeight"
 				:center="geohash"
 				:zoom="10"
 				:offers="[item]"

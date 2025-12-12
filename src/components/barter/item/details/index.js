@@ -79,6 +79,14 @@ export default {
 			return this.item.delivery?.pickupPoint;
 		},
 
+		mapWidth() {
+			return "400px";
+		},
+
+		mapHeight() {
+			return "400px";
+		},
+
 		/**
 		 * Get user location
 		 * 
@@ -105,7 +113,7 @@ export default {
 		 * @returns {null|String}
 		 */
 		geopos() {
-			if (!this.addr.country) {
+			if (!this.addr?.display_name) {
 				if (!this.addr.fetching && this.geohash) {
 					this.addr.fetching = true;
 				
@@ -113,7 +121,7 @@ export default {
 						"zoom": this.zoom || 18,
 						"accept-language": this.sdk.getLanguageByLocale(this.$root.$i18n.locale)
 					}).then(result => {
-						if (result?.address) this.$set(this, "addr", result.address);
+						if (result?.display_name) this.$set(this, "addr", result);
 					}).catch(e => { 
 						console.error(e);
 					}).finally(() => {
@@ -123,10 +131,19 @@ export default {
 
 				return null;
 			} else {
-				return [
-					this.addr.country,
-					this.addr.city || this.addr.town || this.addr.state || this.addr.county
-				].filter(f => f).join(", ");
+				let result = this.addr?.display_name || "";
+				const 
+					countryCode = this.addr?.address?.country_code,
+					needReverse = ["ru", "ua", "by"].includes(countryCode);
+
+				if (needReverse) {
+					result = result
+						.split(",")
+						.map(m => m.trim())
+						.reverse()
+						.join(", ");
+				}
+				return result;
 			}
 		},
 
