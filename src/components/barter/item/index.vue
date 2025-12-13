@@ -504,13 +504,14 @@
 			<div
 				class="row"
 				:class="{ 'sep': deliveryOptions }"
+				:style="{ 'max-width': mapWidth }"
 				v-if="item.geohash"
 			>
 				<!-- Component: Map -->
 				<v-map
 					ref="map"
 					:mapMode="mapMode"
-					:height="(mapMode === 'deliverySelection') ? mapHeight() : undefined"
+					:height="mapHeight"
 					:pickupPointPopupMode="isMyOffer ? 'readonly' : 'selection'"
 					:center="geohash"
 					:zoom="10"

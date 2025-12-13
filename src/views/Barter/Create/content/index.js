@@ -67,6 +67,10 @@ export default {
 			return this.offer?.delivery?.deliveryOptions;
 		},
 
+		mapHeight() {
+			return this.isLargeScreen() ? "560px" : "400px";
+		},
+
 		/**
 		 * Get my location
 		 * 

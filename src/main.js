@@ -120,12 +120,12 @@ Vue.prototype.shared = Vue.observable({
 		},
 
 		/**
-		 * Get map height
+		 * Check if large screen
 		 * 
-		 * @returns {String|undefined}
+		 * @returns {Boolean}
 		 */
-		mapHeight() {
-			let result = undefined;
+		isLargeScreen() {
+			let result = false;
 			const value = getComputedStyle(document.documentElement).getPropertyValue('--device-size-large');
 			if (value) {
 				const 
@@ -133,7 +133,7 @@ Vue.prototype.shared = Vue.observable({
 					exceedsQuerySize = !(window.matchMedia(query).matches);
 				
 				if (exceedsQuerySize) {
-					result = "560px"
+					result = true
 				}
 			}
 			return result;
