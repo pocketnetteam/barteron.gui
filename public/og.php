@@ -139,7 +139,8 @@ class OG {
 
 								$validatorFeePercent = @$id['fee'] ? $id['fee'] : '?';
 
-								$lang = $this->getBrowserLang();
+								$lang = @$id['lang'] ? $id['lang'] : $this->getBrowserLang();
+								$lang = strtolower($lang);
 
 								switch ($lang) {
 									case 'ru':
