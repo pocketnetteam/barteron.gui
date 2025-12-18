@@ -121,6 +121,10 @@ export default {
 			return [11233, 11232];
 		},
 
+		petSuppliesSubcategoriesToShowPrompt() {
+			return [1281];
+		},
+
 		viewingParentCategory() {
 			return !(this.isLoading || this.isSearchEnabled() || this.isFiltersActive()) 
 				&& (this.items?.length < 20) 
@@ -130,6 +134,7 @@ export default {
 					|| this.servicesSubcategoriesToShowPrompt.includes(this.secondLevelParentCategory?.id) && this.secondLevelParentCategory
 					|| this.clothingFootwearAccessoriesSubcategoriesToShowPrompt.includes(this.secondLevelParentCategory?.id) && this.secondLevelParentCategory
 					|| this.musicAndVideoSubcategoriesToShowPrompt.includes(this.secondLevelParentCategory?.id) && this.secondLevelParentCategory
+					|| this.petSuppliesSubcategoriesToShowPrompt.includes(this.secondLevelParentCategory?.id) && this.secondLevelParentCategory
 				);
 		},
 	},

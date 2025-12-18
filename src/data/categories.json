@@ -9734,8 +9734,812 @@
 		"name": "pet_supplies",
 		"id": 1281,
 		"parent": 24,
+		"children": [
+			1282,
+			1297,
+			1314,
+			1325,
+			1337,
+			1343,
+			1376
+		],
+		"order": 60
+	},
+	"1282": {
+		"name": "for_cats",
+		"id": 1282,
+		"parent": 1281,
+		"children": [
+			1283,
+			1284,
+			1285,
+			1286,
+			1287,
+			1288,
+			1289,
+			1290,
+			1291,
+			1292,
+			1293,
+			1294,
+			1295,
+			1296
+		],
+		"order": 10
+	},
+	"1283": {
+		"name": "food_and_treats",
+		"id": 1283,
+		"parent": 1282,
+		"children": [],
+		"order": 10
+	},
+	"1284": {
+		"name": "litter_boxes_and_litter",
+		"id": 1284,
+		"parent": 1282,
+		"children": [],
+		"order": 20
+	},
+	"1285": {
+		"name": "scratching_posts_and_play_centers",
+		"id": 1285,
+		"parent": 1282,
+		"children": [],
+		"order": 30
+	},
+	"1286": {
+		"name": "cat_houses",
+		"id": 1286,
+		"parent": 1282,
+		"children": [],
+		"order": 40
+	},
+	"1287": {
+		"name": "beds",
+		"id": 1287,
+		"parent": 1282,
+		"children": [],
+		"order": 50
+	},
+	"1288": {
+		"name": "carriers",
+		"id": 1288,
+		"parent": 1282,
 		"children": [],
 		"order": 60
+	},
+	"1289": {
+		"name": "cages_and_enclosures",
+		"id": 1289,
+		"parent": 1282,
+		"children": [],
+		"order": 70
+	},
+	"1290": {
+		"name": "toys",
+		"id": 1290,
+		"parent": 1282,
+		"children": [],
+		"order": 80
+	},
+	"1291": {
+		"name": "collars_and_leashes",
+		"id": 1291,
+		"parent": 1282,
+		"children": [],
+		"order": 90
+	},
+	"1292": {
+		"name": "cat_bowls_and_feeders",
+		"id": 1292,
+		"parent": 1282,
+		"children": [],
+		"order": 100
+	},
+	"1293": {
+		"name": "grooming",
+		"id": 1293,
+		"parent": 1282,
+		"children": [],
+		"order": 110
+	},
+	"1294": {
+		"name": "care_products",
+		"id": 1294,
+		"parent": 1282,
+		"children": [],
+		"order": 120
+	},
+	"1295": {
+		"name": "clothing",
+		"id": 1295,
+		"parent": 1282,
+		"children": [],
+		"order": 130
+	},
+	"1296": {
+		"name": "behavior_correction",
+		"id": 1296,
+		"parent": 1282,
+		"children": [],
+		"order": 140
+	},
+	"1297": {
+		"name": "for_dogs",
+		"id": 1297,
+		"parent": 1281,
+		"children": [
+			1298,
+			1299,
+			1300,
+			1301,
+			1302,
+			1303,
+			1304,
+			1306,
+			1307,
+			1308,
+			1309,
+			1310,
+			1311,
+			1312,
+			1313
+		],
+		"order": 20
+	},
+	"1298": {
+		"name": "food_and_treats",
+		"id": 1298,
+		"parent": 1297,
+		"children": [],
+		"order": 10
+	},
+	"1299": {
+		"name": "toys",
+		"id": 1299,
+		"parent": 1297,
+		"children": [],
+		"order": 20
+	},
+	"1300": {
+		"name": "leashes_collars_and_harnesses",
+		"id": 1300,
+		"parent": 1297,
+		"children": [],
+		"order": 30
+	},
+	"1301": {
+		"name": "beds_and_dog_houses",
+		"id": 1301,
+		"parent": 1297,
+		"children": [],
+		"order": 40
+	},
+	"1302": {
+		"name": "bowls_and_feeders",
+		"id": 1302,
+		"parent": 1297,
+		"children": [],
+		"order": 50
+	},
+	"1303": {
+		"name": "grooming",
+		"id": 1303,
+		"parent": 1297,
+		"children": [],
+		"order": 60
+	},
+	"1304": {
+		"name": "care_products",
+		"id": 1304,
+		"parent": 1297,
+		"children": [],
+		"order": 70
+	},
+	"1306": {
+		"name": "clothing",
+		"id": 1306,
+		"parent": 1297,
+		"children": [],
+		"order": 80
+	},
+	"1307": {
+		"name": "shoes",
+		"id": 1307,
+		"parent": 1297,
+		"children": [],
+		"order": 90
+	},
+	"1308": {
+		"name": "carriers",
+		"id": 1308,
+		"parent": 1297,
+		"children": [],
+		"order": 100
+	},
+	"1309": {
+		"name": "travel_accessories",
+		"id": 1309,
+		"parent": 1297,
+		"children": [],
+		"order": 110
+	},
+	"1310": {
+		"name": "toilets_and_training_pads",
+		"id": 1310,
+		"parent": 1297,
+		"children": [],
+		"order": 120
+	},
+	"1311": {
+		"name": "kennels_and_dog_houses",
+		"id": 1311,
+		"parent": 1297,
+		"children": [],
+		"order": 130
+	},
+	"1312": {
+		"name": "dog_training",
+		"id": 1312,
+		"parent": 1297,
+		"children": [],
+		"order": 140
+	},
+	"1313": {
+		"name": "behavior_correction_products",
+		"id": 1313,
+		"parent": 1297,
+		"children": [],
+		"order": 150
+	},
+	"1314": {
+		"name": "for_rodents_and_ferrets",
+		"id": 1314,
+		"parent": 1281,
+		"children": [
+			1315,
+			1316,
+			1317,
+			1318,
+			1319,
+			1320,
+			1321,
+			1322,
+			1323,
+			1324
+		],
+		"order": 30
+	},
+	"1315": {
+		"name": "food_and_treats",
+		"id": 1315,
+		"parent": 1314,
+		"children": [],
+		"order": 10
+	},
+	"1316": {
+		"name": "cages",
+		"id": 1316,
+		"parent": 1314,
+		"children": [],
+		"order": 20
+	},
+	"1317": {
+		"name": "carriers",
+		"id": 1317,
+		"parent": 1314,
+		"children": [],
+		"order": 30
+	},
+	"1318": {
+		"name": "toys",
+		"id": 1318,
+		"parent": 1314,
+		"children": [],
+		"order": 40
+	},
+	"1319": {
+		"name": "houses_and_beds",
+		"id": 1319,
+		"parent": 1314,
+		"children": [],
+		"order": 50
+	},
+	"1320": {
+		"name": "litter_boxes_and_bedding",
+		"id": 1320,
+		"parent": 1314,
+		"children": [],
+		"order": 60
+	},
+	"1321": {
+		"name": "bowls_and_water_bottles",
+		"id": 1321,
+		"parent": 1314,
+		"children": [],
+		"order": 70
+	},
+	"1322": {
+		"name": "care_products",
+		"id": 1322,
+		"parent": 1314,
+		"children": [],
+		"order": 80
+	},
+	"1323": {
+		"name": "grooming_tools",
+		"id": 1323,
+		"parent": 1314,
+		"children": [],
+		"order": 90
+	},
+	"1324": {
+		"name": "harnesses_and_accessories",
+		"id": 1324,
+		"parent": 1314,
+		"children": [],
+		"order": 100
+	},
+	"1325": {
+		"name": "for_birds",
+		"id": 1325,
+		"parent": 1281,
+		"children": [
+			1326,
+			1327,
+			1328,
+			1329,
+			1330,
+			1331,
+			1332,
+			1333,
+			1334,
+			1335,
+			1336
+		],
+		"order": 40
+	},
+	"1326": {
+		"name": "food_and_treats",
+		"id": 1326,
+		"parent": 1325,
+		"children": [],
+		"order": 10
+	},
+	"1327": {
+		"name": "cages",
+		"id": 1327,
+		"parent": 1325,
+		"children": [],
+		"order": 20
+	},
+	"1328": {
+		"name": "toys",
+		"id": 1328,
+		"parent": 1325,
+		"children": [],
+		"order": 30
+	},
+	"1329": {
+		"name": "waterers_and_feeders",
+		"id": 1329,
+		"parent": 1325,
+		"children": [],
+		"order": 40
+	},
+	"1330": {
+		"name": "cage_covers_and_stands",
+		"id": 1330,
+		"parent": 1325,
+		"children": [],
+		"order": 50
+	},
+	"1331": {
+		"name": "baths_and_sand",
+		"id": 1331,
+		"parent": 1325,
+		"children": [],
+		"order": 60
+	},
+	"1332": {
+		"name": "lights_and_lamps",
+		"id": 1332,
+		"parent": 1325,
+		"children": [],
+		"order": 70
+	},
+	"1333": {
+		"name": "carriers",
+		"id": 1333,
+		"parent": 1325,
+		"children": [],
+		"order": 80
+	},
+	"1334": {
+		"name": "clothing",
+		"id": 1334,
+		"parent": 1325,
+		"children": [],
+		"order": 90
+	},
+	"1335": {
+		"name": "training_and_education",
+		"id": 1335,
+		"parent": 1325,
+		"children": [],
+		"order": 100
+	},
+	"1336": {
+		"name": "birdhouses_and_nests",
+		"id": 1336,
+		"parent": 1325,
+		"children": [],
+		"order": 110
+	},
+	"1337": {
+		"name": "for_fish_and_reptiles",
+		"id": 1337,
+		"parent": 1281,
+		"children": [
+			1338,
+			1339,
+			1340,
+			1341,
+			1342
+		],
+		"order": 50
+	},
+	"1338": {
+		"name": "aquariums_and_accessories",
+		"id": 1338,
+		"parent": 1337,
+		"children": [],
+		"order": 10
+	},
+	"1339": {
+		"name": "terrariums_and_accessories",
+		"id": 1339,
+		"parent": 1337,
+		"children": [],
+		"order": 20
+	},
+	"1340": {
+		"name": "fish_food",
+		"id": 1340,
+		"parent": 1337,
+		"children": [],
+		"order": 30
+	},
+	"1341": {
+		"name": "food_for_reptiles_and_other_insectivores",
+		"id": 1341,
+		"parent": 1337,
+		"children": [],
+		"order": 40
+	},
+	"1342": {
+		"name": "ant_farms",
+		"id": 1342,
+		"parent": 1337,
+		"children": [],
+		"order": 50
+	},
+	"1343": {
+		"name": "farm_supplies",
+		"id": 1343,
+		"parent": 1281,
+		"children": [
+			1344,
+			1354,
+			1362,
+			1369
+		],
+		"order": 60
+	},
+	"1344": {
+		"name": "equipment",
+		"id": 1344,
+		"parent": 1343,
+		"children": [
+			1345,
+			1346,
+			1347,
+			1348,
+			1349,
+			1350,
+			1351,
+			1352,
+			1353
+		],
+		"order": 10
+	},
+	"1345": {
+		"name": "electric_fencing_and_accessories",
+		"id": 1345,
+		"parent": 1344,
+		"children": [],
+		"order": 10
+	},
+	"1346": {
+		"name": "feed_production",
+		"id": 1346,
+		"parent": 1344,
+		"children": [],
+		"order": 20
+	},
+	"1347": {
+		"name": "incubators_and_ovoscopes_for_eggs",
+		"id": 1347,
+		"parent": 1344,
+		"children": [],
+		"order": 30
+	},
+	"1348": {
+		"name": "feeding_and_watering_systems",
+		"id": 1348,
+		"parent": 1344,
+		"children": [],
+		"order": 40
+	},
+	"1349": {
+		"name": "milking_equipment",
+		"id": 1349,
+		"parent": 1344,
+		"children": [],
+		"order": 50
+	},
+	"1350": {
+		"name": "milk_storage_and_processing",
+		"id": 1350,
+		"parent": 1344,
+		"children": [],
+		"order": 60
+	},
+	"1351": {
+		"name": "slaughtering_and_plucking_equipment",
+		"id": 1351,
+		"parent": 1344,
+		"children": [],
+		"order": 70
+	},
+	"1352": {
+		"name": "manure_removal",
+		"id": 1352,
+		"parent": 1344,
+		"children": [],
+		"order": 80
+	},
+	"1353": {
+		"name": "other",
+		"id": 1353,
+		"parent": 1344,
+		"children": [],
+		"order": 90
+	},
+	"1354": {
+		"name": "farm_animal_and_poultry_care",
+		"id": 1354,
+		"parent": 1343,
+		"children": [
+			1355,
+			1356,
+			1357,
+			1358,
+			1359,
+			1360,
+			1361
+		],
+		"order": 20
+	},
+	"1355": {
+		"name": "cages_and_accessories",
+		"id": 1355,
+		"parent": 1354,
+		"children": [],
+		"order": 10
+	},
+	"1356": {
+		"name": "hygiene",
+		"id": 1356,
+		"parent": 1354,
+		"children": [],
+		"order": 20
+	},
+	"1357": {
+		"name": "grooming",
+		"id": 1357,
+		"parent": 1354,
+		"children": [],
+		"order": 30
+	},
+	"1358": {
+		"name": "veterinary_supplies",
+		"id": 1358,
+		"parent": 1354,
+		"children": [],
+		"order": 40
+	},
+	"1359": {
+		"name": "heating_and_ventilation",
+		"id": 1359,
+		"parent": 1354,
+		"children": [],
+		"order": 50
+	},
+	"1360": {
+		"name": "identification_and_marking",
+		"id": 1360,
+		"parent": 1354,
+		"children": [],
+		"order": 60
+	},
+	"1361": {
+		"name": "other",
+		"id": 1361,
+		"parent": 1354,
+		"children": [],
+		"order": 70
+	},
+	"1362": {
+		"name": "feed_and_supplements",
+		"id": 1362,
+		"parent": 1343,
+		"children": [
+			1363,
+			1364,
+			1365,
+			1366,
+			1367,
+			1368
+		],
+		"order": 30
+	},
+	"1363": {
+		"name": "for_poultry",
+		"id": 1363,
+		"parent": 1362,
+		"children": [],
+		"order": 10
+	},
+	"1364": {
+		"name": "for_horses",
+		"id": 1364,
+		"parent": 1362,
+		"children": [],
+		"order": 20
+	},
+	"1365": {
+		"name": "for_goats_and_sheep",
+		"id": 1365,
+		"parent": 1362,
+		"children": [],
+		"order": 30
+	},
+	"1366": {
+		"name": "for_cattle",
+		"id": 1366,
+		"parent": 1362,
+		"children": [],
+		"order": 40
+	},
+	"1367": {
+		"name": "for_pigs",
+		"id": 1367,
+		"parent": 1362,
+		"children": [],
+		"order": 50
+	},
+	"1368": {
+		"name": "for_other_farm_animals",
+		"id": 1368,
+		"parent": 1362,
+		"children": [],
+		"order": 60
+	},
+	"1369": {
+		"name": "beekeeping_supplies",
+		"id": 1369,
+		"parent": 1343,
+		"children": [
+			1370,
+			1371,
+			1372,
+			1373,
+			1374,
+			1375
+		],
+		"order": 40
+	},
+	"1370": {
+		"name": "frames_beehives_and_accessories",
+		"id": 1370,
+		"parent": 1369,
+		"children": [],
+		"order": 10
+	},
+	"1371": {
+		"name": "honey_extractors_and_honey_harvesting",
+		"id": 1371,
+		"parent": 1369,
+		"children": [],
+		"order": 20
+	},
+	"1372": {
+		"name": "hand_tools",
+		"id": 1372,
+		"parent": 1369,
+		"children": [],
+		"order": 30
+	},
+	"1373": {
+		"name": "bee_breeding_supplies",
+		"id": 1373,
+		"parent": 1369,
+		"children": [],
+		"order": 40
+	},
+	"1374": {
+		"name": "apiary_equipment",
+		"id": 1374,
+		"parent": 1369,
+		"children": [],
+		"order": 50
+	},
+	"1375": {
+		"name": "feed_supplements",
+		"id": 1375,
+		"parent": 1369,
+		"children": [],
+		"order": 60
+	},
+	"1376": {
+		"name": "for_horses",
+		"id": 1376,
+		"parent": 1281,
+		"children": [
+			1377,
+			1378,
+			1379,
+			1380,
+			1381
+		],
+		"order": 70
+	},
+	"1377": {
+		"name": "horse_feed",
+		"id": 1377,
+		"parent": 1376,
+		"children": [],
+		"order": 10
+	},
+	"1378": {
+		"name": "horse_tack_and_equipment",
+		"id": 1378,
+		"parent": 1376,
+		"children": [],
+		"order": 20
+	},
+	"1379": {
+		"name": "care_products",
+		"id": 1379,
+		"parent": 1376,
+		"children": [],
+		"order": 30
+	},
+	"1380": {
+		"name": "stable_equipment",
+		"id": 1380,
+		"parent": 1376,
+		"children": [],
+		"order": 40
+	},
+	"1381": {
+		"name": "horseshoes_and_farrier_tools",
+		"id": 1381,
+		"parent": 1376,
+		"children": [],
+		"order": 50
 	},
 	"1305": {
 		"name": "tickets_experiences",
@@ -12317,7 +13121,7 @@
 		"order": 70
 	},
 	"6049": {
-		"name": "equipment",
+		"name": "outfit",
 		"id": 6049,
 		"parent": 6031,
 		"children": [],
