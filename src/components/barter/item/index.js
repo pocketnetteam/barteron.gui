@@ -636,10 +636,12 @@ export default {
 				settings = this.sdk.getSafeDealSettings(),
 				filter = settings.allowedAddressFilter;
 
-			if (filter.isEnabled && !(filter.items.includes(this.sdk.address))) {
+			if (!(this.sdk.safeDealAvailable())) {
 				result = false;
-			}; 
-			
+			} else if (filter.isEnabled && !(filter.items.includes(this.sdk.address))) {
+				result = false;
+			};
+
 			if (result && this.deliveryOptionsAvailable) {
 				const 
 					options = this.deliveryOptions,
