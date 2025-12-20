@@ -1106,7 +1106,7 @@ class SDK {
 	}
 
 	safeDealAvailable() {
-		return (this.getTransactionsApiVersion() >= 5);
+		return (this.getTransactionsApiVersion() >= 7);
 	}
 
 	getFromToTransactions(

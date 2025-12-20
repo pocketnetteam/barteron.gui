@@ -121,9 +121,7 @@ export default {
 			if (filter.isEnabled && !(filter.items.includes(this.sdk.address))) {
 				result = false;
 			} else {
-				if (this.sdk.getTransactionsApiVersion() >= 5 
-					|| process.env.NODE_ENV === "development"
-				) {
+				if (this.sdk.safeDealAvailable()) {
 					result = true;
 				};
 			};
