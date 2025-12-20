@@ -55,8 +55,10 @@ class OG {
 				$lang = @$id['lang'] ? strtolower($id['lang']) : $lang;
 			} else {
 				@list($id, $rest) = explode('?', $id);
-				parse_str($rest, $rest);
-				$lang = @$rest['lang'] ? strtolower($rest['lang']) : $lang;
+				if ($rest) {
+					parse_str($rest, $rest);
+					$lang = @$rest['lang'] ? strtolower($rest['lang']) : $lang;
+				}
 			}
 
 			switch(@$page) {
