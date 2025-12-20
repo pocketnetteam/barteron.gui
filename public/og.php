@@ -47,9 +47,14 @@ class OG {
 		if (isset($uri)) {
 			@list($page, $id) = explode('/', $uri);
 
+			$lang = @$id['lang'] ? $id['lang'] : $this->getBrowserLang();
+			$lang = strtolower($lang);
+
 			if ($id && (substr($id, 0, strlen('search')) == 'search' || substr($id, 0, strlen('safedeal')) == 'safedeal')) {
 				@list($page, $id) = explode('?', $id);
 				parse_str($id, $id);
+			} else {
+				@list($id, $rest) = explode('?', $id);
 			}
 
 			switch(@$page) {
@@ -96,15 +101,29 @@ class OG {
 							$trgTitle = urldecode($target->p->s2);
 						}
 
-						if (@$srcTitle && @$trgTitle) {
-							$this->currentOg['title'] = "Exchange {$srcTitle} to {$trgTitle}";
-							$this->currentOg['description'] = "I proposing exchange {$srcTitle} to {$trgTitle}";
-						} else if (@$srcTitle) {
-							$this->currentOg['title'] = "Exchange proposals of {$srcTitle}";
-							$this->currentOg['description'] = "Exchange list of {$srcTitle}";
-						}
-
 						if (@$srcImage) $this->currentOg['image'] = urldecode($srcImage[0]);
+
+						switch ($lang) {
+							case 'ru':
+								if (@$srcTitle && @$trgTitle) {
+									$this->currentOg['title'] = "Предложение обмена";
+									$this->currentOg['description'] = "Предлагаю обмен \"{$srcTitle}\" на \"{$trgTitle}\"";
+								} else if (@$srcTitle) {
+									$this->currentOg['title'] = "Предложения обмена";
+									$this->currentOg['description'] = "Список предложений для \"{$srcTitle}\"";
+								}
+								break;
+
+							default:
+								if (@$srcTitle && @$trgTitle) {
+									$this->currentOg['title'] = "Exchange";
+									$this->currentOg['description'] = "I proposing exchange {$srcTitle} to {$trgTitle}";
+								} else if (@$srcTitle) {
+									$this->currentOg['title'] = "Exchange proposals";
+									$this->currentOg['description'] = "Exchange list of {$srcTitle}";
+								}
+								break;
+						}
 					}
 
 					break;
@@ -139,9 +158,6 @@ class OG {
 
 								$validatorFeePercent = @$id['fee'] ? $id['fee'] : '?';
 
-								$lang = @$id['lang'] ? $id['lang'] : $this->getBrowserLang();
-								$lang = strtolower($lang);
-
 								switch ($lang) {
 									case 'ru':
 										$title = 'Безопасная сделка';
@@ -175,9 +191,18 @@ class OG {
 						$profile = $result[0];
 
 						$title = urldecode($profile->name);
-						$description = urldecode("$title's profile on {$this->project}");
 						$image = urldecode($profile->i);
 						
+						switch ($lang) {
+							case 'ru':
+								$description = urldecode("Профиль $title на {$this->project}");
+								break;
+
+							default:
+								$description = urldecode("$title's profile on {$this->project}");
+								break;
+						}
+
 						if($title) $this->currentOg['title'] = $title;
 						if($description) $this->currentOg['description'] = $description;
 						if($image) $this->currentOg['image'] = $image;
