@@ -520,7 +520,7 @@
 
 			<div
 				class="row block sep"
-				v-if="safeDealAvailable && !(isPickupPointCategory()) && offerCreationParams().isAllowed""
+				v-if="safeDealAvailable && !(isPickupPointCategory()) && offerCreationParams().isAllowed"
 			>
 				<!-- Title: Safe deal -->
 				<strong class="title">{{ $t('safeDealLabels.label') }}</strong>
