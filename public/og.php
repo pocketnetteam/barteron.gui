@@ -194,14 +194,15 @@ class OG {
 
 						$title = urldecode($profile->name);
 						$image = urldecode($profile->i);
+						$project = urldecode($this->project);
 						
 						switch ($lang) {
 							case 'ru':
-								$description = urldecode("Профиль $title на {$this->project}");
+								$description = "Профиль $title на $project";
 								break;
 
 							default:
-								$description = urldecode("$title's profile on {$this->project}");
+								$description = "$title's profile on $project";
 								break;
 						}
 
