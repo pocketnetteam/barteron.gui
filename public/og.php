@@ -47,14 +47,16 @@ class OG {
 		if (isset($uri)) {
 			@list($page, $id) = explode('/', $uri);
 
-			$lang = @$id['lang'] ? $id['lang'] : $this->getBrowserLang();
-			$lang = strtolower($lang);
+			$lang = $this->getBrowserLang();
 
 			if ($id && (substr($id, 0, strlen('search')) == 'search' || substr($id, 0, strlen('safedeal')) == 'safedeal')) {
 				@list($page, $id) = explode('?', $id);
 				parse_str($id, $id);
+				$lang = @$id['lang'] ? strtolower($id['lang']) : $lang;
 			} else {
 				@list($id, $rest) = explode('?', $id);
+				parse_str($rest, $rest);
+				$lang = @$rest['lang'] ? strtolower($rest['lang']) : $lang;
 			}
 
 			switch(@$page) {
