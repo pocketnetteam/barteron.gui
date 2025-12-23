@@ -19,7 +19,7 @@ const safeDealData = {
 
 	allowedAddressFilter: {
 		isEnabled: {
-			production: true,
+			production: false,
 			development: false,
 		},
 
