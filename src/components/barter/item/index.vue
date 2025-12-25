@@ -429,6 +429,7 @@
 
 			<div class="row block sep">
 				<ExchangeList
+					:key="item.address /* to force update of the list after loading the offer */"
 					:title="$t('barterLabels.exchange')"
 					:tags="exchangeList.map(l => l.id)"
 					:visible="0 /* Means show all items without toggle */"
