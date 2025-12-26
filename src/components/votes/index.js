@@ -125,6 +125,12 @@ export default {
 		 * @param {Number} score
 		 */
 		vote(score) {
+			if (score < 4) {
+				this.score = 0;
+				this.$refs.offerScore?.reset();
+				return;
+			};
+
 			if (!(this.isOfferScoreLoading)) {
 				this.isOfferScoreLoading = true;
 				this.score = score;
