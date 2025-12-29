@@ -6,45 +6,32 @@ Vue.use(VueI18n);
 const
 	locales = [
 		"en-US",
-		"ru-RU"
+		"ru-RU",
+		"sr-RS",
 	],
 
-	dateTimeFormats = {
-		"en-US": {
-			short: {
-				year: "numeric",
-				month: "numeric",
-				day: "numeric"
-			},
-			middle: {
-				year: "numeric",
-				month: "long",
-				day: "numeric"
-			},
-			long: {
-				year: "numeric",
-				month: "long",
-				day: "numeric"
-			}
+	defaultDateTimeFormat = {
+		short: {
+			year: "numeric",
+			month: "numeric",
+			day: "numeric"
 		},
-
-		"ru-RU": {
-			short: {
-				year: "numeric",
-				month: "numeric",
-				day: "numeric"
-			},
-			middle: {
-				year: "numeric",
-				month: "long",
-				day: "numeric"
-			},
-			long: {
-				year: "numeric",
-				month: "long",
-				day: "numeric"
-			}
+		middle: {
+			year: "numeric",
+			month: "long",
+			day: "numeric"
+		},
+		long: {
+			year: "numeric",
+			month: "long",
+			day: "numeric"
 		}
+	},
+
+	dateTimeFormats = {
+		"en-US": defaultDateTimeFormat,
+		"ru-RU": defaultDateTimeFormat,
+		"sr-RS": defaultDateTimeFormat,
 	},
 
 	commonCurrency = {
@@ -90,7 +77,22 @@ const
 			},
 			shortPkoin: commonPkoin,
 			shortCurrency: commonCurrency,
-		}
+		},
+
+		"sr-RS": {
+			currency: {
+				style: "currency",
+				currency: "RSD"
+			},
+			currencyNoCents: {
+				style: "currency",
+				currency: "RSD",
+				minimumFractionDigits: 0,
+				maximumFractionDigits: 0
+			},
+			shortPkoin: commonPkoin,
+			shortCurrency: commonCurrency,
+		},
 	},
 
 	currencies = new (class {
@@ -100,7 +102,7 @@ const
 			"ru-RU_1": { code: "RUB", graphem: "₽" },
 			"ru-RU_2": { code: "BYN", graphem: "Br" },
 			"ru-RU_3": { code: "UAH", graphem: "₴" },
-			"ru-RU_4": { code: "KZT", graphem: "₸" }
+			"ru-RU_4": { code: "KZT", graphem: "₸" },
 		};
 
 		/**
@@ -172,8 +174,24 @@ const
 				return 2;
 			}
 
-			return (choicesLength < 4) ? 2 : 3;
-		}
+			return 3;
+		},
+
+		"sr-RS": (choice, choicesLength) => {
+			// this === VueI18n instance, so the locale property also exists here
+
+			if (choice === 0) {
+				return 0;
+			} else if (choice === 1 && choicesLength > 1) {
+				return 1;
+			} else if (1 < choice && choice < 5 && choicesLength > 2) {
+				return 2;
+			} else if (5 <= choice && choicesLength > 3) {
+				return 3;
+			}
+
+			return choicesLength > 1 ? 1 : 0;
+		},
 	};
 
 function loadLocaleMessages() {
