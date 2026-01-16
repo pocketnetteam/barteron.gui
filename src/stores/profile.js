@@ -11,7 +11,6 @@ const
             bartersView: 'tile',
             activeTab: null,
             activeInnerAdsTab: null,
-            appBannerDisabled: false,
             offerShareDisabled: false,
             notificationsBannerDisabled: false,
         }),
@@ -72,10 +71,6 @@ const
                     this.activeInnerAdsTab = data.activeInnerAdsTab;
                 };
 
-                if (data?.appBannerDisabled) {
-                    this.appBannerDisabled = data.appBannerDisabled;
-                };
-
                 if (data?.offerShareDisabled) {
                     this.offerShareDisabled = data.offerShareDisabled;
                 }
@@ -90,7 +85,6 @@ const
                     bartersView: this.bartersView,
                     activeTab: this.activeTab,
                     activeInnerAdsTab: this.activeInnerAdsTab,
-                    appBannerDisabled: this.appBannerDisabled,
                     offerShareDisabled: this.offerShareDisabled,
                     notificationsBannerDisabled: this.notificationsBannerDisabled,
                 };

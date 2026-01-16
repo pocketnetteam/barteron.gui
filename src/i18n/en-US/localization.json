@@ -254,15 +254,6 @@
 		}
 	},
 
-	"appBannerLabels": {
-		"title": "Stay in touch - don't miss a Deal!",
-		"paragraph1": "To avoid missing messages in the messenger from interested users, use a mobile application with push notifications enabled.",
-		"paragraph2": "You need to download the mobile application and log in. Links to download the application for major operating systems are located on the applications page.",
-		"important": "Important!",
-		"details": "If the Applications page does not open for some reason, please manually copy the link below and open it using your browser.",
-		"dont_show_again": "Don't show again"
-	},
-
 	"exchangeLabels": {
 		"label": "Exchange Options",
 		"title": "We can find exchange options for you",

@@ -16,7 +16,6 @@ export default {
 		return {
 			isLoading: false,
 			deals: [],
-			appBannerDisabled: false,
 		}
 	},
 
@@ -95,15 +94,6 @@ export default {
 		openAppsLink() {
 			this.sdk.openExternalLink(this.appsLink);
 		},
-
-		appBannerDisabledChange(value, e) {
-			profileStore.appBannerDisabled = e.target.checked;
-			profileStore.saveState();
-		},
-
-		hideAppBanner() {
-			this.appBannerDisabled = true;
-		},
 	},
 
 	async beforeRouteEnter (to, from, next) {
@@ -140,10 +130,5 @@ export default {
 
 		/* Pass data to instance */
 		next(vm => vm.deals = deals);
-	},
-
-	mounted() {
-		profileStore.setAddress(this.sdk.address);
-		this.appBannerDisabled = profileStore.appBannerDisabled;
 	},
 }
