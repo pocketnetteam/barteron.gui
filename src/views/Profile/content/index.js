@@ -5,6 +5,8 @@ import ProfileExchangeList from "@/components/barter/exchange/profile-list/index
 import BarterList from "@/components/barter/list/index.vue";
 import Votes from "@/components/votes/index.vue";
 import banProcessor from "@/js/banUtils.js";
+import NotificationsBanner from "@/components/notifications-banner/index.vue";
+import Vue from 'vue';
 import likeStore from "@/stores/like.js";
 import {
 	default as profileStore,
@@ -36,7 +38,7 @@ export default {
 		}
 	},
 
-	inject: ["dialog"],
+	inject: ["dialog", "lightboxContainer"],
 
 	computed: {
 		...mapWritableState(useProfileStore, [
@@ -170,6 +172,24 @@ export default {
 				this.showError(e);
 			}).finally(() => {
 				this.isChatLoading = false;
+			});
+		},
+
+		setupNotifications() {
+			const ComponentClass = Vue.extend(NotificationsBanner);
+			const instance = new ComponentClass({
+				propsData: {
+					viewMode: "regular",
+				},
+			});
+			
+			instance.$on('onHide', vm => {
+			});
+
+			instance.$mount();
+			this.lightboxContainer().appendChild(instance.$el);
+			this.$nextTick(() => {
+				instance.show();
 			});
 		},
 

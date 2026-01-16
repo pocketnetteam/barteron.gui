@@ -118,6 +118,10 @@
 		"report_abuse": "Пријавити злоупотребу"
 	},
 
+	"notificationSettingsLabels": {
+		"label": "Подешавање обавештења"
+	},
+
 	"buttonLabels": {
 		"categories": "Категорије",
 		"go_to_profile": "Иди на профил",
@@ -134,6 +138,9 @@
 		"go_to_selection": "Иди на избор",
 		"ask_seller": "Питај продавца",
 		"send_message": "Пошаљи поруку",
+		"setup_notifications": "Подесити обавештења",
+		"connect_telegram_bot": "Повежите Телеграм бот",
+		"disconnect_telegram_bot": "Искључите Телеграм бот",
 		"referral_program": "Реферални програм",
 		"copy_referral_link": "Копирај реферални линк",
 		"my_announcements": "Моји огласи",
@@ -315,6 +322,8 @@
 		"transfer_complete_with_transaction_link": "Трансфер је извршен. Линк на трансакцију ће бити послат у чет.",
 		"transfer_canceled": "Отказали сте трансфер",
 		"transfer_forbidden": "Забранили сте трансфер",
+		"telegram_username_undefined": "Вредност \"username\" није подешена",
+		"disconnecting_telegram_bot": "Искључите Телеграм бот?",
 		
 		"image_error": "Грешка при учитавању слика: {error}",
 		"node_error": "Дошло је до грешке на ноди: {error}",

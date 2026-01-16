@@ -93,6 +93,10 @@ Vue.prototype.shared = Vue.observable({
 				reset: LocationStore.reset
 			});
 		},
+
+		appsLink() {
+			return "https://bastyon.com/applications";
+		},
 	},
 
 	methods: {

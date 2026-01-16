@@ -13,6 +13,7 @@ const
             activeInnerAdsTab: null,
             appBannerDisabled: false,
             offerShareDisabled: false,
+            notificationsBannerDisabled: false,
         }),
 
         actions: {
@@ -78,6 +79,10 @@ const
                 if (data?.offerShareDisabled) {
                     this.offerShareDisabled = data.offerShareDisabled;
                 }
+
+                if (data?.notificationsBannerDisabled) {
+                    this.notificationsBannerDisabled = data.notificationsBannerDisabled;
+                }
             },
 
             saveState() {
@@ -87,6 +92,7 @@ const
                     activeInnerAdsTab: this.activeInnerAdsTab,
                     appBannerDisabled: this.appBannerDisabled,
                     offerShareDisabled: this.offerShareDisabled,
+                    notificationsBannerDisabled: this.notificationsBannerDisabled,
                 };
 
                 Pinia.set(storageId, data);

@@ -50,6 +50,10 @@ export default {
 	},
 
 	methods: {
+		setupNotifications() {
+			this.$components.content?.setupNotifications();
+		},
+
 		createRoom() {
 			this.$components.content?.createRoom();
 		},

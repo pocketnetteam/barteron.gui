@@ -5,6 +5,16 @@
 			<Profile :hash="address"/>
 
 			<div 
+				v-if="isMyProfile" 
+				class="setup-notifications"
+			>
+				<v-button
+					vType="hit"
+					@click="setupNotifications"
+				>{{ $t('buttonLabels.setup_notifications') }}</v-button>
+			</div>
+
+			<div 
 				v-if="!(isMyProfile)" 
 				class="message"
 			>

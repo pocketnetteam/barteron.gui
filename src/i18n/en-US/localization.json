@@ -118,6 +118,10 @@
 		"report_abuse": "Report abuse"
 	},
 
+	"notificationSettingsLabels": {
+		"label": "Setting up notifications"
+	},
+
 	"buttonLabels": {
 		"categories": "Categories",
 		"go_to_profile": "Go to profile",
@@ -134,6 +138,9 @@
 		"go_to_selection": "Go to selection",
 		"ask_seller": "Ask seller",
 		"send_message": "Send message",
+		"setup_notifications": "Setup notifications",
+		"connect_telegram_bot": "Connect the Telegram bot",
+		"disconnect_telegram_bot": "Disconnect the Telegram bot",
 		"referral_program": "Referral program",
 		"copy_referral_link": "Copy referral link",
 		"my_announcements": "My announcements",
@@ -315,6 +322,8 @@
 		"transfer_complete_with_transaction_link": "Transfer complete",
 		"transfer_canceled": "You canceled the transfer",
 		"transfer_forbidden": "You have forbade the transfer",
+		"telegram_username_undefined": "The value \"username\" is not set",
+		"disconnecting_telegram_bot": "Do you want to disconnect the telegram bot?",
 
 		"image_error": "Image upload error: {error}",
 		"node_error": "Node error has occured: {error}",

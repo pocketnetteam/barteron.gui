@@ -23,10 +23,6 @@ export default {
 	inject: ["dialog"],
 
 	computed: {
-		appsLink() {
-			return "https://bastyon.com/applications";
-		},
-
 		/**
 		 * Get offer by id
 		 * 
