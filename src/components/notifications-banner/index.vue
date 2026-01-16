@@ -175,7 +175,7 @@
 		</div>
 
 		<template v-if="viewMode === 'banner'">
-			<div id="notifications-banner-checkbox-holder">
+			<div class="notifications-banner-checkbox-holder">
 				<v-switch
 					class="no-padding"
 					type="checkbox"
