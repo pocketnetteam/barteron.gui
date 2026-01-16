@@ -130,7 +130,7 @@
 		"OS_notifications_main_mobile": "Включите уведомления на своем устройстве",
 		"OS_notifications_link": "Ссылка для скачивания приложения",
 		"OS_notifications_additional_info": "Уведомления можно включить в момент первого запроса разрешения на показ уведомлений операционной системой, либо позже, в настройках операционной системы.",
-		"telegram_notifications_step1": "1. Откройте телеграм-бот и запустите его, нажав кнопку \"Начать\" по ссылке",
+		"telegram_notifications_step1": "1. Откройте телеграм-бот и запустите его, нажав кнопку \"Начать\", по ссылке",
 		"telegram_notifications_step2": "2. Укажите свой \"username\" из профиля Telegram",
 		"telegram_username_placeholder": "Введите username",
 		"telegram_notifications_step3": "3. Подключите телеграм-бот, чтобы завершить настройку",

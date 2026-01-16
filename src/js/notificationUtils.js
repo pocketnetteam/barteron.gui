@@ -5,10 +5,6 @@ const
 
 class TelegramManager {
 
-	// constructor() {
-	// 	// this.sdk = new SDK();
-	// }
-
 	createSubscription(data) {
 		return fetch(`${API_URL}/telegram-notifications/subscriptions`, {
 			method: 'POST',

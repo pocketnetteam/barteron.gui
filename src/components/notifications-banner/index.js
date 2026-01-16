@@ -92,27 +92,13 @@ export default {
 		},
 
 		enter(el) {
-			// el.style.height = '0px'
-			// el.style.opacity = 0
-			// el.style.paddingTop = '0px'
-			// el.style.paddingBottom = '0px'
-
-			// const height = el.scrollHeight + 'px'
-			// el.offsetHeight // forced reflow
-
-			// el.style.transition = 'height 0.3s ease, opacity 0.3s ease, padding 0.3s ease'
-			// el.style.height = height
-			// el.style.opacity = 1
-			// el.style.paddingTop = ''
-			// el.style.paddingBottom = ''
-
 			el.style.height = '0';
 			el.style.opacity = '0';
 			el.style.overflow = 'hidden';
 
 			const height = el.scrollHeight + 'px';
 
-			el.offsetHeight; // reflow
+			el.offsetHeight; // forced reflow
 
 			el.style.transition = 'height 0.3s ease, opacity 0.3s ease';
 			el.style.height = height;
@@ -126,20 +112,11 @@ export default {
 		},
 
 		leave(el) {
-			// el.style.height = el.scrollHeight + 'px'
-			// el.offsetHeight // forced reflow
-
-			// el.style.transition = 'height 0.3s ease, opacity 0.3s ease, padding 0.3s ease'
-			// el.style.height = '0px'
-			// el.style.opacity = 0
-			// el.style.paddingTop = '0px'
-			// el.style.paddingBottom = '0px'
-
 			el.style.height = el.scrollHeight + 'px';
 			el.style.opacity = '1';
 			el.style.overflow = 'hidden';
 
-			el.offsetHeight; // reflow
+			el.offsetHeight; // forced reflow
 
 			el.style.transition = 'height 0.3s ease, opacity 0.3s ease';
 			el.style.height = '0';
