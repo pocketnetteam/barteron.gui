@@ -1,4 +1,4 @@
-// TODO: i18n, appBanner need remove, add env.*.local on server
+// TODO: i18n, add env.*.local on server
 
 import { TelegramManager } from "@/js/notificationUtils.js";
 import Loader from "@/components/loader/index.vue";
@@ -129,7 +129,6 @@ export default {
 
 		notificationsBannerDisabledChange(value, e) {
 			profileStore.notificationsBannerDisabled = e.target.checked;
-			profileStore.saveState();
 		},
 
 		loadTelegramData() {
@@ -241,7 +240,6 @@ export default {
 	},
 
 	mounted() {
-		profileStore.setAddress(this.address);
 		this.loadTelegramData();
 	},
 }

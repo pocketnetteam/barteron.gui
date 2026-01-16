@@ -31,6 +31,8 @@ export default {
 
 	data() {
 		return {
+			activeTab: null,
+			activeInnerAdsTab: null,
 			offersList: [],
 			favoriteList: [],
 			fetching: true,
@@ -43,8 +45,6 @@ export default {
 	computed: {
 		...mapWritableState(useProfileStore, [
 			'bartersView',
-			'activeTab',
-			'activeInnerAdsTab',
 		]),
 
 		/**
@@ -298,24 +298,19 @@ export default {
 		address: {
 			immediate: true,
 			handler() {
-				profileStore.setAddress(this.address);
 				this.getTabsContent(this.address);
 			}
 		},
 
 		offersList() {
-			const canToggleTabWithoutExtraSavingState = !(this.isMyProfile);
-
-			if (canToggleTabWithoutExtraSavingState) {
-				const 
-					onlyInactiveOffers = (this.offersActive.length == 0 && this.offersInactive.length > 0),
-					needToggleToInactive = (onlyInactiveOffers  && this.activeInnerAdsTab != 'inactive');
-				
-				if (needToggleToInactive) {
-					this.activeInnerAdsTab = 'inactive';
-				}
+			const 
+				onlyInactiveOffers = (this.offersActive.length == 0 && this.offersInactive.length > 0),
+				needToggleToInactive = (onlyInactiveOffers  && this.activeInnerAdsTab != 'inactive');
+			
+			if (needToggleToInactive) {
+				this.activeInnerAdsTab = 'inactive';
 			}
-		}
+		},
 	},
 
 	mounted() {
@@ -330,7 +325,6 @@ export default {
 		next(async vm => {
 			const address = to?.params?.id;
 			
-			profileStore.setAddress(address);
 			vm.getTabsContent(address);
 		});
 	}

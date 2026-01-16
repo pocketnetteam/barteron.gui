@@ -1,44 +1,15 @@
 import Pinia from "@/stores/store.js";
-import Vue from "vue";
-
-let watcherDisabled = false;
-let currentAddress = null;
 
 const
     storageId = "profile",
     storage = Pinia.defineStore(storageId, {
         state: () => ({
             bartersView: 'tile',
-            activeTab: null,
-            activeInnerAdsTab: null,
             offerShareDisabled: false,
             notificationsBannerDisabled: false,
         }),
 
         actions: {
-            setAddress(address) {
-                if (currentAddress != address) {
-                    currentAddress = address;
-                    
-                    if (this.isMyProfile()) {
-                        watcherDisabled = true;
-                        this.resetActiveTabs();
-                        this.fetch();
-                    } else {
-                        this.resetActiveTabs();
-                    }
-                }
-            },
-
-            isMyProfile() {
-                return (currentAddress === Vue.prototype?.sdk?.address);
-            },
-
-            resetActiveTabs() {
-                this.activeTab = null;
-                this.activeInnerAdsTab = null;
-            },
-
             fetch() {
                 const 
                     canSyncFetch = (Pinia.prefix),
@@ -63,14 +34,6 @@ const
                     this.bartersView = data.bartersView;
                 };
 
-                if (data?.activeTab) {
-                    this.activeTab = data.activeTab;
-                };
-
-                if (data?.activeInnerAdsTab) {
-                    this.activeInnerAdsTab = data.activeInnerAdsTab;
-                };
-
                 if (data?.offerShareDisabled) {
                     this.offerShareDisabled = data.offerShareDisabled;
                 }
@@ -83,8 +46,6 @@ const
             saveState() {
                 const data = {
                     bartersView: this.bartersView,
-                    activeTab: this.activeTab,
-                    activeInnerAdsTab: this.activeInnerAdsTab,
                     offerShareDisabled: this.offerShareDisabled,
                     notificationsBannerDisabled: this.notificationsBannerDisabled,
                 };
@@ -92,16 +53,12 @@ const
                 Pinia.set(storageId, data);
             },
         }
-    });
-
-const store = storage();
+    }),
+    store = storage();
+    store.fetch();
 
 store.$subscribe(() => {
-    if (store.isMyProfile() && !(watcherDisabled)) {
-        store.saveState();
-    }
-
-    watcherDisabled = false;
+    store.saveState();
 });
 
 export {

@@ -62,7 +62,6 @@ export default {
 
 		offerShareDisabledChange(value, e) {
 			profileStore.offerShareDisabled = e.target.checked;
-			profileStore.saveState();
 		},
 
 		shareOnBastyon() {

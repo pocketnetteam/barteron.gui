@@ -1003,7 +1003,6 @@ export default {
 				return { wasError: true };
 
 			}).then((result) => {
-				profileStore.setAddress(this.sdk.address);
 				const needShow = !(result?.wasError || profileStore.notificationsBannerDisabled);
 				if (needShow) {
 					this.showNotificationsBanner();
