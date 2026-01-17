@@ -136,7 +136,8 @@
 		"telegram_notifications_step3": "3. Подключите телеграм-бот, чтобы завершить настройку",
 		"telegram_bot_connected": "Телеграм-бот подключен",
 		"telegram_bot_disconnected": "Телеграм-бот не подключен",
-		"disconnect_telegram_bot_info": "Настройки подключения телеграм-бота будут удалены, уведомления доставляться не будут"
+		"disconnect_telegram_bot_info": "Настройки подключения телеграм-бота будут удалены, уведомления доставляться не будут",
+		"default_notify_message_for_telegram_bot": "Пользователь начал диалог. Пожалуйста, проверьте чат."
 	},
 
 	"buttonLabels": {

@@ -36,6 +36,10 @@ export default {
 			type: String,
 			default: "banner"
 		},
+		offerHasBeenPublished: {
+			type: Boolean,
+			default: false
+		}
 	},
 
 	computed: {
@@ -172,11 +176,12 @@ export default {
 		},
 
 		connectTelegramBot() {
-			const username = (this.$refs.telegramUsername.inputs[0].value || "").trim();
+			const username = (this.$refs.telegramUsername.inputs[0].value || "").trim().replaceAll("@","");
 			if (username) {
 				const data = {
 					address: this.address,
 					telegram: username,
+					locale: this.$i18n.locale,
 					isEnabled: true,
 				};
 

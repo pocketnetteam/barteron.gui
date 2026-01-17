@@ -1015,7 +1015,10 @@ export default {
 		showNotificationsBanner() {
 			const ComponentClass = Vue.extend(NotificationsBanner);
 			const instance = new ComponentClass({
-				propsData: {},
+				propsData: {
+					viewMode: "banner",
+					offerHasBeenPublished: true,
+				},
 			});
 			
 			instance.$on('onHide', vm => {});

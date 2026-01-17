@@ -9,6 +9,11 @@
 
 		<v-dialog ref="dialog" />
 
+		<strong 
+			v-if="offerHasBeenPublished"
+			class="title"
+		>{{ $t("barterLabels.offer_has_been_published") }}</strong>
+
 		<strong class="title">{{ $t("notificationSettingsLabels.prompt") }}:</strong>
 
 		<div class="accordion">

@@ -11,6 +11,7 @@ import Favorites from "@/data/favorites.json";
 
 import { GeoHash } from "geohash";
 import { GeoHashApproximator } from "@/js/geohashUtils.js";
+import { TelegramManager } from "@/js/notificationUtils.js";
 import LocationStore from "@/stores/location.js";
 import { Promise } from "core-js";
 
@@ -285,6 +286,9 @@ Vue.prototype.shared = Vue.observable({
 						images: data.images || []
 					}
 				});
+			}).then(() => {
+				const tg = new TelegramManager();
+				tg.sendNotifications(data.members);
 			});
 		},
 
