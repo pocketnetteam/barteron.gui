@@ -13,16 +13,24 @@ const
 
 class TelegramManager {
 
+	getErrorMessage(response, result) {
+		const defaultMessage = `HTTP error: ${response?.status ?? "unknown status"}`;
+		return result?.message || defaultMessage;
+	}
+
 	createSubscription(data) {
 		return fetch(`${API_URL}/telegram-notifications/subscriptions`, {
 			method,
 			headers,
 			body: JSON.stringify(data)
 		}) .then(response => {
-			if (!response.ok) {
-				throw new Error(`HTTP error: ${response.status}`);
-			}
-			return response.json();
+			return response.json().then(result => {
+				if (response.ok) {
+					return result;
+				};
+				const message = this.getErrorMessage(response, result);
+				throw new Error(message);
+			});
 		})
 	}
 
@@ -34,10 +42,13 @@ class TelegramManager {
 				address: userAddress,
 			})
 		}) .then(response => {
-			if (!response.ok) {
-				throw new Error(`HTTP error: ${response.status}`);
-			}
-			return response.json();
+			return response.json().then(result => {
+				if (response.ok) {
+					return result;
+				};
+				const message = this.getErrorMessage(response, result);
+				throw new Error(message);
+			});
 		})
 	}
 
@@ -56,10 +67,13 @@ class TelegramManager {
 			headers,
 			body: JSON.stringify(data)
 		}) .then(response => {
-			if (!response.ok) {
-				throw new Error(`HTTP error: ${response.status}`);
-			}
-			return response.json();
+			return response.json().then(result => {
+				if (response.ok) {
+					return result;
+				};
+				const message = this.getErrorMessage(response, result);
+				throw new Error(message);
+			});
 		});
 	}
 
@@ -71,10 +85,13 @@ class TelegramManager {
 				address: userAddress,
 			})
 		}) .then(response => {
-			if (!response.ok) {
-				throw new Error(`HTTP error: ${response.status}`);
-			}
-			return response.json();
+			return response.json().then(result => {
+				if (response.ok) {
+					return result;
+				};
+				const message = this.getErrorMessage(response, result);
+				throw new Error(message);
+			});
 		})
 	}
 

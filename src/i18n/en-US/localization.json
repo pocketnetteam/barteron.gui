@@ -319,6 +319,7 @@
 		"image_error": "Image upload error: {error}",
 		"node_error": "Node error has occured: {error}",
 		"survey_error": "An error occurred while sending your answers: {error}",
+		"common_error": "An error occurred: {error}",
 		"common_loading_error": "Data loading error: {error}",
 		"disabled_permissions": "The following permissions are disabled: {error}. Click the \"Application Settings\" button to allow the access.",
 		"app_geolocation_permission_error": "You have restricted access to geolocation. Click the \"Application Settings\" button to allow the access.",

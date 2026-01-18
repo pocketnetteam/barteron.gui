@@ -164,7 +164,7 @@
 							<div v-if="telegramData.currentState === 'error'">
 								<label class="v-label error-level">
 									<i class="fa fa-info-circle"></i>
-									{{ $t("dialogLabels.common_loading_error", {error: telegramData.stateData?.error?.message || ""}) }}
+									{{ $t("dialogLabels.common_error", {error: telegramData.stateData?.error?.message || ""}) }}
 								</label>
 								<v-button
 									@click="loadTelegramData"
