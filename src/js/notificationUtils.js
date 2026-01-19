@@ -1,29 +1,38 @@
 import i18n from "@/i18n/index.js";
+import SDK from "@/js/sdk.js";
 
 const 
 	API_URL = "https://p2p.back.pocketnet.app/barteron",
-	TOKEN = process.env.VUE_APP_NOTIFICATION_AUTH_TOKEN;
-
-const 
 	method = "POST",
-	headers = {
-		"Authorization": `Bearer ${TOKEN}`,
+	commonHeaders = {
 		"Content-Type": "application/json",
 	};
 
 class TelegramManager {
+	constructor() {
+		this.sdk = new SDK();
+	}
 
+	getHeaders(signature) {
+		return {
+			...commonHeaders,
+			Signature: JSON.stringify(signature),
+		};
+	}
+	
 	getErrorMessage(response, result) {
 		const defaultMessage = `HTTP error: ${response?.status ?? "unknown status"}`;
 		return result?.message || defaultMessage;
 	}
 
 	createSubscription(data) {
-		return fetch(`${API_URL}/telegram-notifications/subscriptions`, {
-			method,
-			headers,
-			body: JSON.stringify(data)
-		}) .then(response => {
+		return this.sdk.sign("auth").then(signature => {
+			return fetch(`${API_URL}/telegram-notifications/subscriptions`, {
+				method,
+				headers: this.getHeaders(signature),
+				body: JSON.stringify(data),
+			});
+		}).then(response => {
 			return response.json().then(result => {
 				if (response.ok) {
 					return result;
@@ -35,13 +44,15 @@ class TelegramManager {
 	}
 
 	getSubscription(userAddress) {
-		return fetch(`${API_URL}/telegram-notifications/subscriptions/get`, {
-			method,
-			headers,
-			body: JSON.stringify({
-				address: userAddress,
-			})
-		}) .then(response => {
+		return this.sdk.sign("auth").then(signature => {
+			return fetch(`${API_URL}/telegram-notifications/subscriptions/get`, {
+				method,
+				headers: this.getHeaders(signature),
+				body: JSON.stringify({
+					address: userAddress,
+				}),
+			});
+		}).then(response => {
 			return response.json().then(result => {
 				if (response.ok) {
 					return result;
@@ -62,11 +73,13 @@ class TelegramManager {
 			message: i18n.t("notificationSettingsLabels.default_notify_message_for_telegram_bot", subscription.locale),
 		};
 
-		return fetch(`${API_URL}/telegram-notifications/messages`, {
-			method,
-			headers,
-			body: JSON.stringify(data)
-		}) .then(response => {
+		return this.sdk.sign("auth").then(signature => {
+			return fetch(`${API_URL}/telegram-notifications/messages`, {
+				method,
+				headers: this.getHeaders(signature),
+				body: JSON.stringify(data),
+			});
+		}).then(response => {
 			return response.json().then(result => {
 				if (response.ok) {
 					return result;
@@ -78,13 +91,15 @@ class TelegramManager {
 	}
 
 	removeSubscription(userAddress) {
-		return fetch(`${API_URL}/telegram-notifications/subscriptions/delete`, {
-			method,
-			headers,
-			body: JSON.stringify({
-				address: userAddress,
-			})
-		}) .then(response => {
+		return this.sdk.sign("auth").then(signature => {
+			return fetch(`${API_URL}/telegram-notifications/subscriptions/delete`, {
+				method,
+				headers: this.getHeaders(signature),
+				body: JSON.stringify({
+					address: userAddress,
+				}),
+			});
+		}).then(response => {
 			return response.json().then(result => {
 				if (response.ok) {
 					return result;
