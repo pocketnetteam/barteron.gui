@@ -1,5 +1,3 @@
-// TODO: i18n, add env.*.local on server
-
 import { TelegramManager } from "@/js/notificationUtils.js";
 import Loader from "@/components/loader/index.vue";
 import Vue from 'vue';

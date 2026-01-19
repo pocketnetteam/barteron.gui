@@ -119,7 +119,25 @@
 	},
 
 	"notificationSettingsLabels": {
-		"label": "Подешавање обавештења"
+		"label": "Подешавање обавештења",
+		"prompt": "ВАЖНО! Да не бисте пропустили поруке, препоручујемо да подесите",
+		"OS_notifications": "Обавештења оперативног система",
+		"telegram_notifications": "Telegram обавештења",
+		"dont_show_again": "Не приказуј поново",
+		"manual_opening_info": "Подешавања можете извршити касније кликом на дугме \"Подеси обавештења\" на страници свог профила",
+		"OS_notifications_main_web": "Инсталирајте апликацију Bastyon и укључите обавештења.",
+		"OS_notifications_main_desktop": "Укључите обавештења на свом рачунару",
+		"OS_notifications_main_mobile": "Укључите обавештења на свом уређају",
+		"OS_notifications_link": "Линк за преузимање апликације",
+		"OS_notifications_additional_info": "Обавештења се могу укључити приликом првог захтева оперативног система за дозволу приказивања обавештења, или касније у подешавањима оперативног система.",
+		"telegram_notifications_step1": "1. Отворите Telegram бота и покрените га кликом на дугме \"Почни\" преко линка",
+		"telegram_notifications_step2": "2. Унесите свој \"username\" са Telegram профила",
+		"telegram_username_placeholder": "Унесите username",
+		"telegram_notifications_step3": "3. Повежите Telegram бота да бисте завршили подешавање",
+		"telegram_bot_connected": "Telegram бот је повезан",
+		"telegram_bot_disconnected": "Telegram бот није повезан",
+		"disconnect_telegram_bot_info": "Подешавања повезивања Telegram бота биће обрисана, обавештења неће бити испоручивана",
+		"default_notify_message_for_telegram_bot": "Корисник је започео разговор. Молимо проверите ћаскање."
 	},
 
 	"buttonLabels": {
