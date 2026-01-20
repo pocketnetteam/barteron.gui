@@ -13,6 +13,19 @@ class TelegramManager {
 		this.sdk = new SDK();
 	}
 
+	notificationsAllowed() {
+		return this.sdk.checkPermission("sign");
+	}
+
+	getSignature() {
+		return this.notificationsAllowed().then(allowed => {
+			if (allowed) {
+				return this.sdk.sign("auth");
+			};
+			throw new Error("sign permission missing");
+		});
+	}
+
 	getHeaders(signature) {
 		return {
 			...commonHeaders,
@@ -26,7 +39,7 @@ class TelegramManager {
 	}
 
 	createSubscription(data) {
-		return this.sdk.sign("auth").then(signature => {
+		return this.getSignature().then(signature => {
 			return fetch(`${API_URL}/telegram-notifications/subscriptions`, {
 				method,
 				headers: this.getHeaders(signature),
@@ -44,7 +57,7 @@ class TelegramManager {
 	}
 
 	getSubscription(userAddress) {
-		return this.sdk.sign("auth").then(signature => {
+		return this.getSignature().then(signature => {
 			return fetch(`${API_URL}/telegram-notifications/subscriptions/get`, {
 				method,
 				headers: this.getHeaders(signature),
@@ -73,7 +86,7 @@ class TelegramManager {
 			message: i18n.t("notificationSettingsLabels.default_notify_message_for_telegram_bot", subscription.locale),
 		};
 
-		return this.sdk.sign("auth").then(signature => {
+		return this.getSignature().then(signature => {
 			return fetch(`${API_URL}/telegram-notifications/messages`, {
 				method,
 				headers: this.getHeaders(signature),
@@ -91,7 +104,7 @@ class TelegramManager {
 	}
 
 	removeSubscription(userAddress) {
-		return this.sdk.sign("auth").then(signature => {
+		return this.getSignature().then(signature => {
 			return fetch(`${API_URL}/telegram-notifications/subscriptions/delete`, {
 				method,
 				headers: this.getHeaders(signature),
@@ -111,27 +124,30 @@ class TelegramManager {
 	}
 
 	sendNotifications(userAddresses) {
-		const 
-			uniqueItems = [...new Set(userAddresses || [])],
-			promises = uniqueItems.map(item => {
-				return this.getSubscription(item);
-			});
+		this.notificationsAllowed().then(allowed => {
+			if (allowed) {
+				const 
+					uniqueItems = [...new Set(userAddresses || [])],
+					promises = uniqueItems.map(item => {
+						return this.getSubscription(item);
+					});
 
-		Promise.allSettled(promises).then(results => {
-			const subscriptions = results
-				.filter(f => f.status === 'fulfilled')
-				.map(m => m.value?.subscription)
-				.filter(f => f?.isEnabled);
+				return Promise.allSettled(promises).then(results => {
+					const subscriptions = results
+						.filter(f => f.status === 'fulfilled')
+						.map(m => m.value?.subscription)
+						.filter(f => f?.isEnabled);
 
-			results
-				.filter(f => f.status === 'rejected')
-				.map(m => m.reason)
-				.forEach(f => {
-					console.error(f);
+					results
+						.filter(f => f.status === 'rejected')
+						.map(m => m.reason)
+						.forEach(f => {
+							console.error(f);
+						});
+
+					return subscriptions;
 				});
-
-			return subscriptions;
-
+			};
 		}).then(subscriptions => {
 			const promises = (subscriptions || []).map(item => {
 				return this.sendMessageBySubscription(item);

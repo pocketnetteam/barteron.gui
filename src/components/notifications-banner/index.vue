@@ -65,6 +65,7 @@
 			</div>
 
 			<div 
+				v-if="telegramNotificationsAllowed"
 				class="accordion-item" 
 			>
 				<div 

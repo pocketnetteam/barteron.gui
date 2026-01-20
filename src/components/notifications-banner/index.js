@@ -1,6 +1,6 @@
 import { TelegramManager } from "@/js/notificationUtils.js";
 import Loader from "@/components/loader/index.vue";
-import Vue from 'vue';
+import Vue, { watch } from 'vue';
 import i18n from "@/i18n/index.js";
 import {
 	default as profileStore,
@@ -22,6 +22,7 @@ export default {
 				0: true,
 				1: true,
 			},
+			telegramNotificationsAllowed: false,
 			telegramData: {
 				currentState: "",
 			},
@@ -134,6 +135,10 @@ export default {
 		},
 
 		loadTelegramData() {
+			if (!(this.telegramNotificationsAllowed)) {
+				return;
+			};
+
 			this.telegramData = {
 				currentState: "loading",
 			};
@@ -243,6 +248,17 @@ export default {
 	},
 
 	mounted() {
-		this.loadTelegramData();
+		const telegramManager = new TelegramManager();
+		telegramManager.notificationsAllowed().then(result => {
+			this.telegramNotificationsAllowed = result;
+		}).catch(e => {
+			console.error(e);
+		});
+	},
+
+	watch: {
+		telegramNotificationsAllowed() {
+			this.loadTelegramData();
+		},
 	},
 }
