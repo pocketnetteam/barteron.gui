@@ -1,6 +1,6 @@
 import { TelegramManager } from "@/js/notificationUtils.js";
 import Loader from "@/components/loader/index.vue";
-import Vue, { watch } from 'vue';
+import Vue from 'vue';
 import i18n from "@/i18n/index.js";
 import {
 	default as profileStore,
