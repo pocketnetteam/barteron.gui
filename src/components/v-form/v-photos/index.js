@@ -393,10 +393,22 @@ export default {
 
 		/* Add images from properties */
 		this.attach(this.images, { disableLog: true });
-		
-		/* Add event listeners */
-		document.addEventListener("dragover", e => this.dragToggle(e, { preventDefault: true }));
-		document.addEventListener("dragleave", e => this.dragToggle(e));
-		document.addEventListener("drop", e => this.dragToggle(e));
 	},
+
+	mounted() {
+		/* Add event listeners */
+		this.onDragOver = (e) => this.dragToggle(e, { preventDefault: true });
+		this.onDragLeave = (e) => this.dragToggle(e);
+		this.onDrop = (e) => this.dragToggle(e);
+
+		document.addEventListener("dragover", this.onDragOver);
+		document.addEventListener("dragleave", this.onDragLeave);
+		document.addEventListener("drop", this.onDrop);
+	},
+
+	beforeDestroy() {
+		document.removeEventListener("dragover", this.onDragOver);
+		document.removeEventListener("dragleave", this.onDragLeave);
+		document.removeEventListener("drop", this.onDrop);
+	}
 }

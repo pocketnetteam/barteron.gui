@@ -43,7 +43,10 @@
 		</div>
 
 
-		<div class="edit">
+		<div 
+			v-if="isEditable"
+			class="edit"
+		>
 			<!-- Edit button -->
 			<v-button
 				v-if="!(editing)"

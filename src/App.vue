@@ -443,10 +443,7 @@ export default {
 
 	beforeDestroy() {
 		this.detachKeyboardObserver();
-	},
-
-	destroyed() {
 		document.body.removeEventListener("scroll", this.handleScroll);
-	}
+	},
 }
 </script>

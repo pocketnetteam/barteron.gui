@@ -4,6 +4,7 @@
 		vType="light"
 		:vSize="vSize"
 		:dropdown="currenciesList"
+		:hideOnScroll="true"
 		:hideButton="hideButton"
 		@selected="(item) => selectCurrency(item, true)"
 	>

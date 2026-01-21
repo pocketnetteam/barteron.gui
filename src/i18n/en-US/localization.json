@@ -341,6 +341,7 @@
 		"error#12": "Object not found",
 		"error#21": "Failed OpReturn",
 		"error#28": "Too many transactions",
+		"error#51": "The commented content has been removed",
 		"error#60": "Your Bastyon reputation does not yet allow you to rate offers low",
 		"error#65": "Exceeded limit"
 	},
