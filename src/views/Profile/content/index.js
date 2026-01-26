@@ -5,6 +5,8 @@ import ProfileExchangeList from "@/components/barter/exchange/profile-list/index
 import BarterList from "@/components/barter/list/index.vue";
 import Votes from "@/components/votes/index.vue";
 import banProcessor from "@/js/banUtils.js";
+import NotificationsBanner from "@/components/notifications-banner/index.vue";
+import Vue from 'vue';
 import likeStore from "@/stores/like.js";
 import {
 	default as profileStore,
@@ -29,6 +31,8 @@ export default {
 
 	data() {
 		return {
+			activeTab: null,
+			activeInnerAdsTab: null,
 			offersList: [],
 			favoriteList: [],
 			fetching: true,
@@ -36,13 +40,11 @@ export default {
 		}
 	},
 
-	inject: ["dialog"],
+	inject: ["dialog", "lightboxContainer"],
 
 	computed: {
 		...mapWritableState(useProfileStore, [
 			'bartersView',
-			'activeTab',
-			'activeInnerAdsTab',
 		]),
 
 		/**
@@ -173,6 +175,24 @@ export default {
 			});
 		},
 
+		setupNotifications() {
+			const ComponentClass = Vue.extend(NotificationsBanner);
+			const instance = new ComponentClass({
+				propsData: {
+					viewMode: "regular",
+				},
+			});
+			
+			instance.$on('onHide', vm => {
+			});
+
+			instance.$mount();
+			this.lightboxContainer().appendChild(instance.$el);
+			this.$nextTick(() => {
+				instance.show();
+			});
+		},
+
 		/**
 		 * Load all tabs contents based by user address
 		 * 
@@ -278,24 +298,19 @@ export default {
 		address: {
 			immediate: true,
 			handler() {
-				profileStore.setAddress(this.address);
 				this.getTabsContent(this.address);
 			}
 		},
 
 		offersList() {
-			const canToggleTabWithoutExtraSavingState = !(this.isMyProfile);
-
-			if (canToggleTabWithoutExtraSavingState) {
-				const 
-					onlyInactiveOffers = (this.offersActive.length == 0 && this.offersInactive.length > 0),
-					needToggleToInactive = (onlyInactiveOffers  && this.activeInnerAdsTab != 'inactive');
-				
-				if (needToggleToInactive) {
-					this.activeInnerAdsTab = 'inactive';
-				}
+			const 
+				onlyInactiveOffers = (this.offersActive.length == 0 && this.offersInactive.length > 0),
+				needToggleToInactive = (onlyInactiveOffers  && this.activeInnerAdsTab != 'inactive');
+			
+			if (needToggleToInactive) {
+				this.activeInnerAdsTab = 'inactive';
 			}
-		}
+		},
 	},
 
 	mounted() {
@@ -310,7 +325,6 @@ export default {
 		next(async vm => {
 			const address = to?.params?.id;
 			
-			profileStore.setAddress(address);
 			vm.getTabsContent(address);
 		});
 	}

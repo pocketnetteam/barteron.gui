@@ -118,6 +118,28 @@
 		"report_abuse": "Пријавити злоупотребу"
 	},
 
+	"notificationSettingsLabels": {
+		"label": "Подешавање обавештења",
+		"prompt": "ВАЖНО! Да не бисте пропустили поруке, препоручујемо да подесите",
+		"OS_notifications": "Обавештења оперативног система",
+		"telegram_notifications": "Telegram обавештења",
+		"dont_show_again": "Не приказуј поново",
+		"manual_opening_info": "Подешавања можете извршити касније кликом на дугме \"Подеси обавештења\" на страници свог профила",
+		"OS_notifications_main_web": "Инсталирајте апликацију Bastyon и укључите обавештења.",
+		"OS_notifications_main_desktop": "Укључите обавештења на свом рачунару",
+		"OS_notifications_main_mobile": "Укључите обавештења на свом уређају",
+		"OS_notifications_link": "Линк за преузимање апликације",
+		"OS_notifications_additional_info": "Обавештења се могу укључити приликом првог захтева оперативног система за дозволу приказивања обавештења, или касније у подешавањима оперативног система.",
+		"telegram_notifications_step1": "1. Отворите Telegram бота и покрените га кликом на дугме \"Почни\" преко линка",
+		"telegram_notifications_step2": "2. Унесите свој \"username\" са Telegram профила",
+		"telegram_username_placeholder": "Унесите username",
+		"telegram_notifications_step3": "3. Повежите Telegram бота да бисте завршили подешавање",
+		"telegram_bot_connected": "Telegram бот је повезан",
+		"telegram_bot_disconnected": "Telegram бот није повезан",
+		"disconnect_telegram_bot_info": "Подешавања повезивања Telegram бота биће обрисана, обавештења неће бити испоручивана",
+		"default_notify_message_for_telegram_bot": "Корисник је започео разговор. Молимо проверите ћаскање."
+	},
+
 	"buttonLabels": {
 		"categories": "Категорије",
 		"go_to_profile": "Иди на профил",
@@ -134,6 +156,9 @@
 		"go_to_selection": "Иди на избор",
 		"ask_seller": "Питај продавца",
 		"send_message": "Пошаљи поруку",
+		"setup_notifications": "Подесити обавештења",
+		"connect_telegram_bot": "Повежите Телеграм бот",
+		"disconnect_telegram_bot": "Искључите Телеграм бот",
 		"referral_program": "Реферални програм",
 		"copy_referral_link": "Копирај реферални линк",
 		"my_announcements": "Моји огласи",
@@ -247,15 +272,6 @@
 		}
 	},
 
-	"appBannerLabels": {
-		"title": "Будите у контакту – Не пропустите трансакцију!",
-		"paragraph1": "Да не бисте пропустили поруке у меcенџеру од заинтересованих корисника, користите мобилну апликацију са омогућеним push-обавештењима.",
-		"paragraph2": "Потребно је да преузмете мобилну апликацију и пријавите се у њој. Линкови за преузимање апликације за главне оперативне системе налазе се на страници апликација.",
-		"important": "Важно!",
-		"details": "Ако се страница апликација из неког разлога не отвори, копирајте линк испод и отворите га помоћу претраживача.",
-		"dont_show_again": "Не показуј више"
-	},
-
 	"exchangeLabels": {
 		"label": "Опције размене",
 		"title": "Можемо пронаћи опције размене за вас",
@@ -315,10 +331,13 @@
 		"transfer_complete_with_transaction_link": "Трансфер је извршен. Линк на трансакцију ће бити послат у чет.",
 		"transfer_canceled": "Отказали сте трансфер",
 		"transfer_forbidden": "Забранили сте трансфер",
+		"telegram_username_undefined": "Вредност \"username\" није подешена",
+		"disconnecting_telegram_bot": "Искључите Телеграм бот?",
 		
 		"image_error": "Грешка при учитавању слика: {error}",
 		"node_error": "Дошло је до грешке на ноди: {error}",
 		"survey_error": "Дошло је до грешке при слању одговора: {error}",
+		"common_error": "Дошло је до грешке: {error}",
 		"common_loading_error": "Грешка при учитавању података: {error}",
 		"disabled_permissions": "Следеће дозволе су онемогућене: {error}. Кликните на \"Подешавања апликације\" и омогућите приступ.",
 		"app_geolocation_permission_error": "Ограничили сте приступ геолокацији. Кликните на \"Подешавања апликације\" и омогућите приступ.",

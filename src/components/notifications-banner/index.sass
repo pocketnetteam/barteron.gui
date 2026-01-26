@@ -1,0 +1,75 @@
+@import "@/css/vars.sass"
+
+.notifications-banner
+	.title
+		color: $bulma
+
+	.accordion
+		width: 100%
+		overflow: hidden
+
+		.accordion-item
+			border: 1px solid $beerus
+			border-radius: 12px
+			margin-bottom: $r * 4
+
+		.accordion-header
+			display: flex
+			justify-content: space-between
+			padding: 12px 16px
+			border-radius: 12px
+			cursor: pointer
+			user-select: none
+			background: $beerus
+			transition: background 0.3s, border-radius 0.3s
+
+			.title,
+			.arrow
+				color: $bulma
+				font-size: 1.1em
+				font-weight: 500
+
+			&:hover
+				background: $beerus-hover
+
+			&.open
+				border-radius: 12px 12px 0 0
+
+			.arrow
+				transition: transform 0.3s
+
+				&.open
+					transform: rotate(180deg)
+
+		.accordion-content
+			background: $gohan
+			overflow: hidden
+			border-radius: 0 0 12px 12px
+
+			.content-holder
+				padding: 12px 16px
+
+				p.info
+					color: $bulma
+					text-align: justify
+					word-wrap: break-word
+					font-size: 1.1em
+					text-transform: none
+					font-weight: normal
+
+				.v-button-holder
+					.v-button
+						height: 40px
+
+				.top-space
+					margin-top: $r * 6
+
+				.half-top-space
+					margin-top: $r * 3
+
+				.telegram-username
+					max-width: 250px
+
+	.notifications-banner-checkbox-holder
+		.v-switch-holder
+			padding: $r 0 $r / 2 0

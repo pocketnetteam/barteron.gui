@@ -534,6 +534,13 @@ class SDK {
 		};
 	}
 
+	sign(scope) {
+		return this.sdk.sign(scope).catch(e => {
+			const error = (e instanceof Error) ? e : new Error(e);
+			return Promise.reject(error);
+		});
+	}
+
 	/**
 	 * Get logged user state
 	 * 

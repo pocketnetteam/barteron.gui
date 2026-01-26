@@ -9,6 +9,11 @@ import { currencies, numberFormats } from "@/i18n/index.js";
 import CurrencyStore from "@/stores/currency.js";
 import { GeoHashApproximator } from "@/js/geohashUtils.js";
 import AppErrors from "@/js/appErrors.js";
+import NotificationsBanner from "@/components/notifications-banner/index.vue";
+import Vue from 'vue';
+import {
+	default as profileStore,
+} from "@/stores/profile.js";
 
 export default {
 	name: "Content",
@@ -56,7 +61,7 @@ export default {
 		}
 	},
 
-	inject: ["dialog"],
+	inject: ["dialog", "lightboxContainer"],
 
 	computed: {
 		pickupPoint() {
@@ -932,25 +937,8 @@ export default {
 								this.offer.newVideoAdded = false;
 								this.offerPublished = true;
 								form.dialog.hide();
-								this.$router.push({
-									name: "exchangeOptions",
-									params: {
-										id: hash?.length < 64 ? data.transaction : hash
-									}
-								}).catch(error => {
-									console.error(error);
-
-									const
-										options = { prefix: this.$t("barterLabels.offer_has_been_published") },
-										warningShown = this.showVersionConflictIfNeeded(
-											error, 
-											options
-										);
-
-									if (!(warningShown)) {
-										form.dialog.view("info", options.prefix);
-									};
-								});
+								const offerHash = hash?.length < 64 ? data.transaction : hash;
+								this.performActionsAfterPublishing(form, offerHash);
 							} else {
 								const 
 									code = data.error?.code ?? (typeof(data.rejected) === "number" ? data.rejected : undefined),
@@ -990,6 +978,56 @@ export default {
 
 				field && this.scrollTo(field);
 			}
+		},
+
+		performActionsAfterPublishing(form, offerHash) {
+			this.$router.push({
+				name: "exchangeOptions",
+				params: {
+					id: offerHash
+				}
+			}).catch(error => {
+				console.error(error);
+
+				const
+					options = { prefix: this.$t("barterLabels.offer_has_been_published") },
+					warningShown = this.showVersionConflictIfNeeded(
+						error, 
+						options
+					);
+
+				if (!(warningShown)) {
+					form.dialog.view("info", options.prefix);
+				};
+
+				return { wasError: true };
+
+			}).then((result) => {
+				const needShow = !(result?.wasError || profileStore.notificationsBannerDisabled);
+				if (needShow) {
+					this.showNotificationsBanner();
+				}
+			}).catch(error => {
+				this.showError(error);
+			});
+		},
+
+		showNotificationsBanner() {
+			const ComponentClass = Vue.extend(NotificationsBanner);
+			const instance = new ComponentClass({
+				propsData: {
+					viewMode: "banner",
+					offerHasBeenPublished: true,
+				},
+			});
+			
+			instance.$on('onHide', vm => {});
+
+			instance.$mount();
+			this.lightboxContainer().appendChild(instance.$el);
+			this.$nextTick(() => {
+				instance.show();
+			});
 		},
 
 		/**
