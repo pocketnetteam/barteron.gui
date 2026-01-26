@@ -175,7 +175,19 @@ export default {
 
 			/* Emit item clicked */
 			this.$emit("selected", item, index, this);
-		}
+		},
+
+		handleOutsideClick() {
+			if (this.active) {
+				this.clickButton(null, false);
+			};
+		},
+
+		handleOutsideScroll() {
+			if (this.hideOnScroll && this.active) {
+				this.active = false;
+			};
+		},
 	},
 
 	mounted() {
@@ -183,14 +195,13 @@ export default {
 		this.setValue(this.dropdown.filter(f => f.default)[0] ?? this.dropdown[0]);
 
 		/* Bind click to close dropdown */
-		document.addEventListener("click", () => {
-			if (this.active) this.clickButton(null, false);
-		});
+		document.addEventListener("click", this.handleOutsideClick);
 
-		document.body.addEventListener("scroll", () => {
-			if (this.hideOnScroll && this.active) {
-				this.active = false;
-			};
-		}, { passive: true });
-	}
+		document.body.addEventListener("scroll", this.handleOutsideScroll, { passive: true });
+	},
+
+	beforeDestroy() {
+		document.removeEventListener("click", this.handleOutsideClick);
+		document.body.removeEventListener("scroll", this.handleOutsideScroll);
+	},
 }

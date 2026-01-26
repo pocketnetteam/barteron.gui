@@ -140,6 +140,10 @@ export default {
 			this.$emit("click", e, this);
 		},
 
+		handleOutsideClick() {
+			if (this.active) this.clickSelect(null, false);
+		},
+
 		/**
 		 * Drop-down item click handler
 		 * 
@@ -181,8 +185,10 @@ export default {
 
 	mounted() {
 		/* Bind click to close dropdown */
-		document.addEventListener("click", () => {
-			if (this.active) this.clickSelect(null, false);
-		});
-	}
+		document.addEventListener("click", this.handleOutsideClick);
+	},
+
+	beforeDestroy() {
+		document.removeEventListener("click", this.handleOutsideClick);
+	},
 }

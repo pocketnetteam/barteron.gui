@@ -180,7 +180,7 @@
 					<v-button
 						:disabled="selectionDisabled()"
 						@click="select"
-					>{{ $t('categoriesLabels.select') }}</v-button>
+					>{{ $t('buttonLabels.show') }}</v-button>
 				</div>
 			</div>
 		</template>
