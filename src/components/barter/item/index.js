@@ -219,7 +219,11 @@ export default {
 		 */
 		deliveryOptionsAvailable() {
 			const options = this.deliveryOptions || {};
-			return (options.pickupPoints?.isEnabled || options.selfPickup?.isEnabled);
+			return (
+				options.pickupPoints?.isEnabled 
+				|| options.selfPickup?.isEnabled
+				|| options.directDelivery?.isEnabled
+			);
 		},
 
 		pickupPointsExist() {
@@ -229,6 +233,10 @@ export default {
 
 		selfPickupItemId() {
 			return "self_pickup";
+		},
+
+		directDeliveryItemId() {
+			return "direct_delivery";
 		},
 
 		purchaseStateLabel() {
@@ -450,9 +458,10 @@ export default {
 			if (this.mapMode === "deliverySelection") {
 				const
 					selfPickupExists = this.pickupPointItems.some(f => f.isSelfPickup),
-					shouldReplaceThisOfferWithSelfPickupItem = selfPickupExists;
+					directDeliveryExists = this.pickupPointItems.some(f => f.isDirectDelivery),
+					shouldReplaceThisOffer = (selfPickupExists || directDeliveryExists);
 
-				result = shouldReplaceThisOfferWithSelfPickupItem ? [...this.pickupPointItems] : [this.item, ...this.pickupPointItems];
+				result = shouldReplaceThisOffer ? [...this.pickupPointItems] : [this.item, ...this.pickupPointItems];
 			} else {
 				result = [this.item];
 			};
@@ -582,7 +591,23 @@ export default {
 						published: this.item.published,
 						geohash: this.item.geohash,
 					};
-					this.pickupPointItems = [item];
+					this.pickupPointItems = this.pickupPointItems.concat(item);
+				}
+
+				if (options.directDelivery?.isEnabled) {
+					const item = {
+						isDirectDelivery: true,
+						hash: this.directDeliveryItemId,
+						address: this.item.address,
+						caption: this.$t("deliveryLabels.direct_delivery"),
+						additionalInfo: options.directDelivery?.additionalInfo,
+						time: this.item.time,
+						relay: this.item.relay,
+						status: this.item.status,
+						published: this.item.published,
+						geohash: this.item.geohash,
+					};
+					this.pickupPointItems = this.pickupPointItems.concat(item);
 				}
 
 				if (options.pickupPoints?.isEnabled) {
@@ -647,7 +672,7 @@ export default {
 					options = this.deliveryOptions,
 					onlyPickupPoints = (
 						options.pickupPoints?.isEnabled 
-						&& !(options.selfPickup?.isEnabled)
+						&& !(options.selfPickup?.isEnabled || options.directDelivery?.isEnabled)
 					);
 
 				if (onlyPickupPoints) {
@@ -678,7 +703,12 @@ export default {
 
 			Promise.resolve().then(() => {
 
-				const needSelectDealType = this.safeDealAvailableForOffer() && (!(pickupPoint) || pickupPoint?.isSelfPickup);
+				const needSelectDealType = this.safeDealAvailableForOffer() && (
+					!(pickupPoint) 
+					|| pickupPoint?.isSelfPickup 
+					|| pickupPoint?.isDirectDelivery
+				);
+
 				return needSelectDealType ? this.selectDealTypePromise() : "regularDeal";
 
 			}).then(dealType => {
@@ -808,6 +838,8 @@ export default {
 				if (pickupPoint) {
 					if (pickupPoint.isSelfPickup) {
 						data.messages.push(this.$t("deliveryLabels.chat_message_self_pickup_selected"));
+					} else if (pickupPoint.isDirectDelivery) {
+						data.messages.push(this.$t("deliveryLabels.chat_message_direct_delivery_selected"));
 					} else if (pickupPoint.hash) {
 						const 
 							address = pickupPoint.address,

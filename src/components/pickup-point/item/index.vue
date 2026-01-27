@@ -6,29 +6,58 @@
 	}">
 		<i class="fa fa-check-circle"></i>
 		
-		<!-- Self pickup -->
-		<div v-if="item.isSelfPickup">
-			<picture class="self-pickup">
-				<div class="image">
-					<img
-						:src="imageUrl('self-pickup.png')"
-						:alt="'self-pickup'"
-						@click="showItem"
-					>
-				</div>
-			</picture>
+		<!-- Self pickup, Direct delivery -->
+		<div v-if="item.isSelfPickup || item.isDirectDelivery">
 
-			<div 
-				class="row title"
-				:title="item.caption"
-				@click="showItem"
-			>{{ item.caption }}</div>
+			<!-- Self pickup -->
+			<template v-if="item.isSelfPickup">
+				<picture class="self-pickup">
+					<div class="image">
+						<img
+							:src="imageUrl('self-pickup.png')"
+							:alt="'self-pickup'"
+							@click="showItem"
+						>
+					</div>
+				</picture>
 
-			<div 
-				class="row about-self-pickup-info"
-				:title="aboutSelfPickupInfo"
-				@click="showItem"
-			>{{ aboutSelfPickupInfo }}</div>
+				<div 
+					class="row title"
+					:title="$t('deliveryLabels.self_pickup')"
+					@click="showItem"
+				>{{ $t("deliveryLabels.self_pickup") }}</div>
+
+				<div 
+					class="row about-self-pickup-info"
+					:title="aboutSelfPickupInfo"
+					@click="showItem"
+				>{{ aboutSelfPickupInfo }}</div>
+			</template>
+
+			<!-- Direct delivery -->
+			<template v-else-if="item.isDirectDelivery">
+				<picture class="direct-delivery">
+					<div class="image">
+						<img
+							:src="imageUrl('direct-delivery.png')"
+							:alt="'direct-delivery'"
+							@click="showItem"
+						>
+					</div>
+				</picture>
+
+				<div 
+					class="row title"
+					:title="$t('deliveryLabels.direct_delivery')"
+					@click="showItem"
+				>{{ $t("deliveryLabels.direct_delivery") }}</div>
+
+				<div 
+					class="row about-direct-delivery-info"
+					:title="aboutDirectDeliveryInfo"
+					@click="showItem"
+				>{{ aboutDirectDeliveryInfo }}</div>
+			</template>
 
 			<div class="row info" v-if="item.time || item.geohash">
 				<slot name="info" v-if="$slots.info && !(hasRelay || isRemoved)"></slot>

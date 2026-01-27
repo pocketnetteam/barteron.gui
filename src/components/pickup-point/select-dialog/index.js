@@ -57,6 +57,18 @@ export default {
 		};
 	},
 
+	computed: {
+		dialogTitle() {
+			let key = "pickup_point";
+			if (this.item?.isSelfPickup) {
+				key = "self_pickup_additional_info";
+			} else if (this.item?.isDirectDelivery) {
+				key = "direct_delivery_additional_info";
+			};
+			return this.$t(`deliveryLabels.${key}`);
+		},
+	},
+
 	methods: {
 		show() {
 			this.lightbox = true;
