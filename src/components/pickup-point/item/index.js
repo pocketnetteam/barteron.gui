@@ -117,6 +117,21 @@ export default {
 		},
 
 		/**
+		 * About direct delivery info
+		 * 
+		 * @returns {String}
+		 */
+		aboutDirectDeliveryInfo() {
+			let result = "";
+			if (this.item.isDirectDelivery) {
+				result = this.item.additionalInfo 
+					? this.$t("deliveryLabels.direct_delivery_additional_info_exists")
+					: this.$t("deliveryLabels.no_direct_delivery_additional_info");
+			}
+			return result;
+		},
+
+		/**
 		 * Decode offer geohash
 		 * 
 		 * @returns {Array|null}

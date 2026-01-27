@@ -453,7 +453,7 @@
 						class="no-padding"
 						type="checkbox"
 						name="pickupPointsEnabled"
-						:label="$t('deliveryLabels.use_pickup_points')"
+						:label="$t('deliveryLabels.pickup_points')"
 						:image="{src: imageUrl('pickup-point.png'), alt: 'icon'}"
 						:selected="pickupPointsEnabled ? 'enabled' : ''"
 						:value="'enabled'"
@@ -492,7 +492,7 @@
 						class="no-padding"
 						type="checkbox"
 						name="selfPickupEnabled"
-						:label="$t('deliveryLabels.self_pickup_available')"
+						:label="$t('deliveryLabels.self_pickup')"
 						:image="{src: imageUrl('self-pickup.png'), alt: 'icon'}"
 						:selected="selfPickupEnabled ? 'enabled' : ''"
 						:value="'enabled'"
@@ -516,6 +516,48 @@
 						:value="deliveryOptions?.selfPickup?.additionalInfo"
 					/>
 				</div>
+
+				<!-- vSwitch: direct delivery enabled -->
+				<div 
+					class="row"
+					:class="!(directDeliveryEnabled) ? 'no-offset' : ''"
+				>
+					<v-switch
+						class="no-padding"
+						type="checkbox"
+						name="directDeliveryEnabled"
+						:label="$t('deliveryLabels.direct_delivery')"
+						:image="{src: imageUrl('direct-delivery.png'), alt: 'icon'}"
+						:selected="directDeliveryEnabled ? 'enabled' : ''"
+						:value="'enabled'"
+						vType="checkbox"
+						vSize="xl"
+						@change="directDeliveryEnabledStateChanged"
+					/>
+				</div>
+
+				<label 
+					v-if="!(directDeliveryEnabled)"
+					class="v-label no-margin-bottom"
+				>
+					<i class="fa fa-info-circle"></i>
+					{{ $t('deliveryLabels.direct_delivery_hint') }}
+				</label>
+
+				<div 
+					v-if="directDeliveryEnabled"
+					class="row full-width"
+				>
+					<v-textarea
+						ref="directDeliveryAdditionalInfo"
+						id="direct-delivery-additional-info"
+						class="field-novalidate full-width"
+						name="directDeliveryAdditionalInfo"
+						length="1000"
+						:placeholder="$t('deliveryLabels.direct_delivery_additional_info_placeholder')"
+						:value="deliveryOptions?.directDelivery?.additionalInfo"
+					/>
+				</div>				
 			</div>
 
 			<div

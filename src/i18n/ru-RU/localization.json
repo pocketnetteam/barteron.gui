@@ -59,15 +59,21 @@
 	},
 
 	"deliveryLabels": {
-		"label": "Пункты выдачи заказов и самовывоз",
+		"label": "Варианты доставки товара",
+		"options_for_receiving_goods": "Варианты получения товара",
 		"pickup_point": "Пункт выдачи заказов",
 		"self_pickup": "Самовывоз",
-		"self_pickup_available": "Доступен самовывоз",
 		"self_pickup_additional_info_placeholder": "Добавьте информацию о самовывозе (необязательно)",
 		"self_pickup_additional_info": "Информация о самовывозе",
 		"self_pickup_additional_info_exists": "Ознакомьтесь с информацией",
 		"no_self_pickup_additional_info": "Нет дополнительной информации",
-		"use_pickup_points": "Использовать пункты выдачи заказов",
+		"direct_delivery": "Доставка напрямую",
+		"direct_delivery_hint": "Доставка почтой, транспортной компанией, курьером",
+		"direct_delivery_additional_info_placeholder": "Добавьте информацию о доставке напрямую (необязательно)",
+		"direct_delivery_additional_info": "Информация о доставке напрямую",
+		"direct_delivery_additional_info_exists": "Ознакомьтесь с информацией",
+		"no_direct_delivery_additional_info": "Нет дополнительной информации",
+		"pickup_points": "Пункты выдачи заказов",
 		"pickup_points_enabled_placeholder": "Выполните поиск и подбор подходящих пунктов выдачи на карте",
 		"pickup_points_loading_error_placeholder": "Произошла ошибка при загрузке пунктов выдачи заказов",
 		"pickup_points_enabled_hint": "Местоположение в этом режиме зафиксировано, для его изменения временно отключите данную опцию",
@@ -85,12 +91,13 @@
 		"address_not_specified": "Адрес не указан",
 		"how_to_get": "Как добраться",
 		"pickup_point_creation_is_forbidden": "Функционал ПВЗ сейчас находится в публичном тестировании. Если вы хотите открыть ПВЗ, свяжитесь сначала с support@bastyon.com",
-		"hint_for_delivery_option_selection": "Выберите опцию Пункт выдачи заказов или Самовывоз (при наличии) на карте или в списке",
+		"hint_for_delivery_option_selection": "Выберите вариант получения товара на карте или в списке",
 		"hint_for_purchase_at_pickup_point": "Опция \"Купить\" откроет чат для оформления покупки",
 		"hint_for_purchase_at_pickup_point_with_safe_deal": "Опция \"Купить\" откроет список выбора гаранта и чат для оформления покупки",
 		"chat_message_exchange_proposed": "Предлагаю обмен",
-		"chat_message_self_pickup_selected": "Вариант доставки: \"Самовывоз\"",
-		"chat_message_pickup_point_selected": "Вариант доставки: \"Пункт выдачи заказов\""
+		"chat_message_self_pickup_selected": "Вариант получения товара: \"Самовывоз\"",
+		"chat_message_direct_delivery_selected": "Вариант получения товара: \"Доставка напрямую\"",
+		"chat_message_pickup_point_selected": "Вариант получения товара: \"Пункт выдачи заказов\""
 	},
 
 	"ratingLabels": {

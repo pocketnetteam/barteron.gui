@@ -50,6 +50,8 @@ export default {
 			pickupPointsLoadingError: null,
 
 			selfPickupEnabled: false,
+
+			directDeliveryEnabled: false,
 			
 			pickupPointsRequestData: {
 				pageSize: 100,
@@ -292,6 +294,7 @@ export default {
 			const deliveryOptions = this.getDeliveryOptions(offer);
 			this.pickupPointsEnabled = (deliveryOptions?.pickupPoints?.isEnabled ? true : false);
 			this.selfPickupEnabled = (deliveryOptions?.selfPickup?.isEnabled ? true : false);
+			this.directDeliveryEnabled = (deliveryOptions?.directDelivery?.isEnabled ? true : false);
 
 			if (this.pickupPointsEnabled) {
 				const ids = deliveryOptions?.pickupPoints?.ids || [];
@@ -339,6 +342,8 @@ export default {
 			this.pickupPointsLoadingError = null;
 			
 			this.selfPickupEnabled = false;
+
+			this.directDeliveryEnabled = false;
 		},
 
 		pickupPointsRepeatLoading() {
@@ -408,6 +413,10 @@ export default {
 
 		selfPickupEnabledStateChanged(value, e) {
 			this.selfPickupEnabled = e.target.checked;
+		},
+
+		directDeliveryEnabledStateChanged(value, e) {
+			this.directDeliveryEnabled = e.target.checked;
 		},
 
 		selectPickupPoint(offer) {
@@ -644,7 +653,7 @@ export default {
 						},
 					};
 				} else if (!(isPickupPointOffer)) {
-					const deliveryOptionsExist = (this.pickupPointsEnabled || this.selfPickupEnabled);
+					const deliveryOptionsExist = (this.pickupPointsEnabled || this.selfPickupEnabled || this.directDeliveryEnabled);
 					if (deliveryOptionsExist) {
 						result = {
 							deliveryOptions: {
@@ -655,6 +664,10 @@ export default {
 								selfPickup: {
 									isEnabled: this.selfPickupEnabled,
 									additionalInfo: data.selfPickupAdditionalInfo,
+								},
+								directDelivery: {
+									isEnabled: this.directDeliveryEnabled,
+									additionalInfo: data.directDeliveryAdditionalInfo,
 								},
 							},
 						};

@@ -27,7 +27,7 @@
 			<v-lightbox
 				:visible="lightbox"
 				size="xl"
-				:title="$t('stepsLabels.location')"
+				:title="$t('buttonLabels.search_area')"
 				:noBorders="true"
 				@onHide="hideLightbox"
 			>

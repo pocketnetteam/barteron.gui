@@ -530,7 +530,7 @@
 				id="delivery-options-info"
 				class="row block"
 			>
-				<strong class="title">{{ $t('deliveryLabels.label') }}</strong>
+				<strong class="title">{{ $t('deliveryLabels.options_for_receiving_goods') }}</strong>
 
 				<PickupPointList
 					ref="pickupPointList"
