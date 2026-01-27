@@ -59,15 +59,21 @@
 	},
 
 	"deliveryLabels": {
-		"label": "Pickup points and self-pickup",
+		"label": "Delivery options for goods",
+		"options_for_receiving_goods": "Options for receiving goods",
 		"pickup_point": "Pickup point",
 		"self_pickup": "Self-pickup",
-		"self_pickup_available": "Self-pickup available",
 		"self_pickup_additional_info_placeholder": "Add self-pickup information (optional)",
 		"self_pickup_additional_info": "Self-pickup information",
 		"self_pickup_additional_info_exists": "Check out the information",
 		"no_self_pickup_additional_info": "No additional information",
-		"use_pickup_points": "Use pickup points",
+		"direct_delivery": "Direct delivery",
+		"direct_delivery_hint": "Delivery by mail, transport company, courier",
+		"direct_delivery_additional_info_placeholder": "Add direct delivery information (optional)",
+		"direct_delivery_additional_info": "Direct delivery information",
+		"direct_delivery_additional_info_exists": "Check out the information",
+		"no_direct_delivery_additional_info": "No additional information",
+		"pickup_points": "Pickup points",
 		"pickup_points_enabled_placeholder": "Search and select suitable pickup points on the map",
 		"pickup_points_loading_error_placeholder": "An error occurred while loading pickup points",
 		"pickup_points_enabled_hint": "The location is fixed in this mode, to change it, temporarily disable this option",
@@ -85,12 +91,13 @@
 		"address_not_specified": "Address not specified",
 		"how_to_get": "How to get",
 		"pickup_point_creation_is_forbidden": "The pickup points functionality is currently in public testing. If you want to open a pickup point, please contact support@bastyon.com first",
-		"hint_for_delivery_option_selection": "Select an Pickup point or Self-pickup option (if available) on the map or in the list",
+		"hint_for_delivery_option_selection": "Select the option to receive the goods on the map or in the list",
 		"hint_for_purchase_at_pickup_point": "The \"Buy\" option will open a chat to complete the purchase",
 		"hint_for_purchase_at_pickup_point_with_safe_deal": "The \"Buy\" option will open the guarantor selection list and a chat to complete the purchase",
 		"chat_message_exchange_proposed": "I propose the exchange",
-		"chat_message_self_pickup_selected": "Delivery option: \"Self-pickup\"",
-		"chat_message_pickup_point_selected": "Delivery option: \"Pickup point\""
+		"chat_message_self_pickup_selected": "Option for receiving goods: \"Self-pickup\"",
+		"chat_message_direct_delivery_selected": "Option for receiving goods: \"Direct delivery\"",
+		"chat_message_pickup_point_selected": "Option for receiving goods: \"Pickup point\""
 	},
 
 	"ratingLabels": {

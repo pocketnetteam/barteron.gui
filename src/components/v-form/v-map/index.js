@@ -122,6 +122,12 @@ export default {
 				size: [32, 37],
 				anchor: [16, 37],
 			},
+			directDeliveryIcon: {
+				regular: this.imageUrl("direct-delivery-icon.png"),
+				active: this.imageUrl("direct-delivery-icon-active.png"),
+				size: [32, 37],
+				anchor: [16, 37],
+			},
 			mapObject: {},
 			mapHandlers: {},
 			resizeObserver: null,
@@ -211,6 +217,8 @@ export default {
 				icon = this.pickupPointIcon;
 			} else if (offer.isSelfPickup) {
 				icon = this.selfPickupIcon;
+			} else if (offer.isDirectDelivery) {
+				icon = this.directDeliveryIcon;
 			} else {
 				icon = this.offerIcon;
 			}
@@ -218,7 +226,11 @@ export default {
 			const key = (
 					this.isViewMode 
 					|| this.isSelectedOffer(offer)
-					|| this.isDeliverySelectionMode && !(offer.isPickupPoint || offer.isSelfPickup)
+					|| this.isDeliverySelectionMode && !(
+						offer.isPickupPoint 
+						|| offer.isSelfPickup
+						|| offer.isDirectDelivery
+					)
 				) ? "active" : "regular",
 				url = icon[key];
 

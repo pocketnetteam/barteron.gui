@@ -3,7 +3,7 @@
 		class="pickup-point-dialog"
 		size="md"
 		:visible="lightbox"
-		:title="item?.isSelfPickup ? $t('deliveryLabels.self_pickup_additional_info') : $t('deliveryLabels.pickup_point')"
+		:title="dialogTitle"
 		@onHide="hide"
 	>
 
@@ -11,6 +11,14 @@
 			<p class="additional-info">
 				<LinkifiedText 
 					:text="item?.additionalInfo || $t('deliveryLabels.no_self_pickup_additional_info')"
+				/>
+			</p>
+		</template>
+
+		<template v-else-if="item?.isDirectDelivery">
+			<p class="additional-info">
+				<LinkifiedText 
+					:text="item?.additionalInfo || $t('deliveryLabels.no_direct_delivery_additional_info')"
 				/>
 			</p>
 		</template>
