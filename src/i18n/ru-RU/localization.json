@@ -67,10 +67,9 @@
 		"self_pickup_additional_info": "Информация о самовывозе",
 		"self_pickup_additional_info_exists": "Ознакомьтесь с информацией",
 		"no_self_pickup_additional_info": "Нет дополнительной информации",
-		"direct_delivery": "Доставка напрямую",
-		"direct_delivery_hint": "Доставка почтой, транспортной компанией, курьером",
-		"direct_delivery_additional_info_placeholder": "Добавьте информацию о доставке напрямую (необязательно)",
-		"direct_delivery_additional_info": "Информация о доставке напрямую",
+		"direct_delivery": "Доставка почтой, транспортной компанией, курьером",
+		"direct_delivery_additional_info_placeholder": "Укажите возможные способы и условия доставки (необязательно)",
+		"direct_delivery_additional_info": "Информация о доставке почтой, транспортной компанией, курьером",
 		"direct_delivery_additional_info_exists": "Ознакомьтесь с информацией",
 		"no_direct_delivery_additional_info": "Нет дополнительной информации",
 		"pickup_points": "Пункты выдачи заказов",
@@ -96,7 +95,7 @@
 		"hint_for_purchase_at_pickup_point_with_safe_deal": "Опция \"Купить\" откроет список выбора гаранта и чат для оформления покупки",
 		"chat_message_exchange_proposed": "Предлагаю обмен",
 		"chat_message_self_pickup_selected": "Вариант получения товара: \"Самовывоз\"",
-		"chat_message_direct_delivery_selected": "Вариант получения товара: \"Доставка напрямую\"",
+		"chat_message_direct_delivery_selected": "Вариант получения товара: \"Доставка почтой, транспортной компанией, курьером\"",
 		"chat_message_pickup_point_selected": "Вариант получения товара: \"Пункт выдачи заказов\""
 	},
 

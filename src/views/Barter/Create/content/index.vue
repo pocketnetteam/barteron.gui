@@ -536,14 +536,6 @@
 					/>
 				</div>
 
-				<label 
-					v-if="!(directDeliveryEnabled)"
-					class="v-label no-margin-bottom"
-				>
-					<i class="fa fa-info-circle"></i>
-					{{ $t('deliveryLabels.direct_delivery_hint') }}
-				</label>
-
 				<div 
 					v-if="directDeliveryEnabled"
 					class="row full-width"

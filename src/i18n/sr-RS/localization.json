@@ -67,10 +67,9 @@
 		"self_pickup_additional_info": "Информације о личном преузимању",
 		"self_pickup_additional_info_exists": "Погледајте информације",
 		"no_self_pickup_additional_info": "Нема додатних информација",
-		"direct_delivery": "Директна испорука",
-		"direct_delivery_hint": "Достава поштом, транспортном компанијом, курирском службом",
-		"direct_delivery_additional_info_placeholder": "Додајте информације о испоруци (опционо)",
-		"direct_delivery_additional_info": "Испорука информација",
+		"direct_delivery": "Достава поштом, транспортном компанијом, курирском службом",
+		"direct_delivery_additional_info_placeholder": "Наведите могуће начине и услове испоруке (опционо)",
+		"direct_delivery_additional_info": "Информације о испоруци поштом, транспортном компанијом, курирском службом",
 		"direct_delivery_additional_info_exists": "Погледајте информације",
 		"no_direct_delivery_additional_info": "Нема додатних информација",
 		"pickup_points": "Тачке преузимања поруџбина",
@@ -96,7 +95,7 @@
 		"hint_for_purchase_at_pickup_point_with_safe_deal": "Опција \"Купити\" отвориће листу за избор гаранта и чет за оформљавање куповине",
 		"chat_message_exchange_proposed": "Предлажем размену",
 		"chat_message_self_pickup_selected": "Опција за пријем робе: \"Лично преузимање\"",
-		"chat_message_direct_delivery_selected": "Опција за пријем робе: \"Директна испорука\"",
+		"chat_message_direct_delivery_selected": "Опција за пријем робе: \"Достава поштом, транспортном компанијом, курирском службом\"",
 		"chat_message_pickup_point_selected": "Опција за пријем робе: \"Тачка преузимања поруџбина\""
 	},
 
