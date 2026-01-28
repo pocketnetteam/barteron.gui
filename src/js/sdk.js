@@ -696,6 +696,14 @@ class SDK {
 		return this.sdk.get.applink(url);
 	}
 
+	bastyonProfileAvailable() {
+		return !!(this.sdk.open.profile);
+	}
+
+	openBastyonProfile(username) {
+		return this.sdk.open.profile(username);
+	}
+
 	/**
 	 * Open external link
 	 * 
