@@ -63,6 +63,20 @@
 			</dl>
 		</div>
 
+		<!-- Bastyon profile -->
+		<div
+			v-if="bastyonProfileAvailable()"
+			class="row bastyon-profile"
+		>
+			<v-button
+				vType="bulma-stroke"
+				@click="openBastyonProfile"
+			>
+				<i class="fa fa-user"></i>
+				<span>{{ $t("profileLabels.profile_on_bastyon") }}</span>
+			</v-button>
+		</div>
+
 		<!-- Account state -->
 		<div class="row state" v-if="$slots.state">
 			<slot name="state"></slot>
