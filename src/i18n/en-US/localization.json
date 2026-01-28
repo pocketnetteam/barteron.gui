@@ -110,6 +110,7 @@
 		"label": "Profile",
 		"edit": "Edit profile",
 		"on_barteron_from": "On Barteron from {date}",
+		"profile_on_bastyon": "Profile on Bastyon",
 		"coins": "PKOIN",
 		"wallet": "Wallet",
 		"settings": "Settings",

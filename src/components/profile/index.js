@@ -140,5 +140,17 @@ export default {
 			return this.$t("safeDealLabels.validation_conditions", { feePercent });
 		},
 
-	}
+	},
+
+	methods: {
+		bastyonProfileAvailable() {
+			return this.sdk.bastyonProfileAvailable();
+		},
+
+		openBastyonProfile() {
+			this.sdk.openBastyonProfile(this.user?.name).catch(e => {
+				console.error(e);
+			});
+		},
+	},
 }
