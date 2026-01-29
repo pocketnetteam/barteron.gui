@@ -96,7 +96,7 @@ export default {
 		 * @returns {Array}
 		 */
 		topParentCategoriesToShowPrompt() {
-			return [13587, 6000, 619, 888, 2984, 10542, 11700, 20, 293, 625, 58058, 15032, 1249, 1, 21, 281, 267, 550];
+			return [13587, 6000, 619, 888, 2984, 10542, 11700, 20, 293, 1, 21, 281, 267, 550];
 		},
 
 		/**
@@ -111,6 +111,10 @@ export default {
 		 */
 		servicesSubcategoriesToShowPrompt() {
 			return [3, 40, 4, 5, 26395, 7, 8, 9, 10, 22];
+		},
+
+		electronicsSubcategoriesToShowPrompt() {
+			return [625, 58058, 15032, 1249];
 		},
 
 		clothingFootwearAccessoriesSubcategoriesToShowPrompt() {
@@ -132,6 +136,7 @@ export default {
 				&& (
 					 this.topParentCategoriesToShowPrompt.includes(this.topParentCategory.id) && this.topParentCategory
 					|| this.servicesSubcategoriesToShowPrompt.includes(this.secondLevelParentCategory?.id) && this.secondLevelParentCategory
+					|| this.electronicsSubcategoriesToShowPrompt.includes(this.secondLevelParentCategory?.id) && this.secondLevelParentCategory
 					|| this.clothingFootwearAccessoriesSubcategoriesToShowPrompt.includes(this.secondLevelParentCategory?.id) && this.secondLevelParentCategory
 					|| this.musicAndVideoSubcategoriesToShowPrompt.includes(this.secondLevelParentCategory?.id) && this.secondLevelParentCategory
 					|| this.petSuppliesSubcategoriesToShowPrompt.includes(this.secondLevelParentCategory?.id) && this.secondLevelParentCategory
