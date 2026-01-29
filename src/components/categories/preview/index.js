@@ -52,7 +52,7 @@ export default {
 					11722,
 				],
 				"293": "all",
-				"625": "all",
+				"7000": "all",
 				"888": "all",
 				"2000": "all",
 				"2984": "all",
@@ -66,9 +66,9 @@ export default {
 					10567,
 				],
 				"20": "all",
+				"5000": "all",
 				"11700": "all",
-				"15032": "all",
-				"58058": "all",
+				"281": "all", 
 				"12": "all",
 			}
 		},
@@ -83,7 +83,7 @@ export default {
 			} else if (subPreview?.length) {
 				categoryIds = subPreview
 			} else {
-				categoryIds = "13587,2,2000,3000,293,625,888,2984,6000,8000,10542,11450,20,11700,15032,58058,12".split(",");
+				categoryIds = "13587,2,2000,3000,11700,293,7000,11450,2984,888,20,5000,6000,10542,8000,281,12".split(",");
 			};
 
 			const result = categoryIds
