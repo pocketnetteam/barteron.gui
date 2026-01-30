@@ -267,6 +267,7 @@ export default {
 			const currencyPriceData = this.getCurrencyPriceData();
 
 			this.currencyPriceEnabled = this.currencyPriceAvailable 
+				&& !(currencyPriceData.isDisabled)
 				&& (offer.hash === "draft" || currencyPriceData.exists);
 			
 			this.waitForRefs("currency,price").then(() => {
@@ -571,9 +572,11 @@ export default {
 
 			const
 				currency = this.currencyPrice?.currency?.toUpperCase(),
-				price = this.currencyPrice?.price;
+				price = this.currencyPrice?.price,
+				isDisabled = this.currencyPrice?.isDisabled;
 
 			if (this.currencyPriceAvailable 
+				&& !(isDisabled)
 				&& currency 
 				&& (typeof price === "number") 
 				&& price >= 0
@@ -586,6 +589,7 @@ export default {
 				exists,
 				listItem,
 				currency,
+				isDisabled,
 			};
 		},
 
@@ -601,6 +605,10 @@ export default {
 				result = {
 					currency,
 					price,
+				};
+			} else if (!(this.currencyPriceEnabled)) {
+				result = {
+					isDisabled: true,
 				};
 			};
 
