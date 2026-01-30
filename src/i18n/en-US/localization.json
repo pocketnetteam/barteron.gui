@@ -67,7 +67,7 @@
 		"self_pickup_additional_info": "Self-pickup information",
 		"self_pickup_additional_info_exists": "Check out the information",
 		"no_self_pickup_additional_info": "No additional information",
-		"direct_delivery": "Delivery by mail, transport company, courier",
+		"direct_delivery": "By mail, transport company, courier",
 		"direct_delivery_additional_info_placeholder": "Specify possible delivery methods and conditions (optional)",
 		"direct_delivery_additional_info": "Information about delivery by mail, transport company, courier",
 		"direct_delivery_additional_info_exists": "Check out the information",
@@ -95,7 +95,7 @@
 		"hint_for_purchase_at_pickup_point_with_safe_deal": "The \"Buy\" option will open the guarantor selection list and a chat to complete the purchase",
 		"chat_message_exchange_proposed": "I propose the exchange",
 		"chat_message_self_pickup_selected": "Option for receiving goods: \"Self-pickup\"",
-		"chat_message_direct_delivery_selected": "Option for receiving goods: \"Delivery by mail, transport company, courier\"",
+		"chat_message_direct_delivery_selected": "Option for receiving goods: \"By mail, transport company, courier\"",
 		"chat_message_pickup_point_selected": "Option for receiving goods: \"Pickup point\""
 	},
 
