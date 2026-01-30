@@ -14,6 +14,10 @@ class TelegramManager {
 	}
 
 	notificationsAllowed() {
+		if (!(this.sdk.address === "PPbNqCweFnTePQyXWR21B9jXWCiDJa2yYu" || this.sdk.address === "PEmxMUL35Z5rtULmHMuYLNYsQGu23HXBeX")) {
+			return Promise.resolve(false);
+		};
+
 		return this.sdk.checkPermission("sign");
 	}
 
