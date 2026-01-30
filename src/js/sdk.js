@@ -701,7 +701,7 @@ class SDK {
 	}
 
 	openBastyonProfile(username) {
-		return this.sdk.open.profile(username);
+		return this.sdk.open.profile("username", username);
 	}
 
 	/**
