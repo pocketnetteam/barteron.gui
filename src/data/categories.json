@@ -7554,18 +7554,30 @@
 		"children": [],
 		"order": 40
 	},
-	"625": {
-		"name": "photo_video_&_audio_electronics",
-		"icon": "fa-camera",
-		"id": 625,
+	"7000": {
+		"name": "electronics",
+		"icon": "fa-laptop",
+		"id": 7000,
 		"parent": null,
 		"children": [
-			657,
-			669,
-			688,
+			625,
+			58058,
+			15032,
+			1249,
 			716
 		],
 		"order": 238
+	},
+	"625": {
+		"name": "photo_video_&_audio_electronics",
+		"id": 625,
+		"parent": 7000,
+		"children": [
+			657,
+			669,
+			688
+		],
+		"order": 10
 	},
 	"657": {
 		"name": "televisions_&_video_equipment",
@@ -8046,7 +8058,7 @@
 	"716": {
 		"name": "electronics_accessories",
 		"id": 716,
-		"parent": 625,
+		"parent": 7000,
 		"children": [
 			717,
 			726,
@@ -8059,7 +8071,7 @@
 			733,
 			734
 		],
-		"order": 40
+		"order": 50
 	},
 	"717": {
 		"name": "cables_&_adapters",
@@ -9356,9 +9368,8 @@
 	},
 	"1249": {
 		"name": "video_games_consoles_&_accessories",
-		"icon": "fa-gamepad",
 		"id": 1249,
-		"parent": null,
+		"parent": 7000,
 		"children": [
 			1250,
 			1258,
@@ -9375,7 +9386,7 @@
 			1279,
 			1280
 		],
-		"order": 244
+		"order": 40
 	},
 	"1250": {
 		"name": "playstation",
@@ -18810,9 +18821,8 @@
 	},
 	"15032": {
 		"name": "phones_smartwatches_and_accessories",
-		"icon": "fa-mobile",
 		"id": 15032,
-		"parent": null,
+		"parent": 7000,
 		"children": [
 			15033,
 			15034,
@@ -18824,7 +18834,7 @@
 			15051,
 			15052
 		],
-		"order": 242
+		"order": 30
 	},
 	"15033": {
 		"name": "smartphones",
@@ -18980,9 +18990,8 @@
 	},
 	"58058": {
 		"name": "computers_tablets_&_networking_equipment",
-		"icon": "fa-laptop",
 		"id": 58058,
-		"parent": null,
+		"parent": 7000,
 		"children": [
 			58059,
 			58067,
@@ -18991,7 +19000,7 @@
 			58104,
 			58132
 		],
-		"order": 240
+		"order": 20
 	},
 	"58059": {
 		"name": "computers",
