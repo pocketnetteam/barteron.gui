@@ -40,6 +40,8 @@ export default {
 			price: 0,
 			pkoin: 0,
 			tags: [],
+			currencyRatesLoading: false,
+			currencyRateError: false,
 			currencyPrice: {},
 			currencyPriceEnabled: false,
 
@@ -190,14 +192,15 @@ export default {
 			const
 				values = this.sdk.currency,
 				price = this.$refs.price?.inputs?.[0],
-				currency = this.$refs.currency?.selected?.toUpperCase();
+				currency = this.$refs.currency?.selected?.toUpperCase(),
+				rate = values[currency];
 
 			/* Handle pkoin input */
 			if (reverse?.target?.name === "pkoin") {
 				reverse = reverse.target.value;
 			};
 
-			if (!this.sdk.empty(values)) {
+			if (rate && rate > 0) {
 				if (price && !price?.value?.length) {
 					price.value = 0;
 				};
@@ -205,13 +208,26 @@ export default {
 				if (reverse?.target || reverse?.value) {
 					/* Typing in price field */
 					this.price = parseFloat(price?.value || 0);
-					this.pkoin = (this.price / values[currency]).toFixed(2);
+					this.pkoin = (this.price / rate).toFixed(2);
 				} else {
 					/* Get value from offer */
 					this.pkoin = parseFloat(reverse || 0);
-					this.price = (this.pkoin * values[currency]).toFixed(2);
+					this.price = (this.pkoin * rate).toFixed(2);
 				}
-			}
+			} else {
+				this.currencyRateError = true;
+			};
+		},
+
+		showCurrencyRateError() {
+			const 
+				currency = this.$refs.currency?.selected?.toUpperCase(),
+				message = this.$t("dialogLabels.currency_rate_error_message", {currency});
+
+			this.showWarning(message, () => {
+					this.navigateToMainPage();
+				}
+			);
 		},
 
 		/**
@@ -278,9 +294,10 @@ export default {
 					this.pkoin = offer.price;
 				};
 			}).then(() => {
-				/* Wait for currency rates */
-				return this.sdk.currency;
+				this.currencyRatesLoading = true;
+				return this.sdk.loadCurrencyRates();
 			}).then(() => {
+				this.currencyRatesLoading = false;
 				if (currencyPriceData.exists) {
 					this.calcPrice({value: currencyPriceData.currency});
 				} else if (offer.price) {
@@ -1099,6 +1116,14 @@ export default {
 			}).catch(e => {
 				this.showError(e);
 			})
+		},
+	},
+
+	watch: {
+		currencyRateError(value) {
+			if (value) {
+				this.showCurrencyRateError();
+			};
 		},
 	},
 
