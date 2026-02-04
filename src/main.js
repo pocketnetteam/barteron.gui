@@ -444,6 +444,22 @@ Vue.prototype.shared = Vue.observable({
 			}
 		},
 
+		navigateToMainPage() {
+			const 
+				to = {
+					path: `/`,
+				},
+				from = this.$route,
+				needReplace = !(this.routesAreEqual(to, from, ['path']));
+			
+			if (needReplace) {
+				return this.$router.replace(to).catch(e => {
+					console.error(e);
+					this.showVersionConflictIfNeeded(e);
+				});
+			}
+		},
+
 		/**
 		 * Checks if routes are equal
 		 * 
@@ -494,8 +510,10 @@ Vue.prototype.shared = Vue.observable({
 		 * 
 		 * @param {String} message
 		 */
-		showWarning(message) {
-			this.dialog?.instance.view("warn", message);
+		showWarning(message, callback) {
+			this.dialog?.instance.view("warn", message).then(() => {
+				callback?.();
+			});
 		},
 
 		/**

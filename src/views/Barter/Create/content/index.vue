@@ -213,8 +213,17 @@
 
 			<div 
 				v-if="getting !== 'for_nothing' && offerCreationParams().isAllowed" 
-				class="row block"
+				class="row block price-holder"
 			>
+
+				<label 
+					v-if="currencyRatesLoading"
+					class="v-label warning-level"
+				>
+					<i class="fa fa-spinner fa-spin"></i>
+					{{ $t("currency_rates_loading") }}
+				</label>
+
 				<!-- Input: Currency exchange to PKOIN -->
 				<v-input
 					ref="price"
@@ -222,6 +231,7 @@
 					:type="['number', 'number']"
 					:value="[price, pkoin]"
 					:min="['0', '']"
+					:disabled="[currencyRatesLoading, currencyRatesLoading]"
 					class="currency-input"
 					vSize="lg"
 					:vEvents="{
@@ -234,6 +244,7 @@
 							ref="currency"
 							vSize="xs"
 							:dropdown="currencies"
+							:disabled="currencyRatesLoading"
 							@selected="calcPrice"
 						/>
 					</template>
@@ -269,6 +280,7 @@
 						:label="currencyPriceLabel()"
 						:selected="currencyPriceEnabled ? 'enabled' : ''"
 						:value="'enabled'"
+						:disabled="currencyRatesLoading"
 						vType="checkbox"
 						vSize="xl"
 						@change="currencyPriceEnabledStateChanged"
@@ -288,6 +300,7 @@
 						:label="$t('price_prefix_text')"
 						:selected="pricePrefix ? 'enabled' : ''"
 						:value="'enabled'"
+						:disabled="currencyRatesLoading"
 						vType="checkbox"
 						vSize="xl"
 						@change="pricePrefixValueChanged"
@@ -585,13 +598,13 @@
 					<!-- vButton: Preview -->
 					<v-button
 						vType="bulma-stroke"
-						:disabled="offerPublished"
+						:disabled="offerPublished || currencyRatesLoading || currencyRateError"
 						@click="preview"
 					>{{ $t('buttonLabels.preview') }}</v-button>
 
 					<!-- vButton: Publish -->
 					<v-button 
-						:disabled="offerPublished"
+						:disabled="offerPublished || currencyRatesLoading || currencyRateError"
 						@click="submit"
 					>{{ $t('buttonLabels.publish') }}</v-button>
 				</div>
