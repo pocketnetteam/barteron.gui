@@ -141,7 +141,10 @@ class SDK {
 
 	_currency = {};
 	get currency() {
-		if (this.empty(this._currency)) this.getCurrency();
+		if (this.empty(this._currency)) {
+			this._currency.pending = true;
+			this.loadCurrencyRates();
+		};
 
 		return this._currency;
 	}
@@ -1218,12 +1221,11 @@ class SDK {
 	/**
 	 * Currency rates from third-party API's
 	 */
-	getCurrency() {
-		this._currency.pending = true;
+	loadCurrencyRates() {
 		const currencyIds = currencies.map(currency => currency);
 		let allRates = null;
 
-		this.getCurrencyRates().then(rates => {
+		return this.fetchCurrencyRates().then(rates => {
 			allRates = rates;
 			const 
 				missingIds = currencyIds?.filter(f => !(rates[f])),
@@ -1231,7 +1233,7 @@ class SDK {
 				needCalculate = missingIds?.length && USD_Rate;
 			
 			return needCalculate 
-				? this.getMissingCurrencyСrossRates(missingIds, USD_Rate)
+				? this.fetchMissingCurrencyСrossRates(missingIds, USD_Rate)
 				: {};
 		}).then(rates => {
 			allRates = {
@@ -1241,10 +1243,16 @@ class SDK {
 		}).catch(e => {
 			console.error(e);
 		}).finally(() => {
-			if (allRates) {
+			const success = allRates;
+			if (success) {
 				Vue.set(this, "_currency", allRates);
-				return allRates;
-			}
+			} else {
+				const needResetPendingState = this._currency.pending;
+				if (needResetPendingState) {
+					this._currency = {};
+				};
+			};
+			return this._currency;
 		});
 	}
 
@@ -1252,7 +1260,7 @@ class SDK {
 	 * Currency rates from coingecko API.
 	 * The most accurate values, but some are missing.
 	 */
-	getCurrencyRates() {
+	fetchCurrencyRates() {
 		const 
 			pkoinId = "pocketcoin",
 			currencyIds = currencies.map(currency => currency);
@@ -1264,7 +1272,7 @@ class SDK {
 				vs_currencies: currencyIds,
 			}).toString() }
 		`, 
-			{ timeout: 60000 }
+			{ timeout: 15000 }
 		)
 		.then(result => result.json())
 		.then(data => {
@@ -1287,7 +1295,7 @@ class SDK {
 	 * Direct values ​​of the PKOIN exchange rate differ 
 	 * greatly from the acceptable ones.
 	 */
-	getMissingCurrencyСrossRates(missingCurrencyIds, USD_Rate) {
+	fetchMissingCurrencyСrossRates(missingCurrencyIds, USD_Rate) {
 		return fetch(`
 			https://min-api.cryptocompare.com/data/price?
 			${ new URLSearchParams({
@@ -1295,7 +1303,7 @@ class SDK {
 				tsyms: missingCurrencyIds
 			}).toString() }
 		`,
-			{ timeout: 60000 }
+			{ timeout: 15000 }
 		)
 		.then(result => result.json())
 		.then(data => {
