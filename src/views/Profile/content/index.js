@@ -35,7 +35,7 @@ export default {
 			activeInnerAdsTab: null,
 			offersList: [],
 			favoriteList: [],
-			fetching: true,
+			fetching: null,
 			isChatLoading: false,
 		}
 	},
@@ -199,8 +199,15 @@ export default {
 		 * @param {String} address 
 		 */
 		async getTabsContent(address) {
+			if (this.fetching?.address === address) {
+				return;
+			};
+
 			/* Start fetching */
-			this.fetching = true;
+			this.fetching = { address };
+
+			this.offersList = [];
+			this.favoriteList = [];
 
 			const [ published = [], pending = [] ] = await Promise.all(
 				[
@@ -235,7 +242,7 @@ export default {
 			}).concat(pending.map(o => o.hash));
 			
 			/* End fetching */
-			this.fetching = false;
+			this.fetching = null;
 
 			/* Get favorited offers */
 			this.updateFavoriteList();
@@ -322,7 +329,7 @@ export default {
 	},
 
 	beforeRouteEnter (to, from, next) {
-		next(async vm => {
+		next(vm => {
 			const address = to?.params?.id;
 			
 			vm.getTabsContent(address);

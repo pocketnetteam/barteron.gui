@@ -60,20 +60,23 @@ class Offer {
 
 		this.relay = data?.relay || false;
 
-		/* If already exists */
-		if (this.sdk.barteron._offers[this.hash] instanceof Offer) {
-			return this.sdk.barteron._offers[this.hash].update(this);
+		this.actionHandler = null;		
+
+		const alreadyExists = (this.sdk.barteron._offers[this.hash] instanceof Offer);
+		if (alreadyExists) {
+			const offer = this.sdk.barteron._offers[this.hash];
+			return offer.update(this);
+		} else {
+			/* Initialize access */
+			Vue.set(
+				this.sdk.barteron._offers,
+				this.hash || "draft",
+				this.update({ hash: this.hash || "draft" })
+			);
+
+			/* Watch for action */
+			this.action();
 		}
-
-		/* Initialize access */
-		Vue.set(
-			this.sdk.barteron._offers,
-			this.hash || "draft",
-			this.update({ hash: this.hash || "draft" })
-		);
-
-		/* Watch for action */
-		this.action();
 	}
 
 	/**
@@ -144,7 +147,7 @@ class Offer {
 	 * Watch action status
 	 */
 	action() {
-		this.sdk.on("action", action => {
+		this.actionHandler = (action) => {
 			if (this.hash === action.transaction) {
 				const statusBefore = this.status;
 				const props = {
@@ -161,8 +164,10 @@ class Offer {
 				if (offerHasPublished) {
 					this.sdk.lastPublishedOfferId = this.hash;
 				};
-			}
-		});
+			};
+		};
+
+		this.sdk.on("action", this.actionHandler);
 	}
 
 	/**
@@ -224,6 +229,8 @@ class Offer {
 	 * Destroy model data
 	 */
 	destroy() {
+		this.sdk.off("action", this.actionHandler);
+		this.actionHandler = null;
 		Vue.delete(this.sdk.barteron._offers, this.hash);
 	}
 };
