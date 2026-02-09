@@ -826,53 +826,23 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	getActions() {
-		return this.sdk.get.actions()
-			.catch(e => this.setLastResult(e));
+		return this.sdk.get.actions();
 	}
 
 	/**
-	 * Get pending offers
+	 * Get offer actions
+	 * 
+	 * @param {Object} options
 	 * 
 	 * @returns {Promise}
 	 */
-	getPendingOffers() {
+	getOfferActions(options = {pending: false}) {
 		return this.getActions().then(actions => {
-			return Promise.all(
-				(actions || [])
-					.filter(action => this.isOfferAction(action))
-					.filter(action => !(action.completed || action.rejected))
-					.map(async action => {
-
-						let result = null;
-
-						const isContentDelete = (action.expObject?.type === this.txTypes.contentDelete.name);
-						if (isContentDelete) {
-							const txid = action.expObject?.txidEdit;
-							
-							if (!this.barteron.offers[txid]) {
-								await this.getBrtOffersByHashes([txid]);
-							}
-
-							result = new Offer({
-								...this.barteron.offers[txid],
-								hash: action.transaction,
-								prevhash: txid,
-								published: "removed",
-								relay: !action?.completed
-							})
-						} else {
-							result = new Offer({
-								/* Normal Offer action */
-								...action.expObject,
-								price: action.expObject?.price / 100,
-								hash: action.transaction,
-								prevhash: action.expObject?.hash,
-								relay: !action?.completed
-							})
-						};
-
-						return result;
-			}) || []);
+			let result = (actions || []).filter(item => this.isOfferAction(item));
+			if (options?.pending) {
+				result = result.filter(item => !(item.completed || item.rejected));
+			};
+			return result;
 		});
 	}
 
@@ -887,13 +857,13 @@ class SDK {
 		const
 			expObject = action.expObject || {},
 			keys = Object.keys(expObject),
-			createOrEditOfferKeys = 'address,hash,language,caption,description,tag,condition,geohash'.split(','),
-			deleteOfferKeys = 'txidEdit,type'.split(',');
+			offerCreationOrEditionKeys = 'address,hash,language,caption,description,tag,condition,geohash'.split(','),
+			offerDeletionKeys = 'txidEdit,type'.split(',');
 		
 		const
-			isCreateOrEditOfferAction = (createOrEditOfferKeys.filter(item => !(keys.includes(item))).length == 0),
+			isCreateOrEditOfferAction = (offerCreationOrEditionKeys.filter(item => !(keys.includes(item))).length == 0),
 			isDeleteOfferAction = (
-				deleteOfferKeys.filter(item => !(keys.includes(item))).length == 0 
+				offerDeletionKeys.filter(item => !(keys.includes(item))).length == 0 
 				&& expObject.type === this.txTypes.contentDelete.name
 			);
 

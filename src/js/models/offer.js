@@ -21,8 +21,6 @@ class Offer {
 		/* Iterable properties */
 		this.address = data?.address || data?.s1 || "";
 		this.hash = data?.s2 || data?.hash || null;
-		this.firsthash = data?.s2 && data?.hash ? data.hash : null;
-		this.prevhash = data?.prevhash || null;
 		this.language = data?.language || data?.p?.s1 || "";
 		this.caption = data?.caption || data?.p?.s2 || "";
 		this.description = data?.description || data?.p?.s3 || "";
@@ -148,16 +146,21 @@ class Offer {
 	 */
 	action() {
 		this.actionHandler = (action) => {
-			if (this.hash === action.transaction) {
-				const statusBefore = this.status;
-				const props = {
-					relay: (!!action?.relay && !action?.completed),
-				};
+			const
+				expObject = action.expObject,
+				isTargetAction = (this.hash === expObject?.hash || this.hash === expObject?.txidEdit);
+
+			if (isTargetAction) {
+				const 
+					statusBefore = this.status,
+					relayValue = (!!action?.relay && !action?.completed);
+
 				Vue.set(
 					this.sdk.barteron._offers[this.hash],
 					"relay",
-					props.relay
+					relayValue
 				);
+
 				const statusAfter = this.status;
 
 				const offerHasPublished = (statusBefore === "published" && statusAfter === "valid");

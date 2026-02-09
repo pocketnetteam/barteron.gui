@@ -153,7 +153,7 @@
 							keyPrefix="profile_active"
 							:items="offersActive"
 							:vType="bartersView"
-							:loaderState="fetching"
+							:loaderState="!!(fetching)"
 							:loaderItems="6"
 						>
 							<!-- Date range, views and favorites -->
@@ -262,7 +262,7 @@
 					keyPrefix="profile_favorites"
 					:items="favoriteList"
 					:vType="bartersView"
-					:loaderState="fetching"
+					:loaderState="!!(fetching)"
 					:loaderItems="6"
 				></BarterList>
 			</template>

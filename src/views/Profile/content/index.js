@@ -203,48 +203,73 @@ export default {
 				return;
 			};
 
-			/* Start fetching */
 			this.fetching = { address };
 
 			this.offersList = [];
 			this.favoriteList = [];
 
-			const [ published = [], pending = [] ] = await Promise.all(
-				[
-					/* Get published offers */
-					this.sdk.getBrtOffers(address),
+			try {
+				const 
+					publishedOffers = await this.sdk.getBrtOffers(address),
+					applyPendingActions = this.isMyProfile,
+					pendingOffers = [];
 
-					/* Get pending offers */
-					(this.isMyProfile ? this.sdk.getPendingOffers() : null)
-				]
-					.filter(r => r)
-					.map(r => r.catch(e => console.error(e)))
-			);
+				if (applyPendingActions) {
+					const pendingActions = await this.sdk.getOfferActions({pending: true}).catch(e => {
+						console.error(e);
+					});
 
-			/* Mix published and pending offers */
-			this.offersList = published.map(offer => {
-				/**
-				 * Avoid duplicates from published and pending
-				 * using "prevhash" key that appears in actions
-				 * just replace offers in published with pending
-				 */
-				const index = pending.findIndex(o => o.firsthash === offer.hash || o.prevhash === offer.hash);
-
-				if (index > -1) {
-					/* Replace old offer with new */
-					offer = pending[index];
+					const 
+						contentDeleteType = this.sdk.txTypes.contentDelete.name,
+						deletionActions = (pendingActions || []).filter(f => (f?.expObject?.type === contentDeleteType)),
+						editionActions =  (pendingActions || []).filter(f => (f?.expObject?.type !== contentDeleteType));
 					
-					/* Remove offer form pending list */
-					pending.splice(index, 1);
-				}
+					const missingHashes = deletionActions
+						.map(m => m?.expObject?.txidEdit)
+						.filter(f => f && !(this.sdk.barteron.offers[f]));
 
-				return offer.hash;
-			}).concat(pending.map(o => o.hash));
-			
-			/* End fetching */
-			this.fetching = null;
+					await this.sdk.getBrtOffersByHashes(missingHashes);
 
-			/* Get favorited offers */
+					deletionActions.forEach(f => {
+						const 
+							hash = f?.expObject?.txidEdit,
+							existingOffer = this.sdk.barteron.offers[hash];
+						
+						if (existingOffer) {
+							const offer = new this.sdk.models.Offer({
+								...existingOffer,
+								published: "removed",
+								relay: true,
+							});
+							pendingOffers.push(offer);
+						};
+					});
+
+					editionActions.forEach(f => {
+						const expObject = f.expObject;
+						if (expObject) {
+							const offer = new this.sdk.models.Offer({
+								...expObject,
+								price: expObject?.price / 100,
+								relay: true,
+							});
+							pendingOffers.push(offer);
+						};
+					});
+				};
+
+				const 
+					publishedOfferHashes = publishedOffers.map(m => m.hash),
+					pendingOfferHashes = pendingOffers.map(m => m.hash),
+					addingOfferHashes = pendingOfferHashes.filter(f => !(publishedOfferHashes.includes(f)));
+				
+				this.offersList = publishedOfferHashes.concat(addingOfferHashes);
+			} catch (e) {
+				this.showError(e);
+			} finally {
+				this.fetching = null;
+			};
+
 			this.updateFavoriteList();
 		},
 

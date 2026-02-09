@@ -522,6 +522,7 @@ Vue.prototype.shared = Vue.observable({
 		 * @param {Object} e
 		 */
 		showError(e, options, callback) {
+			console.error(e);
 			this.dialog?.instance.view("error", this.sdk.errorMessage(e, options)).then(() => {
 				callback?.();
 			});
