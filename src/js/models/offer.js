@@ -58,8 +58,6 @@ class Offer {
 
 		this.relay = data?.relay || false;
 
-		this.actionHandler = null;		
-
 		const alreadyExists = (this.sdk.barteron._offers[this.hash] instanceof Offer);
 		if (alreadyExists) {
 			const offer = this.sdk.barteron._offers[this.hash];
@@ -145,8 +143,8 @@ class Offer {
 	 * Watch action status
 	 */
 	action() {
-		this.actionHandler = (action) => {
-			const
+		this.sdk.on("action", (action) => {
+			const 
 				expObject = action.expObject,
 				isTargetAction = (this.hash === expObject?.hash || this.hash === expObject?.txidEdit);
 
@@ -168,9 +166,7 @@ class Offer {
 					this.sdk.lastPublishedOfferId = this.hash;
 				};
 			};
-		};
-
-		this.sdk.on("action", this.actionHandler);
+		});
 	}
 
 	/**
@@ -232,8 +228,6 @@ class Offer {
 	 * Destroy model data
 	 */
 	destroy() {
-		this.sdk.off("action", this.actionHandler);
-		this.actionHandler = null;
 		Vue.delete(this.sdk.barteron._offers, this.hash);
 	}
 };
