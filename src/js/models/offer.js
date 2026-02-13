@@ -146,24 +146,25 @@ class Offer {
 		this.sdk.on("action", (action) => {
 			const 
 				expObject = action.expObject,
-				isTargetAction = (this.hash === expObject?.hash || this.hash === expObject?.txidEdit);
+				isCreation = (this.hash === action.transaction),
+				isEditingOrDeletion = (this.hash === expObject?.hash || this.hash === expObject?.txidEdit),
+				isTargetAction = (isCreation || isEditingOrDeletion);
 
 			if (isTargetAction) {
 				const 
 					statusBefore = this.status,
-					relayValue = (!!action?.relay && !action?.completed);
+					relay = (!!action?.relay && !action?.completed);
 
-				Vue.set(
-					this.sdk.barteron._offers[this.hash],
-					"relay",
-					relayValue
-				);
+				this.update({ relay });
 
 				const statusAfter = this.status;
 
-				const offerHasPublished = (statusBefore === "published" && statusAfter === "valid");
-				if (offerHasPublished) {
-					this.sdk.lastPublishedOfferId = this.hash;
+				const 
+					offerHasPublished = (statusBefore === "published" && statusAfter === "valid"),
+					isFirstPublication = (isCreation && offerHasPublished);
+
+				if (isFirstPublication) {
+					this.sdk.lastCreatedOfferId = this.hash;
 				};
 			};
 		});
@@ -205,10 +206,9 @@ class Offer {
 
 			/* Create new key in storage when hash had changed */
 			if (txid && hash && txid !== hash) {
-				this.update({ hash: txid });
-
-				Vue.set(this.sdk.barteron._offers, txid, this);
 				Vue.delete(this.sdk.barteron._offers, hash);
+				this.update({ hash: txid, relay: true });
+				Vue.set(this.sdk.barteron._offers, txid, this);
 			}
 
 			return action;

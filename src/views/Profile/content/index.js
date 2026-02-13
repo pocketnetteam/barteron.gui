@@ -220,9 +220,9 @@ export default {
 					});
 
 					const 
-						contentDeleteType = this.sdk.txTypes.contentDelete.name,
-						deletionActions = (pendingActions || []).filter(f => (f?.expObject?.type === contentDeleteType)),
-						editionActions =  (pendingActions || []).filter(f => (f?.expObject?.type !== contentDeleteType));
+						objectType = this.sdk.txTypes.contentDelete.name,
+						deletionActions = (pendingActions || []).filter(f => (f?.expObject?.type === objectType)),
+						editionActions =  (pendingActions || []).filter(f => (f?.expObject?.type !== objectType));
 					
 					const missingHashes = deletionActions
 						.map(m => m?.expObject?.txidEdit)
@@ -246,10 +246,14 @@ export default {
 					});
 
 					editionActions.forEach(f => {
-						const expObject = f.expObject;
+						const 
+							expObject = f.expObject,
+							hash = (expObject.hash || f.transaction);
+
 						if (expObject) {
 							const offer = new this.sdk.models.Offer({
 								...expObject,
+								hash,
 								price: expObject?.price / 100,
 								relay: true,
 							});

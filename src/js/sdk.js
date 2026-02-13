@@ -27,7 +27,7 @@ class SDK {
 		ids: {},
 	};
 	offerUpdateActionId = null;
-	lastPublishedOfferId = null;
+	lastCreatedOfferId = null;
 
 	models = {
 		Account,
@@ -1605,7 +1605,9 @@ class SDK {
 	getBrtAccount(address) {
 		address = address || this._address;
 
-		if (!address) return;
+		if (!address) {
+			return Promise.resolve([]);
+		}
 
 		if (!this.barteron._accounts[address]) {
 			new Account({ address });
@@ -1668,9 +1670,15 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	getBrtOffersByHashes(
-		hashes = [], 
+		hashes, 
 		options = { disabledAverageOfferScores: false }
 	) {
+		hashes = hashes || [];
+
+		if (!(hashes.length)) {
+			return Promise.resolve([]);
+		};
+
 		hashes.forEach(hash => {
 			if (!this.barteron._offers[hash]) {
 				new Offer({ hash });
@@ -1756,9 +1764,11 @@ class SDK {
 	 * @returns {Promise}
 	 */
 	getBrtAverageOfferScores(
-		offerIds = [], 
+		offerIds, 
 		options = { forceUpdate: false }
 	) {
+		offerIds = offerIds || [];
+
 		offerIds.forEach(hash => {
 			if (!this.barteron._averageOfferScores[hash]) {
 				Vue.set(this.barteron._averageOfferScores, hash, {});
@@ -1786,7 +1796,7 @@ class SDK {
 		})
 
 		if (!(filteredIds.length)) {
-			return;
+			return Promise.resolve({});
 		}
 
 		return this.rpc("getbarteronoffersdetails", {
