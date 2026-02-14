@@ -56,6 +56,7 @@
 				ref="categorySelect"
 				:title="categorySelectTitle"
 				:marked="vTags"
+				mode="exchange"
 				@selected="insert"
 			/>
 
