@@ -35,7 +35,7 @@ export default {
 			activeInnerAdsTab: null,
 			offersList: [],
 			favoriteList: [],
-			fetching: true,
+			fetching: null,
 			isChatLoading: false,
 		}
 	},
@@ -199,45 +199,81 @@ export default {
 		 * @param {String} address 
 		 */
 		async getTabsContent(address) {
-			/* Start fetching */
-			this.fetching = true;
+			if (this.fetching?.address === address) {
+				return;
+			};
 
-			const [ published = [], pending = [] ] = await Promise.all(
-				[
-					/* Get published offers */
-					this.sdk.getBrtOffers(address),
+			this.fetching = { address };
 
-					/* Get pending offers */
-					(this.isMyProfile ? this.sdk.getPendingOffers() : null)
-				]
-					.filter(r => r)
-					.map(r => r.catch(e => console.error(e)))
-			);
+			this.offersList = [];
+			this.favoriteList = [];
 
-			/* Mix published and pending offers */
-			this.offersList = published.map(offer => {
-				/**
-				 * Avoid duplicates from published and pending
-				 * using "prevhash" key that appears in actions
-				 * just replace offers in published with pending
-				 */
-				const index = pending.findIndex(o => o.firsthash === offer.hash || o.prevhash === offer.hash);
+			try {
+				const 
+					publishedOffers = await this.sdk.getBrtOffers(address),
+					applyPendingActions = this.isMyProfile,
+					pendingOffers = [];
 
-				if (index > -1) {
-					/* Replace old offer with new */
-					offer = pending[index];
+				if (applyPendingActions) {
+					const pendingActions = await this.sdk.getOfferActions({pending: true}).catch(e => {
+						console.error(e);
+					});
+
+					const 
+						objectType = this.sdk.txTypes.contentDelete.name,
+						deletionActions = (pendingActions || []).filter(f => (f?.expObject?.type === objectType)),
+						editionActions =  (pendingActions || []).filter(f => (f?.expObject?.type !== objectType));
 					
-					/* Remove offer form pending list */
-					pending.splice(index, 1);
-				}
+					const missingHashes = deletionActions
+						.map(m => m?.expObject?.txidEdit)
+						.filter(f => f && !(this.sdk.barteron.offers[f]));
 
-				return offer.hash;
-			}).concat(pending.map(o => o.hash));
-			
-			/* End fetching */
-			this.fetching = false;
+					await this.sdk.getBrtOffersByHashes(missingHashes);
 
-			/* Get favorited offers */
+					deletionActions.forEach(f => {
+						const 
+							hash = f?.expObject?.txidEdit,
+							existingOffer = this.sdk.barteron.offers[hash];
+						
+						if (existingOffer) {
+							const offer = new this.sdk.models.Offer({
+								...existingOffer,
+								published: "removed",
+								relay: true,
+							});
+							pendingOffers.push(offer);
+						};
+					});
+
+					editionActions.forEach(f => {
+						const 
+							expObject = f.expObject,
+							hash = (expObject.hash || f.transaction);
+
+						if (expObject) {
+							const offer = new this.sdk.models.Offer({
+								...expObject,
+								hash,
+								price: expObject?.price / 100,
+								relay: true,
+							});
+							pendingOffers.push(offer);
+						};
+					});
+				};
+
+				const 
+					publishedOfferHashes = publishedOffers.map(m => m.hash),
+					pendingOfferHashes = pendingOffers.map(m => m.hash),
+					addingOfferHashes = pendingOfferHashes.filter(f => !(publishedOfferHashes.includes(f)));
+				
+				this.offersList = publishedOfferHashes.concat(addingOfferHashes);
+			} catch (e) {
+				this.showError(e);
+			} finally {
+				this.fetching = null;
+			};
+
 			this.updateFavoriteList();
 		},
 
@@ -322,7 +358,7 @@ export default {
 	},
 
 	beforeRouteEnter (to, from, next) {
-		next(async vm => {
+		next(vm => {
 			const address = to?.params?.id;
 			
 			vm.getTabsContent(address);

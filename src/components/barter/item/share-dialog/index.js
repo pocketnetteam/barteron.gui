@@ -24,7 +24,7 @@ export default {
 
 	computed: {
 		item() {
-			const offerId = this.sdk.lastPublishedOfferId;
+			const offerId = this.sdk.lastCreatedOfferId;
 			return this.sdk.barteron.offers[offerId];
 		},
 
