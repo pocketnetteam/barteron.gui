@@ -982,16 +982,17 @@ export default {
 									code = data.error?.code ?? (typeof(data.rejected) === "number" ? data.rejected : undefined),
 									error = this.sdk.errorMessage(code);
 
+								console.error(error);
 								form.dialog.view("error", this.$t("dialogLabels.node_error", { error }));
 							}
 						}).catch(e => {
-							/* Show error dialog */
 							const error = this.sdk.errorMessage(e);
+							console.error(error);
 							form.dialog.view("error", this.$t("dialogLabels.node_error", { error }));
 						});
 					})
 					.catch(error => {
-						/* Show error dialog */
+						console.error(error);
 						form.dialog.view("error", this.$t("dialogLabels.image_error", { error: error.message }));
 					});
 			} else {

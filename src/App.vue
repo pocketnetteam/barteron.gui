@@ -352,7 +352,11 @@ export default {
 		},
 
 		showOfferShareDialog() {
-			if (!(this.sdk.shareOnBastyonIsAvailable()) || profileStore.offerShareDisabled) {
+			if (
+				!(this.sdk.lastCreatedOfferId) 
+				|| !(this.sdk.shareOnBastyonIsAvailable()) 
+				|| profileStore.offerShareDisabled) 
+			{
 				return;
 			};
 
@@ -436,7 +440,7 @@ export default {
 			this.setLanguage();
 		},
 
-		"sdk.lastPublishedOfferId"() {
+		"sdk.lastCreatedOfferId"() {
 			this.showOfferShareDialog();
 		},
 	},
