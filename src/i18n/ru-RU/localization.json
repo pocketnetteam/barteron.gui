@@ -157,7 +157,8 @@
 		"dont_show_again": "Больше не показывать",
 		"manual_opening_info": "Настройки можно выполнить позже, нажав на кнопку \"Настроить уведомления\" на странице своего профиля",
 
-		"dialog_type_notification_message": "Пользователь начал диалог. Пожалуйста, проверьте чат."
+		"dialog_type_notification_message": "Пользователь начал диалог. Пожалуйста, проверьте чат в приложении Barteron.",
+		"test_type_notification_message": "Тестовое уведомление"
 	},
 
 	"buttonLabels": {
