@@ -128,15 +128,15 @@
 	"notificationSettingsLabels": {
 		"label": "Настройка уведомлений",
 		"prompt": "ВАЖНО! Чтобы не пропустить сообщения, рекомендуем настроить",
+
 		"OS_notifications": "Уведомления операционной системы",
-		"telegram_notifications": "Уведомления в Telegram",
-		"dont_show_again": "Больше не показывать",
-		"manual_opening_info": "Настройки можно выполнить позже, нажав на кнопку \"Настроить уведомления\" на странице своего профиля",
 		"OS_notifications_main_web": "Установите приложение Bastyon и включите уведомления.",
 		"OS_notifications_main_desktop": "Включите уведомления на своем ПК",
 		"OS_notifications_main_mobile": "Включите уведомления на своем устройстве",
 		"OS_notifications_link": "Ссылка для скачивания приложения",
 		"OS_notifications_additional_info": "Уведомления можно включить в момент первого запроса разрешения на показ уведомлений операционной системой, либо позже, в настройках операционной системы.",
+
+		"telegram_notifications": "Уведомления в Telegram",
 		"telegram_notifications_step1": "1. Откройте телеграм-бот и запустите его, нажав кнопку \"Начать\", по ссылке",
 		"telegram_notifications_step2": "2. Укажите свой \"username\" из профиля Telegram",
 		"telegram_username_placeholder": "Введите username",
@@ -144,7 +144,20 @@
 		"telegram_bot_connected": "Телеграм-бот подключен",
 		"telegram_bot_disconnected": "Телеграм-бот не подключен",
 		"disconnect_telegram_bot_info": "Настройки подключения телеграм-бота будут удалены, уведомления доставляться не будут",
-		"default_notify_message_for_telegram_bot": "Пользователь начал диалог. Пожалуйста, проверьте чат."
+
+		"vk_notifications": "Уведомления ВКонтакте",
+		"vk_notifications_step1": "1. Откройте ВК-бот и запустите его, нажав кнопку \"Начать\", по ссылке",
+		"vk_notifications_step2": "2. Укажите короткое имя ВКонтакте (часть ссылки после vk.com/)",
+		"vk_username_placeholder": "Введите короткое имя ВК",
+		"vk_notifications_step3": "3. Подключите ВК-бот, чтобы завершить настройку",
+		"vk_bot_connected": "ВК-бот подключен",
+		"vk_bot_disconnected": "ВК-бот не подключен",
+		"disconnect_vk_bot_info": "Настройки подключения ВК-бота будут удалены, уведомления доставляться не будут",
+
+		"dont_show_again": "Больше не показывать",
+		"manual_opening_info": "Настройки можно выполнить позже, нажав на кнопку \"Настроить уведомления\" на странице своего профиля",
+
+		"dialog_type_notification_message": "Пользователь начал диалог. Пожалуйста, проверьте чат."
 	},
 
 	"buttonLabels": {
@@ -166,6 +179,8 @@
 		"setup_notifications": "Настроить уведомления",
 		"connect_telegram_bot": "Подключить телеграм-бот",
 		"disconnect_telegram_bot": "Отключить телеграм-бот",
+		"connect_vk_bot": "Подключить ВК-бот",
+		"disconnect_vk_bot": "Отключить ВК-бот",
 		"referral_program": "Реферальная программа",
 		"copy_referral_link": "Копировать реферальную ссылку",
 		"my_announcements": "Мои объявления",
@@ -340,6 +355,8 @@
 		"transfer_forbidden": "Вы запретили перевод",
 		"telegram_username_undefined": "Значение \"username\" не задано",
 		"disconnecting_telegram_bot": "Отключить телеграм-бот?",
+		"vk_username_undefined": "Короткое имя ВК не задано",
+		"disconnecting_vk_bot": "Отключить ВК-бот?",
 		
 		"image_error": "Ошибка загрузки изображений: {error}",
 		"node_error": "Произошла ошибка на ноде: {error}",

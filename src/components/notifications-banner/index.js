@@ -1,4 +1,4 @@
-import { TelegramManager } from "@/js/notificationUtils.js";
+import { TelegramManager, VKManager } from "@/js/notificationUtils.js";
 import Loader from "@/components/loader/index.vue";
 import Vue from 'vue';
 import i18n from "@/i18n/index.js";
@@ -18,12 +18,13 @@ export default {
 	data() {
 		return {
 			lightbox: false,
-			activeIndexes: {
-				0: true,
-				1: true,
-			},
+			activeIndexes: {},
 			telegramNotificationsAllowed: false,
 			telegramData: {
+				currentState: "",
+			},
+			vkNotificationsAllowed: false,
+			vkData: {
 				currentState: "",
 			},
 			notificationsBannerDisabled: false,
@@ -66,7 +67,11 @@ export default {
 		},
 
 		telegramBotLink() {
-			return TelegramManager.telegramBotLink;
+			return TelegramManager.botLink;
+		},
+
+		vkBotLink() {
+			return VKManager.botLink;
 		},
 	},
 
@@ -91,7 +96,7 @@ export default {
 
 		toggle(index) {
 			const value = this.activeIndexes[index];
-			Vue.set(this.activeIndexes, index, !(value));
+			this.activeIndexes = { [index]: !(value) };
 		},
 
 		enter(el) {
@@ -126,13 +131,17 @@ export default {
 			el.style.opacity = '0';
 		},
 
+		notificationsBannerDisabledChange(value, e) {
+			profileStore.notificationsBannerDisabled = e.target.checked;
+		},
+
+		// OS notifications --------------------------------------------
+
 		openAppsLink() {
 			this.sdk.openExternalLink(this.appsLink);
 		},
 
-		notificationsBannerDisabledChange(value, e) {
-			profileStore.notificationsBannerDisabled = e.target.checked;
-		},
+		// Telegram notifications --------------------------------------
 
 		loadTelegramData() {
 			if (!(this.telegramNotificationsAllowed)) {
@@ -245,12 +254,133 @@ export default {
 				};
 			});
 		},
+
+		// VK notifications --------------------------------------------
+
+		loadVKData() {
+			if (!(this.vkNotificationsAllowed)) {
+				return;
+			};
+
+			this.vkData = {
+				currentState: "loading",
+			};
+
+			const vkManager = new VKManager();
+			vkManager.getSubscription(this.address).then(data => {
+				if (data?.subscription) {
+					this.vkData = {
+						currentState: "connected",
+						stateData: data?.subscription,
+					}
+				} else {
+					this.vkData = {
+						currentState: "disconnected",
+					}
+				}
+			}).catch(e => {
+				console.error(e);
+				this.vkData = {
+					currentState: "error",
+					stateData: {
+						error: e,
+					},
+				};
+			});
+		},
+
+		vkLoadingError() {
+			let result = "";
+			if (this.vkData?.currentState === "error") {
+				result = this.vkData?.stateData?.error?.message;
+			}
+			return result;
+		},
+
+		openVKBotLink() {
+			this.sdk.openExternalLink(this.vkBotLink);
+		},
+
+		connectVKBot() {
+			const username = (this.$refs.vkUsername.inputs[0].value || "").trim().replaceAll("@","");
+			if (username) {
+				const data = {
+					address: this.address,
+					vkScreenName: username,
+					locale: this.$i18n.locale,
+					isEnabled: true,
+				};
+
+				this.vkData = {
+					currentState: "loading",
+				};
+
+				const vkManager = new VKManager();
+				vkManager.createSubscription(data).then(() => {
+					this.vkData = {
+						currentState: "connected",
+					}
+				}).catch(e => {
+					console.error(e);
+					this.vkData = {
+						currentState: "error",
+						stateData: {
+							error: e,
+						},
+					};
+				});
+			} else {
+				this.$refs.dialog?.instance.view(
+					"error", 
+					this.$t("dialogLabels.vk_username_undefined")
+				);
+			};
+		},
+
+		disconnectVKBotEvent() {
+			this.$refs.dialog?.instance
+				.view("question", this.$t("dialogLabels.disconnecting_vk_bot"))
+				.then(state => {
+					if (state) {
+						this.disconnectVKBot();
+					}
+				});
+
+		},
+
+		disconnectVKBot() {
+			this.vkData = {
+				currentState: "loading",
+			};
+
+			const vkManager = new VKManager();
+			vkManager.removeSubscription(this.address).then(() => {
+				this.vkData = {
+					currentState: "disconnected",
+				}
+			}).catch(e => {
+				console.error(e);
+				this.vkData = {
+					currentState: "error",
+					stateData: {
+						error: e,
+					},
+				};
+			});
+		},
 	},
 
 	mounted() {
-		const telegramManager = new TelegramManager();
-		telegramManager.notificationsAllowed().then(result => {
-			this.telegramNotificationsAllowed = result;
+		const 
+			telegramManager = new TelegramManager(),
+			vkManager = new VKManager();
+
+		Promise.allSettled([
+			telegramManager.notificationsAllowed(),
+			vkManager.notificationsAllowed(),
+		]).then(results => {
+			this.telegramNotificationsAllowed = results[0].value;
+			this.vkNotificationsAllowed = results[1].value;
 		}).catch(e => {
 			console.error(e);
 		});
@@ -259,6 +389,10 @@ export default {
 	watch: {
 		telegramNotificationsAllowed() {
 			this.loadTelegramData();
+		},
+
+		vkNotificationsAllowed() {
+			this.loadVKData();
 		},
 	},
 }

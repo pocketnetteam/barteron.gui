@@ -128,15 +128,15 @@
 	"notificationSettingsLabels": {
 		"label": "Notification Settings",
 		"prompt": "IMPORTANT! To avoid missing messages, we recommend configuring",
+
 		"OS_notifications": "Operating system notifications",
-		"telegram_notifications": "Telegram notifications",
-		"dont_show_again": "Do not show again",
-		"manual_opening_info": "You can configure the settings later by clicking the \"Configure notifications\" button on your profile page",
 		"OS_notifications_main_web": "Install the Bastyon app and enable notifications.",
 		"OS_notifications_main_desktop": "Enable notifications on your PC",
 		"OS_notifications_main_mobile": "Enable notifications on your device",
 		"OS_notifications_link": "Link to download the app",
 		"OS_notifications_additional_info": "Notifications can be enabled when the operating system first requests permission to display notifications, or later in the operating system settings.",
+
+		"telegram_notifications": "Telegram notifications",
 		"telegram_notifications_step1": "1. Open the Telegram bot and start it by clicking the \"Start\" button using the link",
 		"telegram_notifications_step2": "2. Enter your Telegram profile \"username\"",
 		"telegram_username_placeholder": "Enter username",
@@ -144,7 +144,20 @@
 		"telegram_bot_connected": "Telegram bot connected",
 		"telegram_bot_disconnected": "Telegram bot not connected",
 		"disconnect_telegram_bot_info": "Telegram bot connection settings will be removed, notifications will not be delivered",
-		"default_notify_message_for_telegram_bot": "The user has started a conversation. Please check the chat."
+
+		"vk_notifications": "VK notifications",
+		"vk_notifications_step1": "1. Open the VK bot and start it by clicking the \"Start\" button using the link",
+		"vk_notifications_step2": "2. Enter your VK short name (the link part after vk.com/)",
+		"vk_username_placeholder": "Enter VK short name",
+		"vk_notifications_step3": "3. Connect the VK bot to complete the setup",
+		"vk_bot_connected": "VK bot connected",
+		"vk_bot_disconnected": "VK bot not connected",
+		"disconnect_vk_bot_info": "VK bot connection settings will be removed, notifications will not be delivered",
+
+		"dont_show_again": "Do not show again",
+		"manual_opening_info": "You can configure the settings later by clicking the \"Configure notifications\" button on your profile page",
+
+		"dialog_type_notification_message": "The user has started a conversation. Please check the chat."
 	},
 
 	"buttonLabels": {
@@ -166,6 +179,8 @@
 		"setup_notifications": "Setup notifications",
 		"connect_telegram_bot": "Connect the Telegram bot",
 		"disconnect_telegram_bot": "Disconnect the Telegram bot",
+		"connect_vk_bot": "Connect the VK bot",
+		"disconnect_vk_bot": "Disconnect the VK bot",
 		"referral_program": "Referral program",
 		"copy_referral_link": "Copy referral link",
 		"my_announcements": "My announcements",
@@ -340,6 +355,8 @@
 		"transfer_forbidden": "You have forbade the transfer",
 		"telegram_username_undefined": "The value \"username\" is not set",
 		"disconnecting_telegram_bot": "Do you want to disconnect the telegram bot?",
+		"vk_username_undefined": "The short VK name is not set",
+		"disconnecting_vk_bot": "Do you want to disconnect the VK bot?",
 
 		"image_error": "Image upload error: {error}",
 		"node_error": "Node error has occured: {error}",
