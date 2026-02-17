@@ -14,9 +14,6 @@ class NetworkManager {
 	}
 
 	getSignature() {
-		// debug
-		return Promise.resolve(JSON.parse('{"nonce":"date=2026-02-16T23:27:03.278Z,exp=360,s=617574682f6261727465726f6e2e706f636b65746e65742e617070","signature":"f46437b1bc4a1c53b2343483bb127121157296b32c7c39eaa45278b58a0676f205eff29dc4dc8ba1798dbe773a3ac361bce37ba341309a0ba4dc0c9b63465a8d","pubkey":"025085c260432cad0f38b5c84f224d99b1434b2afd97690bf8bcff91d8b0a03fba","address":"PEmxMUL35Z5rtULmHMuYLNYsQGu23HXBeX","v":1}'))
-
 		return this.checkSignPermission().then(allowed => {
 			if (allowed) {
 				return this.sdk.sign("auth");
