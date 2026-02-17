@@ -180,7 +180,7 @@
 					<v-button
 						:disabled="selectionDisabled()"
 						@click="select"
-					>{{ $t('buttonLabels.show') }}</v-button>
+					>{{ ["offer", "exchange"].includes(mode) ? $t('buttonLabels.select') : $t('buttonLabels.show') }}</v-button>
 				</div>
 			</div>
 		</template>
