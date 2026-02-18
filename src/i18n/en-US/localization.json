@@ -146,7 +146,7 @@
 		"disconnect_telegram_bot_info": "Telegram bot connection settings will be removed, notifications will not be delivered",
 
 		"vk_notifications": "VK notifications",
-		"vk_notifications_step1": "1. Open the VK bot and start it by clicking the \"Start\" button using the link",
+		"vk_notifications_step1": "1. Open the VK bot, go to messages and launch it by clicking the \"Start\" button, using the link",
 		"vk_notifications_step2": "2. Enter your VK short name (the link part after vk.com/)",
 		"vk_username_placeholder": "Enter VK short name",
 		"vk_notifications_step3": "3. Connect the VK bot to complete the setup",
