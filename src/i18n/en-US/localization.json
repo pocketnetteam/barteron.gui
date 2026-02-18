@@ -156,9 +156,6 @@
 
 		"dont_show_again": "Do not show again",
 		"manual_opening_info": "You can configure the settings later by clicking the \"Configure notifications\" button on your profile page",
-
-		"dialog_type_notification_message": "The user has started a conversation. Please check the chat in the Barteron app.",
-		"test_type_notification_message": "Test notification"
 	},
 
 	"buttonLabels": {

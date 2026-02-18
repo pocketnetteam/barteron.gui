@@ -156,9 +156,6 @@
 
 		"dont_show_again": "Не приказуј поново",
 		"manual_opening_info": "Подешавања можете извршити касније кликом на дугме \"Подеси обавештења\" на страници свог профила",
-
-		"dialog_type_notification_message": "Корисник је започео разговор. Молимо вас да проверите чет у апликацији Barteron.",
-		"test_type_notification_message": "Тестно обавештење"
 	},
 
 	"buttonLabels": {

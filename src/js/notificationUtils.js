@@ -144,10 +144,7 @@ class NotificationSender extends NetworkManager {
 	) {
 		this.getSubscriptions(userAddress, options).then(subscriptions => {
 			return subscriptions.reduce((result, value) => {
-				const message = this.getMessage(messageType, value.locale);
-				if (message) {
-					result[value.channel] = { message };
-				}
+				result[value.channel] = { messageType };
 				return result;
 			}, {});
 		}).then(messages => {
@@ -179,14 +176,6 @@ class NotificationSender extends NetworkManager {
 		}).catch(e => {
 			console.error(e);
 		});
-	}
-
-	getMessage(messageType, locale) {
-		const 
-			key = `notificationSettingsLabels.${messageType}_type_notification_message`,
-			exists = i18n.te(key, locale);
-
-		return exists ? i18n.t(key, locale) : null;
 	}
 
 	getSubscriptions(userAddress, options) {
