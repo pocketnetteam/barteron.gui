@@ -31,7 +31,7 @@
 
 		<h1 
 			class="info" 
-			v-html="($t('safeDealLabels.faq_answer3')).replaceAll('\n','<br>')"
+			v-html="($t('safeDealLabels.faq_answer3', {pkoinCategory: $t('pkoin')})).replaceAll('\n','<br>')"
 		></h1>
 
 		<h1 class="title">
