@@ -416,6 +416,7 @@
 		"how_it_works": "Описание работы",
 		"validator_fee_required": "Требуется комиссия",
 		"details": "Подробнее",
+		"need_select_pkoin_to_enable_safe_deal": "\"Безопасная сделка\" отключена. Чтобы ее включить, добавьте вариант \"{pkoinCategory}\" в разделе",
 		"add_validator_fee_payment_options": "Добавить варианты оплаты комиссии гаранта",
 		"ready_to_pay_validator_fee": "Готов оплатить комиссию гаранта:",
 		"offer_validator_fee_variant_seller": "Полностью",

@@ -416,6 +416,7 @@
 		"how_it_works": "Како функционише",
 		"validator_fee_required": "Потребна комисија",
 		"details": "Детаљније",
+		"need_select_pkoin_to_enable_safe_deal": "\"Безбедна трансакција\" је онемогућена. Да бисте је омогућили, додајте опцију \"{pkoinCategory}\" у одељак",
 		"add_validator_fee_payment_options": "Додајте опције плаћања комисије гаранта",
 		"ready_to_pay_validator_fee": "Спреман за плаћање комисије гаранту:",
 		"offer_validator_fee_variant_seller": "Потпуно",

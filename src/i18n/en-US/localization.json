@@ -416,6 +416,7 @@
 		"how_it_works": "How it works",
 		"validator_fee_required": "Fee required",
 		"details": "Details",
+		"need_select_pkoin_to_enable_safe_deal": "\"Safe deal\" is disabled. To enable it, add the \"{pkoinCategory}\" variant in the following section:",
 		"add_validator_fee_payment_options": "Add guarantor's fee payment options",
 		"ready_to_pay_validator_fee": "Ready to pay guarantor's fee:",
 		"offer_validator_fee_variant_seller": "Fully",
