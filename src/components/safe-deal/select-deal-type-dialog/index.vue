@@ -19,7 +19,7 @@
 
 				<div>
 					<span>
-						<span class="footnote">*{{ $t('safeDealLabels.validator_fee_required') }}. </span>
+						<span class="footnote">*{{ safeDealFootnote }}. </span>
 						<a 
 							href="#" 
 							class="link" 

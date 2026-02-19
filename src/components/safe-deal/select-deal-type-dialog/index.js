@@ -18,6 +18,10 @@ export default {
 			type: Function,
 			required: true
 		},
+		validatorFeeVariant: {
+			type: String,
+			default: ""
+		},
 	},
 
 	data() {
@@ -28,7 +32,13 @@ export default {
 	},
 
 	computed: {
-
+		safeDealFootnote() {
+			const key = (this.validatorFeeVariant === "seller" 
+				? "validator_fee_is_paid_by_seller" 
+				: "validator_fee_required"
+			);
+			return this.$t(`safeDealLabels.${key}`);
+		},
 	},
 
 	methods: {
