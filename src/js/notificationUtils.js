@@ -1,4 +1,3 @@
-import i18n from "@/i18n/index.js";
 import SDK from "@/js/sdk.js";
 
 const 

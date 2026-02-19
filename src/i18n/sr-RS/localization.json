@@ -147,15 +147,15 @@
 
 		"vk_notifications": "VK обавештења",
 		"vk_notifications_step1": "1. Отворите VK бот, идите на поруке и покрените га кликом на дугме \"Старт\", користећи линк",
-		"vk_notifications_step2": "2. Унесите кратко име за VK (део линка након vk.com/)",
-		"vk_username_placeholder": "Унесите кратко име",
+		"vk_notifications_step2": "2. Молимо вас да наведете адресу вашег VK налога. (део линка након vk.com/)",
+		"vk_username_placeholder": "Унесите адресу свог налога",
 		"vk_notifications_step3": "3. Повежите VK бота да бисте завршили подешавање",
 		"vk_bot_connected": "VK бот је повезан",
 		"vk_bot_disconnected": "Vk бот није повезан",
 		"disconnect_vk_bot_info": "Подешавања повезивања VK бота биће обрисана, обавештења неће бити испоручивана",
 
 		"dont_show_again": "Не приказуј поново",
-		"manual_opening_info": "Подешавања можете извршити касније кликом на дугме \"Подеси обавештења\" на страници свог профила",
+		"manual_opening_info": "Подешавања можете извршити касније кликом на дугме \"Подеси обавештења\" на страници свог профила"
 	},
 
 	"buttonLabels": {
@@ -353,7 +353,7 @@
 		"transfer_forbidden": "Забранили сте трансфер",
 		"telegram_username_undefined": "Вредност \"username\" није подешена",
 		"disconnecting_telegram_bot": "Искључите Телеграм бот?",
-		"vk_username_undefined": "Кратко име за VK није постављено",
+		"vk_username_undefined": "Адреса налога није подешена",
 		"disconnecting_vk_bot": "Искључите VK бот?",
 		
 		"image_error": "Грешка при учитавању слика: {error}",

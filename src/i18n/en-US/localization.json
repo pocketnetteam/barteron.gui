@@ -147,15 +147,15 @@
 
 		"vk_notifications": "VK notifications",
 		"vk_notifications_step1": "1. Open the VK bot, go to messages and launch it by clicking the \"Start\" button, using the link",
-		"vk_notifications_step2": "2. Enter your VK short name (the link part after vk.com/)",
-		"vk_username_placeholder": "Enter VK short name",
+		"vk_notifications_step2": "2. Enter your VK account address (the link part after vk.com/)",
+		"vk_username_placeholder": "Account address",
 		"vk_notifications_step3": "3. Connect the VK bot to complete the setup",
 		"vk_bot_connected": "VK bot connected",
 		"vk_bot_disconnected": "VK bot not connected",
 		"disconnect_vk_bot_info": "VK bot connection settings will be removed, notifications will not be delivered",
 
 		"dont_show_again": "Do not show again",
-		"manual_opening_info": "You can configure the settings later by clicking the \"Configure notifications\" button on your profile page",
+		"manual_opening_info": "You can configure the settings later by clicking the \"Configure notifications\" button on your profile page"
 	},
 
 	"buttonLabels": {
@@ -353,7 +353,7 @@
 		"transfer_forbidden": "You have forbade the transfer",
 		"telegram_username_undefined": "The value \"username\" is not set",
 		"disconnecting_telegram_bot": "Do you want to disconnect the telegram bot?",
-		"vk_username_undefined": "The short VK name is not set",
+		"vk_username_undefined": "The account address is not set",
 		"disconnecting_vk_bot": "Do you want to disconnect the VK bot?",
 
 		"image_error": "Image upload error: {error}",
