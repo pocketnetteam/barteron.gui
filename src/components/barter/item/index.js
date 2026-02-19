@@ -746,6 +746,7 @@ export default {
 				const instance = new ComponentClass({
 					propsData: {
 						lightboxContainer: this.lightboxContainer,
+						validatorFeeVariant: this.item.safeDeal?.validatorFeeVariant || "",
 					},
 				});
 				
@@ -825,7 +826,9 @@ export default {
 		createRoom(offer, options = {}) {
 			if (this.sdk.willOpenRegistration()) return;
 
-			let needCreateRoom = true;
+			let 
+				needCreateRoom = true,
+				safeDealQueryParams = null;
 
 			const data = {
 				name: offer.caption,
@@ -890,11 +893,11 @@ export default {
 							return;
 						};
 						
-						const params = {
+						safeDealQueryParams = {
 							id: safeDealId,
 							...idCreationData,
 						};
-						const paramsString = new URLSearchParams(params).toString();
+						const paramsString = new URLSearchParams(safeDealQueryParams).toString();
 
 						data.messages.push(this.sdk.appLink(`barter/safedeal?${ paramsString }`));
 					} else {
@@ -915,11 +918,27 @@ export default {
 				this.sendMessage(data).then(() => {
 					this.dialog?.instance.hide();
 				}).catch(e => {
+					safeDealQueryParams = null;
 					this.showError(e);
 				}).finally(() => {
 					this.isChatLoading = false;
+					this.$nextTick(() => {
+						this.openSafeDealIfNeeded(safeDealQueryParams);
+					});
 				});
 			}
+		},
+
+		openSafeDealIfNeeded(safeDealQueryParams) {
+			if (safeDealQueryParams) {
+				this.$router.push({
+					name: "SafeDeal",
+					query: safeDealQueryParams
+				}).catch(e => {
+					console.error(e);
+					this.showVersionConflictIfNeeded(e);
+				});
+			};
 		},
 
 		/**

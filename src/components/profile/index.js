@@ -13,6 +13,10 @@ export default {
 		hash: {
 			type: String
 		},
+		hideBastyonProfileButton: {
+			type: Boolean,
+			default: false
+		},
 		showValidationConditions: {
 			type: Boolean,
 			default: false

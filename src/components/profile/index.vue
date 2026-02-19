@@ -65,7 +65,7 @@
 
 		<!-- Bastyon profile -->
 		<div
-			v-if="bastyonProfileAvailable()"
+			v-if="bastyonProfileAvailable() && !(hideBastyonProfileButton)"
 			class="row bastyon-profile"
 		>
 			<v-button

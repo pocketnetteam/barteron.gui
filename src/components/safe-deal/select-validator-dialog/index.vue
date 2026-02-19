@@ -26,6 +26,7 @@
 				<Profile 
 					:ref="`profile-${index}`"
 					:hash="item"
+					:hideBastyonProfileButton="true"
 					:showValidationConditions="true"
 				/>
 			</li>
