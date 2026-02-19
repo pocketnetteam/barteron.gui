@@ -658,12 +658,16 @@ export default {
 		safeDealAvailableForOffer() {
 			let result = true;
 			const 
+				safeDealAvailable = this.sdk.safeDealAvailable(),
+				exchangeListIncludesPkoin = this.exchangeList?.some(f => f.id === 17),
 				settings = this.sdk.getSafeDealSettings(),
-				filter = settings.allowedAddressFilter;
+				filter = settings.allowedAddressFilter,
+				addressExcluded = (filter.isEnabled && !(filter.items.includes(this.sdk.address)));
 
-			if (!(this.sdk.safeDealAvailable())) {
-				result = false;
-			} else if (filter.isEnabled && !(filter.items.includes(this.sdk.address))) {
+			if (!(safeDealAvailable) 
+				|| !(exchangeListIncludesPkoin) 
+				|| addressExcluded
+			) {
 				result = false;
 			};
 

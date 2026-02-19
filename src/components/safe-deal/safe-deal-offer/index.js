@@ -15,6 +15,10 @@ export default {
 			type: Object,
 			default: () => ({})
 		},
+		pkoinExchangeSelected: {
+			type: Boolean,
+			default: false
+		},
 		mode: String,
 		holderClass: String,
 	},
@@ -65,6 +69,10 @@ export default {
 			this.$nextTick(() => {
 				instance.show();
 			});
+		},
+
+		scrollToGetSection() {
+			this.$emit("scrollToGetSection", this);
 		},
 
 		validate() {

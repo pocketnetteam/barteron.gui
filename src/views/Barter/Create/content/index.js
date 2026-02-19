@@ -130,12 +130,22 @@ export default {
 			if (filter.isEnabled && !(filter.items.includes(this.sdk.address))) {
 				result = false;
 			} else {
-				if (this.sdk.safeDealAvailable()) {
+				if (this.sdk.safeDealAvailable() && (this.getting === "my_list" || this.getting === "something")) {
 					result = true;
 				};
 			};
 
 			return result;
+		},
+
+		pkoinExchangeSelected() {
+			let tags = [];
+			if (this.getting === "my_list") {
+				tags = this.account?.tags;
+			} else if (this.getting === "something") {
+				tags = this.tags;
+			}
+			return (tags || []).some(f => f === 17);
 		},
 
 		/**
@@ -537,6 +547,10 @@ export default {
 			};
 	
 			return result;
+		},
+
+		scrollToGetSection() {
+			this.scrollTo("#get");
 		},
 
 		offerCreationParams() {

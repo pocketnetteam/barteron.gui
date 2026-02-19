@@ -578,6 +578,8 @@
 					holderClass="field"
 					name="safeDeal"
 					:safeDeal="offer.safeDeal"
+					:pkoinExchangeSelected="pkoinExchangeSelected"
+					@scrollToGetSection="scrollToGetSection"
 					@safeDealVisibilityUpdated="updateAsideStepsAsync"
 				/>
 			</div>
