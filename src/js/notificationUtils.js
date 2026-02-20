@@ -8,6 +8,10 @@ const
 	};
 
 class NetworkManager {
+	constructor() {
+		this.sdk = new SDK();
+	}
+
 	checkSignPermission() {
 		return this.sdk.checkPermission("sign");
 	}
@@ -37,7 +41,6 @@ class NetworkManager {
 class ChannelManager extends NetworkManager {
 	constructor({ cannel, path }) {
 		super();
-		this.sdk = new SDK();
 		this.cannel = cannel;
 		this.path = path;
 	}
