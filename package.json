@@ -22,7 +22,7 @@
 		"countries-and-timezones": "^3.7.2",
 		"husky": "^8.0.3",
 		"leaflet": "^1.9.4",
-		"leaflet-geosearch": "^3.8.0",
+		"leaflet-geosearch": "git+https://github.com/Voyager-3rd/leaflet-geosearch.git#barteron-issue-819",
 		"linkifyjs": "^4.3.1",
 		"ngeohash": "^0.6.3",
 		"photoswipe": "^5.4.4",
@@ -38,7 +38,6 @@
 		"vue-loader": "^17.4.2",
 		"vue-router": "^3.0.0",
 		"vue2-leaflet": "^2.7.1",
-		"vue2-leaflet-geosearch": "^1.0.6",
 		"vue2-leaflet-markercluster": "^3.1.0"
 	},
 	"devDependencies": {
