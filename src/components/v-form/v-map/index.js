@@ -13,7 +13,7 @@ import {
 	LIcon
 } from "vue2-leaflet";
 import Vue2LeafletMarkerCluster from "vue2-leaflet-markercluster";
-import LGeosearch from "vue2-leaflet-geosearch";
+import LGeosearch from "@/components/vue2-leaflet-geosearch/Vue2LeafletGeosearch.vue";
 import BarterItem from "@/components/barter/item/index.vue";
 import PickupPointItem from "@/components/pickup-point/item/index.vue";
 import { mapState } from "pinia";
@@ -255,6 +255,7 @@ export default {
 				params: {
 				  'accept-language': this.sdk.getLanguageByLocale(this.$root.$i18n.locale),
 				  addressdetails: 1,
+				  limit: 7,
 				},
 			});
 		},
@@ -290,7 +291,7 @@ export default {
 		getGeosearchForm() {
 			if (!(this.geosearchForm)) {
 				const parent = this.$refs.map.$el;
-				this.geosearchForm = parent.querySelector("div.leaflet-control-geosearch.bar form");
+				this.geosearchForm = parent.querySelector("div.leaflet-control-geosearch.leaflet-geosearch-bar form");
 			}
 			return this.geosearchForm;
 		},
