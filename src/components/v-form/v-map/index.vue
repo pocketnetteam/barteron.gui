@@ -88,7 +88,11 @@
 
 			<!-- Pin marker -->
 			<template>
-				<l-marker v-if="(isInputMode || isDeliveryInputMode || isViewMode || isDeliverySelectionMode) && marker" :latLng="marker" />
+				<l-marker 
+					v-if="marker && (isInputMode || isDeliveryInputMode || isViewMode || isDeliverySelectionMode)" 
+					:latLng="marker" 
+				/>
+
 				<l-geosearch :options="geosearchOptions" />
 			</template>
 

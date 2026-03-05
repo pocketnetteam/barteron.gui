@@ -133,7 +133,7 @@ export default {
 			resizeObserver: null,
 			geosearchOptions: this.getGeosearchOptions(),
 			addressSearchEnabled: false,
-			marker: null,
+			marker: undefined,
 			scale: this.zoom,
 			userLocationIsLoading: false,
 			mapState: "",
@@ -362,25 +362,30 @@ export default {
 
 			handlers.click = (e) => {
 				if (e.originalEvent.target.matches("div.vue2leaflet-map")) {
+					this.mapObject.setView(e.latlng, this.mapObject.getZoom());
 					this.marker = Object.values(e.latlng);
 					this.$emit("change", Object.values(e.latlng));
 				}
 			};
 
 			handlers.move = (e) => {
-				if (e?.originalEvent) markerAtCenter(false, e);
+				const markerExists = this.marker;
+				if (markerExists && e?.originalEvent) {
+					markerAtCenter(false, e);
+				};
 			};
 
 			handlers.moveend = (e) => {
-				markerAtCenter(true, e);
+				const markerExists = this.marker;
+				if (markerExists) {
+					markerAtCenter(true, e);
+				};
 			};
 
 			this.mapObject
 				.on("click", handlers.click)
 				.on("move", handlers.move)
 				.on("moveend", handlers.moveend);
-
-			markerAtCenter(true);
 		},
 
 		setupDeliveryInputModeHandlers() {
@@ -439,12 +444,11 @@ export default {
 
 		setupData() {
 			if (this.isInputMode || this.isDeliveryInputMode) {
-				this.marker = this.marker ?? Object.values(this.mapObject.getCenter());
 				if (this.isDeliveryInputMode) {
 					this.changeStateTo("initialState");
 				}
 			} else if (this.isSearchMode) {
-				this.marker = null;
+				this.marker = undefined;
 				this.changeStateTo("initialState");
 			}
 		},
