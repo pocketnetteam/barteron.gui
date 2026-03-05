@@ -838,9 +838,9 @@ export default {
 		stepState(scope) {
 			this.$components.aside.steps.forEach(step => {
 				const
-					getField = (cb) => {
+					getField = (callback) => {
 						return scope.form.valid[
-							scope.form.valid.findIndex(index => cb(index.field))
+							scope.form.valid.findIndex(f => callback(f.field))
 						];
 					},
 
