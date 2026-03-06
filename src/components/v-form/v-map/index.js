@@ -72,6 +72,10 @@ export default {
 			type: Array,
 			default: () => [0, 0]
 		},
+		setInitialMarker: {
+			type: Boolean,
+			default: false
+		},
 		offers: {
 			type: Array,
 			default: () => []
@@ -133,7 +137,7 @@ export default {
 			resizeObserver: null,
 			geosearchOptions: this.getGeosearchOptions(),
 			addressSearchEnabled: false,
-			marker: undefined,
+			marker: null,
 			scale: this.zoom,
 			userLocationIsLoading: false,
 			mapState: "",
@@ -444,11 +448,14 @@ export default {
 
 		setupData() {
 			if (this.isInputMode || this.isDeliveryInputMode) {
+				if (this.setInitialMarker) {
+					this.marker = Object.values(this.mapObject.getCenter());
+				}
 				if (this.isDeliveryInputMode) {
 					this.changeStateTo("initialState");
 				}
 			} else if (this.isSearchMode) {
-				this.marker = undefined;
+				this.marker = null;
 				this.changeStateTo("initialState");
 			}
 		},
@@ -669,6 +676,15 @@ export default {
 
 		latLonDefined(latLon) {
 			return latLon?.length && (latLon[0] || latLon[1]);
+		},
+
+		serialize() {
+			const canSerialize = (this.isInputMode || this.isDeliveryInputMode);
+			return canSerialize ? this.marker : null;
+		},
+
+		validate() {
+			return Boolean(this.serialize());
 		},
 	},
 
