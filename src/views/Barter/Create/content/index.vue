@@ -438,13 +438,15 @@
 				<!-- vMap -->
 				<v-map
 					id="location"
-					class="map"
+					class="map field"
 					ref="map"
+					:width="mapWidth"
 					:height="mapHeight"
 					:mapMode="mapMode()"
 					:pickupPointPopupMode="'input'"
 					:selectedOfferIds="selectedOfferIds()"
 					:center="geohash || location || undefined"
+					:setInitialMarker="Boolean(geohash)"
 					:mapActionData="mapActionData"
 					@errorEvent="mapErrorEvent"
 					@mapAction="mapAction"

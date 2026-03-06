@@ -76,8 +76,18 @@ export default {
 			return this.offer?.delivery?.deliveryOptions;
 		},
 
+		validationMargin() {
+			return 3;
+		},
+
+		mapWidth() {
+			return `calc(100% - ${this.validationMargin * 2}px)`;
+		},
+
 		mapHeight() {
-			return this.isLargeScreen() ? "560px" : "400px";
+			const fullHeight = (this.isLargeScreen() ? 560 : 400);
+			const height = fullHeight - this.validationMargin * 2;
+			return `${height}px`;
 		},
 
 		/**
@@ -437,6 +447,23 @@ export default {
 
 		pickupPointsEnabledStateChanged(value, e) {
 			this.pickupPointsEnabled = e.target.checked;
+
+			this.$nextTick(() => {
+				if (this.pickupPointsEnabled) {
+					const 
+						locationDefined = this.$refs.map.serialize(),
+						preventStateChanging = !(locationDefined);
+
+					if (preventStateChanging) {
+						this.pickupPointsEnabled = false;
+
+						this.showInfo(this.$t("dialogLabels.must_enter_location_first"), () => {
+							const el = this.$refs.map.$el;
+							this.scrollTo(el);
+						});
+					}
+				}
+			});
 		},
 
 		selfPickupEnabledStateChanged(value, e) {
@@ -750,10 +777,11 @@ export default {
 				hash = this.offer.hash,
 				form = this.$refs.form,
 				photos = this.$refs.photos,
-				center = this.$refs.map["marker"],
+				map = this.$refs.map,
 				data = form.serialize(),
 				images = photos.serialize(),
 				serializedVideo = this.serializeVideo(),
+				marker = map.serialize(),
 				serializedMetaData = this.serializeMetaData(),
 				delivery = this.serializeDelivery(data),
 				workSchedule = this.$refs.workSchedule, // optional
@@ -785,7 +813,7 @@ export default {
 				tags: tags,
 				condition: this.condition,
 				images: Object.values(images),
-				geohash: GeoHash.encodeGeoHash.apply(null, center),
+				geohash: (marker ? GeoHash.encodeGeoHash.apply(null, marker) : null),
 				currencyPrice,
 				video: serializedVideo.video,
 				videoSettings: serializedVideo.videoSettings,
@@ -795,7 +823,7 @@ export default {
 				price,
 			});
 
-			/* Add/remove passed/rejected classes to photos uploader */
+			/* Add/remove passed/rejected classes to some elements */
 			if (photos.validate()) {
 				photos.$el.classList.add(form.classes.passed);
 				photos.$el.classList.remove(form.classes.rejected);
@@ -804,9 +832,28 @@ export default {
 				photos.$el.classList.remove(form.classes.passed);
 			}
 
+			if (map.validate()) {
+				map.$el.classList.add(form.classes.passed);
+				map.$el.classList.remove(form.classes.rejected);
+			} else {
+				map.$el.classList.add(form.classes.rejected);
+				map.$el.classList.remove(form.classes.passed);
+			}
+
 			formMetaData.completed = true;
 
-			return { formMetaData, hash, form, photos, center, data, images, workSchedule, pickupPointList, safeDeal };
+			return { 
+				formMetaData, 
+				hash, 
+				form, 
+				photos, 
+				map, 
+				data, 
+				images, 
+				workSchedule, 
+				pickupPointList, 
+				safeDeal 
+			};
 		},
 
 		updateAsideStepsAsync() {
@@ -831,6 +878,7 @@ export default {
 		 * @param {Object} scope.form
 		 * @param {Boolean} scope.formValid
 		 * @param {Boolean} scope.photosValid
+		 * @param {Boolean} scope.locationValid
 		 * @param {Boolean|undefined} scope.workScheduleValid
 		 * @param {Boolean|undefined} scope.pickupPointListValid
 		 * @param {Boolean|undefined} scope.safeDealValid
@@ -855,7 +903,7 @@ export default {
 							}
 
 							case "location": {
-								return true;
+								return scope.locationValid;
 							}
 
 							case "work-schedule": {
@@ -939,9 +987,10 @@ export default {
 			};
 
 			const
-				{ hash, form, photos, images, workSchedule, pickupPointList, safeDeal } = serializationData,
+				{ hash, form, photos, map, images, workSchedule, pickupPointList, safeDeal } = serializationData,
 				formValid = form.validate(),
 				photosValid = photos.validate(),
+				locationValid = map.validate(),
 				workScheduleValid = workSchedule?.validate(),
 				pickupPointListValid = pickupPointList?.validate(),
 				safeDealValid = safeDeal?.validate();
@@ -951,13 +1000,14 @@ export default {
 				form,
 				formValid,
 				photosValid,
+				locationValid,
 				workScheduleValid,
 				pickupPointListValid,
 				safeDealValid,
 			});
 
 			/* Check all fields validity */
-			if (formValid && photosValid) {
+			if (formValid && photosValid && locationValid) {
 				const upload = Object.values(images).filter(image => image.startsWith("data:image"));
 				
 				/* Show dialog */
@@ -1022,7 +1072,7 @@ export default {
 			} else {
 				/* Scroll view to first rejected input */
 				const field = (() => {
-					if (!formValid) {
+					if (!(formValid)) {
 						const input = form.valid.filter(f => !f.valid)[0].field;
 
 						if (input.name === "tags" && !photosValid) {
@@ -1034,8 +1084,10 @@ export default {
 						}
 
 						return input;
-					} else {
+					} else if (!(photosValid)) {
 						return this.$refs.photos.$el;
+					} else if (!(locationValid)) {
+						return this.$refs.map.$el;
 					};
 				})();
 

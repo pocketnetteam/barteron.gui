@@ -72,6 +72,10 @@ export default {
 			type: Array,
 			default: () => [0, 0]
 		},
+		setInitialMarker: {
+			type: Boolean,
+			default: false
+		},
 		offers: {
 			type: Array,
 			default: () => []
@@ -362,25 +366,30 @@ export default {
 
 			handlers.click = (e) => {
 				if (e.originalEvent.target.matches("div.vue2leaflet-map")) {
+					this.mapObject.setView(e.latlng, this.mapObject.getZoom());
 					this.marker = Object.values(e.latlng);
 					this.$emit("change", Object.values(e.latlng));
 				}
 			};
 
 			handlers.move = (e) => {
-				if (e?.originalEvent) markerAtCenter(false, e);
+				const markerExists = this.marker;
+				if (markerExists && e?.originalEvent) {
+					markerAtCenter(false, e);
+				};
 			};
 
 			handlers.moveend = (e) => {
-				markerAtCenter(true, e);
+				const markerExists = this.marker;
+				if (markerExists) {
+					markerAtCenter(true, e);
+				};
 			};
 
 			this.mapObject
 				.on("click", handlers.click)
 				.on("move", handlers.move)
 				.on("moveend", handlers.moveend);
-
-			markerAtCenter(true);
 		},
 
 		setupDeliveryInputModeHandlers() {
@@ -439,7 +448,9 @@ export default {
 
 		setupData() {
 			if (this.isInputMode || this.isDeliveryInputMode) {
-				this.marker = this.marker ?? Object.values(this.mapObject.getCenter());
+				if (this.setInitialMarker) {
+					this.marker = Object.values(this.mapObject.getCenter());
+				}
 				if (this.isDeliveryInputMode) {
 					this.changeStateTo("initialState");
 				}
@@ -665,6 +676,15 @@ export default {
 
 		latLonDefined(latLon) {
 			return latLon?.length && (latLon[0] || latLon[1]);
+		},
+
+		serialize() {
+			const canSerialize = (this.isInputMode || this.isDeliveryInputMode);
+			return canSerialize ? this.marker : null;
+		},
+
+		validate() {
+			return Boolean(this.serialize());
 		},
 	},
 
