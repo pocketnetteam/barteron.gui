@@ -336,6 +336,7 @@
 	"dialogLabels": {
 		"label": "Dialog",
 
+		"must_enter_location_first": "First, you need to enter a location. Select a point on the map.",
 		"images_imgur": "Uploading images..",
 		"data_node": "Posting data to node, please wait..",
 		"saving_data_message": "The data has been sent to node. Saving may take a few minutes.",

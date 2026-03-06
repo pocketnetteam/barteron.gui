@@ -506,8 +506,10 @@ Vue.prototype.shared = Vue.observable({
 		 * 
 		 * @param {String} message
 		 */
-		showInfo(message) {
-			this.dialog?.instance.view("info", message);
+		showInfo(message, callback) {
+			this.dialog?.instance.view("info", message).then(() => {
+				callback?.();
+			});
 		},
 
 		/**
