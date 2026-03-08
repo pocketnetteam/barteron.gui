@@ -40,6 +40,7 @@
 							height="60vh"
 							:center="geohash"
 							:zoom="locationStore.zoom || undefined"
+							:searchRegionBoundsAsArray="searchRegionBoundsAsArray"
 							:mapActionData="mapActionData"
 							@scale="setZoom"
 							@change="setCenter"
