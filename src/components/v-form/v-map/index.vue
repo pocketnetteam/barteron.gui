@@ -11,6 +11,20 @@
 			:max-zoom="maxZoom"
 			:center="center"
 		>
+			<!-- Search area -->
+			<template v-if="searchRegionBoundsAsArray">
+				<l-rectangle
+					:bounds="searchRegionBoundsAsArray"
+					:interactive="false"
+					:stroke="true"
+					:color="'#136aec'"
+					:opacity="0.5"
+					:weight="1.5"
+					:fillColor="'#136aec'"
+					:fillOpacity="0.15"
+				/>
+			</template>
+
 			<!-- Offers near -->
 			<template v-if="shownOffers.length">
 				<l-marker-cluster>

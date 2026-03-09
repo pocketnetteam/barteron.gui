@@ -2,6 +2,7 @@ import AppErrors from "@/js/appErrors.js";
 import { GeoHashApproximator } from "@/js/geohashUtils.js";
 import { mapState } from "pinia";
 import { useLocaleStore } from "@/stores/locale.js";
+import L from "leaflet";
 
 export default {
 	name: "Location",
@@ -44,6 +45,25 @@ export default {
 
 		searchRegionDefined() {
 			return !!(this.locationStore.bounds);
+		},
+
+		searchRegionBoundsAsArray() {
+			let result = null;
+			if (this.searchRegionDefined) {
+				try {
+					const 
+						bounds = this.locationStore.bounds,
+						sw = bounds._southWest,
+						ne = bounds._northEast,
+						point1 = [sw.lat, sw.lng],
+						point2 = [ne.lat, ne.lng]; 
+
+					result = [point1, point2];
+				} catch (e) {
+					console.error(e);
+				}
+			};
+			return result;
 		},
 
 		maxDesiredZoomToSaveRegion() {
@@ -204,17 +224,56 @@ export default {
 		 * Submit form data
 		 */
 		submit() {
-			const geohash = this.encodeGeoHash(this.center);
+			const 
+				geohash = this.encodeGeoHash(this.center),
+				zoom = this.zoom,
+				bounds = this.getInnerSquareBounds(this.bounds, this.zoom);
+
+			if (!(bounds)) {
+				console.error("Internal error: inner square bounds is not defined");
+				return;
+			};
 
 			this.locationStore.set({
 				geohash,
-				zoom: this.zoom,
-				bounds: this.bounds
+				zoom,
+				bounds,
 			});
 
 			this.saveRegionButtonEnabled = false;
 			this.updateStoredLocationAddress();
 			this.hideLightbox();
+		},
+
+		getInnerSquareBounds(bounds, zoom) {
+			let result = null;
+
+			const map = this.$refs.map.mapObject;
+			if (bounds && map) {
+				const 
+					sw = map.project(bounds.getSouthWest(), zoom),
+					ne = map.project(bounds.getNorthEast(), zoom);
+
+				const 
+					width = ne.x - sw.x,
+					height = sw.y - ne.y,
+					size = Math.min(width, height);
+
+				const 
+					center = map.project(bounds.getCenter(), zoom),
+					half = size / 2;
+
+				const 
+					squareSW = L.point(center.x - half, center.y + half),
+					squareNE = L.point(center.x + half, center.y - half);
+
+				result = L.latLngBounds(
+					map.unproject(squareSW, zoom),
+					map.unproject(squareNE, zoom)
+				);
+			}
+			
+			return result;
 		},
 
 		mapAction(actionName, actionParams, event) {
