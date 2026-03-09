@@ -454,10 +454,6 @@ export default {
 			SafeDealStore.remove(this.id);
 		},
 
-		openSafeDealRoom() {
-			this.sendSafeDealMessage();
-		},
-
 		shareSafeDealTransaction(txid) {
 			const 
 				messages = [`bastyon://transactionview?stx=${txid}`],
@@ -502,6 +498,8 @@ export default {
 				openRoom: (options?.openRoom ?? true),
 			};
 
+			const sendingOptions = {disableNotifications: true};
+
 			const 
 				defaultDialogMessage = data.openRoom ? 
 					this.$t("dialogLabels.opening_room")
@@ -510,7 +508,7 @@ export default {
 
 			this.isChatLoading = true;
 			this.dialog?.instance.view("load", dialogMessage);
-			this.sendMessage(data).then(() => {
+			this.sendMessage(data, sendingOptions).then(() => {
 				this.dialog?.instance.hide();
 			}).catch(e => {
 				this.showError(e);

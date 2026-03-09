@@ -527,14 +527,14 @@ class SDK {
 	 * @param {Object} options
 	 */
 	setupRPCOptionsForMethod(method, options) {
-		if (method === "getbarteronoffersdetails") {
-			// forced redirection to avoid bugs of this method before the implementation of version 0.22.16
-			if (this.isProductionEnvironment()) {
-				options.rpc = {
-					fnode: "65.21.56.203:38081",
-				};
-			}
-		};
+		// if (method === "...") {
+		// 	// forced redirection for production environment
+		// 	if (this.isProductionEnvironment()) {
+		// 		options.rpc = {
+		// 			fnode: "X.X.X.X:38081",
+		// 		};
+		// 	}
+		// };
 	}
 
 	sign(scope) {
