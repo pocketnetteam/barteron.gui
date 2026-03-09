@@ -271,10 +271,11 @@ Vue.prototype.shared = Vue.observable({
 		 * @param {Array} [data.messages]
 		 * @param {Array} [data.images]
 		 * @param {Boolean} [data.openRoom]
+		 * @param {Object} options
 		 * 
 		 * @returns {Promise}
 		 */
-		sendMessage(data) {
+		sendMessage(data, options = {disableNotifications: false}) {
 			return this.sdk.createRoom({
 				name: data.name,
 				members: data.members
@@ -291,8 +292,10 @@ Vue.prototype.shared = Vue.observable({
 					}
 				});
 			}).then(result => {
-				this.sendNotifications(data.members, "dialog");
-				return result;
+				if (!(options?.disableNotifications)) {
+					this.sendNotifications(data.members, "dialog");
+					return result;
+				}
 			});
 		},
 
