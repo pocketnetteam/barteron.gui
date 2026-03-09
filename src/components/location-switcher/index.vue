@@ -58,7 +58,15 @@
 					>
 						<div class="geo-filter-label-holder">
 							<label
-								v-if="!(searchRegionDefined)"
+								v-if="searchRegionDefined"
+								class="v-label success-level no-margin"
+							>
+								<i class="fa fa-check-circle"></i>
+								{{ $t("locationLabels.geo_filter_enabled") }}
+							</label>
+
+							<label
+								v-else
 								class="v-label warning-level no-margin"
 							>
 								<i class="fa fa-exclamation-triangle"></i>
