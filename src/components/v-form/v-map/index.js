@@ -9,6 +9,7 @@ import {
 	LPopup,
 	LCircle,
 	LCircleMarker,
+	LRectangle,
 	LControl,
 	LIcon
 } from "vue2-leaflet";
@@ -40,6 +41,7 @@ export default {
 		LPopup,
 		LCircle,
 		LCircleMarker,
+		LRectangle,
 		LControl,
 		LIcon,
 		LGeosearch,
@@ -99,6 +101,10 @@ export default {
 		maxZoom: {
 			type: Number,
 			default: 18
+		},
+		searchRegionBoundsAsArray: {
+			type: Array,
+			default: null
 		},
 		mapActionData: {
 			type: Object,
