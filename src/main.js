@@ -349,6 +349,11 @@ Vue.prototype.shared = Vue.observable({
 			return result;
 		},
 
+		locationFilterEnabled() {
+			const { bounds } = LocationStore.location;
+			return Boolean(bounds);
+		},
+
 		/**
 		 * Withdraw of Remove an Offer Dialog
 		 * 

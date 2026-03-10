@@ -41,8 +41,18 @@
 	.category-label
 		color: $popo
 
-	.top-category-link-holder
-		margin-top: $r * 6
+	.top-category-link-holder,
+	.location-filter-link-holder
+		margin-top: $r * 4
+
+		&.bold-label
+			font-weight: bold
+
+		.inline-button
+			display: inline-block
+
+			.v-button
+				height: 32px
 
 section
 	> p
@@ -51,6 +61,18 @@ section
 		align-items: center
 		gap: $r
 		margin: 0 0 $r * 2
+
+		&.top-category-link-holder
+			display: block
+
+			&.includes-button
+				line-height: 2
+
+		&.location-filter-link-holder
+			display: block
+
+			&.includes-button
+				line-height: 2
 
 .categories-loading-error-holder
 	.error

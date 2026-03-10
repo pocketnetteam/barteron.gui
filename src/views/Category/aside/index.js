@@ -220,10 +220,6 @@ export default {
 			}
 		},
 
-		isEmptyListFromFullSearch() {
-			return offerStore.isEmptyListFromFullSearch(this.$route);
-		},
-
 		addSwipeGesture() {
 			const 
 				data = this.swipeGestureData,

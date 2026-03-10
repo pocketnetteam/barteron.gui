@@ -37,7 +37,9 @@
 	"categoryLabels": {
 		"label": "Категорија",
 		"empty": "Понуде нису пронађене :(",
-		"empty_details": "Покушајте да изаберете {all_regions} у локацији или проширите област претраге на мапи и сачувајте је поново",
+		"not_empty_list_with_locaction_filter_details": "Филтер за геолокацију је омогућен. Да бисте променили област претраге, користите {map}.",
+		"empty_list_with_locaction_filter_details": "Покушајте да промените опсег филтера геолокације користећи {map}. Да бисте га онемогућили, изаберите {all_regions}.",
+		"map_link": "карта",
 		"view_top_parent": "Погледајте {all_offers} у категорији {category_name}",
 		"loading_error": "При учитавању огласа дошло је до грешке: {error}"
 	},

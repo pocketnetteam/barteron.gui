@@ -130,7 +130,7 @@ export default {
 		},
 
 		viewingParentCategory() {
-			return !(this.isLoading || this.isSearchEnabled() || this.isFiltersActive()) 
+			return !(this.isLoading || this.loadingError || this.isSearchEnabled() || this.isFiltersActive()) 
 				&& (this.items?.length < 20) 
 				&& this.isSubcategory
 				&& (
@@ -244,8 +244,8 @@ export default {
 			};
 		},
 
-		isEmptyListFromFullSearch() {
-			return offerStore.isEmptyListFromFullSearch(this.$route);
+		openLocationFilter() {
+			
 		},
 
 		/**
