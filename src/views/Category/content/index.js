@@ -1,8 +1,9 @@
 import Loader from "@/components/loader/index.vue";
 import BarterList from "@/components/barter/list/index.vue";
-import offerStore, { useOfferStore } from "@/stores/offer.js";
+import { useOfferStore } from "@/stores/offer.js";
 import { mapState, mapWritableState, mapActions } from "pinia";
 import { useLocaleStore } from "@/stores/locale.js";
+import { EventBus } from '@/js/eventBus.js';
 
 export default {
 	name: "Content",
@@ -130,7 +131,7 @@ export default {
 		},
 
 		viewingParentCategory() {
-			return !(this.isLoading || this.isSearchEnabled() || this.isFiltersActive()) 
+			return !(this.isLoading || this.loadingError || this.isSearchEnabled() || this.isFiltersActive()) 
 				&& (this.items?.length < 20) 
 				&& this.isSubcategory
 				&& (
@@ -244,8 +245,8 @@ export default {
 			};
 		},
 
-		isEmptyListFromFullSearch() {
-			return offerStore.isEmptyListFromFullSearch(this.$route);
+		openLocationFilter() {
+			EventBus.$emit("openLocationFilter");
 		},
 
 		/**

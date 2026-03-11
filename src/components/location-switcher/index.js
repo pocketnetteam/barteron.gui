@@ -2,6 +2,7 @@ import AppErrors from "@/js/appErrors.js";
 import { GeoHashApproximator } from "@/js/geohashUtils.js";
 import { mapState } from "pinia";
 import { useLocaleStore } from "@/stores/locale.js";
+import { EventBus } from "@/js/eventBus.js";
 import L from "leaflet";
 
 export default {
@@ -25,7 +26,7 @@ export default {
 		}
 	},
 
-	inject: ["dialog"],
+	inject: ["dialog", "setHeaderVisibility"],
 	
 	computed: {
 		...mapState(useLocaleStore, ["locale"]),
@@ -72,6 +73,21 @@ export default {
 	},
 
 	methods: {
+		addEventListeners() {
+			this.openEventHandler = () => {
+				this.setHeaderVisibility(true, { animation: false });
+				this.$nextTick(() => {
+					this.showLightbox();
+				});
+			};
+
+			EventBus.$on("openLocationFilter", this.openEventHandler);
+		},
+
+		removeEventListeners() {
+			EventBus.$off("openLocationFilter", this.openEventHandler);
+		},
+
 		/**
 		 * Show lightbox
 		 */
@@ -354,7 +370,12 @@ export default {
 	},
 
 	mounted() {
+		this.addEventListeners();
 		this.updateStoredLocationAddress();
+	},
+
+	beforeDestroy() {
+		this.removeEventListeners();
 	},
 
 	watch: {

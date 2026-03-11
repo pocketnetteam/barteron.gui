@@ -37,7 +37,9 @@
 	"categoryLabels": {
 		"label": "Category",
 		"empty": "No offers found :(",
-		"empty_details": "Try to set {all_regions} in your location, or expand your search area on the map and save it again",
+		"not_empty_list_with_locaction_filter_details": "The geo-location filter is enabled. To change the search area, use {map}.",
+		"empty_list_with_locaction_filter_details": "Try changing the geo-location filter scope using {map}. To disable it, select {all_regions}.",
+		"map_link": "map",
 		"view_top_parent": "View {all_offers} in the category {category_name}",
 		"loading_error": "An error occurred while loading offers: {error}"
 	},

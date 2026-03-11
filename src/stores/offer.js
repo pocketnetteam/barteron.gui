@@ -332,20 +332,6 @@ const
                     .filter(key => this.filters[key] && !(key === "orderBy" || key === "orderDesc"))
                     .some(f => Array.isArray(f) && f.length || !(Array.isArray(f)) && f);
             },
-
-            isEmptyListFromFullSearch(currentRoute) {
-                const 
-                    fullSearchPaths = ["/", "/category/search?search="],
-                    isHomeRoute = currentRoute?.name === "home",
-                    isFiltersActive = isHomeRoute ? false : this.isFiltersActive();
-
-                return !(this.isLoading) 
-                    && !(this.items.length) 
-                    && !(isFiltersActive)
-                    && this.itemsRoute
-                    && this.itemsRoute.fullPath === currentRoute?.fullPath
-                    && fullSearchPaths.includes(this.itemsRoute.fullPath);
-            },
         }
     }),
     store = storage();
