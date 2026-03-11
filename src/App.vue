@@ -152,6 +152,7 @@ export default {
 			lightboxContainer: () => this.lightboxContainer,
 			categorySelectDialog: () => this.categorySelectDialog,
 			setCategorySelectProps: (data) => this.setCategorySelectProps(data),
+			setHeaderVisibility: (value, options) => this.setHeaderVisibility(value, options),
 		};
 	},
 

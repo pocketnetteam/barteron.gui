@@ -1,6 +1,5 @@
 import CategoriesHierarchy from "@/components/categories/categories-hierarchy/index.vue";
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
-import offerStore from "@/stores/offer.js";
 
 export default {
 	name: "Aside",
@@ -218,10 +217,6 @@ export default {
 			if (ref && ref.active) {
 				ref.toggle();
 			}
-		},
-
-		isEmptyListFromFullSearch() {
-			return offerStore.isEmptyListFromFullSearch(this.$route);
 		},
 
 		addSwipeGesture() {
