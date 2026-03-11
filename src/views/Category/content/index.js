@@ -1,8 +1,9 @@
 import Loader from "@/components/loader/index.vue";
 import BarterList from "@/components/barter/list/index.vue";
-import offerStore, { useOfferStore } from "@/stores/offer.js";
+import { useOfferStore } from "@/stores/offer.js";
 import { mapState, mapWritableState, mapActions } from "pinia";
 import { useLocaleStore } from "@/stores/locale.js";
+import { EventBus } from '@/js/eventBus.js';
 
 export default {
 	name: "Content",
@@ -245,7 +246,7 @@ export default {
 		},
 
 		openLocationFilter() {
-			
+			EventBus.$emit("openLocationFilter");
 		},
 
 		/**
