@@ -446,24 +446,20 @@ export default {
 		},
 
 		pickupPointsEnabledStateChanged(value, e) {
-			this.pickupPointsEnabled = e.target.checked;
+			const 
+				newValue = e.target.checked,
+				locationDefined = this.$refs.map.serialize(),
+				preventEnabledState = (newValue && !(locationDefined));
 
-			this.$nextTick(() => {
-				if (this.pickupPointsEnabled) {
-					const 
-						locationDefined = this.$refs.map.serialize(),
-						preventStateChanging = !(locationDefined);
-
-					if (preventStateChanging) {
-						this.pickupPointsEnabled = false;
-
-						this.showInfo(this.$t("dialogLabels.must_enter_location_first"), () => {
-							const el = this.$refs.map.$el;
-							this.scrollTo(el);
-						});
-					}
-				}
-			});
+			if (preventEnabledState) {
+				this.showInfo(this.$t("dialogLabels.must_enter_location_first"), () => {
+					e.target.checked = false;
+					const el = this.$refs.map.$el;
+					this.scrollTo(el);
+				});
+			} else {
+				this.pickupPointsEnabled = newValue;
+			}
 		},
 
 		selfPickupEnabledStateChanged(value, e) {
