@@ -183,6 +183,7 @@
 		"start_purchase": "Начать покупку",
 		"go_to_selection": "Перейти к выбору",
 		"ask_seller": "Задать вопрос продавцу",
+		"ask_pickup_point_owner": "Задать вопрос владельцу ПВЗ",
 		"send_message": "Отправить сообщение",
 		"setup_notifications": "Настроить уведомления",
 		"connect_telegram_bot": "Подключить телеграм-бот",

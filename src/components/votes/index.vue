@@ -6,7 +6,7 @@
 
 		<header v-if="offerInfo">
 			<h1 class="title">
-				<router-link :to="{ name: 'barterItem', params: { id: this.item.hash } }">
+				<router-link :to="{ name: 'barterItem', params: { id: item.hash } }">
 					{{ item.caption }}
 				</router-link>
 			</h1>
@@ -59,7 +59,7 @@
 					@click="contactSeller"
 				>
 					<i class="fa fa-question-circle"></i>
-					<span>{{ $t('buttonLabels.ask_seller') }}</span>
+					<span>{{ item.isPickupPoint ? $t('buttonLabels.ask_pickup_point_owner') : $t('buttonLabels.ask_seller') }}</span>
 				</v-button>
 
 				<v-textarea

@@ -24,7 +24,10 @@
 		</div>
 
 		<div class="box">
-			<Profile :hash="address" />
+			<Profile 
+				:hash="address" 
+				:hideBastyonProfileButton="isMyOffer"
+			/>
 			<ExchangeList
 				v-if="isMyOffer"
 				:tags="account?.tags || []"

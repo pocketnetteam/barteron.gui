@@ -10,7 +10,10 @@
 
 		<!-- without aside -->
 		<div class="row sep no-aside d-sep">
-			<Profile :hash="address"/>
+			<Profile 
+				:hash="address"
+				:hideBastyonProfileButton="isMyProfile"
+			/>
 
 			<div 
 				v-if="isMyProfile" 
