@@ -32,6 +32,7 @@ export default {
 			sourceOffer: null,
 			offer: {},
 			offerPublished: false,
+			skipLeaveGuard: false,
 
 			pricePrefix: null,
 			videoOrderVariant: "first",
@@ -446,24 +447,22 @@ export default {
 		},
 
 		pickupPointsEnabledStateChanged(value, e) {
-			this.pickupPointsEnabled = e.target.checked;
+			const 
+				newValue = e.target.checked,
+				locationDefined = this.$refs.map.serialize(),
+				preventEnabledState = (newValue && !(locationDefined));
 
-			this.$nextTick(() => {
-				if (this.pickupPointsEnabled) {
-					const 
-						locationDefined = this.$refs.map.serialize(),
-						preventStateChanging = !(locationDefined);
-
-					if (preventStateChanging) {
-						this.pickupPointsEnabled = false;
-
-						this.showInfo(this.$t("dialogLabels.must_enter_location_first"), () => {
-							const el = this.$refs.map.$el;
-							this.scrollTo(el);
-						});
-					}
-				}
-			});
+			if (preventEnabledState) {
+				this.$nextTick(() => {
+					e.target.checked = false;
+					this.showInfo(this.$t("dialogLabels.must_enter_location_first"), () => {
+						const el = this.$refs.map.$el;
+						this.scrollTo(el);
+					});
+				});
+			} else {
+				this.pickupPointsEnabled = newValue;
+			}
 		},
 
 		selfPickupEnabledStateChanged(value, e) {
@@ -530,7 +529,7 @@ export default {
 
 				this.pickupPointsRequestData.isLoading = true;
 
-				this.setMapActionData();
+				this.setMapActionData(null, null);
 
 				this.sdk.getBrtOffersFeed(
 					request
@@ -540,8 +539,7 @@ export default {
 					}
 					this.pickupPointsRequestData.pageStart = pageStart;
 					this.pickupPointsRequestData.isLoading = false;
-					const filteredOffers = this.filterPickupPointsIfNeeded(offers);
-					this.setMapActionData(filteredOffers);
+					this.setMapActionData(offers, null);
 				}).catch(e => { 
 					const
 						requestRejected = (e instanceof AppErrors.RequestIdError),
@@ -554,10 +552,13 @@ export default {
 					} else {
 						console.info(e.message);
 					}
-				});				
-			} else if (actionName === "moveMap") {
+				});
+
+			} else if (actionName === "moveStart") {
+
 				this.pickupPointsRequestData.isLoading = false;
-				this.setMapActionData();
+				this.setMapActionData(null, null);
+
 			}
 
 		},
@@ -565,13 +566,15 @@ export default {
 		filterPickupPointsIfNeeded(offers) {
 			let result = offers;
 	
-			const 
-				settings = this.sdk.getDeliverySettings(),
-				addressFilter = settings?.addressFilter;
+			if (offers) {
+				const 
+					settings = this.sdk.getDeliverySettings(),
+					addressFilter = settings?.addressFilter;
 
-			if (addressFilter?.isEnabled) {
-				result = (offers || []).filter(f => f?.address && addressFilter?.items?.includes(f.address));
-			};
+				if (addressFilter?.isEnabled) {
+					result = (offers || []).filter(f => f?.address && addressFilter?.items?.includes(f.address));
+				};
+			}
 	
 			return result;
 		},
@@ -619,8 +622,8 @@ export default {
 				isLoading: this.pickupPointsRequestData.isLoading,
 				nextPageExists: (offers?.length === this.pickupPointsRequestData.pageSize),
 				isNextPage: (offers?.length && this.pickupPointsRequestData.pageStart > 0),
-				offers,
-				error
+				offers: this.filterPickupPointsIfNeeded(offers),
+				error,
 			}
 		},		
 
@@ -932,6 +935,8 @@ export default {
 		 * Cancel an offer
 		 */
 		cancel() {
+			this.skipLeaveGuard = true;
+
 			const to = this.$route.params.from 
 				? { path: this.$route.params.from } 
 				: { name: "home" };
@@ -1048,6 +1053,7 @@ export default {
 							if (data.transaction) {
 								this.offer.newVideoAdded = false;
 								this.offerPublished = true;
+								this.skipLeaveGuard = true;
 								form.dialog.hide();
 								const offerHash = hash?.length < 64 ? data.transaction : hash;
 								this.performActionsAfterPublishing(form, offerHash);
@@ -1219,14 +1225,17 @@ export default {
 
 	beforeRouteLeave (to, from, next) {
 		const
+			dialog = this.dialog?.instance,
 			isPreviewRoute = (to?.name === "barterItem" && to?.query?.preview),
 			videoData = this.$refs.videoUploader?.getData(),
 			unpublishedVideo = (videoData?.videoExists && this.offer.newVideoAdded);
 
-		if (isPreviewRoute) {
+		if (this.skipLeaveGuard) {
+			this.skipLeaveGuard = false;
+			next();
+		} else if (isPreviewRoute) {
 			next();
 		} else if (unpublishedVideo) {
-			const dialog = this.dialog?.instance;
 			dialog.view("question", this.$t("dialogLabels.need_remove_unpublished_video")).then(state => {
 				if (state) {
 					this.$refs.videoUploader?.videoRemoving({disableStateChange: true}).then(() => {
@@ -1241,7 +1250,22 @@ export default {
 				};
 			});
 		} else {
-			next();
+			const 
+				titleExists = this.$refs.caption.inputs[0].value,
+				canBeUnsavedData = titleExists,
+				needToConfirmExit = canBeUnsavedData;
+
+			if (needToConfirmExit) {
+				dialog.view("question", this.$t("dialogLabels.unsaved_offer_creation_data")).then(state => {
+					if (state) {
+						next();
+					} else {
+						next(false);
+					};
+				});
+			} else {
+				next();
+			}
 		};
 	}	
 }

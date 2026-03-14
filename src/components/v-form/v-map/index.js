@@ -155,6 +155,7 @@ export default {
 			foundOffers: [],
 			geosearchForm: null,
 			mountingComplete: false,
+			debouncedSearch: null,
 		}
 	},
 
@@ -316,10 +317,8 @@ export default {
 				this.setupDeliverySelectionModeHandlers();
 			} else if(this.isInputMode) {
 				this.setupInputModeHandlers();
-			} else if(this.isDeliveryInputMode) {
-				this.setupDeliveryInputModeHandlers();
-			} else if (this.isSearchMode) {
-				this.setupSearchModeHandlers();
+			} else if(this.isDeliveryInputMode || this.isSearchMode) {
+				this.setupCommonSearchHandlers();
 			};
 
 			// legacy
@@ -398,14 +397,10 @@ export default {
 				.on("moveend", handlers.moveend);
 		},
 
-		setupDeliveryInputModeHandlers() {
-			this.setupSearchModeHandlers();
-		},
-
-		setupSearchModeHandlers() {
+		setupCommonSearchHandlers() {
 			const handlers = this.mapHandlers;
 
-			const moveEndHandler = (e) => {
+			handlers.moveend = (e) => {
 				this.mapObject.off("moveend", handlers.moveend); // prevent double moveend event bug
 
 				this.scale = this.mapObject.getZoom();
@@ -416,12 +411,15 @@ export default {
 				this.$emit("scale", this.scale, e);
 				this.$emit("change", center, e);
 				this.$emit("bounds", this.mapObject.getBounds(), e);
+				this.$emit("mapAction", "moveEnd", {}, e);
+
+				if (this.isDeliveryInputMode) {
+					this.debouncedSearch(e);
+				};
 			};
 
-			handlers.moveend = (e) => moveEndHandler(e);
-
 			handlers.movestart = (e) => {
-				this.$emit("mapAction", "moveMap", {}, e);
+				this.$emit("mapAction", "moveStart", {}, e);
 				this.mapObject.on("moveend", handlers.moveend);
 			};
 
@@ -478,11 +476,17 @@ export default {
 
 				switch (this.mapState) {
 					case "initialState":
-						this.offersSearchButton = true;
+						if (this.isSearchMode) {
+							this.offersSearchButton = true;
+						} else if (this.isDeliveryInputMode) {
+							this.searchOffersEvent(null);
+						}
 						break;
 						
 					case "readyForSearch":
-						this.offersSearchButton = true;
+						if (this.isSearchMode) {
+							this.offersSearchButton = true;
+						}
 						break;
 
 					case "isLoading":
@@ -664,12 +668,16 @@ export default {
 		},
 
 		searchOffersEvent(e) {
-			this.mapObject.closePopup();
+			if (this.isSearchMode) {
+				this.mapObject.closePopup();
+			};
 			this.emitLoadingMapAction("loadData", e);
 		},
 
 		loadMoreOffersEvent(e) {
-			this.mapObject.closePopup();
+			if (this.isSearchMode) {
+				this.mapObject.closePopup();
+			};
 			this.emitLoadingMapAction("loadNextPage", e);
 		},
 
@@ -692,6 +700,10 @@ export default {
 		validate() {
 			return Boolean(this.serialize());
 		},
+	},
+
+	created() {
+		this.debouncedSearch = this.debounce(this.searchOffersEvent, 500);
 	},
 
 	mounted() {
@@ -739,6 +751,7 @@ export default {
 	},
 
 	beforeDestroy() {
+		this.debouncedSearch?.cancel();
 		this.mapObject.off?.();
 		this.resizeObserver?.disconnect();
 	},
