@@ -357,9 +357,11 @@ export default {
 		}
 	},
 
-	mounted() {
-		this.debouncedSearch = this.debounce(() => this.search(), 500);
+	created() {
+		this.debouncedSearch = this.debounce(this.search, 500);
+	},
 
+	mounted() {
 		this.root = this.importChildren(
 			Object.entries(this.categories.items || {})
 				.filter(f => !f[1].parent)
@@ -370,6 +372,6 @@ export default {
 	},
 
 	beforeDestroy() {
-		this.debouncedSearch.cancel();
+		this.debouncedSearch?.cancel();
 	},
 }

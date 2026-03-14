@@ -2,7 +2,10 @@
 	<v-aside class="profile">
 		<!-- Profile stats -->
 		<div class="box">
-			<Profile :hash="address"/>
+			<Profile 
+				:hash="address"
+				:hideBastyonProfileButton="isMyProfile"
+			/>
 
 			<div 
 				v-if="isMyProfile" 

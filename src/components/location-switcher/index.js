@@ -350,7 +350,7 @@ export default {
 						console.info(e.message);
 					}
 				});				
-			} else if (actionName === "moveMap") {
+			} else if (actionName === "moveStart") {
 				this.offersRequestData.isLoading = false;
 				this.setMapActionData();
 			}
