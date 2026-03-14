@@ -183,11 +183,21 @@
 		</div>
 
 		<!-- Safe deal -->
-		<div class="row block sep" v-if="item.safeDeal?.validatorFeeVariant">
+		<div 
+			v-if="item.safeDeal?.validatorFeeVariant"
+			class="row block sep"
+		>
 			<strong class="title">{{ $t('safeDealLabels.label') }}</strong>
 			<SafeDeal
 				mode="view"
 				:safeDeal="item.safeDeal"
+			/>
+		</div>
+
+		<div class="row block top-sep">
+			<Profile 
+				:hash="item.address"
+				:hideBastyonProfileButton="true"
 			/>
 		</div>
 	</div>
