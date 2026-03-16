@@ -1877,9 +1877,11 @@ class SDK {
 			}
 		};
 
-		return this.rpc("getbarteronfeed", request).then(feed => {
+		const requestName = "getbarteronfeed";
 
-			this.throwRequestIdErrorIfNeeded(checkingData, "getbarteronfeed");
+		return this.rpc(requestName, request).then(feed => {
+
+			this.throwRequestIdErrorIfNeeded(checkingData, requestName);
 
 			const offers = feed?.map(offer => new Offer(offer)) || [];
 
@@ -1889,6 +1891,11 @@ class SDK {
 			};
 
 			return offers;
+		}).catch(e => {
+			if (!(e instanceof AppErrors.RequestIdError)) {
+				this.throwRequestIdErrorIfNeeded(checkingData, requestName);
+			};
+			throw e;
 		});
 	}
 
@@ -1937,9 +1944,11 @@ class SDK {
 			theirTags: (request?.theirTags || []).map(tag => +tag)
 		};
 
-		return this.rpc("getbarterondeals", request).then(deals => {
+		const requestName = "getbarterondeals";
 
-			this.throwRequestIdErrorIfNeeded(checkingData, "getbarterondeals");
+		return this.rpc(requestName, request).then(deals => {
+
+			this.throwRequestIdErrorIfNeeded(checkingData, requestName);
 
 			const offers = deals?.map(offer => new Offer(offer)) || [];
 
@@ -1949,6 +1958,11 @@ class SDK {
 			};
 
 			return offers;
+		}).catch(e => {
+			if (!(e instanceof AppErrors.RequestIdError)) {
+				this.throwRequestIdErrorIfNeeded(checkingData, requestName);
+			};
+			throw e;
 		});
 	}
 
@@ -1985,9 +1999,11 @@ class SDK {
 			theirTags: (request?.theirTags || []).map(tag => +tag)
 		};
 
-		return this.rpc("getbarteroncomplexdeals", request).then(data => {
+		const requestName = "getbarteroncomplexdeals";
 
-			this.throwRequestIdErrorIfNeeded(checkingData, "getbarteroncomplexdeals");
+		return this.rpc(requestName, request).then(data => {
+
+			this.throwRequestIdErrorIfNeeded(checkingData, requestName);
 
 			data?.map(match => {
 				if (match.target) {
@@ -1997,6 +2013,11 @@ class SDK {
 			});
 
 			return data;
+		}).catch(e => {
+			if (!(e instanceof AppErrors.RequestIdError)) {
+				this.throwRequestIdErrorIfNeeded(checkingData, requestName);
+			};
+			throw e;
 		});
 	}
 
