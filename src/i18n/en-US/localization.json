@@ -164,6 +164,7 @@
 		"vk_test_message_failed": "Error sending test message: {error}",
 		"disconnect_vk_bot_info": "VK bot connection settings will be removed, notifications will not be delivered",
 
+		"notification_privacy_info": "Only a message about the start of a new conversation is sent to external communication channels. User accounts and links to offers are not included.",
 		"dont_show_again": "Do not show again",
 		"manual_opening_info": "You can configure the settings later by clicking the \"Configure notifications\" button on your profile page"
 	},

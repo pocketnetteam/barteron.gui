@@ -360,8 +360,13 @@
 						</div>
 					</div>
 				</transition>
-			</div>			
+			</div>
 		</div>
+
+		<label class="v-label warning-level">
+			<i class="far fa-hand-paper"></i>
+			{{ $t("notificationSettingsLabels.notification_privacy_info") }}
+		</label>
 
 		<!-- Banner checkbox -->
 		<template v-if="viewMode === 'banner'">
