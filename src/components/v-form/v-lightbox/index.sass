@@ -1,7 +1,7 @@
 @import "@/css/vars.sass"
 	
 .v-lightbox
-	background: $overlay-hidden
+	background: $overlay-visible
 	border: 0
 	cursor: default
 	display: flex
@@ -11,15 +11,17 @@
 	top: 0
 	left: 0
 	visibility: hidden
+	opacity: 0
 	height: 100%
 	width: 100%
 	z-index: 1100
-	+transition()
+	transition: opacity 0.3s ease, visibility 0s linear 0.3s
 
 	/* Visible state */
 	&.v-lightbox-open
-		background: $overlay-visible
 		visibility: visible
+		opacity: 1
+		transition: opacity 0.3s ease
 
 		section
 			display: flex

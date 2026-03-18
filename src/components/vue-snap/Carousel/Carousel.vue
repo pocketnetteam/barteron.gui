@@ -268,6 +268,8 @@ export default {
       this.goToSlide(this.currentPage + direction)
     },
     goToSlide(index, options = {}) {
+      index = (index >= 0 ? index : 0);
+
       if (!this.slidesWidth[index]) {
         return
       }

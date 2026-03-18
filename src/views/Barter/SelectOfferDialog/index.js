@@ -29,14 +29,20 @@ export default {
 
 	methods: {
 		show() {
-			this.lightbox = true;
-			this.$emit("onShow", this);
+			this.$nextTick(() => {
+				requestAnimationFrame(() => {
+					this.lightbox = true;
+					this.$emit("onShow", this);
+				});
+			});
 		},
 
 		hide() {
 			this.lightbox = false;
-			this.$emit("onHide", this);
-			this.remove();
+			setTimeout(() => {
+				this.$emit("onHide", this);
+				this.remove();
+			}, 300);
 		},
 
 		select() {
@@ -46,7 +52,7 @@ export default {
 
 		remove() {
 			this.$destroy();
-			this.$el.parentNode.removeChild(this.$el);			
+			this.$el.parentNode?.removeChild(this.$el);			
 		}
 	},
 }

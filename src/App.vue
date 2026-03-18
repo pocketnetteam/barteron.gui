@@ -369,9 +369,7 @@ export default {
 			
 			instance.$mount();
 			this.lightboxContainer?.appendChild(instance.$el);
-			this.$nextTick(() => {
-				instance.show();
-			});
+			instance.show();
 		},
 
 		handleSearchParams(searchString = "", excludedItems = []) {
