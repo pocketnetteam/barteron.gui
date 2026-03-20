@@ -4,6 +4,7 @@ import StickerSlide from "./slide/index.vue";
 import LegalInfo from "@/components/legal-info/index.vue";
 import NotificationsBanner from "@/components/notifications-banner/index.vue";
 import SafeDealDialog from "@/components/safe-deal/safe-deal-dialog/index.vue";
+import UsefulTipsDialog from "@/components/useful-tips-dialog/index.vue";
 import Vue from 'vue';
 
 export default {
@@ -46,7 +47,7 @@ export default {
 			let items = [
 				"notifications",
 				"safeDeal",
-				"advice"
+				"usefulTips"
 			];
 
 			if (this.legalInfoAvailable) {
@@ -64,6 +65,10 @@ export default {
 
 				case "safeDeal":
 					this.showSafeDealInfo();
+					break;
+
+				case "usefulTips":
+					this.showUsefulTips();
 					break;
 
 				default:
@@ -89,6 +94,20 @@ export default {
 
 		showSafeDealInfo() {
 			const ComponentClass = Vue.extend(SafeDealDialog);
+			const instance = new ComponentClass({
+				propsData: {},
+			});
+			
+			instance.$on('onHide', vm => {
+			});
+
+			instance.$mount();
+			this.lightboxContainer().appendChild(instance.$el);
+			instance.show();
+		},
+
+		showUsefulTips() {
+			const ComponentClass = Vue.extend(UsefulTipsDialog);
 			const instance = new ComponentClass({
 				propsData: {},
 			});

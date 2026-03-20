@@ -1,0 +1,30 @@
+@import "@/css/vars.sass"
+
+.useful-tips-dialog
+	h1
+		color: $bulma
+
+	.section-holder
+		&:not(:first-child)
+			margin-top: $r * 4
+
+	.section,
+	.chapter,
+	.item
+		color: $bulma
+		text-align: justify
+		word-wrap: break-word
+	
+	.section
+		font-size: 1.4em
+		text-align: start
+
+	.chapter
+		font-size: 1.2em
+		text-align: start
+
+	.item
+		font-size: 1.0em
+
+		&:not(:last-child)
+			margin-bottom: $r

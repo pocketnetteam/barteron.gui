@@ -1,3 +1,4 @@
+import ThemeStore from "@/stores/theme.js";
 import LegalInfo from "@/components/legal-info/index.vue";
 
 export default {
@@ -23,12 +24,12 @@ export default {
 		item() {
 			let result = {};
 
-			const iconOpacity = 0.0275;
+			const iconOpacity = (this.isDarkTheme ? 0.075 : 0.05);
 
 			switch (this.itemId) {
 				case "notifications":
 					result = {
-						backgroundColor: "#FFFAD2",
+						backgroundColor: (this.isDarkTheme ? "#736600" : "#FFFAD2"),
 						icon: "fa-bell",
 						iconOpacity,
 						title: this.$t("notificationSettingsLabels.label"),
@@ -42,7 +43,7 @@ export default {
 
 				case "safeDeal":
 					result = {
-						backgroundColor: "#DCFFC9",
+						backgroundColor: (this.isDarkTheme ? "#2a7600" : "#DCFFC9"),
 						icon: "fa-shield-alt",
 						iconOpacity,
 						title: this.$t("safeDealLabels.label"),
@@ -54,23 +55,23 @@ export default {
 					};
 					break;
 
-				case "advice":
+				case "usefulTips":
 					result = {
-						backgroundColor: "#D2F0FF",
+						backgroundColor: (this.isDarkTheme ? "#005a87" : "#D2F0FF"),
 						icon: "fa-lightbulb",
 						iconOpacity,
-						title: this.$t("stickerLabels.advice_title"),
-						description: this.$t("stickerLabels.advice_description"),
+						title: this.$t("usefulTipsLabels.label"),
+						description: this.$t("stickerLabels.useful_tips_description"),
 						action: {
 							icon: "✅",
-							title: this.$t("stickerLabels.advice_action"),
+							title: this.$t("stickerLabels.useful_tips_action"),
 						},
 					};
 					break;
 
 				case "legalInfo":
 					result = {
-						backgroundColor: "#FFECDF",
+						backgroundColor: (this.isDarkTheme ? "#873700" : "#FFECDF"),
 						icon: "fa-balance-scale",
 						iconOpacity,
 						title: this.$t("legalLabels.label"),
@@ -84,6 +85,10 @@ export default {
 			result.id = this.itemId;
 
 			return result;
+		},
+
+		isDarkTheme() {
+			return ThemeStore.isDarkTheme();
 		},
 		
 		requiredLegalInfoItemKeys() {
