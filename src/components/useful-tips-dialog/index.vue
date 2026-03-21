@@ -1,36 +1,70 @@
 <template>
 	<v-lightbox
+		ref="lightbox"
 		class="useful-tips-dialog"
 		size="md"
 		:visible="lightbox"
 		:title="$t('usefulTipsLabels.label')"
+		@onScroll="handleScroll"
 		@onHide="hide"
 	>
+		<div class="link-sections">
+			<div 
+				v-for="section in tips.sections"
+				:key="`link_${section.id}`"
+				class="link-section"
+			>
+				<a 
+					class="link" 
+					href="#" 
+					@click.prevent="goToLink(section.id)"
+				>
+					<u>{{ section.title }}</u>
+				</a>
+			</div>
+		</div>
+		
 		<div 
 			v-for="section in tips.sections"
-			:key="section.title"
+			:key="section.id"
 			class="section-holder"
 		>
-			<h1 class="section">{{ section.title }}</h1>
+			<h1 
+				class="section"
+				:id="section.id"
+			>{{ section.title }}</h1>
 
 			<div 
 				v-for="chapter in section.chapters"
-				:key="chapter.title"
+				:key="chapter.id"
 			>
 				<h2 class="chapter">{{ chapter.title }}</h2>
 
 				<ul>
 					<li
 						v-for="item in chapter.items"
-						:key="item.text"
+						:key="item.id"
 						class="item"
 					>{{ item.text }}</li>
 				</ul>
 			</div>
 		</div>
 
+		<div class="bottom-space"></div>
+
 		<!-- Footer -->
 		<template #footer>
+			<v-button 
+				v-show="scrollTopBtnVisible"
+				ref="scrollTopBtn"
+				class="scroll-top-btn"
+				vSize="sm"
+				vType="light"
+				@click="scrollToTop"
+			>
+				<i class="fa fa-chevron-up"></i>
+			</v-button>
+
 			<div class="row full-width right">
 				<div class="buttons-holder min-h-w">
 					<v-button 

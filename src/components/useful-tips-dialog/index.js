@@ -9,6 +9,7 @@ export default {
 		return {
 			lightbox: false,
 			tips: {},
+			scrollTopBtnVisible: false,
 		}
 	},
 
@@ -63,6 +64,7 @@ export default {
 			while (this.$te(`usefulTipsLabels.section_${si}_title`)) {
 				const chapters = [];
 				const section = {
+					id: `section_${si}`,
 					title: this.$t(`usefulTipsLabels.section_${si}_title`),
 					chapters,
 				};
@@ -72,6 +74,7 @@ export default {
 				while (this.$te(`usefulTipsLabels.section_${si}_chapter_${ci}_title`)) {
 					const items = [];
 					const chapter = {
+						id: `chapter_${ci}`,
 						title: this.$t(`usefulTipsLabels.section_${si}_chapter_${ci}_title`),
 						items,
 					};
@@ -95,6 +98,7 @@ export default {
 						};
 
 						const item = {
+							id: `item_${ii}`,
 							text: this.$t(`usefulTipsLabels.section_${si}_chapter_${ci}_item_${ii}_text`, values),
 						};
 						items.push(item);
@@ -110,6 +114,21 @@ export default {
 
 			this.tips = { sections };
 		},
+
+		goToLink(id) {
+			const rootEl = this.$refs.lightbox?.$el;
+			const targetEl = rootEl?.querySelector(`#${id}`);
+			targetEl?.scrollIntoView({ behavior: "smooth", block: "start" });
+		},
+
+		scrollToTop() {
+			this.$refs.lightbox?.resetScroll({behavior: "smooth"});
+		},
+
+		handleScroll(event) {
+			const scrollTop = event.target.scrollTop;
+			this.scrollTopBtnVisible = (scrollTop > 200);
+		}
 	},
 
 	mounted() {
