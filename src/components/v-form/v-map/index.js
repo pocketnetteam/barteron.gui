@@ -391,8 +391,14 @@ export default {
 				};
 			};
 
+			handlers["geosearch/showlocation"] = (e) => {
+				this.$emit("geosearch_showlocation", e);
+				markerAtCenter(false, e);
+			};
+
 			this.mapObject
 				.on("click", handlers.click)
+				.on("geosearch/showlocation", handlers["geosearch/showlocation"])
 				.on("move", handlers.move)
 				.on("moveend", handlers.moveend);
 		},
