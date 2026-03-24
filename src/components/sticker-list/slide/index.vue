@@ -15,6 +15,7 @@
 				<template v-if="item.id === 'legalInfo'">
 					<LegalInfo
 						:i18nDocumentKeys="requiredLegalInfoItemKeys"
+						colorType="dark"
 					/>
 				</template>
 				<template v-else>

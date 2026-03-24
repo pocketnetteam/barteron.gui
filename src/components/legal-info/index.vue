@@ -1,5 +1,8 @@
 <template>
-	<div class="legal-info">
+	<div 
+		class="legal-info"
+		:class="`color-type-${colorType}`"
+	>
 		<ul class="legal-info-list">
 			<li 
 				v-for="item in list()"
