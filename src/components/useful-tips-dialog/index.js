@@ -61,7 +61,7 @@ export default {
 			let sections = [];
 
 			let si = 1; // section index
-			while (this.$te(`usefulTipsLabels.section_${si}_title`)) {
+			while (this.$te_all(`usefulTipsLabels.section_${si}_title`)) {
 				const chapters = [];
 				const section = {
 					id: `section_${si}`,
@@ -71,7 +71,7 @@ export default {
 				sections.push(section);
 
 				let ci = 1; // chapter index
-				while (this.$te(`usefulTipsLabels.section_${si}_chapter_${ci}_title`)) {
+				while (this.$te_all(`usefulTipsLabels.section_${si}_chapter_${ci}_title`)) {
 					const items = [];
 					const chapter = {
 						id: `section_${si}_chapter_${ci}`,
@@ -81,10 +81,10 @@ export default {
 					chapters.push(chapter);
 
 					let ii = 1; // item index
-					while (this.$te(`usefulTipsLabels.section_${si}_chapter_${ci}_item_${ii}_text`)) {
+					while (this.$te_all(`usefulTipsLabels.section_${si}_chapter_${ci}_item_${ii}_text`)) {
 						const 
 							values = {},
-							valuesExist = this.$te(`usefulTipsLabels.section_${si}_chapter_${ci}_item_${ii}_values`);
+							valuesExist = this.$te_all(`usefulTipsLabels.section_${si}_chapter_${ci}_item_${ii}_values`);
 
 						if (valuesExist) {
 							const serialized = this.$t(`usefulTipsLabels.section_${si}_chapter_${ci}_item_${ii}_values`);
@@ -93,7 +93,7 @@ export default {
 								let [key, value] = pair.split(":");
 								key = key.trim();
 								value = value.trim();
-								if (key && value && this.$te(value)) {
+								if (key && value && this.$te_all(value)) {
 									values[key] = this.$t(value);
 								};
 							});
@@ -129,7 +129,7 @@ export default {
 
 		handleScroll(event) {
 			const scrollTop = event.target.scrollTop;
-			this.scrollTopBtnVisible = (scrollTop > 300);
+			this.scrollTopBtnVisible = (scrollTop > 500);
 		}
 	},
 

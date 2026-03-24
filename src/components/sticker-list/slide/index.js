@@ -24,7 +24,7 @@ export default {
 		item() {
 			let result = {};
 
-			const iconOpacity = (this.isDarkTheme ? 0.075 : 0.05);
+			const iconOpacity = (this.isDarkTheme ? 0.2 : 0.15);
 
 			switch (this.itemId) {
 				case "notifications":

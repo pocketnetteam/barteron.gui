@@ -37,7 +37,7 @@ export default {
 			if (typeof this.title === 'string') {
 				return this.decodeString(this.title);
 			} else if (this.title) {
-				return this.$t(this.$te(title) ? title : `pageLabels.${ title }`);
+				return this.$t(this.$te_all(title) ? title : `pageLabels.${ title }`);
 			}
 
 			return this.title;
