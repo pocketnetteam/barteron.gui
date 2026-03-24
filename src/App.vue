@@ -82,7 +82,7 @@
 import Vue from "vue";
 import Loader from "@/components/loader/index.vue";
 import OfferShareDialog from "@/components/barter/item/share-dialog/index.vue";
-import VueI18n from "@/i18n/index.js";
+import i18n from "@/i18n/index.js";
 import SurveyBar from "@/components/survey-bar/index.vue";
 import Pinia from "@/stores/store.js";
 import { mapState, mapWritableState } from "pinia";
@@ -235,7 +235,7 @@ export default {
 					language = this.sdk.appinfo?.locale,
 					target = LocaleStore.list.filter(f => f.includes(language)).pop();
 				
-				result = target || VueI18n.fallbackLocale;
+				result = target || i18n.fallbackLocale;
 			}
 			
 			return result;
@@ -369,9 +369,7 @@ export default {
 			
 			instance.$mount();
 			this.lightboxContainer?.appendChild(instance.$el);
-			this.$nextTick(() => {
-				instance.show();
-			});
+			instance.show();
 		},
 
 		handleSearchParams(searchString = "", excludedItems = []) {

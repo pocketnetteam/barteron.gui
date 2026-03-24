@@ -49,11 +49,16 @@ export default {
 			this.$emit("onHide", this);
 		},
 
-		resetScroll() {
+		handleScroll(event) {
+			this.$emit("onScroll", event);
+		},
+
+		resetScroll(options = {}) {
 			this.$refs.main?.scrollTo({
 				top: 0,
 				left: 0,
 				behavior: "instant",
+				...options,
 			});
 		},
 

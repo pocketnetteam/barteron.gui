@@ -36,6 +36,7 @@
 			<main
 				v-if="$slots.default"
 				ref="main"
+				@scroll.passive="handleScroll"
 			>
 				<div class="v-lightbox-content">
 					<slot></slot>

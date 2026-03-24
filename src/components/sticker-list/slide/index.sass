@@ -1,0 +1,56 @@
+@import "@/css/vars.sass"
+
+$content-color: $popo
+$content-opacity: 0.65
+
+.sticker-list-slide
+	width: 100%
+	height: 100%
+	position: relative
+	border-radius: 16px
+
+	.back-icon
+		position: absolute
+		top: 0
+		right: 0
+		bottom: 0
+		left: 0
+		display: flex
+		justify-content: flex-end
+		align-items: flex-end
+		padding: 20px
+
+		i.fa
+			color: $content-color
+			font-size: 30px
+
+	.content-holder
+		padding: 24px 20px
+		color: $content-color
+		
+		.title
+			font-size: 18px
+			font-weight: bold
+			opacity: $content-opacity
+
+		.legal-info
+			opacity: $content-opacity
+
+		.details
+			margin-top: 20px
+			font-size: 14px
+
+			.description
+				opacity: $content-opacity
+				line-height: 1.5
+
+			.action
+				margin-top: 16px
+				font-size: 15px
+
+				.link
+					color: $content-color
+					
+					.action-title
+						opacity: $content-opacity
+						text-decoration: underline

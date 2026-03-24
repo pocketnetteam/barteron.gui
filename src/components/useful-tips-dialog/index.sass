@@ -1,0 +1,66 @@
+@import "@/css/vars.sass"
+
+$scroll-top-btn-height: 36px
+
+.useful-tips-dialog
+	.link-sections
+		margin-bottom: $r * 6
+
+	.link-section
+		font-size: 1.2em
+
+		&:not(:last-child)
+			margin-bottom: $r * 2
+
+	.link-chapters
+		margin-left: $r * 4
+
+	.link-chapter
+		font-size: 0.8em
+		margin-top: $r * 1
+
+	h1
+		color: $bulma
+
+	.section-holder
+		&:not(:first-child)
+			margin-top: $r * 4
+
+	.section,
+	.chapter,
+	.item
+		color: $bulma
+		text-align: justify
+		word-wrap: break-word
+	
+	.section
+		font-size: 1.4em
+		text-align: start
+
+	.chapter
+		font-size: 1.2em
+		text-align: start
+
+	.item
+		font-size: 1.0em
+
+		&:not(:last-child)
+			margin-bottom: $r
+
+	.bottom-space
+		width: 100%
+		height: $scroll-top-btn-height
+
+	.v-lightbox-footer
+		position: relative
+
+	.scroll-top-btn
+		position: absolute
+		top: -$scroll-top-btn-height - 16px
+		right: 24px
+		width: $scroll-top-btn-height
+		height: $scroll-top-btn-height
+
+		.v-button
+			width: 100%
+			height: 100%

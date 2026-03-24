@@ -108,6 +108,30 @@ Vue.prototype.shared = Vue.observable({
 		/* isEmpty: this.sdk.empty,
 		ifEmpty: this.sdk.ifEmpty, */
 
+		$te_all(key) {
+			const i18n = this.$i18n;
+			const current = i18n.locale;
+			const fallbacks = i18n.fallbackLocale;
+
+			if (i18n.te(key, current)) return true;
+
+			if (typeof fallbacks === 'string') {
+				return i18n.te(key, fallbacks);
+			} 
+			
+			if (Array.isArray(fallbacks)) {
+				return fallbacks.some(locale => i18n.te(key, locale));
+			}
+
+			if (typeof fallbacks === 'object' && fallbacks !== null) {
+				// for complex cases (by example, { 'ru': ['en'], 'default': ['en'] })
+				const specificFallbacks = fallbacks[current] || fallbacks['default'] || [];
+				return [].concat(specificFallbacks).some(locale => i18n.te(key, locale));
+			}
+
+			return false;
+		},
+
 		/**
 		 * 
 		 * @param {Function} fn

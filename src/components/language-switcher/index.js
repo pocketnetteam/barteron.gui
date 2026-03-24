@@ -3,8 +3,6 @@ import {
 	default as LocaleStore,
 	useLocaleStore
 } from "@/stores/locale.js";
-import VueI18n from "@/i18n/index.js";
-
 
 export default {
 	name: "LanguageSwitcher",
@@ -27,7 +25,7 @@ export default {
 		localesList() {
 			return (this.list || LocaleStore.list).map(l => {
 				const text = (l === LocaleStore.inheritLocale) ? 
-					VueI18n.t("localeLabels.inherit") 
+					this.$t("localeLabels.inherit")
 					: l.substring(0, 2).toUpperCase();
 
 				return {

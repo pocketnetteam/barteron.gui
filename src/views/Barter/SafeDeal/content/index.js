@@ -209,7 +209,7 @@ export default {
 			}
 
 			let step = 1;
-			while (this.$te(key(step))) {
+			while (this.$te_all(key(step))) {
 				result.push(this.$t(key(step)));
 				step++;
 			}
@@ -227,7 +227,7 @@ export default {
 					: `safeDealLabels.status_${ this.currentStatus }_role_${ this.userRole }_info_${ info }`;
 			}
 
-			while (this.$te(key(info))) {
+			while (this.$te_all(key(info))) {
 				result.push(this.$t(key(info)));
 				info++;
 			}
