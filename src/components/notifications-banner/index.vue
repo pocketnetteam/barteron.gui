@@ -364,7 +364,7 @@
 		</div>
 
 		<label class="v-label warning-level">
-			<i class="far fa-hand-paper"></i>
+			<i class="far fa-hand-paper fa-flip-horizontal"></i>
 			{{ $t("notificationSettingsLabels.notification_privacy_info") }}
 		</label>
 

@@ -31,8 +31,12 @@ export default {
 
 	methods: {
 		show() {
-			this.lightbox = true;
-			this.$emit("onShow", this);
+			this.$nextTick(() => {
+				requestAnimationFrame(() => {
+					this.lightbox = true;
+					this.$emit("onShow", this);
+				});
+			});
 		},
 
 		hide() {

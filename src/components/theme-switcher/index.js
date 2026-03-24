@@ -7,7 +7,6 @@ import {
 	default as LocaleStore,
 	useLocaleStore
 } from "@/stores/locale.js";
-import VueI18n from "@/i18n/index.js";
 
 export default {
 	name: "ThemeSwitcher",
@@ -72,7 +71,7 @@ export default {
 				...theme,
 				text: `
 				<i class='fa ${ theme.icon }'></i>
-				${ VueI18n.t(`themeLabels.${ theme.value }`) }
+				${ this.$t(`themeLabels.${ theme.value }`) }
 				`
 			}));
 		}

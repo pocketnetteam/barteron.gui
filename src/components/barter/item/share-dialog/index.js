@@ -39,8 +39,12 @@ export default {
 
 	methods: {
 		show() {
-			this.lightbox = true;
-			this.$emit("onShow", this);
+			this.$nextTick(() => {
+				requestAnimationFrame(() => {
+					this.lightbox = true;
+					this.$emit("onShow", this);
+				});
+			});
 		},
 
 		hide() {
@@ -53,7 +57,7 @@ export default {
 
 		remove() {
 			this.$destroy();
-			this.$el.parentNode.removeChild(this.$el);			
+			this.$el.parentNode?.removeChild(this.$el);			
 		},
 
 		openBoostInfoLink() {

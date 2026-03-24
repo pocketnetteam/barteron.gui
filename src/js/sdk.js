@@ -2,7 +2,7 @@ import Vue from "vue";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
 import CountriesTimezones from "countries-and-timezones";
 import CityTimezones from "city-timezones";
-import VueI18n, { currencies } from "@/i18n/index.js";
+import i18n, { currencies } from "@/i18n/index.js";
 import { GeoHashLimitator } from "@/js/geohashUtils.js";
 
 import Account from "@/js/models/account.js";
@@ -191,14 +191,15 @@ class SDK {
 				getKey = (code) => `dialogLabels.error#${ code }`,
 				defaultCode = 0,
 				parsedCode = `${ error?.toString()?.replace(/[^\d-]/g, "") || defaultCode }`,
-				resultCode = VueI18n.te(getKey(parsedCode)) ? parsedCode : defaultCode;
+				keyExists = (i18n.te(getKey(parsedCode)) || i18n.te(getKey(parsedCode), i18n.fallbackLocale)),
+				resultCode = keyExists ? parsedCode : defaultCode;
 			
 			key = getKey(resultCode);
 		}
 
 		const details = options?.details || error?.message || error?.toString();
 
-		return VueI18n.t(key, { error: details });
+		return i18n.t(key, { error: details });
 	}
 
 	/**

@@ -64,7 +64,7 @@ export default {
 		 * @returns String
 		 */
 		getName(name) {
-			return this.$te(`pageLabels.${ name }`) ? this.$t(`pageLabels.${ name }`) : this.$t(name);
+			return this.$te_all(`pageLabels.${ name }`) ? this.$t(`pageLabels.${ name }`) : this.$t(name);
 		},
 
 		itemClick() {

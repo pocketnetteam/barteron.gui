@@ -1,20 +1,31 @@
 @import "@/css/vars.sass"
 
 .legal-info
-	
 	.legal-info-list
 		+resetList()
 		color: $bulma
 
 		li
 			&:not(:last-child)
-				margin-bottom: $r * 2
+				margin-bottom: 12px
 
 			.link
 				color: $bulma
+				text-decoration: underline
 
 				&:hover
 					color: $bulma-hover
 
 				i
-					margin-right: $r
+					margin-right: 8px
+
+	&.color-type-dark
+		.legal-info-list
+			color: $popo
+
+			li
+				.link
+					color: $popo
+
+					&:hover
+						color: $popo

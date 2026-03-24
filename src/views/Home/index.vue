@@ -4,6 +4,10 @@
 			<CategoriesPreview />
 		</section>
 
+		<section>
+			<StickerList />
+		</section>
+
 		<section v-if="mayMatchExchanges?.length">
 			<h1>{{ $t('may_match_exchanges') }}</h1>
 			<BarterList
@@ -24,13 +28,6 @@
 				:carousel="true"
 				:hideInfo="true"
 				:compactView="true"
-			/>
-		</section>
-
-		<section v-if="legalInfoAvailable">
-			<h1>{{ $t('legalLabels.label') }}</h1>
-			<LegalInfo
-				:i18nDocumentKeys="requiredLegalInfoItemKeys"
 			/>
 		</section>
 

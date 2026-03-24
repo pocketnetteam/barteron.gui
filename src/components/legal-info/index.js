@@ -5,7 +5,12 @@ export default {
 		i18nDocumentKeys: {
 			type: Array,
 			default: () => []
-		}
+		},
+
+		colorType: {
+			type: String,
+			default: "regular"
+		},
 	},
 
 	methods: {

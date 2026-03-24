@@ -1,4 +1,4 @@
-import VueI18n from "@/i18n/index.js";
+import i18n from "@/i18n/index.js";
 
 class RequestIdError extends Error {
 	constructor(requestName, requestSource, id, currentId) {
@@ -14,7 +14,7 @@ class RequestIdError extends Error {
 
 class AppGeolocationPermissionError extends Error {
 	constructor(error) {
-		const message = VueI18n.t("dialogLabels.app_geolocation_permission_error");
+		const message = i18n.t("dialogLabels.app_geolocation_permission_error");
 		super(message);
 		this.error = error;
 	}
@@ -24,7 +24,7 @@ class GeolocationRequestError extends Error {
 	constructor(error) {
 		let message = error.message;
 		if (message === "location:notavailable") {
-			message =  VueI18n.t("dialogLabels.platform_geolocation_permission_error");
+			message =  i18n.t("dialogLabels.platform_geolocation_permission_error");
 		}
 		super(message);
 		this.error = error;
@@ -39,13 +39,13 @@ class UploadImagesError extends Error {
 			imagesFailedUploadNumbers = (/images:failedUploadNumbers:.+$/.test(message)); // example "images:failedUploadNumbers:2,3,5"
 
 		if (imagesMaxCountExceeded) {
-			message = VueI18n.t("dialogLabels.images_max_count_exceeded_error");
+			message = i18n.t("dialogLabels.images_max_count_exceeded_error");
 		} else if (imagesFailedUploadNumbers) {
 			const 
 				rawNumbers = message.split(":").pop(),
 				numbers = rawNumbers.split(",").join(", ");
 
-			message = VueI18n.t("dialogLabels.images_failed_upload_numbers_error", {numbers});
+			message = i18n.t("dialogLabels.images_failed_upload_numbers_error", {numbers});
 		}
 		super(message);
 		this.error = error;
@@ -54,7 +54,7 @@ class UploadImagesError extends Error {
 
 class PaymentError extends Error {
 	constructor(error) {
-		let message = VueI18n.t("dialogLabels.payment_error");
+		let message = i18n.t("dialogLabels.payment_error");
 		const 
 			canceled = (error === "cancel"),
 			forbidden = (error === "forbid"),
@@ -66,12 +66,12 @@ class PaymentError extends Error {
 			};
 
 		if (canceled) {
-			message = VueI18n.t("dialogLabels.transfer_canceled");
+			message = i18n.t("dialogLabels.transfer_canceled");
 		} else if (forbidden) {
-			message = VueI18n.t("dialogLabels.transfer_forbidden");
+			message = i18n.t("dialogLabels.transfer_forbidden");
 		} else if (error?.message && knownErrors[error?.message]) {
 			const key = knownErrors[error?.message];
-			message = VueI18n.t(`dialogLabels.${key}`);
+			message = i18n.t(`dialogLabels.${key}`);
 		} else {
 			message += (error?.message ? `: ${error.message}` : "");
 		};
