@@ -74,7 +74,7 @@ export default {
 				while (this.$te(`usefulTipsLabels.section_${si}_chapter_${ci}_title`)) {
 					const items = [];
 					const chapter = {
-						id: `chapter_${ci}`,
+						id: `section_${si}_chapter_${ci}`,
 						title: this.$t(`usefulTipsLabels.section_${si}_chapter_${ci}_title`),
 						items,
 					};
@@ -90,10 +90,12 @@ export default {
 							const serialized = this.$t(`usefulTipsLabels.section_${si}_chapter_${ci}_item_${ii}_values`);
 							const pairs = serialized.split(",");
 							pairs.forEach(pair => {
-								const [key, value] = pair.split(":");
+								let [key, value] = pair.split(":");
+								key = key.trim();
+								value = value.trim();
 								if (key && value && this.$te(value)) {
 									values[key] = this.$t(value);
-								}
+								};
 							});
 						};
 
@@ -118,16 +120,16 @@ export default {
 		goToLink(id) {
 			const rootEl = this.$refs.lightbox?.$el;
 			const targetEl = rootEl?.querySelector(`#${id}`);
-			targetEl?.scrollIntoView({ behavior: "smooth", block: "start" });
+			targetEl?.scrollIntoView({ behavior: "instant", block: "start" });
 		},
 
 		scrollToTop() {
-			this.$refs.lightbox?.resetScroll({behavior: "smooth"});
+			this.$refs.lightbox?.resetScroll({behavior: "instant"});
 		},
 
 		handleScroll(event) {
 			const scrollTop = event.target.scrollTop;
-			this.scrollTopBtnVisible = (scrollTop > 200);
+			this.scrollTopBtnVisible = (scrollTop > 300);
 		}
 	},
 

@@ -21,6 +21,24 @@
 				>
 					<u>{{ section.title }}</u>
 				</a>
+
+				<div class="link-chapters">
+					<div 
+						v-for="chapter in section.chapters"
+						:key="`link_${chapter.id}`"
+						class="link-chapter"
+					>
+						<a 
+							class="link" 
+							href="#" 
+							@click.prevent="goToLink(chapter.id)"
+						>
+							<u>{{ chapter.title }}</u>
+						</a>
+						
+					</div>
+				</div>
+
 			</div>
 		</div>
 		
@@ -38,7 +56,10 @@
 				v-for="chapter in section.chapters"
 				:key="chapter.id"
 			>
-				<h2 class="chapter">{{ chapter.title }}</h2>
+				<h2 
+					class="chapter"
+					:id="chapter.id"
+				>{{ chapter.title }}</h2>
 
 				<ul>
 					<li
@@ -66,7 +87,7 @@
 			</v-button>
 
 			<div class="row full-width right">
-				<div class="buttons-holder min-h-w">
+				<div class="buttons-holder">
 					<v-button 
 						@click="hide"
 					>
