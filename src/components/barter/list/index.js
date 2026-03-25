@@ -23,6 +23,10 @@ export default {
 			type: Array,
 			default: () => []
 		},
+		itemType: {
+			type: String,
+			default: "regular"
+		},
 		carousel: Boolean,
 		vType: {
 			type: String,

@@ -55,6 +55,10 @@ export default {
 			type: Object,
 			default: () => ({})
 		},
+		itemType: {
+			type: String,
+			default: "regular"
+		},
 		vType: {
 			/* row, tile or item */
 			type: String,
