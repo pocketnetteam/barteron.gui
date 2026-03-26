@@ -304,8 +304,8 @@
 		"group_exchange": "Групповой обмен",
 		"start_purchase": "Начать покупку",
 		"go_to_selection": "Перейти к выбору",
-		"ask_seller": "Задать вопрос продавцу",
-		"ask_pickup_point_owner": "Задать вопрос владельцу ПВЗ",
+		"ask_seller": "Чат с продавцом",
+		"ask_pickup_point_owner": "Чат с владельцем ПВЗ",
 		"send_message": "Отправить сообщение",
 		"setup_notifications": "Настроить уведомления",
 		"connect_telegram_bot": "Подключить телеграм-бот",
@@ -559,6 +559,7 @@
 		"reviewIsPublishing": "Отзыв публикуется",
 		"voteNotPublished": "Оценка не опубликована",
 		"reviewNotPublished": "Отзыв не опубликован",
+		"comment_prompt": "Добавить отзыв",
 		"placeholder": "Оставьте свой отзыв о покупке",
 		"empty": "Здесь ещё нет отзывов"
 	},

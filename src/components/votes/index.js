@@ -41,6 +41,7 @@ export default {
 			isCommentLoading: false,
 			score: 0,
 			isChatLoading: false,
+			commentFieldShown: false,
 		}
 	},
 
@@ -143,13 +144,20 @@ export default {
 					address: this.item.address,
 					value: score
 				}).then((action) => {
+					if (!(this.isComponentAlive)) return;
 					const element = this.createRelayOfferScore(action);
 					this.offerScores.push(element);
+					this.commentFieldShown = true;
+					setTimeout(() => {
+						this.isComponentAlive && this.scrollToElement("#input-comment");
+					}, 300);
 				}).catch(e => {
+					if (!(this.isComponentAlive)) return;
 					this.score = 0;
 					this.$refs.offerScore?.reset();
 					this.showError(e);
 				}).finally(() => {
+					if (!(this.isComponentAlive)) return;
 					this.isOfferScoreLoading = false;
 				});
 			}
@@ -175,13 +183,16 @@ export default {
 						info: this.score?.toFixed() || ""
 					}
 				}).then((action) => {
+					if (!(this.isComponentAlive)) return;
 					const element = this.createRelayComment(action);
 					feed.content = "";
 					this.comments.push(element);
 					this.score = 0;
 				}).catch(e => { 
+					if (!(this.isComponentAlive)) return;
 					this.showError(e);
 				}).finally(() => {
+					if (!(this.isComponentAlive)) return;
 					this.isCommentLoading = false;
 				});
 			}
@@ -265,6 +276,10 @@ export default {
 
 		commentable() {
 			return this.offerExists && this.form;
+		},
+
+		showCommentField() {
+			this.commentFieldShown = true;
 		},
 
 		contactSeller() {

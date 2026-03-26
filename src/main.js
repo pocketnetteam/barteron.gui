@@ -587,6 +587,20 @@ Vue.prototype.shared = Vue.observable({
 
 Vue.mixin(Vue.prototype.shared);
 
+const isComponentAliveMixin = {
+	data() {
+		return {
+			isComponentAlive: true,
+		};
+	},
+
+	beforeDestroy() {
+		this.isComponentAlive = false;
+	},
+};
+
+Vue.mixin(isComponentAliveMixin);
+
 /**
  * StartUp
  */

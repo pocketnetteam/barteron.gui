@@ -51,19 +51,21 @@
 				ref="form"
 				v-if="commentable()"
 			>
-				<v-button 
-					v-if="!(isMyOffer)"
-					class="contact-seller"
-					vSize="sm"
-					:disabled="isChatLoading"
-					@click="contactSeller"
+				<div 
+					v-if="!(commentFieldShown)"
+					class="row comment-prompt"
 				>
-					<i class="fa fa-question-circle"></i>
-					<span>{{ item.isPickupPoint ? $t('buttonLabels.ask_pickup_point_owner') : $t('buttonLabels.ask_seller') }}</span>
-				</v-button>
+					<a 
+						class="link" 
+						href="#" 
+						@click.prevent="showCommentField"
+					><i class="fa fa-pen"></i>{{ $t("voteLabels.comment_prompt") }}</a>
+				</div>
 
 				<v-textarea
+					v-if="commentFieldShown"
 					ref="vote"
+					id="input-comment"
 					class="field"
 					name="vote"
 					length="9000"
@@ -97,6 +99,17 @@
 						</div>
 					</template>
 				</v-textarea>
+
+				<v-button 
+					v-if="!(isMyOffer)"
+					class="contact-seller"
+					vSize="sm"
+					:disabled="isChatLoading"
+					@click="contactSeller"
+				>
+					<i class="fa fa-comment-dots"></i>
+					<span>{{ item.isPickupPoint ? $t('buttonLabels.ask_pickup_point_owner') : $t('buttonLabels.ask_seller') }}</span>
+				</v-button>
 			</v-form>
 		</main>
 	</section>
