@@ -36,7 +36,7 @@ function showMediaItems(mediaItems, startIndex) {
 		return result;
 	});
 
-	Promise.allSettled(promises).then(results => {
+	return Promise.allSettled(promises).then(results => {
 		lightboxOptions.dataSource = results
 			.map(item => item.value)
 			.filter(data => (data.mediaItem.type === "image" && data.image || data.mediaItem.type !== "image"))
@@ -146,8 +146,8 @@ function showMediaItems(mediaItems, startIndex) {
 
 		lightbox.init();
 		lightbox.loadAndOpen(startIndex);
-	}).catch(e => {
-		console.error(e);
+
+		return lightbox;
 	});   
 }
 

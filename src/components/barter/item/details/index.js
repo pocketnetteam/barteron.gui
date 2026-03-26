@@ -40,7 +40,9 @@ export default {
 			videoItem: null,
 			hover: 0,
 			active: 0,
-			addr: {}
+			addr: {},
+
+			pswpLightbox: null,
 		}
 	},
 
@@ -206,7 +208,20 @@ export default {
 		 * @param {Number} index
 		 */
 		mediaItemClick(index) {
-			showMediaItems(this.mediaItems, index);
+			showMediaItems(this.mediaItems, index).then(lightbox => {
+				this.pswpLightbox = lightbox;
+				this.pswpLightbox.on("destroy", () => {
+					this.pswpLightbox = null;
+				});
+			}).catch(e => {
+				console.error(e);
+			});
 		},
-	}
+	},
+
+	beforeDestroy() {
+		this.pswpLightbox?.pswp?.close();
+		this.pswpLightbox?.destroy?.();
+		this.pswpLightbox = null;
+	},
 }
