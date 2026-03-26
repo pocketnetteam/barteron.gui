@@ -25,6 +25,7 @@
 			<BarterList
 				keyPrefix="viewed"
 				:items="viewedList"
+				itemType="viewed"
 				:carousel="true"
 				:hideInfo="true"
 				:compactView="true"

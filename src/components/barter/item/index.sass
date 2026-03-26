@@ -1,5 +1,7 @@
 @import "@/css/vars.sass"
 
+$viewed-item-opacity: 0.75
+
 .pswp__top-bar
 	left: 55px
 	right: 55px
@@ -62,6 +64,9 @@ div[class^="barter-item-"]
 			height: 100%
 			width: 100%
 
+			&.item-type-viewed
+				opacity: $viewed-item-opacity
+
 		.img-error
 			background: none !important
 			color: $dodoria
@@ -117,6 +122,9 @@ div[class^="barter-item-"]
 			position: absolute
 			right: 8px
 			bottom: 8px
+
+			&.item-type-viewed
+				opacity: $viewed-item-opacity
 
 			li
 				background: $background-gray-ghost

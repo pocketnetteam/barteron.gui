@@ -30,6 +30,7 @@
 								<!-- Image -->
 								<template #image>
 									<img
+										:class="`item-type-${itemType}`"
 										:src="imageUrl(images?.[0])"
 										:alt="item.caption"
 									>
@@ -50,6 +51,7 @@
 							<!-- Next images -->
 							<div class="image" v-else>
 								<img
+									:class="`item-type-${itemType}`"
 									:src="imageUrl(image)"
 									:alt="`${ item.caption }#${ index+1 }`"
 								>
@@ -58,6 +60,7 @@
 					</ul>
 					<ul
 						class="bullets"
+						:class="`item-type-${itemType}`"
 						v-if="images?.length > 1"
 					>
 						<li

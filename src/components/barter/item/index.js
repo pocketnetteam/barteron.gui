@@ -55,6 +55,10 @@ export default {
 			type: Object,
 			default: () => ({})
 		},
+		itemType: {
+			type: String,
+			default: "regular"
+		},
 		vType: {
 			/* row, tile or item */
 			type: String,
@@ -92,6 +96,8 @@ export default {
 			pickupPointsLoadingError: null,
 
 			selectedOfferId: null,
+
+			pswpLightbox: null,
 		}
 	},
 
@@ -555,7 +561,14 @@ export default {
 		 * @param {Number} index
 		 */
 		mediaItemClick(index) {
-			showMediaItems(this.mediaItems, index);
+			showMediaItems(this.mediaItems, index).then(lightbox => {
+				this.pswpLightbox = lightbox;
+				this.pswpLightbox.on("destroy", () => {
+					this.pswpLightbox = null;
+				});
+			}).catch(e => {
+				console.error(e);
+			});
 		},
 
 		/**
@@ -987,5 +1000,13 @@ export default {
 		selectedOfferId(newValue) {
 			this.purchaseState = (newValue ? "pickupPointSelected" : "waitForPickupPoint");
 		},
+	},
+
+	beforeDestroy() {
+		if (this.vType === "page") {
+			this.pswpLightbox?.pswp?.close();
+			this.pswpLightbox?.destroy?.();
+			this.pswpLightbox = null;
+		};
 	},
 }

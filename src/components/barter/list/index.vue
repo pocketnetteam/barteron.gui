@@ -22,6 +22,7 @@
 						v-else
 						:key="`${keyPrefix}_${item?.hash}`"
 						:item="item"
+						:itemType="itemType"
 						:vType="vType"
 						:hideInfo="hideInfo"
 						:compactView="compactView"
@@ -68,6 +69,7 @@
 						<BarterItem
 							:key="`${keyPrefix}_${item?.hash}`"
 							:item="item"
+							:itemType="itemType"
 							:vType="vType"
 							:hideInfo="hideInfo"
 							:compactView="compactView"
