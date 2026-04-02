@@ -128,6 +128,14 @@
 		"section_3_chapter_3_item_2_text": "У филтеру по цени можете изабрати један од готових опсега или унети сопствене вредности у поља \"{price_from}\" и \"{price_to}\".",
 		"section_3_chapter_3_item_2_values": "price_from:priceLabels.from, price_to:priceLabels.to",
 
+		"section_3_chapter_4_title": "Како проценити број огласа у задатом региону?",
+		"section_3_chapter_4_item_1_text": "То се може урадити помоћу претраге огласа на мапи. Притисните дугме \"{search_area}\" у горњој траци апликације да бисте отворили мапу.",
+		"section_3_chapter_4_item_1_values": "search_area:buttonLabels.search_area",
+		"section_3_chapter_4_item_2_text": "Пронађите на овој мапи регион који вас интересује (ручно или помоћу поља за унос адресе) и притисните дугме \"{search_in_visible_area}\".",
+		"section_3_chapter_4_item_2_values": "search_in_visible_area:buttonLabels.search_in_visible_area",
+		"section_3_chapter_4_item_3_text": "Огласи се учитавају у деловима. Ако је њихов број велики, појавиће се дугме \"{show_more}\".",
+		"section_3_chapter_4_item_3_values": "show_more:buttonLabels.show_more",
+
 		"section_4_title": "Како извршити бартер?",
 
 		"section_4_chapter_1_title": "Опције бартера",
@@ -144,7 +152,7 @@
 		
 		"section_4_chapter_3_title": "Двострани бартер (ручни избор)",
 		"section_4_chapter_3_item_1_text": "Такође можете ручно предложити размену ако сте пронашли одговарајући оглас другог учесника платформе.",
-		"section_4_chapter_3_item_2_text": "Отворите тај оглас и обратите пажњу на списак размене (одељак \"{exchange}:\"), он треба да садржи опцију коју можете понудити за размену.",
+		"section_4_chapter_3_item_2_text": "Отворите тај оглас и обратите пажњу на списак размене (одељак \"{exchange}:\"). Пожељно је (али није обавезно) да садржи опцију који можете понудити за размену.",
 		"section_4_chapter_3_item_2_values": "exchange:barterLabels.exchange",
 		"section_4_chapter_3_item_3_text": "Притисните у огласу дугме \"{propose_exchange}\".",
 		"section_4_chapter_3_item_3_values": "propose_exchange:buttonLabels.propose_exchange",

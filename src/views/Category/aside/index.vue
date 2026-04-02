@@ -159,7 +159,7 @@
 			/>
 		</v-details> -->
 
-		<div class="v-details" id="action-buttons">
+		<div class="v-details aside-sticky-action-buttons" id="action-buttons">
 			<div class="row">
 				<div class="buttons-holder full-width">
 					<v-button

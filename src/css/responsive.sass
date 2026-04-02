@@ -1,7 +1,7 @@
 /* General */
 #app
 	padding-right: 65px
-	min-width: 340px
+	min-width: 320px
 
 	#header
 		padding-top: var(--app-margin-top)
@@ -71,6 +71,12 @@
 /* Large screen size */
 @media screen and (max-width: $large)
 	#app
+		#header
+			margin: 0 auto $r * 2
+
+		#page-header
+			margin: 0 0 $r * 2
+
 		#container
 			#content.shrink-right
 				margin: 0
@@ -90,6 +96,17 @@
 					.first-row
 						padding-left: calc(var(--bastyon-menu-height) + 2px)
 
+		.profile
+			div[class^="barter-item-"].barter-item-row
+				flex-direction: column
+
+		.barter-list-tile
+			&.home-page
+				.barter-list-holder
+					.barter-track
+						grid-template-columns: repeat(auto-fill, minmax($home-page-barter-item-width, 1fr))
+						gap: 20px
+	
 	.pswp
 		.pswp__video-container
 			padding: 60px 60px
@@ -129,6 +146,9 @@
 			z-index: 1005
 			bottom: $r
 
+			.aside-sticky-action-buttons
+				padding-bottom: 0
+
 			&.showing-lightbox
 				z-index: 1015
 
@@ -158,6 +178,10 @@
 			.title
 				display: block
 
+		.profile
+			div[class^="barter-item-"].barter-item-row
+				flex-direction: row
+
 		.profile,
 		.safe-deal-content
 			.no-aside
@@ -177,6 +201,10 @@
 		#container
 			&:has(#aside)
 				padding-left: $r * 0
+
+			#content
+				&.category-content
+					margin-left: 0
 
 			/* margin-bottom will be removed after bug fix https://github.com/pocketnetteam/barteron.gui/issues/493 */
 			.votes
@@ -209,6 +237,14 @@
 				nav
 					margin: $r * 2 0 0
 
+		.vs-carousel
+			.vs-carousel__arrows
+				display: none
+
+		.categories-preview-carousel
+			.vs-carousel__wrapper
+				scroll-snap-type: none
+
 	.pswp
 		.pswp__video-container
 			padding: 60px 0
@@ -216,7 +252,10 @@
 /* Small screen size */
 @media screen and (max-width: $small)
 	#app
+
 		#header
+			margin: 0 auto $r * 1
+
 			.bar
 				.inner-compact
 					display: none
@@ -231,6 +270,9 @@
 					#location-switcher-button
 						>.v-button
 							padding: .25em 1em
+
+		#page-header
+			margin: 0 0 $r * 1
 
 		.barter-list-settings
 			.filter
@@ -263,6 +305,10 @@
 						span.title
 							display: none
 
+		.profile
+			div[class^="barter-item-"].barter-item-row
+				flex-direction: column
+
 		#footer
 			.footer-holder
 				.feedback
@@ -291,7 +337,8 @@
 		#main #container #content
 			.barter-list-holder
 				.barter-track
-					justify-content: space-evenly
+					grid-template-columns: repeat(2, minmax(148px, 1fr))
+					grid-gap: 20px 8px
 
 			.tabset
 				ul
@@ -332,26 +379,6 @@
 						i.fa
 							margin-right: $r / 2
 
-		.vs-carousel
-			.vs-carousel__slide
-				&:not(.fixed-layout)
-					flex: 0 0 calc( 50% - 7px ) // Gap - 2px
-					width: calc( 50% - 7px ) // Gap - 2px
-
-			.vs-carousel__arrows
-				display: none
-
-		.compact-view
-			.vs-carousel
-				.vs-carousel__slide
-					&:not(.fixed-layout)
-						flex: 0 0 calc( 33% - 7px ) // Gap - 2px
-						width: calc( 33% - 7px ) // Gap - 2px
-
-		.categories-preview-carousel
-			.vs-carousel__wrapper
-				scroll-snap-type: none
-
 		div[class^="barter-item-"].barter-item-row
 			flex-direction: column
 
@@ -373,25 +400,12 @@
 							.v-button i
 								display: none
 
-/* Tablet */
-@media screen and (min-width: $phones) and (max-width: $tablet)
-	#app
-		.vs-carousel
-			.vs-carousel__slide
-				&:not(.fixed-layout)
-					flex: 0 0 calc( 33.33% - 7px ) // Gap - 2px
-					width: calc( 33.33% - 7px ) // Gap - 2px
+		.tabs
+			.inner-tabs
+				.tabcontent-holder
+					padding: $r 0 0
 
-			.vs-carousel__arrows
-				display: none
-
-		.compact-view
-			.vs-carousel
-				.vs-carousel__slide
-					&:not(.fixed-layout)
-						flex: 0 0 calc( 25% - 7px ) // Gap - 2px
-						width: calc( 25% - 7px ) // Gap - 2px
-
-		.categories-preview-carousel
-			.vs-carousel__wrapper
-				scroll-snap-type: none
+		.tabs
+			&.pills 
+				> .tabcontent
+					border: none

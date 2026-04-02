@@ -128,6 +128,14 @@
 		"section_3_chapter_3_item_2_text": "In the price filter, you can choose one of the predefined ranges or specify your own values in the \"{price_from}\" and \"{price_to}\" input fields.",
 		"section_3_chapter_3_item_2_values": "price_from:priceLabels.from, price_to:priceLabels.to",
 
+		"section_3_chapter_4_title": "How to estimate the number of offers in a selected region?",
+		"section_3_chapter_4_item_1_text": "This can be done using the map-based offer search. Click the \"{search_area}\" button in the top panel of the application to open the map.",
+		"section_3_chapter_4_item_1_values": "search_area:buttonLabels.search_area",
+		"section_3_chapter_4_item_2_text": "Find the region you are interested in on this map (manually or using the address input field) and click the \"{search_in_visible_area}\" button.",
+		"section_3_chapter_4_item_2_values": "search_in_visible_area:buttonLabels.search_in_visible_area",
+		"section_3_chapter_4_item_3_text": "Offers are loaded in batches. If there are many of them, the \"{show_more}\" button will appear.",
+		"section_3_chapter_4_item_3_values": "show_more:buttonLabels.show_more",
+
 		"section_4_title": "How to perform a barter?",
 
 		"section_4_chapter_1_title": "Barter options",
@@ -144,7 +152,7 @@
 		
 		"section_4_chapter_3_title": "Two-way barter (manual matching)",
 		"section_4_chapter_3_item_1_text": "You can also manually propose an exchange if you find a suitable offer from another platform participant.",
-		"section_4_chapter_3_item_2_text": "Open that offer and pay attention to the exchange list (\"{exchange}\" section); it should contain an option that you can offer for exchange.",
+		"section_4_chapter_3_item_2_text": "Open that offer and pay attention to the exchange list (\"{exchange}\" section). It's desirable (but not required) that it contain an option you can offer for exchange.",
 		"section_4_chapter_3_item_2_values": "exchange:barterLabels.exchange",
 		"section_4_chapter_3_item_3_text": "Click the \"{propose_exchange}\" button in the offer.",
 		"section_4_chapter_3_item_3_values": "propose_exchange:buttonLabels.propose_exchange",

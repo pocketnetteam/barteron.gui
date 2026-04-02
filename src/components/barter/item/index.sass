@@ -47,7 +47,7 @@ div[class^="barter-item-"]
 		margin: 0 0 .9em
 		position: relative
 		overflow: hidden
-		height: 180px
+		aspect-ratio: 1
 		width: 100%
 		+unselectable()
 
@@ -154,7 +154,6 @@ div[class^="barter-item-"]
 
 		picture
 			border-radius: 8px
-			height: 110px
 	
 	&.hide-info
 		picture
@@ -181,8 +180,8 @@ div[class^="barter-item-"]
 	.pricing
 		color: $popo
 		display: flex
-		flex-wrap: wrap
-		align-items: center
+		flex-direction: column
+		align-items: flex-start
 		justify-content: space-between
 
 		.price
@@ -214,8 +213,7 @@ div[class^="barter-item-"]
 				letter-spacing: -1px
 
 		.currency-holder
-			display: flex
-			flex-basis: 100%
+			display: inline-flex
 
 			.currency-switcher
 				flex-basis: auto
@@ -254,11 +252,12 @@ div[class^="barter-item-"]
 			pointer-events: none
 
 		a
-			display: block
-			overflow: hidden
-			text-overflow: ellipsis
-			white-space: nowrap
 			width: 100%
+			display: -webkit-box
+			-webkit-line-clamp: 2
+			-webkit-box-orient: vertical
+			overflow: hidden
+			line-height: 1.4
 
 	.to,
 	.info
@@ -352,8 +351,8 @@ div[class^="barter-item-"]
 		picture
 			margin: 0
 			flex-shrink: 0
-			height: 137px
-			width: 203px
+			aspect-ratio: 1
+			width: 180px
 
 			.image
 				height: 100%
@@ -419,6 +418,7 @@ div[class^="barter-item-"]
 			flex-shrink: 0
 			margin: 0 0 $r * 4.6
 			height: auto
+			aspect-ratio: initial
 			width: 100%
 
 			.fade

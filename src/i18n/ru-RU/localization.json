@@ -128,6 +128,14 @@
 		"section_3_chapter_3_item_2_text": "В фильтре по цене можно выбрать один из готовых диапазонов, либо указать свои значения в полях ввода \"{price_from}\" и \"{price_to}\".",
 		"section_3_chapter_3_item_2_values": "price_from:priceLabels.from, price_to:priceLabels.to",
 
+		"section_3_chapter_4_title": "Как оценить количество объявлений в заданном регионе?",
+		"section_3_chapter_4_item_1_text": "Это можно сделать с помощью поиска объявлений на карте. Нажмите кнопку \"{search_area}\" в верхней панели приложения, чтобы открыть карту.",
+		"section_3_chapter_4_item_1_values": "search_area:buttonLabels.search_area",
+		"section_3_chapter_4_item_2_text": "Найдите на этой карте интересующий Вас регион (вручную или с помощью поля ввода адреса) и нажмите кнопку \"{search_in_visible_area}\".",
+		"section_3_chapter_4_item_2_values": "search_in_visible_area:buttonLabels.search_in_visible_area",
+		"section_3_chapter_4_item_3_text": "Объявления загружаются порциями. Если их количество велико, появится кнопка \"{show_more}\".",
+		"section_3_chapter_4_item_3_values": "show_more:buttonLabels.show_more",
+
 		"section_4_title": "Как выполнить бартер?",
 
 		"section_4_chapter_1_title": "Варианты бартера",
@@ -144,7 +152,7 @@
 		
 		"section_4_chapter_3_title": "Двусторонний бартер (подбор вручную)",
 		"section_4_chapter_3_item_1_text": "Вы также можете вручную предложить обмен, если нашли подходящее объявление другого участника платформы.",
-		"section_4_chapter_3_item_2_text": "Откройте это объявление и обратите внимание на список обмена (раздел \"{exchange}:\"), он должен содержать вариант, который Вы можете предложить к обмену.",
+		"section_4_chapter_3_item_2_text": "Откройте это объявление и обратите внимание на список обмена (раздел \"{exchange}:\"). Желательно (но необязательно), чтобы он содержал вариант, который Вы можете предложить к обмену.",
 		"section_4_chapter_3_item_2_values": "exchange:barterLabels.exchange",
 		"section_4_chapter_3_item_3_text": "Нажмите в объявлении кнопку \"{propose_exchange}\".",
 		"section_4_chapter_3_item_3_values": "propose_exchange:buttonLabels.propose_exchange",

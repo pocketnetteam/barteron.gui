@@ -4,8 +4,7 @@ import Categories from "@/js/categories.js";
 import AppErrors from "@/js/appErrors.js";
 
 const 
-    defaultPageSize = 18,
-    homePageSize = 12,
+    defaultPageSize = 12,
     storageId = "offer",
     categories = new Categories(),
     storage = Pinia.defineStore(storageId, {
@@ -96,8 +95,7 @@ const
 
                 const 
                     mixin = Vue.prototype.shared,
-                    isHomeRoute = (data?.route?.name === "home"),
-                    disableFilterAndSearch = isHomeRoute;
+                    disableFilterAndSearch = this._isHomeRoute(data?.route);
 
                 if (disableFilterAndSearch) {
                     const request = {
@@ -131,6 +129,20 @@ const
                         Vue.prototype.sdk.getBrtOfferDeals(request)
                         : Vue.prototype.sdk.getBrtOffersFeed(request);
                 }
+            },
+
+            _isHomeRoute(route) {
+                return route?.name === "home";
+            },
+
+            _getPageSize(route) {
+                let result = defaultPageSize;
+                const isHomeRoute = this._isHomeRoute(route);
+                if (isHomeRoute) {
+                    const minWidthForFiveItems = 1182;
+                    result = window.innerWidth >= minWidthForFiveItems ? 15 : 12;
+                };
+                return result;
             },
 
             _createRequestCheckingData() {
@@ -196,7 +208,7 @@ const
 
                 const 
                     isFirstPage = this.pageStart === 0,
-                    isHomeRoute = data?.route?.name === "home",
+                    isHomeRoute = this._isHomeRoute(data?.route),
                     isHeightDescOrder = (this.filters.orderBy === "height" 
                         && this.filters.orderDesc);
 
@@ -213,7 +225,7 @@ const
                 
                 this.topHeight = null;
                 this.pageStart = 0;
-                this.pageSize = (route?.name === "home" ? homePageSize : defaultPageSize);
+                this.pageSize = this._getPageSize(route);
                 this.scrollOffset = null;
 
                 const data = {
