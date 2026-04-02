@@ -82,14 +82,31 @@ div[class*="barter-item"]
 		justify-content: space-between
 
 		.v-button-holder
-			width: 50%
+			height: 40px
 
 			.v-button
 				width: 100%
 
+				.text
+					white-space: pre-wrap
+					text-align: center
+
+	&.barter-item-tile
+		.offer
+			flex-wrap: wrap
+
+			.v-button-holder
+				flex: 1
+
 	&.barter-item-row
 		.offer
+			justify-content: flex-start
 			align-items: flex-end
 
 			.v-button-holder
 				width: 100%
+				height: 40px
+
+				.text
+					white-space: pre-wrap
+					text-align: center

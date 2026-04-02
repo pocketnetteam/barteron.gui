@@ -1,19 +1,23 @@
 @import "@/css/vars.sass"
 
+$item-width: 140px
+
 .select-offer-dialog
 	ul
 		+resetList()
-		display: flex
-		justify-content: center
-		flex-wrap: wrap
+		display: grid
+		grid-template-columns: repeat(auto-fill, minmax($item-width, 1fr))
 		gap: 12px
+		padding: 0
+		margin: 0
+		justify-content: center
 
 		li
 			border: 1px solid transparent
 			border-radius: 12px
 			position: relative
-			width: 140px
-			height: 140px
+			width: 100%
+			aspect-ratio: 1
 
 			i.fa
 				display: none
