@@ -86,18 +86,30 @@
 
 		<!-- View: Tile -->
 		<template v-if="vType === 'tile' && !(hideInfo)">
-			<div class="row pricing">
-				<span class="price">
-					<template v-if="item.price">
-						<span class="currency icon-pkoin"></span>
-						{{ pkoinPriceText }}
-						<span>{{ $t('profileLabels.coins') }}</span>
-					</template>
-					<template v-else>
-						<span class="currency fa fa-gift"></span>
-						{{ $t('barterLabels.free') }}
-					</template>
-				</span>
+			<div class="row wrap sided gap-sm">
+				<div class="pricing">
+					<span class="price">
+						<template v-if="item.price">
+							<span class="currency icon-pkoin"></span>
+							{{ pkoinPriceText }}
+							<span>{{ $t('profileLabels.coins') }}</span>
+						</template>
+						<template v-else>
+							<span class="currency fa fa-gift"></span>
+							{{ $t('barterLabels.free') }}
+						</template>
+					</span>
+
+					<div class="currency-holder">
+						<CurrencySwitcher
+							:pricePrefix="pricePrefix"
+							:switcher="false"
+							:amount="item?.price"
+							:currencyPrice="item?.currencyPrice"
+							:hideButton="true"
+						/>
+					</div>
+				</div>
 
 				<span class="favorite">
 					<slot name="favorite" v-if="$slots.favorite"></slot>
@@ -111,16 +123,6 @@
 						v-else
 					></i>
 				</span>
-
-				<div class="currency-holder">
-					<CurrencySwitcher
-						:pricePrefix="pricePrefix"
-						:switcher="false"
-						:amount="item?.price"
-						:currencyPrice="item?.currencyPrice"
-						:hideButton="true"
-					/>
-				</div>
 			</div>
 
 			<div

@@ -1,5 +1,8 @@
 <template>
-	<v-content>
+	<v-content 
+		class="category-content"
+		:class="isHomeRoute ? 'home-page' : ''"
+	>
 
 		<!-- Top panel -->
 		<div 

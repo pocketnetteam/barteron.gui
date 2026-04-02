@@ -1,40 +1,34 @@
 @import "@/css/vars.sass"
 
-$item-width-max: 294px
-$item-width-max-home-page: 284px
-$compact-item-width-max: 180px
-
 .barter-carousel-holder
 	.vs-carousel
 		.vs-carousel__wrapper
 			border-radius: 11px 11px 0 0
-			gap: 9px
-	
+			gap: 20px
+
 		.vs-carousel__slide
-			flex: 0 0 calc( 25% - 7px ) // Gap - 2px
-			width: calc( 25% - 7px ) // Gap - 2px
+			flex: 0 0 $barter-item-width
 
 			& > *
 				box-sizing: content-box
 				display: block
 				margin: 0 auto
-				max-width: $item-width-max
+				max-width: $barter-item-width
 
 	&.compact-view
 		.vs-carousel
 			.vs-carousel__wrapper
 				border-radius: 8px
-				gap: 9px
-		
+				gap: 12px
+
 			.vs-carousel__slide
-				flex: 0 0 calc( 16% - 7px ) // Gap - 2px
-				width: calc( 16% - 7px ) // Gap - 2px
+				flex: 0 0 $compact-barter-item-width
 
 				& > *
 					box-sizing: content-box
 					display: block
 					margin: 0 auto
-					max-width: $compact-item-width-max
+					max-width: $compact-barter-item-width
 
 	.vs-carousel__arrows
 		+fontAwesome("")
@@ -87,19 +81,23 @@ $compact-item-width-max: 180px
 			margin: 0 0 0 3px
 
 .barter-list-holder
+	margin-bottom: $r * 2
+
 	.barter-track
 		+resetList()
 		display: grid
-		grid-template-columns: repeat(auto-fit, $item-width-max)
+		grid-template-columns: repeat(auto-fill, minmax($barter-item-width, 1fr))
 		grid-template-rows: 1fr
 		justify-content: flex-start
-		grid-gap: 24px
+		gap: 20px
 
 .barter-list-tile
 	&.home-page
 		.barter-list-holder
 			.barter-track
-				grid-template-columns: repeat(auto-fit, $item-width-max-home-page)
+				grid-template-columns: repeat(auto-fill, minmax($home-page-barter-item-width, 1fr))
+				gap: 60px 24px
+				gap: clamp(24px, 4vw, 60px) 24px
 
 .barter-list-row
 	width: 100%
