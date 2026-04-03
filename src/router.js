@@ -98,12 +98,14 @@ const router = new VueRouter({
 			);
 		
 		if (isReturnToOfferListFromItem && scrollOffset) {
-			document.body.scrollTo({
-				top: scrollOffset.y,
-				left: scrollOffset.x,
-				behavior: "instant",
+			Vue.nextTick(() => {
+				document.body.scrollTo({
+					top: scrollOffset.y,
+					left: scrollOffset.x,
+					behavior: "instant",
+				});
+				offerStore.scrollOffset = null;
 			});
-			offerStore.scrollOffset = null;
 			return;
 		}
 

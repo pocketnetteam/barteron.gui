@@ -6,7 +6,7 @@ import { useLocaleStore } from "@/stores/locale.js";
 import { EventBus } from '@/js/eventBus.js';
 
 export default {
-	name: "Content",
+	name: "CategoryContent",
 
 	components: {
 		Loader,
@@ -277,18 +277,6 @@ export default {
 
 	watch: {
 		/**
-		 * Watch for route change to preload items
-		 * 
-		 * @param {Object} to
-		 * @param {Object} from
-		 */
-		async $route(to) {
-			if (to?.name === "category") {
-				await this.loadFirstPage(to);
-			}
-		},
-
-		/**
 		 * Watch for location change to preload items
 		 */
 		async "locationStore.bounds"() {
@@ -303,7 +291,7 @@ export default {
 		},
 	},
 
-	mounted() {
+	activated() {
 		if (!(this.isHomeRoute)) {
 			this.waitForRefs("order, bartersView").then(() => {
 				this.setOrderValueToElement();
@@ -328,6 +316,11 @@ export default {
 				await vm.loadFirstPage(to);
 			}
 		});
+	},
+
+	async beforeRouteUpdate(to, from, next) {
+		await this.loadFirstPage(to);
+		next();
 	},
 
 	beforeRouteLeave(to, from, next) {

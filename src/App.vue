@@ -46,23 +46,20 @@
 						<router-view />
 					</keep-alive>
 
-					<!-- props "key" used here for this reasons: 
-						https://github.com/pocketnetteam/barteron.gui/issues/425 
-						https://github.com/pocketnetteam/barteron.gui/issues/689
-					-->
 					<div
 						id="container"
 						v-if="hasComponents(['aside', 'content', 'sidebar'])"
-						:key="mainContainerKey"
 					>
 						<router-view
 							name="aside"
 							v-if="hasComponents(['aside'])"
 						/>
-						<router-view
-							name="content"
-							v-if="hasComponents(['content'])"
-						/>
+						<keep-alive include="CategoryContent">
+							<router-view
+								name="content"
+								v-if="hasComponents(['content'])"
+							/>
+						</keep-alive>
 						<router-view
 							name="sidebar"
 							v-if="hasComponents(['sidebar'])"
@@ -113,19 +110,6 @@ export default {
 
 		surveyDisplayInterval() {
 			return 600_000;
-		},
-
-		mainContainerKey() {
-			const 
-				routeName = this.$route?.name,
-				fullPath = this.$route?.fullPath,
-				routesWithQueryParams = [
-					"ThreeSidedSearch",
-					"SafeDeal"
-				],
-				needExtendedKey = routesWithQueryParams.includes(routeName);
-			
-			return needExtendedKey ? fullPath : routeName;
 		},
 	},
 

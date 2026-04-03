@@ -68,21 +68,24 @@ export default {
 		},
 
 		itemClick() {
-			// workaround: in case the route is not processed in the @/views/Category/content/index.js
-			setTimeout(async () => {
-				const 
-					fullPath = this.$route?.fullPath,
-					isCategoryRoute = this.$route?.name === "category",
-					routeHasChanged = (
-						offerStore.loadingItemsRoute?.fullPath === fullPath
-						|| offerStore.itemsRoute?.fullPath === fullPath
-					),
-					needReloadOffers = isCategoryRoute && !(routeHasChanged);
 
-				if (needReloadOffers) {
-					await offerStore.loadFirstPage(this.$route);
-				}
-			}, 100);
+			/* code below need remove after testing; problem solved by replacing watcher of $route on beforeRouteUpdate hook */
+
+			// // workaround: in case the route is not processed in the @/views/Category/content/index.js
+			// setTimeout(async () => {
+			// 	const 
+			// 		fullPath = this.$route?.fullPath,
+			// 		isCategoryRoute = this.$route?.name === "category",
+			// 		routeHasChanged = (
+			// 			offerStore.loadingItemsRoute?.fullPath === fullPath
+			// 			|| offerStore.itemsRoute?.fullPath === fullPath
+			// 		),
+			// 		needReloadOffers = isCategoryRoute && !(routeHasChanged);
+
+			// 	if (needReloadOffers) {
+			// 		await offerStore.loadFirstPage(this.$route);
+			// 	}
+			// }, 100);
 		},
 	}
 }
