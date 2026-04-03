@@ -670,4 +670,12 @@ export default {
 			this.updateStatus();
 		});
 	},
+
+	async beforeRouteUpdate(to, from, next) {
+		const needUpdate = (JSON.stringify(to.query) !== JSON.stringify(from.query));
+		if (needUpdate) {
+			this.updateStatus();
+		};
+		next();
+	},
 }

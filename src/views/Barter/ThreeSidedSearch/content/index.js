@@ -1,4 +1,5 @@
 import Vue from "vue";
+import Loader from "@/components/loader/index.vue";
 import Offer from "./offer.vue";
 import banProcessor from "@/js/banUtils.js";
 
@@ -6,19 +7,60 @@ export default {
 	name: "Content",
 
 	components: {
-		Offer
+		Loader,
+		Offer,
 	},
 
 	data() {
 		return {
+			isChatLoading: false,
 			isLoading: false,
-			deals: []
+			deals: [],
 		}
 	},
 
 	inject: ["dialog"],
 
 	methods: {
+		async loadDeals() {
+
+			this.isLoading = true;
+			this.deals = [];
+
+			try {
+				const
+					sdk = Vue.prototype.sdk,
+					source = await sdk.getBrtOffersByHashes([this.$route.query?.source]).then(result => result?.pop()),
+					dealsResult = await sdk.getBrtOfferComplexDeals({
+						myTag: source?.tag,
+						theirTags: await sdk.getTheirTags(source),
+						excludeAddresses: [source?.address]
+					}).then(offers => {
+						return offers?.reduce((result, match) => {
+							if (match?.intermediates) {
+								match.intermediates.forEach(offer => {
+									offer.update({ source, target: match.target });
+									result.push(offer);
+								});
+							}
+			
+							return result;
+						}, []);
+					});
+
+				this.deals = (dealsResult || []).filter(f => 
+					!(f?.address && banProcessor.isBannedAddress(f.address) 
+						|| f?.source?.address && banProcessor.isBannedAddress(f.source.address)
+						|| f?.target?.address && banProcessor.isBannedAddress(f.target.address)
+					)
+				);
+			} catch (e) {
+				console.error(e);
+			} finally {
+				this.isLoading = false;
+			};
+		},
+
 		/**
 		 * Propose exchange your offer to sellers' offers
 		 * 
@@ -36,7 +78,7 @@ export default {
 		createRoom(deal) {
 			if (this.sdk.willOpenRegistration()) return;
 
-			this.isLoading = true;
+			this.isChatLoading = true;
 			this.dialog?.instance.view("load", this.$t("dialogLabels.opening_room"));
 			this.sendMessage({
 				name: this.$t("buttonLabels.group_exchange"),
@@ -48,51 +90,20 @@ export default {
 			}).catch(e => {
 				this.showError(e);
 			}).finally(() => {
-				this.isLoading = false;
+				this.isChatLoading = false;
 			});
-		}
+		},
 	},
 
-	async beforeRouteEnter (to, from, next) {
+	mounted() {
+		this.loadDeals();
+	},
 
-		let deals = [];
-
-		try {
-
-		const
-			sdk = Vue.prototype.sdk,
-			source = await sdk.getBrtOffersByHashes([to.query?.source]).then(result => result?.pop()),
-			dealsResult = await sdk.getBrtOfferComplexDeals({
-				myTag: source?.tag,
-				theirTags: await sdk.getTheirTags(source),
-				excludeAddresses: [source?.address]
-			}).then(offers => {
-				return offers?.reduce((result, match) => {
-					if (match?.intermediates) {
-						match.intermediates.forEach(offer => {
-							offer.update({ source, target: match.target });
-							result.push(offer);
-						});
-					}
-	
-					return result;
-				}, []);
-			});
-
-			deals = (dealsResult || []).filter(f => 
-				!(f?.address && banProcessor.isBannedAddress(f.address) 
-					|| f?.source?.address && banProcessor.isBannedAddress(f.source.address)
-					|| f?.target?.address && banProcessor.isBannedAddress(f.target.address)
-				)
-			);
-
-		} catch (e) {
-			console.error(e);
-		}
-
-		/* Pass data to instance */
-		next(vm => {
-			vm.deals = deals;
-		});
-	}
+	async beforeRouteUpdate(to, from, next) {
+		const needUpdate = (JSON.stringify(to.query) !== JSON.stringify(from.query));
+		if (needUpdate) {
+			this.loadDeals();
+		};
+		next();
+	},
 }
