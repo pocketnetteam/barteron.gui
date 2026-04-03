@@ -2,7 +2,7 @@ import CategoriesHierarchy from "@/components/categories/categories-hierarchy/in
 import ExchangeList from "@/components/barter/exchange/list/index.vue";
 
 export default {
-	name: "Aside",
+	name: "CategoryAside",
 
 	components: {
 		CategoriesHierarchy,
@@ -266,15 +266,16 @@ export default {
 	},
 
 	mounted() {
-		this.setupFilters();
-
-		this.$2watch("$refs.asideCategories").then(() => {
+		Promise.all([
+			this.$2watch("$components.content"),
+			this.$2watch("$refs.asideCategories"),
+		]).then(() => {
+			this.setupFilters();
 			this.markIfNeeded();
 			this.addSwipeGesture();
 		}).catch(e => { 
 			console.error(e);
 		});
-
 	},
 
 	beforeDestroy() {
