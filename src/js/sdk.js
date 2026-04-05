@@ -141,8 +141,15 @@ class SDK {
 
 	_currency = {};
 	get currency() {
-		if (this.empty(this._currency)) {
-			this._currency.pending = true;
+		const 
+			retryInterval = 10_000,
+			needLoad = this.empty(this._currency) || 
+				this._currency.failedAt && (Date.now() - this._currency.failedAt) > retryInterval;
+
+		if (needLoad) {
+			this._currency.loading = true;
+			this._currency.failedAt = null;
+
 			this.loadCurrencyRates();
 		};
 
@@ -1218,10 +1225,8 @@ class SDK {
 			if (success) {
 				Vue.set(this, "_currency", allRates);
 			} else {
-				const needResetPendingState = this._currency.pending;
-				if (needResetPendingState) {
-					this._currency = {};
-				};
+				this._currency.loading = false;
+				this._currency.failedAt = Date.now();
 			};
 			return this._currency;
 		});
