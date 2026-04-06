@@ -1,4 +1,4 @@
-import deliveryData from "../../public/delivery_data.json";
+import deliveryData from "@/data/delivery_data.json";
 
 const 
 	env = process.env.NODE_ENV,
