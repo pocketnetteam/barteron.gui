@@ -507,26 +507,26 @@ class SDK {
 	 * @param {Object} options
 	 */
 	setupRPCOptionsForBrighteon(options) {
-		if (this.isProductionEnvironment()) {
-			options.rpc = {
-				fnode: this.getRPCNodeForBrighteon(),
-			};
-		};
+		// if (this.isProductionEnvironment()) {
+		// 	options.rpc = {
+		// 		fnode: this.getRPCNodeForBrighteon(),
+		// 	};
+		// };
 	}
 
-	getRPCNodeForBrighteon() {
-		if (!(this._RPCNodeForBrighteon)) {
-			const 
-				index = (Math.random() < 0.5 ? 0 : 1),
-				items = [
-					"65.21.56.203:38081",
-					"135.181.196.243:38081"
-				];
+	// getRPCNodeForBrighteon() {
+	// 	if (!(this._RPCNodeForBrighteon)) {
+	// 		const 
+	// 			index = (Math.random() < 0.5 ? 0 : 1),
+	// 			items = [
+	// 				"65.21.56.203:38081",
+	// 				"135.181.196.243:38081"
+	// 			];
 
-			this._RPCNodeForBrighteon = items[index];
-		}
-		return this._RPCNodeForBrighteon;
-	}
+	// 		this._RPCNodeForBrighteon = items[index];
+	// 	}
+	// 	return this._RPCNodeForBrighteon;
+	// }
 
 	/**
 	 * Setup RPC options for method
