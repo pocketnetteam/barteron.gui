@@ -157,7 +157,7 @@
 							:items="offersActive"
 							:vType="bartersView"
 							:loaderState="!!(fetching)"
-							:loaderItems="6"
+							:loaderItems="8"
 						>
 							<!-- Date range, views and favorites -->
 							<template #info="{ item }" v-if="isMyProfile">
@@ -266,7 +266,7 @@
 					:items="favoriteList"
 					:vType="bartersView"
 					:loaderState="!!(fetching)"
-					:loaderItems="6"
+					:loaderItems="8"
 				></BarterList>
 			</template>
 
