@@ -7,6 +7,7 @@ import WorkSchedule from "@/components/work-schedule/index.vue";
 import SafeDeal from "@/components/safe-deal/safe-deal-offer/index.vue";
 import Profile from "@/components/profile/index.vue";
 import { showMediaItems } from "@/js/mediaUtils.js";
+import { formatAddress_OSM } from "@/js/addressUtils.js";
 import "photoswipe/style.css";
 import Vue from 'vue';
 
@@ -135,19 +136,7 @@ export default {
 
 				return null;
 			} else {
-				let result = this.addr?.display_name || "";
-				const 
-					countryCode = this.addr?.address?.country_code,
-					needReverse = ["ru", "ua", "by"].includes(countryCode);
-
-				if (needReverse) {
-					result = result
-						.split(",")
-						.map(m => m.trim())
-						.reverse()
-						.join(", ");
-				}
-				return result;
+				return formatAddress_OSM(this.addr);
 			}
 		},
 
