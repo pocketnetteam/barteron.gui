@@ -133,9 +133,16 @@
 							</div>
 						</li>
 					</ul>
+					<div 
+						v-if="isMobile && mediaItemsCount > 1"
+						class="img-count"
+					>
+						<i class="fa fa-camera"></i>
+						<span class="count">{{ mediaItemsCount }}</span>
+					</div>
 					<ul
+						v-if="!(isMobile) && images?.length > 1"
 						class="bullets"
-						v-if="images?.length > 1"
 					>
 						<li
 							v-for="(image, index) in images"

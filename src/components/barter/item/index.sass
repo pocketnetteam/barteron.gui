@@ -113,6 +113,24 @@ div[class^="barter-item-"]
 					z-index: -2
 					+transition(opacity)
 
+		.img-count
+			display: flex
+			gap: 0.25em
+			align-items: center
+			background: $overlay-half
+			border-radius: 6px
+			position: absolute
+			padding: 5px 8px
+			right: 8px
+			bottom: 8px
+			color: $white
+			font-size: 1em
+			font-weight: bold
+			+unselectable()
+
+			.count
+				font-size: 0.85em
+
 		.bullets
 			+resetList()
 			background: $overlay-half

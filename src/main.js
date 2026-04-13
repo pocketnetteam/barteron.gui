@@ -102,6 +102,10 @@ Vue.prototype.shared = Vue.observable({
 		pkoinTotalSupply() {
 			return 24_375_000;
 		},
+
+		isMobile() {
+			return window.matchMedia("(hover: none)").matches;
+		},
 	},
 
 	methods: {

@@ -13,6 +13,7 @@
 			<BarterList
 				keyPrefix="complex_deals"
 				:items="mayMatchExchanges"
+				itemType="complexDeals"
 				:carousel="true"
 				:hideInfo="true"
 				:compactView="true"
