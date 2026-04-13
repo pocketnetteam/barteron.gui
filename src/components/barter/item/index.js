@@ -21,6 +21,7 @@ import SelectValidatorDialog from "@/components/safe-deal/select-validator-dialo
 import SafeDeal from "@/components/safe-deal/safe-deal-offer/index.vue";
 import Score from "@/components/score/index.vue";
 import { showMediaItems } from "@/js/mediaUtils.js";
+import { formatAddress_OSM } from "@/js/addressUtils.js";
 import SafeDealUtils from "@/js/safeDealUtils.js";
 import "photoswipe/style.css";
 import Vue from 'vue';
@@ -338,19 +339,7 @@ export default {
 
 				return null;
 			} else {
-				let result = this.addr?.display_name || "";
-				const 
-					countryCode = this.addr?.address?.country_code,
-					needReverse = ["ru", "ua", "by"].includes(countryCode);
-
-				if (needReverse) {
-					result = result
-						.split(",")
-						.map(m => m.trim())
-						.reverse()
-						.join(", ");
-				}
-				return result;
+				return formatAddress_OSM(this.addr);
 			}
 		},
 
@@ -400,7 +389,10 @@ export default {
 
 		/* Get offer images */
 		images() {
-			return (this.item.images || []).map(url => this.sdk.manageBastyonImageSrc(url));
+			let images = (this.item.images || []);
+			const onlyFirst = (this.itemType === "viewed" || this.itemType === "complexDeals");
+			images = (onlyFirst ? images.slice(0, 1) : images);
+			return images.map(url => this.sdk.manageBastyonImageSrc(url));
 		},
 
 		mediaItems() {
@@ -422,6 +414,14 @@ export default {
 				};
 			};
 
+			return result;
+		},
+
+		mediaItemsCount() {
+			const hasVideo = this.item.video && this.sdk.videoOperationsAvailable();
+			let result = (this.item.images || []).length + Number(hasVideo);
+			const onlyFirst = (this.itemType === "viewed" || this.itemType === "complexDeals");
+			result = (onlyFirst ? 1 : result);
 			return result;
 		},
 
@@ -989,6 +989,12 @@ export default {
 					console.error(e);
 				});
 			};
+		};
+	},
+
+	deactivated() {
+		if (this.vType === "tile" || this.vType === "row") {
+			this.hover = 0;
 		};
 	},
 

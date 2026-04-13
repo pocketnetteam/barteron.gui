@@ -123,6 +123,24 @@ $pd: 3px // selected item padding
 					z-index: -2
 					+transition(opacity)
 
+		.img-count
+			display: flex
+			gap: 0.25em
+			align-items: center
+			background: $overlay-half
+			border-radius: 6px
+			position: absolute
+			padding: 3px 4px
+			right: 8px
+			bottom: 8px
+			color: $white
+			font-size: 1em
+			font-weight: bold
+			+unselectable()
+
+			.count
+				font-size: 0.85em
+
 		.bullets
 			+resetList()
 			background: $overlay-half

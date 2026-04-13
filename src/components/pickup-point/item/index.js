@@ -145,6 +145,11 @@ export default {
 			return (this.item.images || []).map(url => this.sdk.manageBastyonImageSrc(url));
 		},
 
+		mediaItemsCount() {
+			const hasVideo = this.item.video && this.sdk.videoOperationsAvailable();
+			return (this.item.images || []).length + Number(hasVideo);
+		},
+
 		averageOfferScore() {
 			return this.sdk.barteron.averageOfferScores[this.item.hash];
 		},
