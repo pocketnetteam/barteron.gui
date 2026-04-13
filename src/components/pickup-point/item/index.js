@@ -142,7 +142,10 @@ export default {
 
 		/* Get offer images */
 		images() {
-			return (this.item.images || []).map(url => this.sdk.manageBastyonImageSrc(url));
+			let images = (this.item.images || []);
+			const onlyFirst = (this.isMobile);
+			images = (onlyFirst ? images.slice(0, 1) : images);
+			return images.map(url => this.sdk.manageBastyonImageSrc(url));
 		},
 
 		mediaItemsCount() {

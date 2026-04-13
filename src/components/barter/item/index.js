@@ -390,7 +390,11 @@ export default {
 		/* Get offer images */
 		images() {
 			let images = (this.item.images || []);
-			const onlyFirst = (this.itemType === "viewed" || this.itemType === "complexDeals");
+			const onlyFirst = (
+				this.itemType === "viewed" 
+				|| this.itemType === "complexDeals" 
+				|| this.isMobile && (this.vType === "tile" || this.vType === "row")
+			);
 			images = (onlyFirst ? images.slice(0, 1) : images);
 			return images.map(url => this.sdk.manageBastyonImageSrc(url));
 		},
@@ -420,8 +424,8 @@ export default {
 		mediaItemsCount() {
 			const hasVideo = this.item.video && this.sdk.videoOperationsAvailable();
 			let result = (this.item.images || []).length + Number(hasVideo);
-			const onlyFirst = (this.itemType === "viewed" || this.itemType === "complexDeals");
-			result = (onlyFirst ? 1 : result);
+			const resetCount = (this.itemType === "viewed" || this.itemType === "complexDeals");
+			result = (resetCount ? 1 : result);
 			return result;
 		},
 
