@@ -37,6 +37,7 @@ function formatAddress_OSM(
 
 	const replacements = {
 		"ru": {
+			"область": "обл.",
 			"район": "р-н",
 			"административный": "адм.",
 			"округ": "окр.",
@@ -65,10 +66,13 @@ function formatAddress_OSM(
 		return updated;
 	};
 
+	const isDublicateRegion = rawParts.region.toLowerCase().includes(rawParts.settlement.toLowerCase()) 
+		|| rawParts.settlement.toLowerCase().includes(rawParts.region.toLowerCase().replace(" область", "").replace(" обл.", ""));
+
 	const 
 		postcode = options?.includePostcode && rawParts.postcode,
 		country = rawParts.country,
-		region = shorten(rawParts.region),
+		region = isDublicateRegion ? "" : shorten(rawParts.region),
 		settlement = shorten(rawParts.settlement),
 		district = options?.includeDistrict && shorten(rawParts.district),
 		road = shorten(rawParts.road),
