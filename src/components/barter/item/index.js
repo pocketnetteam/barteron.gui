@@ -421,14 +421,6 @@ export default {
 			return result;
 		},
 
-		mediaItemsCount() {
-			const hasVideo = this.item.video && this.sdk.videoOperationsAvailable();
-			let result = (this.item.images || []).length + Number(hasVideo);
-			const resetCount = (this.itemType === "viewed" || this.itemType === "complexDeals");
-			result = (resetCount ? 1 : result);
-			return result;
-		},
-
 		averageOfferScore() {
 			return this.sdk.barteron.averageOfferScores[this.item.hash];
 		},
