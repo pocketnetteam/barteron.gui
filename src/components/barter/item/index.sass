@@ -41,7 +41,7 @@ div[class^="barter-item-"]
 
 	/* View: Tile */
 	picture
-		cursor: pointer
+		cursor: default
 		border-radius: 11px
 		display: block
 		margin: 0 0 .9em
@@ -422,6 +422,7 @@ div[class^="barter-item-"]
 			width: 100%
 
 			.fade
+				cursor: pointer
 				border-radius: 11px
 				position: relative
 				overflow: hidden
@@ -466,8 +467,10 @@ div[class^="barter-item-"]
 
 				li
 					+transition(border-color)
+					cursor: pointer
 					border: 1px solid transparent
 					border-radius: 12px
+					background-color: $beerus
 					overflow: hidden
 					height: 64px
 					width: 64px
