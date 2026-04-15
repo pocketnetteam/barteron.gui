@@ -421,14 +421,6 @@ export default {
 			return result;
 		},
 
-		mediaItemsCount() {
-			const hasVideo = this.item.video && this.sdk.videoOperationsAvailable();
-			let result = (this.item.images || []).length + Number(hasVideo);
-			const resetCount = (this.itemType === "viewed" || this.itemType === "complexDeals");
-			result = (resetCount ? 1 : result);
-			return result;
-		},
-
 		averageOfferScore() {
 			return this.sdk.barteron.averageOfferScores[this.item.hash];
 		},
@@ -565,13 +557,9 @@ export default {
 		 * @param {Number} index
 		 */
 		mediaItemClick(index) {
-			showMediaItems(this.mediaItems, index).then(lightbox => {
-				this.pswpLightbox = lightbox;
-				this.pswpLightbox.on("destroy", () => {
-					this.pswpLightbox = null;
-				});
-			}).catch(e => {
-				console.error(e);
+			this.pswpLightbox = showMediaItems(this.mediaItems, index);
+			this.pswpLightbox.on("destroy", () => {
+				this.pswpLightbox = null;
 			});
 		},
 

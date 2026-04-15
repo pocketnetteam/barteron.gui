@@ -20,6 +20,14 @@ $viewed-item-opacity: 0.75
 .pswp__img--placeholder
 	display: none !important
 
+.pswp__preloader
+	display: block !important
+	opacity: 1 !important
+	visibility: visible !important
+
+.pswp__content--loading .pswp__preloader
+	display: block !important
+
 div[class^="barter-item-"]
 	cursor: default
 	display: inline-flex
@@ -41,7 +49,7 @@ div[class^="barter-item-"]
 
 	/* View: Tile */
 	picture
-		cursor: pointer
+		cursor: default
 		border-radius: 11px
 		display: block
 		margin: 0 0 .9em
@@ -112,24 +120,6 @@ div[class^="barter-item-"]
 					opacity: 0
 					z-index: -2
 					+transition(opacity)
-
-		.img-count
-			display: flex
-			gap: 0.25em
-			align-items: center
-			background: $overlay-half
-			border-radius: 6px
-			position: absolute
-			padding: 5px 8px
-			right: 8px
-			bottom: 8px
-			color: $white
-			font-size: 1em
-			font-weight: bold
-			+unselectable()
-
-			.count
-				font-size: 0.85em
 
 		.bullets
 			+resetList()
@@ -440,6 +430,7 @@ div[class^="barter-item-"]
 			width: 100%
 
 			.fade
+				cursor: pointer
 				border-radius: 11px
 				position: relative
 				overflow: hidden
@@ -484,8 +475,10 @@ div[class^="barter-item-"]
 
 				li
 					+transition(border-color)
+					cursor: pointer
 					border: 1px solid transparent
 					border-radius: 12px
+					background-color: $beerus
 					overflow: hidden
 					height: 64px
 					width: 64px
