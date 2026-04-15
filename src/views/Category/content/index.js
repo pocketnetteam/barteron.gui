@@ -44,6 +44,10 @@ export default {
 			return this.$route?.name === "home";
 		},
 
+		listSettingsExist() {
+			return !(this.isHomeRoute);
+		},
+
 		/**
 		 * Make list of order by
 		 * 
@@ -273,6 +277,15 @@ export default {
 				this.loadFirstPage(this.$route);
 			}
 		},
+
+		updateSettingsElements() {
+			if (this.listSettingsExist) {
+				this.$nextTick(() => {
+					this.setOrderValueToElement();
+					this.setBartersViewToElement();
+				});
+			};
+		},
 	},
 
 	watch: {
@@ -284,22 +297,22 @@ export default {
 		},
 
 		locale() {
-			this.$nextTick(() => {
-				this.setOrderValueToElement();
-				this.setBartersViewToElement();
-			});
+			this.updateSettingsElements();
+		},
+
+		isHomeRoute() {
+			this.updateSettingsElements();
 		},
 	},
 
 	activated() {
-		if (!(this.isHomeRoute)) {
+		if (this.listSettingsExist) {
 			this.waitForRefs("order, bartersView").then(() => {
-				this.setOrderValueToElement();
-				this.setBartersViewToElement();
+				this.updateSettingsElements();
 			}).catch(e => { 
 				console.error(e);
 			});
-		}
+		};
 	},
 
 	beforeRouteEnter (to, from, next) {
@@ -318,9 +331,9 @@ export default {
 		});
 	},
 
-	async beforeRouteUpdate(to, from, next) {
-		await this.loadFirstPage(to);
+	beforeRouteUpdate(to, from, next) {
 		next();
+		this.loadFirstPage(to);
 	},
 
 	beforeRouteLeave(to, from, next) {

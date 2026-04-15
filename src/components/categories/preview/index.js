@@ -45,8 +45,12 @@ export default {
 					527,
 				],
 				"11450": [
-					11451,
-					11534,
+					11452,
+					11492,
+					11507,
+					11535,
+					11596,
+					11612,
 					11645,
 					11682,
 					11722,
@@ -132,12 +136,15 @@ export default {
 			const 
 				isCategory = rawItem.type === "category",
 				data = isCategory ? this.categories.findById(rawItem.id) : {},
-				key = (data.name || rawItem.name),
+				key = (data.id || rawItem.name),
+				i18nKey = (data.previewName || data.name || rawItem.name),
+				previewTitle = this.$t(i18nKey),
 				defaultIcon = "fa-folder-open";
 
 			const result = {
 				...data,
 				...rawItem,
+				previewTitle,
 				key,
 			};
 

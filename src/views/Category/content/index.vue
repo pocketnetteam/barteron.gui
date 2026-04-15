@@ -6,7 +6,7 @@
 
 		<!-- Top panel -->
 		<div 
-			v-if="!(isHomeRoute)"
+			v-if="listSettingsExist"
 			class="barter-list-settings row"
 		>
 
