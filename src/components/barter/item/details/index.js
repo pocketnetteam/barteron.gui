@@ -197,13 +197,9 @@ export default {
 		 * @param {Number} index
 		 */
 		mediaItemClick(index) {
-			showMediaItems(this.mediaItems, index).then(lightbox => {
-				this.pswpLightbox = lightbox;
-				this.pswpLightbox.on("destroy", () => {
-					this.pswpLightbox = null;
-				});
-			}).catch(e => {
-				console.error(e);
+			this.pswpLightbox = showMediaItems(this.mediaItems, index);
+			this.pswpLightbox.on("destroy", () => {
+				this.pswpLightbox = null;
 			});
 		},
 	},
