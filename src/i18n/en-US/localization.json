@@ -554,6 +554,7 @@
 		"video_processing_failed": "Video processing failed. Please delete the video and try again.",
 		"wait_until_video_processed": "Please wait until the video is processed",
 		"video_not_found_or_removed": "Video not found. It may have been removed.",
+		"video_loading_failed": "Video loading failed",
 		"finish_working_with_video": "Please finish working with the video",
 		"order_selection_title": "Arrange relative to images:",
 		"order_first": "First",

@@ -1,154 +1,165 @@
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import VideoPlayer from "@/components/video-player/index.vue";
-import Vue from 'vue';
+import SDK from "@/js/sdk.js";
+import i18n from "@/i18n/index.js";
+import Vue from "vue";
 
 function showMediaItems(mediaItems, startIndex) {
+	const dataSource = (mediaItems || []).map(item => {
+		let result = null;
+		if (item.type === "image") {
+			result = {
+				src: item.url,
+				width: item.width || 1200, 
+				height: item.height || 800,
+				mediaItem: item,
+			};
+		} else if (item.type === "video") {
+			result = {
+				mediaItem: {
+					...item
+				},
+			};
+		};
+		return result;
+	}).filter(f => f);
+
 	const lightboxOptions = {
+		dataSource: dataSource,
 		initialZoomLevel: "fit",
 		secondaryZoomLevel: 2,
 		maxZoomLevel: 4,
 		wheelToZoom: true,
 		showHideAnimationType: "fade",
-		pswpModule: () => import('photoswipe'),
+		pswpModule: () => import("photoswipe"),
 	};
 
-	const promises = (mediaItems || []).map(item => {
-		let result = Promise.resolve();
+	const lightbox = new PhotoSwipeLightbox(lightboxOptions);
+	const videoContainerId = "pswp-video-container";
 
-		if (item.type === "image") {
-			result = new Promise(resolve => {
-				let image = new Image();
-				const data = {
-					image,
-					mediaItem: item,
-				};
-				image.onload = () => resolve(data);
-				image.onerror = () => resolve(data);
-				image.src = item.url;
-			});
-		} else if (item.type === "video") {
-			const data = {
-				mediaItem: item,
+	lightbox.on("gettingData", (e) => {
+		const { data } = e;
+		if (data.mediaItem?.type === "image" && (!data.width || data.width === 1200)) {
+			const img = new Image();
+			img.src = data.src;
+			img.onload = () => {
+				data.width = img.width;
+				data.height = img.height;
+				lightbox.pswp?.refreshSlideContent(e.index);
 			};
-			result = Promise.resolve(data);
-		};
-
-		return result;
+		}
 	});
 
-	return Promise.allSettled(promises).then(results => {
-		lightboxOptions.dataSource = results
-			.map(item => item.value)
-			.filter(data => (data.mediaItem.type === "image" && data.image || data.mediaItem.type !== "image"))
-			.map(data => {
-				return data.mediaItem.type === "image" 
-					? {
-						src:    data.image.src,
-						width:  data.image.width,
-						height: data.image.height,
-						mediaItem: data.mediaItem,
-					}
-					: {
-						mediaItem: data.mediaItem,
+	lightbox.on("contentLoad", async (event) => {
+		const { content } = event;
+		const mediaItem = content.data?.mediaItem;
+
+		if (mediaItem?.type === "video") {
+			event.preventDefault();
+			content.state = "loading";
+
+			const videoContainer = document.createElement("div");
+			videoContainer.className = "pswp__video-container";
+			videoContainer.id = videoContainerId;
+			content.element = videoContainer;
+
+			const needVideoInfo = !(mediaItem.data?.playlistUrl);
+			if (needVideoInfo) {
+				try {
+					const sdk = new SDK();
+					const dataItems = await sdk.getVideoInfo([mediaItem.url]);
+					const videoItem = dataItems?.[0];
+					if (videoItem) {
+						mediaItem.data = videoItem;
+					} else {
+						throw new Error(i18n.t("videosLabels.video_not_found_or_removed"));
 					};
-			});
+				} catch (e) {
+					mediaItem.error = e;
+					console.error(e);
+				};
+			};
 
-		const lightbox = new PhotoSwipeLightbox(lightboxOptions);
-		const videoContainerId = "pswp-video-container";
+			if (mediaItem.data) {
 
-		lightbox.on('contentLoad', (event) => {
-			const { content, isLazy } = event;
-
-			const 
-				mediaItem = content.data?.mediaItem,
-				isVideo = (mediaItem?.type === "video");
-
-			if (isVideo) {
-				event.preventDefault();
-
-				const videoContainer = document.createElement('div');
-				videoContainer.className = 'pswp__video-container';
-				videoContainer.id = videoContainerId;
-		  
-				var ComponentClass = Vue.extend(VideoPlayer);
-				var playerInstance = new ComponentClass({
-					propsData: {
-						options: {},
-					}
+				const ComponentClass = Vue.extend(VideoPlayer);
+				const playerInstance = new ComponentClass({
+					propsData: { options: {} }
 				});
-				
+
 				playerInstance.$mount();
 				videoContainer.appendChild(playerInstance.$el);
 				lightbox.playerInstance = playerInstance;
-				const data = {
+
+				playerInstance.setSource({
 					playlistUrl: mediaItem?.data?.playlistUrl,
 					thumbnailUrl: mediaItem?.data?.thumbnailUrl,
-				};
-				playerInstance.setSource(data);
+				});
 
-				content.element = videoContainer;
+			} else if (mediaItem.error) {
 
-				content.onLoaded();
-			};
-		});
+				const errorMsg = document.createElement("div");
+				errorMsg.className = "pswp__error-msg";
+				errorMsg.innerHTML = `
+					<div style="text-align: center; margin: 20px auto; color: #ccc;">
+						<p>${i18n.t("videosLabels.video_loading_failed")}</p>
+						<small>${mediaItem.error.message}</small>
+					</div>
+				`;
+				videoContainer.appendChild(errorMsg);
 
-		lightbox.on('contentActivate', ({ content }) => {
-			// zoom button bug fix
-			const
-				data = content.data,
-				zoomAllowed = (data?.mediaItem?.type === "image" && data?.width && data?.height),
-				el = document.querySelector("div.pswp"),
-				zoomClassName = "pswp--zoom-allowed";
-			
-			(zoomAllowed ? el?.classList.add(zoomClassName) : el?.classList.remove(zoomClassName));
-		});
-
-		lightbox.on('contentDeactivate', (event) => {
-			const { content } = event;
-
-			const 
-				mediaItem = content.data?.mediaItem,
-				isVideo = (mediaItem?.type === "video");
-			
-			if (isVideo) {
-				lightbox.playerInstance?.pauseAsync();
 			}
-		});
 
-		lightbox.on('pointerDown', (event) => {
-			const 
-				targetClassList = event.originalEvent?.target?.classList,
-				controlClasses = [
-					"vjs-mouse-display",
-					"vjs-progress-control",
-					"vjs-volume-control",
-					"vjs-volume-horizontal",
-					"vjs-volume-vertical",
-					"vjs-control"
-				],
-				isControlClick = controlClasses.some(f => targetClassList?.contains(f));
+			content.onLoaded();
+		}
+	});
 
-			if (isControlClick) {
-				event.preventDefault();
-			};
-		});
+	lightbox.on("contentActivate", ({ content }) => {
+		const data = content.data;
+		const zoomAllowed = data?.mediaItem?.type === "image";
+		const el = document.querySelector("div.pswp");
+		el?.classList.toggle("pswp--zoom-allowed", !!zoomAllowed);
+	});
 
-		lightbox.on('pointerUp', (event) => {
-			if (event.originalEvent?.target?.id === videoContainerId) {
-				lightbox.pswp?.close();
-			};
-		});
+	lightbox.on("contentDeactivate", ({ content }) => {
+		if (content.data?.mediaItem?.type === "video") {
+			lightbox.playerInstance?.pauseAsync();
+		}
+	});
 
-		lightbox.on('destroy', () => {
-			lightbox.playerInstance?.$destroy();
-			lightbox.playerInstance = null;
-		});				
+	lightbox.on("pointerDown", (event) => {
+		const 
+			targetClassList = event.originalEvent?.target?.classList,
+			controlClasses = [
+				"vjs-mouse-display",
+				"vjs-progress-control",
+				"vjs-volume-control",
+				"vjs-volume-horizontal",
+				"vjs-volume-vertical",
+				"vjs-control"
+			],
+			isControlClick = controlClasses.some(f => targetClassList?.contains(f));
 
-		lightbox.init();
-		lightbox.loadAndOpen(startIndex);
+		if (isControlClick) {
+			event.preventDefault();
+		};
+	});
 
-		return lightbox;
-	});   
+	lightbox.on("pointerUp", (event) => {
+		if (event.originalEvent?.target?.id === videoContainerId) {
+			lightbox.pswp?.close();
+		}
+	});
+
+	lightbox.on("destroy", () => {
+		lightbox.playerInstance?.$destroy();
+		lightbox.playerInstance = null;
+	});
+
+	lightbox.init();
+	lightbox.loadAndOpen(startIndex);
+
+	return lightbox;
 }
 
-export { showMediaItems }
+export { showMediaItems };

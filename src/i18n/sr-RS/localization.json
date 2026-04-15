@@ -554,6 +554,7 @@
 		"video_processing_failed": "Обрада видео материјала није успела. Обришите видео и покушајте поново",
 		"wait_until_video_processed": "Молимо сачекајте завршетак обраде видео материјала",
 		"video_not_found_or_removed": "Видео није пронађен. Могуће је да је обрисан.",
+		"video_loading_failed": "Учитавање видеа није успело",
 		"finish_working_with_video": "Молимо завршите рад са видео материјалом",
 		"order_selection_title": "Постави у односу на слике:",
 		"order_first": "Прво",
