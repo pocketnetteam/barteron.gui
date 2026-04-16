@@ -18,7 +18,7 @@
 			<div 
 				class="title"
 			>
-				<span :title="$t(item.name)">{{ $t(item.name) }}</span>
+				<span :title="item.previewTitle">{{ item.previewTitle }}</span>
 			</div>
 		</div>
 	</div>

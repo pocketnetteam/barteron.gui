@@ -185,25 +185,38 @@ Vue.prototype.shared = Vue.observable({
 		 * Vue2 watch
 		 * 
 		 * @param {String} prop
-		 * @param {Function} fn
 		 * 
 		 * @returns {Promise}
 		 */
-		$2watch(prop, fn) {
-			return new Promise(resolve => {
-				const
-					value = () => new Function("_", `return _.${ prop }`)(this),
-					oldVal = { ...value() },
-					interval = setInterval(() => {
-						const newVal = value();
-
-						if (newVal) {
-							clearInterval(interval);
-							resolve(newVal);
-							if (typeof fn === "function") fn(newVal, oldVal);
-						}
-					}, 10);
+		async $2watch(prop, timeout = 5000) {
+			let isDestroyed = false;
+			this.$once('hook:beforeDestroy', () => {
+				isDestroyed = true;
 			});
+
+			const getValueByPath = (obj, path) => {
+				return path
+					.replaceAll('?.', '.')
+					.split('.')
+					.reduce((acc, key) => (acc && acc[key] !== undefined ? acc[key] : undefined), obj);
+			};
+
+			const start = Date.now();
+
+			while (Date.now() - start < timeout) {
+				if (isDestroyed) {
+					throw new Error(`Component was destroyed while watching property "${prop}"`);
+				};
+
+				const newVal = getValueByPath(this, prop);
+				if (newVal) {
+					return newVal;
+				};
+
+				await new Promise(resolve => requestAnimationFrame(resolve));
+			};
+
+			throw new Error(`A timeout of ${timeout} ms occurred while watching property "${prop}"`);
 		},
 
 		/**

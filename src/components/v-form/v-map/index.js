@@ -741,6 +741,8 @@ export default {
 		mapMode() {
 			this.$2watch("mountingComplete").then(() => {
 				this.setupMapMode();
+			}).catch(e => {
+				console.error(e);
 			});
 		},
 

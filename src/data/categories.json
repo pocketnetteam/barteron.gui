@@ -14393,6 +14393,7 @@
 	},
 	"11452": {
 		"name": "clothing",
+		"previewName": "clothing_for_men",
 		"id": 11452,
 		"parent": 11451,
 		"children": [
@@ -14717,6 +14718,7 @@
 	},
 	"11492": {
 		"name": "footwear",
+		"previewName": "footwear_for_men",
 		"id": 11492,
 		"parent": 11451,
 		"children": [
@@ -14837,6 +14839,7 @@
 	},
 	"11507": {
 		"name": "accessories",
+		"previewName": "accessories_for_men",
 		"id": 11507,
 		"parent": 11451,
 		"children": [
@@ -15075,6 +15078,7 @@
 	},
 	"11535": {
 		"name": "clothing",
+		"previewName": "clothing_for_women",
 		"id": 11535,
 		"parent": 11534,
 		"children": [
@@ -15570,6 +15574,7 @@
 	},
 	"11596": {
 		"name": "footwear",
+		"previewName": "footwear_for_women",
 		"id": 11596,
 		"parent": 11534,
 		"children": [
@@ -15698,6 +15703,7 @@
 	},
 	"11612": {
 		"name": "accessories",
+		"previewName": "accessories_for_women",
 		"id": 11612,
 		"parent": 11534,
 		"children": [
@@ -15837,15 +15843,11 @@
 		"name": "hair_accessories",
 		"id": 11628,
 		"parent": 11612,
-		"children": [
-			11629,
-			11630,
-			11631,
-			11632
-		],
+		"children": [],
 		"order": 70
 	},
 	"11629": {
+		"removed": true,
 		"name": "hair_clips_and_combs",
 		"id": 11629,
 		"parent": 11628,
@@ -15853,6 +15855,7 @@
 		"order": 10
 	},
 	"11630": {
+		"removed": true,
 		"name": "hair_ties",
 		"id": 11630,
 		"parent": 11628,
@@ -15860,6 +15863,7 @@
 		"order": 20
 	},
 	"11631": {
+		"removed": true,
 		"name": "hair_accessory_sets",
 		"id": 11631,
 		"parent": 11628,
@@ -15867,6 +15871,7 @@
 		"order": 30
 	},
 	"11632": {
+		"removed": true,
 		"name": "sleep_caps",
 		"id": 11632,
 		"parent": 11628,
@@ -16731,73 +16736,8 @@
 		"name": "footwear",
 		"id": 11739,
 		"parent": 11722,
-		"children": [
-			11740,
-			11741,
-			11742,
-			11743,
-			11744,
-			11745,
-			11746,
-			11747
-		],
-		"order": 20
-	},
-	"11740": {
-		"name": "boots",
-		"id": 11740,
-		"parent": 11739,
-		"children": [],
-		"order": 10
-	},
-	"11741": {
-		"name": "dress_shoes",
-		"id": 11741,
-		"parent": 11739,
 		"children": [],
 		"order": 20
-	},
-	"11742": {
-		"name": "sneakers",
-		"id": 11742,
-		"parent": 11739,
-		"children": [],
-		"order": 30
-	},
-	"11743": {
-		"name": "canvas_shoes",
-		"id": 11743,
-		"parent": 11739,
-		"children": [],
-		"order": 40
-	},
-	"11744": {
-		"name": "sandals",
-		"id": 11744,
-		"parent": 11739,
-		"children": [],
-		"order": 50
-	},
-	"11745": {
-		"name": "open-toe_shoes",
-		"id": 11745,
-		"parent": 11739,
-		"children": [],
-		"order": 60
-	},
-	"11746": {
-		"name": "slippers",
-		"id": 11746,
-		"parent": 11739,
-		"children": [],
-		"order": 70
-	},
-	"11747": {
-		"name": "booties",
-		"id": 11747,
-		"parent": 11739,
-		"children": [],
-		"order": 80
 	},
 	"21": {
 		"name": "bijouterie_decorations",
