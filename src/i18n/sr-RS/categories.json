@@ -1625,6 +1625,12 @@
 	"tv_shows_and_video_lessons": "Телевизијске емисије и видео лекције",	
 
 	"clothing_footwear_accessories": "Одећа, обућа, аксесоари",
+	"clothing_for_men": "Мушка одећа",
+	"footwear_for_men": "Мушка обућа",
+	"accessories_for_men": "Мушки аксесоари",
+	"clothing_for_women": "Женска одећа",
+	"footwear_for_women": "Женска обућа",
+	"accessories_for_women": "Женски аксесоари",
 	"for_men": "За мушкарце",
 	"outerwear": "Горња одећа",
 	"men’s_sheepskin_coats": "Мушки бунди",

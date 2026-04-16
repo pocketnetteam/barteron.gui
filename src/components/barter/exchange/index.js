@@ -87,6 +87,8 @@ export default {
 	mounted() {
 		this.$2watch("$components.content?.$refs.barterItem").then(() => {
 			this.isLoaded = true;
+		}).catch(e => {
+			console.error(e);
 		});
 	}
 }

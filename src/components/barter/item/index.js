@@ -968,6 +968,8 @@ export default {
 		if (this.vType === "page") {
 			this.$2watch("item.address").then(() => {
 				this.loadPickupPointsIfNeeded();
+			}).catch(e => {
+				console.error(e);
 			});
 	
 			const 
