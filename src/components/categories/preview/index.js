@@ -274,6 +274,8 @@ export default {
 	mounted() {
 		this.$2watch("$refs.carousel").then(() => {
 			this.updatePreviewWidth();
+		}).catch(e => {
+			console.error(e);
 		});
 	},
 

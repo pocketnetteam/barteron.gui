@@ -668,6 +668,8 @@ export default {
 	mounted() {
 		this.$2watch("sellerAddress").then(() => {
 			this.updateStatus();
+		}).catch(e => {
+			console.error(e);
 		});
 	},
 
