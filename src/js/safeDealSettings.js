@@ -8,7 +8,7 @@ const safeDealData = {
 		],
 
 		production: [
-			"PBjV827sqgz7dJybRb9MKbQKgzFGFzXWZc",
+			"PMdhZ1gvZXAXmQ6z5ghHz86arfXorxNYgX",
 			"PPbNqCweFnTePQyXWR21B9jXWCiDJa2yYu",
 			"PMkhdDuCM3k8xLRDBUnmBDcUMWjhfPbWbE",
 		],
