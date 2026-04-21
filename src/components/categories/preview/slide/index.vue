@@ -13,11 +13,26 @@
 					[`item-type-${item.type}`]: true,
 				}"
 			>
-				<i :class="`fa ${item.icon}`"></i>
+				<img
+					v-if="isTopCategory(item)"
+					class="image top-category"
+					:style="{ 'padding': getPadding(item) }"
+					:src="imageUrl(`categories-preview/${item.key}.png`)"
+				>
+				<img
+					v-else-if="isSubcategory(item)"
+					class="image subcategory"
+					:style="{ 'padding': '15px' }"
+					:src="imageUrl(`categories-preview/subcategory.png`)"
+				>
+				<div 
+					v-else 
+					class="action"
+				>
+					<i :class="`fa ${item.icon}`"></i>
+				</div>
 			</div>
-			<div 
-				class="title"
-			>
+			<div class="title">
 				<span :title="item.previewTitle">{{ item.previewTitle }}</span>
 			</div>
 		</div>

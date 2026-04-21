@@ -1072,7 +1072,7 @@
 	},
 	"2": {
 		"name": "services",
-		"icon": "fa-user-tie",
+		"icon": "fa-briefcase",
 		"id": 2,
 		"parent": null,
 		"children": [
@@ -2764,7 +2764,7 @@
 	},
 	"4000": {
 		"name": "job",
-		"icon": "fa-briefcase",
+		"icon": "fa-user-tie",
 		"id": 4000,
 		"parent": null,
 		"children": [
