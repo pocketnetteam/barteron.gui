@@ -74,6 +74,10 @@ export default {
 			type: Array,
 			default: () => [0, 0]
 		},
+		centerLoaded: {
+			type: Boolean,
+			default: true
+		},
 		setInitialMarker: {
 			type: Boolean,
 			default: false
@@ -718,6 +722,8 @@ export default {
 		this.$2watch("$refs.map").then(map => {
 			this.mapObject = map.mapObject;
 			this.observeResize();
+		}).then(() => {
+			return this.$2watch("centerLoaded");
 		}).then(() => {
 			return this.latLonDefined(this.center) ? 
 				this.center 
