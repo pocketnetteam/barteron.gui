@@ -445,6 +445,7 @@
 					:pickupPointPopupMode="'input'"
 					:selectedOfferIds="selectedOfferIds()"
 					:center="geohash || location || undefined"
+					:centerLoaded="centerLoaded"
 					:setInitialMarker="Boolean(geohash)"
 					:mapActionData="mapActionData"
 					@errorEvent="mapErrorEvent"
