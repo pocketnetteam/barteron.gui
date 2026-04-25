@@ -114,6 +114,10 @@ export default {
 			}
 		},
 
+		centerLoaded() {
+			return Boolean(this.offer);
+		},
+
 		/**
 		 * Currency price option available
 		 */
