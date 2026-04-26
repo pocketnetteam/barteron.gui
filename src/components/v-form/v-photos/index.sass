@@ -1,5 +1,8 @@
 @import "@/css/vars.sass"
 
+$item-size: 168px
+$button-size: 28px
+
 .list-enter-active,
 .list-leave-active
 	transition: all 0.3s ease
@@ -11,10 +14,10 @@
 
 .photo-uploader
 	position: relative
-	margin: 0 0 $r
+	margin: 0 $r $r 0
 
 	&.no-files .photo-query
-		min-height: 175px
+		min-height: $item-size
 
 	&.dragover .add
 		background: $overlay-half
@@ -26,7 +29,7 @@
 		align-items: center
 		justify-content: flex-start
 		flex-wrap: wrap
-		gap: 10px
+		gap: 14px
 		margin: 0
 		padding: 0
 		position: relative
@@ -60,8 +63,8 @@
 			align-items: center
 			justify-content: center
 			position: relative
-			height: 111px
-			width: 178px
+			height: $item-size
+			width: $item-size
 
 		.remove
 			+transition(background-color)
@@ -77,11 +80,35 @@
 			position: absolute
 			top: -$r
 			right: -$r
-			height: 28px
-			width: 28px
+			height: $button-size
+			width: $button-size
 
 			&:hover
 				background-color: $dodoria-hover
+
+		.rotate
+			+transition(background-color)
+			background-color: $piccolo
+			border-radius: 50%
+			color: $primary
+			cursor: pointer
+			font-size: 17px
+			display: flex
+			align-items: center
+			justify-content: center
+			padding: $r
+			position: absolute
+			top: $button-size
+			right: -$r
+			height: $button-size
+			width: $button-size
+
+			&:hover
+				background-color: $piccolo-hover
+
+			&.disabled
+				background-color: $trunks
+				pointer-events: none
 
 		.img-holder
 			border-radius: 10px
@@ -94,6 +121,11 @@
 				object-fit: cover
 				height: 100%
 				width: 100%
+				opacity: 1
+				transition: opacity 0.3s ease-out
+
+				&.rotating
+					opacity: 0.5
 
 		.add
 			+transition(background)

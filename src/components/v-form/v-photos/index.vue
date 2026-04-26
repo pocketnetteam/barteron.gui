@@ -20,12 +20,23 @@
 			>
 				<picture class="img-holder">
 					<img
+						:class="isRotating(item) ? 'rotating' : ''"
 						:src="item.image"
 						:alt="item.file?.name || `image-${ index }`"
 						:data-index="index"
 					>
 				</picture>
-				<i class="fa fa-times remove" @click="$event => detatch($event, index)"></i>
+				<i 
+					class="fa fa-times remove" 
+					:title="$t('buttonLabels.remove')"
+					@click="$event => detatch($event, index)"
+				></i>
+				<i 
+					class="fa fa-redo rotate" 
+					:class="isRotating(item) ? 'disabled' : ''"
+					:title="$t('buttonLabels.rotate')"
+					@click="$event => rotate($event, index)"
+				></i>
 			</li>
 
 			<li class="add" v-if="!max || files.length < max">
