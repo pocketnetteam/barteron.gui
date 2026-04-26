@@ -15,6 +15,7 @@ export default {
 		return {
 			files: [],
 			filesSizeCalculated: false,
+			rotating: [],
 			max: parseInt(this.maxLen) || 0,
 			drag: false,
 			moving: null,
@@ -25,6 +26,23 @@ export default {
 	},
 
 	computed: {
+		allMimeTypes() {
+			return {
+				"avif": "image/avif",
+				"gif":  "image/gif",
+				"icon": "image/x-icon",
+				"jpg":  "image/jpeg",
+				"jpeg": "image/jpeg",
+				"apng": "image/apng",
+				"png":  "image/png",
+				"svg":  "image/svg+xml",
+				"tiff": "image/tiff",
+				"bmp":  "image/bmp",
+				"wbmp": "image/vnd.wap.wbmp",
+				"webp": "image/webp",
+			};
+		},
+
 		/**
 		 * Convert given extensions to mime types
 		 * 
@@ -32,21 +50,7 @@ export default {
 		 */
 		mimeTypes() {
 			return (this.accept?.replace(" ", "").split(",") || []).reduce((a, t) => {
-				switch(t) {
-					/* Image mime types */
-					case "avif": t = "image/avif"; break;
-					case "gif": t = "image/gif"; break;
-					case "icon": t = "image/x-icon"; break;
-					case "jpeg": t = "image/jpeg"; break;
-					case "apng": t = "image/apng"; break;
-					case "png": t = "image/png"; break;
-					case "svg": t = "image/svg+xml"; break;
-					case "tiff": t = "image/tiff"; break;
-					case "bmp": t = "image/bmp"; break;
-					case "wbmp": t = "image/vnd.wap.wbmp"; break;
-					case "webp": t = "image/webp"; break;
-				}
-
+				t = this.allMimeTypes[t] || t;
 				a.push(t);
 				return a;
 			}, []);
@@ -201,6 +205,99 @@ export default {
 			return this;
 		},
 
+		rotate(e, index) {
+			e?.preventDefault();
+			e?.stopPropagation();
+
+			const item = this.files[index];
+
+			if (this.isRotating(item)) {
+				return;
+			};
+			
+			this.rotating.push(item.id);
+
+			this.rotateItem(item, 90).then(result => {
+				const currentIndex = this.files.findIndex(f => f.id === item.id);
+				if (currentIndex >= 0) {
+					this.$set(this.files, currentIndex, {
+						...item,
+						image: result.newBase64,
+						file: result.rotatedFile
+					});
+				};
+			}).catch(e => {
+				this.log.add(e.message, "error");
+			}).finally(() => {
+				this.rotating = this.rotating.filter(f => f !== item.id);
+			});
+		},
+
+		isRotating(item) {
+			return this.rotating.some(f => f === item?.id);
+		},
+
+		async rotateItem(item, degrees = 90) {
+			return new Promise((resolve, reject) => {
+				const img = new Image();
+				img.crossOrigin = "Anonymous";
+				img.onload = () => {
+					try {
+						const canvas = document.createElement("canvas");
+						const ctx = canvas.getContext("2d");
+
+						if (degrees % 180 !== 0) {
+							[canvas.width, canvas.height] = [img.height, img.width];
+						} else {
+							[canvas.width, canvas.height] = [img.width, img.height];
+						}
+
+						ctx.translate(canvas.width / 2, canvas.height / 2);
+						ctx.rotate((degrees * Math.PI) / 180);
+						ctx.drawImage(img, -img.width / 2, -img.height / 2);
+
+						const params = {
+							quality: 0.9,
+						};
+
+						if (item.file) {
+							params.fileType = item.file?.type;
+							params.fileName = item.file?.name;
+						} else if (item.image?.startsWith("http")) {
+							const 
+								urlPath = new URL(item.image).pathname,
+								fileName = urlPath.substring(urlPath.lastIndexOf('/') + 1),
+								extension = fileName.split('.').pop().toLowerCase(),
+								fileType = this.allMimeTypes[extension] || "image/jpeg";
+
+							params.fileName = fileName;
+							params.fileType = fileType;
+						} else {
+							reject(new Error("Can't read file type"));
+						};
+
+						const newBase64 = canvas.toDataURL(params.fileType, params.quality);
+
+						canvas.toBlob((blob) => {
+							const rotatedFile = new File([blob], params.fileName, {
+								type: params.fileType,
+								lastModified: Date.now(),
+							});
+
+							resolve({
+								newBase64,
+								rotatedFile
+							});
+						}, params.fileType, params.quality);
+					} catch (e) {
+						reject(e);
+					};
+				};
+				img.onerror = () => reject(new Error("Can't load file"));
+				img.src = item.image;
+			});
+		},
+
 		/**
 		 * Make image first in query
 		 * 
@@ -351,12 +448,12 @@ export default {
 				})
 			})
 
-			this.filesSizeCalculated = false
+			this.filesSizeCalculated = false;
 
 			Promise.all(promises).catch(e => { 
 				console.error(e);
 			}).finally(() => {
-				this.filesSizeCalculated = true
+				this.filesSizeCalculated = true;
 			});
 		},
 
