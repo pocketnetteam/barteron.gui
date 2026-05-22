@@ -1,5 +1,5 @@
 <template>
-	<form action="#" class="search-bar">
+	<form action="#" class="search-bar" @keydown.enter.prevent> <!-- need add @keydown.enter.prevent to prevent category selection dialog by enter -->
 		<v-button
 			id="show-categories-button"
 			@click="showCategorySelectDialog"
@@ -16,7 +16,7 @@
 					{ category: $t(categories.items[id]?.name || 'categoryLabels.label') })
 				"
 				v-model="query"
-				@keyup.enter="submit"
+				@keyup.enter.stop="submit"
 			>
 		</div>
 		
