@@ -17,13 +17,13 @@
 					v-if="isTopCategory(item)"
 					class="image top-category"
 					:style="{ 'padding': getPadding(item) }"
-					:src="imageUrl(`categories-preview/${item.key}.png`)"
+					:src="categoryImages[item.key] || subcategoryImg"
 				>
 				<img
 					v-else-if="isSubcategory(item)"
 					class="image subcategory"
 					:style="{ 'padding': '15px' }"
-					:src="imageUrl(`categories-preview/subcategory.png`)"
+					:src="subcategoryImg"
 				>
 				<div 
 					v-else 
