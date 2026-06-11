@@ -1,3 +1,5 @@
+import categoryImages from '@/assets/images/categories-preview';
+
 export default {
 	name: "PreviewSlide",
 
@@ -7,6 +9,13 @@ export default {
 		groupedItem: {
 			type: Array,
 			default: () => []
+		}
+	},
+
+	data() {
+		return {
+			categoryImages,
+			subcategoryImg: categoryImages['subcategory'],
 		}
 	},
 
