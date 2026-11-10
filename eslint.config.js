@@ -15,6 +15,8 @@ export default defineConfig(
       '_docs-todo/',
       // Vendored copy of the host SDK, kept verbatim
       'e2e/fixtures/',
+      // Host fetch tunnel, copied from the old app verbatim
+      'public/miniapp-service-worker.js',
     ],
   },
   js.configs.recommended,

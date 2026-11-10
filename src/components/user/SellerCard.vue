@@ -5,6 +5,7 @@ import BastyonLink from '@/components/BastyonLink.vue'
 import UiAvatar from '@/ui/UiAvatar.vue'
 import UiBadge, { type BadgeTone } from '@/ui/UiBadge.vue'
 import UiIcon from '@/ui/UiIcon.vue'
+import type { IconName } from '@/ui/icons'
 import UiRating from '@/ui/UiRating.vue'
 
 /** Seller block on the item page (principle 06: roles and fees are visible where you decide). */
@@ -18,7 +19,7 @@ defineProps<{
   reviews?: number
   /** «На Barteron с марта 2023» — formatted by the caller. */
   since?: string
-  badges?: { label: string; tone?: BadgeTone }[]
+  badges?: { label: string; tone?: BadgeTone; icon?: IconName }[]
   profileTo?: RouteLocationRaw
   reviewsTo?: RouteLocationRaw
 }>()
@@ -44,9 +45,13 @@ const { t } = useI18n()
       </div>
     </div>
     <div v-if="badges?.length" class="seller__badges">
-      <UiBadge v-for="(badge, i) in badges" :key="i" :tone="badge.tone ?? 'neutral'">{{
-        badge.label
-      }}</UiBadge>
+      <UiBadge
+        v-for="(badge, i) in badges"
+        :key="i"
+        :tone="badge.tone ?? 'neutral'"
+        :icon="badge.icon"
+        >{{ badge.label }}</UiBadge
+      >
     </div>
     <div class="seller__links">
       <RouterLink v-if="profileTo" :to="profileTo" class="seller__link">

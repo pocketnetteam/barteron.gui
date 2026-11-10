@@ -185,6 +185,11 @@ export const ICONS = {
     ],
   },
   shield: { els: [['path', { d: 'M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6z' }]] },
+  // Not in the prototype: the moderator role mark (PLAN.md, stage 1 decisions).
+  'shield-fill': {
+    fill: true,
+    els: [['path', { d: 'M12 2 4 5.4v5.8c0 5 3.4 9.4 8 10.8 4.6-1.4 8-5.8 8-10.8V5.4z' }]],
+  },
   minus: { els: [['path', { d: 'M5 12h14' }]] },
   sort: { els: [['path', { d: 'M7 4v16M3 16l4 4 4-4M17 20V4M13 8l4-4 4 4' }]] },
   send: { els: [['path', { d: 'm3 11 18-8-8 18-2-8z' }]] },

@@ -13,15 +13,17 @@ import UiSegmented from '@/ui/UiSegmented.vue'
 import UiSelect from '@/ui/UiSelect.vue'
 import { showToast } from '@/ui/toast'
 import SheetComponents from './SheetComponents.vue'
+import SheetData from './SheetData.vue'
 import SheetFoundations from './SheetFoundations.vue'
 import SheetMarketplace from './SheetMarketplace.vue'
 
 /**
  * Internal design system showcase (dev and test builds). Three tabs follow the
  * prototype sheets foundations / components / marketplace, so they can be
- * compared side by side in both themes.
+ * compared side by side in both themes. The fourth shows the data layer
+ * (stage 2) on the mock network.
  */
-type Sheet = 'foundations' | 'components' | 'marketplace'
+type Sheet = 'foundations' | 'components' | 'marketplace' | 'data'
 
 const route = useRoute()
 const router = useRouter()
@@ -37,6 +39,7 @@ const SHEETS = [
   { value: 'foundations' as const, label: 'Основы' },
   { value: 'components' as const, label: 'Компоненты' },
   { value: 'marketplace' as const, label: 'Маркетплейс' },
+  { value: 'data' as const, label: 'Данные' },
 ]
 
 const themeItems = computed(() =>
@@ -132,7 +135,8 @@ function notReady(): void {
 
       <SheetFoundations v-if="sheet === 'foundations'" />
       <SheetComponents v-else-if="sheet === 'components'" />
-      <SheetMarketplace v-else />
+      <SheetMarketplace v-else-if="sheet === 'marketplace'" />
+      <SheetData v-else />
     </div>
 
     <template #tabbar>
@@ -205,13 +209,19 @@ function notReady(): void {
 }
 
 .showcase__tabs {
-  max-width: 560px;
+  max-width: 720px;
 }
 
 @media (max-width: 767px) {
   .showcase {
     padding-top: 20px;
     gap: 16px;
+  }
+
+  /* Four sheet names do not fit one row at 390 px. */
+  .showcase__tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 
   .showcase__title {

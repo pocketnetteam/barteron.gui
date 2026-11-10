@@ -46,6 +46,10 @@ export const useSessionStore = defineStore('session', () => {
     hostTheme.value = result.appinfo.theme?.rootid ?? null
     setLocale(resolveLocale(result.appinfo.locale))
 
+    // Outside services through the host when it routes traffic through Tor;
+    // sdk.js checks `alttransport` itself and returns null otherwise.
+    void result.sdk.serviceWorker?.register().catch(() => null)
+
     result.sdk.on('theme', (theme) => {
       hostTheme.value = theme.rootid
     })

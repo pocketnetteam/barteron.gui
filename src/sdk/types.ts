@@ -57,12 +57,29 @@ export interface AppInfo {
   pkoin?: boolean
 }
 
-/** A transaction the host built and sent on the app's behalf. */
+/**
+ * A transaction the host built and sent on the app's behalf: `action.export()`
+ * of the previous client, bastyon-nextgen `src/mini-apps/tx/app-actions.ts`.
+ * The host pushes it again as an `action` event on every new status.
+ */
 export interface HostAction {
-  /** Present once the transaction is broadcast. */
-  transaction?: string
+  id?: string
+  /** txid; missing while the host still queues the transaction. */
+  transaction?: string | null
+  /** In a block. */
   completed?: boolean
+  /** Why it never made it into a block (`notconfirmed` after an hour); null — not rejected. */
   rejected?: unknown
+  /** Set by sdk.js: no txid yet. */
+  relay?: boolean
+  /** Set by sdk.js: sent, waiting for a block. */
+  temp?: boolean
+  /** The object the app sent, as the host understood it (`export(true)`). */
+  expObject?: Record<string, unknown>
+  /** ISO dates. */
+  added?: string | null
+  sent?: string | null
+  updated?: string | null
   [key: string]: unknown
 }
 
@@ -119,7 +136,8 @@ export interface HostSdk {
     applink(path?: string): string
     balance(): Promise<unknown>
     action(): Promise<unknown>
-    actions(): Promise<unknown>
+    /** This app's transactions: pending ones and those finished in the last day. */
+    actions(): Promise<HostAction[]>
     fromToTransactions(
       addressFrom: string,
       addressTo: string,

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatMoney, formatPkoin, shortHash } from './format'
+import { formatAgo, formatMoney, formatPkoin, shortHash } from './format'
 
 /** Intl puts no-break spaces between groups; compare with plain spaces. */
 const plain = (s: string) => s.replace(/\s/g, ' ')
@@ -39,5 +39,15 @@ describe('shortHash', () => {
 
   it('leaves short values alone', () => {
     expect(shortHash('abcdef')).toBe('abcdef')
+  })
+})
+
+describe('formatAgo', () => {
+  const now = Date.UTC(2026, 10, 10, 12)
+  it('«2 часа назад», «вчера», «сейчас» in the interface language', () => {
+    expect(formatAgo(now - 2 * 3600_000, 'ru', now)).toBe('2 часа назад')
+    expect(formatAgo(now - 26 * 3600_000, 'ru', now)).toBe('вчера')
+    expect(formatAgo(now - 10_000, 'en', now)).toBe('this minute')
+    expect(formatAgo(now - 3 * 3600_000, 'sr', now)).toMatch(/3/)
   })
 })

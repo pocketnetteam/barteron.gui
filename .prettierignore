@@ -6,3 +6,6 @@ playwright-report
 pnpm-lock.yaml
 PLAN.md
 e2e/fixtures
+# Data copied from the old app by a script, kept minified
+src/data
+public/miniapp-service-worker.js

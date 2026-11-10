@@ -22,5 +22,11 @@
     "mobilecamera",
     "geolocation",
     "externallink"
+  ],
+  "fetch_hosts": [
+    "https://api.coingecko.com",
+    "https://min-api.cryptocompare.com",
+    "https://nominatim.openstreetmap.org",
+    "https://p2p.back.pocketnet.app"
   ]
 }

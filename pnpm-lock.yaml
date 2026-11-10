@@ -14,6 +14,12 @@ importers:
       '@fontsource/jetbrains-mono':
         specifier: 5.3.0
         version: 5.3.0
+      '@tanstack/vue-query':
+        specifier: ^5.107.1
+        version: 5.107.1(vue@3.5.45(typescript@5.9.3))
+      ngeohash:
+        specifier: ^0.6.4
+        version: 0.6.4
       pinia:
         specifier: ^3.0.4
         version: 3.0.4(typescript@5.9.3)(vue@3.5.45(typescript@5.9.3))
@@ -36,6 +42,9 @@ importers:
       '@tsconfig/node22':
         specifier: ^22.0.2
         version: 22.0.6
+      '@types/ngeohash':
+        specifier: ^0.6.8
+        version: 0.6.8
       '@types/node':
         specifier: ^22.18.0
         version: 22.20.5
@@ -543,6 +552,22 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@tanstack/match-sorter-utils@9.2.6':
+    resolution: {integrity: sha512-DIpUSOhPfQ7u/qfUi/Wgm0wBO56MyBYXGvnlI0NcauDRPqdBUlAZZjW2Dxm92m+k1UWVhKw8YJ4f47+75Aujyw==}
+    engines: {node: '>=20'}
+
+  '@tanstack/query-core@5.107.1':
+    resolution: {integrity: sha512-PSyAik11oQBEVOiVy5hjZWHmoUqOXqK1WYy4v55mcxozEfKaQgpUMsgnXhWjuESzSht8JfzqMS1m6M/9CpNgvg==}
+
+  '@tanstack/vue-query@5.107.1':
+    resolution: {integrity: sha512-O08F25JtbFDWJwEUjQNgSFRhkAXjlrAIUe0o06LfHC5agyNaxgzK9VUqjONu/BOUckARYdlXxSS7KIiKWeWlRw==}
+    peerDependencies:
+      '@vue/composition-api': ^1.1.2
+      vue: ^2.6.0 || ^3.3.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+
   '@tsconfig/node22@22.0.6':
     resolution: {integrity: sha512-/5thavHAnWDZwH2H6eEn/T8pBEBhtuKaWGMslsj82kJfvzQgOgEMK7X4goBbIUjgVtAzPTtM9Ml64LA0uxO6Iw==}
 
@@ -560,6 +585,9 @@ packages:
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
+
+  '@types/ngeohash@0.6.8':
+    resolution: {integrity: sha512-A90x3HMwE1yXbWCnd0ztHzv8rAQPjwTzX2diYI/6OrWm/3oairDaehw5WPWJFgZ+8+J/OuF99IbipmMa2le6tQ==}
 
   '@types/node@22.20.5':
     resolution: {integrity: sha512-U2+DNr+wSjpsTS/wZGYHq7GcwfuSmKiKvoPvK22zwTlRhU91yOniN4qRR5KhIjvif7ysw/dz/hKmfDH0Ris4aA==}
@@ -1148,6 +1176,10 @@ packages:
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
+  ngeohash@0.6.4:
+    resolution: {integrity: sha512-+dEKu+Be7xkK6gVQ2wZSGLbr+iWO+0ZGaLi98iE7F0/1WCSqQDRmS8LAlZBNLD2z/3zFKE9v9BvUfCrhyDhXbg==}
+    engines: {node: '>=v0.2.0'}
+
   nopt@10.0.1:
     resolution: {integrity: sha512-df3sBr/6ax9hSGuC3CspvLlbnX8cP5L5nZwXF8cGN8l0zSWR6BvzmQ6jPUKjvo6+/xdpkNvEcucBNUdBeeV13g==}
     engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0}
@@ -1265,6 +1297,9 @@ packages:
   readdirp@5.1.1:
     resolution: {integrity: sha512-Kko+Y5XQ6fM+Ce3dq3m9YGxnacYZYl9cA1wZjaF3Vbry2L3i1qVg8+CAgNPsXRArPMUMCaOR7oa9Nqntc43JKA==}
     engines: {node: '>= 20.19.0'}
+
+  remove-accents@0.5.0:
+    resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
 
   rfdc@1.4.1:
     resolution: {integrity: sha512-q1b3N5QkRUWUl7iyylaaj3kOpIT0N2i9MqIEQXP73GVsN9cw3fdx8X63cEmWhJGi2PPCF23Ijp7ktmd39rawIA==}
@@ -1488,6 +1523,17 @@ packages:
 
   vue-component-type-helpers@3.3.14:
     resolution: {integrity: sha512-Pq3+OnbCiPCHk0R7KSZrx+j/XXaUn2kSQ1epxq60w8CPbByLjC1EJgV51n4WY851sTXUVzsNMuitywdkdVyKjA==}
+
+  vue-demi@0.14.10:
+    resolution: {integrity: sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==}
+    engines: {node: '>=12'}
+    hasBin: true
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^3.0.0-0 || ^2.6.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
 
   vue-eslint-parser@10.4.2:
     resolution: {integrity: sha512-WMpzulb50kb6snghzoGzS++62wcOszAk/piYcnvzdStM8Wni/BmogYltpoOFv2eK9hDbXxvwFQgnwZGpAoUfpA==}
@@ -1877,6 +1923,20 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.68.2':
     optional: true
 
+  '@tanstack/match-sorter-utils@9.2.6':
+    dependencies:
+      remove-accents: 0.5.0
+
+  '@tanstack/query-core@5.107.1': {}
+
+  '@tanstack/vue-query@5.107.1(vue@3.5.45(typescript@5.9.3))':
+    dependencies:
+      '@tanstack/match-sorter-utils': 9.2.6
+      '@tanstack/query-core': 5.107.1
+      '@vue/devtools-api': 6.6.4
+      vue: 3.5.45(typescript@5.9.3)
+      vue-demi: 0.14.10(vue@3.5.45(typescript@5.9.3))
+
   '@tsconfig/node22@22.0.6': {}
 
   '@types/chai@5.2.3':
@@ -1891,6 +1951,8 @@ snapshots:
   '@types/estree@1.0.10': {}
 
   '@types/json-schema@7.0.15': {}
+
+  '@types/ngeohash@0.6.8': {}
 
   '@types/node@22.20.5':
     dependencies:
@@ -2573,6 +2635,8 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
+  ngeohash@0.6.4: {}
+
   nopt@10.0.1:
     dependencies:
       abbrev: 5.0.0
@@ -2675,6 +2739,8 @@ snapshots:
   quansync@0.2.11: {}
 
   readdirp@5.1.1: {}
+
+  remove-accents@0.5.0: {}
 
   rfdc@1.4.1: {}
 
@@ -2878,6 +2944,10 @@ snapshots:
   vscode-uri@3.2.0: {}
 
   vue-component-type-helpers@3.3.14: {}
+
+  vue-demi@0.14.10(vue@3.5.45(typescript@5.9.3)):
+    dependencies:
+      vue: 3.5.45(typescript@5.9.3)
 
   vue-eslint-parser@10.4.2(eslint@10.14.0):
     dependencies:

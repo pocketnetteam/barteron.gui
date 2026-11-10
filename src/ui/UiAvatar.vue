@@ -57,8 +57,8 @@ const showImage = computed(() => !!props.src && !failed.value)
       :aria-label="t(`ui.role.${role}`)"
     >
       <UiIcon
-        :name="role === 'guarantor' ? 'check' : 'shield'"
-        :size="size >= 48 ? 11 : 9"
+        :name="role === 'guarantor' ? 'check' : 'shield-fill'"
+        :size="role === 'guarantor' ? (size >= 48 ? 11 : 9) : size >= 48 ? 12 : 10"
         :stroke="3"
       />
     </span>
@@ -109,7 +109,13 @@ const showImage = computed(() => !!props.src && !failed.value)
   background: var(--success);
 }
 
+/*
+ * Not drawn in the prototype. The moderator mark differs from the guarantor's
+ * in shape (rounded square, not a circle), colour (brand violet, not green)
+ * and glyph (shield, not a check), so it reads without colour too.
+ */
 .ui-avatar__role--moderator {
-  background: var(--info);
+  border-radius: 6px;
+  background: var(--primary);
 }
 </style>

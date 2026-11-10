@@ -1,10 +1,10 @@
 import { expect, test, type Page } from '@playwright/test'
 
 /**
- * Design system showcase (/dev/ui): the three sheets render in both themes,
+ * Design system showcase (/dev/ui): the sheets render in both themes,
  * fit the screen at 1440 and 390, and the interactive parts work.
  */
-const SHEETS = ['foundations', 'components', 'marketplace'] as const
+const SHEETS = ['foundations', 'components', 'marketplace', 'data'] as const
 
 async function noHorizontalScroll(page: Page): Promise<void> {
   const overflow = await page.evaluate(

@@ -9,7 +9,7 @@ const devRoutes: RouteRecordRaw[] =
   import.meta.env.VITE_SHOWCASE === 'true'
     ? [
         {
-          path: '/dev/ui/:sheet(foundations|components|marketplace)?',
+          path: '/dev/ui/:sheet(foundations|components|marketplace|data)?',
           name: 'showcase',
           component: () => import('@/views/dev/ShowcaseView.vue'),
         },

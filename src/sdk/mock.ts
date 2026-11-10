@@ -1,3 +1,5 @@
+import { demoNetworkData } from './mock-data'
+import { createMockNetwork, type MockNetwork, type MockWrite } from './mock-network'
 import type { AppInfo, HostAction, HostEventName, HostEvents, HostSdk, Permission } from './types'
 
 /** Not a real address: the mock never reaches the network. */
@@ -17,8 +19,10 @@ export interface MockOptions {
   locale?: string
   /** Without it the mock follows the OS colour scheme, like a host would. */
   theme?: 'light' | 'dark'
-  /** RPC fixtures by method name. A method without a fixture rejects. */
+  /** RPC fixtures by method name; they win over the network. A method without either rejects. */
   rpc?: Record<string, MockRpcHandler>
+  /** In-memory Barteron network: answers node reads and confirms writes. */
+  network?: MockNetwork
 }
 
 export interface MockCall {
@@ -44,7 +48,7 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
   const address = options.address === undefined ? MOCK_ADDRESS : options.address
   const granted = new Set<Permission>(options.granted ?? ['account', 'chat'])
   const grantOnRequest = options.grantOnRequest ?? true
-  const rpcFixtures = options.rpc ?? {}
+  const rpcFixtures = { ...options.network?.rpc, ...options.rpc }
   const calls: MockCall[] = []
   const listeners = new Map<string, Set<(data: unknown) => void>>()
   let txCounter = 0
@@ -87,10 +91,17 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
     if (!granted.has(permission)) throw new Error(`permission:${permission}`)
   }
 
-  /** Writes resolve with a fake broadcast transaction. */
+  /**
+   * Writes: with a network, broadcast and a block later; without one, a fake
+   * broadcast transaction that never confirms.
+   */
   const sendTx = async (method: string, data: unknown): Promise<HostAction> => {
     record(method, data)
-    requireSignedIn()
+    const author = requireSignedIn()
+    if (options.network) {
+      const kind = method.replace('barteron.', '') as MockWrite
+      return options.network.send(kind, data, author)
+    }
     txCounter += 1
     return { transaction: `mocktx${String(txCounter).padStart(58, '0')}`, completed: false }
   }
@@ -159,7 +170,7 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
       action: () => resolved('get.action'),
       actions: async () => {
         record('get.actions')
-        return []
+        return options.network?.actions() ?? []
       },
       fromToTransactions: async (from, to, opts) => {
         record('get.fromToTransactions', from, to, opts)
@@ -241,10 +252,21 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
     },
   }
 
+  options.network?.subscribe((action) => sdk.mock.push('action', action))
+
   // Like a host that follows the OS: tell the app when the scheme changes.
   if (!options.theme) {
     darkQuery?.addEventListener?.('change', () => sdk.mock.push('theme', { rootid: osTheme() }))
   }
 
   return sdk
+}
+
+/** The mock the app uses in dev: signed in, with demo offers and sellers. */
+export function createDemoMockSdk(options: Omit<MockOptions, 'network'> = {}): MockSdk {
+  const address = options.address === undefined ? MOCK_ADDRESS : options.address
+  return createMockSdk({
+    ...options,
+    network: createMockNetwork(demoNetworkData(address ?? MOCK_ADDRESS)),
+  })
 }

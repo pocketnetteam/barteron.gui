@@ -236,6 +236,17 @@ function toggleFavorite(index: number): void {
           :profile-to="{ name: 'profile', params: { id: 'PMockUser1111111111111111111111111' } }"
           @open-bastyon="toast('Откроется профиль в Bastyon')"
         />
+        <span class="sheet__caption sheet__caption--gap">Модератор — значка нет на макетах</span>
+        <SellerCard
+          name="Вера Орлова"
+          seed="d"
+          role="moderator"
+          :rating="4.8"
+          :reviews="17"
+          since="На Barteron с мая 2024"
+          :badges="[{ label: 'Модератор', tone: 'primary', icon: 'shield-fill' }]"
+          @open-bastyon="toast('Откроется профиль в Bastyon')"
+        />
         <span class="sheet__caption sheet__caption--gap">Обмен на странице объявления</span>
         <div class="panel panel--gap14">
           <h3 class="panel__title">Меняю на</h3>

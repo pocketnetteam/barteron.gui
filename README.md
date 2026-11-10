@@ -50,18 +50,34 @@ Bastyon открывает Barteron в iframe. Приложение загруж
 - **Компоненты маркетплейса** — [src/components/](src/components/): карточки объявлений, цена, «Меняю на», продавец, статус сети и панель транзакции, шапка, таб-бар.
 - **Иконки** — [src/ui/icons.ts](src/ui/icons.ts), сгенерированы из листа `foundations` и экранов. Показываются через `<UiIcon name="…" />`.
 
+## Данные
+
+Своего сервера у Barteron нет: всё читается из ноды через `sdk.rpc` хоста, а записывается транзакциями, которые подписывает Bastyon.
+
+- **Модели** — [src/models/](src/models/): объявление (транзакция 211), профиль Barteron (104), отзыв и оценка, профиль Bastyon, дерево категорий. Каждая модель умеет разобрать транзакцию из ответа ноды и собрать то, что уходит в `sdk.barteron.*`. Формат — точно как у старого приложения: обе версии правят одни и те же объявления.
+- **Запросы к ноде** — [src/api/barteron.ts](src/api/barteron.ts). Бан-лист применяется здесь же, к каждой выдаче.
+- **Для экранов** — [src/api/queries.ts](src/api/queries.ts): `useFeed`, `useOffer`, `useAccount`, `useCategories`, `useRates` и другие (TanStack Query). Одиночные запросы карточек собираются в один запрос к ноде.
+- **Транзакции** — [src/stores/tx.ts](src/stores/tx.ts): `send(kind, payload)` отправляет транзакцию и ведёт её статус: отправляем → ждём блок → в сети, при ошибке можно повторить.
+- **Внешние сервисы** — курсы (coingecko, cryptocompare) и адреса (Nominatim). Если хост включил Tor, запросы идут через его туннель: [public/miniapp-service-worker.js](public/miniapp-service-worker.js).
+
+В обычном браузере заглушка SDK отвечает из сети в памяти: [src/sdk/mock-network.ts](src/sdk/mock-network.ts), демо-объявления — в [src/sdk/mock-data.ts](src/sdk/mock-data.ts). Блок приходит через 4 секунды. Если заголовок начинается с `!error`, нода отказывает сразу, а с `!reject` транзакция не попадает в блок. Посмотреть всё вместе можно на вкладке «Данные» витрины: http://localhost:5180/dev/ui/data.
+
 ## Структура
 
 ```
 build/        плагины Vite: dev-манифест, разрешённые origin хостов
 e2e/          Playwright; fixtures/bastyon-sdk.js — копия sdk.js из pocketnet.gui
-public/       b_manifest.json (production), иконки
+public/       b_manifest.json (production), иконки, Tor-туннель хоста
+src/api/      запросы к ноде, курсы, адреса; TanStack Query для экранов
 src/components/  компоненты маркетплейса и раскладка (шапка, таб-бар)
+src/config/   списки из старого приложения: бан-лист, гаранты, модераторы, пункты выдачи
+src/data/     категории и их переводы (копия из старого приложения)
 src/i18n/     ru, en, sr
-src/lib/      форматирование цен, контраст
+src/lib/      форматирование, геохеш, контраст, localStorage
+src/models/   объявление, профиль, отзыв, оценка, категории
 src/router/   маршруты старого приложения
-src/sdk/      связь с Bastyon
-src/stores/   Pinia: сессия, тема
+src/sdk/      связь с Bastyon; заглушка и сеть в памяти
+src/stores/   Pinia: сессия, тема, транзакции, валюта, место
 src/styles/   токены и базовые стили
 src/ui/       базовые компоненты дизайн-системы, иконки
 src/views/    экраны (пока заглушки); dev/ — витрина

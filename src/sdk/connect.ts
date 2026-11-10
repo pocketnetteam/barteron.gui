@@ -59,7 +59,9 @@ export async function connect(options: ConnectOptions): Promise<ConnectResult> {
 
   if (!inIframe) {
     if (!options.allowMock) return { status: 'outside' }
-    const sdk = options.createMock ? options.createMock() : (await import('./mock')).createMockSdk()
+    const sdk = options.createMock
+      ? options.createMock()
+      : (await import('./mock')).createDemoMockSdk()
     await sdk.init()
     return { status: 'ready', mode: 'mock', sdk, appinfo: await sdk.get.appinfo() }
   }
