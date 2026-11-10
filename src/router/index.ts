@@ -4,6 +4,18 @@ import HomeView from '@/views/HomeView.vue'
 const StubView = () => import('@/views/StubView.vue')
 const NotFoundView = () => import('@/views/NotFoundView.vue')
 
+/** Internal pages: dev and test builds only, cut out of production. */
+const devRoutes: RouteRecordRaw[] =
+  import.meta.env.VITE_SHOWCASE === 'true'
+    ? [
+        {
+          path: '/dev/ui/:sheet(foundations|components|marketplace)?',
+          name: 'showcase',
+          component: () => import('@/views/dev/ShowcaseView.vue'),
+        },
+      ]
+    : []
+
 /**
  * Same paths and names as the old app (barteron.gui `src/router.js`): these
  * links are already shared in chats. Screens are stubs until their stage.
@@ -28,6 +40,7 @@ export const routes: RouteRecordRaw[] = [
   { path: '/barter/:id', name: 'barterItem', component: StubView },
   { path: '/profile/:id', name: 'profile', component: StubView },
   { path: '/about', name: 'about', component: StubView },
+  ...devRoutes,
   { path: '/404', name: 'notFound', component: NotFoundView },
   { path: '/:pathMatch(.*)*', name: 'unknown', component: NotFoundView },
 ]

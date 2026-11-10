@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useSessionStore } from '@/stores/session'
+import UiButton from '@/ui/UiButton.vue'
 
 /** Stage 0 home: shows what the host told us. Stage 3 replaces it with the real home page. */
 const session = useSessionStore()
@@ -27,6 +28,8 @@ const rows = computed(() => {
     { key: 'app', label: t('status.app'), value: info?.application?.id ?? '—' },
   ]
 })
+
+const showcase = import.meta.env.VITE_SHOWCASE === 'true'
 
 const HASH = '0'.repeat(64)
 const sampleRoutes = [
@@ -57,17 +60,23 @@ const sampleRoutes = [
         </template>
         <template v-else-if="session.account === 'no-permission'">
           {{ t('status.accountNoPermission') }}
-          <button type="button" @click="session.requestAccountAccess()">
+          <UiButton variant="secondary" :size="32" @click="session.requestAccountAccess()">
             {{ t('status.grant') }}
-          </button>
+          </UiButton>
         </template>
         <template v-else-if="session.account === 'guest'">
           {{ t('status.accountGuest') }}
-          <button type="button" @click="session.signIn()">{{ t('status.signIn') }}</button>
+          <UiButton variant="secondary" :size="32" @click="session.signIn()">
+            {{ t('status.signIn') }}
+          </UiButton>
         </template>
         <template v-else>—</template>
       </dd>
     </dl>
+
+    <UiButton v-if="showcase" variant="secondary" icon="tiles" :to="{ name: 'showcase' }">
+      {{ t('status.showcase') }}
+    </UiButton>
 
     <h2>{{ t('status.routes') }}</h2>
     <ul>
@@ -83,11 +92,10 @@ const sampleRoutes = [
   display: grid;
   grid-template-columns: max-content 1fr;
   gap: 8px 16px;
-  margin: 0 0 24px;
 }
 
 .status dt {
-  color: var(--muted);
+  color: var(--text2);
 }
 
 .status dd {
@@ -95,7 +103,10 @@ const sampleRoutes = [
   overflow-wrap: anywhere;
 }
 
-.status button {
-  margin-left: 8px;
+.status dd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
 }
 </style>

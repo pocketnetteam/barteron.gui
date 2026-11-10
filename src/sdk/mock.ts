@@ -15,6 +15,7 @@ export interface MockOptions {
   /** What `permissions.request` grants. By default, everything asked. */
   grantOnRequest?: boolean
   locale?: string
+  /** Without it the mock follows the OS colour scheme, like a host would. */
   theme?: 'light' | 'dark'
   /** RPC fixtures by method name. A method without a fixture rejects. */
   rpc?: Record<string, MockRpcHandler>
@@ -48,6 +49,12 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
   const listeners = new Map<string, Set<(data: unknown) => void>>()
   let txCounter = 0
 
+  const darkQuery =
+    typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+      ? window.matchMedia('(prefers-color-scheme: dark)')
+      : null
+  const osTheme = () => (darkQuery?.matches ? 'dark' : 'light')
+
   const record = (method: string, ...args: unknown[]) => {
     calls.push({ method, args })
   }
@@ -57,7 +64,7 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
     version: 'mock',
     production: false,
     locale: options.locale ?? navigator.language.split('-')[0],
-    theme: { rootid: options.theme ?? 'light' },
+    theme: { rootid: options.theme ?? osTheme() },
     margintop: '0px',
     application: { id: MOCK_APP_ID, name: 'Barteron' },
     project: {
@@ -232,6 +239,11 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
         listeners.get(key)?.forEach((listener) => listener(data))
       },
     },
+  }
+
+  // Like a host that follows the OS: tell the app when the scheme changes.
+  if (!options.theme) {
+    darkQuery?.addEventListener?.('change', () => sdk.mock.push('theme', { rootid: osTheme() }))
   }
 
   return sdk

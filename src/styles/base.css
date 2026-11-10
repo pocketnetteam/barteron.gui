@@ -1,32 +1,4 @@
-/*
- * Temporary base styles for the scaffold. Stage 1 replaces them with the
- * design system tokens from the prototype (foundations.html).
- */
-:root {
-  color-scheme: light;
-  --bg: #ffffff;
-  --text: #1a1a1a;
-  --muted: #6b6b6b;
-  --line: #e5e5e5;
-  --accent: #2563eb;
-  font-family:
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-}
-
-:root[data-host-theme='dark'] {
-  color-scheme: dark;
-  --bg: #16181d;
-  --text: #f0f0f0;
-  --muted: #a0a0a0;
-  --line: #2c2f36;
-  --accent: #6b9bff;
-}
+/* Reset, page defaults and the type scale from foundations.html. */
 
 *,
 *::before,
@@ -34,33 +6,197 @@
   box-sizing: border-box;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   margin: 0;
-  background: var(--bg);
+  min-height: 100vh;
+  background: var(--page);
   color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 20px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* The host's header overlaps the iframe by `margintop` (appinfo). */
   padding-top: var(--app-margin-top, 0);
 }
 
+h1,
+h2,
+h3,
+h4,
+p,
+ol,
+ul,
+dl,
+dd,
+figure {
+  margin: 0;
+}
+
+ol,
+ul {
+  padding: 0;
+  list-style: none;
+}
+
 a {
-  color: var(--accent);
+  color: var(--link);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
 }
 
 button {
-  font: inherit;
-  padding: 8px 16px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: transparent;
-  color: inherit;
   cursor: pointer;
 }
 
+img,
+svg {
+  display: block;
+}
+
+:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 1px;
+}
+
+/* Type scale: «Типографика · Onest» */
+.t-display {
+  font-size: 40px;
+  line-height: 48px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+.t-h1 {
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 700;
+}
+.t-h2 {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 700;
+}
+.t-h3 {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+}
+.t-price-l {
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.t-price-m {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.t-title {
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 500;
+}
+.t-body-l {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+}
+.t-body {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+}
+.t-label {
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+}
+.t-caption {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+}
+.t-mono {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 500;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Content container: 1248 px plus side padding. */
+.container {
+  width: 100%;
+  max-width: calc(var(--container) + 2 * var(--page-pad));
+  margin: 0 auto;
+  padding-left: var(--page-pad);
+  padding-right: var(--page-pad);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Temporary scaffold layout for the stage 0 pages (home status, stubs). */
 .page {
   max-width: 720px;
   margin: 0 auto;
   padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.page h1 {
+  font-size: 24px;
+  line-height: 32px;
+}
+
+.page h2 {
+  font-size: 18px;
+  line-height: 24px;
 }
 
 .muted {
-  color: var(--muted);
+  color: var(--text2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

@@ -47,3 +47,37 @@ describe('mock SDK', () => {
     expect(listener).toHaveBeenCalledWith({ rootid: 'dark' })
   })
 })
+
+describe('mock SDK theme', () => {
+  function fakeMedia(matches: boolean) {
+    const listeners: ((e: { matches: boolean }) => void)[] = []
+    const media = {
+      matches,
+      addEventListener: (_: string, fn: (e: { matches: boolean }) => void) => listeners.push(fn),
+    }
+    vi.spyOn(window, 'matchMedia').mockReturnValue(media as unknown as MediaQueryList)
+    return {
+      set(value: boolean) {
+        media.matches = value
+        listeners.forEach((fn) => fn({ matches: value }))
+      },
+    }
+  }
+
+  it('follows the OS scheme when no theme is given', async () => {
+    const os = fakeMedia(true)
+    const sdk = createMockSdk()
+    expect((await sdk.get.appinfo()).theme).toEqual({ rootid: 'dark' })
+
+    const onTheme = vi.fn()
+    sdk.on('theme', onTheme)
+    os.set(false)
+    expect(onTheme).toHaveBeenCalledWith({ rootid: 'light' })
+  })
+
+  it('keeps an explicit theme', async () => {
+    fakeMedia(true)
+    const sdk = createMockSdk({ theme: 'light' })
+    expect((await sdk.get.appinfo()).theme).toEqual({ rootid: 'light' })
+  })
+})

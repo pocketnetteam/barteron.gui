@@ -110,7 +110,8 @@ test.describe('inside a Bastyon host with the real sdk.js', () => {
     await expect(app.getByTestId('status-host')).toHaveText('Fake Bastyon')
     await expect(app.getByTestId('status-theme')).toHaveText('dark')
     await expect(app.getByTestId('status-account')).toHaveText(HOST_ADDRESS)
-    await expect(app.locator('html')).toHaveAttribute('data-host-theme', 'dark')
+    // «Системная» (the default) follows the host theme.
+    await expect(app.locator('html')).toHaveAttribute('data-theme', 'dark')
   })
 
   test('asks the host for account access when it is not granted', async ({ page }) => {

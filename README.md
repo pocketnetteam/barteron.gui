@@ -40,15 +40,29 @@ Bastyon открывает Barteron в iframe. Приложение загруж
 
 Без входа в аккаунт Bastyon приложение покажет «Вы не вошли в Bastyon». Если хост не дал доступ к аккаунту, будет кнопка «Разрешить доступ».
 
+## Дизайн-система
+
+Витрина компонентов — http://localhost:5180/dev/ui (`pnpm dev`). На ней три вкладки, по листам прототипа `foundations`, `components` и `marketplace`, и переключатели темы и языка. В production-сборку витрина не попадает: её включает `VITE_SHOWCASE=true` в `.env.development`, `.env.https` и `.env.test`.
+
+- **Токены** — [src/styles/tokens.css](src/styles/tokens.css). Имена те же, что в макетах: `--page`, `--surface`, `--text2`, `--primary`… В компонентах и экранах используются только они, без цветов напрямую.
+- **Тема** — [src/stores/theme.ts](src/stores/theme.ts): «Системная» (внутри Bastyon — тема хоста, вне его — тема ОС), «Светлая», «Тёмная». Выбор хранится в `localStorage`.
+- **Базовые компоненты** — [src/ui/](src/ui/), имена с `Ui…`: кнопки, поля, выбор, вкладки, чипы, плашки, тосты (`showToast`), окна и листы, аватары, рейтинг, шаги.
+- **Компоненты маркетплейса** — [src/components/](src/components/): карточки объявлений, цена, «Меняю на», продавец, статус сети и панель транзакции, шапка, таб-бар.
+- **Иконки** — [src/ui/icons.ts](src/ui/icons.ts), сгенерированы из листа `foundations` и экранов. Показываются через `<UiIcon name="…" />`.
+
 ## Структура
 
 ```
 build/        плагины Vite: dev-манифест, разрешённые origin хостов
 e2e/          Playwright; fixtures/bastyon-sdk.js — копия sdk.js из pocketnet.gui
 public/       b_manifest.json (production), иконки
+src/components/  компоненты маркетплейса и раскладка (шапка, таб-бар)
 src/i18n/     ru, en, sr
+src/lib/      форматирование цен, контраст
 src/router/   маршруты старого приложения
 src/sdk/      связь с Bastyon
-src/stores/   Pinia
-src/views/    экраны (пока заглушки)
+src/stores/   Pinia: сессия, тема
+src/styles/   токены и базовые стили
+src/ui/       базовые компоненты дизайн-системы, иконки
+src/views/    экраны (пока заглушки); dev/ — витрина
 ```

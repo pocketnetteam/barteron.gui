@@ -1,0 +1,194 @@
+/*
+ * Design tokens from the prototype (foundations.html, components.html,
+ * marketplace.html). The names are the prototype's own, so screen markup can
+ * be ported as is. Screens use only these variables; the theme changes the
+ * values, never the names.
+ *
+ * The theme is set on <html data-theme="light|dark"> by the theme store
+ * (src/stores/theme.ts). Any element with data-theme switches its subtree,
+ * which the showcase uses to put both themes side by side.
+ */
+
+:root {
+  /* Fonts. Onest is bundled with the app (fontsource), not loaded from Google. */
+  --font-sans: 'Onest Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  /* Spacing, step 4 (foundations: «Отступы · шаг 4») */
+  --space-1: 2px;
+  --space-2: 4px;
+  --space-3: 8px;
+  --space-4: 12px;
+  --space-5: 16px;
+  --space-6: 20px;
+  --space-7: 24px;
+  --space-8: 32px;
+  --space-9: 40px;
+  --space-10: 48px;
+  --space-11: 64px;
+
+  /* Radii */
+  --radius-xs: 6px;
+  --radius-s: 8px;
+  --radius-m: 12px;
+  --radius-l: 16px;
+  --radius-xl: 24px;
+  --radius-full: 999px;
+
+  /* Layout. The container is 1248 px of content plus 24 px side padding. */
+  --container: 1248px;
+  --gutter: 24px;
+  --page-pad: 24px;
+  --tabbar-h: 64px;
+
+  /* Layers */
+  --z-header: 100;
+  --z-tabbar: 100;
+  --z-popover: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+
+  --duration: 160ms;
+}
+
+@media (max-width: 1279px) {
+  :root {
+    --gutter: 16px;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --gutter: 8px;
+    --page-pad: 16px;
+  }
+}
+
+/* Light theme — also the default before the theme store runs. */
+:root,
+[data-theme='light'] {
+  color-scheme: light;
+
+  --page: #f4f4f6;
+  --surface: #ffffff;
+  --subtle: #fafafb;
+  --muted: #ebebef;
+  --muted-hover: #dcdce2;
+  --border: #dcdce2;
+  --border-strong: #c3c3cc;
+
+  --text: #16161d;
+  --text2: #5a5a66;
+  --text3: #68687a;
+
+  --primary: #5b3cf0;
+  --primary-hover: #4a2ccf;
+  --primary-soft: #f3f0ff;
+  --primary-soft-hover: #e6e0ff;
+  --link: #4a2ccf;
+  --ring: rgba(91, 60, 240, 0.35);
+
+  --contrast: #16161d;
+  --on-contrast: #ffffff;
+  /* Status colours on a contrast surface (toasts, tooltips): the other theme's values. */
+  --on-contrast-success: #4cc982;
+  --on-contrast-danger: #ff7a7a;
+  --on-contrast-link: #a898ff;
+
+  --pkoin: #9a5b00;
+  --pkoin-soft: #fff4db;
+  --star: #f5a524;
+  --success: #157a41;
+  --success-soft: #e7f6ee;
+  --warning: #8a5300;
+  --warning-soft: #fff4db;
+  --danger: #c4262a;
+  --danger-soft: #fdecec;
+  --info: #1f5fc4;
+  --info-soft: #e8f1fe;
+
+  --disabled-bg: #ebebef;
+  --disabled-fg: #9a9aa6;
+  --skeleton: #ebebef;
+  --photo: #e3e3ea;
+  /* Labels on top of a photo */
+  --on-photo: rgba(16, 16, 22, 0.64);
+  --on-photo-button: rgba(255, 255, 255, 0.9);
+  --favorite: #e5383b;
+
+  --overlay: rgba(16, 16, 22, 0.56);
+  --shadow-1: 0 1px 2px rgba(16, 16, 22, 0.06), 0 2px 8px rgba(16, 16, 22, 0.06);
+  --shadow-2: 0 4px 16px rgba(16, 16, 22, 0.1);
+  --shadow-3: 0 12px 40px rgba(16, 16, 22, 0.18);
+
+  /* Map (stage 3) */
+  --map-land: #eef0ea;
+  --map-water: #c9dff0;
+  --map-road: #ffffff;
+  --map-road2: #f7e7b8;
+  --map-park: #d7e8cf;
+  --radius-fill: rgba(91, 60, 240, 0.08);
+}
+
+/* Dark theme: shadows do not work on dark, so levels are told apart by the
+   lightness of the surface and a border/default line. */
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --page: #0e0e13;
+  --surface: #18181f;
+  --subtle: #1f1f28;
+  --muted: #2a2a35;
+  --muted-hover: #343442;
+  --border: #2e2e3a;
+  --border-strong: #444452;
+
+  --text: #f2f2f5;
+  --text2: #b4b4c0;
+  --text3: #8c8c99;
+
+  --primary: #6e4fff;
+  --primary-hover: #8467ff;
+  --primary-soft: #241c4d;
+  --primary-soft-hover: #2e2463;
+  --link: #a898ff;
+  --ring: rgba(132, 103, 255, 0.55);
+
+  --contrast: #f2f2f5;
+  --on-contrast: #16161d;
+  --on-contrast-success: #157a41;
+  --on-contrast-danger: #c4262a;
+  --on-contrast-link: #4a2ccf;
+
+  --pkoin: #ffc24d;
+  --pkoin-soft: #3a2a0a;
+  --star: #ffc24d;
+  --success: #4cc982;
+  --success-soft: #12301f;
+  --warning: #ffc24d;
+  --warning-soft: #3a2a0a;
+  --danger: #ff7a7a;
+  --danger-soft: #3a1517;
+  --info: #6fa8ff;
+  --info-soft: #132743;
+
+  --disabled-bg: #23232d;
+  --disabled-fg: #5e5e6b;
+  --skeleton: #2a2a35;
+  --photo: #262631;
+  --on-photo: rgba(16, 16, 22, 0.64);
+  --on-photo-button: rgba(255, 255, 255, 0.9);
+  --favorite: #e5383b;
+
+  --overlay: rgba(0, 0, 0, 0.64);
+  --shadow-1: 0 0 0 1px #2e2e3a;
+  --shadow-2: 0 0 0 1px #2e2e3a, 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-3: 0 0 0 1px #2e2e3a, 0 16px 48px rgba(0, 0, 0, 0.6);
+
+  --map-land: #1b1e24;
+  --map-water: #15263a;
+  --map-road: #2c3039;
+  --map-road2: #3a3426;
+  --map-park: #18291f;
+  --radius-fill: rgba(132, 103, 255, 0.12);
+}

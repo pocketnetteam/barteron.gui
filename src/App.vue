@@ -1,17 +1,12 @@
 <script setup lang="ts">
-import { watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useSessionStore } from '@/stores/session'
+import UiButton from '@/ui/UiButton.vue'
+import UiToastHost from '@/ui/UiToastHost.vue'
 
 const session = useSessionStore()
 const { t } = useI18n()
 const sdkHost = import.meta.env.VITE_SDK_HOST
-
-watchEffect(() => {
-  const root = document.documentElement
-  if (session.hostTheme) root.dataset.hostTheme = session.hostTheme
-  else delete root.dataset.hostTheme
-})
 
 function reload() {
   window.location.reload()
@@ -33,10 +28,12 @@ function reload() {
     <h1>{{ t('app.failed.title') }}</h1>
     <p v-if="session.failReason === 'script'">{{ t('app.failed.script', { host: sdkHost }) }}</p>
     <p v-else>{{ t('app.failed.timeout') }}</p>
-    <button type="button" @click="reload">{{ t('app.failed.retry') }}</button>
+    <UiButton icon="retry" @click="reload">{{ t('app.failed.retry') }}</UiButton>
   </main>
 
   <main v-else class="page muted" data-testid="state-connecting">
     {{ t('app.connecting') }}
   </main>
+
+  <UiToastHost />
 </template>

@@ -42,11 +42,18 @@ export default defineConfig(
     rules: {
       // TypeScript already reports undefined names.
       'no-undef': 'off',
+      // Optional typed props are undefined by default; a default adds nothing.
+      'vue/require-default-prop': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
     },
+  },
+  {
+    // Tests define small wrapper components inline.
+    files: ['**/*.test.ts'],
+    rules: { 'vue/one-component-per-file': 'off' },
   },
   prettier
 )
