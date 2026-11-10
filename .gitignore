@@ -1,1 +1,22 @@
 _docs-todo
+
+node_modules
+dist
+coverage
+*.tsbuildinfo
+.eslintcache
+
+# Playwright
+test-results
+playwright-report
+
+# Local env overrides
+.env.local
+.env.*.local
+
+# Editors and OS
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+Thumbs.db

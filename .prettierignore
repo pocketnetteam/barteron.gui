@@ -1,0 +1,8 @@
+_docs-todo
+dist
+coverage
+test-results
+playwright-report
+pnpm-lock.yaml
+PLAN.md
+e2e/fixtures

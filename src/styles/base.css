@@ -1,0 +1,66 @@
+/*
+ * Temporary base styles for the scaffold. Stage 1 replaces them with the
+ * design system tokens from the prototype (foundations.html).
+ */
+:root {
+  color-scheme: light;
+  --bg: #ffffff;
+  --text: #1a1a1a;
+  --muted: #6b6b6b;
+  --line: #e5e5e5;
+  --accent: #2563eb;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+:root[data-host-theme='dark'] {
+  color-scheme: dark;
+  --bg: #16181d;
+  --text: #f0f0f0;
+  --muted: #a0a0a0;
+  --line: #2c2f36;
+  --accent: #6b9bff;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  padding-top: var(--app-margin-top, 0);
+}
+
+a {
+  color: var(--accent);
+}
+
+button {
+  font: inherit;
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.muted {
+  color: var(--muted);
+}
