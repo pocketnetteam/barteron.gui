@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
-import { computed } from 'vue'
+import { computed, toValue, type MaybeRefOrGetter } from 'vue'
 import { useAccount, useBarteron, useCategories, useOffersByAddress } from '@/api/queries'
 import type { CategoryTree } from '@/models/categories'
 import { exchangeCategories, isOfferActive, type Offer } from '@/models/offer'
@@ -12,6 +12,8 @@ export interface MatchItem {
   kind: 'direct' | 'chain'
   /** My offer it fits. */
   source: Offer
+  /** Chain: the offers in between. */
+  via?: Offer[]
 }
 
 /** At most this many of my offer groups are asked about, to spare the node. */
@@ -110,9 +112,12 @@ export function useMayMatch() {
           const source = g.offers[0]!
           return [
             ...direct.slice(0, 3).map((target) => ({ target, kind: 'direct' as const, source })),
-            ...chains
-              .slice(0, 2)
-              .map((c) => ({ target: c.target, kind: 'chain' as const, source })),
+            ...chains.slice(0, 2).map((c) => ({
+              target: c.target,
+              kind: 'chain' as const,
+              source,
+              via: c.intermediates,
+            })),
           ]
         })
       )
@@ -128,6 +133,94 @@ export function useMayMatch() {
           return true
         })
         .slice(0, MAX_ITEMS)
+      for (const i of items)
+        if (i.target.hash) client.setQueryData(['barteron', 'offer', i.target.hash], i.target)
+      return items
+    },
+    staleTime: 5 * 60_000,
+  })
+}
+
+/**
+ * My active offers that fit what the seller wants: its category is one of
+ * theirs or lies under one («Ваш „Ноутбук“ подходит для обмена»).
+ */
+export function fittingOffers(
+  offer: Pick<Offer, 'tags' | 'address'>,
+  mine: readonly Offer[],
+  tree: CategoryTree,
+  sellerList: readonly number[] = []
+): Offer[] {
+  const wanted = new Set(expand(tree, exchangeCategories(offer, sellerList)))
+  return mine.filter(
+    (o) => o.address !== offer.address && o.tag !== null && isOfferActive(o) && wanted.has(o.tag)
+  )
+}
+
+/**
+ * «Варианты обмена» on my own offer (s3-itemown): offers that want what I
+ * have and have what I want, then chains of three. The old «Найти обмены»
+ * page asked `getbarterondeals` the same way (Exchange/content/index.js).
+ */
+export function useOfferMatches(offer: MaybeRefOrGetter<Offer | null | undefined>) {
+  const barteron = useBarteron()
+  const client = useQueryClient()
+  const categories = useCategories()
+  const account = useAccount(() => toValue(offer)?.address)
+
+  return useQuery({
+    queryKey: computed(() => [
+      'barteron',
+      'feed',
+      'offer-matches',
+      toValue(offer)?.txHash ?? null,
+      account.data.value?.tags ?? null,
+    ]),
+    enabled: computed(() => {
+      const o = toValue(offer)
+      return (
+        !!barteron.value &&
+        !!o?.hash &&
+        o.tag !== null &&
+        !!categories.tree.value &&
+        !!account.data.value
+      )
+    }),
+    queryFn: async (): Promise<MatchItem[]> => {
+      const source = toValue(offer)!
+      const api = barteron.value!.api
+      const tree = categories.tree.value!
+      const theirTags = exchangeCategories(source, account.data.value?.tags ?? [])
+      if (!theirTags.length || source.tag === null) return []
+      const exclude = [source.address]
+      const [direct, chains] = await Promise.all([
+        api
+          .deals({
+            myTags: [source.tag, ...tree.parents(source.tag).map((c) => c.id)],
+            theirTags: expand(tree, theirTags),
+            excludeAddresses: exclude,
+            pageSize: 24,
+          })
+          .catch(() => [] as Offer[]),
+        api
+          .complexDeals({ myTag: source.tag, theirTags, excludeAddresses: exclude })
+          .catch(() => []),
+      ])
+      const seen = new Set<string>()
+      const items = [
+        ...direct.map((target) => ({ target, kind: 'direct' as const, source })),
+        ...chains.map((c) => ({
+          target: c.target,
+          kind: 'chain' as const,
+          source,
+          via: c.intermediates,
+        })),
+      ].filter((i) => {
+        const id = i.target.hash ?? ''
+        if (!isOfferActive(i.target) || seen.has(id)) return false
+        seen.add(id)
+        return true
+      })
       for (const i of items)
         if (i.target.hash) client.setQueryData(['barteron', 'offer', i.target.hash], i.target)
       return items

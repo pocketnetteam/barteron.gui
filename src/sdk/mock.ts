@@ -186,7 +186,12 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
       imageFromMobileCamera: () => resolved('get.imageFromMobileCamera'),
       videos: async (urls) => {
         record('get.videos', urls)
-        return []
+        // No PeerTube offline: a demo video is always «being processed» (state 2).
+        return urls.map((url) =>
+          url.includes('processing')
+            ? { data: { original: { state: { id: 2 }, streamingPlaylists: [] }, thumbnail: '' } }
+            : {}
+        )
       },
     },
 

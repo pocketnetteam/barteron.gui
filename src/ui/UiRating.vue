@@ -16,6 +16,8 @@ const props = withDefaults(
     /** Link to the reviews. */
     to?: RouteLocationRaw
     variant?: 'stars' | 'compact' | 'photo'
+    /** Stars only: the number stays for screen readers (a review's score). */
+    hideValue?: boolean
   }>(),
   { variant: 'stars' }
 )
@@ -39,7 +41,12 @@ const label = computed(() => t('ui.rating', { value: valueText.value }))
   </span>
 
   <span v-else class="ui-rating" :class="`ui-rating--${variant}`">
-    <span class="ui-rating__value" role="img" :aria-label="label">
+    <span
+      class="ui-rating__value"
+      :class="{ 'visually-hidden': hideValue }"
+      role="img"
+      :aria-label="label"
+    >
       <span aria-hidden="true">{{ valueText }}</span>
     </span>
     <span v-if="variant === 'stars'" class="ui-rating__stars" aria-hidden="true">

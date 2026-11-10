@@ -307,6 +307,18 @@ export const ICONS = {
   'cat-food': {
     els: [['path', { d: 'M5 9h12v5a6 6 0 0 1-12 0zM17 10h1.5a2.5 2.5 0 0 1 0 5H17M8 3v3M12 3v3' }]],
   },
+  copy: {
+    els: [
+      ['rect', { x: '8', y: '8', width: '12', height: '12', rx: '2' }],
+      ['path', { d: 'M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3' }],
+    ],
+  },
+  withdraw: {
+    els: [
+      ['circle', { cx: '12', cy: '12', r: '9' }],
+      ['path', { d: 'M9 9h6v6H9z' }],
+    ],
+  },
 } satisfies Record<string, IconDef>
 
 export type IconName = keyof typeof ICONS

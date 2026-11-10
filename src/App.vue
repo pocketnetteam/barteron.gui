@@ -1,10 +1,19 @@
 <script setup lang="ts">
+import { computed, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 import { useSessionStore } from '@/stores/session'
 import UiButton from '@/ui/UiButton.vue'
 import UiToastHost from '@/ui/UiToastHost.vue'
 
+const AutorenewPrompt = defineAsyncComponent(() => import('@/components/item/AutorenewPrompt.vue'))
+
 const session = useSessionStore()
+const route = useRoute()
+const showRenewals = computed(
+  () =>
+    session.status === 'ready' && session.account === 'signed-in' && !route.path.startsWith('/dev')
+)
 const { t } = useI18n()
 const sdkHost = import.meta.env.VITE_SDK_HOST
 
@@ -35,5 +44,7 @@ function reload() {
     {{ t('app.connecting') }}
   </main>
 
+  <!-- My offers whose year is running out: offer to renew them (stage 4). -->
+  <AutorenewPrompt v-if="showRenewals" />
   <UiToastHost />
 </template>

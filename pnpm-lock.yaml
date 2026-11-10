@@ -17,6 +17,9 @@ importers:
       '@tanstack/vue-query':
         specifier: ^5.107.1
         version: 5.107.1(vue@3.5.45(typescript@5.9.3))
+      hls.js:
+        specifier: 1.5.20
+        version: 1.5.20
       leaflet:
         specifier: 1.9.4
         version: 1.9.4
@@ -1075,6 +1078,9 @@ packages:
   hashery@1.5.1:
     resolution: {integrity: sha512-iZyKG96/JwPz1N55vj2Ie2vXbhu440zfUfJvSwEqEbeLluk7NnapfGqa7LH0mOsnDxTF85Mx8/dyR6HfqcbmbQ==}
     engines: {node: '>=20'}
+
+  hls.js@1.5.20:
+    resolution: {integrity: sha512-uu0VXUK52JhihhnN/MVVo1lvqNNuhoxkonqgO3IpjvQiGpJBdIXMGkofjQb/j9zvV7a1SW8U9g1FslWx/1HOiQ==}
 
   hookable@5.5.3:
     resolution: {integrity: sha512-Yc+BQe8SvoXH1643Qez1zqLRmbA5rCL+sSmk6TVos0LWVfNIB7PGncdlId77WzLGSIB5KaWgTaNTs2lNVEI6VQ==}
@@ -2559,6 +2565,8 @@ snapshots:
   hashery@1.5.1:
     dependencies:
       hookified: 1.15.1
+
+  hls.js@1.5.20: {}
 
   hookable@5.5.3: {}
 

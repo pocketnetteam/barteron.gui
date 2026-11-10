@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useBastyonProfile } from '@/composables/bastyon'
 import { useBalance, useOffersByAddress, useRates, useUserProfile } from '@/api/queries'
 import { toEquivalent } from '@/api/rates'
 import { formatMoney, formatPkoin } from '@/lib/format'
@@ -28,6 +29,7 @@ const rates = useRates()
 const currency = useCurrencyStore()
 const favorites = useFavoritesStore()
 const soon = useSoon()
+const openBastyon = useBastyonProfile()
 
 const name = computed(() => profile.data.value?.name || t('header.you'))
 const avatar = computed(() => {
@@ -80,9 +82,7 @@ function select(key: string) {
   emit('close')
   if (item?.to) return
   if (key === 'bastyon' && me.value) {
-    const open = session.sdk?.open.profile
-    if (open) void open('address', me.value).catch(() => null)
-    else soon()
+    void openBastyon(me.value, profile.data.value?.name)
     return
   }
   soon()

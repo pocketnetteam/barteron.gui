@@ -63,6 +63,10 @@ export async function connect(options: ConnectOptions): Promise<ConnectResult> {
       ? options.createMock()
       : (await import('./mock')).createDemoMockSdk()
     await sdk.init()
+    // e2e reads what the app asked of the host (chat, complaints, transactions).
+    if (typeof window !== 'undefined' && 'mock' in sdk) {
+      ;(window as { __barteronMock?: unknown }).__barteronMock = (sdk as { mock: unknown }).mock
+    }
     return { status: 'ready', mode: 'mock', sdk, appinfo: await sdk.get.appinfo() }
   }
 

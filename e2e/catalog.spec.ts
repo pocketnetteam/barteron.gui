@@ -11,6 +11,11 @@ const isPhone = (page: Page) => (page.viewportSize()?.width ?? 1440) < 768
 const list = (page: Page) => page.getByTestId('offer-list')
 
 test.beforeEach(async ({ page }) => {
+  // The renewal reminder (stage 4) would cover the page: e2e/item.spec.ts tests it.
+  await page.addInitScript(
+    (me) => localStorage.setItem(`${me}_autorenew_snooze`, String(Date.now())),
+    ME
+  )
   outside = []
   page.on('request', (request) => {
     const url = new URL(request.url())

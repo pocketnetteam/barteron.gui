@@ -2,6 +2,16 @@ import { expect, test } from '@playwright/test'
 
 /** Outside Bastyon the dev build runs on the mock SDK. */
 test.describe('mock SDK in a plain browser', () => {
+  // The renewal reminder (stage 4) would cover the page: e2e/item.spec.ts tests it.
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() =>
+      localStorage.setItem(
+        'PMockUser1111111111111111111111111_autorenew_snooze',
+        String(Date.now())
+      )
+    )
+  })
+
   test('status page shows the mock connection and the user address', async ({ page }) => {
     await page.goto('/dev/status')
     await expect(page.getByTestId('status-mode')).toHaveText('Заглушка SDK')
@@ -27,10 +37,9 @@ test.describe('mock SDK in a plain browser', () => {
   })
 
   test('a shared link opens directly', async ({ page }) => {
-    const hash = 'b'.repeat(64)
-    await page.goto(`/barter/${hash}`)
-    await expect(page.getByTestId('stub-title')).toContainText('barterItem')
-    await expect(page.getByTestId('stub-params')).toHaveText(`{"id":"${hash}"}`)
+    // An offer the network does not know: the offer page says so.
+    await page.goto(`/barter/${'b'.repeat(64)}`)
+    await expect(page.getByTestId('item-missing')).toBeVisible()
   })
 
   test('an unknown path shows "not found"', async ({ page }) => {

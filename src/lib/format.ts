@@ -66,3 +66,26 @@ export function formatAgo(time: number, locale: string, now = Date.now()): strin
   }
   return rtf.format(0, 'minute')
 }
+
+/** «2 ноября», with the year when it is not this year: «2 ноября 2025». */
+export function formatDate(time: number, locale: string, now = Date.now()): string {
+  const date = new Date(time)
+  const sameYear = date.getFullYear() === new Date(now).getFullYear()
+  return new Intl.DateTimeFormat(locale, {
+    day: 'numeric',
+    month: 'long',
+    ...(sameYear ? {} : { year: 'numeric' }),
+  }).format(date)
+}
+
+/**
+ * «марта 2023» for «На Barteron с марта 2023»: the month as it stands next to
+ * a day (genitive in Russian and Serbian), then the year.
+ */
+export function formatMonthYear(time: number, locale: string): string {
+  const date = new Date(time)
+  const month = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long' })
+    .formatToParts(date)
+    .find((p) => p.type === 'month')?.value
+  return `${month ?? ''} ${date.getFullYear()}`.trim()
+}

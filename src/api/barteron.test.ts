@@ -80,7 +80,13 @@ describe('BarteronApi', () => {
   it('my offers include withdrawn ones', async () => {
     const { api } = setup()
     const mine = await api.offersByAddress(ME)
-    expect(mine.map((o) => o.published).sort()).toEqual(['published', 'withdrawed'])
+    // Laptop, withdrawn tablet, expired speaker, headphones about to expire.
+    expect(mine.map((o) => o.published).sort()).toEqual([
+      'published',
+      'published',
+      'published',
+      'withdrawed',
+    ])
   })
 
   it('deals: offers in the categories I want that accept what I have', async () => {

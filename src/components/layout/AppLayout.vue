@@ -115,7 +115,9 @@ watch(
     <AppFooter class="layout__footer" />
 
     <template #tabbar>
-      <TabBar :items="tabs" :active="tab" @select="onTab" />
+      <!-- A page may put its own actions there instead (offer page: chat, exchange, buy). -->
+      <slot v-if="$slots['phone-bar']" name="phone-bar" />
+      <TabBar v-else :items="tabs" :active="tab" @select="onTab" />
     </template>
   </AppShell>
 

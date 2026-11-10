@@ -4,6 +4,7 @@ const HomeView = () => import('@/views/HomeView.vue')
 const StubView = () => import('@/views/StubView.vue')
 const CatalogView = () => import('@/views/CatalogView.vue')
 const MapView = () => import('@/views/MapView.vue')
+const OfferView = () => import('@/views/OfferView.vue')
 const NotFoundView = () => import('@/views/NotFoundView.vue')
 
 /** Internal pages: dev and test builds only, cut out of production. */
@@ -48,7 +49,7 @@ export const routes: RouteRecordRaw[] = [
   { path: '/barter/search', name: 'ThreeSidedSearch', component: StubView },
   { path: '/barter/safedeal', name: 'SafeDeal', component: StubView },
   { path: '/barter/moderation', name: 'VotingModeration', component: StubView },
-  { path: '/barter/:id', name: 'barterItem', component: StubView },
+  { path: '/barter/:id', name: 'barterItem', component: OfferView },
   { path: '/profile/:id', name: 'profile', component: StubView },
   { path: '/about', name: 'about', component: StubView },
   ...devRoutes,

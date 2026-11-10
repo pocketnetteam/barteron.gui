@@ -194,3 +194,11 @@ export function formatAddress(place: NominatimPlace, options: AddressFormatOptio
 
   return [...new Set(parts.filter((p): p is string => !!p))].join(', ')
 }
+
+/** City and district: «Москва, район Таганский». */
+export function areaName(place: NominatimPlace): string | null {
+  const a = place.address ?? {}
+  const city = a.city || a.town || a.village || a.hamlet || a.state || ''
+  const district = a.suburb || a.city_district || a.district || ''
+  return [city, district].filter(Boolean).join(', ') || null
+}

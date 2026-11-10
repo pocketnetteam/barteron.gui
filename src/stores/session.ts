@@ -99,6 +99,19 @@ export const useSessionStore = defineStore('session', () => {
     await loadAccount()
   }
 
+  const isSignedIn = () => account.value === 'signed-in'
+
+  /**
+   * Before an action that needs an account: asks for access or opens
+   * sign-in, then says whether the user is signed in now.
+   */
+  async function ensureSignedIn(): Promise<boolean> {
+    if (isSignedIn()) return true
+    if (account.value === 'no-permission') await requestAccountAccess()
+    else await signIn()
+    return isSignedIn()
+  }
+
   /** Opens Bastyon's sign-in / registration. */
   async function signIn(): Promise<void> {
     await sdk.value?.helpers.registration().catch(() => undefined)
@@ -119,6 +132,7 @@ export const useSessionStore = defineStore('session', () => {
     loadAccount,
     requestAccountAccess,
     signIn,
+    ensureSignedIn,
   }
 })
 

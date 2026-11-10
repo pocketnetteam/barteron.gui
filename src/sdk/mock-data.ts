@@ -56,6 +56,7 @@ interface DemoOffer {
   metaData?: JsonObject
   safeDeal?: JsonObject
   delivery?: JsonObject
+  video?: string
 }
 
 function offerTx(o: DemoOffer, now: number, height: number): RawTx {
@@ -78,13 +79,14 @@ function offerTx(o: DemoOffer, now: number, height: number): RawTx {
         p: o.published ?? 'published',
         f: o.currencyPrice ?? {},
         d: o.delivery ?? {},
-        v: {},
+        v: o.video ? { order: 'last' } : {},
         s: o.safeDeal ?? {},
         m: o.metaData ?? {},
       }),
       s5: JSON.stringify((o.photos ?? []).map(demoPhoto)),
       s6: encodeGeohash(o.place),
       i1: Math.round(o.price * 100),
+      ...(o.video ? { s7: o.video } : {}),
     },
   }
 }
@@ -243,6 +245,163 @@ export function demoNetworkData(me: string, now = Date.now(), height = 3_100_000
       ageHours: 300,
       published: 'withdrawed',
     },
+    {
+      id: demoTxid('pvz-taganka'),
+      author: SELLERS.dmitry,
+      caption: 'ПВЗ на Таганской',
+      description: 'Пункт выдачи заказов для покупок на Barteron. Принимаем посылки до 5 кг.',
+      tag: 97,
+      tags: [],
+      condition: 'new',
+      price: 60,
+      place: [55.7417, 37.6533],
+      photos: [100, 120, 140, 160, 180, 200, 220],
+      ageHours: 2000,
+      delivery: {
+        pickupPoint: {
+          financialTerms:
+            'Приём и выдача — 60 PKOIN за посылку до 5 кг, крупногабарит — по договорённости. Оплату вносит продавец при сдаче или покупатель при получении.',
+          workSchedule: {
+            weekDays: {
+              day1: { startTime: '10:00', finishTime: '21:00' },
+              day2: { startTime: '10:00', finishTime: '21:00' },
+              day3: { startTime: '10:00', finishTime: '21:00' },
+              day4: { startTime: '10:00', finishTime: '21:00' },
+              day5: { startTime: '10:00', finishTime: '21:00' },
+              day6: { startTime: '11:00', finishTime: '19:00' },
+              day7: { startTime: '11:00', finishTime: '19:00' },
+            },
+            additionalInfo: '31 декабря — до 16:00, 1–2 января — выходные',
+          },
+          address: 'Москва, ул. Марксистская, 3, стр. 1, вход со двора',
+          route:
+            'От метро «Таганская» (кольцевая) — 5 минут пешком. Арка рядом с аптекой, вторая дверь слева, звонок «Barteron».',
+        },
+      },
+    },
+    {
+      id: demoTxid('pvz-paveletskaya'),
+      author: SELLERS.anna,
+      caption: 'ПВЗ у Павелецкой',
+      description: 'Пункт выдачи заказов для покупок на Barteron. Принимаем посылки до 5 кг.',
+      tag: 97,
+      tags: [],
+      condition: 'new',
+      price: 80,
+      place: [55.7296, 37.6386],
+      photos: [110],
+      ageHours: 3000,
+      delivery: {
+        pickupPoint: {
+          financialTerms: '80 PKOIN за посылку до 5 кг.',
+          workSchedule: {
+            weekDays: {
+              day1: { startTime: '09:00', finishTime: '20:00' },
+              day2: { startTime: '09:00', finishTime: '20:00' },
+              day3: { startTime: '09:00', finishTime: '20:00' },
+              day4: { startTime: '09:00', finishTime: '20:00' },
+              day5: { startTime: '09:00', finishTime: '20:00' },
+              day6: { startTime: '09:00', finishTime: '20:00' },
+            },
+            additionalInfo: '',
+          },
+          address: 'Москва, Кожевническая ул., 7',
+          route: 'Выход из метро к Павелецкому вокзалу, дальше 7 минут пешком.',
+        },
+      },
+    },
+    {
+      id: demoTxid('pvz-proletarskaya'),
+      author: SELLERS.dmitry,
+      caption: 'ПВЗ на Пролетарской',
+      description: 'Пункт выдачи заказов для покупок на Barteron. Принимаем посылки до 5 кг.',
+      tag: 97,
+      tags: [],
+      condition: 'new',
+      price: 75,
+      place: [55.7317, 37.6669],
+      photos: [130],
+      ageHours: 2500,
+      delivery: {
+        pickupPoint: {
+          financialTerms: '75 PKOIN за посылку, хранение бесплатно.',
+          workSchedule: {
+            weekDays: {
+              day1: { allDay: true },
+              day2: { allDay: true },
+              day3: { allDay: true },
+              day4: { allDay: true },
+              day5: { allDay: true },
+              day6: { allDay: true },
+              day7: { allDay: true },
+            },
+            additionalInfo: '',
+          },
+          address: 'Москва, Крутицкий вал, 18',
+          route: 'От метро «Пролетарская» — 10 минут пешком.',
+        },
+      },
+    },
+    {
+      id: demoTxid('tablet-ilya'),
+      author: SELLERS.ilya,
+      caption: 'Планшет 10", 64 ГБ, с чехлом-клавиатурой',
+      description:
+        'Планшет 10 дюймов, 64 ГБ, Wi-Fi. Пользовался около года, в основном для чтения и видео.\n' +
+        'Экран без царапин, на корпусе мелкие потёртости на углах — видно на фото 4 и 5.\n' +
+        'В комплекте: зарядное устройство, чехол-клавиатура, коробка.\n' +
+        'Рассмотрю обмен на ноутбук с доплатой с любой стороны.',
+      tag: 58069,
+      tags: [58068, 17],
+      condition: 'used',
+      price: 1250,
+      place: [55.7406, 37.6531],
+      photos: [210, 225, 240, 255, 270],
+      ageHours: 190,
+      safeDeal: { validatorFeeVariant: 'inHalf' },
+      video: 'peertube://demo.bastyon.com/videos/processing',
+      delivery: {
+        deliveryOptions: {
+          pickupPoints: {
+            isEnabled: true,
+            ids: [
+              demoTxid('pvz-taganka'),
+              demoTxid('pvz-paveletskaya'),
+              demoTxid('pvz-proletarskaya'),
+            ],
+          },
+          selfPickup: { isEnabled: true, additionalInfo: 'м. Таганская, вечером по будням' },
+          directDelivery: {
+            isEnabled: true,
+            additionalInfo: 'Почта России или СДЭК, за счёт покупателя',
+          },
+        },
+      },
+    },
+    {
+      id: demoTxid('speaker-mine'),
+      author: me,
+      caption: 'Колонка портативная',
+      description: 'Срок публикации истёк — можно опубликовать снова.',
+      tag: 58068,
+      tags: [1006],
+      price: 390,
+      place: near(BELGRADE, 9),
+      photos: [300],
+      ageHours: 370 * 24,
+    },
+    {
+      id: demoTxid('headphones-mine'),
+      author: me,
+      caption: 'Наушники накладные',
+      description: 'Год почти прошёл: приложение предложит продлить.',
+      tag: 58068,
+      tags: [621],
+      price: 210,
+      place: near(BELGRADE, 10),
+      photos: [320],
+      ageHours: 359 * 24,
+    },
   ]
 
   // A fuller catalog for stage 3 screens: bikes, coins, furniture, books…
@@ -313,8 +472,87 @@ export function demoNetworkData(me: string, now = Date.now(), height = 3_100_000
       s2: offers[0]!.id,
       i1: 4,
     },
+    {
+      hash: demoTxid('tscore1'),
+      type: TX_TYPE.score,
+      time: Math.floor(now / 1000) - 1123200,
+      height,
+      s1: SELLERS.maria,
+      s2: demoTxid('tablet-ilya'),
+      i1: 5,
+    },
+    {
+      hash: demoTxid('tscore2'),
+      type: TX_TYPE.score,
+      time: Math.floor(now / 1000) - 2246400,
+      height,
+      s1: SELLERS.dmitry,
+      s2: demoTxid('tablet-ilya'),
+      i1: 4,
+    },
+    {
+      hash: demoTxid('tscore3'),
+      type: TX_TYPE.score,
+      time: Math.floor(now / 1000) - 3283200,
+      height,
+      s1: SELLERS.anna,
+      s2: demoTxid('tablet-ilya'),
+      i1: 5,
+    },
   ]
   const comments: RawTx[] = [
+    {
+      hash: demoTxid('treview1'),
+      type: TX_TYPE.comment,
+      time: Math.floor(now / 1000) - 1123200,
+      height,
+      s1: SELLERS.maria,
+      s2: demoTxid('treview1'),
+      s3: demoTxid('tablet-ilya'),
+      p: {
+        s1: JSON.stringify({
+          message: 'Всё как в описании, встретились у метро, проверила планшет на месте. Спасибо!',
+          url: '',
+          images: [],
+          info: '5',
+        }),
+      },
+    },
+    {
+      hash: demoTxid('treview2'),
+      type: TX_TYPE.comment,
+      time: Math.floor(now / 1000) - 2246400,
+      height,
+      s1: SELLERS.dmitry,
+      s2: demoTxid('treview2'),
+      s3: demoTxid('tablet-ilya'),
+      p: {
+        s1: JSON.stringify({
+          message:
+            'Покупал через безопасную сделку, прошло без проблем. Чехол чуть потёртее, чем на фото.',
+          url: '',
+          images: [],
+          info: '4',
+        }),
+      },
+    },
+    {
+      hash: demoTxid('treview3'),
+      type: TX_TYPE.comment,
+      time: Math.floor(now / 1000) - 3283200,
+      height,
+      s1: SELLERS.anna,
+      s2: demoTxid('treview3'),
+      s3: demoTxid('tablet-ilya'),
+      p: {
+        s1: JSON.stringify({
+          message: 'Быстро ответил и отправил в пункт выдачи на следующий день.',
+          url: '',
+          images: [],
+          info: '5',
+        }),
+      },
+    },
     {
       hash: demoTxid('review1'),
       type: TX_TYPE.comment,

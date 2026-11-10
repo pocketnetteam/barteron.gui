@@ -64,6 +64,16 @@ fetchHosts: [
 - `src/mini-apps/store/apps-installer.test.ts`: у встроенного Barteron `manifest.fetchHosts` содержит `https://barteron.club` и эти пять адресов;
 - вручную с Tor: в Barteron открываются курсы, «Где искать» с поиском адреса и карта с плитками.
 
+## 4. `open.profile` с типом `username`
+
+**Что не так.** Старый Barteron, который сейчас открывается в bastyon-nextgen с barteron.club, открывает профиль продавца вызовом `sdk.open.profile('username', <имя>)` (barteron.gui `src/js/sdk.js`, `openBastyonProfile`). Прежний хост принимает типы `username` и `address` (pocketnet.gui `js/lib/apps/index.js`, `open.profile`). bastyon-nextgen принимает только `address` и `name` и на `username` бросает `open_profile_invalid_type` (`src/mini-apps/actions/content.ts`, строки 64–80). Поэтому кнопка «Профиль в Bastyon» у старого Barteron в новом хосте не работает.
+
+**Решение.** Принимать `username` так же, как `name`.
+
+**Проверить:** тест рядом с проверками `open.profile`: `{ type: 'username', data: 'alice' }` открывает профиль `alice`.
+
+Новый Barteron вызывает сначала `username`, а при ошибке — `address`, так что работает в обоих хостах и без этой правки.
+
 ## Не сейчас: запись из dev-сборки (риск 6)
 
 Хост выполняет `barteron.*` только для id `barteron.pocketnet.app` (`assertBarteron` в `src/mini-apps/actions/barteron.ts`). С localhost Barteron поэтому может только читать. Решили 10.11.2026: пока запись в Barteron проверяется на заглушке SDK, хост не меняем. Когда понадобится живая проверка, выберем одно из двух:

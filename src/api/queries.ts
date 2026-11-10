@@ -388,3 +388,32 @@ export function installTxRefresh(
 ): () => void {
   return txStore.subscribe((tx) => refreshAfterTx(client, tx, me()))
 }
+
+/** Several offers by id at once: pickup points of an offer. */
+export function useOffersByIds(ids: MaybeRefOrGetter<readonly string[]>) {
+  const barteron = useBarteron()
+  const client = useQueryClient()
+  return useQuery({
+    queryKey: computed(() => ['barteron', 'offers-by-ids', [...toValue(ids)]]),
+    enabled: computed(() => !!barteron.value && toValue(ids).length > 0),
+    queryFn: async () => {
+      const found = await barteron.value!.api.offersByIds(toValue(ids))
+      for (const o of found) if (o.hash) client.setQueryData(keys.offer(o.hash), o)
+      return found
+    },
+  })
+}
+
+/** Bastyon names and avatars of several users: authors of reviews. */
+export function useUserProfiles(addresses: MaybeRefOrGetter<readonly string[]>) {
+  const barteron = useBarteron()
+  return useQuery({
+    queryKey: computed(() => ['bastyon', 'profiles', [...toValue(addresses)].sort()]),
+    enabled: computed(() => !!barteron.value && toValue(addresses).length > 0),
+    staleTime: 10 * 60_000,
+    queryFn: async () => {
+      const list = await barteron.value!.api.userProfiles(toValue(addresses))
+      return new Map(list.map((p) => [p.address, p]))
+    },
+  })
+}
