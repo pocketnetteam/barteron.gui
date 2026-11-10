@@ -104,7 +104,8 @@ void props
 .ui-screen__head {
   flex: none;
   min-height: 60px;
-  padding: 8px 16px 8px 8px;
+  /* The host close button may sit at the top right (lib/host-insets.ts). */
+  padding: 8px max(16px, var(--host-corner, 0px)) 8px 8px;
   display: flex;
   align-items: center;
   gap: 8px;

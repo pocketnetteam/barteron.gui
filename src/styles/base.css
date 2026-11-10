@@ -21,7 +21,7 @@ body {
   line-height: 20px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* The host's header overlaps the iframe by `margintop` (appinfo). */
+  /* The host's header overlaps the iframe by `margintop` (appinfo); sdk.js sets the variable. */
   padding-top: var(--app-margin-top, 0);
 }
 

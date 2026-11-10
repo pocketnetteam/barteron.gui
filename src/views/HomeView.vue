@@ -219,7 +219,8 @@ function openAll() {
 }
 
 .home-top {
-  padding: 12px 16px 14px;
+  /* The host close button may sit at the top right (lib/host-insets.ts). */
+  padding: 12px max(16px, var(--host-corner, 0px)) 14px 16px;
   border-radius: 0 0 20px 20px;
   background: var(--surface);
   display: flex;

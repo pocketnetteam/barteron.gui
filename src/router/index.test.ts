@@ -1,6 +1,9 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { createMemoryHistory } from 'vue-router'
 import { createAppRouter } from './index'
+
+// A real push loads the lazy page with all its imports, which takes seconds under a full run.
+vi.mock('@/views/HomeView.vue', () => ({ default: { render: () => null } }))
 
 const router = createAppRouter(createMemoryHistory())
 const HASH = 'a'.repeat(64)

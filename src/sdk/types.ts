@@ -51,6 +51,11 @@ export interface AppInfo {
   locale?: string
   theme?: HostTheme
   margintop?: string | number
+  /**
+   * Where the host's close button lies over the frame, in CSS px. Asked of
+   * bastyon-nextgen in HOST-TASKS.md item 2; not sent yet.
+   */
+  closebutton?: { side?: 'left' | 'right'; top?: number; width?: number; height?: number }
   application?: HostApplication
   project?: HostProject
   /** True when the host routes traffic through Tor. */

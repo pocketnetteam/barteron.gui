@@ -230,6 +230,11 @@ const balance = computed(() =>
   border-bottom: 1px solid var(--border);
 }
 
+/* The host close button may sit at the top right (lib/host-insets.ts). */
+.header .container {
+  padding-right: max(var(--page-pad), var(--host-corner, 0px));
+}
+
 .header__strip {
   background: var(--subtle);
 }

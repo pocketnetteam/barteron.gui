@@ -614,7 +614,7 @@ function back() {
   position: absolute;
   z-index: 800;
   left: 16px;
-  right: 16px;
+  right: max(16px, var(--host-corner, 0px));
   top: 16px;
   display: flex;
   align-items: flex-start;
@@ -875,7 +875,7 @@ function back() {
 
   .mapview__top {
     left: 8px;
-    right: 8px;
+    right: max(8px, var(--host-corner, 0px));
     top: 8px;
   }
 

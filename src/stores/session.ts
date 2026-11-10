@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { markRaw, ref, shallowRef } from 'vue'
 import { resolveLocale, setLocale } from '@/i18n'
+import { applyHostInsets } from '@/lib/host-insets'
 import { connect, type ConnectMode, type ConnectOptions } from '@/sdk/connect'
 import type { AppInfo, HostSdk } from '@/sdk/types'
 
@@ -50,6 +51,7 @@ export const useSessionStore = defineStore('session', () => {
     hostTheme.value = result.appinfo.theme?.rootid ?? null
     hostLocale.value = result.appinfo.locale ?? null
     setLocale(resolveLocale(hostLocale.value))
+    applyHostInsets(result.appinfo)
 
     // Outside services through the host when it routes traffic through Tor;
     // sdk.js checks `alttransport` itself and returns null otherwise.

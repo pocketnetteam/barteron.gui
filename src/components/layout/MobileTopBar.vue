@@ -36,7 +36,8 @@ const { t } = useI18n()
 
 <style scoped>
 .mtop {
-  padding: 10px 16px;
+  /* The host close button may sit at the top right (lib/host-insets.ts). */
+  padding: 10px max(16px, var(--host-corner, 0px)) 10px 16px;
   background: var(--surface);
   display: flex;
   flex-direction: column;
