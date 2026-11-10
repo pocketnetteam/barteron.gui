@@ -4,9 +4,18 @@ import UiButton from '@/ui/UiButton.vue'
 import UiDialog from '@/ui/UiDialog.vue'
 
 /** «Опубликовать снова?», «Снять с публикации?», «Удалить объявление?» (s3-item-dialogs). */
-withDefaults(defineProps<{ title: string; text: string; confirm: string; danger?: boolean }>(), {
-  danger: false,
-})
+withDefaults(
+  defineProps<{
+    title: string
+    text: string
+    confirm: string
+    cancel?: string
+    danger?: boolean
+  }>(),
+  {
+    danger: false,
+  }
+)
 const open = defineModel<boolean>('open', { default: false })
 const emit = defineEmits<{ confirm: [] }>()
 const { t } = useI18n()
@@ -16,7 +25,9 @@ const { t } = useI18n()
   <UiDialog v-model:open="open" :title="title" :width="520">
     <p class="cd__text">{{ text }}</p>
     <template #actions>
-      <UiButton variant="neutral" @click="open = false">{{ t('ui.cancel') }}</UiButton>
+      <UiButton variant="neutral" data-testid="confirm-cancel" @click="open = false">{{
+        cancel ?? t('ui.cancel')
+      }}</UiButton>
       <UiButton
         :variant="danger ? 'danger' : 'primary'"
         data-testid="confirm-action"

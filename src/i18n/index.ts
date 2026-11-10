@@ -1,7 +1,5 @@
 import { createI18n } from 'vue-i18n'
-import en from './locales/en'
-import ru, { type Messages } from './locales/ru'
-import sr from './locales/sr'
+import type { Messages } from './locales/ru'
 
 export const LOCALES = ['ru', 'en', 'sr'] as const
 export type Locale = (typeof LOCALES)[number]
@@ -30,15 +28,63 @@ export function slavicPlural(choice: number, choicesLength: number): number {
   return 2
 }
 
+/**
+ * Texts load per language, in chunks of their own: a person needs one
+ * language, and the three together were a third of the main bundle (about
+ * 42 KB gzip). Every language has every key (`index.test.ts`), so the
+ * fallback is not needed for texts.
+ */
+const LOADERS: Record<Locale, () => Promise<{ default: Messages }>> = {
+  ru: () => import('./locales/ru'),
+  en: () => import('./locales/en'),
+  sr: () => import('./locales/sr'),
+}
+
 export const i18n = createI18n<[Messages], Locale, false>({
   legacy: false,
   locale: resolveLocale(typeof navigator === 'undefined' ? null : navigator.language),
   fallbackLocale: FALLBACK_LOCALE,
-  messages: { ru, en, sr },
+  messages: {} as Record<Locale, Messages>,
   pluralRules: { ru: slavicPlural, sr: slavicPlural },
+  missingWarn: import.meta.env.DEV,
+  fallbackWarn: false,
 })
 
-export function setLocale(locale: Locale): void {
+const loaded = new Set<Locale>()
+
+/** Texts already at hand (tests register all three at once). */
+export function registerLocale(locale: Locale, messages: Messages): void {
+  i18n.global.setLocaleMessage(locale, messages)
+  loaded.add(locale)
+}
+
+async function loadLocale(locale: Locale): Promise<void> {
+  if (loaded.has(locale)) return
+  registerLocale(locale, (await LOADERS[locale]()).default)
+}
+
+function apply(locale: Locale) {
   i18n.global.locale.value = locale
-  document.documentElement.lang = locale
+  if (typeof document !== 'undefined') document.documentElement.lang = locale
+}
+
+let wanted: Locale | null = null
+
+/**
+ * Switches the language once its texts are here; until then the previous one
+ * stays on screen. Immediate when they were loaded before.
+ */
+export function setLocale(locale: Locale): Promise<void> {
+  wanted = locale
+  if (loaded.has(locale)) {
+    apply(locale)
+    return Promise.resolve()
+  }
+  return loadLocale(locale).then(
+    () => {
+      if (wanted === locale) apply(locale)
+    },
+    // No chunk (offline after an update): the current language stays.
+    () => undefined
+  )
 }

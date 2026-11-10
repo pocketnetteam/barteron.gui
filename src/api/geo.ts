@@ -202,3 +202,11 @@ export function areaName(place: NominatimPlace): string | null {
   const district = a.suburb || a.city_district || a.district || ''
   return [city, district].filter(Boolean).join(', ') || null
 }
+
+/** City and street or square, without the house: «Москва, Таганская площадь». */
+export function placeName(place: NominatimPlace): string | null {
+  const a = place.address ?? {}
+  const city = a.city || a.town || a.village || a.hamlet || a.state || ''
+  const spot = a.road || a.square || a.pedestrian || a.suburb || a.neighbourhood || ''
+  return [city, spot].filter(Boolean).join(', ') || null
+}

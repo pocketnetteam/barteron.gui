@@ -52,5 +52,6 @@ export default defineConfig(({ mode }) => ({
     environment: 'happy-dom',
     include: ['src/**/*.test.ts', 'build/**/*.test.ts'],
     restoreMocks: true,
+    setupFiles: ['src/test/setup.ts'],
   },
 }))

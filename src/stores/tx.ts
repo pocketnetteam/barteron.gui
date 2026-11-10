@@ -124,11 +124,16 @@ export function etaMinutes(tx: TrackedTx, now = Date.now()): number {
   return Math.max(1, Math.ceil((BLOCK_SECONDS - (since % BLOCK_SECONDS)) / 60))
 }
 
-const errorText = (error: unknown): string => {
+/** The host's reason as text; a node code stays a number in text (`-26`), see `lib/tx-errors`. */
+export const errorText = (error: unknown): string => {
   if (typeof error === 'string') return error
+  if (typeof error === 'number') return String(error)
   if (error instanceof Error) return error.message
-  if (isJsonObject(error) && typeof error.message === 'string') return error.message
-  if (isJsonObject(error) && typeof error.code === 'string') return error.code
+  if (isJsonObject(error)) {
+    if (typeof error.message === 'string' && error.message) return error.message
+    if (typeof error.code === 'string' || typeof error.code === 'number') return String(error.code)
+    if (error.error !== undefined) return errorText(error.error)
+  }
   return 'unknown'
 }
 

@@ -36,6 +36,8 @@ export interface MockControls {
   /** Simulates an event pushed by the host. */
   push<K extends HostEventName>(key: K, data: HostEvents[K]): void
   readonly granted: ReadonlySet<Permission>
+  /** The next call of this method fails: an upload error, a closed video window. */
+  failNext(method: string): void
 }
 
 export type MockSdk = HostSdk & { mock: MockControls }
@@ -52,6 +54,9 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
   const calls: MockCall[] = []
   const listeners = new Map<string, Set<(data: unknown) => void>>()
   let txCounter = 0
+  let videoCounter = 0
+  const failing = new Set<string>()
+  const fails = (method: string): boolean => failing.delete(method)
 
   const darkQuery =
     typeof window !== 'undefined' && typeof window.matchMedia === 'function'
@@ -80,6 +85,8 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
     },
     alttransport: false,
     pkoin: true,
+    // Both hosts say 8 (bastyon-nextgen host-context.ts, pocketnet.gui apps/index.js).
+    transactionsApiVersion: 8,
   })
 
   const requireSignedIn = (): string => {
@@ -186,21 +193,69 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
       imageFromMobileCamera: () => resolved('get.imageFromMobileCamera'),
       videos: async (urls) => {
         record('get.videos', urls)
-        // No PeerTube offline: a demo video is always «being processed» (state 2).
-        return urls.map((url) =>
-          url.includes('processing')
-            ? { data: { original: { state: { id: 2 }, streamingPlaylists: [] }, thumbnail: '' } }
+        // No PeerTube offline. A demo video with «processing» in its link is
+        // always being processed (state 2); one from the upload window is
+        // processed until its `ready` time, then ready without a playlist.
+        return urls.map((url) => {
+          const readyAt = Number(url.match(/[?&]ready=(\d+)/)?.[1] ?? 0)
+          const state = url.includes('failed')
+            ? 7
+            : url.includes('processing') || readyAt > Date.now()
+              ? 2
+              : readyAt
+                ? 1
+                : 0
+          return state
+            ? {
+                data: {
+                  original: {
+                    state: { id: state },
+                    duration: 42,
+                    // A ready video has a playlist; offline it never plays.
+                    streamingPlaylists:
+                      state === 1 ? [{ playlistUrl: 'https://mock.video/master.m3u8' }] : [],
+                  },
+                  thumbnail: '',
+                },
+              }
             : {}
-        )
+        })
       },
     },
 
     images: {
-      upload: (data) => resolved('images.upload', data),
+      async upload(data) {
+        record('images.upload', data)
+        requireSignedIn()
+        const images = (data as { images?: unknown })?.images
+        const list = Array.isArray(images)
+          ? images.filter((i): i is string => typeof i === 'string')
+          : []
+        if (list.length > 10) throw new Error('images:max:10')
+        await new Promise((r) => setTimeout(r, 700))
+        if (fails('images.upload')) return list.map(() => ({ error: 'mock: upload failed' }))
+        // Stored as a small copy: drafts and the mock chain keep it in memory and localStorage.
+        const { shrinkPhoto } = await import('@/lib/image')
+        return Promise.all(
+          list.map(async (img) => ({ url: await shrinkPhoto(img, 240, 0.7).catch(() => img) }))
+        )
+      },
     },
     manageBastyonImageSrc: (src = '') => src,
     videos: {
-      opendialog: (data) => resolved('videos.opendialog', data),
+      async opendialog(data) {
+        record('videos.opendialog', data)
+        requireSignedIn()
+        await new Promise((r) => setTimeout(r, 500))
+        // The window was closed without a video.
+        if (fails('videos.opendialog')) return null
+        videoCounter += 1
+        // Processed in 6 seconds, like a short clip.
+        return {
+          link: `peertube://mock.video/v${videoCounter}?ready=${Date.now() + 6000}`,
+          name: 'video.mp4',
+        }
+      },
       remove: (data) => resolved('videos.remove', data),
     },
 
@@ -252,6 +307,7 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
     mock: {
       calls,
       granted,
+      failNext: (method) => void failing.add(method),
       push(key, data) {
         listeners.get(key)?.forEach((listener) => listener(data))
       },

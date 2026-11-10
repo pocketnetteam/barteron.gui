@@ -48,3 +48,17 @@ export const PICKUP_POINT_OWNERS: readonly string[] = [
   'TWEE5wJDL2EjR6iryH5mTyebDZWRbPZ733',
   'TVSeQiPd94EHuE5KVX986V4d1qw4ZdU4L1',
 ]
+
+/**
+ * Made-up addresses of the SDK mock (`PMockUser…`) and its demo sellers
+ * (`PDemo…`): not valid base58, so they never occur on a real network. Dev
+ * and test builds let them own pickup points, so the mock can show the flow.
+ */
+const DEMO_OWNER = /^P(Mock|Demo)/
+
+/** May publish a pickup point, and their points are offered to sellers. */
+export function isPickupPointOwner(address: string | null | undefined): boolean {
+  if (!address) return false
+  if (PICKUP_POINT_OWNERS.includes(address)) return true
+  return import.meta.env.VITE_SHOWCASE === 'true' && DEMO_OWNER.test(address)
+}

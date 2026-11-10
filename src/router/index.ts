@@ -5,6 +5,8 @@ const StubView = () => import('@/views/StubView.vue')
 const CatalogView = () => import('@/views/CatalogView.vue')
 const MapView = () => import('@/views/MapView.vue')
 const OfferView = () => import('@/views/OfferView.vue')
+const CreateView = () => import('@/views/CreateView.vue')
+const DraftPreview = () => import('@/views/item/DraftPreview.vue')
 const NotFoundView = () => import('@/views/NotFoundView.vue')
 
 /** Internal pages: dev and test builds only, cut out of production. */
@@ -43,12 +45,14 @@ export const routes: RouteRecordRaw[] = [
     // vue-router requires the alias to declare the param exactly like the path.
     alias: '/barter/edit/:id?',
     name: 'createBarter',
-    component: StubView,
+    component: CreateView,
   },
   { path: '/barter/exchange/:id', name: 'exchangeOptions', component: StubView },
   { path: '/barter/search', name: 'ThreeSidedSearch', component: StubView },
   { path: '/barter/safedeal', name: 'SafeDeal', component: StubView },
   { path: '/barter/moderation', name: 'VotingModeration', component: StubView },
+  // The form's preview; the old app showed it on the same path (`/barter/draft?preview=1`).
+  { path: '/barter/draft', name: 'draftPreview', component: DraftPreview },
   { path: '/barter/:id', name: 'barterItem', component: OfferView },
   { path: '/profile/:id', name: 'profile', component: StubView },
   { path: '/about', name: 'about', component: StubView },

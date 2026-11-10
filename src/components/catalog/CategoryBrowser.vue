@@ -8,11 +8,12 @@ import UiSkeleton from '@/ui/UiSkeleton.vue'
 
 /**
  * Category list with search and drill-down (s2-categories-mobile). `open`
- * opens a category's offers; `pick` chooses a category for a filter.
+ * opens a category's offers; `pick` chooses a category for a filter; `leaf`
+ * chooses one an offer can be published in, without subcategories.
  */
 const props = withDefaults(
   defineProps<{
-    mode?: 'open' | 'pick'
+    mode?: 'open' | 'pick' | 'leaf'
     /** Start inside this category. */
     start?: number | null
   }>(),
@@ -52,6 +53,13 @@ function enter(c: Category) {
   } else emit('select', c.id)
 }
 
+/** A found or popular category: in `leaf` mode one with subcategories opens instead. */
+function choose(id: number) {
+  const c = tree.value?.get(id)
+  if (props.mode === 'leaf' && c && tree.value?.hasChildren(id)) enter(c)
+  else emit('select', id)
+}
+
 function back() {
   currentId.value = current.value?.parent ?? null
 }
@@ -74,7 +82,7 @@ function back() {
     <template v-if="query.trim()">
       <ul class="cb__list">
         <li v-for="c in found" :key="c.id">
-          <button type="button" class="cb__row cb__row--found" @click="emit('select', c.id)">
+          <button type="button" class="cb__row cb__row--found" @click="choose(c.id)">
             <span class="cb__name">{{ name(c.id) }}</span>
             <span v-if="path(c.id)" class="cb__path">{{ path(c.id) }}</span>
           </button>
@@ -94,7 +102,7 @@ function back() {
             :key="id"
             type="button"
             class="cb__chip"
-            @click="emit('select', id)"
+            @click="choose(id)"
           >
             {{ name(id) }}
           </button>
@@ -108,7 +116,7 @@ function back() {
       </button>
 
       <ul v-if="tree" class="cb__list">
-        <li v-if="current">
+        <li v-if="current && mode !== 'leaf'">
           <button type="button" class="cb__row cb__row--whole" @click="emit('select', current.id)">
             <span class="cb__name">{{
               mode === 'pick'

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, nextTick, ref, toRef } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
+import { useRouter, type RouteLocationRaw } from 'vue-router'
 import { useCategories, useOffersByAddress, useOffersByIds } from '@/api/queries'
 import ItemAbout from '@/components/item/ItemAbout.vue'
 import ItemBuyBox from '@/components/item/ItemBuyBox.vue'
@@ -63,6 +63,8 @@ const props = defineProps<{
   offer: Offer
   /** The owner looks at it as buyers see it (`?view=buyer`). */
   preview?: boolean
+  /** A draft from the form (`/barter/draft`): the way back to it. */
+  draftBack?: RouteLocationRaw
 }>()
 
 const { t, locale } = useI18n()
@@ -307,7 +309,19 @@ const exchangeTitle = computed(() =>
     <div class="op container" data-testid="item-page" data-kind="other">
       <!-- Preview of my own offer, or why it cannot be bought -->
       <ItemNotice
-        v-if="preview"
+        v-if="preview && draftBack"
+        class="op__notice"
+        tone="surface"
+        icon="views"
+        :text="t('item.draftPreview.text')"
+        data-testid="draft-preview"
+      >
+        <template #end>
+          <RouterLink :to="draftBack">{{ t('item.draftPreview.back') }}</RouterLink>
+        </template>
+      </ItemNotice>
+      <ItemNotice
+        v-else-if="preview"
         class="op__notice"
         tone="surface"
         icon="views"
@@ -334,7 +348,8 @@ const exchangeTitle = computed(() =>
         <UiBreadcrumbs :items="page.crumbs.value" />
         <div class="op__title-row">
           <h1 class="op__title" data-testid="item-title">{{ offer.caption }}</h1>
-          <div class="op__head-actions">
+          <!-- A draft has no id yet: nothing to keep or share. -->
+          <div v-if="id" class="op__head-actions">
             <UiButton
               variant="outline"
               :size="40"
@@ -359,7 +374,7 @@ const exchangeTitle = computed(() =>
             }}</a>
           </span>
           <span>{{ t('item.published', { date: page.published.value }) }}</span>
-          <span class="op__number">
+          <span v-if="id" class="op__number">
             № <span class="mono">{{ page.number.value }}</span>
             <button
               type="button"
@@ -388,7 +403,7 @@ const exchangeTitle = computed(() =>
                   <button type="button" class="op__round" :aria-label="t('ui.back')" @click="back">
                     <UiIcon name="back" :size="22" :stroke="2" />
                   </button>
-                  <span class="op__overlay-end">
+                  <span v-if="id" class="op__overlay-end">
                     <button
                       type="button"
                       class="op__round"
@@ -515,7 +530,7 @@ const exchangeTitle = computed(() =>
               <UiIcon name="complain" :size="16" />
               {{ t('item.complainShort') }}
             </button>
-            <span class="mono">№ {{ page.number.value }}</span>
+            <span v-if="id" class="mono">№ {{ page.number.value }}</span>
           </div>
         </div>
 

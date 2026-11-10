@@ -1,0 +1,662 @@
+import { useQuery, useQueryClient } from '@tanstack/vue-query'
+import {
+  computed,
+  inject,
+  onBeforeUnmount,
+  provide,
+  reactive,
+  ref,
+  toValue,
+  watch,
+  type InjectionKey,
+  type MaybeRefOrGetter,
+} from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRoute, useRouter } from 'vue-router'
+import { useAccount, useCategories, useOffer, useRates, useUserProfile } from '@/api/queries'
+import { parseVideoInfo } from '@/components/item/gallery'
+import { isPickupPointOwner } from '@/config/delivery'
+import { dataUrlBytes, isPhotoFile, shrinkPhoto } from '@/lib/image'
+import { readStored, userKey, writeStored } from '@/lib/storage'
+import {
+  draftFromOffer,
+  draftHasContent,
+  draftIssues,
+  isPointDraft,
+  MAX_PHOTOS,
+  newDraft,
+  offerFromDraft,
+  photoId,
+  PKOIN,
+  readDraft,
+  stepsOf,
+  storedDraft,
+  type DraftIssue,
+  type DraftPhoto,
+  type DraftStep,
+  type OfferDraft,
+} from '@/models/draft'
+import { isTxid } from '@/models/tx'
+import { OfferInvalidError, toOfferPayload, type Offer } from '@/models/offer'
+import { useCurrencyStore } from '@/stores/currency'
+import { useSessionStore } from '@/stores/session'
+import { useTxStore } from '@/stores/tx'
+
+/** Bastyon locale for `p.s1`, as the old app wrote `$i18n.locale`. */
+const LANGUAGE_TAG: Record<string, string> = { ru: 'ru-RU', en: 'en-US', sr: 'sr-RS' }
+
+/** Photos sent to the host at once: enough to be quick, not a flood. */
+const UPLOAD_SLOTS = 3
+/** The old app checked a video every 20 seconds while PeerTube processed it. */
+const VIDEO_POLL_MS = 20_000
+
+export type FormState = 'loading' | 'signin' | 'missing' | 'foreign' | 'error' | 'ready'
+
+/** Where the form puts the draft: one for a new offer, one per edited offer. */
+export const draftKey = (hash: string | null, address: string | null): string =>
+  userKey(hash ? `offer_draft_${hash}` : 'offer_draft', address)
+
+/**
+ * Everything the offer form (s4) knows: the draft and where it is kept, the
+ * steps and what is missing on each, photo uploads, the video and publishing.
+ * Created once by the page and handed to the steps through `provide`.
+ */
+export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>) {
+  const { t, locale } = useI18n()
+  const route = useRoute()
+  const router = useRouter()
+  const session = useSessionStore()
+  const txStore = useTxStore()
+  const currency = useCurrencyStore()
+  const categories = useCategories()
+  const rates = useRates()
+  const client = useQueryClient()
+
+  /** The offer being edited; `null` — a new one (the old app also accepted `draft`). */
+  const hash = computed(() => {
+    const value = toValue(id)
+    return value && isTxid(value) ? value : null
+  })
+  const badId = computed(() => {
+    const value = toValue(id)
+    return !!value && value !== 'draft' && !isTxid(value)
+  })
+  const editing = computed(() => !!hash.value)
+  const me = computed(() => session.address)
+
+  const original = useOffer(hash)
+  const account = useAccount(me)
+  const profile = useUserProfile(me)
+  const myList = computed<readonly number[]>(() => account.data.value?.tags ?? [])
+
+  // ─── The draft and where it lives ─────────────────────────────────────────
+  const draft = ref<OfferDraft | null>(null)
+  /** A draft found on the device when the form opened: «Продолжаем черновик». */
+  const restoredAt = ref<number | null>(null)
+  const savedAt = ref<number | null>(null)
+  /** What the form started from, to tell whether anything changed. */
+  let initial = ''
+  const published = ref(false)
+
+  const snapshot = (value: OfferDraft) => JSON.stringify({ ...storedDraft(value), updatedAt: 0 })
+
+  const defaultCurrency = () => (currency.pkoinOnly ? PKOIN : currency.code)
+
+  function start(value: OfferDraft, restored: boolean) {
+    draft.value = value
+    restoredAt.value = restored ? value.updatedAt : null
+    initial =
+      restored && editing.value && original.data.value
+        ? snapshot(draftFromOffer(original.data.value, locale.value))
+        : snapshot(value)
+  }
+
+  watch(
+    [me, hash, () => original.data.value, () => session.account],
+    () => {
+      if (draft.value || !me.value) return
+      const stored = readDraft(readStored<unknown>(draftKey(hash.value, me.value), null))
+      if (!hash.value) {
+        start(stored ?? newDraft(defaultCurrency()), !!stored && draftHasContent(stored))
+        return
+      }
+      const offer = original.data.value
+      if (!offer || offer.address !== me.value) return
+      // A draft made from an older version is stale: the offer changed since.
+      if (stored && stored.baseTxHash === offer.txHash) start(stored, true)
+      else start(draftFromOffer(offer, locale.value), false)
+    },
+    { immediate: true }
+  )
+
+  const dirty = computed(() => !!draft.value && snapshot(draft.value) !== initial)
+
+  let saveTimer: ReturnType<typeof setTimeout> | undefined
+  watch(
+    draft,
+    (value) => {
+      if (!value || published.value) return
+      clearTimeout(saveTimer)
+      saveTimer = setTimeout(() => {
+        if (!draft.value || published.value || !me.value) return
+        // Nothing typed yet, or an edit with no changes: nothing worth keeping.
+        if (editing.value ? !dirty.value : !draftHasContent(draft.value)) return
+        draft.value.updatedAt = Date.now()
+        writeStored(draftKey(hash.value, me.value), storedDraft(draft.value))
+        savedAt.value = draft.value.updatedAt
+      }, 400)
+    },
+    { deep: true }
+  )
+
+  function forgetStored() {
+    try {
+      localStorage.removeItem(draftKey(hash.value, me.value))
+    } catch {
+      // Storage unavailable: nothing was kept anyway.
+    }
+    savedAt.value = null
+  }
+
+  /** «Начать заново»: the stored draft goes, and a video uploaded for it leaves the storage. */
+  async function discard() {
+    const value = draft.value
+    forgetStored()
+    restoredAt.value = null
+    if (value?.video && value.videoUploadedHere) {
+      await session.sdk?.videos.remove({ url: value.video }).catch(() => undefined)
+    }
+    const offer = original.data.value
+    start(
+      offer && editing.value ? draftFromOffer(offer, locale.value) : newDraft(defaultCurrency()),
+      false
+    )
+    void goTo(stepsOf(draft.value!)[0]!, true)
+  }
+
+  // ─── Page state ────────────────────────────────────────────────────────────
+  const state = computed<FormState>(() => {
+    if (session.account === 'guest' || session.account === 'no-permission') return 'signin'
+    if (badId.value) return 'missing'
+    if (editing.value) {
+      if (original.isError.value) return 'error'
+      if (original.isSuccess.value) {
+        const offer = original.data.value
+        if (!offer || offer.published === 'removed') return 'missing'
+        if (me.value && offer.address !== me.value) return 'foreign'
+      }
+    }
+    return draft.value ? 'ready' : 'loading'
+  })
+
+  /**
+   * The Bastyon account is still being registered: no profile on the node yet
+   * (old `pending_reg`, checked by the name). The form can be filled; publishing waits.
+   */
+  const activating = computed(
+    () => profile.isSuccess.value && (!profile.data.value || !profile.data.value.name)
+  )
+  let profileTimer: ReturnType<typeof setInterval> | undefined
+  watch(
+    activating,
+    (on) => {
+      clearInterval(profileTimer)
+      if (on) profileTimer = setInterval(() => void profile.refetch(), 30_000)
+    },
+    { immediate: true }
+  )
+
+  /** Pickup points are in public testing: only listed addresses may open one. */
+  const pointForbidden = computed(
+    () => !!draft.value && isPointDraft(draft.value) && !isPickupPointOwner(me.value)
+  )
+
+  // ─── Video ─────────────────────────────────────────────────────────────────
+  // A pickup point's cost is in PKOIN, always «от», and it has no video.
+  watch(
+    () => !!draft.value && isPointDraft(draft.value),
+    (point) => {
+      const value = draft.value
+      if (!point || !value) return
+      value.currency = PKOIN
+      value.fixCurrency = false
+      value.priceFrom = false
+    },
+    { immediate: true }
+  )
+
+  const videoUrl = computed(() => draft.value?.video || null)
+  const video = useQuery({
+    queryKey: computed(() => ['bastyon', 'video-state', videoUrl.value]),
+    enabled: computed(() => !!session.sdk && !!videoUrl.value),
+    staleTime: 0,
+    retry: 1,
+    queryFn: async () => parseVideoInfo(await session.sdk!.get.videos([videoUrl.value!], true)),
+    refetchInterval: (query) =>
+      query.state.data?.status === 'processing'
+        ? session.mode === 'mock'
+          ? 1500
+          : VIDEO_POLL_MS
+        : false,
+  })
+  const videoStatus = computed(() => {
+    if (!videoUrl.value) return null
+    if (video.isPending.value) return 'loading' as const
+    if (video.isError.value) return 'failed' as const
+    return video.data.value?.status ?? 'loading'
+  })
+
+  const videoBusy = ref(false)
+  async function addVideo(): Promise<void> {
+    const sdk = session.sdk
+    if (!sdk || !draft.value || videoBusy.value) return
+    videoBusy.value = true
+    try {
+      const result = (await sdk.videos.opendialog()) as { link?: unknown } | null | undefined
+      if (result && typeof result.link === 'string' && result.link && draft.value) {
+        draft.value.video = result.link
+        draft.value.videoUploadedHere = true
+      }
+    } finally {
+      videoBusy.value = false
+    }
+  }
+
+  /** A video uploaded in this form leaves the storage; one already published only leaves the offer. */
+  async function removeVideo(): Promise<void> {
+    const value = draft.value
+    if (!value?.video) return
+    const url = value.video
+    const here = value.videoUploadedHere
+    value.video = ''
+    value.videoUploadedHere = false
+    if (here) await session.sdk?.videos.remove({ url }).catch(() => undefined)
+  }
+
+  // ─── Photos ────────────────────────────────────────────────────────────────
+  /** «Добавлено только 10 из 12 — это максимум»; «можно JPEG или PNG». */
+  const photoNotice = ref<
+    { kind: 'limit'; added: number; total: number } | { kind: 'type' } | null
+  >(null)
+  let freeSlots = UPLOAD_SLOTS
+  const waiting: (() => void)[] = []
+  const slot = () =>
+    freeSlots > 0
+      ? (freeSlots--, Promise.resolve())
+      : new Promise<void>((resolve) => waiting.push(resolve))
+  const release = () => {
+    const next = waiting.shift()
+    if (next) next()
+    else freeSlots++
+  }
+
+  const findPhoto = (pid: string): DraftPhoto | undefined =>
+    draft.value?.photos.find((p) => p.id === pid)
+
+  async function upload(pid: string): Promise<void> {
+    const photo = findPhoto(pid)
+    if (!photo?.data) return
+    photo.status = 'uploading'
+    await slot()
+    try {
+      const current = findPhoto(pid)
+      // Removed while waiting.
+      if (!current?.data) return
+      const answer = (await session.sdk!.images.upload({ images: [current.data] })) as unknown
+      const first = Array.isArray(answer) ? (answer[0] as { url?: unknown } | undefined) : undefined
+      const done = findPhoto(pid)
+      if (!done) return
+      if (first && typeof first.url === 'string' && first.url) {
+        done.url = first.url
+        done.status = 'ready'
+        delete done.data
+      } else done.status = 'failed'
+    } catch {
+      const failed = findPhoto(pid)
+      if (failed) failed.status = 'failed'
+    } finally {
+      release()
+    }
+  }
+
+  /** Files from the picker, a drop or the clipboard; data URLs from the camera. */
+  async function addPhotos(sources: readonly (File | string)[]): Promise<void> {
+    const value = draft.value
+    if (!value || !session.sdk) return
+    const usable = sources.filter((s) => typeof s === 'string' || isPhotoFile(s))
+    photoNotice.value = usable.length < sources.length ? { kind: 'type' } : null
+    const room = Math.max(0, MAX_PHOTOS - value.photos.length)
+    const taken = usable.slice(0, room)
+    if (usable.length > room) {
+      photoNotice.value = {
+        kind: 'limit',
+        added: value.photos.length + taken.length,
+        total: value.photos.length + usable.length,
+      }
+    }
+    const added = taken.map((source) => {
+      const photo: DraftPhoto = { id: photoId(), url: null, status: 'uploading', bytes: 0 }
+      value.photos.push(photo)
+      return { id: photo.id, source }
+    })
+    await Promise.all(
+      added.map(async ({ id: pid, source }) => {
+        try {
+          const data = await shrinkPhoto(source)
+          const photo = findPhoto(pid)
+          if (!photo) return
+          photo.data = data
+          photo.bytes = dataUrlBytes(data)
+        } catch {
+          const photo = findPhoto(pid)
+          if (photo) photo.status = 'failed'
+          return
+        }
+        await upload(pid)
+      })
+    )
+  }
+
+  function retryPhoto(pid: string) {
+    void upload(pid)
+  }
+
+  function removePhoto(pid: string) {
+    const value = draft.value
+    if (!value) return
+    value.photos = value.photos.filter((p) => p.id !== pid)
+    if (photoNotice.value?.kind === 'limit') photoNotice.value = null
+  }
+
+  function movePhoto(from: number, to: number) {
+    const list = draft.value?.photos
+    if (!list || from === to || from < 0 || to < 0 || from >= list.length || to >= list.length) {
+      return
+    }
+    const [item] = list.splice(from, 1)
+    list.splice(to, 0, item!)
+  }
+
+  /** Bastyon's camera on a phone: `{images: [{image}]}`; a bare base64 gets its prefix. */
+  async function takePhoto(): Promise<boolean> {
+    const sdk = session.sdk
+    if (!sdk) return false
+    const granted = await sdk.permissions.check({ permission: 'mobilecamera' }).catch(() => false)
+    if (!granted) {
+      await sdk.permissions.request(['mobilecamera']).catch(() => undefined)
+      if (!(await sdk.permissions.check({ permission: 'mobilecamera' }).catch(() => false))) {
+        return false
+      }
+    }
+    const answer = (await sdk.get.imageFromMobileCamera().catch(() => null)) as {
+      images?: unknown
+    } | null
+    const images = Array.isArray(answer?.images) ? answer!.images : []
+    const sources = images
+      .map((i) => (typeof i === 'string' ? i : (i as { image?: unknown })?.image))
+      .filter((i): i is string => typeof i === 'string' && !!i)
+      .map((i) => (i.startsWith('data:') ? i : `data:image/jpeg;base64,${i}`))
+    if (!sources.length) return false
+    await addPhotos(sources)
+    return true
+  }
+
+  // ─── Steps ─────────────────────────────────────────────────────────────────
+  const steps = computed<DraftStep[]>(() =>
+    draft.value ? stepsOf(draft.value) : stepsOf({ tag: null })
+  )
+  /** 1-based in the address, so the phone's back button walks the steps. */
+  const stepIndex = computed(() => {
+    const n = Number(route.query.step)
+    return Number.isInteger(n) && n >= 1 && n <= steps.value.length ? n - 1 : 0
+  })
+  const step = computed(() => steps.value[stepIndex.value]!)
+  /** Steps where errors show: the seller tried to leave them, or reached the review. */
+  const tried = reactive(new Set<DraftStep>())
+
+  const issues = computed<DraftIssue[]>(() =>
+    draft.value
+      ? draftIssues(draft.value, {
+          tree: categories.tree.value,
+          rates: rates.data.value ?? null,
+          videoStatus: videoStatus.value,
+          myList: account.isSuccess.value ? myList.value : undefined,
+        })
+      : []
+  )
+  const errorsOf = (s: DraftStep) => issues.value.filter((i) => i.step === s && i.level === 'error')
+  const blocking = computed(() => issues.value.filter((i) => i.level === 'error'))
+  const waits = computed(() => issues.value.filter((i) => i.level === 'wait'))
+
+  const issueText = (issue: DraftIssue) => t(`create.issue.${issue.key}`, issue.params ?? {})
+
+  /** The error under a field, once the seller tried to leave its step. */
+  function fieldError(field: string): string | undefined {
+    const issue = issues.value.find(
+      (i) => i.field === field && i.level === 'error' && tried.has(i.step)
+    )
+    return issue ? issueText(issue) : undefined
+  }
+
+  function scrollToField(field: string) {
+    requestAnimationFrame(() => {
+      const el = document.querySelector<HTMLElement>(`[data-field="${field}"]`)
+      el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      el?.querySelector<HTMLElement>('input, textarea, button')?.focus({ preventScroll: true })
+    })
+  }
+
+  function goTo(target: DraftStep, replace = false) {
+    const index = steps.value.indexOf(target)
+    if (index < 0) return Promise.resolve()
+    const query = { ...route.query, step: index === 0 ? undefined : String(index + 1) }
+    window.scrollTo({ top: 0 })
+    return replace ? router.replace({ query }) : router.push({ query })
+  }
+
+  /** «Далее»: shows what is missing on this step instead of moving on. */
+  function next(): boolean {
+    tried.add(step.value)
+    const errors = errorsOf(step.value)
+    if (errors.length) {
+      scrollToField(errors[0]!.field)
+      return false
+    }
+    const following = steps.value[stepIndex.value + 1]
+    if (following) {
+      if (following === 'review') steps.value.forEach((s) => tried.add(s))
+      void goTo(following)
+    }
+    return true
+  }
+
+  function back() {
+    const previous = steps.value[stepIndex.value - 1]
+    if (previous) void goTo(previous)
+  }
+
+  /** «Исправить» on the review: to the step, at the field. */
+  function fix(issue: DraftIssue) {
+    tried.add(issue.step)
+    void goTo(issue.step).then(() => scrollToField(issue.field))
+  }
+
+  // A pickup point has other steps: keep the seller on a step that exists.
+  watch(steps, (list, before) => {
+    if (before && list.join() !== before.join() && stepIndex.value >= list.length) {
+      void goTo(list[list.length - 1]!, true)
+    }
+  })
+
+  // ─── Publishing ────────────────────────────────────────────────────────────
+  const language = computed(() => LANGUAGE_TAG[locale.value] ?? 'en-US')
+
+  /** The offer as it will be sent; also what the preview shows. */
+  const offer = computed<Offer | null>(() =>
+    draft.value && me.value
+      ? offerFromDraft(draft.value, {
+          address: me.value,
+          language: language.value,
+          rates: rates.data.value ?? null,
+          myList: myList.value,
+          base: editing.value ? (original.data.value ?? null) : null,
+        })
+      : null
+  )
+
+  const publishTxId = ref<string | null>(null)
+  const publishTx = computed(() => txStore.items.find((tx) => tx.id === publishTxId.value) ?? null)
+  const publishError = ref<string | null>(null)
+  const sending = ref(false)
+
+  const canPublish = computed(
+    () =>
+      state.value === 'ready' &&
+      !blocking.value.length &&
+      !waits.value.length &&
+      !activating.value &&
+      !pointForbidden.value &&
+      !sending.value &&
+      // Sent: a second press would publish a second offer.
+      !published.value
+  )
+
+  async function publish(): Promise<boolean> {
+    steps.value.forEach((s) => tried.add(s))
+    publishError.value = null
+    const first = blocking.value[0]
+    if (first) {
+      fix(first)
+      return false
+    }
+    if (!canPublish.value || !offer.value) return false
+    if (!(await session.ensureSignedIn())) return false
+
+    let payload
+    try {
+      payload = toOfferPayload(offer.value, {
+        isLeafCategory: (tag) => categories.tree.value?.isLeaf(tag) ?? false,
+      })
+    } catch (error) {
+      publishError.value =
+        error instanceof OfferInvalidError ? `offer:invalid:${error.field}` : String(error)
+      return false
+    }
+
+    sending.value = true
+    try {
+      const tx = await txStore.send('offer', payload)
+      publishTxId.value = tx.id
+      if (tx.status === 'failed') {
+        publishError.value = tx.error
+        return false
+      }
+      // In the network now: the draft is no longer needed, nor is the video at risk.
+      published.value = true
+      clearTimeout(saveTimer)
+      forgetStored()
+      if (draft.value) draft.value.videoUploadedHere = false
+      void client.invalidateQueries({ queryKey: ['barteron', 'offers-by', me.value] })
+      return true
+    } finally {
+      sending.value = false
+    }
+  }
+
+  /** The offer's page once it is sent: a new offer's id is its first txid. */
+  const publishedId = computed(
+    () => hash.value ?? publishTx.value?.target ?? publishTx.value?.txid ?? null
+  )
+
+  /** «Разместить ещё»: an empty form after a new offer went out. */
+  function reset() {
+    published.value = false
+    publishTxId.value = null
+    publishError.value = null
+    tried.clear()
+    start(newDraft(defaultCurrency()), false)
+    void goTo(stepsOf(draft.value!)[0]!, true)
+  }
+
+  onBeforeUnmount(() => {
+    clearTimeout(saveTimer)
+    clearInterval(profileTimer)
+    // A change typed in the last 400 ms is kept too.
+    if (draft.value && me.value && !published.value) {
+      if (editing.value ? dirty.value : draftHasContent(draft.value)) {
+        writeStored(draftKey(hash.value, me.value), storedDraft(draft.value))
+      }
+    }
+  })
+
+  return {
+    hash,
+    editing,
+    state,
+    original,
+    draft,
+    restoredAt,
+    savedAt,
+    dirty,
+    discard,
+    activating,
+    pointForbidden,
+    myList,
+    account,
+    categories,
+    rates,
+    // video
+    videoStatus,
+    videoInfo: computed(() => video.data.value ?? null),
+    videoBusy,
+    addVideo,
+    removeVideo,
+    retryVideo: () => void video.refetch(),
+    // photos
+    photoNotice,
+    addPhotos,
+    retryPhoto,
+    removePhoto,
+    movePhoto,
+    takePhoto,
+    // steps
+    steps,
+    stepIndex,
+    step,
+    tried,
+    issues,
+    blocking,
+    waits,
+    issueText,
+    fieldError,
+    errorsOf,
+    goTo,
+    next,
+    back,
+    fix,
+    // publishing
+    offer,
+    canPublish,
+    publish,
+    sending,
+    publishTx,
+    publishError,
+    published,
+    publishedId,
+    reset,
+  }
+}
+
+export type OfferForm = ReturnType<typeof createOfferForm>
+
+const FORM: InjectionKey<OfferForm> = Symbol('offer-form')
+
+export function provideOfferForm(form: OfferForm) {
+  provide(FORM, form)
+}
+
+export function useOfferForm(): OfferForm {
+  const form = inject(FORM)
+  if (!form) throw new Error('useOfferForm outside the offer form')
+  return form
+}
