@@ -10,6 +10,7 @@ import App from './App.vue'
 import { createQueryClient, installTxRefresh } from './api/queries'
 import { i18n } from './i18n'
 import { createAppRouter } from './router'
+import { useLocaleStore } from './stores/locale'
 import { useSessionStore } from './stores/session'
 import { useThemeStore } from './stores/theme'
 import { useTxStore } from './stores/tx'
@@ -26,6 +27,8 @@ app.mount('#app')
 
 const session = useSessionStore(pinia)
 const tx = useTxStore(pinia)
+// The user's language choice goes on top of Bastyon's.
+useLocaleStore(pinia)
 installTxRefresh(queryClient, tx, () => session.address)
 
 void session
@@ -33,4 +36,10 @@ void session
     sdkHost: import.meta.env.VITE_SDK_HOST,
     allowMock: import.meta.env.VITE_ALLOW_MOCK === 'true',
   })
-  .then(() => tx.start())
+  .then(() => {
+    session.sdk?.on(
+      'balance',
+      () => void queryClient.invalidateQueries({ queryKey: ['bastyon', 'balance'] })
+    )
+    return tx.start()
+  })

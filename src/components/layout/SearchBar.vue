@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import UiIcon from '@/ui/UiIcon.vue'
 
@@ -10,12 +11,22 @@ defineProps<{
   size?: 44 | 48
 }>()
 const query = defineModel<string>({ default: '' })
-const emit = defineEmits<{ submit: [query: string]; scope: [] }>()
+const emit = defineEmits<{
+  submit: [query: string]
+  scope: [anchor: HTMLElement]
+  /** The field got focus or input: show the hints under the form. */
+  focus: [form: HTMLElement]
+  keydown: [event: KeyboardEvent]
+}>()
+const form = ref<HTMLFormElement>()
+
+defineExpose({ focus: () => form.value?.querySelector('input')?.focus() })
 const { t } = useI18n()
 </script>
 
 <template>
   <form
+    ref="form"
     class="search"
     :class="size === 48 ? 'search--h48' : ''"
     role="search"
@@ -30,9 +41,18 @@ const { t } = useI18n()
         type="search"
         enterkeyhint="search"
         :placeholder="placeholder ?? t('header.searchPlaceholder')"
+        autocomplete="off"
+        @focus="form && emit('focus', form)"
+        @input="form && emit('focus', form)"
+        @keydown="emit('keydown', $event)"
       />
     </label>
-    <button v-if="scope" type="button" class="search__scope" @click="emit('scope')">
+    <button
+      v-if="scope"
+      type="button"
+      class="search__scope"
+      @click="emit('scope', $event.currentTarget as HTMLElement)"
+    >
       {{ scope }}
       <UiIcon name="chevron" :size="16" :stroke="2" />
     </button>

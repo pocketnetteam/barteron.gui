@@ -22,7 +22,7 @@ beforeEach(() => {
 
 describe('session store', () => {
   it('connects and reads the address', async () => {
-    const { started } = startWithMock({ locale: 'ru', theme: 'dark' })
+    const { sdk, started } = startWithMock({ locale: 'ru', theme: 'dark' })
     expect(useSessionStore().status).toBe('connecting')
     await started
 
@@ -34,6 +34,8 @@ describe('session store', () => {
     expect(session.hostTheme).toBe('dark')
     expect(i18n.global.locale.value).toBe('ru')
     expect(document.documentElement.lang).toBe('ru')
+    // bastyon-nextgen keeps its splash over the app until `loaded`.
+    expect(sdk.mock.calls.some((c) => c.method === 'emit' && c.args[0] === 'loaded')).toBe(true)
   })
 
   it('falls back to English for a host locale we do not have', async () => {

@@ -33,6 +33,7 @@ import {
 } from './barteron'
 import { createBatcher } from './batch'
 import { fetchRates } from './rates'
+import { parseBalance } from './wallet'
 
 export function createQueryClient(): QueryClient {
   return new QueryClient({
@@ -52,7 +53,8 @@ export const keys = {
   all: ['barteron'] as const,
   feeds: ['barteron', 'feed'] as const,
   feed: (request: FeedRequest | null) => ['barteron', 'feed', request] as const,
-  deals: (request: DealsRequest | null) => ['barteron', 'deals', request] as const,
+  // Under `feeds`: a published offer refreshes deal lists too.
+  deals: (request: DealsRequest | null) => ['barteron', 'feed', 'deals', request] as const,
   complexDeals: (request: ComplexDealsRequest | null) =>
     ['barteron', 'complex-deals', request] as const,
   groups: (request: GroupsRequest | null) => ['barteron', 'groups', request] as const,
@@ -65,6 +67,7 @@ export const keys = {
   categoryTree: ['categories', 'tree'] as const,
   categoryNames: (locale: Locale) => ['categories', 'names', locale] as const,
   rates: ['rates'] as const,
+  balance: (address: string | null) => ['bastyon', 'balance', address] as const,
 }
 
 /** Brighteon is the same app under another project: English, Canada and the USA. */
@@ -317,6 +320,17 @@ export function useCategories() {
     error: computed(() => tree.error.value ?? names.error.value),
     label,
   }
+}
+
+/** PKOIN balance of the signed-in user; the host pushes `balance` when it changes. */
+export function useBalance() {
+  const session = useSessionStore()
+  return useQuery({
+    queryKey: computed(() => keys.balance(session.address)),
+    enabled: computed(() => !!session.sdk && session.account === 'signed-in'),
+    queryFn: async () => parseBalance(await session.sdk!.get.balance()),
+    staleTime: 60_000,
+  })
 }
 
 /**

@@ -124,6 +124,28 @@ export class CategoryTree {
     return !!item && !item.removed && item.children.length === 0
   }
 
+  /**
+   * Categories whose name contains the text, for «Найти категорию» and search
+   * hints. Names that start with it come first, then shallower ones.
+   */
+  search(text: string, names: CategoryNames, limit = 20): Category[] {
+    const needle = text.trim().toLocaleLowerCase()
+    if (!needle) return []
+    const found: { item: Category; starts: boolean; depth: number }[] = []
+    for (const item of this.items.values()) {
+      if (item.removed) continue
+      const name = (names[item.name] ?? item.name).toLocaleLowerCase()
+      const at = name.indexOf(needle)
+      if (at < 0) continue
+      const starts = at === 0 || /[\s,(«"-]/.test(name[at - 1] ?? '')
+      found.push({ item, starts, depth: this.parents(item.id).length })
+    }
+    return found
+      .sort((a, b) => Number(b.starts) - Number(a.starts) || a.depth - b.depth)
+      .slice(0, limit)
+      .map((f) => f.item)
+  }
+
   /** Name for a category id; `null` for an unknown id. */
   label(id: number | null | undefined, names: CategoryNames, preview = false): string | null {
     const item = this.get(id)

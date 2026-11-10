@@ -4,6 +4,7 @@ import { i18n } from '@/i18n'
 import { CURRENCIES, defaultCurrency } from '@/api/rates'
 import { readStored, userKey, writeStored } from '@/lib/storage'
 import { useSessionStore } from './session'
+import { useUserStored } from './stored'
 
 /**
  * Currency for the equivalent next to PKOIN prices. Stored under the old
@@ -26,11 +27,26 @@ export const useCurrencyStore = defineStore('currency', () => {
   /** The chosen currency, or the first one for the interface language. */
   const code = computed(() => stored.value || defaultCurrency(i18n.global.locale.value))
 
+  /**
+   * «Только PKOIN»: no equivalent next to prices. New in this version, so it
+   * has its own key: the old app would not understand «PKOIN» as a currency.
+   */
+  const pkoinOnly = useUserStored<boolean>('pkoin_only', false, (v) => v === true)
+
   function set(value: string) {
     if (!CURRENCIES.some((c) => c.code === value)) return
     stored.value = value
     writeStored(userKey('currency', session.address), value)
+    pkoinOnly.set(false)
   }
 
-  return { code, chosen: computed(() => stored.value || null), set }
+  return {
+    code,
+    chosen: computed(() => stored.value || null),
+    pkoinOnly: pkoinOnly.value,
+    /** Currency for the equivalent; `undefined` with «Только PKOIN». */
+    shown: computed(() => (pkoinOnly.value.value ? undefined : code.value)),
+    set,
+    setPkoinOnly: () => pkoinOnly.set(true),
+  }
 })

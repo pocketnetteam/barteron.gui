@@ -20,6 +20,10 @@ export const useSessionStore = defineStore('session', () => {
   const failReason = ref<'script' | 'timeout' | null>(null)
   const appinfo = ref<AppInfo | null>(null)
   const hostTheme = ref<string | null>(null)
+  /** Bastyon's language (`ru`, `en-US`…); the user may override it (`useLocaleStore`). */
+  const hostLocale = ref<string | null>(
+    typeof navigator === 'undefined' ? null : navigator.language
+  )
   const account = ref<AccountState>('unknown')
   const address = ref<string | null>(null)
   const sdk = shallowRef<HostSdk | null>(null)
@@ -44,7 +48,8 @@ export const useSessionStore = defineStore('session', () => {
     mode.value = result.mode
     appinfo.value = result.appinfo
     hostTheme.value = result.appinfo.theme?.rootid ?? null
-    setLocale(resolveLocale(result.appinfo.locale))
+    hostLocale.value = result.appinfo.locale ?? null
+    setLocale(resolveLocale(hostLocale.value))
 
     // Outside services through the host when it routes traffic through Tor;
     // sdk.js checks `alttransport` itself and returns null otherwise.
@@ -54,10 +59,14 @@ export const useSessionStore = defineStore('session', () => {
       hostTheme.value = theme.rootid
     })
     result.sdk.on('locale', ({ locale }) => {
+      hostLocale.value = locale
       setLocale(resolveLocale(locale))
     })
 
     await loadAccount()
+    // The host shows its splash until the app says it is up: bastyon-nextgen
+    // waits for `loaded` (`mini-app-frame.vue`), as the old app sent it after init.
+    result.sdk.emit('loaded')
     status.value = 'ready'
   }
 
@@ -100,6 +109,7 @@ export const useSessionStore = defineStore('session', () => {
     failReason,
     appinfo,
     hostTheme,
+    hostLocale,
     account,
     address,
     sdk,

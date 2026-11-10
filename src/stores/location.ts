@@ -1,6 +1,14 @@
 import { defineStore } from 'pinia'
 import { computed, ref, shallowRef, watch } from 'vue'
-import { requestGeolocation } from '@/api/geo'
+import { requestGeolocation, reverseGeocode, type NominatimPlace } from '@/api/geo'
+import { i18n } from '@/i18n'
+import {
+  areaFromStored,
+  centerForTimeZone,
+  deviceTimeZone,
+  storedFromArea,
+  type Area,
+} from '@/lib/area'
 import {
   approximateBounds,
   fromLeafletBounds,
@@ -37,6 +45,12 @@ function valid(value: unknown): StoredLocation {
   }
 }
 
+/** City, town or region of a Nominatim place; the country when nothing else. */
+export function cityOf(place: NominatimPlace): string | null {
+  const a = place.address ?? {}
+  return a.city || a.town || a.village || a.state || a.county || a.country || null
+}
+
 /** Place filter of the catalog and the device location. */
 export const useLocationStore = defineStore('location', () => {
   const session = useSessionStore()
@@ -67,6 +81,39 @@ export const useLocationStore = defineStore('location', () => {
     save(onlyBounds ? { ...stored.value, bounds: null } : EMPTY)
   }
 
+  /** Centre and radius of the stored map view; also kept after «Все регионы». */
+  const area = computed(() => areaFromStored(stored.value))
+
+  /** Saves an area as the filter of every list. */
+  function setArea(value: Area) {
+    save(valid(storedFromArea(value)))
+  }
+
+  /** Where a map opens: the stored centre, the device, or the time zone (old `getDefaultLocation`). */
+  const mapCenter = computed<LatLng>(
+    () => area.value?.center ?? device.value ?? centerForTimeZone(deviceTimeZone())
+  )
+
+  /**
+   * City of the area centre for «Москва · 10 км» (old `onlyCity`). One
+   * Nominatim request per centre and language; the mock stays offline.
+   */
+  const placeName = ref<string | null>(null)
+  let placeKey = ''
+  watch(
+    () => [area.value?.center.join(','), i18n.global.locale.value, session.mode] as const,
+    async ([center, locale, mode]) => {
+      const key = `${center}|${locale}`
+      if (!center || key === placeKey) return
+      placeKey = key
+      placeName.value = null
+      if (mode !== 'bastyon') return
+      const place = await reverseGeocode(area.value!.center, { locale, zoom: 10 }).catch(() => null)
+      if (placeKey === key) placeName.value = place ? cityOf(place.raw) : null
+    },
+    { immediate: true }
+  )
+
   /** Geohash prefixes for `location` of feed requests; empty — everywhere. */
   const feedLocation = computed(() =>
     stored.value.bounds ? approximateBounds(fromLeafletBounds(stored.value.bounds)) : []
@@ -89,6 +136,10 @@ export const useLocationStore = defineStore('location', () => {
 
   return {
     stored,
+    area,
+    mapCenter,
+    placeName,
+    setArea,
     device,
     deviceStatus,
     feedLocation,

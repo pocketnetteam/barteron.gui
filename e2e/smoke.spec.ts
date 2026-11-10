@@ -2,8 +2,8 @@ import { expect, test } from '@playwright/test'
 
 /** Outside Bastyon the dev build runs on the mock SDK. */
 test.describe('mock SDK in a plain browser', () => {
-  test('home shows the mock connection and the user address', async ({ page }) => {
-    await page.goto('/')
+  test('status page shows the mock connection and the user address', async ({ page }) => {
+    await page.goto('/dev/status')
     await expect(page.getByTestId('status-mode')).toHaveText('Заглушка SDK')
     await expect(page.getByTestId('status-account')).toHaveText(
       'PMockUser1111111111111111111111111'
@@ -11,8 +11,15 @@ test.describe('mock SDK in a plain browser', () => {
     await expect(page.locator('html')).toHaveAttribute('lang', 'ru')
   })
 
-  test('route links open the matching screens', async ({ page }) => {
+  test('home opens with categories and new offers', async ({ page }) => {
     await page.goto('/')
+    await expect(page.getByTestId('home')).toBeVisible()
+    await expect(page.getByTestId('category-tiles')).toContainText('Транспорт')
+    await expect(page.getByTestId('new-offers').locator('article').first()).toBeVisible()
+  })
+
+  test('route links open the matching screens', async ({ page }) => {
+    await page.goto('/dev/status')
     await page.getByRole('link', { name: '/barter/safedeal?deal=demo' }).click()
     await expect(page).toHaveURL(/\/barter\/safedeal\?deal=demo$/)
     await expect(page.getByTestId('stub-title')).toContainText('SafeDeal')

@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory, type RouteRecordRaw, type RouterHistory } from 'vue-router'
-import HomeView from '@/views/HomeView.vue'
 
+const HomeView = () => import('@/views/HomeView.vue')
 const StubView = () => import('@/views/StubView.vue')
+const CatalogView = () => import('@/views/CatalogView.vue')
+const MapView = () => import('@/views/MapView.vue')
 const NotFoundView = () => import('@/views/NotFoundView.vue')
 
 /** Internal pages: dev and test builds only, cut out of production. */
@@ -13,19 +15,28 @@ const devRoutes: RouteRecordRaw[] =
           name: 'showcase',
           component: () => import('@/views/dev/ShowcaseView.vue'),
         },
+        {
+          // What the host told us; the e2e host tests read it.
+          path: '/dev/status',
+          name: 'status',
+          component: () => import('@/views/dev/StatusView.vue'),
+        },
       ]
     : []
 
 /**
  * Same paths and names as the old app (barteron.gui `src/router.js`): these
  * links are already shared in chats. Screens are stubs until their stage.
+ * New paths are only added, never put over old ones.
  */
 export const routes: RouteRecordRaw[] = [
   { path: '/', name: 'home', component: HomeView },
   // bastyon-nextgen opens `<scope>/<start_url>`, and the manifest's start_url is
   // `index.html`; the previous host ignores start_url and opens `/`.
   { path: '/index.html', redirect: (to) => ({ path: '/', query: to.query, hash: to.hash }) },
-  { path: '/category/:id', name: 'category', component: StubView },
+  { path: '/category/:id', name: 'category', component: CatalogView },
+  // New: the catalog on a map. `search` as the id means all categories, as in the old app.
+  { path: '/category/:id/map', name: 'categoryMap', component: MapView },
   {
     path: '/barter/create/:id?',
     // vue-router requires the alias to declare the param exactly like the path.
@@ -46,5 +57,15 @@ export const routes: RouteRecordRaw[] = [
 ]
 
 export function createAppRouter(history: RouterHistory = createWebHistory()) {
-  return createRouter({ history, routes })
+  return createRouter({
+    history,
+    routes,
+    // Back to a list: where it was (its pages are still in the query cache).
+    // Filters and sorting on the same page keep the scroll; a new page starts at the top.
+    scrollBehavior(to, from, saved) {
+      if (saved) return saved
+      if (to.path === from.path) return false
+      return { top: 0 }
+    },
+  })
 }

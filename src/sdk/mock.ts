@@ -165,7 +165,8 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
       async balance() {
         record('get.balance')
         requireSignedIn()
-        return { total: 0 }
+        // The shape bastyon-nextgen answers with (`actions/wallet.ts`).
+        return { available: 842.5, frozen: 0 }
       },
       action: () => resolved('get.action'),
       actions: async () => {

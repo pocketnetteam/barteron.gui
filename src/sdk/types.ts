@@ -38,6 +38,8 @@ export interface HostProject {
 export interface HostApplication {
   id: string
   name?: string
+  /** Where the app is served from: `barteron.club` (the old app built document links on it). */
+  scope?: string
   [key: string]: unknown
 }
 

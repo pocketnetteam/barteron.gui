@@ -1,4 +1,5 @@
 // Generated from the prototype: foundations.html (base set) and the s2–s8 screens (extra).
+// `shield-fill` is not in the prototype: the moderator role mark (PLAN.md, stage 1 decisions).
 // Line icons, 24 × 24, stroke 1.8, round caps and joins; filled icons set `fill`.
 
 export type IconElement = ['path' | 'circle' | 'rect', Record<string, string>]
@@ -185,11 +186,6 @@ export const ICONS = {
     ],
   },
   shield: { els: [['path', { d: 'M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6z' }]] },
-  // Not in the prototype: the moderator role mark (PLAN.md, stage 1 decisions).
-  'shield-fill': {
-    fill: true,
-    els: [['path', { d: 'M12 2 4 5.4v5.8c0 5 3.4 9.4 8 10.8 4.6-1.4 8-5.8 8-10.8V5.4z' }]],
-  },
   minus: { els: [['path', { d: 'M5 12h14' }]] },
   sort: { els: [['path', { d: 'M7 4v16M3 16l4 4 4-4M17 20V4M13 8l4-4 4 4' }]] },
   send: { els: [['path', { d: 'm3 11 18-8-8 18-2-8z' }]] },
@@ -228,6 +224,89 @@ export const ICONS = {
   },
   play: { fill: true, els: [['path', { d: 'M7 5v14l12-7z' }]] },
   spinner: { els: [['path', { d: 'M12 3a9 9 0 1 1-9 9' }]] },
+  'shield-fill': {
+    fill: true,
+    els: [['path', { d: 'M12 2 4 5.4v5.8c0 5 3.4 9.4 8 10.8 4.6-1.4 8-5.8 8-10.8V5.4z' }]],
+  },
+  'search-empty': {
+    els: [
+      ['circle', { cx: '11', cy: '11', r: '7' }],
+      ['path', { d: 'm20 20-3.5-3.5M8.5 11h5' }],
+    ],
+  },
+  'search-area': { els: [['path', { d: 'M20 11a8 8 0 0 0-14.3-4.9L4 8M4 4v4h4' }]] },
+  'cat-transport': {
+    els: [
+      ['path', { d: 'M3 13l2-6h14l2 6v5H3z' }],
+      ['circle', { cx: '7.5', cy: '15.5', r: '1.2' }],
+      ['circle', { cx: '16.5', cy: '15.5', r: '1.2' }],
+    ],
+  },
+  'cat-realty': {
+    els: [
+      ['rect', { x: '5', y: '3', width: '14', height: '18', rx: '1' }],
+      ['path', { d: 'M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2' }],
+    ],
+  },
+  'cat-electronics': {
+    els: [
+      ['rect', { x: '5', y: '5', width: '14', height: '10', rx: '1.5' }],
+      ['path', { d: 'M3 19h18' }],
+    ],
+  },
+  'cat-clothes': {
+    els: [['path', { d: 'M8 4 4 7l2 4 2-1v10h8V10l2 1 2-4-4-3c-1 1.5-2.3 2-4 2s-3-.5-4-2z' }]],
+  },
+  'cat-kids': {
+    els: [
+      ['path', { d: 'M4 6h3l2 8h10l2-6H9' }],
+      ['circle', { cx: '10', cy: '18', r: '1.6' }],
+      ['circle', { cx: '17', cy: '18', r: '1.6' }],
+    ],
+  },
+  'cat-services': {
+    els: [
+      ['rect', { x: '3', y: '7', width: '18', height: '13', rx: '2' }],
+      ['path', { d: 'M9 7V5h6v2M3 12h18' }],
+    ],
+  },
+  'cat-bikes': {
+    els: [
+      ['circle', { cx: '6', cy: '16', r: '3.5' }],
+      ['circle', { cx: '18', cy: '16', r: '3.5' }],
+      ['path', { d: 'M6 16 10 8h5l3 8M10 8 8 5H6M15 8l-3 8' }],
+    ],
+  },
+  'cat-sport': {
+    els: [
+      ['circle', { cx: '12', cy: '12', r: '9' }],
+      ['path', { d: 'M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18' }],
+    ],
+  },
+  'cat-animals': {
+    els: [
+      ['circle', { cx: '8', cy: '8.5', r: '1.6' }],
+      ['circle', { cx: '16', cy: '8.5', r: '1.6' }],
+      ['circle', { cx: '4.8', cy: '12.5', r: '1.4' }],
+      ['circle', { cx: '19.2', cy: '12.5', r: '1.4' }],
+      ['path', { d: 'M12 12c-3 0-5 3-5 5s2 2 5 2 5 0 5-2-2-5-5-5z' }],
+    ],
+  },
+  'cat-books': {
+    els: [
+      ['path', { d: 'M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z' }],
+      ['path', { d: 'M5 17a3 3 0 0 1 3-3h11' }],
+    ],
+  },
+  'cat-collect': {
+    els: [
+      ['circle', { cx: '12', cy: '12', r: '8' }],
+      ['circle', { cx: '12', cy: '12', r: '4.5' }],
+    ],
+  },
+  'cat-food': {
+    els: [['path', { d: 'M5 9h12v5a6 6 0 0 1-12 0zM17 10h1.5a2.5 2.5 0 0 1 0 5H17M8 3v3M12 3v3' }]],
+  },
 } satisfies Record<string, IconDef>
 
 export type IconName = keyof typeof ICONS

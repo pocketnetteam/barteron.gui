@@ -245,6 +245,55 @@ export function demoNetworkData(me: string, now = Date.now(), height = 3_100_000
     },
   ]
 
+  // A fuller catalog for stage 3 screens: bikes, coins, furniture, books…
+  // around both cities, with conditions, delivery ways and safe deals mixed.
+  const sellers = [SELLERS.anna, SELLERS.ilya, SELLERS.maria, SELLERS.dmitry]
+  const pickup = { deliveryOptions: { selfPickup: { isEnabled: true } } }
+  const courier = { deliveryOptions: { directDelivery: { isEnabled: true } } }
+  const extra: [string, number, (number | string)[], number, 'new' | 'used', number][] = [
+    ['Stels Navigator 300, городской', 1003, [17, 1005], 420, 'used', 2],
+    ['Горный Forward Sporting 27,5″', 1006, [17], 480, 'used', 6],
+    ['Детский велосипед 16″, с боковыми колёсами', 1005, [17, 2987], 150, 'new', 20],
+    ['BMX Stark Madness', 1002, [17, 1004], 350, 'used', 26],
+    ['Шоссейный, рама 54, карбоновая вилка', 1004, [17], 490, 'used', 48],
+    ['Складной велосипед 20″', 1003, [17], 300, 'new', 52],
+    ['Городской с корзиной, женский', 1003, [17], 260, 'used', 75],
+    ['Фэтбайк 26″, 7 скоростей', 1006, [17, 890], 470, 'new', 80],
+    ['Монета 10 рублей 1993, золото', 38, [17], 1800, 'used', 12],
+    ['Серебряный рубль 1924', 13, [17, 38], 640, 'used', 33],
+    ['Кресло-качалка из ротанга', 3003, [3002], 650, 'used', 70],
+    ['Кровать двуспальная с матрасом', 3004, ['my_list'], 1100, 'used', 90],
+    ['Детективы Агаты Кристи, 12 книг', 589, ['for_nothing'], 0, 'used', 30],
+    ['Фантастика, серия «Шедевры»', 591, [588], 90, 'used', 100],
+    ['Беговая дорожка складная', 890, [1006], 2400, 'used', 28],
+    ['Турник настенный', 894, [17], 120, 'new', 40],
+    ['Чай пуэр, 5 блинов', 13589, [13590], 60, 'new', 8],
+    ['Кофе в зёрнах, 2 кг', 13590, [17], 75, 'new', 15],
+    ['Рюкзак школьный ортопедический', 2987, [17], 85, 'new', 44],
+    ['Куртка зимняя, размер 48', 11456, [17, 11457], 310, 'used', 60],
+    ['Ремонт стиральных машин на дому', 161, [17], 150, 'new', 120],
+    ['Телевизор 43″, Smart TV', 658, [17, 15033], 1350, 'used', 18],
+  ]
+  extra.forEach(([caption, tag, tags, price, condition, ageHours], i) => {
+    const city = i % 3 === 2 ? BELGRADE : MOSCOW
+    offers.push({
+      id: demoTxid(`x${i}-${caption.slice(0, 6)}`),
+      author: sellers[i % sellers.length]!,
+      caption,
+      description: 'Состояние как на фото. Пишите в чат, отвечу быстро.',
+      tag,
+      tags,
+      condition,
+      price,
+      place: near(city, i + 10),
+      photos: i % 4 === 3 ? [] : [(i * 37) % 360],
+      ageHours,
+      ...(tag === 161 && { metaData: { price: { prefix: 'from' } } }),
+      ...(i % 5 === 1 && { safeDeal: { validatorFeeVariant: 'buyer' } }),
+      ...(i % 3 === 0 ? { delivery: pickup } : i % 3 === 1 ? { delivery: courier } : {}),
+    })
+  })
+
   const scores: RawTx[] = [
     {
       hash: demoTxid('score1'),

@@ -13,7 +13,7 @@ import { expect, test, type Page } from '@playwright/test'
  * `{ response: id, data }` or `{ response: id, error }`.
  */
 
-const APP_URL = 'http://localhost:5180/'
+const APP_URL = 'http://localhost:5180/dev/status'
 const HOST_ADDRESS = 'PHostUser22222222222222222222222222'
 const SDK_SOURCE = readFileSync(new URL('./fixtures/bastyon-sdk.js', import.meta.url), 'utf8')
 

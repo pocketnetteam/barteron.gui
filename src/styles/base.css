@@ -200,3 +200,19 @@ svg {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Leaflet maps (AreaMap, OffersMap): our font and background; dark tiles in the dark theme. */
+/* :root raises the weight over leaflet.css, which loads later with the map chunk. */
+:root .leaflet-container {
+  font: inherit;
+  background: var(--map-land);
+}
+
+:root[data-theme='dark'] .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.85) contrast(0.9);
+}
+
+:root[data-theme='dark'] .leaflet-control-attribution {
+  background: rgba(22, 22, 29, 0.8);
+  color: var(--text3);
+}

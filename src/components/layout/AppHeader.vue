@@ -25,26 +25,45 @@ const props = defineProps<{
   /** Signed in: balance and avatar instead of nothing. */
   user?: { name: string; seed?: string; avatar?: string | null; balance?: number | null }
   unread?: number
+  /** Not signed in: «Войти» instead of the avatar. */
+  signIn?: string
+  /** The categories menu is open: the button turns into «× Все категории». */
+  categoriesOpen?: boolean
+  /** «В категории»: the search runs in the current category. */
+  searchScope?: string
+  searchPlaceholder?: string
+  /** The map page (s2-map-desktop): no top strip, «Списком» instead of the personal buttons. */
+  compact?: boolean
+  /** «Списком»: back to the list from the map. */
+  listLabel?: string
 }>()
 
 const query = defineModel<string>('query', { default: '' })
 
+/** Buttons that open a panel pass themselves: the panel opens under them. */
 defineEmits<{
-  location: []
+  location: [anchor: HTMLElement]
   tips: []
   safeDeal: []
   referral: []
-  currency: []
-  language: []
-  theme: []
+  currency: [anchor: HTMLElement]
+  language: [anchor: HTMLElement]
+  theme: [anchor: HTMLElement]
   support: []
   categories: []
   search: [query: string]
+  searchFocus: [form: HTMLElement]
+  searchKeydown: [event: KeyboardEvent]
+  searchScope: [anchor: HTMLElement]
   favorites: []
   messages: []
-  account: []
+  account: [anchor: HTMLElement]
+  signIn: []
   create: []
+  list: []
 }>()
+
+const el = (event: Event) => event.currentTarget as HTMLElement
 
 const { t, locale } = useI18n()
 
@@ -57,13 +76,14 @@ const balance = computed(() =>
 
 <template>
   <header class="header">
-    <div class="header__strip">
+    <div v-if="!compact" class="header__strip">
       <div class="container header__strip-row">
         <div class="header__strip-group">
           <button
             type="button"
             class="header__strip-btn header__strip-btn--strong"
-            @click="$emit('location')"
+            data-testid="header-location"
+            @click="$emit('location', el($event))"
           >
             <UiIcon name="location" :size="14" :stroke="2" />{{ location }}
           </button>
@@ -86,13 +106,28 @@ const balance = computed(() =>
           </button>
         </div>
         <div class="header__strip-group">
-          <button type="button" class="header__strip-btn" @click="$emit('currency')">
+          <button
+            type="button"
+            class="header__strip-btn"
+            data-testid="header-currency"
+            @click="$emit('currency', el($event))"
+          >
             {{ currency }}<UiIcon name="chevron" :size="12" :stroke="2.4" />
           </button>
-          <button type="button" class="header__strip-btn" @click="$emit('language')">
+          <button
+            type="button"
+            class="header__strip-btn"
+            data-testid="header-language"
+            @click="$emit('language', el($event))"
+          >
             {{ language }}<UiIcon name="chevron" :size="12" :stroke="2.4" />
           </button>
-          <button type="button" class="header__strip-btn" @click="$emit('theme')">
+          <button
+            type="button"
+            class="header__strip-btn"
+            data-testid="header-theme"
+            @click="$emit('theme', el($event))"
+          >
             {{ t('header.theme', { name: themeName }) }}
           </button>
           <button
@@ -110,14 +145,35 @@ const balance = computed(() =>
       <AppLogo />
       <UiButton
         class="header__categories"
-        variant="secondary"
-        icon="tiles"
+        :variant="categoriesOpen ? 'contrast' : 'secondary'"
+        :icon="categoriesOpen ? 'close' : 'tiles'"
+        :aria-expanded="categoriesOpen"
+        data-testid="header-categories"
         @click="$emit('categories')"
       >
         <span class="header__label">{{ t('header.allCategories') }}</span>
       </UiButton>
-      <SearchBar v-model="query" class="header__search" @submit="$emit('search', $event)" />
-      <div class="header__actions">
+      <SearchBar
+        v-model="query"
+        class="header__search"
+        :scope="searchScope"
+        :placeholder="searchPlaceholder"
+        @submit="$emit('search', $event)"
+        @focus="$emit('searchFocus', $event)"
+        @keydown="$emit('searchKeydown', $event)"
+        @scope="$emit('searchScope', $event)"
+      />
+      <UiButton
+        v-if="listLabel"
+        class="header__list"
+        variant="neutral"
+        icon="rows"
+        data-testid="to-list"
+        @click="$emit('list')"
+      >
+        <span class="header__label">{{ listLabel }}</span>
+      </UiButton>
+      <div v-if="!compact" class="header__actions">
         <button
           type="button"
           class="header__icon"
@@ -142,7 +198,8 @@ const balance = computed(() =>
           type="button"
           class="header__account"
           :aria-label="t('header.account')"
-          @click="$emit('account')"
+          data-testid="header-account"
+          @click="$emit('account', el($event))"
         >
           <span v-if="balance !== null" class="header__balance">
             <UiIcon class="header__pkoin" name="pkoin" :size="18" :stroke="2" />
@@ -151,6 +208,14 @@ const balance = computed(() =>
           </span>
           <UiAvatar :name="user.name" :seed="user.seed" :src="user.avatar" :size="32" />
         </button>
+        <UiButton
+          v-else-if="signIn"
+          class="header__sign-in"
+          variant="secondary"
+          @click="$emit('signIn')"
+        >
+          {{ signIn }}
+        </UiButton>
       </div>
       <UiButton class="header__create" icon="plus" @click="$emit('create')">
         <span class="header__label">{{ t('header.create') }}</span>
@@ -218,7 +283,8 @@ const balance = computed(() =>
 }
 
 .header__categories,
-.header__create {
+.header__create,
+.header__list {
   flex: none;
 }
 
@@ -316,7 +382,8 @@ const balance = computed(() =>
   }
 
   .header__categories,
-  .header__create {
+  .header__create,
+  .header__list {
     width: 44px;
     padding: 0;
   }
