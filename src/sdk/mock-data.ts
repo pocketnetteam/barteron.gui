@@ -5,8 +5,9 @@
  */
 
 import { encodeGeohash } from '@/lib/geohash'
+import { createDealId, dealOpReturn, type DealParams } from '@/models/safe-deal'
 import { TX_TYPE, type JsonObject, type RawTx } from '@/models/tx'
-import type { MockNetworkData } from './mock-network'
+import { MOCK_HEIGHT, type MockNetworkData, type MockTransfer } from './mock-network'
 
 /** Made-up address of the right length. */
 const demoAddress = (name: string) => `PDemo${name}`.padEnd(34, '1')
@@ -126,7 +127,11 @@ function accountTx(
 }
 
 /** Demo network content; `me` is the signed-in mock user. */
-export function demoNetworkData(me: string, now = Date.now(), height = 3_100_000): MockNetworkData {
+export function demoNetworkData(
+  me: string,
+  now = Date.now(),
+  height = MOCK_HEIGHT
+): MockNetworkData {
   const offers: DemoOffer[] = [
     {
       id: demoTxid('bike'),
@@ -635,11 +640,28 @@ export function demoNetworkData(me: string, now = Date.now(), height = 3_100_000
     accounts: [
       accountTx(SELLERS.anna, [58068, 15033], BELGRADE, 4.8, 23, now),
       // Илья is a guarantor and a moderator on duty in dev builds (config/roles.ts).
+      // Yesterday he let the mock user give Дмитрий's coffee machine a «2» (stage 8).
       accountTx(SELLERS.ilya, [58068, 58069, 17], BELGRADE, 4.9, 41, now, {
         d: { validator: { status: 'available', feePercent: 2 } },
-        m: { votingModeration: { moderator: { status: 'available' } } },
+        m: {
+          votingModeration: {
+            moderator: { status: 'available' },
+            accessItems: [
+              {
+                createdAt: now - 24 * 3600 * 1000,
+                offerId: demoTxid('coffee'),
+                userAddress: me,
+                score: 2,
+                status: 'allowed',
+              },
+            ],
+          },
+        },
       }),
-      accountTx(SELLERS.maria, [621], BELGRADE, 4.6, 12, now),
+      // Мария holds payment too: Илья's tablet needs a guarantor who is not Илья.
+      accountTx(SELLERS.maria, [621], BELGRADE, 4.6, 12, now, {
+        d: { validator: { status: 'available', feePercent: 2 } },
+      }),
       accountTx(SELLERS.dmitry, [690], MOSCOW, 4.4, 8, now),
       accountTx(me, [1006, 621], BELGRADE, 4.7, 5, now),
     ],
@@ -666,10 +688,67 @@ export function demoNetworkData(me: string, now = Date.now(), height = 3_100_000
         regdate: 1_660_000_000,
         reputation: 15,
       },
-      { address: me, name: 'Вы (заглушка)', i: '', regdate: 1_670_000_000, reputation: 5 },
+      // Above 100: low scores go through a moderator (stage 8). e2e may lower it.
+      { address: me, name: 'Вы (заглушка)', i: '', regdate: 1_670_000_000, reputation: 150 },
     ],
     scores,
     comments,
+    transfers: demoDeals(me, now, height).transfers,
+  }
+}
+
+/**
+ * Safe deals of the mock user, one per role (stage 8): buying Илья's tablet
+ * (nothing paid yet), holding Анна's payment for Илья's bike (my decision),
+ * selling my laptop to Мария (Илья's transfer to me is on its way), and
+ * a smartphone bought from Дмитрий long ago. Their transfers are in the mock
+ * chain; the links are what the device list starts with.
+ */
+export function demoDeals(
+  me: string,
+  now = Date.now(),
+  height = MOCK_HEIGHT
+): { deals: (DealParams & { savedAt: number })[]; transfers: MockTransfer[] } {
+  const hour = 3600 * 1000
+  const deal = (offer: string, buyer: string, validator: string, random: string) => {
+    const terms = { offer: demoTxid(offer), buyer, validator, fee: '2' }
+    return { id: createDealId(terms, random), ...terms }
+  }
+  const tablet = deal('tablet-ilya', me, SELLERS.maria, '7ab1e7000000d0a1')
+  const bike = deal('bike', SELLERS.anna, me, 'b1ce000000000d0b')
+  const laptop = deal('laptop-mine', SELLERS.maria, SELLERS.ilya, '1a9709000000d0c3')
+  const phone = deal('phone', me, SELLERS.ilya, '9407e0000000d0d4')
+  const transfer = (
+    d: DealParams,
+    from: string,
+    to: string,
+    pkoin: number,
+    blocksAgo: number
+  ): MockTransfer => ({
+    addrFrom: from,
+    addrTo: to,
+    hash: demoTxid(`pay-${d.offer.slice(0, 6)}-${blocksAgo}`),
+    height: height - blocksAgo,
+    amount: Math.round(pkoin * 1e8),
+    time: Math.floor((now - blocksAgo * 60_000) / 1000),
+    opreturn: dealOpReturn(d.id),
+  })
+  return {
+    deals: [
+      { ...tablet, savedAt: now - 2 * hour },
+      { ...bike, savedAt: now - 30 * hour },
+      { ...laptop, savedAt: now - 50 * hour },
+      { ...phone, savedAt: now - 30 * 24 * hour },
+    ],
+    transfers: [
+      // 3 900 and 2 % paid by the buyer: the bike's offer says so.
+      transfer(bike, SELLERS.anna, me, 3978, 1300),
+      transfer(laptop, SELLERS.maria, SELLERS.ilya, 5304, 2900),
+      // One block on top: five more and the laptop deal is done.
+      transfer(laptop, SELLERS.ilya, me, 5200, 1),
+      transfer(phone, me, SELLERS.ilya, 2448, 40_000),
+      transfer(phone, SELLERS.ilya, SELLERS.dmitry, 2400, 38_000),
+    ],
   }
 }
 

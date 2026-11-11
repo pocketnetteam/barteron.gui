@@ -1,6 +1,6 @@
 # Правки в bastyon-nextgen для Barteron
 
-Задание для того, кто работает в `C:\www\bastyon-nextgen`. Сам Barteron (`C:\www\barteron-nextgen`) этот репозиторий не правит. Нашли эти места при проверке Barteron в хосте 10.11.2026. Подробности — в [PLAN.md](PLAN.md), раздел 5, риски 6, 8 и 9.
+Задание для того, кто работает в `C:\www\bastyon-nextgen`. Сам Barteron (`C:\www\barteron-nextgen`) этот репозиторий не правит. Нашли эти места при проверке Barteron в хосте 10.11.2026 (п. 1–5) и 11.11.2026 (п. 6). Подробности — в [PLAN.md](PLAN.md), раздел 5, риски 6, 8 и 9.
 
 Пути ниже — от корня bastyon-nextgen.
 
@@ -83,6 +83,21 @@ fetchHosts: [
 **Как Barteron это использует.** Кнопки показываются, только если у SDK есть `open.wallet` (`src/components/cabinet/WalletSection.vue`). Пока его нет, в разделе только баланс и подпись «Пополнение, переводы и история — в приложении Bastyon».
 
 **Проверить:** тест рядом с проверками `open.profile`: `open.wallet` с `{}` и с `{ section: 'history' }` открывает страницу кошелька.
+
+## 6. `get.fromToTransactions`: метка OP_RETURN и порядок параметров
+
+**Что не так.** Старый Barteron, который сейчас открывается в bastyon-nextgen с barteron.club, узнаёт статус безопасной сделки так: `sdk.get.fromToTransactions(от, кому, { update: true, depth: 3466240, opreturn: '<hex скрипта OP_RETURN>', confirmations: 6 })` (barteron.gui `src/views/Barter/SafeDeal/content/index.js`, `updateStatus`). В bastyon-nextgen это действие для него не работает, по двум причинам:
+
+- схема (`src/mini-apps/actions/_schema.ts`, `fromToTransactions`) описывает `opreturn` как `z.boolean()`, а приходит строка. Запрос отклоняется с `invalid_params`;
+- обработчик (`src/mini-apps/actions/wallet.ts`) передаёт ноде `[addressFrom, addressTo, update, depth, opreturn]`. Нода ждёт `[от, кому, с высоты, метки]` (pocketnet.core `PocketTransactionRpc.cpp`, `GetFromToTransactions`; так же зовёт прежний хост, pocketnet.gui `js/satolist.js`, `getfromtotransactions`). `update` — флаг кеша прежнего клиента, ноде его не передают. Сейчас на месте высоты оказывается `update`, высота уходит на место метки, а сама метка — пятым параметром. Нода её не видит и ищет переводы по своей метке по умолчанию, `a:subscription`.
+
+Тест `calls RPC with correct legacy parameters` в `wallet.test.ts` закрепляет этот неверный порядок.
+
+**Решение.** В схеме `opreturn: z.union([z.string(), z.array(z.string())]).optional()`. В обработчике — `[addressFrom, addressTo, depth, opreturn]`, а `depth`, если его нет, — как у прежнего хоста: текущая высота минус 43 200 × 12 блоков. `update` ноде не передавать.
+
+**Как Barteron это использует.** Новый Barteron статус сделки через это действие не читает: он спрашивает `sdk.rpc('getfromtotransactions', [от, кому, 3466240, скрипт])` и высоту `sdk.rpc('getnodeinfo')`. Оба метода хост пропускает (`rpc-spec.ts`). Проверено 11.11.2026 на основной сети через свою копию bastyon-nextgen, без входа: высота пришла; по выдуманной сделке — пустой список; по метке `a:subscription`, переданной строкой, — 27 переводов за месяц. Правка нужна старому Barteron, пока он открывается в новом хосте, и другим приложениям с этим действием.
+
+**Проверить:** тест в `wallet.test.ts`: `{ addressFrom: 'A', addressTo: 'B', update: true, depth: 10, opreturn: '6a24…' }` → RPC `['A', 'B', 10, '6a24…']`.
 
 ## Не сейчас: запись из dev-сборки (риск 6)
 

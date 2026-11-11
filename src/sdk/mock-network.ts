@@ -8,10 +8,25 @@
  * `!reject` never makes it into a block; `!error` is refused at once.
  */
 
+import { opReturnHex } from '@/models/safe-deal'
 import { isJsonObject, TX_TYPE, type JsonObject, type RawTx } from '@/models/tx'
 import type { HostAction } from './types'
 
 export type MockWrite = 'offer' | 'removeOffer' | 'account' | 'comment' | 'vote' | 'payment'
+
+/** A PKOIN transfer as `getfromtotransactions` lists it. */
+export interface MockTransfer {
+  addrFrom: string
+  addrTo: string
+  hash: string
+  height: number
+  /** Satoshi. */
+  amount: number
+  /** Seconds. */
+  time: number
+  /** OP_RETURN script, hex. */
+  opreturn: string
+}
 
 export interface MockNetworkData {
   offers?: RawTx[]
@@ -19,11 +34,14 @@ export interface MockNetworkData {
   profiles?: JsonObject[]
   scores?: RawTx[]
   comments?: RawTx[]
+  transfers?: MockTransfer[]
 }
 
 export interface MockNetworkOptions extends MockNetworkData {
   /** Current block height. */
   height?: number
+  /** A new empty block this often, ms; 0 — blocks come only with writes. */
+  blockMs?: number
   /** Time to broadcast, ms. */
   broadcastMs?: number
   /** Time to the block, ms. */
@@ -58,11 +76,26 @@ function offerJson(tx: RawTx): JsonObject {
 
 const likePattern = (pattern: string) => pattern.replace(/^%|%$/g, '').toLowerCase()
 
+/** Demo chain height: above the first safe deal block (3 466 240), below mainnet today. */
+export const MOCK_HEIGHT = 4_000_000
+
 export function createMockNetwork(options: MockNetworkOptions = {}): MockNetwork {
   const now = options.now ?? Date.now
-  let height = options.height ?? 3_100_000
+  let height = options.height ?? MOCK_HEIGHT
   const broadcastMs = options.broadcastMs ?? 400
   const confirmMs = options.confirmMs ?? 4000
+  const blockMs = options.blockMs ?? 0
+  let lastBlockAt = now()
+  /** Empty blocks that came since the last look. */
+  function tick() {
+    if (!blockMs) return
+    const blocks = Math.floor((now() - lastBlockAt) / blockMs)
+    if (blocks > 0) {
+      height += blocks
+      lastBlockAt += blocks * blockMs
+    }
+  }
+  const transfers = [...(options.transfers ?? [])]
 
   /** Latest version by offer id. */
   const offers = new Map<string, RawTx>()
@@ -229,10 +262,30 @@ export function createMockNetwork(options: MockNetworkOptions = {}): MockNetwork
 
     getuserprofile: ([addresses]) =>
       list(addresses).flatMap((a) => (profiles.has(text(a)) ? [profiles.get(text(a))!] : [])),
+
+    // Like ExplorerRepository::GetFromToTransactions: by exact OP_RETURN, an
+    // empty address is anyone, from the height given, blocks only.
+    getfromtotransactions: ([from, to, depth, opreturn]) => {
+      const scripts = Array.isArray(opreturn) ? opreturn.map(text) : [text(opreturn)]
+      const min = typeof depth === 'number' ? depth : 0
+      return transfers.filter(
+        (t) =>
+          scripts.includes(t.opreturn) &&
+          (!text(from) || t.addrFrom === from) &&
+          (!text(to) || t.addrTo === to) &&
+          t.height >= min
+      )
+    },
+
+    getnodeinfo: () => {
+      tick()
+      return { lastblock: { height } }
+    },
   }
 
   /** Puts a confirmed write into the chain. */
   function apply(kind: MockWrite, data: JsonObject, address: string, txid: string) {
+    tick()
     height += 1
     const time = Math.floor(now() / 1000)
     const base = { hash: txid, time, height, blockHash: randomHex(64) }
@@ -315,6 +368,20 @@ export function createMockNetwork(options: MockNetworkOptions = {}): MockNetwork
         s2: text(data.share),
         i1: Number(data.value),
       })
+    } else if (kind === 'payment') {
+      // The message goes into OP_RETURN, as the wallet writes it.
+      const message = text(data.message)
+      for (const r of list(data.recievers).map(obj)) {
+        transfers.push({
+          addrFrom: address,
+          addrTo: text(r.address),
+          hash: txid,
+          height,
+          amount: Math.round(Number(r.amount) * 1e8),
+          time,
+          opreturn: message ? opReturnHex(message) : '',
+        })
+      }
     }
   }
 
@@ -334,7 +401,13 @@ export function createMockNetwork(options: MockNetworkOptions = {}): MockNetwork
       added: new Date(now()).toISOString(),
       sent: new Date(now()).toISOString(),
       updated: null,
-      expObject: kind === 'removeOffer' ? { txidEdit: data.hash, type: 'contentDelete' } : data,
+      expObject:
+        kind === 'removeOffer'
+          ? { txidEdit: data.hash, type: 'contentDelete' }
+          : kind === 'payment'
+            ? // As bastyon-nextgen records a transfer (tx/app-actions).
+              { type: 'transaction', source: [address], ...data }
+            : data,
     }
     actions.push(action)
     setTimeout(() => {
@@ -359,6 +432,7 @@ export function createMockNetwork(options: MockNetworkOptions = {}): MockNetwork
     },
     actions: () => actions.map((a) => ({ ...a })),
     get height() {
+      tick()
       return height
     },
   }

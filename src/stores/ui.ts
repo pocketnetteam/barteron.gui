@@ -8,12 +8,18 @@ export const useUiStore = defineStore('ui', () => {
   const categories = ref(false)
   /** Desktop «Все категории» menu under the header. */
   const mega = ref(false)
+  /** «Как работает безопасная сделка». */
+  const safeDealHelp = ref(false)
 
   return {
     search,
     location,
     categories,
     mega,
+    safeDealHelp,
+    openSafeDealHelp: () => {
+      safeDealHelp.value = true
+    },
     openSearch: (scope: number | null = null, text = '') => {
       search.value = { scope, text }
     },

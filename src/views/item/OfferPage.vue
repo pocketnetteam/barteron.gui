@@ -2,7 +2,7 @@
 import { computed, defineAsyncComponent, nextTick, ref, toRef } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter, type RouteLocationRaw } from 'vue-router'
-import { useCategories, useOffersByAddress, useOffersByIds } from '@/api/queries'
+import { useCategories, useOffersByAddress, useOffersByIds, useRates } from '@/api/queries'
 import ItemAbout from '@/components/item/ItemAbout.vue'
 import ItemBuyBox from '@/components/item/ItemBuyBox.vue'
 import ItemDelivery, { type PickupCard } from '@/components/item/ItemDelivery.vue'
@@ -26,6 +26,7 @@ import { exchangeMessages, offerLink, purchaseMessages, useChat } from '@/compos
 import { fittingOffers } from '@/composables/may-match'
 import { useOfferPage } from '@/composables/offer-page'
 import { useOfferReviews } from '@/composables/offer-reviews'
+import { useSafeDealSupported, type GuarantorOption } from '@/composables/safe-deal'
 import { decodeGeohash } from '@/lib/geohash'
 import {
   deliveryOptions,
@@ -40,8 +41,11 @@ import {
   isOfferActive,
   isPickupPoint,
   offerLifecycle,
+  offerPkoin,
   type Offer,
 } from '@/models/offer'
+import { createDealId, dealPath, dealQuery, feeVariantOf } from '@/models/safe-deal'
+import { useDealsStore } from '@/stores/deals'
 import { useFavoritesStore } from '@/stores/favorites'
 import { useSessionStore } from '@/stores/session'
 import UiBreadcrumbs from '@/ui/UiBreadcrumbs.vue'
@@ -71,6 +75,7 @@ const { t, locale } = useI18n()
 const router = useRouter()
 const session = useSessionStore()
 const favorites = useFavoritesStore()
+const deals = useDealsStore()
 const categories = useCategories()
 const chat = useChat()
 const soon = useSoon()
@@ -218,12 +223,20 @@ const chosenLine = computed(() =>
     ? t('item.buy.chosen', { name: chosenPoint.value.title, price: chosenPoint.value.price })
     : null
 )
-/** Old `safeDealAvailableForOffer`, minus what stage 8 checks (host version, guarantor list). */
+/**
+ * Old `safeDealAvailableForOffer`: the seller takes PKOIN, the way is not a
+ * pickup point, and the host can read transfers.
+ */
+const safeSupported = useSafeDealSupported()
 const safeDealPossible = computed(
   () =>
+    safeSupported.value &&
     exchangeCategories(offer.value, page.seller.data.value?.tags ?? []).includes(17) &&
     pick.value?.way !== 'pickupPoint'
 )
+const rates = useRates()
+const pkoinPrice = computed(() => offerPkoin(offer.value, rates.data.value))
+const notGuarantors = computed(() => [offer.value.address, ...(me.value ? [me.value] : [])])
 const purchaseLines = computed(() => {
   const p = pick.value
   if (p?.way === 'selfPickup') return [t('chatMessage.selfPickup')]
@@ -261,6 +274,32 @@ async function confirmPurchase() {
     messages: purchaseMessages((p) => sdk.get.applink(p), id.value, pick.value, t),
   })
   if (ok) buyOpen.value = false
+}
+
+/**
+ * Through a safe deal (old `createRoom` with a validator): a new deal id,
+ * the chat with the seller and the guarantor — the offer, the way to get
+ * it, «Вариант покупки: безопасная сделка», the deal link — then the deal page.
+ */
+async function confirmSafeDeal(guarantor: GuarantorOption) {
+  const sdk = session.sdk
+  const buyer = me.value
+  if (!sdk || !buyer || !guarantor.fee) return
+  const terms = { offer: id.value, buyer, validator: guarantor.address, fee: String(guarantor.fee) }
+  const deal = { id: createDealId(terms), ...terms }
+  const ok = await chat.open({
+    name: offer.value.caption,
+    members: [offer.value.address, guarantor.address],
+    messages: [
+      ...purchaseMessages((p) => sdk.get.applink(p), id.value, pick.value, t),
+      t('chatMessage.safeDeal'),
+      sdk.get.applink(dealPath(deal)),
+    ],
+  })
+  if (!ok) return
+  buyOpen.value = false
+  deals.remember(deal)
+  void router.push({ name: 'SafeDeal', query: dealQuery(deal) })
 }
 
 function ask() {
@@ -490,6 +529,7 @@ const exchangeTitle = computed(() =>
             :average="average"
             :rows="reviews.rows.value"
             :form="reviewForm"
+            :offer="offer"
             :low-score-blocked="reviews.lowScoreBlocked.value"
             :sending="reviews.sending.value"
             @submit="reviews.submit"
@@ -516,6 +556,7 @@ const exchangeTitle = computed(() =>
             :average="average"
             :rows="reviews.rows.value"
             :form="reviewForm"
+            :offer="offer"
             :low-score-blocked="reviews.lowScoreBlocked.value"
             :sending="reviews.sending.value"
             @submit="reviews.submit"
@@ -654,8 +695,12 @@ const exchangeTitle = computed(() =>
     :photo="page.card.value.photo ?? null"
     :lines="purchaseLines"
     :safe-deal-possible="safeDealPossible"
+    :fee-variant="feeVariantOf(offer)"
+    :pkoin="pkoinPrice"
+    :exclude="notGuarantors"
     :sending="chat.opening.value"
     @confirm="confirmPurchase"
+    @safe="confirmSafeDeal"
   />
   <PickupPickerScreen
     v-if="pickerOpen"

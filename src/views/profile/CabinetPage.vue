@@ -14,7 +14,7 @@ import UiButton from '@/ui/UiButton.vue'
 const SECTIONS: Record<Exclude<CabinetSection, 'public'>, Component> = {
   ads: defineAsyncComponent(() => import('@/components/cabinet/MyOffers.vue')),
   barters: defineAsyncComponent(() => import('@/components/cabinet/ExchangeHub.vue')),
-  deals: defineAsyncComponent(() => import('@/components/cabinet/SoonSection.vue')),
+  deals: defineAsyncComponent(() => import('@/components/cabinet/DealsSection.vue')),
   favorites: defineAsyncComponent(() => import('@/components/cabinet/SavedOffers.vue')),
   viewed: defineAsyncComponent(() => import('@/components/cabinet/SavedOffers.vue')),
   votes: defineAsyncComponent(() => import('@/components/cabinet/MyReviews.vue')),
@@ -38,7 +38,7 @@ const current = computed(() => props.section ?? (phone.value ? null : 'ads'))
 const view = computed(() => (current.value ? SECTIONS[current.value] : null))
 const viewProps = computed(() => {
   const s = current.value
-  if (s === 'deals' || s === 'favorites' || s === 'viewed') return { kind: s }
+  if (s === 'favorites' || s === 'viewed') return { kind: s }
   return {}
 })
 /** Sections a tab of the tab bar opens are its roots: no «back». */

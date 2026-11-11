@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { computed, ref, useId } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import type { Offer } from '@/models/offer'
 import UiAvatar from '@/ui/UiAvatar.vue'
 import UiBadge from '@/ui/UiBadge.vue'
-import UiButton from '@/ui/UiButton.vue'
-import UiIcon from '@/ui/UiIcon.vue'
 import UiRating from '@/ui/UiRating.vue'
-import UiTextarea from '@/ui/UiTextarea.vue'
 import ItemSection from './ItemSection.vue'
+import ReviewForm from './ReviewForm.vue'
 
 export interface ReviewRow {
   id: string
@@ -26,13 +25,15 @@ export interface ReviewRow {
 /**
  * «Отзывы об объявлении» (s3-item; s3-item-states «Отзыв · …»). Anyone signed
  * in may write; a score is given once and never by the author (old `votes`).
- * Scores 1–3 go through a moderator (stage 8): here the form explains it.
+ * Scores 1–3 go through a moderator: `ReviewForm` handles the request.
  */
 const props = defineProps<{
   average: { value: number; count: number }
   rows: ReviewRow[]
   /** Form: `score` — stars and text; `comment` — text only (the author answers); `none`. */
   form: 'score' | 'comment' | 'none'
+  /** The offer: low scores need a moderator's permission for it. */
+  offer?: Offer | null
   /** Under 100 reputation Bastyon does not allow low scores. */
   lowScoreBlocked?: boolean
   sending?: boolean
@@ -42,31 +43,11 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{ submit: [value: { stars: number | null; text: string }]; preview: [] }>()
 const { t } = useI18n()
-const id = useId()
 
-const stars = ref(0)
-const text = ref('')
 const showAll = ref(false)
 const shown = computed(() =>
   props.compact && !showAll.value ? props.rows.slice(0, 2) : props.rows
 )
-/** 1–3: needs a moderator; not possible yet (stage 8). */
-const low = computed(() => props.form === 'score' && stars.value > 0 && stars.value <= 3)
-const canSend = computed(() => {
-  if (low.value || props.sending) return false
-  if (props.form === 'score') return stars.value > 0 || !!text.value.trim()
-  return !!text.value.trim()
-})
-
-function submit() {
-  if (!canSend.value) return
-  emit('submit', {
-    stars: props.form === 'score' && stars.value ? stars.value : null,
-    text: text.value.trim(),
-  })
-  stars.value = 0
-  text.value = ''
-}
 
 const fmt = (value: number) => value.toFixed(1).replace('.', ',')
 </script>
@@ -138,57 +119,14 @@ const fmt = (value: number) => value.toFixed(1).replace('.', ',')
       </li>
     </ul>
 
-    <form v-if="form !== 'none'" class="irv__form" @submit.prevent="submit">
-      <h3 class="irv__form-title">
-        {{ form === 'score' ? t('item.reviews.formTitle') : t('item.reviews.answerTitle') }}
-      </h3>
-      <div
-        v-if="form === 'score'"
-        class="irv__stars"
-        role="radiogroup"
-        :aria-label="t('item.reviews.starsLabel')"
-      >
-        <button
-          v-for="n in 5"
-          :key="n"
-          type="button"
-          role="radio"
-          class="irv__star"
-          :aria-checked="stars === n"
-          :aria-label="t('item.reviews.star', { n }, n)"
-          @click="stars = stars === n ? 0 : n"
-        >
-          <UiIcon :name="n <= stars ? 'star-filled' : 'star'" :size="28" :stroke="1.6" />
-        </button>
-      </div>
-      <div v-if="low" class="irv__low" role="alert">
-        <UiIcon name="warning" :size="18" />
-        <p>{{ lowScoreBlocked ? t('item.reviews.lowBlocked') : t('item.reviews.lowSoon') }}</p>
-      </div>
-      <UiTextarea
-        :id="`irv-${id}`"
-        v-model="text"
-        :rows="3"
-        :aria-label="t('item.reviews.placeholder')"
-        :placeholder="t('item.reviews.placeholder')"
-        :maxlength="1000"
-      />
-      <div class="irv__actions">
-        <UiButton
-          type="submit"
-          :size="44"
-          :disabled="!canSend"
-          :loading="sending"
-          data-testid="review-send"
-        >
-          {{ t('item.reviews.send') }}
-        </UiButton>
-        <button v-if="low" type="button" class="irv__link" @click="stars = 0">
-          {{ t('item.reviews.changeScore') }}
-        </button>
-      </div>
-      <p class="irv__hint">{{ t('item.reviews.hint') }}</p>
-    </form>
+    <ReviewForm
+      v-if="form !== 'none'"
+      :offer="offer"
+      :form="form"
+      :low-score-blocked="lowScoreBlocked"
+      :sending="sending"
+      @submit="emit('submit', $event)"
+    />
   </ItemSection>
 </template>
 
@@ -281,71 +219,6 @@ const fmt = (value: number) => value.toFixed(1).replace('.', ',')
 .irv__error {
   color: var(--danger);
   font-size: 13px;
-}
-
-.irv__form {
-  padding: 16px;
-  border-radius: var(--radius-l);
-  background: var(--subtle);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.irv__form-title {
-  font-size: 16px;
-  line-height: 22px;
-  font-weight: 700;
-}
-
-.irv__stars {
-  display: flex;
-  gap: 4px;
-}
-
-.irv__star {
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  border: 0;
-  border-radius: var(--radius-s);
-  background: none;
-  color: var(--star);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.irv__star:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px var(--ring);
-}
-
-.irv__low {
-  padding: 12px;
-  border-radius: var(--radius-m);
-  background: var(--warning-soft);
-  display: flex;
-  gap: 8px;
-  font-size: 13px;
-  line-height: 18px;
-}
-
-.irv__low .ui-icon {
-  flex: none;
-  color: var(--warning);
-}
-
-.irv__actions {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.irv__hint {
-  color: var(--text3);
-  font-size: 12px;
-  line-height: 16px;
 }
 
 @media (max-width: 767px) {

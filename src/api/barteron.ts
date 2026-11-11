@@ -12,6 +12,7 @@ import { parseAccount, type BarteronAccount } from '@/models/account'
 import { parseOffer, type Offer } from '@/models/offer'
 import { parseUserProfile, type UserProfile } from '@/models/profile'
 import { parseReview, parseScore, type OfferScore, type Review } from '@/models/review'
+import { parseTransfers, type DealTransfer } from '@/models/deal-transfer'
 import { isJsonObject, TX_TYPE, type RawTx } from '@/models/tx'
 import type { HostSdk } from '@/sdk/types'
 
@@ -252,5 +253,33 @@ export class BarteronApi {
       const profile = isJsonObject(raw) ? parseUserProfile(raw) : null
       return profile ? [profile] : []
     })
+  }
+
+  /**
+   * Transfers `from` → `to` with exactly this OP_RETURN script, from the
+   * height given. The node lists only transfers already in a block
+   * (pocketnet.core ExplorerRepository::GetFromToTransactions). Asked with
+   * `sdk.rpc`: the host action `get.fromToTransactions` of bastyon-nextgen
+   * refuses a script (HOST-TASKS.md, item 6).
+   */
+  async transfers(
+    from: string,
+    to: string,
+    opReturn: string,
+    fromHeight: number
+  ): Promise<DealTransfer[]> {
+    return parseTransfers(
+      await this.sdk.rpc('getfromtotransactions', [from, to, fromHeight, opReturn])
+    )
+  }
+
+  /** Height of the last block (`getnodeinfo`). */
+  async chainHeight(): Promise<number> {
+    const info = await this.sdk.rpc<unknown>('getnodeinfo', [])
+    const body = isJsonObject(info) && isJsonObject(info.data) ? info.data : info
+    const block = isJsonObject(body) ? body.lastblock : null
+    const height = isJsonObject(block) ? Number(block.height) : NaN
+    if (!(height > 0)) throw new Error('getnodeinfo: no height')
+    return height
   }
 }

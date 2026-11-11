@@ -10,6 +10,8 @@ const DraftPreview = () => import('@/views/item/DraftPreview.vue')
 const ProfileView = () => import('@/views/ProfileView.vue')
 const ExchangeOptionsView = () => import('@/views/exchange/ExchangeOptionsView.vue')
 const ChainView = () => import('@/views/exchange/ChainView.vue')
+const SafeDealView = () => import('@/views/deal/SafeDealView.vue')
+const ModerationView = () => import('@/views/deal/ModerationView.vue')
 const NotFoundView = () => import('@/views/NotFoundView.vue')
 
 /** Internal pages: dev and test builds only, cut out of production. */
@@ -53,8 +55,9 @@ export const routes: RouteRecordRaw[] = [
   // «Варианты обмена» of an offer and one chain of three (stage 7), on the old paths.
   { path: '/barter/exchange/:id', name: 'exchangeOptions', component: ExchangeOptionsView },
   { path: '/barter/search', name: 'ThreeSidedSearch', component: ChainView },
-  { path: '/barter/safedeal', name: 'SafeDeal', component: StubView },
-  { path: '/barter/moderation', name: 'VotingModeration', component: StubView },
+  // A safe deal and a low score's moderation (stage 8), on the old paths.
+  { path: '/barter/safedeal', name: 'SafeDeal', component: SafeDealView },
+  { path: '/barter/moderation', name: 'VotingModeration', component: ModerationView },
   // The form's preview; the old app showed it on the same path (`/barter/draft?preview=1`).
   { path: '/barter/draft', name: 'draftPreview', component: DraftPreview },
   { path: '/barter/:id', name: 'barterItem', component: OfferView },

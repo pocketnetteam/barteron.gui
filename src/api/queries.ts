@@ -66,6 +66,8 @@ export const keys = {
   categoryNames: (locale: Locale) => ['categories', 'names', locale] as const,
   rates: ['rates'] as const,
   balance: (address: string | null) => ['bastyon', 'balance', address] as const,
+  /** Transfers of a safe deal and the chain height. */
+  deal: (id: string | null) => ['barteron', 'deal', id] as const,
 }
 
 /** Brighteon is the same app under another project: English, Canada and the USA. */
@@ -361,6 +363,9 @@ export function refreshAfterTx(
       invalidate(['barteron', 'offers-details'])
       break
     case 'payment':
+      // A safe deal transfer is in a block: read the deal again.
+      if (tx.target) invalidate(keys.deal(tx.target))
+      invalidate(keys.balance(me))
       break
   }
 }

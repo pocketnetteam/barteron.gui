@@ -9,6 +9,7 @@ import { useFavoritesStore } from '@/stores/favorites'
 import { useSessionStore } from '@/stores/session'
 import { useTxStore, type TrackedTx } from '@/stores/tx'
 import { useMyExchanges } from './exchanges'
+import { useDealList } from './safe-deal'
 
 /** Who I am in the cabinet head: name, avatar, rating, balance. */
 export function useCabinetHead() {
@@ -92,14 +93,16 @@ export function useMyOffers() {
   return { query, groups, total }
 }
 
-/** Counts for the cabinet menu. Exchanges and deals come with their stages. */
+/** Counts for the cabinet menu: deals — those not finished yet. */
 export function useCabinetCounts() {
   const offers = useMyOffers()
   const favorites = useFavoritesStore()
   const exchanges = useMyExchanges()
+  const deals = useDealList()
   return computed(() => ({
     ads: offers.query.data.value ? offers.total.value : null,
     barters: exchanges.total.value || null,
+    deals: deals.active.value || null,
     favorites: favorites.ids.length || null,
   }))
 }

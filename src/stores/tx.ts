@@ -17,6 +17,7 @@ import { defineStore } from 'pinia'
 import { computed, reactive, ref } from 'vue'
 import { isBanned, loadBanList } from '@/config/ban'
 import { offerFromAlias, type Offer } from '@/models/offer'
+import { dealIdFromMessage } from '@/models/deal-transfer'
 import { isJsonObject, isTxid, str } from '@/models/tx'
 import type { NetStatus } from '@/components/net/NetStatusBadge.vue'
 import type { HostAction, HostSdk } from '@/sdk/types'
@@ -70,6 +71,8 @@ export function kindOfAction(action: HostAction): TxKind | null {
   if (exp.type === 'contentDelete' && 'txidEdit' in exp) return 'offerRemove'
   if (exp.type === 'comment') return 'review'
   if (exp.type === 'upvoteShare') return 'vote'
+  // A transfer (bastyon-nextgen tx/app-actions `recordPayment`).
+  if (exp.type === 'transaction') return 'payment'
   if (
     hasKeys(exp, [
       'address',
@@ -104,7 +107,8 @@ export function targetOf(kind: TxKind, payload: unknown, txid: string | null): s
     case 'vote':
       return str(p.share) || null
     case 'payment':
-      return null
+      // A safe deal transfer: the deal id from its message.
+      return dealIdFromMessage(p.message)
   }
 }
 

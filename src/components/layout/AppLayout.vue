@@ -20,6 +20,7 @@ const CategoryBrowser = defineAsyncComponent(
   () => import('@/components/catalog/CategoryBrowser.vue')
 )
 const LocationPanel = defineAsyncComponent(() => import('./LocationPanel.vue'))
+const SafeDealHelp = defineAsyncComponent(() => import('@/components/deal/SafeDealHelp.vue'))
 
 /**
  * Page frame of the app: the desktop header and footer, the phone tab bar,
@@ -182,6 +183,8 @@ watch(
   <UiDialog v-model:open="ui.location" :title="t('location.title')" :width="440">
     <LocationPanel class="layout__location" :titled="false" @done="ui.location = false" />
   </UiDialog>
+
+  <SafeDealHelp v-if="ui.safeDealHelp" v-model:open="ui.safeDealHelp" />
 </template>
 
 <style scoped>

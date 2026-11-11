@@ -113,7 +113,7 @@ test('buy: first a way to get it, then the chat gets that way', async ({ page })
 
   await page.locator('#item-delivery').getByText('Самовывоз', { exact: true }).click()
   await buy()
-  // The seller takes PKOIN: first «how to buy»; the safe deal comes with stage 8.
+  // The seller takes PKOIN: first «how to buy» (the safe deal: e2e/safe-deal.spec.ts).
   const dialog = page.getByRole('dialog', { name: 'Как купить?' })
   await expect(dialog).toContainText('Через безопасную сделку')
   await dialog.getByRole('button', { name: 'Дальше' }).click()
@@ -155,7 +155,7 @@ test('a review with stars becomes a score and a comment; mine shows as publishin
   page,
 }) => {
   await page.goto(`/barter/${TABLET}`)
-  const form = page.locator('.irv__form').filter({ visible: true })
+  const form = page.getByTestId('review-form').filter({ visible: true })
   await form.getByRole('radio', { name: '5 звёзд' }).click()
   await form.getByRole('textbox').fill('Отличный планшет')
   await form.getByTestId('review-send').click()
@@ -170,9 +170,12 @@ test('a review with stars becomes a score and a comment; mine shows as publishin
   })
 })
 
-test('a low score waits for a moderator: no transaction', async ({ page }) => {
+test('a low score under 100 reputation: refused, no transaction', async ({ page }) => {
+  await page.addInitScript(() => {
+    ;(window as { __barteronMockSetup?: unknown }).__barteronMockSetup = { reputation: 5 }
+  })
   await page.goto(`/barter/${TABLET}`)
-  const form = page.locator('.irv__form').filter({ visible: true })
+  const form = page.getByTestId('review-form').filter({ visible: true })
   await form.getByRole('radio', { name: '2 звезды' }).click()
   await expect(form).toContainText('Ваш стаж в Bastyon пока не позволяет')
   await expect(form.getByTestId('review-send')).toBeDisabled()

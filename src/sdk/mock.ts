@@ -1,4 +1,4 @@
-import { demoNetworkData } from './mock-data'
+import { demoDeals, demoNetworkData } from './mock-data'
 import { createMockNetwork, type MockNetwork, type MockWrite } from './mock-network'
 import type { AppInfo, HostAction, HostEventName, HostEvents, HostSdk, Permission } from './types'
 
@@ -269,7 +269,16 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
       send: (request) => resolved('chat.send', request),
     },
 
-    payment: (data) => sendTx('payment', data),
+    // The wallet window: needs `payment`; `failNext('payment')` — the user closed it.
+    payment: async (data) => {
+      requirePermission('payment')
+      if (fails('payment')) {
+        record('payment', data)
+        // Both hosts reject a closed window with the string `cancel`.
+        throw 'cancel'
+      }
+      return sendTx('payment', data)
+    },
 
     helpers: {
       alert: (message) => resolved('helpers.alert', message),
@@ -327,8 +336,38 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
 /** The mock the app uses in dev: signed in, with demo offers and sellers. */
 export function createDemoMockSdk(options: Omit<MockOptions, 'network'> = {}): MockSdk {
   const address = options.address === undefined ? MOCK_ADDRESS : options.address
+  const me = address ?? MOCK_ADDRESS
+  if (address) seedDemoDeals(address)
+  const data = demoNetworkData(me)
+  // e2e can lower the user's Bastyon reputation before the app starts.
+  const setup =
+    typeof window !== 'undefined'
+      ? (window as { __barteronMockSetup?: { reputation?: number } }).__barteronMockSetup
+      : undefined
+  if (typeof setup?.reputation === 'number') {
+    data.profiles = data.profiles?.map((p) =>
+      p.address === me ? { ...p, reputation: setup.reputation } : p
+    )
+  }
   return createMockSdk({
     ...options,
-    network: createMockNetwork(demoNetworkData(address ?? MOCK_ADDRESS)),
+    // A block every 10 s: a safe deal transfer counts in a minute, not in ten.
+    network: createMockNetwork({ ...data, blockMs: 10_000 }),
   })
+}
+
+/**
+ * The demo deals go into the device list once, the first time the mock
+ * starts for this user (stores/deals.ts reads `<address>_deals`). A list
+ * already there, even an empty one, stays as it is.
+ */
+function seedDemoDeals(address: string) {
+  try {
+    const key = `${address}_deals`
+    if (localStorage.getItem(key) === null) {
+      localStorage.setItem(key, JSON.stringify(demoDeals(address).deals))
+    }
+  } catch {
+    // No storage: the list starts empty.
+  }
 }

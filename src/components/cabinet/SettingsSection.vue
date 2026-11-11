@@ -11,6 +11,7 @@ import { useCurrencyStore } from '@/stores/currency'
 import { LOCALE_CHOICES, useLocaleStore, type LocaleChoice } from '@/stores/locale'
 import { useSessionStore } from '@/stores/session'
 import { useThemeStore, type ThemePreference } from '@/stores/theme'
+import { useUiStore } from '@/stores/ui'
 import UiIcon from '@/ui/UiIcon.vue'
 import UiSegmented from '@/ui/UiSegmented.vue'
 import UiSelect from '@/ui/UiSelect.vue'
@@ -32,6 +33,7 @@ const localeStore = useLocaleStore()
 const currency = useCurrencyStore()
 const soon = useSoon()
 const openDoc = useOpenDoc()
+const ui = useUiStore()
 
 const themes = computed(() =>
   (['system', 'light', 'dark'] as const).map((value) => ({
@@ -176,7 +178,7 @@ const version = __APP_VERSION__
       <button type="button" class="set__link" @click="soon()">
         {{ t('settings.links.tips') }}
       </button>
-      <button type="button" class="set__link" @click="soon()">
+      <button type="button" class="set__link" @click="ui.openSafeDealHelp()">
         {{ t('settings.links.safeDeal') }}
       </button>
       <button type="button" class="set__link" @click="support">

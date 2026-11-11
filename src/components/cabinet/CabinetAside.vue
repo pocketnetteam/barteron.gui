@@ -18,7 +18,7 @@ const items = computed(() => {
   const rows: { key: CabinetSection; count?: number | null }[] = [
     { key: 'ads', count: c.ads },
     { key: 'barters', count: c.barters },
-    { key: 'deals' },
+    { key: 'deals', count: c.deals },
     { key: 'favorites', count: c.favorites },
     { key: 'viewed' },
     { key: 'votes', count: reviews.rows.value.length || null },

@@ -40,27 +40,37 @@ export const SUPPORT_EMAIL = 'support@bastyon.com'
 /**
  * Dev and test builds: the SDK mock user (`PMockUser…`) and the demo seller
  * Илья (`PDemoIyaPetrov…`) hold both roles, so the cabinet and the public
- * profile can show them. These made-up addresses never occur on a real network.
+ * profile can show them; Мария (`PDemoMariaV…`) is one more guarantor, so a
+ * deal for Илья's tablet has one. These made-up addresses never occur on a
+ * real network (sdk/mock-data.ts, `SELLERS`).
  */
-const DEMO_ROLES = /^P(MockUser|DemoIyaPetrov)/
-const demoRole = (address: string) =>
-  import.meta.env.VITE_SHOWCASE === 'true' && DEMO_ROLES.test(address)
+const MOCK_USER = 'PMockUser1111111111111111111111111'
+const DEMO_ILYA = 'PDemoIyaPetrov'.padEnd(34, '1')
+const DEMO_MARIA = 'PDemoMariaV'.padEnd(34, '1')
+const showcase = () => import.meta.env.VITE_SHOWCASE === 'true'
+
+/** Every guarantor address, for the list a buyer picks from. */
+export const guarantorAddresses = (): string[] => [
+  ...GUARANTORS,
+  ...(showcase() ? [MOCK_USER, DEMO_ILYA, DEMO_MARIA] : []),
+]
+
+/** Every moderator address: a request goes to one of those on duty. */
+export const moderatorAddresses = (): string[] => [
+  ...MODERATORS,
+  ...(showcase() ? [MOCK_USER, DEMO_ILYA] : []),
+]
 
 /** Can hold payment in safe deals; their fee and availability live in the Barteron profile. */
 export function isGuarantor(address: string | null | undefined): boolean {
-  return !!address && (GUARANTORS.includes(address) || demoRole(address))
+  return !!address && guarantorAddresses().includes(address)
 }
 
-/** Reviews requests for low scores (stage 8). */
+/** Decides on requests for low scores. */
 export function isModerator(address: string | null | undefined): boolean {
-  return !!address && (MODERATORS.includes(address) || demoRole(address))
+  return !!address && moderatorAddresses().includes(address)
 }
-
-/** The demo moderator on duty in dev builds (sdk/mock-data.ts, `SELLERS.ilya`). */
-const DEMO_MODERATOR = 'PDemoIyaPetrov'.padEnd(34, '1')
 
 /** Addresses of the other moderators, for «is anyone else on duty». */
 export const otherModerators = (address: string): string[] =>
-  [...MODERATORS, ...(import.meta.env.VITE_SHOWCASE === 'true' ? [DEMO_MODERATOR] : [])].filter(
-    (m) => m !== address
-  )
+  moderatorAddresses().filter((m) => m !== address)

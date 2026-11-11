@@ -85,7 +85,7 @@ function openAll() {
 
     <div class="container home" data-testid="home">
       <CategoryTiles @all="openAll" />
-      <HomeBanners @action="soon" />
+      <HomeBanners @action="(key) => (key === 'safeDeal' ? ui.openSafeDealHelp() : soon())" />
 
       <section v-if="matchItems.length" class="home__section" data-testid="may-match">
         <div class="home__head">

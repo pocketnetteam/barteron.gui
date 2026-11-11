@@ -47,6 +47,11 @@ export interface ChatRequest {
   name?: string
   members: string[]
   messages: string[]
+  /**
+   * `false` — no Telegram/VK notice: the deal page sends into a chat that
+   * already exists (old `sendSafeDealMessage`, `disableNotifications`).
+   */
+  notify?: boolean
 }
 
 /**
@@ -90,7 +95,7 @@ export function useChat() {
       if (request.messages.length) {
         await sdk.chat.send({ roomid, content: { messages: request.messages, images: [] } })
       }
-      notify(request.members)
+      if (request.notify !== false) notify(request.members)
       return true
     } catch (error) {
       console.error('[barteron] chat failed:', error)

@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { BAN_LIST } from '@/config/ban-list'
+import { dealOpReturn, SAFE_DEAL_START_HEIGHT } from '@/models/safe-deal'
 import { TX_TYPE, type RawTx } from '@/models/tx'
 import { createMockSdk } from '@/sdk/mock'
-import { createMockNetwork } from '@/sdk/mock-network'
-import { demoNetworkData, SELLERS } from '@/sdk/mock-data'
+import { createMockNetwork, MOCK_HEIGHT } from '@/sdk/mock-network'
+import { demoDeals, demoNetworkData, SELLERS } from '@/sdk/mock-data'
 import { BarteronApi, searchPattern } from './barteron'
 
 const ME = 'PMockUser1111111111111111111111111'
@@ -19,7 +20,8 @@ function setup(extraOffers: RawTx[] = []) {
 const offerFrom = (author: string, id: string): RawTx => ({
   hash: id,
   type: TX_TYPE.offer,
-  height: 3_200_000,
+  // Newer than every demo offer (mock height 4 000 000).
+  height: 4_100_000,
   time: Math.floor(Date.now() / 1000),
   s1: author,
   s2: id,
@@ -124,5 +126,37 @@ describe('BarteronApi', () => {
     await api.feed({ location: ['9q'], lang: 'ru-RU' })
     const call = sdk.mock.calls.filter((c) => c.method === 'rpc').at(-1)!
     expect(call.args[1]).toEqual([{ location: ['9q'], lang: 'en-US' }])
+  })
+
+  it('safe deal: transfers by the exact OP_RETURN, as the old page asked', async () => {
+    const { sdk, api } = setup()
+    const bike = demoDeals(ME).deals[1]!
+    const script = dealOpReturn(bike.id)
+    const paid = await api.transfers(SELLERS.anna, ME, script, SAFE_DEAL_START_HEIGHT)
+    expect(paid.map((t) => t.amount)).toEqual([3978])
+    const call = sdk.mock.calls.filter((c) => c.method === 'rpc').at(-1)!
+    expect(call.args).toEqual([
+      'getfromtotransactions',
+      [SELLERS.anna, ME, SAFE_DEAL_START_HEIGHT, script],
+    ])
+    expect(await api.transfers(SELLERS.anna, ME, dealOpReturn('0'.repeat(26)), 0)).toEqual([])
+    expect(await api.chainHeight()).toBe(MOCK_HEIGHT)
+  })
+
+  it('safe deal: a transfer lands in the chain with its message in OP_RETURN', async () => {
+    const data = demoNetworkData(ME)
+    const network = createMockNetwork({ ...data, broadcastMs: 0, confirmMs: 0 })
+    const sdk = createMockSdk({ network, granted: ['account', 'payment'] })
+    const api = new BarteronApi(sdk)
+    const id = '0123456789abcdef7052858601'
+    await sdk.payment({
+      recievers: [{ address: SELLERS.maria, amount: 1262.5 }],
+      feemode: 'exclude',
+      message: `Safe deal ${id}`,
+    })
+    await new Promise((r) => setTimeout(r, 10))
+    const [transfer] = await api.transfers(ME, SELLERS.maria, dealOpReturn(id), 0)
+    expect(transfer).toMatchObject({ from: ME, to: SELLERS.maria, amount: 1262.5 })
+    expect(transfer!.height).toBe(MOCK_HEIGHT + 1)
   })
 })

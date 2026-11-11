@@ -30,10 +30,14 @@ test.describe('mock SDK in a plain browser', () => {
 
   test('route links open the matching screens', async ({ page }) => {
     await page.goto('/dev/status')
+    // «О проекте» is the last stub (stage 9).
+    await page.getByRole('link', { name: '/about' }).click()
+    await expect(page).toHaveURL(/\/about$/)
+    await expect(page.getByTestId('stub-title')).toContainText('about')
+    // A deal link without its parameters: the deal page says the link is broken.
+    await page.goto('/dev/status')
     await page.getByRole('link', { name: '/barter/safedeal?deal=demo' }).click()
-    await expect(page).toHaveURL(/\/barter\/safedeal\?deal=demo$/)
-    await expect(page.getByTestId('stub-title')).toContainText('SafeDeal')
-    await expect(page.getByTestId('stub-query')).toHaveText('{"deal":"demo"}')
+    await expect(page.getByTestId('deal-bad')).toBeVisible()
   })
 
   test('a shared link opens directly', async ({ page }) => {

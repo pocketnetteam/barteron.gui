@@ -217,6 +217,7 @@ const viewerIndex = ref(0)
             :average="reviews.average.value"
             :rows="reviews.rows.value"
             :form="inactive ? 'none' : reviews.form.value"
+            :offer="offer"
             :own="own"
             :low-score-blocked="reviews.lowScoreBlocked.value"
             :sending="reviews.sending.value"

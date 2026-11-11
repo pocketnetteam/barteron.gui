@@ -36,7 +36,7 @@ const groups = computed<Row[][]>(() => {
     [
       { key: 'ads', label: label('ads'), count: c.ads },
       { key: 'barters', label: label('barters'), count: c.barters },
-      { key: 'deals', label: label('deals') },
+      { key: 'deals', label: label('deals'), count: c.deals },
     ],
     [
       { key: 'favorites', label: label('favorites'), count: c.favorites },

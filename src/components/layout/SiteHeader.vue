@@ -225,7 +225,7 @@ function support() {
       @theme="toggle('theme', $event)"
       @account="toggle('account', $event)"
       @tips="soon"
-      @safe-deal="soon"
+      @safe-deal="ui.openSafeDealHelp()"
       @referral="soon"
       @support="support"
       @categories="megaOpen = !megaOpen"
