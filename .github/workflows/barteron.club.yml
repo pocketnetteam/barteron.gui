@@ -1,0 +1,41 @@
+# Production: a push to main of pocketnetteam/barteron.gui builds the app and copies it
+# to barteron.club. See LAUNCH.md, including how to roll back.
+name: barteron.club
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: barteron.club
+
+jobs:
+  build:
+    # Manual runs too: only main may reach production.
+    if: github.ref == 'refs/heads/main'
+    runs-on: mirror.barteron.club
+    steps:
+      - name: Checkout git repository
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm check
+          pnpm build
+      # The copy of the current version is the rollback (LAUNCH.md). Old copies are removed by hand.
+      - name: Keep the current version
+        run: |
+          backup="/data/barteron-old-$(date +%Y%m%d-%H%M%S)"
+          cp -a /data/barteron "$backup"
+          echo "Rollback: rsync -ah --delete $backup/ /data/barteron/"
+      # No rm -rf: old chunks stay, so a page that is already open can still load its screens.
+      - name: Copy
+        run: rsync -ah ./dist/ /data/barteron/

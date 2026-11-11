@@ -1,0 +1,34 @@
+# Test stand: a push to the nextgen branch of pocketnetteam/barteron.gui builds the app
+# and copies it to the test server. See LAUNCH.md.
+name: test.barter.pocketnet.app
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - nextgen
+
+concurrency:
+  group: test.barter.pocketnet.app
+
+jobs:
+  build:
+    runs-on: test
+    steps:
+      - name: Checkout git repository
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # Like the old stand: the production build (SDK from bastyon.com).
+      - name: Build
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm check
+          pnpm build
+      # No rm -rf: old chunks stay, so a page that is already open can still load its screens.
+      - name: Copy
+        run: rsync -ah ./dist/ /docker/barter/
