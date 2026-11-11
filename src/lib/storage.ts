@@ -27,3 +27,25 @@ export function writeStored(key: string, value: unknown): void {
     // Storage unavailable: the value lives until reload.
   }
 }
+
+export function removeStored(key: string): void {
+  try {
+    localStorage.removeItem(key)
+  } catch {
+    // Storage unavailable: nothing was kept anyway.
+  }
+}
+
+/** Keys that start with `prefix`: the drafts of one user. */
+export function storedKeys(prefix: string): string[] {
+  try {
+    const keys: string[] = []
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i)
+      if (key?.startsWith(prefix)) keys.push(key)
+    }
+    return keys
+  } catch {
+    return []
+  }
+}

@@ -11,6 +11,7 @@ import StepWhat from '@/components/create/StepWhat.vue'
 import WizardFrame, { type WizardHint, type WizardStep } from '@/components/create/WizardFrame.vue'
 import ConfirmDialog from '@/components/item/ConfirmDialog.vue'
 import AppLayout from '@/components/layout/AppLayout.vue'
+import NotifyReminder from '@/components/cabinet/NotifyReminder.vue'
 import TxPanel, { type TxStep } from '@/components/net/TxPanel.vue'
 import { createOfferForm, provideOfferForm } from '@/composables/offer-form'
 import { formatDate, shortHash } from '@/lib/format'
@@ -327,23 +328,27 @@ const publishLabel = computed(() => {
   </AppLayout>
 
   <div v-if="panelOpen && form.publishTx.value" class="cf__overlay" @click.self="openOffer">
-    <TxPanel
-      class="cf__panel"
-      :title="form.editing.value ? t('create.panel.titleEdit') : t('create.panel.title')"
-      :subtitle="t('create.panel.subtitle')"
-      :steps="txSteps"
-      data-testid="create-panel"
-      @close="openOffer"
-    >
-      <template #actions>
-        <UiButton variant="neutral" data-testid="create-open-offer" @click="openOffer">
-          {{ t('create.panel.open') }}
-        </UiButton>
-        <UiButton v-if="!form.editing.value" variant="ghost" @click="postAnother">
-          {{ t('create.panel.more') }}
-        </UiButton>
-      </template>
-    </TxPanel>
+    <div class="cf__stack">
+      <TxPanel
+        class="cf__panel"
+        :title="form.editing.value ? t('create.panel.titleEdit') : t('create.panel.title')"
+        :subtitle="t('create.panel.subtitle')"
+        :steps="txSteps"
+        data-testid="create-panel"
+        @close="openOffer"
+      >
+        <template #actions>
+          <UiButton variant="neutral" data-testid="create-open-offer" @click="openOffer">
+            {{ t('create.panel.open') }}
+          </UiButton>
+          <UiButton v-if="!form.editing.value" variant="ghost" @click="postAnother">
+            {{ t('create.panel.more') }}
+          </UiButton>
+        </template>
+      </TxPanel>
+      <!-- A new offer: replies will come, the old app asked to set up notifications here. -->
+      <NotifyReminder v-if="!form.editing.value" @open="panelOpen = false" />
+    </div>
   </div>
 
   <ConfirmDialog
@@ -426,9 +431,18 @@ const publishLabel = computed(() => {
   padding: 16px;
 }
 
-.cf__panel {
+.cf__stack {
   width: 100%;
   max-width: 520px;
+  max-height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cf__panel {
+  width: 100%;
 }
 
 @media (max-width: 767px) {
@@ -452,6 +466,16 @@ const publishLabel = computed(() => {
   .cf__overlay {
     align-items: flex-end;
     padding: 0;
+  }
+
+  .cf__stack {
+    max-width: none;
+  }
+
+  /* The panel stays at the bottom edge; the reminder sits above it. */
+  .cf__stack > .nrem {
+    order: -1;
+    margin: 0 12px;
   }
 
   .cf__panel {

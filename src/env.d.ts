@@ -12,3 +12,6 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }
+
+/** `version` from package.json, shown in the settings. */
+declare const __APP_VERSION__: string

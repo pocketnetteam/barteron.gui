@@ -58,9 +58,9 @@ Bastyon открывает Barteron в iframe. Приложение загруж
 - **Запросы к ноде** — [src/api/barteron.ts](src/api/barteron.ts). Бан-лист применяется здесь же, к каждой выдаче.
 - **Для экранов** — [src/api/queries.ts](src/api/queries.ts): `useFeed`, `useOffer`, `useAccount`, `useCategories`, `useRates` и другие (TanStack Query). Одиночные запросы карточек собираются в один запрос к ноде.
 - **Транзакции** — [src/stores/tx.ts](src/stores/tx.ts): `send(kind, payload)` отправляет транзакцию и ведёт её статус: отправляем → ждём блок → в сети, при ошибке можно повторить.
-- **Внешние сервисы** — курсы (coingecko, cryptocompare) и адреса (Nominatim). Если хост включил Tor, запросы идут через его туннель: [public/miniapp-service-worker.js](public/miniapp-service-worker.js).
+- **Внешние сервисы** — курсы (coingecko, cryptocompare), адреса (Nominatim) и уведомления в Telegram и VK (p2p.back, [src/api/notify.ts](src/api/notify.ts)). Если хост включил Tor, запросы идут через его туннель: [public/miniapp-service-worker.js](public/miniapp-service-worker.js).
 
-В обычном браузере заглушка SDK отвечает из сети в памяти: [src/sdk/mock-network.ts](src/sdk/mock-network.ts), демо-объявления — в [src/sdk/mock-data.ts](src/sdk/mock-data.ts). Блок приходит через 4 секунды. Если заголовок начинается с `!error`, нода отказывает сразу, а с `!reject` транзакция не попадает в блок. Посмотреть всё вместе можно на вкладке «Данные» витрины: http://localhost:5180/dev/ui/data.
+В обычном браузере заглушка SDK отвечает из сети в памяти: [src/sdk/mock-network.ts](src/sdk/mock-network.ts), демо-объявления — в [src/sdk/mock-data.ts](src/sdk/mock-data.ts). Блок приходит через 4 секунды. Если заголовок начинается с `!error`, нода отказывает сразу, а с `!reject` транзакция не попадает в блок. Посмотреть всё вместе можно на вкладке «Данные» витрины: http://localhost:5180/dev/ui/data. p2p.back на заглушке тоже в памяти ([src/sdk/mock-notify.ts](src/sdk/mock-notify.ts)): имя бота, начинающееся с `!error`, сервис не примет.
 
 ## Экраны
 
@@ -69,6 +69,7 @@ Bastyon открывает Barteron в iframe. Приложение загруж
 - **Карта** `/category/:id/map` — новый путь, тот же набор фильтров.
 - **Объявление** `/barter/:id` — путь старого приложения. Одна страница для трёх случаев: чужое объявление, своё (с управлением и статусом сети) и пункт выдачи (категория 97). `?view=buyer` показывает своё объявление глазами покупателя. Код — [src/views/item/](src/views/item/) и [src/components/item/](src/components/item/); обмен, покупка и вопрос продавцу открывают чат Bastyon с теми же сообщениями, что и старое приложение ([src/composables/chat.ts](src/composables/chat.ts)).
 - **Подача объявления** `/barter/create`, правка — `/barter/create/:id` и `/barter/edit/:id` (пути старого приложения). Мастер из пяти шагов, черновик хранится на устройстве. Пункт выдачи — тот же мастер с категорией 97. Предпросмотр черновика — `/barter/draft` (`?edit=<id>` при правке). Код — [src/views/create/](src/views/create/), [src/components/create/](src/components/create/), состояние формы — [src/composables/offer-form.ts](src/composables/offer-form.ts), перевод формы в транзакцию — [src/models/draft.ts](src/models/draft.ts).
+- **Кабинет и профиль** `/profile/:id` — путь старого приложения. Свой адрес открывает кабинет, разделы — в хеше, как вкладки старого профиля: `#ads`, `#barters`, `#favorites`, `#votes`, и новые `#deals`, `#viewed`, `#wallet`, `#notifications`, `#settings`, `#mylist`, `#public` (свой профиль глазами других). Чужой адрес — публичный профиль продавца. На заглушке у пользователя и у демо-продавца Ильи есть роли гаранта и модератора. Код — [src/views/profile/](src/views/profile/), [src/components/cabinet/](src/components/cabinet/), запись профиля — [src/composables/my-account.ts](src/composables/my-account.ts).
 - Остальные экраны — пока заглушки, они появятся на следующих этапах. Страница статуса подключения — `/dev/status`, только в dev- и test-сборках.
 
 Каркас страницы — [src/components/layout/AppLayout.vue](src/components/layout/AppLayout.vue): шапка, подвал, таб-бар телефона и экраны поиска, категорий и места поверх страницы. Карта — Leaflet с плитками OpenStreetMap, грузится отдельным куском. На заглушке плиток нет, чтобы не ходить в сеть.
@@ -79,18 +80,18 @@ Bastyon открывает Barteron в iframe. Приложение загруж
 build/        плагины Vite: dev-манифест, разрешённые origin хостов
 e2e/          Playwright; fixtures/bastyon-sdk.js — копия sdk.js из pocketnet.gui
 public/       b_manifest.json (production), иконки, Tor-туннель хоста, юридические документы
-src/api/      запросы к ноде, курсы, адреса; TanStack Query для экранов
-src/components/  компоненты маркетплейса, каталога, главной, карты, объявления, формы подачи; каркас страницы
-src/composables/ выдача каталога, «Может подойти», поиск адреса, переходы, чат, страница объявления, форма подачи
+src/api/      запросы к ноде, курсы, адреса, уведомления (p2p.back); TanStack Query для экранов
+src/components/  компоненты маркетплейса, каталога, главной, карты, объявления, формы подачи, кабинета; каркас страницы
+src/composables/ выдача каталога, «Может подойти», поиск адреса, переходы, чат, страница объявления, форма подачи, кабинет, свой профиль, уведомления
 src/config/   списки из старого приложения: бан-лист, гаранты, модераторы, пункты выдачи
 src/data/     категории и их переводы (копия из старого приложения)
 src/i18n/     ru, en, sr; каждый язык грузится отдельным куском
 src/lib/      форматирование, геохеш, область поиска, контраст, localStorage, сжатие фото, тексты ошибок ноды
 src/models/   объявление, черновик формы, профиль, отзыв, оценка, категории, фильтры каталога, доставка и пункты выдачи
 src/router/   маршруты старого приложения
-src/sdk/      связь с Bastyon; заглушка и сеть в памяти
-src/stores/   Pinia: сессия, тема, язык, транзакции, валюта, место, избранное, просмотренные, история поиска, автопродление
+src/sdk/      связь с Bastyon; заглушка, сеть и p2p.back в памяти
+src/stores/   Pinia: сессия, тема, язык, транзакции, валюта, место, избранное, просмотренные, история поиска, автопродление, напоминание об уведомлениях
 src/styles/   токены и базовые стили
 src/ui/       базовые компоненты дизайн-системы, иконки
-src/views/    экраны: главная, каталог, карта, объявление (item/), подача (create/), остальное пока заглушки; dev/ — витрина и статус
+src/views/    экраны: главная, каталог, карта, объявление (item/), подача (create/), кабинет и профиль (profile/), остальное пока заглушки; dev/ — витрина и статус
 ```

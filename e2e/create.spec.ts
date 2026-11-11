@@ -115,6 +115,8 @@ test('new offer: five steps, then the transaction the old app would write', asyn
   await expect(page.getByTestId('create-issues')).toHaveCount(0)
   await page.getByTestId('create-publish').click()
   await expect(page.getByTestId('create-panel')).toContainText('Данные отправлены на ноду')
+  // Replies will come: the old app asked to set up notifications here.
+  await expect(page.getByTestId('notify-reminder')).toBeVisible()
 
   const [sent] = await callsOf(page, 'barteron.offer')
   const payload = sent!.args[0] as Record<string, unknown>

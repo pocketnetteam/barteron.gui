@@ -1,9 +1,17 @@
+import { readFileSync } from 'node:fs'
 import { fileURLToPath, URL } from 'node:url'
 import basicSsl from '@vitejs/plugin-basic-ssl'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vitest/config'
 import { devManifest } from './build/dev-manifest'
 import { HOST_ORIGINS } from './build/host-origins'
+
+/** Shown in the settings. */
+const APP_VERSION = (
+  JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8')) as {
+    version: string
+  }
+).version
 
 /**
  * Oldest engines we build for — the same as bastyon-nextgen (Safari 15,
@@ -26,6 +34,7 @@ export default defineConfig(({ mode }) => ({
     mode === 'https' && basicSsl({ name: 'barteron-dev', domains: ['localhost'] }),
   ],
   define: {
+    __APP_VERSION__: JSON.stringify(APP_VERSION),
     // vue-i18n build flags: Composition API only, no devtools in production.
     __VUE_I18N_FULL_INSTALL__: true,
     __VUE_I18N_LEGACY_API__: false,

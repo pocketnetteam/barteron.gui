@@ -5,6 +5,7 @@
  */
 
 import {
+  keepPreviousData,
   QueryClient,
   useInfiniteQuery,
   useQuery,
@@ -370,11 +371,14 @@ export function refreshAfterTx(
       break
     case 'account':
       invalidate(keys.account(tx.target))
+      // «Мой список» decides what my offers with «my list» match.
+      invalidate(keys.feeds)
       break
     case 'review':
     case 'vote':
       invalidate(keys.offerDetails(tx.target))
       invalidate(keys.score(tx.target))
+      invalidate(['barteron', 'offers-details'])
       break
     case 'payment':
       break
@@ -396,6 +400,8 @@ export function useOffersByIds(ids: MaybeRefOrGetter<readonly string[]>) {
   return useQuery({
     queryKey: computed(() => ['barteron', 'offers-by-ids', [...toValue(ids)]]),
     enabled: computed(() => !!barteron.value && toValue(ids).length > 0),
+    // A list that loses one id (a favourite removed) keeps showing the rest.
+    placeholderData: keepPreviousData,
     queryFn: async () => {
       const found = await barteron.value!.api.offersByIds(toValue(ids))
       for (const o of found) if (o.hash) client.setQueryData(keys.offer(o.hash), o)
@@ -415,5 +421,20 @@ export function useUserProfiles(addresses: MaybeRefOrGetter<readonly string[]>) 
       const list = await barteron.value!.api.userProfiles(toValue(addresses))
       return new Map(list.map((p) => [p.address, p]))
     },
+  })
+}
+
+/** Scores and reviews of several offers at once: everything said about a seller. */
+export function useOffersDetails(ids: MaybeRefOrGetter<readonly string[]>) {
+  const barteron = useBarteron()
+  return useQuery({
+    queryKey: computed(() => ['barteron', 'offers-details', [...toValue(ids)].sort()]),
+    enabled: computed(() => !!barteron.value && toValue(ids).length > 0),
+    queryFn: () =>
+      barteron.value!.api.offerDetails({
+        offerIds: [...toValue(ids)],
+        includeAccounts: false,
+        includeCommentScores: false,
+      }),
   })
 }

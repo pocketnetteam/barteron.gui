@@ -97,7 +97,8 @@ function accountTx(
   place: [number, number],
   rating: number,
   count: number,
-  now: number
+  now: number,
+  roles: { d?: JsonObject; m?: JsonObject } = {}
 ): RawTx & { additional: JsonObject } {
   return {
     hash: demoTxid(`acc-${address}`),
@@ -106,7 +107,14 @@ function accountTx(
     time: Math.floor(now / 1000 - 400 * 24 * 3600),
     s1: address,
     p: {
-      s4: JSON.stringify({ a: tags, g: encodeGeohash(place, 6), s: false, r: 10, d: {}, m: {} }),
+      s4: JSON.stringify({
+        a: tags,
+        g: encodeGeohash(place, 6),
+        s: false,
+        r: 10,
+        d: roles.d ?? {},
+        m: roles.m ?? {},
+      }),
     },
     additional: {
       regdate: Math.floor(now / 1000 - 500 * 24 * 3600),
@@ -570,13 +578,52 @@ export function demoNetworkData(me: string, now = Date.now(), height = 3_100_000
         }),
       },
     },
+    // About the mock user: «Отзывы обо мне» in the cabinet.
+    {
+      hash: demoTxid('review-me1'),
+      type: TX_TYPE.comment,
+      time: Math.floor(now / 1000) - 3 * 86400,
+      height,
+      s1: SELLERS.maria,
+      s2: demoTxid('review-me1'),
+      s3: demoTxid('headphones-mine'),
+      p: {
+        s1: JSON.stringify({
+          message: 'Наушники как новые, встретились у метро. Спасибо!',
+          url: '',
+          images: [],
+          info: '5',
+        }),
+      },
+    },
+    {
+      hash: demoTxid('review-me2'),
+      type: TX_TYPE.comment,
+      time: Math.floor(now / 1000) - 12 * 86400,
+      height,
+      s1: SELLERS.dmitry,
+      s2: demoTxid('review-me2'),
+      s3: demoTxid('laptop-mine'),
+      p: {
+        s1: JSON.stringify({
+          message: 'Ноутбук рабочий, батарея держит часов пять.',
+          url: '',
+          images: [],
+          info: '4',
+        }),
+      },
+    },
   ]
 
   return {
     offers: offers.map((o) => offerTx(o, now, height)),
     accounts: [
       accountTx(SELLERS.anna, [58068, 15033], BELGRADE, 4.8, 23, now),
-      accountTx(SELLERS.ilya, [58068, 58069], BELGRADE, 4.9, 41, now),
+      // Илья is a guarantor and a moderator on duty in dev builds (config/roles.ts).
+      accountTx(SELLERS.ilya, [58068, 58069, 17], BELGRADE, 4.9, 41, now, {
+        d: { validator: { status: 'available', feePercent: 2 } },
+        m: { votingModeration: { moderator: { status: 'available' } } },
+      }),
       accountTx(SELLERS.maria, [621], BELGRADE, 4.6, 12, now),
       accountTx(SELLERS.dmitry, [690], MOSCOW, 4.4, 8, now),
       accountTx(me, [1006, 621], BELGRADE, 4.7, 5, now),

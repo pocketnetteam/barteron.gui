@@ -196,6 +196,18 @@ export const ICONS = {
       ['path', { d: 'M8 11V8a4 4 0 0 1 8 0v3' }],
     ],
   },
+  monitor: {
+    els: [
+      ['rect', { x: '3', y: '4', width: '18', height: '13', rx: '2' }],
+      ['path', { d: 'M8 21h8M12 17v4' }],
+    ],
+  },
+  smartphone: {
+    els: [
+      ['rect', { x: '7', y: '3', width: '10', height: '18', rx: '2' }],
+      ['path', { d: 'M11 18h2' }],
+    ],
+  },
   tip: {
     els: [
       [

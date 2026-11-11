@@ -15,8 +15,8 @@ import UiIcon from '@/ui/UiIcon.vue'
 import MenuList, { type MenuItem } from './MenuList.vue'
 
 /**
- * Profile menu (s2-nav-desktop). Profile tabs keep the old hashes:
- * `#ads`, `#barters`, `#favorites`, `#votes`.
+ * Profile menu (s2-nav-desktop): the cabinet sections (`composables/cabinet`). The old
+ * profile tabs keep their hashes: `#ads`, `#barters`, `#favorites`, `#votes`.
  */
 const emit = defineEmits<{ close: [] }>()
 const { t, locale } = useI18n()
@@ -62,19 +62,23 @@ const items = computed<MenuItem[]>(() => [
     to: profileRoute('#ads'),
   },
   { key: 'barters', label: t('profileMenu.exchanges'), to: profileRoute('#barters') },
-  { key: 'deals', label: t('profileMenu.deals') },
+  { key: 'deals', label: t('profileMenu.deals'), to: profileRoute('#deals') },
   {
     key: 'favorites',
     label: t('profileMenu.favorites'),
     meta: favorites.ids.length || null,
     to: profileRoute('#favorites'),
   },
-  { key: 'viewed', label: t('profileMenu.viewed') },
+  { key: 'viewed', label: t('profileMenu.viewed'), to: profileRoute('#viewed') },
   { key: 'votes', label: t('profileMenu.reviews'), to: profileRoute('#votes') },
-  { key: 'notifications', label: t('profileMenu.notifications') },
-  { key: 'settings', label: t('profileMenu.settings') },
+  {
+    key: 'notifications',
+    label: t('profileMenu.notifications'),
+    to: profileRoute('#notifications'),
+  },
+  { key: 'settings', label: t('profileMenu.settings'), to: profileRoute('#settings') },
   { key: 'bastyon', label: t('profileMenu.bastyonProfile'), external: true, divider: true },
-  { key: 'referral', label: t('header.referral') },
+  { key: 'referral', label: t('header.referral'), to: profileRoute('#wallet') },
 ])
 
 function select(key: string) {
@@ -100,7 +104,7 @@ function select(key: string) {
         </RouterLink>
       </div>
     </div>
-    <RouterLink class="pm__wallet" :to="profileRoute()" @click="emit('close')">
+    <RouterLink class="pm__wallet" :to="profileRoute('#wallet')" @click="emit('close')">
       <UiIcon class="pm__pkoin" name="pkoin" :size="22" :stroke="2" />
       <span class="pm__sum">
         <span class="pm__amount">{{ pkoin ?? t('profileMenu.balanceUnknown') }}</span>

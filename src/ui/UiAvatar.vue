@@ -8,8 +8,8 @@ const props = withDefaults(
   defineProps<{
     name?: string
     src?: string | null
-    /** 64 / 56 / 48 / 40 / 32 / 24 */
-    size?: 24 | 32 | 40 | 48 | 56 | 64
+    /** 96 / 72 — profile head; 64 / 56 / 48 / 40 / 32 / 24 */
+    size?: 24 | 32 | 40 | 48 | 56 | 64 | 72 | 96
     /** Picks the colour; use the address so the colour does not change with the name. */
     seed?: string
     role?: 'guarantor' | 'moderator'
@@ -24,10 +24,21 @@ watch(
   () => (failed.value = false)
 )
 
-const FONT: Record<number, number> = { 24: 11, 32: 13, 40: 15, 48: 18, 56: 20, 64: 24 }
+const FONT: Record<number, number> = {
+  24: 11,
+  32: 13,
+  40: 15,
+  48: 18,
+  56: 20,
+  64: 24,
+  72: 26,
+  96: 34,
+}
 const color = computed(() => avatarColor(props.seed ?? props.name))
 const text = computed(() => initials(props.name))
 const showImage = computed(() => !!props.src && !failed.value)
+/** Role mark: 28 on the profile head, 20 from 48 up, 16 below. */
+const badge = computed(() => (props.size >= 72 ? 28 : props.size >= 48 ? 20 : 16))
 </script>
 
 <template>
@@ -52,13 +63,13 @@ const showImage = computed(() => !!props.src && !failed.value)
       v-if="role"
       class="ui-avatar__role"
       :class="`ui-avatar__role--${role}`"
-      :style="{ width: size >= 48 ? '20px' : '16px', height: size >= 48 ? '20px' : '16px' }"
+      :style="{ width: badge + 'px', height: badge + 'px' }"
       role="img"
       :aria-label="t(`ui.role.${role}`)"
     >
       <UiIcon
         :name="role === 'guarantor' ? 'check' : 'shield-fill'"
-        :size="role === 'guarantor' ? (size >= 48 ? 11 : 9) : size >= 48 ? 12 : 10"
+        :size="Math.round(badge * (role === 'guarantor' ? 0.55 : 0.6))"
         :stroke="3"
       />
     </span>

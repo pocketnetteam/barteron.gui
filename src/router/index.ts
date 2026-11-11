@@ -7,6 +7,7 @@ const MapView = () => import('@/views/MapView.vue')
 const OfferView = () => import('@/views/OfferView.vue')
 const CreateView = () => import('@/views/CreateView.vue')
 const DraftPreview = () => import('@/views/item/DraftPreview.vue')
+const ProfileView = () => import('@/views/ProfileView.vue')
 const NotFoundView = () => import('@/views/NotFoundView.vue')
 
 /** Internal pages: dev and test builds only, cut out of production. */
@@ -54,7 +55,8 @@ export const routes: RouteRecordRaw[] = [
   // The form's preview; the old app showed it on the same path (`/barter/draft?preview=1`).
   { path: '/barter/draft', name: 'draftPreview', component: DraftPreview },
   { path: '/barter/:id', name: 'barterItem', component: OfferView },
-  { path: '/profile/:id', name: 'profile', component: StubView },
+  // My own address opens the cabinet; sections in the hash, like the old tabs (`#ads`, `#favorites`).
+  { path: '/profile/:id', name: 'profile', component: ProfileView },
   { path: '/about', name: 'about', component: StubView },
   ...devRoutes,
   { path: '/404', name: 'notFound', component: NotFoundView },

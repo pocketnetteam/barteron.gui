@@ -10,11 +10,12 @@ export interface SegmentItem<V> {
   icon?: IconName
 }
 
-const props = defineProps<{ items: SegmentItem<T>[]; label?: string }>()
+const props = defineProps<{ items: SegmentItem<T>[]; label?: string; disabled?: boolean }>()
 const model = defineModel<T>()
 const buttons = ref<HTMLButtonElement[]>([])
 
 function onKeydown(event: KeyboardEvent, index: number): void {
+  if (props.disabled) return
   const next = nextIndex(event.key, index, props.items.length)
   if (next === null) return
   event.preventDefault()
@@ -24,7 +25,13 @@ function onKeydown(event: KeyboardEvent, index: number): void {
 </script>
 
 <template>
-  <div class="ui-segmented" role="radiogroup" :aria-label="label">
+  <div
+    class="ui-segmented"
+    :class="{ 'ui-segmented--disabled': disabled }"
+    role="radiogroup"
+    :aria-label="label"
+    :aria-disabled="disabled || undefined"
+  >
     <button
       v-for="(item, index) in items"
       :key="String(item.value)"
@@ -35,6 +42,7 @@ function onKeydown(event: KeyboardEvent, index: number): void {
       role="radio"
       :aria-checked="item.value === model"
       :tabindex="item.value === model ? 0 : -1"
+      :disabled="disabled"
       @click="model = item.value"
       @keydown="onKeydown($event, index)"
     >
@@ -75,6 +83,18 @@ function onKeydown(event: KeyboardEvent, index: number): void {
 
 .ui-segmented__item:hover {
   color: var(--text);
+}
+
+.ui-segmented--disabled {
+  opacity: 0.6;
+}
+
+.ui-segmented--disabled .ui-segmented__item {
+  cursor: default;
+}
+
+.ui-segmented--disabled .ui-segmented__item:not(.ui-segmented__item--active):hover {
+  color: var(--text2);
 }
 
 .ui-segmented__item:focus-visible {

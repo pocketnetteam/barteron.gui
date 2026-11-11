@@ -33,7 +33,7 @@ import {
   type Offer,
   type OfferCurrencyPrice,
 } from './offer'
-import { isJsonObject, type JsonObject } from './tx'
+import { isJsonObject, isTxid, type JsonObject } from './tx'
 
 export const PKOIN = 'PKOIN'
 /** «Покеткоины»: with them in the exchange list a buyer may pay through a guarantor. */
@@ -583,4 +583,33 @@ export function draftHasContent(draft: OfferDraft): boolean {
     draft.photos.length > 0 ||
     !!draft.video
   )
+}
+
+export interface DraftEntry {
+  /** Storage key. */
+  key: string
+  /** The offer being edited; `null` — the draft of a new offer. */
+  hash: string | null
+  draft: OfferDraft
+}
+
+/**
+ * The drafts of one user among stored `[key, value]` pairs, newest first:
+ * `<address>_offer_draft` and `<address>_offer_draft_<id>` (edits). Empty ones
+ * are left out.
+ */
+export function draftEntries(
+  address: string,
+  items: readonly (readonly [string, unknown])[]
+): DraftEntry[] {
+  const base = `${address}_offer_draft`
+  return items
+    .flatMap(([key, value]): DraftEntry[] => {
+      if (key !== base && !key.startsWith(`${base}_`)) return []
+      const hash = key === base ? null : key.slice(base.length + 1)
+      if (hash !== null && !isTxid(hash)) return []
+      const draft = readDraft(value)
+      return draft && draftHasContent(draft) ? [{ key, hash, draft }] : []
+    })
+    .sort((a, b) => b.draft.updatedAt - a.draft.updatedAt)
 }

@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { CURRENCIES } from '@/api/rates'
+import { cabinetRoute } from '@/composables/cabinet'
 import { useOfferForm } from '@/composables/offer-form'
 import { formatMoney, formatPkoin } from '@/lib/format'
 import {
@@ -14,6 +15,7 @@ import {
   type FeeVariant,
 } from '@/models/draft'
 import { useCurrencyStore } from '@/stores/currency'
+import { useSessionStore } from '@/stores/session'
 import UiAlert from '@/ui/UiAlert.vue'
 import UiBadge from '@/ui/UiBadge.vue'
 import UiButton from '@/ui/UiButton.vue'
@@ -29,6 +31,7 @@ const { t, locale } = useI18n()
 const form = useOfferForm()
 const currency = useCurrencyStore()
 const { categories, rates, myList } = form
+const session = useSessionStore()
 const d = computed(() => form.draft.value!)
 
 const modes = computed<{ value: ExchangeMode; title: string; text: string }[]>(() => [
@@ -135,7 +138,15 @@ function addPkoin() {
       </li>
     </ul>
     <UiAlert v-else tone="warning" icon="warning">{{ t('create.exchange.myListEmpty') }}</UiAlert>
-    <p class="sx__hint">{{ t('create.exchange.myListHint') }}</p>
+    <p class="sx__hint">
+      {{ t('create.exchange.myListHint') }}
+      <RouterLink
+        class="sx__link"
+        :to="cabinetRoute(session.address, 'mylist')"
+        data-testid="create-mylist-edit"
+        >{{ t('create.exchange.myListEdit') }}</RouterLink
+      >
+    </p>
     <p v-if="form.fieldError('tags')" class="sx__error" role="alert">
       <UiIcon name="error" :size="14" :stroke="2" />{{ form.fieldError('tags') }}
     </p>
@@ -315,6 +326,11 @@ function addPkoin() {
   font-size: 12px;
   line-height: 16px;
   color: var(--text2);
+}
+
+.sx__link {
+  color: var(--link);
+  font-weight: 600;
 }
 
 .sx__mylist {

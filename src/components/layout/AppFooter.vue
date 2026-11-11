@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useSoon } from '@/composables/catalog-nav'
+import { LEGAL_DOCS, useOpenDoc } from '@/composables/docs'
 import { SUPPORT_EMAIL } from '@/config/roles'
 import { useSessionStore } from '@/stores/session'
 
@@ -13,23 +14,8 @@ const { t, locale } = useI18n()
 const session = useSessionStore()
 const soon = useSoon()
 
-const DOCS = [
-  { key: 'agreement', file: 'UserAgreement.pdf' },
-  { key: 'privacy', file: 'PersonalDataProcessingPolicy.pdf' },
-  { key: 'contract', file: 'BarterAgreementDraft.docx' },
-] as const
-
-const docs = computed(() => (locale.value === 'ru' ? DOCS : []))
-
-function openDoc(file: string) {
-  const scope = session.appinfo?.application?.scope
-  const origin = scope
-    ? scope.startsWith('http')
-      ? scope
-      : `https://${scope}`
-    : window.location.origin
-  void session.sdk?.openExternalLink(`${origin}/docs/ru-RU/${file}`).catch(() => soon())
-}
+const docs = computed(() => (locale.value === 'ru' ? LEGAL_DOCS : []))
+const openDoc = useOpenDoc()
 
 function support() {
   void session.sdk?.openExternalLink(`mailto:${SUPPORT_EMAIL}`).catch(() => soon())

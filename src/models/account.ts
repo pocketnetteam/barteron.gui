@@ -27,8 +27,14 @@ export interface VotingModerationItem extends JsonObject {
   createdAt?: number
 }
 
+export interface ModeratorSettings extends JsonObject {
+  /** `available` — takes requests; anything else — does not (old `moderator-profile`). */
+  status?: string
+}
+
 export interface VotingModeration extends JsonObject {
-  moderator?: string
+  /** Set by moderators only. */
+  moderator?: ModeratorSettings
   requestItems?: VotingModerationItem[]
   accessItems?: VotingModerationItem[]
 }
@@ -193,3 +199,71 @@ export function accountFromAlias(
     metaData: isJsonObject(alias.metaData) ? alias.metaData : from.metaData,
   }
 }
+
+// ─── Roles: what guarantors and moderators keep in their profile ─────────────
+
+export const ROLE_AVAILABLE = 'available'
+export const ROLE_UNAVAILABLE = 'unavailable'
+
+/** The old form took 1–98: `0 < fee < 99` (safe-deal-profile `checkData`). */
+export const isValidGuarantorFee = (fee: number): boolean =>
+  Number.isFinite(fee) && fee > 0 && fee < 99
+
+export interface GuarantorState {
+  available: boolean
+  feePercent: number
+}
+
+/** A guarantor's status and fee; an unset fee is the default one, as the old app showed it. */
+export function guarantorState(account: BarteronAccount, defaultFee: number): GuarantorState {
+  const validator = isJsonObject(account.safeDeal.validator) ? account.safeDeal.validator : {}
+  const fee = Number(validator.feePercent)
+  return {
+    available: validator.status === ROLE_AVAILABLE,
+    feePercent: Number.isFinite(fee) && fee > 0 ? fee : defaultFee,
+  }
+}
+
+/** The profile with new guarantor settings; other keys of `safeDeal` stay. */
+export function withGuarantor(account: BarteronAccount, state: GuarantorState): BarteronAccount {
+  const validator = isJsonObject(account.safeDeal.validator) ? account.safeDeal.validator : {}
+  return {
+    ...account,
+    safeDeal: {
+      ...account.safeDeal,
+      validator: {
+        ...validator,
+        status: state.available ? ROLE_AVAILABLE : ROLE_UNAVAILABLE,
+        feePercent: state.feePercent,
+      },
+    },
+  }
+}
+
+export const moderatorAvailable = (account: BarteronAccount): boolean =>
+  account.metaData.votingModeration?.moderator?.status === ROLE_AVAILABLE
+
+/** The profile with a new moderator status; requests and grants stay. */
+export function withModerator(account: BarteronAccount, available: boolean): BarteronAccount {
+  const voting = isJsonObject(account.metaData.votingModeration)
+    ? account.metaData.votingModeration
+    : {}
+  const moderator = isJsonObject(voting.moderator) ? voting.moderator : {}
+  return {
+    ...account,
+    metaData: {
+      ...account.metaData,
+      votingModeration: {
+        ...voting,
+        moderator: { ...moderator, status: available ? ROLE_AVAILABLE : ROLE_UNAVAILABLE },
+      },
+    },
+  }
+}
+
+/**
+ * A moderator may go off duty only while someone else is on it: otherwise
+ * low scores would have nobody to approve them (old `checkSaving`).
+ */
+export const canLeaveModeration = (others: readonly BarteronAccount[]): boolean =>
+  others.some(moderatorAvailable)

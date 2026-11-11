@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { CategoryTree } from './categories'
 import {
+  draftEntries,
   draftFromOffer,
   draftIssues,
   draftPrice,
@@ -308,5 +309,30 @@ describe('the draft on the device', () => {
     expect(readDraft(JSON.parse(JSON.stringify(stored)))?.photos).toHaveLength(1)
     expect(readDraft({ v: 2 })).toBeNull()
     expect(readDraft('junk')).toBeNull()
+  })
+})
+
+describe('drafts listed in the cabinet', () => {
+  const me = 'PMockUser1111111111111111111111111'
+  const hash = 'a'.repeat(64)
+  const draft = (caption: string, updatedAt: number) => ({
+    ...newDraft('PKOIN'),
+    caption,
+    updatedAt,
+  })
+
+  it('new offer and edits, newest first; empty and foreign ones left out', () => {
+    const entries = draftEntries(me, [
+      [`${me}_offer_draft`, draft('Велосипед', 1)],
+      [`${me}_offer_draft_${hash}`, draft('Ноутбук', 2)],
+      [`${me}_offer_draft_bad`, draft('Битый', 3)],
+      ['PSomeoneElse_offer_draft', draft('Чужой', 4)],
+      [`${me}_offer`, { view: 'tile' }],
+      [`${me}_offer_draft_${'b'.repeat(64)}`, draft('', 5)],
+    ])
+    expect(entries.map((e) => [e.hash, e.draft.caption])).toEqual([
+      [hash, 'Ноутбук'],
+      [null, 'Велосипед'],
+    ])
   })
 })

@@ -210,3 +210,9 @@ export function placeName(place: NominatimPlace): string | null {
   const spot = a.road || a.square || a.pedestrian || a.suburb || a.neighbourhood || ''
   return [city, spot].filter(Boolean).join(', ') || null
 }
+
+/** Just the city, for a seller's profile: «Москва». */
+export function cityName(place: NominatimPlace): string | null {
+  const a = place.address ?? {}
+  return a.city || a.town || a.village || a.hamlet || a.state || null
+}

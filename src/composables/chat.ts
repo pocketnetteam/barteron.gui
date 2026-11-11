@@ -3,6 +3,7 @@ import { useI18n } from 'vue-i18n'
 import { isBanned } from '@/config/ban'
 import type { DeliveryPick } from '@/models/delivery'
 import { useSessionStore } from '@/stores/session'
+import { useDialogNotifier } from './notify'
 import { dismiss as dismissToast, showToast } from '@/ui/toast'
 
 /** Link to an offer that opens Barteron inside Bastyon (old `sdk.appLink`). */
@@ -52,14 +53,14 @@ export interface ChatRequest {
  * Opens a Bastyon chat and sends the first messages, like the old
  * `sendMessage` (main.js:339-361): `chat` permission, `getOrCreateRoom`,
  * `openRoom`, `send`.
- *
- * Not yet: the old app also asked p2p.back to notify the members in
- * Telegram/VK; that comes with notifications (PLAN.md, stage 6).
+ * Then the other members hear of the new dialog in Telegram and VK, if they
+ * connected the bots (`useDialogNotifier`), as the old app did.
  */
 export function useChat() {
   const session = useSessionStore()
   const { t } = useI18n()
   const opening = ref(false)
+  const notify = useDialogNotifier()
 
   async function open(request: ChatRequest): Promise<boolean> {
     const sdk = session.sdk
@@ -89,6 +90,7 @@ export function useChat() {
       if (request.messages.length) {
         await sdk.chat.send({ roomid, content: { messages: request.messages, images: [] } })
       }
+      notify(request.members)
       return true
     } catch (error) {
       console.error('[barteron] chat failed:', error)

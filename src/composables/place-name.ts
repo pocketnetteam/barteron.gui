@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/vue-query'
 import { computed, toValue, type MaybeRefOrGetter } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { placeName, reverseGeocode } from '@/api/geo'
+import { cityName, placeName, reverseGeocode } from '@/api/geo'
 import { decodeGeohash } from '@/lib/geohash'
 import { useSessionStore } from '@/stores/session'
 
@@ -23,6 +23,27 @@ export function usePlaceName(geohash: MaybeRefOrGetter<string | null | undefined
     queryFn: async () => {
       const found = await reverseGeocode(point.value!, { locale: locale.value, zoom: 17 })
       return found ? placeName(found.raw) : null
+    },
+  })
+}
+
+/**
+ * The city of a profile's place (old profile: «country, city»; the mockup has
+ * the city). One request per area of about 5 km and language; Bastyon only.
+ */
+export function useCityName(geohash: MaybeRefOrGetter<string | null | undefined>) {
+  const { locale } = useI18n()
+  const session = useSessionStore()
+  const key = computed(() => (toValue(geohash) ?? '').slice(0, 5))
+  const point = computed(() => decodeGeohash(key.value))
+  return useQuery({
+    queryKey: computed(() => ['geo', 'city', key.value, locale.value]),
+    enabled: computed(() => session.mode === 'bastyon' && !!point.value),
+    staleTime: Infinity,
+    retry: 1,
+    queryFn: async () => {
+      const found = await reverseGeocode(point.value!, { locale: locale.value, zoom: 10 })
+      return found ? cityName(found.raw) : null
     },
   })
 }

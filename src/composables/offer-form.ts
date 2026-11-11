@@ -102,6 +102,16 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
 
   const defaultCurrency = () => (currency.pkoinOnly ? PKOIN : currency.code)
 
+  /**
+   * A new offer starts at «Место для новых объявлений» when the profile fixes
+   * one (cabinet settings: `static` and `geohash` of tx 104).
+   */
+  const homePlace = () => {
+    const a = account.data.value
+    return a?.static && a.geohash ? a.geohash : ''
+  }
+  const fresh = (): OfferDraft => ({ ...newDraft(defaultCurrency()), geohash: homePlace() })
+
   function start(value: OfferDraft, restored: boolean) {
     draft.value = value
     restoredAt.value = restored ? value.updatedAt : null
@@ -117,7 +127,7 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
       if (draft.value || !me.value) return
       const stored = readDraft(readStored<unknown>(draftKey(hash.value, me.value), null))
       if (!hash.value) {
-        start(stored ?? newDraft(defaultCurrency()), !!stored && draftHasContent(stored))
+        start(stored ?? fresh(), !!stored && draftHasContent(stored))
         return
       }
       const offer = original.data.value
@@ -127,6 +137,17 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
       else start(draftFromOffer(offer, locale.value), false)
     },
     { immediate: true }
+  )
+
+  // The profile may come after the form opened: a new, untouched draft gets the place then.
+  watch(
+    () => account.data.value,
+    () => {
+      const value = draft.value
+      if (!value || editing.value || restoredAt.value !== null || value.geohash) return
+      if (draftHasContent(value)) return
+      value.geohash = homePlace()
+    }
   )
 
   const dirty = computed(() => !!draft.value && snapshot(draft.value) !== initial)
@@ -167,10 +188,7 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
       await session.sdk?.videos.remove({ url: value.video }).catch(() => undefined)
     }
     const offer = original.data.value
-    start(
-      offer && editing.value ? draftFromOffer(offer, locale.value) : newDraft(defaultCurrency()),
-      false
-    )
+    start(offer && editing.value ? draftFromOffer(offer, locale.value) : fresh(), false)
     void goTo(stepsOf(draft.value!)[0]!, true)
   }
 
@@ -574,7 +592,7 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
     publishTxId.value = null
     publishError.value = null
     tried.clear()
-    start(newDraft(defaultCurrency()), false)
+    start(fresh(), false)
     void goTo(stepsOf(draft.value!)[0]!, true)
   }
 
