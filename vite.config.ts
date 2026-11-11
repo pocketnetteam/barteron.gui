@@ -5,6 +5,7 @@ import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vitest/config'
 import { devManifest } from './build/dev-manifest'
 import { HOST_ORIGINS } from './build/host-origins'
+import { indexPhp } from './build/index-php'
 
 /** Shown in the settings. */
 const APP_VERSION = (
@@ -32,6 +33,8 @@ export default defineConfig(({ mode }) => ({
     // only https frames and requests, so a sideloaded dev server must be https.
     // The old app ran its dev server on https as well.
     mode === 'https' && basicSsl({ name: 'barteron-dev', domains: ['localhost'] }),
+    // barteron.club serves index.php: the page plus link-preview tags (php/og.php).
+    indexPhp(),
   ],
   define: {
     __APP_VERSION__: JSON.stringify(APP_VERSION),
