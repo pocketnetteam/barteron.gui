@@ -3,6 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useMyDrafts } from '@/composables/cabinet'
 import { useMyOffers, type MyOfferItem } from '@/composables/cabinet-data'
+import { useMyExchanges } from '@/composables/exchanges'
 import { usePhone } from '@/composables/media'
 import { useSessionStore } from '@/stores/session'
 import UiAlert from '@/ui/UiAlert.vue'
@@ -19,6 +20,10 @@ import SectionHead from './SectionHead.vue'
 const { t } = useI18n()
 const session = useSessionStore()
 const mine = useMyOffers()
+/** «4 варианта обмена» on each live offer: the same matches as the exchanges section. */
+const exchanges = useMyExchanges()
+const variantsOf = (item: MyOfferItem) =>
+  exchanges.byOffer.value.get(item.offer.hash ?? '')?.count ?? null
 const drafts = useMyDrafts(() => session.address)
 /** The phone screen has no sorting (s5-myoffers-mobile): tabs right under the top bar. */
 const phone = usePhone()
@@ -153,7 +158,12 @@ onMounted(() => drafts.refresh())
         <p v-if="!draftList.length" class="mys__none">{{ t('myOffers.emptyTab.drafts') }}</p>
       </div>
       <div v-else class="mys__list">
-        <MyOfferRow v-for="item in rows" :key="item.offer.hash ?? item.tx?.id" :item="item" />
+        <MyOfferRow
+          v-for="item in rows"
+          :key="item.offer.hash ?? item.tx?.id"
+          :item="item"
+          :variants="variantsOf(item)"
+        />
         <p v-if="!rows.length" class="mys__none">{{ t(`myOffers.emptyTab.${tab}`) }}</p>
       </div>
     </template>

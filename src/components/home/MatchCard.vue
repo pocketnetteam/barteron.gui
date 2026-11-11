@@ -6,6 +6,7 @@ import { offerCardData } from '@/components/offer/card-data'
 import OfferPhoto from '@/components/offer/OfferPhoto.vue'
 import PriceTag from '@/components/offer/PriceTag.vue'
 import type { MatchItem } from '@/composables/may-match'
+import { chainQuery, chainRefOf } from '@/models/exchange'
 import UiIcon from '@/ui/UiIcon.vue'
 
 /** A card of «Может подойти для обмена»: the way of exchange and which of my offers it fits. */
@@ -15,12 +16,9 @@ const context = useCardContext()
 
 const data = computed(() => offerCardData(props.item.target, context.value))
 const to = computed(() =>
-  props.item.kind === 'direct'
-    ? { name: 'barterItem', params: { id: props.item.target.hash ?? '' } }
-    : {
-        name: 'ThreeSidedSearch',
-        query: { source: props.item.source.hash ?? '', target: props.item.target.hash ?? '' },
-      }
+  props.item.chain
+    ? { name: 'ThreeSidedSearch', query: chainQuery(chainRefOf(props.item.chain)) }
+    : { name: 'barterItem', params: { id: props.item.target.hash ?? '' } }
 )
 </script>
 

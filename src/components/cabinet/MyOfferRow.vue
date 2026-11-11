@@ -23,7 +23,11 @@ import UiPopover from '@/ui/UiPopover.vue'
 const DAY = 24 * 60 * 60 * 1000
 
 /** One of my offers in the cabinet (s5-myoffers-desktop / -mobile). */
-const props = defineProps<{ item: MyOfferItem }>()
+const props = defineProps<{
+  item: MyOfferItem
+  /** Exchanges found for it (stage 7); `null` while they are looked for. */
+  variants?: number | null
+}>()
 const { t, locale } = useI18n()
 const router = useRouter()
 const tx = useTxStore()
@@ -176,6 +180,13 @@ function retryNew() {
           <span v-if="status.note && !opFailed" class="mo__note">{{ status.note }}</span>
         </template>
       </div>
+      <RouterLink
+        v-if="variants && lifecycle === 'active' && !newTx"
+        class="mo__variants"
+        :to="exchangeTo"
+        data-testid="my-offer-variants"
+        >{{ t('myOffers.variants', variants) }}</RouterLink
+      >
     </div>
     <UiButton
       v-if="!newTx"
@@ -307,6 +318,14 @@ function retryNew() {
 .mo__more {
   grid-area: more;
   justify-self: end;
+}
+
+.mo__variants {
+  align-self: flex-start;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  color: var(--link);
 }
 
 .mo__actions {

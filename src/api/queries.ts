@@ -26,7 +26,6 @@ import { useSessionStore } from '@/stores/session'
 import type { TrackedTx, useTxStore } from '@/stores/tx'
 import {
   BarteronApi,
-  type ComplexDealsRequest,
   type DealsRequest,
   type FeedRequest,
   type GroupsRequest,
@@ -56,8 +55,6 @@ export const keys = {
   feed: (request: FeedRequest | null) => ['barteron', 'feed', request] as const,
   // Under `feeds`: a published offer refreshes deal lists too.
   deals: (request: DealsRequest | null) => ['barteron', 'feed', 'deals', request] as const,
-  complexDeals: (request: ComplexDealsRequest | null) =>
-    ['barteron', 'complex-deals', request] as const,
   groups: (request: GroupsRequest | null) => ['barteron', 'groups', request] as const,
   offersByAddress: (address: string | null) => ['barteron', 'offers-by', address] as const,
   offer: (id: string | null) => ['barteron', 'offer', id] as const,
@@ -126,7 +123,7 @@ export function useBarteron() {
   )
 }
 
-function seedOffers(client: QueryClient, offers: readonly Offer[]) {
+export function seedOffers(client: QueryClient, offers: readonly Offer[]) {
   for (const offer of offers) {
     if (offer.hash) client.setQueryData(keys.offer(offer.hash), offer)
   }
@@ -198,23 +195,6 @@ export const useFeed = (request: MaybeRefOrGetter<FeedRequest | null>) =>
 /** Offers that fit my exchange list: `getbarterondeals`, page by page. */
 export const useDeals = (request: MaybeRefOrGetter<DealsRequest | null>) =>
   useOfferPages(keys.deals, request, (b, r) => b.api.dealsPage(r))
-
-export function useComplexDeals(request: MaybeRefOrGetter<ComplexDealsRequest | null>) {
-  const barteron = useBarteron()
-  const client = useQueryClient()
-  return useQuery({
-    queryKey: computed(() => keys.complexDeals(toValue(request))),
-    enabled: computed(() => !!barteron.value && !!toValue(request)),
-    queryFn: async () => {
-      const deals = await barteron.value!.api.complexDeals(toValue(request)!)
-      seedOffers(
-        client,
-        deals.flatMap((d) => [d.target, ...d.intermediates])
-      )
-      return deals
-    },
-  })
-}
 
 /** «Что продают рядом»: counts by area (stage 10). */
 export function useGroups(request: MaybeRefOrGetter<GroupsRequest | null>) {

@@ -46,7 +46,7 @@ const list = useCatalogList(
 )
 
 const from = computed(() => (location.filtered ? (location.area?.center ?? null) : null))
-const matchItems = computed(() => matches.data.value ?? [])
+const matchItems = computed(() => matches.items.value)
 
 function openAll() {
   if (window.matchMedia('(max-width: 767px)').matches) ui.openCategories()

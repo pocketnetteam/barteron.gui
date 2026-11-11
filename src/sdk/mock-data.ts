@@ -142,6 +142,21 @@ export function demoNetworkData(me: string, now = Date.now(), height = 3_100_000
       safeDeal: { validatorFeeVariant: 'buyer' },
     },
     {
+      // Stage 7: wants a tablet, not a laptop — my laptop reaches it through
+      // Илья's tablet (a chain of three), not directly.
+      id: demoTxid('road-bike'),
+      author: SELLERS.maria,
+      caption: 'Велосипед шоссейный, 21 скорость',
+      description: 'Алюминиевая рама 54, новые покрышки. Меняю только на планшет.',
+      tag: 1006,
+      tags: [58069],
+      condition: 'used',
+      price: 2600,
+      place: near(BELGRADE, 4),
+      photos: [150, 175],
+      ageHours: 30,
+    },
+    {
       id: demoTxid('sofa'),
       author: SELLERS.anna,
       caption: 'Диван-кровать, серый',

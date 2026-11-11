@@ -8,6 +8,7 @@ import { useCurrencyStore } from '@/stores/currency'
 import { useFavoritesStore } from '@/stores/favorites'
 import { useSessionStore } from '@/stores/session'
 import { useTxStore, type TrackedTx } from '@/stores/tx'
+import { useMyExchanges } from './exchanges'
 
 /** Who I am in the cabinet head: name, avatar, rating, balance. */
 export function useCabinetHead() {
@@ -95,8 +96,10 @@ export function useMyOffers() {
 export function useCabinetCounts() {
   const offers = useMyOffers()
   const favorites = useFavoritesStore()
+  const exchanges = useMyExchanges()
   return computed(() => ({
     ads: offers.query.data.value ? offers.total.value : null,
+    barters: exchanges.total.value || null,
     favorites: favorites.ids.length || null,
   }))
 }

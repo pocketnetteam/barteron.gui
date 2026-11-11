@@ -12,11 +12,12 @@ import ItemSection from '@/components/item/ItemSection.vue'
 import AppLayout from '@/components/layout/AppLayout.vue'
 import NetStatusBadge from '@/components/net/NetStatusBadge.vue'
 import OfferPhoto from '@/components/offer/OfferPhoto.vue'
-import OfferTile from '@/components/offer/OfferTile.vue'
 import PriceTag from '@/components/offer/PriceTag.vue'
 import { useCardContext } from '@/components/offer/card-context'
 import { offerCardData } from '@/components/offer/card-data'
-import { useOfferMatches } from '@/composables/may-match'
+import ExchangeTile from '@/components/exchange/ExchangeTile.vue'
+import { exchangeItems } from '@/components/exchange/exchange-ui'
+import { useOfferExchanges } from '@/composables/exchanges'
 import { useOfferActions } from '@/composables/offer-actions'
 import { useOfferPage } from '@/composables/offer-page'
 import { useOfferReviews } from '@/composables/offer-reviews'
@@ -46,7 +47,6 @@ const offer = toRef(props, 'offer')
 const page = useOfferPage(offer)
 const id = page.id
 const actions = useOfferActions(offer)
-const matches = useOfferMatches(offer)
 
 const lifecycle = computed(() => {
   const state = offerLifecycle(offer.value)
@@ -65,7 +65,11 @@ const oldPrice = computed(() =>
 )
 
 // ─── Matches ────────────────────────────────────────────────────────────────
-const matchItems = computed(() => matches.data.value ?? [])
+// Only a live offer is matched; the cache is shared with the exchanges section.
+const matches = useOfferExchanges(() => (lifecycle.value === 'active' ? offer.value : null))
+const matchItems = computed(() =>
+  matches.state.value?.exchanges ? exchangeItems(matches.state.value.exchanges) : []
+)
 const matchesRoute = computed(() => ({
   name: 'exchangeOptions',
   params: { id: id.value },
@@ -321,24 +325,19 @@ function back() {
                 t('item.own.matchesAll')
               }}</RouterLink>
             </template>
-            <p v-if="matches.isPending.value" class="ow__muted">
+            <p v-if="matches.state.value?.status === 'pending'" class="ow__muted">
               {{ t('item.own.matchesLoading') }}
             </p>
             <p v-else-if="!matchItems.length" class="ow__muted">{{ t('item.own.matchesNone') }}</p>
             <div v-else class="ow__matches">
-              <div v-for="m in matchItems.slice(0, 4)" :key="m.target.hash!" class="ow__match">
-                <OfferTile :offer="m.target" :context="cardCtx" />
-                <span
-                  class="ow__match-badge"
-                  :class="{ 'ow__match-badge--chain': m.kind === 'chain' }"
-                >
-                  {{
-                    m.kind === 'chain'
-                      ? t('item.own.chain', { n: (m.via?.length ?? 1) + 2 })
-                      : t('item.own.direct')
-                  }}
-                </span>
-              </div>
+              <ExchangeTile
+                v-for="m in matchItems.slice(0, 4)"
+                :key="m.key"
+                class="ow__match"
+                :offer="m.offer"
+                :kind="m.kind"
+                :to="m.to"
+              />
             </div>
           </ItemSection>
 
@@ -529,27 +528,6 @@ function back() {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
-}
-
-.ow__match {
-  position: relative;
-}
-
-.ow__match :deep(.photo__corner--tl) {
-  visibility: hidden;
-}
-
-.ow__match-badge {
-  position: absolute;
-  z-index: 2;
-  top: 8px;
-  left: 8px;
-  padding: 2px 8px;
-  border-radius: var(--radius-full);
-  background: var(--primary);
-  color: #ffffff;
-  font: 700 11px / 18px var(--font-sans);
-  pointer-events: none;
 }
 
 .ow__phone-card,
