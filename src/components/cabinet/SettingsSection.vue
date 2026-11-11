@@ -2,14 +2,10 @@
 import { computed, defineAsyncComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { currenciesFor } from '@/api/rates'
-import { useSoon } from '@/composables/catalog-nav'
-import { LEGAL_DOCS, useOpenDoc } from '@/composables/docs'
 import { useMyAccount } from '@/composables/my-account'
 import { usePlaceName } from '@/composables/place-name'
-import { SUPPORT_EMAIL } from '@/config/roles'
 import { useCurrencyStore } from '@/stores/currency'
 import { LOCALE_CHOICES, useLocaleStore, type LocaleChoice } from '@/stores/locale'
-import { useSessionStore } from '@/stores/session'
 import { useThemeStore, type ThemePreference } from '@/stores/theme'
 import { useUiStore } from '@/stores/ui'
 import UiIcon from '@/ui/UiIcon.vue'
@@ -17,22 +13,23 @@ import UiSegmented from '@/ui/UiSegmented.vue'
 import UiSelect from '@/ui/UiSelect.vue'
 import MyListCard from './MyListCard.vue'
 import SectionHead from './SectionHead.vue'
+import SettingsMenu from './SettingsMenu.vue'
 
 const HomePlaceDialog = defineAsyncComponent(() => import('./HomePlaceDialog.vue'))
 
 /**
  * «Настройки» (s5-settings-desktop): «Мой список обмена» and the place for
  * new offers go to my Barteron profile; theme, language and currency stay on
- * the device (the old keys, as in the header).
+ * the device (the old keys, as in the header). On a phone the section is
+ * «Настройки и помощь» (s8-menu-mobile): rows that open sheets, and the place
+ * for new offers under them; «Мой список обмена» has its own row in the
+ * phone cabinet.
  */
 const { t, locale } = useI18n()
-const session = useSessionStore()
 const account = useMyAccount()
 const theme = useThemeStore()
 const localeStore = useLocaleStore()
 const currency = useCurrencyStore()
-const soon = useSoon()
-const openDoc = useOpenDoc()
 const ui = useUiStore()
 
 const themes = computed(() =>
@@ -100,11 +97,6 @@ const placeText = computed(() => {
   return placeName.data.value ?? t('settings.place.pointSet')
 })
 
-// ─── Links ──────────────────────────────────────────────────────────────────
-const docs = computed(() => (locale.value === 'ru' ? LEGAL_DOCS.slice(0, 2) : []))
-function support() {
-  void session.sdk?.openExternalLink(`mailto:${SUPPORT_EMAIL}`).catch(() => soon())
-}
 const version = __APP_VERSION__
 </script>
 
@@ -112,40 +104,44 @@ const version = __APP_VERSION__
   <section class="set" data-testid="cabinet-settings">
     <SectionHead :title="t('cabinet.sections.settings')" />
 
-    <div class="set__card">
+    <SettingsMenu class="set__phone" />
+
+    <div class="set__card set__desktop">
       <MyListCard :account="account" />
     </div>
 
     <div class="set__card set__rows">
-      <div class="set__row">
-        <span class="set__label">{{ t('theme.title') }}</span>
-        <UiSegmented
-          v-model="themeModel"
-          class="set__seg"
-          :items="themes"
-          :label="t('theme.title')"
-        />
-      </div>
-      <div class="set__row">
-        <span class="set__label">{{ t('language.title') }}</span>
-        <UiSelect
-          v-model="languageModel"
-          class="set__select"
-          :options="languages"
-          :label="t('language.title')"
-        />
-      </div>
-      <div class="set__row">
-        <span class="set__label">
-          {{ t('settings.currency') }}
-          <span class="set__sub">{{ t('settings.currencyHint') }}</span>
-        </span>
-        <UiSelect
-          v-model="currencyModel"
-          class="set__select"
-          :options="currencies"
-          :label="t('settings.currency')"
-        />
+      <div class="set__desktop">
+        <div class="set__row">
+          <span class="set__label">{{ t('theme.title') }}</span>
+          <UiSegmented
+            v-model="themeModel"
+            class="set__seg"
+            :items="themes"
+            :label="t('theme.title')"
+          />
+        </div>
+        <div class="set__row">
+          <span class="set__label">{{ t('language.title') }}</span>
+          <UiSelect
+            v-model="languageModel"
+            class="set__select"
+            :options="languages"
+            :label="t('language.title')"
+          />
+        </div>
+        <div class="set__row">
+          <span class="set__label">
+            {{ t('settings.currency') }}
+            <span class="set__sub">{{ t('settings.currencyHint') }}</span>
+          </span>
+          <UiSelect
+            v-model="currencyModel"
+            class="set__select"
+            :options="currencies"
+            :label="t('settings.currency')"
+          />
+        </div>
       </div>
       <div class="set__row" data-testid="settings-place">
         <span class="set__label">
@@ -174,31 +170,41 @@ const version = __APP_VERSION__
       <p v-if="account.pending.value" class="set__pending">{{ t('account.locked') }}</p>
     </div>
 
-    <div class="set__card set__links">
-      <button type="button" class="set__link" @click="soon()">
+    <div class="set__card set__links set__desktop">
+      <RouterLink class="set__link" :to="{ name: 'tips' }" data-testid="settings-tips">
         {{ t('settings.links.tips') }}
-      </button>
+      </RouterLink>
       <button type="button" class="set__link" @click="ui.openSafeDealHelp()">
         {{ t('settings.links.safeDeal') }}
       </button>
-      <button type="button" class="set__link" @click="support">
+      <button
+        type="button"
+        class="set__link"
+        data-testid="settings-support"
+        @click="ui.openDialog('support')"
+      >
         {{ t('settings.links.support')
         }}<span class="set__meta">{{ t('settings.links.supportMeta') }}</span>
       </button>
-      <button type="button" class="set__link" @click="soon()">
-        {{ t('settings.links.survey') }}
-      </button>
       <button
-        v-for="doc in docs"
-        :key="doc.key"
         type="button"
         class="set__link"
-        @click="openDoc(doc.file)"
+        data-testid="settings-survey"
+        @click="ui.openDialog('survey')"
       >
-        {{ t(`footer.${doc.key}`) }}<UiIcon name="external" :size="16" class="set__meta" />
+        {{ t('settings.links.survey') }}
+      </button>
+      <RouterLink class="set__link" :to="{ name: 'about' }">{{ t('info.about') }}</RouterLink>
+      <button type="button" class="set__link" @click="ui.openDialog('legal')">
+        {{ t('legal.title') }}<UiIcon name="chevron-right" :size="16" class="set__meta" />
       </button>
       <span class="set__version">{{ t('settings.version', { version }) }}</span>
     </div>
+    <p class="set__phone set__foot">
+      {{ t('settings.menu.foot') }}<br />{{ t('settings.menu.device') }}<br />{{
+        t('settings.menu.version', { version })
+      }}
+    </p>
 
     <HomePlaceDialog
       v-if="placeOpen"
@@ -306,8 +312,20 @@ const version = __APP_VERSION__
 
 .set__link:hover {
   color: var(--link);
+  text-decoration: none;
 }
 
+.set__phone {
+  display: none;
+}
+
+.set__foot {
+  margin: 0;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--text3);
+  text-align: center;
+}
 .set__meta {
   font-size: 13px;
   color: var(--text3);
@@ -329,6 +347,23 @@ const version = __APP_VERSION__
 }
 
 @media (max-width: 767px) {
+  .set__desktop {
+    display: none;
+  }
+
+  .set__phone {
+    display: flex;
+  }
+
+  .set__foot {
+    display: block;
+  }
+
+  /* Only the place for new offers is left in this card: no line over it. */
+  .set__rows .set__row[data-testid='settings-place'] {
+    border-top: 0;
+  }
+
   .set__card {
     padding: 18px;
   }

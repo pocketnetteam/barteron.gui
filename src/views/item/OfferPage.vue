@@ -21,7 +21,8 @@ import { useCardContext } from '@/components/offer/card-context'
 import { offerCardData } from '@/components/offer/card-data'
 import SellerCard from '@/components/user/SellerCard.vue'
 import { useBastyonProfile } from '@/composables/bastyon'
-import { categoryRoute, useSoon } from '@/composables/catalog-nav'
+import { categoryRoute } from '@/composables/catalog-nav'
+import { useUiStore } from '@/stores/ui'
 import { exchangeMessages, offerLink, purchaseMessages, useChat } from '@/composables/chat'
 import { fittingOffers } from '@/composables/may-match'
 import { useOfferPage } from '@/composables/offer-page'
@@ -78,7 +79,7 @@ const favorites = useFavoritesStore()
 const deals = useDealsStore()
 const categories = useCategories()
 const chat = useChat()
-const soon = useSoon()
+const ui = useUiStore()
 const openBastyon = useBastyonProfile()
 const cardCtx = useCardContext()
 
@@ -517,7 +518,7 @@ const exchangeTitle = computed(() =>
                       : t('item.safe.textHalf')
                   }}
                 </p>
-                <button type="button" class="op__link" @click="soon()">
+                <button type="button" class="op__link" @click="ui.openSafeDealHelp()">
                   {{ t('item.safe.how') }}
                 </button>
               </div>

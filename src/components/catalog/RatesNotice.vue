@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRates } from '@/api/queries'
 import { useCurrencyStore } from '@/stores/currency'
+import { useUiStore } from '@/stores/ui'
 import UiButton from '@/ui/UiButton.vue'
 import UiIcon from '@/ui/UiIcon.vue'
 
@@ -13,6 +14,7 @@ import UiIcon from '@/ui/UiIcon.vue'
 const { t } = useI18n()
 const rates = useRates()
 const currency = useCurrencyStore()
+const ui = useUiStore()
 const shown = computed(
   () => !!currency.shown && rates.isError.value && !rates.data.value?.[currency.shown]
 )
@@ -30,12 +32,22 @@ const shown = computed(
     >
       {{ t('list.retry') }}
     </UiButton>
+    <!-- s8-system-desktop «Нет курса валюты»: another currency may have a rate. -->
+    <UiButton
+      variant="ghost"
+      :size="32"
+      data-testid="rates-change"
+      @click="ui.openDialog('currency')"
+    >
+      {{ t('list.changeCurrency') }}
+    </UiButton>
   </div>
 </template>
 
 <style scoped>
 .rates {
   padding: 12px 16px;
+  flex-wrap: nowrap;
   border-radius: 14px;
   background: var(--warning-soft);
   display: flex;
@@ -52,5 +64,15 @@ const shown = computed(
   flex: 1;
   font-size: 14px;
   line-height: 20px;
+}
+
+@media (max-width: 767px) {
+  .rates {
+    flex-wrap: wrap;
+  }
+
+  .rates__text {
+    flex-basis: calc(100% - 32px);
+  }
 }
 </style>

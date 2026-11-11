@@ -1,5 +1,6 @@
+import { useI18n } from 'vue-i18n'
 import { useSessionStore } from '@/stores/session'
-import { useSoon } from './catalog-nav'
+import { showToast } from '@/ui/toast'
 
 /** The old app's legal documents, same paths (`/docs/ru-RU/…`); Russian only, as before. */
 export const LEGAL_DOCS = [
@@ -11,7 +12,7 @@ export const LEGAL_DOCS = [
 /** Opens a document from where the app is served (barteron.club inside Bastyon). */
 export function useOpenDoc() {
   const session = useSessionStore()
-  const soon = useSoon()
+  const { t } = useI18n()
   return (file: string) => {
     const scope = session.appinfo?.application?.scope
     const origin = scope
@@ -19,6 +20,8 @@ export function useOpenDoc() {
         ? scope
         : `https://${scope}`
       : window.location.origin
-    void session.sdk?.openExternalLink(`${origin}/docs/ru-RU/${file}`).catch(() => soon())
+    void session.sdk
+      ?.openExternalLink(`${origin}/docs/ru-RU/${file}`)
+      .catch(() => showToast(t('legal.openFailed'), { kind: 'error' }))
   }
 }

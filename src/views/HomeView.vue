@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 import OfferList from '@/components/catalog/OfferList.vue'
 import RatesNotice from '@/components/catalog/RatesNotice.vue'
 import CategoryTiles from '@/components/home/CategoryTiles.vue'
@@ -10,10 +11,11 @@ import MatchCard from '@/components/home/MatchCard.vue'
 import ViewedRow from '@/components/home/ViewedRow.vue'
 import AppLayout from '@/components/layout/AppLayout.vue'
 import { useAreaPhrase, useLocationLabel } from '@/components/layout/location-label'
-import { useSoon } from '@/composables/catalog-nav'
+import SurveyInvite from '@/components/system/SurveyInvite.vue'
 import { useCatalogList } from '@/composables/catalog-list'
 import { useMayMatch } from '@/composables/may-match'
 import { useLocationStore } from '@/stores/location'
+import { useSessionStore } from '@/stores/session'
 import { useUiStore } from '@/stores/ui'
 import UiIcon from '@/ui/UiIcon.vue'
 
@@ -25,7 +27,8 @@ import UiIcon from '@/ui/UiIcon.vue'
 const { t } = useI18n()
 const location = useLocationStore()
 const ui = useUiStore()
-const soon = useSoon()
+const router = useRouter()
+const session = useSessionStore()
 const locationLabel = useLocationLabel()
 const areaPhrase = useAreaPhrase()
 const matches = useMayMatch()
@@ -52,6 +55,19 @@ function openAll() {
   if (window.matchMedia('(max-width: 767px)').matches) ui.openCategories()
   else ui.mega = true
 }
+
+/** The bell and the «Настройте уведомления» hint: the cabinet's notifications. */
+function notifications() {
+  if (session.address)
+    void router.push({ name: 'profile', params: { id: session.address }, hash: '#notifications' })
+  else void session.ensureSignedIn()
+}
+
+function banner(key: 'notifications' | 'safeDeal' | 'tips') {
+  if (key === 'safeDeal') ui.openSafeDealHelp()
+  else if (key === 'tips') void router.push({ name: 'tips' })
+  else notifications()
+}
 </script>
 
 <template>
@@ -67,7 +83,7 @@ function openAll() {
             type="button"
             class="home-top__bell"
             :aria-label="t('home.notifications')"
-            @click="soon"
+            @click="notifications"
           >
             <UiIcon name="bell" :size="24" />
           </button>
@@ -85,7 +101,8 @@ function openAll() {
 
     <div class="container home" data-testid="home">
       <CategoryTiles @all="openAll" />
-      <HomeBanners @action="(key) => (key === 'safeDeal' ? ui.openSafeDealHelp() : soon())" />
+      <HomeBanners @action="banner" />
+      <SurveyInvite />
 
       <section v-if="matchItems.length" class="home__section" data-testid="may-match">
         <div class="home__head">

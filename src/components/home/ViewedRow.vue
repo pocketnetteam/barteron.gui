@@ -6,7 +6,7 @@ import { useBarteron } from '@/api/queries'
 import { useCardContext } from '@/components/offer/card-context'
 import { offerCardData } from '@/components/offer/card-data'
 import OfferMini from '@/components/offer/OfferMini.vue'
-import { useSoon } from '@/composables/catalog-nav'
+import { useSessionStore } from '@/stores/session'
 import { useViewedStore } from '@/stores/viewed'
 import HomeCarousel from './HomeCarousel.vue'
 
@@ -19,7 +19,11 @@ const viewed = useViewedStore()
 const barteron = useBarteron()
 const client = useQueryClient()
 const context = useCardContext()
-const soon = useSoon()
+const session = useSessionStore()
+/** «Все»: the cabinet's «Просмотренные»; a guest has no cabinet, so sign-in first. */
+const all = computed(() =>
+  session.address ? { name: 'profile', params: { id: session.address }, hash: '#viewed' } : null
+)
 
 const ids = computed(() => [...viewed.ids])
 const query = useQuery({
@@ -52,10 +56,10 @@ const cards = computed(() =>
   <section v-if="cards.length" class="viewed" data-testid="viewed">
     <div class="viewed__head">
       <h2 class="viewed__title">{{ t('home.viewed') }}</h2>
-      <button type="button" class="viewed__all" @click="soon">
+      <RouterLink v-if="all" class="viewed__all" :to="all">
         <span class="viewed__all-long">{{ t('home.viewedAll') }}</span>
         <span class="viewed__all-short">{{ t('home.all') }}</span>
-      </button>
+      </RouterLink>
     </div>
     <HomeCarousel :label="t('home.viewed')">
       <OfferMini

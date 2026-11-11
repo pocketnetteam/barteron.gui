@@ -4,8 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter, type RouteLocationRaw } from 'vue-router'
 import { useBalance, useCategories, useUserProfile } from '@/api/queries'
 import { currenciesFor, CURRENCIES } from '@/api/rates'
-import { useCatalogNav, useSoon } from '@/composables/catalog-nav'
-import { SUPPORT_EMAIL } from '@/config/roles'
+import { useCatalogNav } from '@/composables/catalog-nav'
 import { LOCALE_CHOICES, useLocaleStore, type LocaleChoice } from '@/stores/locale'
 import { useCurrencyStore } from '@/stores/currency'
 import { useSessionStore } from '@/stores/session'
@@ -48,7 +47,6 @@ const balance = useBalance()
 const me = computed(() => session.address)
 const profile = useUserProfile(me)
 const nav = useCatalogNav()
-const soon = useSoon()
 const locationLabel = useLocationLabel()
 
 type Panel = 'location' | 'currency' | 'language' | 'theme' | 'account' | 'search'
@@ -193,8 +191,8 @@ function favorites() {
   else signIn()
 }
 
-function support() {
-  void session.sdk?.openExternalLink(`mailto:${SUPPORT_EMAIL}`).catch(() => soon())
+function tips() {
+  void router.push({ name: 'tips' })
 }
 </script>
 
@@ -224,17 +222,16 @@ function support() {
       @language="toggle('language', $event)"
       @theme="toggle('theme', $event)"
       @account="toggle('account', $event)"
-      @tips="soon"
+      @tips="tips"
       @safe-deal="ui.openSafeDealHelp()"
-      @referral="soon"
-      @support="support"
+      @referral="ui.openDialog('referral')"
+      @support="ui.openDialog('support')"
       @categories="megaOpen = !megaOpen"
       @search="search($event)"
       @search-focus="(el) => ((anchor = el), (panel = 'search'))"
       @search-keydown="(e) => e.key === 'Escape' && (panel = null)"
       @search-scope="searchInScope = !searchInScope"
       @favorites="favorites"
-      @messages="soon"
       @sign-in="signIn"
       @create="create"
     />

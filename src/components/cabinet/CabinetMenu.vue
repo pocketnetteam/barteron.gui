@@ -6,15 +6,14 @@ import { cabinetRoute, type CabinetSection } from '@/composables/cabinet'
 import { useCabinetCounts, useCabinetHead } from '@/composables/cabinet-data'
 import { useBastyonProfile } from '@/composables/bastyon'
 import { useProfileReviews } from '@/composables/profile-reviews'
-import { SUPPORT_EMAIL } from '@/config/roles'
 import { useNotifyPrefsStore } from '@/stores/notify-prefs'
-import { useSessionStore } from '@/stores/session'
+import { useUiStore } from '@/stores/ui'
 import UiAvatar from '@/ui/UiAvatar.vue'
 import UiIcon from '@/ui/UiIcon.vue'
 
 /** Phone cabinet (s5-cabinet-mobile): who I am, the wallet, sections in three groups. */
 const { t } = useI18n()
-const session = useSessionStore()
+const ui = useUiStore()
 const head = useCabinetHead()
 const counts = useCabinetCounts()
 const reviews = useProfileReviews(head.me)
@@ -50,7 +49,8 @@ const groups = computed<Row[][]>(() => {
     [
       { key: 'notifications', label: label('notifications') },
       { key: 'mylist', label: label('mylist'), count: account.data.value?.tags.length || null },
-      { key: 'settings', label: label('settings') },
+      // «Настройки и помощь» (s8-menu-mobile): display, help, about Barteron.
+      { key: 'settings', label: t('cabinet.settingsPhone') },
       { key: 'bastyon', label: t('cabinet.bastyonProfile'), external: true },
       { key: 'support', label: t('cabinet.support') },
     ],
@@ -62,8 +62,7 @@ const isSection = (key: Row['key']): key is CabinetSection => key !== 'bastyon' 
 function act(key: Row['key']) {
   if (key === 'bastyon' && head.me.value)
     void openBastyon(head.me.value, head.profile.data.value?.name)
-  else if (key === 'support')
-    void session.sdk?.openExternalLink(`mailto:${SUPPORT_EMAIL}`).catch(() => undefined)
+  else if (key === 'support') ui.openDialog('support')
 }
 </script>
 

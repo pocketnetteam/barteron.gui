@@ -10,6 +10,7 @@ import App from './App.vue'
 import { createQueryClient, installTxRefresh } from './api/queries'
 import { i18n, setLocale } from './i18n'
 import { createAppRouter } from './router'
+import { routeFromHost } from './sdk/host-route'
 import { useLocaleStore } from './stores/locale'
 import { useSessionStore } from './stores/session'
 import { useThemeStore } from './stores/theme'
@@ -17,11 +18,8 @@ import { useTxStore } from './stores/tx'
 
 const pinia = createPinia()
 const queryClient = createQueryClient()
-const app = createApp(App)
-  .use(pinia)
-  .use(VueQueryPlugin, { queryClient })
-  .use(i18n)
-  .use(createAppRouter())
+const router = createAppRouter()
+const app = createApp(App).use(pinia).use(VueQueryPlugin, { queryClient }).use(i18n).use(router)
 useThemeStore(pinia).apply()
 // Texts come per language: the first ones before anything is drawn.
 void setLocale(i18n.global.locale.value).then(() => app.mount('#app'))
@@ -42,5 +40,10 @@ void session
       'balance',
       () => void queryClient.invalidateQueries({ queryKey: ['bastyon', 'balance'] })
     )
+    // The previous Bastyon asks to open another Barteron page (a link from a chat).
+    session.sdk?.on('changestate', (data) => {
+      const target = routeFromHost(data)
+      if (target && target !== router.currentRoute.value.fullPath) void router.push(target)
+    })
     return tx.start()
   })

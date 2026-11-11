@@ -2,7 +2,6 @@ import type { Messages } from './ru'
 
 const en: Messages = {
   app: {
-    soon: 'This section is coming in a later version',
     connecting: 'Connecting to Bastyon…',
     outside: {
       title: 'Barteron runs inside Bastyon',
@@ -10,10 +9,12 @@ const en: Messages = {
       open: 'Open in Bastyon',
     },
     failed: {
-      title: 'Bastyon did not respond',
-      script: 'Could not load the Bastyon SDK from {host}.',
-      timeout: 'The SDK loaded, but Bastyon did not answer.',
+      title: 'Could not reach Bastyon',
+      script:
+        'The SDK library did not load. Barteron works inside Bastyon — open it from there or reload the page.',
+      timeout: 'Bastyon did not answer. Open Barteron from Bastyon again or reload the page.',
       retry: 'Try again',
+      open: 'Open in Bastyon',
     },
   },
   status: {
@@ -37,15 +38,14 @@ const en: Messages = {
     routes: 'Route check',
     showcase: 'Design system showcase',
   },
-  stub: {
-    title: 'The “{name}” screen comes in a later stage',
-    params: 'Parameters',
-    query: 'Link parameters',
-    home: 'Home',
-  },
   notFound: {
-    title: 'Page not found',
+    title: 'There is no such page',
     home: 'Home',
+    text: 'The link is out of date or the offer was deleted. Try searching — it may have been posted again.',
+    textPhone:
+      'The link is out of date or the offer was deleted. It may have been posted again — try finding it by name.',
+    search: 'Search offers',
+    popular: 'Popular categories',
   },
   ui: {
     retry: 'Retry',
@@ -164,11 +164,16 @@ const en: Messages = {
     ru: 'Русский',
     en: 'English',
     sr: 'Српски',
+    now: 'now: {name}',
   },
   currency: {
     title: 'Currency',
     hint: 'Equivalent next to the PKOIN price',
     pkoinOnly: 'PKOIN only',
+    dialogTitle: 'Price currency',
+    find: 'Find a currency',
+    nothing: 'No such currency',
+    note: 'Prices are always kept in PKOIN; the currency only changes how they are shown. Rates come from open sources.',
   },
   location: {
     title: 'Where to look',
@@ -179,7 +184,8 @@ const en: Messages = {
     locate: 'My location',
     searching: 'Looking for the address…',
     searchFailed: 'Could not find the address. Try again',
-    denied: 'Bastyon did not share your location',
+    denied:
+      'Access is denied in Bastyon or in the browser settings. You can choose a city by hand — the place filter keeps working.',
     mapLabel: 'Map of the search area',
     dragHint: 'Move the map to change the centre',
     mapFailed: 'The map did not load',
@@ -192,6 +198,7 @@ const en: Messages = {
     change: 'change',
     chosenPlace: 'Chosen place',
     around: '{place} and {radius} around',
+    deniedTitle: 'No access to your location',
   },
   search: {
     hints: 'Search hints',
@@ -226,12 +233,16 @@ const en: Messages = {
   footer: {
     label: 'About Barteron',
     about:
-      'A decentralized board of offers and exchanges. It works inside Bastyon; the data lives on the blockchain.',
+      'Works in the Bastyon network. Barteron does not check whether users keep their agreements.',
     project: 'About',
     agreement: 'User agreement',
     privacy: 'Personal data policy',
     contract: 'Barter agreement draft',
     survey: 'Anonymous survey',
+    tips: 'Useful tips',
+    members: 'For members',
+    referral: 'Referral program',
+    support: 'Support',
   },
   home: {
     categories: 'Categories',
@@ -337,6 +348,7 @@ const en: Messages = {
     more: 'Show more',
     portions: 'Offers come from the node in portions',
     ratesFailed: 'No {code} rate — showing prices in PKOIN only',
+    changeCurrency: 'Change currency',
   },
   catalog: {
     home: 'Home',
@@ -456,7 +468,6 @@ const en: Messages = {
   chat: {
     opening: 'The chat is opening. Please wait.',
     failed: 'Could not open the chat. Please try again',
-    noPermission: 'Bastyon did not grant access to chats',
   },
   chatMessage: {
     safeDeal: 'Purchase option: safe deal',
@@ -612,6 +623,9 @@ const en: Messages = {
       changeScore: 'Change the rating',
       hint: 'You can rate an offer once. A review cannot be changed after it is published; it appears in a minute or two.',
       lowBlocked: 'Your Bastyon reputation does not yet allow low ratings.',
+      confirmTitle: 'Send the score «{n}»?',
+      confirmText: 'The score is written to the network and cannot be changed later.',
+      confirmSend: 'Send',
     },
     propose: {
       title: 'What do you offer in return?',
@@ -849,6 +863,7 @@ const en: Messages = {
           text: 'Sellers find nearby points by it when they choose delivery options.',
         },
       },
+      all: 'All tips',
     },
     what: {
       title: 'What do you offer',
@@ -1190,6 +1205,7 @@ const en: Messages = {
       mylist: 'My exchange list',
       public: 'My public profile',
     },
+    settingsPhone: 'Settings and help',
   },
   exchanges: {
     roomName: 'Group exchange',
@@ -1539,6 +1555,15 @@ const en: Messages = {
       supportMeta: 'by email',
       survey: 'Anonymous survey',
     },
+    menu: {
+      display: 'Display',
+      area: 'Search area',
+      help: 'Help',
+      about: 'About Barteron',
+      foot: 'Barteron · a Bastyon mini-app',
+      device: 'Favourites and drafts are kept on this device',
+      version: 'Version {version}',
+    },
   },
   profile: {
     title: 'Profile',
@@ -1784,8 +1809,7 @@ const en: Messages = {
       text: 'It was deleted or has not reached the node yet. Without it the seller and the status are unknown.',
     },
     unsupported: {
-      title: 'This version of Bastyon has no safe deal',
-      text: 'Use the web version or update the Bastyon app.',
+      text: 'This version of Bastyon has no safe deal: it cannot read transfers. Update the app or open the web version.',
     },
     aside: {
       participants: 'Participants',
@@ -1991,6 +2015,328 @@ const en: Messages = {
       bad: 'The request link is broken',
       badText: 'The link lacks request details. Open it again from the chat.',
       signIn: 'Sign in to open the request',
+    },
+  },
+  system: {
+    notNow: 'Not now',
+    profileFailed: 'Bastyon did not open the profile',
+    version: {
+      title: 'A new version of Barteron is out',
+      text: 'To keep everything working, restart the app: close it and open it again from Bastyon.',
+      saved: 'Your offer draft and favourites are kept on this device',
+      restart: 'Restart',
+      hint: 'If the button does not help, close the mini-app by hand',
+    },
+    permissions: {
+      title: 'Permissions needed',
+      text: 'Permissions are off: {list}. Turn them on in the app settings in Bastyon.',
+      settings: 'App settings',
+      names: {
+        account: 'account access',
+        chat: 'chats',
+        payment: 'transfers',
+        sign: 'signing',
+        geolocation: 'location',
+      },
+    },
+    activation: {
+      title: 'Your account is being activated',
+      text: 'A new Bastyon account is being confirmed by the network. It usually takes a few minutes — you can already browse offers.',
+      works: 'Search, favourites and the map work',
+      waits: 'Posting an offer and writing to a seller will work after activation',
+      browse: 'Browse offers',
+    },
+    outdated: {
+      title: 'Update Bastyon',
+      works: 'Browsing and exchanges work',
+      web: 'Open the web version',
+      skip: 'Continue without this feature',
+    },
+    offline: {
+      title: 'No connection to the network',
+      text: 'The node is not answering. We show what has already loaded; new offers and statuses will appear once it reconnects.',
+      saved: 'Favourites and viewed offers are on this device',
+      waits: 'Posting and transfers are unavailable',
+    },
+  },
+  support: {
+    title: 'Write to support',
+    text: 'Write to us by e-mail — we will answer there. If it is about an offer or a deal, add a link to it.',
+    hint: 'This is the support address of the Bastyon network.',
+    copy: 'Copy the e-mail address',
+    write: 'Write an e-mail',
+    copied: 'E-mail address copied',
+    copyFailed: 'Could not copy the address. Write to {email}',
+    subject: 'Barteron: feedback',
+    mailCopied:
+      'Bastyon did not open your mail app. The address {email} is copied — paste it into an e-mail',
+    mailFailed: 'Bastyon did not open your mail app. Write to {email}',
+  },
+  referral: {
+    title: 'Referral program',
+    promo: 'Earn PKOIN by promoting Barteron',
+    promoText: 'Bring in sellers with your referral link.',
+    text: 'First register in the program and read the terms — after that the link becomes available.',
+    terms: 'Terms and registration',
+    copy: 'Copy the referral link',
+    copied: 'Referral link copied',
+    copyFailed: 'Could not copy the link',
+    copyByHand: 'Select it and copy it by hand:',
+    signIn: 'Sign in to get the link',
+  },
+  legal: {
+    title: 'Legal information',
+    inRussian: 'The documents are in Russian.',
+    openFailed: 'Bastyon did not open the document',
+  },
+  survey: {
+    title: 'Anonymous survey',
+    question1: 'What should we improve first?',
+    question2: 'What do you like most?',
+    answer: 'Your answer',
+    email: 'E-mail for contact (optional)',
+    empty: 'Answer at least one question',
+    badEmail: 'Check the e-mail address',
+    note: 'Your account address goes with the answers, so the survey is not shown to you again.',
+    send: 'Send',
+    failed: 'Could not send your answers',
+    failedText: 'The text is kept in the form — try again.',
+    sent: 'Your answers are sent',
+    sentText: 'Thank you! The survey will no longer show on the home page.',
+    done: 'Done',
+    signIn:
+      'So as not to ask twice, Barteron notes that you took the survey. Sign in to Bastyon for that.',
+    signInAction: 'Sign in',
+    invite: 'Help us improve Barteron',
+    inviteText: 'Two questions, anonymous',
+    go: 'Take it',
+    take: 'Take the survey',
+    dismiss: 'Do not offer again',
+  },
+  info: {
+    nav: 'About Barteron',
+    about: 'About',
+    tips: 'Useful tips',
+  },
+  about: {
+    badge: 'A Bastyon mini-app',
+    title: 'Swap and sell directly — with no middleman',
+    lead: 'Barteron is a classifieds board in a decentralised network. Offers are kept in the blockchain, talks happen in Bastyon chats, payment is in PKOIN from the wallet in your account.',
+    how: 'How it works',
+    tiles: {
+      chain: 'Offers in the blockchain',
+      chats: 'Bastyon chats',
+      pkoin: 'Payment in PKOIN',
+      match: 'Exchange matching',
+    },
+    differs: 'What makes Barteron different',
+    diff: {
+      owner: {
+        title: 'No central owner',
+        text: 'Offers are written to the network and shown by nodes. Your Bastyon account is both your login and your wallet.',
+        note: 'That is why posting and status changes take from a few seconds to ~10 minutes.',
+      },
+      money: {
+        title: 'Money goes directly',
+        text: 'The buyer pays the seller or a guarantor straight from the wallet. Barteron never holds your funds.',
+        note: 'For protection there is a safe deal with a guarantor for a fee.',
+      },
+      data: {
+        title: 'Your data stays with you',
+        text: 'Favourites, viewed offers and drafts are kept on your device. Messengers only learn that a new dialog started.',
+        note: 'Change your device and the favourites will not move.',
+      },
+    },
+    ways: 'Ways to agree',
+    way: {
+      direct: {
+        title: 'Swap 1:1',
+        text: 'Barteron finds offers whose authors want what you have.',
+      },
+      chain: {
+        title: 'Chain of three',
+        text: 'You → Oleg → Maria → you. A group chat is created automatically.',
+      },
+      buy: {
+        title: 'Buy for PKOIN',
+        text: 'The price in PKOIN and in your currency. You can agree on an extra payment.',
+      },
+      safe: {
+        title: 'Safe deal',
+        text: 'The payment waits with a guarantor until the seller meets the terms.',
+      },
+      point: {
+        title: 'Pickup point',
+        text: 'Leave an item at a pickup point — the buyer collects it while it is kept there. Beta.',
+      },
+    },
+    faq: 'Frequent questions',
+    q: {
+      safe: {
+        q: 'What is a safe deal?',
+        a: 'A deal with a guarantor in the middle. The buyer pays the guarantor, and once the seller meets the terms, the guarantor passes the payment on to the seller, keeping a fee.',
+      },
+      fee: {
+        q: 'Who pays the guarantor’s fee?',
+        a: 'The seller decides when posting the offer: the buyer, the seller or half each. The guarantor sets the fee. The buyer sees their share before paying.',
+      },
+      delay: {
+        q: 'Why did my offer not show up right away?',
+        a: 'An offer is a blockchain transaction. First it gets into a block, then the nodes show it in search. That usually takes from a few seconds to ~10 minutes; meanwhile the offer shows the status «waiting for a block».',
+      },
+      lowScore: {
+        q: 'Why can I not give a low score right away?',
+        a: 'Scores 1–3 need a moderator’s permission: this protects sellers from revenge and fake ratings. Send a request from the review form and a moderator will look at the reason. Besides, the Bastyon network accepts low scores only from accounts with a reputation of 100 or more.',
+      },
+      favorites: {
+        q: 'Where are my favourites on a new phone?',
+        a: 'Favourites, viewed offers and drafts are kept on the device where you saved them, not in the network. On a new phone this list will be empty. Offers, reviews and your profile are in the network and seen everywhere.',
+      },
+    },
+    support: {
+      title: 'Support',
+      text: 'Write to us by e-mail — the address comes from the network’s support settings.',
+      copy: 'Copy the address',
+    },
+    referralText: 'Invite sellers with your referral link.',
+  },
+  tips: {
+    find: 'Search the tips',
+    nothing: 'No such tips',
+    nothingText: 'Try another word or search the offers.',
+    link: {
+      createExchange: 'To the «Exchange and price» step',
+      createPlace: 'To the «Place and delivery» step',
+      safeDealHelp: 'How a safe deal works',
+      notifications: 'Set up notifications',
+      location: 'Choose where to look',
+      map: 'Open the map',
+      barters: 'My exchanges',
+    },
+    create: {
+      title: 'How to write an effective offer?',
+      short: 'Offer',
+      meta: '8 topics',
+      name: {
+        title: 'Title',
+        i1: 'Do not write «Selling», «Offering» and the like.',
+        i2: 'For an item — the main features: brand, model, article number, colour.',
+        i3: 'For a service — a short and precise description.',
+      },
+      category: {
+        title: 'Category',
+        i1: 'Many people search by category, not by phrase — choose it precisely.',
+        i2: 'Services go to «Services», items to the other categories.',
+        i3: 'Start typing the name in the category search.',
+      },
+      photos: {
+        title: 'Photos',
+        i1: 'Pick photos that show the essence most fully.',
+        i2: 'Up to 10 photos, JPEG or PNG. Drag them to change the order.',
+      },
+      video: {
+        title: 'Video',
+        i1: 'A video noticeably raises interest in the offer.',
+        i2: 'One video up to 2 minutes; we recommend 720p.',
+      },
+      exchange: {
+        title: 'Exchange list and price',
+        i1: 'In «Want in return» you can pick any categories — they will be shown in the offer.',
+        i2: 'The price is shown in PKOIN and in the buyer’s currency. You can fix the price in your currency.',
+      },
+      description: {
+        title: 'Description',
+        i1: 'Do not repeat the title.',
+        i2: 'Answer the questions a buyer will have.',
+        i3: 'Say what unit the price is for. You can add links and contacts.',
+      },
+      delivery: {
+        title: 'Delivery',
+        i1: 'Give the buyer several ways to get the item — it raises the chance of a deal.',
+      },
+      safe: {
+        title: 'Safe deal',
+        i1: 'Makes a purchase more likely.',
+        i2: 'To turn it on, add «PKOIN» to the exchange list.',
+        i3: 'You can take on half or all of the guarantor’s fee.',
+      },
+    },
+    notify: {
+      title: 'How to learn about new responses?',
+      short: 'Responses',
+      meta: 'notifications',
+      setup: {
+        title: 'Setting up notifications',
+        i1: 'Answer responses quickly — set up notifications for that.',
+        i2: 'Open «Profile» → «Notifications» and connect the bot in Telegram or VK.',
+        i3: 'The main channel is Bastyon push notifications; messengers come on top.',
+        i4: 'A messenger only gets the fact of a new dialog — no names or links. Deal details stay in the Bastyon chat.',
+      },
+    },
+    search: {
+      title: 'How to search for offers?',
+      short: 'Search',
+      meta: '4 topics',
+      place: {
+        title: 'Where to look',
+        i1: 'Search can be local: set a place and a radius — all lists show only offers nearby.',
+        i2: 'The place is chosen in the header, on a phone above the search: a city, an address or a point on the map.',
+      },
+      exchange: {
+        title: 'What is accepted in exchange',
+        i1: 'The «Accept in exchange» filter leaves offers whose authors would take what you have.',
+        i2: 'For example, in «Food» tick «PKOIN» — offers payable in PKOIN remain.',
+        i3: 'Any categories and exchange options can be combined this way.',
+      },
+      filters: {
+        title: 'Other filters',
+        i1: 'Price, condition, delivery, safe deal and the word search work together.',
+        i2: 'Pick the price from ready ranges or enter «from» and «to».',
+      },
+      count: {
+        title: 'How many offers are nearby',
+        i1: 'Open the catalog on the map — offers show up as dots.',
+        i2: 'Find the area by address search or by hand and press «Search this area».',
+        i3: 'Offers come in parts; if there are many, «Show more» appears at the bottom.',
+      },
+    },
+    barter: {
+      title: 'How to make a barter?',
+      short: 'Barter',
+      meta: '5 topics',
+      kinds: {
+        title: 'How Barteron matches exchanges',
+        i1: 'Barteron itself finds swaps for two and chains of three.',
+        i2: 'Two people take part in a swap, three in a chain: each gives an item to the next.',
+        i3: 'Matching compares the categories of offers with what their authors want in return.',
+        i4: 'You can also propose an exchange yourself — to any offer.',
+      },
+      direct: {
+        title: 'Swap for two: matching',
+        i1: 'Open «Profile» → «Exchanges» — options for all your offers are there.',
+        i2: 'Or open your offer and press «Exchange options».',
+        i3: 'Pick an option and press «Propose an exchange» — a chat with the author opens.',
+      },
+      manual: {
+        title: 'Swap for two: by hand',
+        i1: 'Found a suitable offer? Propose an exchange yourself.',
+        i2: 'Look at what the author will swap for: better if what you offer is there.',
+        i3: 'Press «Propose an exchange» and pick your offer.',
+        i4: 'A chat with the author and links to both offers opens.',
+      },
+      chain: {
+        title: 'Chain of three',
+        i1: 'Chains are searched for all your offers: they are on the home page in «May suit for an exchange» and in «Exchanges».',
+        i2: 'Open a chain to see who gives what to whom.',
+        i3: 'Press «Propose an exchange» — a shared chat for three is created.',
+        i4: 'Agree in the chat when and how to hand over the items.',
+      },
+      group: {
+        title: 'Exchange for three or more: by hand',
+        i1: 'See offers that close a chain together with yours? Propose an exchange yourself.',
+        i2: 'Create a group chat in Bastyon, invite the authors and add links to the offers.',
+        i3: 'Agree on the terms in the chat.',
+      },
     },
   },
 }

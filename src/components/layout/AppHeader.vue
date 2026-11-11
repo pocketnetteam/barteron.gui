@@ -25,6 +25,11 @@ const props = defineProps<{
   /** Signed in: balance and avatar instead of nothing. */
   user?: { name: string; seed?: string; avatar?: string | null; balance?: number | null }
   unread?: number
+  /**
+   * «Сообщения в Bastyon». Off in the app: neither host lets an app open the
+   * list of chats yet; the showcase draws it as in the mockup.
+   */
+  messages?: boolean
   /** Not signed in: «Войти» instead of the avatar. */
   signIn?: string
   /** The categories menu is open: the button turns into «× Все категории». */
@@ -183,6 +188,7 @@ const balance = computed(() =>
           <UiIcon name="heart" />
         </button>
         <button
+          v-if="messages"
           type="button"
           class="header__icon"
           :aria-label="unread ? t('header.messagesUnread', unread) : t('header.messages')"

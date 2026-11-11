@@ -125,6 +125,8 @@ export interface BarteronApiOptions {
   brighteon?: boolean
   /** Turns geohash prefixes into ones inside the allowed region (Brighteon). */
   limitLocation?: (location: string[]) => string[]
+  /** Told after every node request whether it answered («Нет связи с сетью»). */
+  onRpc?: (answered: boolean) => void
 }
 
 export class BarteronApi {
@@ -133,9 +135,20 @@ export class BarteronApi {
     private readonly options: BarteronApiOptions = {}
   ) {}
 
+  private async rpc<T>(method: string, parameters: unknown[]): Promise<T> {
+    try {
+      const result = await this.sdk.rpc<T>(method, parameters)
+      this.options.onRpc?.(true)
+      return result
+    } catch (error) {
+      this.options.onRpc?.(false)
+      throw error
+    }
+  }
+
   /** The ban list loads alongside the request: results are filtered by it. */
   private async call<T>(method: string, parameters: unknown[]): Promise<T> {
-    const [result] = await Promise.all([this.sdk.rpc<T>(method, parameters), loadBanList()])
+    const [result] = await Promise.all([this.rpc<T>(method, parameters), loadBanList()])
     return result
   }
 
@@ -268,14 +281,12 @@ export class BarteronApi {
     opReturn: string,
     fromHeight: number
   ): Promise<DealTransfer[]> {
-    return parseTransfers(
-      await this.sdk.rpc('getfromtotransactions', [from, to, fromHeight, opReturn])
-    )
+    return parseTransfers(await this.rpc('getfromtotransactions', [from, to, fromHeight, opReturn]))
   }
 
   /** Height of the last block (`getnodeinfo`). */
   async chainHeight(): Promise<number> {
-    const info = await this.sdk.rpc<unknown>('getnodeinfo', [])
+    const info = await this.rpc<unknown>('getnodeinfo', [])
     const body = isJsonObject(info) && isJsonObject(info.data) ? info.data : info
     const block = isJsonObject(body) ? body.lastblock : null
     const height = isJsonObject(block) ? Number(block.height) : NaN

@@ -31,6 +31,9 @@ function hostPage({ granted, locale }: HostOptions): string {
   const granted = new Set(${JSON.stringify(granted)})
   window.__requests = []
   window.__events = []
+  // An event from the host to the app, as js/lib/apps/index.js sends it.
+  window.__push = (key, data) =>
+    document.getElementById('app').contentWindow.postMessage({ listener: window.__listener, key, data }, '*')
   const answers = {
     appinfo: () => ({
       device: 'fake-host',
@@ -52,6 +55,12 @@ function hostPage({ granted, locale }: HostOptions): string {
   window.addEventListener('message', (event) => {
     const message = event.data || {}
     if (message.event) window.__events.push(message)
+    // sdk.js subscribes to host events once; the host pushes them to that id.
+    if (message.listener && !message.action) {
+      window.__listener = message.listener
+      event.source.postMessage({ response: message.id, data: {} }, '*')
+      return
+    }
     if (!message.action) return
     window.__requests.push(message.action)
     const answer = answers[message.action]
@@ -128,7 +137,7 @@ test.describe('inside a Bastyon host with the real sdk.js', () => {
   test('reports in-app navigation to the host', async ({ page }) => {
     const app = await openInHost(page, { granted: ['account'], locale: 'ru' })
     await app.getByRole('link', { name: '/about' }).click()
-    await expect(app.getByTestId('stub-title')).toContainText('about')
+    await expect(app.getByTestId('about-page')).toBeVisible()
 
     await expect
       .poll(() =>
@@ -139,5 +148,25 @@ test.describe('inside a Bastyon host with the real sdk.js', () => {
         )
       )
       .toContain('about')
+  })
+
+  test('follows the previous host to another page (changestate)', async ({ page }) => {
+    const app = await openInHost(page, { granted: ['account'], locale: 'ru' })
+    await expect(app.getByTestId('status-account')).toHaveText(HOST_ADDRESS)
+    // bastyon-nextgen sends its own address on every page change: not followed.
+    await page.evaluate(() =>
+      (window as unknown as { __push(k: string, d: unknown): void }).__push('changestate', {
+        path: '/app/barteron.pocketnet.app/about',
+      })
+    )
+    await page.waitForTimeout(300)
+    await expect(app.getByTestId('status-account')).toBeVisible()
+    // A Barteron link opened in the previous Bastyon while the app is open.
+    await page.evaluate(() =>
+      (window as unknown as { __push(k: string, d: unknown): void }).__push('changestate', {
+        route: 'help#search',
+      })
+    )
+    await expect(app.getByTestId('tips-page')).toContainText('Как искать объявления?')
   })
 })

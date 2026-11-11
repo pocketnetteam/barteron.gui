@@ -94,6 +94,7 @@ function toggleFavorite(index: number): void {
     >
       <div class="frame frame--wide">
         <AppHeader
+          messages
           location="Москва · 10 км"
           currency="₽ RUB"
           language="Русский"

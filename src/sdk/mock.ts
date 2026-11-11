@@ -38,6 +38,8 @@ export interface MockControls {
   readonly granted: ReadonlySet<Permission>
   /** The next call of this method fails: an upload error, a closed video window. */
   failNext(method: string): void
+  /** The node stops answering: every `rpc` rejects until switched back. */
+  setOffline(offline: boolean): void
 }
 
 export type MockSdk = HostSdk & { mock: MockControls }
@@ -57,6 +59,7 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
   let videoCounter = 0
   const failing = new Set<string>()
   const fails = (method: string): boolean => failing.delete(method)
+  let offline = false
 
   const darkQuery =
     typeof window !== 'undefined' && typeof window.matchMedia === 'function'
@@ -138,6 +141,7 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
     getroute: ({ route }) => `/${route}`,
     async rpc<T>(method: string, parameters: unknown[] = []): Promise<T> {
       record('rpc', method, parameters)
+      if (offline) throw new Error('rpc: node is not responding')
       const fixture = rpcFixtures[method]
       if (!fixture) throw new Error(`mock_rpc_missing:${method}`)
       return fixture(parameters) as T
@@ -311,12 +315,20 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
       profile: (type, data) => resolved('open.profile', type, data),
     },
 
-    openExternalLink: (url) => resolved('openExternalLink', url),
+    // bastyon-nextgen takes http(s) only (`SafeUrl`): a `mailto:` is refused.
+    openExternalLink: async (url) => {
+      record('openExternalLink', url)
+      if (!/^https?:\/\//i.test(url)) throw new Error('invalid_params')
+      return undefined
+    },
 
     mock: {
       calls,
       granted,
       failNext: (method) => void failing.add(method),
+      setOffline: (value) => {
+        offline = value
+      },
       push(key, data) {
         listeners.get(key)?.forEach((listener) => listener(data))
       },
@@ -339,17 +351,33 @@ export function createDemoMockSdk(options: Omit<MockOptions, 'network'> = {}): M
   const me = address ?? MOCK_ADDRESS
   if (address) seedDemoDeals(address)
   const data = demoNetworkData(me)
-  // e2e can lower the user's Bastyon reputation before the app starts.
+  /**
+   * e2e and the demo set these before the app starts: a lower Bastyon
+   * reputation, a new account the node does not know yet («Аккаунт
+   * активируется»), permissions the user turned off and refuses to give.
+   */
   const setup =
     typeof window !== 'undefined'
-      ? (window as { __barteronMockSetup?: { reputation?: number } }).__barteronMockSetup
+      ? (
+          window as {
+            __barteronMockSetup?: {
+              reputation?: number
+              activating?: boolean
+              granted?: Permission[]
+              refuse?: boolean
+            }
+          }
+        ).__barteronMockSetup
       : undefined
   if (typeof setup?.reputation === 'number') {
     data.profiles = data.profiles?.map((p) =>
       p.address === me ? { ...p, reputation: setup.reputation } : p
     )
   }
+  if (setup?.activating) data.profiles = data.profiles?.filter((p) => p.address !== me)
   return createMockSdk({
+    ...(setup?.granted ? { granted: setup.granted } : {}),
+    ...(setup?.refuse ? { grantOnRequest: false } : {}),
     ...options,
     // A block every 10 s: a safe deal transfer counts in a minute, not in ten.
     network: createMockNetwork({ ...data, blockMs: 10_000 }),

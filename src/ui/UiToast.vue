@@ -20,11 +20,17 @@ const { t } = useI18n()
       :stroke="kind === 'success' ? 2.4 : 2"
     />
     <span class="ui-toast__text">{{ text }}</span>
-    <button v-if="action" type="button" class="ui-toast__action" @click="action.run()">
+    <!-- The action stays until it is pressed (s8-confirm), and pressing it is the answer. -->
+    <button
+      v-if="action"
+      type="button"
+      class="ui-toast__action"
+      @click="(action.run(), $emit('close'))"
+    >
       {{ action.label }}
     </button>
     <button
-      v-else-if="kind !== 'progress'"
+      v-if="kind !== 'progress'"
       type="button"
       class="ui-toast__close"
       :aria-label="t('ui.close')"

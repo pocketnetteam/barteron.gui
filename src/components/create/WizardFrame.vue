@@ -121,6 +121,9 @@ const { t } = useI18n()
             <h3>{{ h.title }}</h3>
             <p>{{ h.text }}</p>
           </div>
+          <RouterLink class="wz__all" :to="{ name: 'tips' }">{{
+            t('create.hints.all')
+          }}</RouterLink>
         </aside>
       </main>
 
@@ -132,6 +135,10 @@ const { t } = useI18n()
           <h3>{{ h.title }}</h3>
           <p>{{ h.text }}</p>
         </div>
+        <!-- «Полезные советы» in full (stage 9); the form keeps the short ones. -->
+        <RouterLink class="wz__all" :to="{ name: 'tips' }" data-testid="create-all-tips">{{
+          t('create.hints.all')
+        }}</RouterLink>
       </aside>
     </div>
   </div>
@@ -360,6 +367,19 @@ const { t } = useI18n()
   font-size: 13px;
   line-height: 19px;
   color: var(--text2);
+}
+
+.wz__all {
+  align-self: flex-start;
+  color: var(--link);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.wz__all:hover {
+  text-decoration: underline;
 }
 
 @media (max-width: 1100px) {

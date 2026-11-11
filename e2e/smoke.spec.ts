@@ -30,10 +30,10 @@ test.describe('mock SDK in a plain browser', () => {
 
   test('route links open the matching screens', async ({ page }) => {
     await page.goto('/dev/status')
-    // «О проекте» is the last stub (stage 9).
+    // «О проекте» (stage 9).
     await page.getByRole('link', { name: '/about' }).click()
     await expect(page).toHaveURL(/\/about$/)
-    await expect(page.getByTestId('stub-title')).toContainText('about')
+    await expect(page.getByTestId('about-page')).toBeVisible()
     // A deal link without its parameters: the deal page says the link is broken.
     await page.goto('/dev/status')
     await page.getByRole('link', { name: '/barter/safedeal?deal=demo' }).click()

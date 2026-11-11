@@ -1,6 +1,24 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
+/**
+ * Windows of the app as a whole (s8-dialogs, s8-sheets-mobile, s8-system):
+ * one at a time, mounted by `AppDialogs`. On a phone each is a bottom sheet.
+ */
+export type AppDialog =
+  | 'support'
+  | 'survey'
+  | 'referral'
+  | 'legal'
+  | 'currency'
+  | 'language'
+  | 'theme'
+  | 'permissions'
+  | 'activation'
+
+/** Host permissions the «Нужны разрешения» window can name. */
+export type HostPermission = 'account' | 'chat' | 'payment' | 'sign' | 'geolocation'
+
 /** Phone screens that open over the page: search, place, categories. */
 export const useUiStore = defineStore('ui', () => {
   const search = ref<{ scope: number | null; text: string } | null>(null)
@@ -10,6 +28,14 @@ export const useUiStore = defineStore('ui', () => {
   const mega = ref(false)
   /** «Как работает безопасная сделка». */
   const safeDealHelp = ref(false)
+  const dialog = ref<AppDialog | null>(null)
+  /** What «Нужны разрешения» lists. */
+  const permissions = ref<HostPermission[]>([])
+  /**
+   * A piece of the app did not load: a new version replaced the old files
+   * (s8-conflict-mobile). Only a restart helps.
+   */
+  const versionConflict = ref(false)
 
   return {
     search,
@@ -17,8 +43,21 @@ export const useUiStore = defineStore('ui', () => {
     categories,
     mega,
     safeDealHelp,
+    dialog,
+    permissions,
+    versionConflict,
     openSafeDealHelp: () => {
       safeDealHelp.value = true
+    },
+    openDialog: (name: AppDialog) => {
+      dialog.value = name
+    },
+    closeDialog: () => {
+      dialog.value = null
+    },
+    openPermissions: (list: HostPermission[]) => {
+      permissions.value = [...new Set(list)]
+      dialog.value = 'permissions'
     },
     openSearch: (scope: number | null = null, text = '') => {
       search.value = { scope, text }

@@ -1,7 +1,5 @@
-import { useI18n } from 'vue-i18n'
 import { useRouter, type RouteLocationRaw } from 'vue-router'
 import { useSearchHistoryStore } from '@/stores/search-history'
-import { showToast } from '@/ui/toast'
 
 /**
  * `/category/search` lists all categories: the old app used `search` as the
@@ -46,13 +44,4 @@ export function useCatalogNav() {
   }
 
   return { search, category }
-}
-
-/**
- * A section that arrives in a later stage (PLAN.md): say so instead of a dead
- * button.
- */
-export function useSoon() {
-  const { t } = useI18n()
-  return () => showToast(t('app.soon'), { kind: 'info' })
 }

@@ -7,6 +7,7 @@ import { DEFAULT_RADIUS, formatRadius, RADIUS_PRESETS, radiusPreset } from '@/li
 import type { LatLng } from '@/lib/geohash'
 import AreaMap from '@/components/map/AreaMap.vue'
 import { useLocationStore } from '@/stores/location'
+import { useSessionStore } from '@/stores/session'
 import UiButton from '@/ui/UiButton.vue'
 import UiIcon from '@/ui/UiIcon.vue'
 
@@ -20,6 +21,12 @@ const emit = defineEmits<{ done: [] }>()
 
 const { t, locale } = useI18n()
 const location = useLocationStore()
+const session = useSessionStore()
+
+/** Geolocation is off in Bastyon or the browser: only their settings turn it on. */
+function openSettings() {
+  void session.sdk?.helpers.opensettings().catch(() => undefined)
+}
 
 const center = ref<LatLng>(location.mapCenter)
 const radius = ref(location.area?.radiusKm ?? DEFAULT_RADIUS)
@@ -99,9 +106,18 @@ function everywhere() {
       </ul>
       <p v-else-if="searching" class="loc__note">{{ t('location.searching') }}</p>
       <p v-else-if="searchFailed" class="loc__note">{{ t('location.searchFailed') }}</p>
-      <p v-if="location.deviceStatus === 'denied'" class="loc__note">
-        {{ t('location.denied') }}
-      </p>
+      <!-- s8-system-desktop «Геолокация запрещена»: the city by hand still works. -->
+      <div
+        v-if="location.deviceStatus === 'denied'"
+        class="loc__denied"
+        data-testid="location-denied"
+      >
+        <strong>{{ t('location.deniedTitle') }}</strong>
+        <span>{{ t('location.denied') }}</span>
+        <UiButton variant="ghost" :size="32" external class="loc__settings" @click="openSettings">{{
+          t('system.permissions.settings')
+        }}</UiButton>
+      </div>
     </div>
 
     <AreaMap v-model:center="center" :radius-km="radius" :height="170" />
@@ -288,6 +304,30 @@ function everywhere() {
   font-size: 12px;
   line-height: 16px;
   color: var(--text3);
+}
+
+.loc__denied {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--subtle);
+  box-shadow: inset 0 0 0 1px var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--text2);
+}
+
+.loc__denied strong {
+  color: var(--text);
+  font-size: 14px;
+}
+
+.loc__settings {
+  margin: 4px 0 0 -8px;
 }
 
 .loc__group {

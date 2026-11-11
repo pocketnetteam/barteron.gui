@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useAccount, useRates } from '@/api/queries'
 import DealActionCard from '@/components/deal/DealActionCard.vue'
 import DealParticipants, { type DealPerson } from '@/components/deal/DealParticipants.vue'
@@ -11,9 +11,11 @@ import PageTopBar from '@/components/layout/PageTopBar.vue'
 import { useCardContext } from '@/components/offer/card-context'
 import { offerCardData } from '@/components/offer/card-data'
 import OfferPhoto from '@/components/offer/OfferPhoto.vue'
+import SystemState from '@/components/system/SystemState.vue'
 import { cabinetRoute } from '@/composables/cabinet'
 import { useChat } from '@/composables/chat'
 import { useDeal, useDealTransfer, useSafeDealSupported } from '@/composables/safe-deal'
+import { BASTYON_APP_URL } from '@/config/links'
 import { formatAgo, formatPkoin } from '@/lib/format'
 import { offerPkoin } from '@/models/offer'
 import { dealStep, feeVariantOf, parseDealQuery, type DealRole } from '@/models/safe-deal'
@@ -36,6 +38,7 @@ import UiTracker from '@/ui/UiTracker.vue'
  * from the chain; only the one whose move it is gets a button.
  */
 const route = useRoute()
+const router = useRouter()
 const { t, locale } = useI18n()
 const session = useSessionStore()
 const ui = useUiStore()
@@ -209,13 +212,21 @@ const crumbs = computed(() => [
           >{{ t('deal.noAccess.toOffer') }}</UiButton
         >
       </UiEmptyState>
-      <UiEmptyState
+      <!-- s8-system-desktop «Bastyon устарел». -->
+      <SystemState
         v-else-if="page === 'unsupported'"
         class="sd__panel"
-        icon="warning"
-        :title="t('deal.unsupported.title')"
+        kind="outdated"
+        icon="arrow-up"
+        tone="warning"
+        :title="t('system.outdated.title')"
         :text="t('deal.unsupported.text')"
-      />
+        :notes="[{ ok: true, text: t('system.outdated.works') }]"
+        data-testid="deal-unsupported"
+      >
+        <UiButton :href="BASTYON_APP_URL" external>{{ t('system.outdated.web') }}</UiButton>
+        <UiButton variant="ghost" @click="router.back()">{{ t('system.outdated.skip') }}</UiButton>
+      </SystemState>
       <UiEmptyState
         v-else-if="page === 'signin'"
         class="sd__panel"

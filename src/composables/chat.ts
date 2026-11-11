@@ -1,8 +1,11 @@
+import { useQueryClient } from '@tanstack/vue-query'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { keys, useBarteron } from '@/api/queries'
 import { isBanned } from '@/config/ban'
 import type { DeliveryPick } from '@/models/delivery'
 import { useSessionStore } from '@/stores/session'
+import { useUiStore } from '@/stores/ui'
 import { useDialogNotifier } from './notify'
 import { dismiss as dismissToast, showToast } from '@/ui/toast'
 
@@ -66,6 +69,29 @@ export function useChat() {
   const { t } = useI18n()
   const opening = ref(false)
   const notify = useDialogNotifier()
+  const ui = useUiStore()
+  const client = useQueryClient()
+  const barteron = useBarteron()
+
+  /**
+   * A new account the node does not know yet cannot write to anyone: say so
+   * (s8-system «Аккаунт активируется») instead of a chat that fails. When the
+   * node does not answer, the chat is tried anyway.
+   */
+  async function activating(): Promise<boolean> {
+    const me = session.address
+    if (!me || !barteron.value) return false
+    try {
+      const profile = await client.fetchQuery({
+        queryKey: keys.profile(me),
+        queryFn: async () => (await barteron.value!.profile(me)) ?? null,
+        staleTime: 10 * 60_000,
+      })
+      return !profile?.name
+    } catch {
+      return false
+    }
+  }
 
   async function open(request: ChatRequest): Promise<boolean> {
     const sdk = session.sdk
@@ -73,6 +99,10 @@ export function useChat() {
     if (!(await session.ensureSignedIn())) return false
     // A banned user's rooms never opened in the old app either.
     if (isBanned(session.address)) return false
+    if (await activating()) {
+      ui.openDialog('activation')
+      return false
+    }
 
     opening.value = true
     const toast = showToast(t('chat.opening'), { kind: 'progress' })
@@ -81,7 +111,7 @@ export function useChat() {
       if (!granted) {
         await sdk.permissions.request(['chat'])
         if (!(await sdk.permissions.check({ permission: 'chat' }).catch(() => false))) {
-          showToast(t('chat.noPermission'), { kind: 'error' })
+          ui.openPermissions(['chat'])
           return false
         }
       }

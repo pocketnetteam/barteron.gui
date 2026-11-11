@@ -1,5 +1,6 @@
-import { useSoon } from '@/composables/catalog-nav'
+import { useI18n } from 'vue-i18n'
 import { useSessionStore } from '@/stores/session'
+import { showToast } from '@/ui/toast'
 
 /**
  * Opens a user's profile in Bastyon. The old app sent `('username', name)`,
@@ -8,12 +9,13 @@ import { useSessionStore } from '@/stores/session'
  */
 export function useBastyonProfile() {
   const session = useSessionStore()
-  const soon = useSoon()
+  const { t } = useI18n()
+  const failed = () => showToast(t('system.profileFailed'), { kind: 'error' })
 
   return async function openProfile(address: string, name?: string | null): Promise<void> {
     const open = session.sdk?.open.profile
     if (!open) {
-      soon()
+      failed()
       return
     }
     if (name) {
@@ -24,8 +26,6 @@ export function useBastyonProfile() {
         // bastyon-nextgen: no `username`; try the address.
       }
     }
-    await open('address', address).catch(() => {
-      soon()
-    })
+    await open('address', address).catch(failed)
   }
 }

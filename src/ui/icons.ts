@@ -331,6 +331,22 @@ export const ICONS = {
       ['path', { d: 'M9 9h6v6H9z' }],
     ],
   },
+  // s8-menu-mobile, s8-about-desktop.
+  globe: {
+    els: [
+      [
+        'path',
+        {
+          d: 'M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z',
+        },
+      ],
+    ],
+  },
+  moon: { els: [['path', { d: 'M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9Z' }]] },
+  mail: { els: [['path', { d: 'M3 6h18v12H3zM3 6l9 7 9-7' }]] },
+  link: {
+    els: [['path', { d: 'M9 15 15 9M8 12l-2 2a3 3 0 0 0 4 4l2-2m4-4 2-2a3 3 0 0 0-4-4l-2 2' }]],
+  },
 } satisfies Record<string, IconDef>
 
 export type IconName = keyof typeof ICONS

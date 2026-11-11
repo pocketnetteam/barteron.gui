@@ -14,8 +14,10 @@ const props = withDefaults(
     /** Escape, the overlay and the × close it. Off while a transaction is being sent. */
     closable?: boolean
     width?: number
+    /** The body draws its own heading (a system screen); the title stays for screen readers. */
+    hideTitle?: boolean
   }>(),
-  { presentation: 'auto', closable: true, width: 440 }
+  { presentation: 'auto', closable: true, width: 440, hideTitle: false }
 )
 
 const open = defineModel<boolean>('open', { default: false })
@@ -116,8 +118,10 @@ onBeforeUnmount(() => lockScroll(false))
           :style="{ '--w': `${width}px` }"
         >
           <span class="ui-dialog__grabber" aria-hidden="true" />
-          <div class="ui-dialog__head">
-            <h2 :id="titleId" class="ui-dialog__title">{{ title }}</h2>
+          <div class="ui-dialog__head" :class="{ 'ui-dialog__head--hidden': hideTitle }">
+            <h2 :id="titleId" class="ui-dialog__title" :class="{ 'visually-hidden': hideTitle }">
+              {{ title }}
+            </h2>
             <button
               v-if="closable"
               type="button"
@@ -164,6 +168,7 @@ onBeforeUnmount(() => lockScroll(false))
   flex-direction: column;
   gap: 16px;
   outline: none;
+  position: relative;
 }
 
 .ui-dialog__grabber {
@@ -180,6 +185,14 @@ onBeforeUnmount(() => lockScroll(false))
   justify-content: space-between;
   align-items: flex-start;
   gap: 12px;
+}
+
+/* Only the × is left, in the corner over the body. */
+.ui-dialog__head--hidden {
+  position: absolute;
+  z-index: 1;
+  top: 16px;
+  right: 16px;
 }
 
 .ui-dialog__title {

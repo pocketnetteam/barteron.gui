@@ -3,7 +3,8 @@ import { computed, defineAsyncComponent, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { useCategories } from '@/api/queries'
-import { useCatalogNav, useSoon } from '@/composables/catalog-nav'
+import { useCatalogNav } from '@/composables/catalog-nav'
+import { useNetStore } from '@/stores/net'
 import { useSessionStore } from '@/stores/session'
 import { useUiStore } from '@/stores/ui'
 import UiDialog from '@/ui/UiDialog.vue'
@@ -21,6 +22,7 @@ const CategoryBrowser = defineAsyncComponent(
 )
 const LocationPanel = defineAsyncComponent(() => import('./LocationPanel.vue'))
 const SafeDealHelp = defineAsyncComponent(() => import('@/components/deal/SafeDealHelp.vue'))
+const NetBanner = defineAsyncComponent(() => import('@/components/system/NetBanner.vue'))
 
 /**
  * Page frame of the app: the desktop header and footer, the phone tab bar,
@@ -39,8 +41,8 @@ const { t } = useI18n()
 const route = useRoute()
 const session = useSessionStore()
 const ui = useUiStore()
+const net = useNetStore()
 const nav = useCatalogNav()
-const soon = useSoon()
 const categories = useCategories()
 const locationLabel = useLocationLabel()
 
@@ -61,9 +63,8 @@ const tabs = computed<TabItem[]>(() => [
 
 function onTab(key: TabKey) {
   if (tabs.value.find((x) => x.key === key)?.to) return
-  if (session.account === 'no-permission') void session.requestAccountAccess()
-  else if (session.account === 'guest') void session.signIn()
-  else soon()
+  // Favourites, exchanges and the profile are the user's own: ask to sign in first.
+  void session.ensureSignedIn()
 }
 
 // Phone search
@@ -106,12 +107,14 @@ watch(
 <template>
   <AppShell>
     <template #header>
-      <SiteHeader :scope="scope" :query="query" />
+      <!-- «О проекте» and «Полезные советы» bring a short header of their own. -->
+      <slot name="header"><SiteHeader :scope="scope" :query="query" /></slot>
     </template>
     <template v-if="$slots['mobile-top']" #mobile-top>
       <slot name="mobile-top" />
     </template>
 
+    <NetBanner v-if="net.offline" />
     <slot />
     <AppFooter class="layout__footer" />
 

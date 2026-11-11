@@ -6,10 +6,10 @@ import { useBalance, useOffersByAddress, useRates, useUserProfile } from '@/api/
 import { toEquivalent } from '@/api/rates'
 import { formatMoney, formatPkoin } from '@/lib/format'
 import { isOfferActive } from '@/models/offer'
-import { useSoon } from '@/composables/catalog-nav'
 import { useCurrencyStore } from '@/stores/currency'
 import { useFavoritesStore } from '@/stores/favorites'
 import { useSessionStore } from '@/stores/session'
+import { useUiStore } from '@/stores/ui'
 import UiAvatar from '@/ui/UiAvatar.vue'
 import UiIcon from '@/ui/UiIcon.vue'
 import MenuList, { type MenuItem } from './MenuList.vue'
@@ -28,7 +28,7 @@ const balance = useBalance()
 const rates = useRates()
 const currency = useCurrencyStore()
 const favorites = useFavoritesStore()
-const soon = useSoon()
+const ui = useUiStore()
 const openBastyon = useBastyonProfile()
 
 const name = computed(() => profile.data.value?.name || t('header.you'))
@@ -78,18 +78,15 @@ const items = computed<MenuItem[]>(() => [
   },
   { key: 'settings', label: t('profileMenu.settings'), to: profileRoute('#settings') },
   { key: 'bastyon', label: t('profileMenu.bastyonProfile'), external: true, divider: true },
-  { key: 'referral', label: t('header.referral'), to: profileRoute('#wallet') },
+  { key: 'referral', label: t('header.referral') },
 ])
 
 function select(key: string) {
   const item = items.value.find((i) => i.key === key)
   emit('close')
   if (item?.to) return
-  if (key === 'bastyon' && me.value) {
-    void openBastyon(me.value, profile.data.value?.name)
-    return
-  }
-  soon()
+  if (key === 'bastyon' && me.value) void openBastyon(me.value, profile.data.value?.name)
+  else if (key === 'referral') ui.openDialog('referral')
 }
 </script>
 

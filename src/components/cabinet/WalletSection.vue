@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useCabinetHead } from '@/composables/cabinet-data'
 import { useMyAccount } from '@/composables/my-account'
 import { isGuarantor, isModerator, referralLink, REFERRAL_TERMS_URL } from '@/config/roles'
+import { copyText } from '@/lib/clipboard'
 import { useSessionStore } from '@/stores/session'
 import { showToast } from '@/ui/toast'
 import UiButton from '@/ui/UiButton.vue'
@@ -38,12 +39,8 @@ const openWallet = computed(
 
 async function copyReferral() {
   if (!me.value) return
-  try {
-    await navigator.clipboard.writeText(referralLink(me.value))
-    showToast(t('wallet.referral.copied'))
-  } catch {
-    showToast(t('wallet.referral.copyFailed'), { kind: 'error' })
-  }
+  if (await copyText(referralLink(me.value))) showToast(t('wallet.referral.copied'))
+  else showToast(t('wallet.referral.copyFailed'), { kind: 'error' })
 }
 
 const openTerms = () =>

@@ -1,6 +1,6 @@
 # Правки в bastyon-nextgen для Barteron
 
-Задание для того, кто работает в `C:\www\bastyon-nextgen`. Сам Barteron (`C:\www\barteron-nextgen`) этот репозиторий не правит. Нашли эти места при проверке Barteron в хосте 10.11.2026 (п. 1–5) и 11.11.2026 (п. 6). Подробности — в [PLAN.md](PLAN.md), раздел 5, риски 6, 8 и 9.
+Задание для того, кто работает в `C:\www\bastyon-nextgen`. Сам Barteron (`C:\www\barteron-nextgen`) этот репозиторий не правит. Нашли эти места при проверке Barteron в хосте 10.11.2026 (п. 1–5) и 11.11.2026 (п. 6–7). Подробности — в [PLAN.md](PLAN.md), раздел 5, риски 6, 8 и 9.
 
 Пути ниже — от корня bastyon-nextgen.
 
@@ -98,6 +98,16 @@ fetchHosts: [
 **Как Barteron это использует.** Новый Barteron статус сделки через это действие не читает: он спрашивает `sdk.rpc('getfromtotransactions', [от, кому, 3466240, скрипт])` и высоту `sdk.rpc('getnodeinfo')`. Оба метода хост пропускает (`rpc-spec.ts`). Проверено 11.11.2026 на основной сети через свою копию bastyon-nextgen, без входа: высота пришла; по выдуманной сделке — пустой список; по метке `a:subscription`, переданной строкой, — 27 переводов за месяц. Правка нужна старому Barteron, пока он открывается в новом хосте, и другим приложениям с этим действием.
 
 **Проверить:** тест в `wallet.test.ts`: `{ addressFrom: 'A', addressTo: 'B', update: true, depth: 10, opreturn: '6a24…' }` → RPC `['A', 'B', 10, '6a24…']`.
+
+## 7. `openExternalLink`: письмо в поддержку (`mailto:`)
+
+**Что не так.** В Barteron есть окно «Написать в поддержку» (макет `s8-dialogs`) с кнопкой «Написать письмо ↗»: `sdk.openExternalLink('mailto:support@bastyon.com?subject=…')`. bastyon-nextgen отклоняет такую ссылку с `invalid_params`: в схеме действия (`src/mini-apps/actions/_schema.ts`, `openExternalLink: z.object({ url: SafeUrl })`) `SafeUrl` пропускает только `http(s)`. При этом сам хост `mailto:` открыть умеет: `ALLOWED_PROTOCOLS` в `src/helpers/common/open-external.ts` — `http:`, `https:`, `mailto:`. Прежний хост открывает любую ссылку (`window.open`, InAppBrowser, `shell.openExternal`), и письмо там открывается.
+
+**Решение.** Для `openExternalLink` принимать, кроме `http(s)`, ещё `mailto:` — ту же тройку схем, что в `ALLOWED_PROTOCOLS`. `javascript:`, `data:`, `file:` по-прежнему отклонять. `authFetch` оставить на `SafeUrl`.
+
+**Как Barteron это использует.** Если хост отказал, Barteron копирует адрес и пишет «Bastyon не открыл почту. Адрес support@bastyon.com скопирован». Кнопка «Скопировать адрес почты» работает в обоих хостах и без этой правки.
+
+**Проверить:** тест в `_schema.test.ts` или `content.test.ts`: `{ url: 'mailto:support@bastyon.com?subject=Barteron' }` принимается, `{ url: 'javascript:alert(1)' }` — нет.
 
 ## Не сейчас: запись из dev-сборки (риск 6)
 

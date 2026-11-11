@@ -55,7 +55,9 @@ const title = computed(() =>
     ? t(
         current.value === 'votes'
           ? 'cabinet.sections.votesFull'
-          : `cabinet.sections.${current.value}`
+          : current.value === 'settings'
+            ? 'cabinet.settingsPhone'
+            : `cabinet.sections.${current.value}`
       )
     : t('cabinet.menuTitle')
 )

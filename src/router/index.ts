@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory, type RouteRecordRaw, type RouterHistory } from 'vue-router'
 
 const HomeView = () => import('@/views/HomeView.vue')
-const StubView = () => import('@/views/StubView.vue')
 const CatalogView = () => import('@/views/CatalogView.vue')
 const MapView = () => import('@/views/MapView.vue')
 const OfferView = () => import('@/views/OfferView.vue')
@@ -13,6 +12,8 @@ const ChainView = () => import('@/views/exchange/ChainView.vue')
 const SafeDealView = () => import('@/views/deal/SafeDealView.vue')
 const ModerationView = () => import('@/views/deal/ModerationView.vue')
 const NotFoundView = () => import('@/views/NotFoundView.vue')
+const AboutView = () => import('@/views/info/AboutView.vue')
+const TipsView = () => import('@/views/info/TipsView.vue')
 
 /** Internal pages: dev and test builds only, cut out of production. */
 const devRoutes: RouteRecordRaw[] =
@@ -34,7 +35,7 @@ const devRoutes: RouteRecordRaw[] =
 
 /**
  * Same paths and names as the old app (barteron.gui `src/router.js`): these
- * links are already shared in chats. Screens are stubs until their stage.
+ * links are already shared in chats.
  * New paths are only added, never put over old ones.
  */
 export const routes: RouteRecordRaw[] = [
@@ -63,7 +64,9 @@ export const routes: RouteRecordRaw[] = [
   { path: '/barter/:id', name: 'barterItem', component: OfferView },
   // My own address opens the cabinet; sections in the hash, like the old tabs (`#ads`, `#favorites`).
   { path: '/profile/:id', name: 'profile', component: ProfileView },
-  { path: '/about', name: 'about', component: StubView },
+  { path: '/about', name: 'about', component: AboutView },
+  // New: «Полезные советы» as a page; the old app showed them in a window.
+  { path: '/help', name: 'tips', component: TipsView },
   ...devRoutes,
   { path: '/404', name: 'notFound', component: NotFoundView },
   { path: '/:pathMatch(.*)*', name: 'unknown', component: NotFoundView },

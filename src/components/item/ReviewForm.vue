@@ -12,6 +12,7 @@ import UiIcon from '@/ui/UiIcon.vue'
 import UiTextarea from '@/ui/UiTextarea.vue'
 
 const ModerationRequestDialog = defineAsyncComponent(() => import('./ModerationRequestDialog.vue'))
+const ConfirmDialog = defineAsyncComponent(() => import('./ConfirmDialog.vue'))
 
 /**
  * The review form (s3-item-states «Отзыв · …», s7-moderationstates user
@@ -63,8 +64,17 @@ const canSend = computed(() => {
   return !!text.value.trim()
 })
 
+/** A score cannot be changed once it is in the network: ask first (s8-confirm). */
+const confirmOpen = ref(false)
+
 function submit() {
   if (!canSend.value) return
+  if (props.form === 'score' && stars.value) confirmOpen.value = true
+  else send()
+}
+
+function send() {
+  confirmOpen.value = false
   emit('submit', {
     stars: props.form === 'score' && stars.value ? stars.value : null,
     text: text.value.trim(),
@@ -218,6 +228,14 @@ const reason = ref('')
       v-model:reason="reason"
       :score="stars"
       :send="(r) => moderation.request(stars, r)"
+    />
+    <ConfirmDialog
+      v-if="confirmOpen"
+      v-model:open="confirmOpen"
+      :title="t('item.reviews.confirmTitle', { n: stars })"
+      :text="t('item.reviews.confirmText')"
+      :confirm="t('item.reviews.confirmSend')"
+      @confirm="send"
     />
   </form>
 </template>

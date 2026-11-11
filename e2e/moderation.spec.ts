@@ -100,6 +100,7 @@ test('a moderator allowed «2»: not lower, and «2» goes as a score', async ({
   await expect(form.getByTestId('review-send')).toBeDisabled()
   await form.getByRole('radio', { name: '2 звезды' }).click()
   await form.getByTestId('review-send').click()
+  await page.getByTestId('confirm-action').click()
   await expect.poll(async () => (await callsOf(page, 'barteron.vote')).length).toBe(1)
   const [vote] = await callsOf(page, 'barteron.vote')
   expect(vote?.args[0]).toMatchObject({ share: COFFEE, value: 2 })

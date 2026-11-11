@@ -271,6 +271,8 @@ test('settings: the place for new offers fills the offer form', async ({ page })
 
   // Theme and language stay on the device.
   await page.goto(`/profile/${ME}#settings`)
+  // On a phone the section is «Настройки и помощь»: the theme is a sheet (s8-sheets-mobile).
+  if (isPhone(page)) await page.getByTestId('settings-menu').locator('[data-row="theme"]').click()
   await page.getByRole('radio', { name: 'Тёмная' }).click()
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
 })

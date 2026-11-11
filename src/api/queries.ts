@@ -22,6 +22,7 @@ import type { Offer } from '@/models/offer'
 import type { UserProfile } from '@/models/profile'
 import { averageScore, type AverageScore } from '@/models/review'
 import type { AppInfo, HostSdk } from '@/sdk/types'
+import { useNetStore } from '@/stores/net'
 import { useSessionStore } from '@/stores/session'
 import type { TrackedTx, useTxStore } from '@/stores/tx'
 import {
@@ -84,12 +85,17 @@ interface Barteron {
 
 const perSdk = new WeakMap<HostSdk, Barteron>()
 
-export function barteronFor(sdk: HostSdk, brighteon = false): Barteron {
+export function barteronFor(
+  sdk: HostSdk,
+  brighteon = false,
+  onRpc?: (answered: boolean) => void
+): Barteron {
   const cached = perSdk.get(sdk)
   if (cached) return cached
   const api = new BarteronApi(sdk, {
     brighteon,
     limitLocation: (location) => limitToArea(location, CANADA_USA),
+    onRpc,
   })
   const byKey = <T>(items: T[], key: (item: T) => string | null) =>
     new Map(items.flatMap((item) => (key(item) ? [[key(item)!, item] as const] : [])))
@@ -120,8 +126,9 @@ export function barteronFor(sdk: HostSdk, brighteon = false): Barteron {
 /** Barteron reads for the connected host; `null` until the session is ready. */
 export function useBarteron() {
   const session = useSessionStore()
+  const net = useNetStore()
   return computed(() =>
-    session.sdk ? barteronFor(session.sdk, isBrighteon(session.appinfo)) : null
+    session.sdk ? barteronFor(session.sdk, isBrighteon(session.appinfo), net.report) : null
   )
 }
 

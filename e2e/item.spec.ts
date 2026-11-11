@@ -159,6 +159,9 @@ test('a review with stars becomes a score and a comment; mine shows as publishin
   await form.getByRole('radio', { name: '5 звёзд' }).click()
   await form.getByRole('textbox').fill('Отличный планшет')
   await form.getByTestId('review-send').click()
+  // A score cannot be changed later: asked first (s8-confirm).
+  await expect(page.getByRole('dialog')).toContainText('Отправить оценку «5»?')
+  await page.getByTestId('confirm-action').click()
   await expect(page.getByTestId('item-page')).toContainText('Отзыв публикуется')
   await expect.poll(async () => (await callsOf(page, 'barteron.vote')).length).toBe(1)
   const [vote] = await callsOf(page, 'barteron.vote')

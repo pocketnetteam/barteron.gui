@@ -1,48 +1,64 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useSoon } from '@/composables/catalog-nav'
 import { LEGAL_DOCS, useOpenDoc } from '@/composables/docs'
-import { SUPPORT_EMAIL } from '@/config/roles'
-import { useSessionStore } from '@/stores/session'
+import { useUiStore, type AppDialog } from '@/stores/ui'
 
 /**
- * Footer (s2-home-desktop). Legal documents are the old app's files at the
- * same paths (`/docs/ru-RU/…`); they exist in Russian only, as before.
+ * Footer (s8-about-desktop): Barteron, «Участникам», legal documents. The
+ * documents are the old app's files at the same paths (`/docs/ru-RU/…`), in
+ * Russian only, as before.
  */
 const { t, locale } = useI18n()
-const session = useSessionStore()
-const soon = useSoon()
-
-const docs = computed(() => (locale.value === 'ru' ? LEGAL_DOCS : []))
+const ui = useUiStore()
 const openDoc = useOpenDoc()
 
-function support() {
-  void session.sdk?.openExternalLink(`mailto:${SUPPORT_EMAIL}`).catch(() => soon())
-}
+const forMembers: { key: AppDialog; label: string }[] = [
+  { key: 'referral', label: 'footer.referral' },
+  { key: 'survey', label: 'footer.survey' },
+  { key: 'support', label: 'footer.support' },
+]
 </script>
 
 <template>
-  <footer class="footer">
+  <footer class="footer" data-testid="footer">
     <div class="container footer__inner">
-      <strong class="footer__brand">barteron</strong>
-      <p class="footer__about">{{ t('footer.about') }}</p>
-      <nav class="footer__links" :aria-label="t('footer.label')">
+      <div class="footer__brand-col">
+        <strong class="footer__brand">barteron</strong>
+        <p class="footer__about">{{ t('footer.about') }}</p>
+      </div>
+      <nav class="footer__col" :aria-label="t('footer.label')">
+        <span class="footer__head">Barteron</span>
         <RouterLink class="footer__link" :to="{ name: 'about' }">{{
           t('footer.project')
         }}</RouterLink>
+        <RouterLink class="footer__link" :to="{ name: 'tips' }">{{ t('footer.tips') }}</RouterLink>
+      </nav>
+      <nav class="footer__col" :aria-label="t('footer.members')">
+        <span class="footer__head">{{ t('footer.members') }}</span>
         <button
-          v-for="doc in docs"
+          v-for="item in forMembers"
+          :key="item.key"
+          type="button"
+          class="footer__link"
+          :data-testid="`footer-${item.key}`"
+          @click="ui.openDialog(item.key)"
+        >
+          {{ t(item.label) }}
+        </button>
+      </nav>
+      <nav class="footer__col" :aria-label="t('legal.title')">
+        <span class="footer__head">{{ t('legal.title') }}</span>
+        <button
+          v-for="doc in LEGAL_DOCS"
           :key="doc.key"
           type="button"
           class="footer__link"
           @click="openDoc(doc.file)"
         >
-          {{ t(`footer.${doc.key}`) }}
-        </button>
-        <button type="button" class="footer__link" @click="soon">{{ t('footer.survey') }}</button>
-        <button type="button" class="footer__link" @click="support">
-          {{ t('header.support') }}
+          {{ t(`footer.${doc.key}`)
+          }}<span v-if="locale !== 'ru'" class="footer__lang" :title="t('legal.inRussian')"
+            >RU</span
+          >
         </button>
       </nav>
     </div>
@@ -52,15 +68,23 @@ function support() {
 <style scoped>
 .footer {
   margin-top: 48px;
-  padding: 36px 0 40px;
   background: var(--surface);
   border-top: 1px solid var(--border);
 }
 
 .footer__inner {
+  padding-top: 32px;
+  padding-bottom: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px 48px;
+}
+
+.footer__brand-col {
+  flex: 1 1 240px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 .footer__brand {
@@ -74,29 +98,49 @@ function support() {
   margin: 0;
   max-width: 420px;
   font-size: 13px;
-  line-height: 19px;
-  color: var(--text2);
+  line-height: 18px;
+  color: var(--text3);
 }
 
-.footer__links {
-  margin-top: 12px;
+.footer__col {
+  flex: 0 1 200px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px 28px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.footer__head {
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 700;
+  color: var(--text2);
 }
 
 .footer__link {
   padding: 0;
   border: 0;
   background: none;
-  color: var(--text2);
+  color: var(--text);
   font: 400 14px / 20px var(--font-sans);
+  text-align: left;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .footer__link:hover {
-  color: var(--text);
+  color: var(--link);
   text-decoration: none;
+}
+
+.footer__lang {
+  margin-left: 6px;
+  padding: 0 5px;
+  border-radius: 4px;
+  background: var(--muted);
+  color: var(--text2);
+  font-size: 11px;
+  font-weight: 600;
 }
 
 .footer__link:focus-visible {

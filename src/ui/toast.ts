@@ -21,12 +21,19 @@ export interface ToastOptions {
   duration?: number
 }
 
+/**
+ * s8-confirm: four seconds; errors do not go away by themselves, and a toast
+ * with an action stays until it is pressed (or closed).
+ */
 const DEFAULT_DURATION: Record<ToastKind, number> = {
   success: 4000,
   info: 4000,
-  error: 8000,
+  error: 0,
   progress: 0,
 }
+
+const durationOf = (kind: ToastKind, action?: ToastAction, duration?: number): number =>
+  duration ?? (action ? 0 : DEFAULT_DURATION[kind])
 
 const MAX_VISIBLE = 3
 
@@ -34,10 +41,9 @@ const state = reactive({ items: [] as Toast[] })
 const timers = new Map<number, ReturnType<typeof setTimeout>>()
 let lastId = 0
 
-function schedule(id: number, kind: ToastKind, duration?: number): void {
+function schedule(id: number, ms: number): void {
   clearTimeout(timers.get(id))
   timers.delete(id)
-  const ms = duration ?? DEFAULT_DURATION[kind]
   if (ms > 0)
     timers.set(
       id,
@@ -51,7 +57,7 @@ export function showToast(text: string, options: ToastOptions = {}): number {
   const kind = options.kind ?? 'success'
   state.items.push({ id, kind, text, action: options.action })
   while (state.items.length > MAX_VISIBLE) dismiss(state.items[0]!.id)
-  schedule(id, kind, options.duration)
+  schedule(id, durationOf(kind, options.action, options.duration))
   return id
 }
 
@@ -62,7 +68,7 @@ export function updateToast(id: number, text: string, options: ToastOptions = {}
   item.text = text
   item.kind = options.kind ?? item.kind
   item.action = options.action
-  schedule(id, item.kind, options.duration)
+  schedule(id, durationOf(item.kind, options.action, options.duration))
 }
 
 export function dismiss(id: number): void {

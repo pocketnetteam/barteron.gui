@@ -85,6 +85,7 @@ function notReady(): void {
     <template #header>
       <AppHeader
         v-model:query="query"
+        messages
         location="Москва · 10 км"
         currency="₽ RUB"
         :language="LOCALE_NAMES[localeModel]"

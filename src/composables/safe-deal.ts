@@ -23,6 +23,7 @@ import {
 import { useDealsStore, type StoredDeal } from '@/stores/deals'
 import { useSessionStore } from '@/stores/session'
 import { useTxStore, type TrackedTx } from '@/stores/tx'
+import { useUiStore } from '@/stores/ui'
 import { useChat } from './chat'
 import { usePeople } from './exchanges'
 
@@ -243,6 +244,8 @@ export function useDealTransfer(
         await sdk.permissions.request(['payment']).catch(() => undefined)
         if (!(await sdk.permissions.check({ permission: 'payment' }).catch(() => false))) {
           failure.value = { kind: 'forbid', text: '' }
+          // Only Bastyon's app settings turn it back on (s8-system «Нужны разрешения»).
+          useUiStore().openPermissions(['payment'])
           return false
         }
       }
