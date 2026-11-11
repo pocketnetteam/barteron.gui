@@ -121,11 +121,16 @@ function banner(key: 'notifications' | 'safeDeal' | 'tips') {
       <section class="home__section" data-testid="new-offers">
         <div class="home__head home__head--wrap">
           <h2 class="home__title">{{ t('home.newOffers') }}</h2>
-          <button type="button" class="home__place" @click="ui.openLocation()">
-            <UiIcon name="location" :size="16" :stroke="2" />
-            <span>{{ areaPhrase ?? t('location.allRegions') }} ·</span>
-            <span class="home__change">{{ t('location.change') }}</span>
-          </button>
+          <div class="home__head-end">
+            <button type="button" class="home__place" @click="ui.openLocation()">
+              <UiIcon name="location" :size="16" :stroke="2" />
+              <span>{{ areaPhrase ?? t('location.allRegions') }} ·</span>
+              <span class="home__change">{{ t('location.change') }}</span>
+            </button>
+            <RouterLink class="home__nearby" :to="{ name: 'nearby' }" data-testid="home-nearby">
+              {{ t('home.nearby') }}<UiIcon name="chevron-right" :size="16" :stroke="2" />
+            </RouterLink>
+          </div>
         </div>
         <RatesNotice />
         <OfferList
@@ -220,7 +225,25 @@ function banner(key: 'notifications' | 'safeDeal' | 'tips') {
   font: 600 14px / 20px var(--font-sans);
 }
 
+.home__head-end {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 20px;
+}
+
+.home__nearby {
+  color: var(--link);
+  font: 600 14px / 20px var(--font-sans);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  align-self: center;
+}
+
 .home__place:focus-visible,
+.home__nearby:focus-visible,
 .home__change:focus-visible {
   outline: none;
   border-radius: 4px;

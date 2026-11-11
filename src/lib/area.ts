@@ -80,8 +80,10 @@ export function formatRadius(radiusKm: number, locale: string, units: { km: stri
   return `${value} ${units.km}`
 }
 
-/** Distance on a card: «1,8 км», «350 м». */
-export const formatDistance = formatRadius
+/** Distance on a card: «1,8 км», «350 м»; whole kilometres from 10 on — «160 км», not «160,4 км». */
+export function formatDistance(km: number, locale: string, units: { km: string; m: string }) {
+  return formatRadius(km >= 10 ? Math.round(km) : km, locale, units)
+}
 
 /**
  * Centre of the map when nothing is stored and the device location is

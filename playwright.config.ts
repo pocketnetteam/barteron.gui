@@ -14,6 +14,9 @@ export default defineConfig({
     trace: 'on-first-retry',
     // The mock takes its language from the browser; texts in specs are Russian.
     locale: 'ru-RU',
+    // Without a place filter the map opens where the time zone says; the demo
+    // offers are in Moscow and Belgrade, so the specs do not depend on the machine.
+    timezoneId: 'Europe/Moscow',
   },
 
   projects: [

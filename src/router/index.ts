@@ -14,6 +14,7 @@ const ModerationView = () => import('@/views/deal/ModerationView.vue')
 const NotFoundView = () => import('@/views/NotFoundView.vue')
 const AboutView = () => import('@/views/info/AboutView.vue')
 const TipsView = () => import('@/views/info/TipsView.vue')
+const NearbyView = () => import('@/views/NearbyView.vue')
 
 /** Internal pages: dev and test builds only, cut out of production. */
 const devRoutes: RouteRecordRaw[] =
@@ -67,6 +68,8 @@ export const routes: RouteRecordRaw[] = [
   { path: '/about', name: 'about', component: AboutView },
   // New: «Полезные советы» as a page; the old app showed them in a window.
   { path: '/help', name: 'tips', component: TipsView },
+  // New (stage 10): what is sold around the search area.
+  { path: '/nearby', name: 'nearby', component: NearbyView },
   ...devRoutes,
   { path: '/404', name: 'notFound', component: NotFoundView },
   { path: '/:pathMatch(.*)*', name: 'unknown', component: NotFoundView },

@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/vue-query'
 import { computed, toValue, type MaybeRefOrGetter } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { cityName, placeName, reverseGeocode } from '@/api/geo'
-import { decodeGeohash } from '@/lib/geohash'
+import { cityName, districtName, placeName, reverseGeocode } from '@/api/geo'
+import { decodeGeohash, encodeGeohash, type LatLng } from '@/lib/geohash'
+import { createLimiter } from '@/lib/limit'
 import { useSessionStore } from '@/stores/session'
 
 /**
@@ -24,6 +25,41 @@ export function usePlaceName(geohash: MaybeRefOrGetter<string | null | undefined
       const found = await reverseGeocode(point.value!, { locale: locale.value, zoom: 17 })
       return found ? placeName(found.raw) : null
     },
+  })
+}
+
+/**
+ * Nominatim allows one request a second: district names wait in a queue. On
+ * mainnet a burst of twenty from one page was partly refused (stage 10).
+ */
+const oneBySecond = createLimiter(1)
+const pause = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
+/**
+ * «Таганский» for a district of «Что продают рядом»: the suburb or city
+ * district, else the town. One request per area of about 1 km and language,
+ * one a second; Bastyon only. `null` as the point — no name needed.
+ */
+export function useDistrictName(point: MaybeRefOrGetter<LatLng | null>) {
+  const { locale } = useI18n()
+  const session = useSessionStore()
+  const at = computed(() => toValue(point))
+  const key = computed(() => (at.value ? encodeGeohash(at.value, 6) : ''))
+  return useQuery({
+    queryKey: computed(() => ['geo', 'district', key.value, locale.value]),
+    enabled: computed(() => session.mode === 'bastyon' && !!at.value),
+    staleTime: Infinity,
+    retry: 1,
+    retryDelay: 2000,
+    queryFn: () =>
+      oneBySecond(async () => {
+        try {
+          const found = await reverseGeocode(at.value!, { locale: locale.value, zoom: 14 })
+          return found ? districtName(found.raw) : null
+        } finally {
+          await pause(1000)
+        }
+      }),
   })
 }
 

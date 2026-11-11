@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   areaFromStored,
   centerForTimeZone,
+  formatDistance,
   formatRadius,
   radiusPreset,
   storedFromArea,
@@ -49,6 +50,12 @@ describe('search area in the old storage format', () => {
     expect(zoomForRadius(50)).toBe(9)
     expect(formatRadius(2.5, 'ru', UNITS)).toBe('2,5 км')
     expect(formatRadius(0.8, 'ru', UNITS)).toBe('800 м')
+  })
+
+  it('distances: tenths up close, whole kilometres far away', () => {
+    expect(formatDistance(0.35, 'ru', UNITS)).toBe('350 м')
+    expect(formatDistance(3.94, 'ru', UNITS)).toBe('3,9 км')
+    expect(formatDistance(160.4, 'ru', UNITS)).toBe('160 км')
   })
 
   it('default centre by time zone, region, or Moscow', () => {

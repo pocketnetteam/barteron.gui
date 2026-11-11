@@ -146,7 +146,12 @@ export function createMockNetwork(options: MockNetworkOptions = {}): MockNetwork
     return sorted.slice(start * size, start * size + size)
   }
 
-  function filtered(request: JsonObject): RawTx[] {
+  /**
+   * Offers a request matches. `asNode`: like the feed and the counts of the
+   * real node, withdrawn and expired offers come too — its SQL has no status
+   * filter (checked on mainnet, stage 10); the app hides them itself.
+   */
+  function filtered(request: JsonObject, asNode = false): RawTx[] {
     const lang = text(request.lang)
     const tags = list(request.tags).map(Number)
     const location = list(request.location).map(text)
@@ -154,7 +159,7 @@ export function createMockNetwork(options: MockNetworkOptions = {}): MockNetwork
     const min = typeof request.priceMin === 'number' ? request.priceMin : null
     const max = typeof request.priceMax === 'number' ? request.priceMax : null
     return [...offers.values()].filter((tx) => {
-      if (!isActive(tx)) return false
+      if (asNode ? tx.type !== TX_TYPE.offer : !isActive(tx)) return false
       const price = tx.p?.i1 ?? 0
       const geohash = tx.p?.s6 ?? ''
       if (lang && tx.p?.s1 !== lang) return false
@@ -176,13 +181,14 @@ export function createMockNetwork(options: MockNetworkOptions = {}): MockNetwork
   })
 
   const rpc: MockNetwork['rpc'] = {
-    getbarteronfeed: ([request]) => paginate(filtered(obj(request)), obj(request)),
+    getbarteronfeed: ([request]) => paginate(filtered(obj(request), true), obj(request)),
 
     getbarterongroups: ([request]) => {
       const r = obj(request)
-      const size = typeof r.locationGroup === 'number' ? r.locationGroup : 3
+      // The node's default; the old client never asked, so nothing relied on another.
+      const size = typeof r.locationGroup === 'number' ? r.locationGroup : 1
       const counts = new Map<string, number>()
-      for (const tx of filtered(r)) {
+      for (const tx of filtered(r, true)) {
         const key = (tx.p?.s6 ?? '').slice(0, size)
         counts.set(key, (counts.get(key) ?? 0) + 1)
       }

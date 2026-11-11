@@ -211,6 +211,22 @@ export function placeName(place: NominatimPlace): string | null {
   return [city, spot].filter(Boolean).join(', ') || null
 }
 
+/** A district of a city, else the town: «Таганский», «Химки». */
+export function districtName(place: NominatimPlace): string | null {
+  const a = place.address ?? {}
+  return (
+    a.suburb ||
+    a.city_district ||
+    a.quarter ||
+    a.neighbourhood ||
+    a.town ||
+    a.village ||
+    a.hamlet ||
+    a.city ||
+    null
+  )
+}
+
 /** Just the city, for a seller's profile: «Москва». */
 export function cityName(place: NominatimPlace): string | null {
   const a = place.address ?? {}

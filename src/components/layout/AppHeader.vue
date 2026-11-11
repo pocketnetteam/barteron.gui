@@ -92,6 +92,13 @@ const balance = computed(() =>
           >
             <UiIcon name="location" :size="14" :stroke="2" />{{ location }}
           </button>
+          <RouterLink
+            class="header__strip-btn header__optional"
+            :to="{ name: 'nearby' }"
+            data-testid="header-nearby"
+          >
+            {{ t('header.nearby') }}
+          </RouterLink>
           <button type="button" class="header__strip-btn header__optional" @click="$emit('tips')">
             {{ t('header.tips') }}
           </button>
@@ -274,6 +281,10 @@ const balance = computed(() =>
 
 .header__strip-btn--strong {
   color: var(--text);
+}
+
+a.header__strip-btn {
+  text-decoration: none;
 }
 
 .header__strip-btn:hover {

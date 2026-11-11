@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { categoryRoute } from '@/composables/catalog-nav'
-import type { IconName } from '@/ui/icons'
+import { categoryIcon } from '@/config/category-icons'
 import UiIcon from '@/ui/UiIcon.vue'
 
 /**
@@ -15,25 +15,24 @@ const { t } = useI18n()
 interface Tile {
   id: number
   key: string
-  icon: IconName
   /** Also on the phone. */
   phone?: true
 }
 
 const TILES: Tile[] = [
-  { id: 6000, key: 'transport', icon: 'cat-transport', phone: true },
-  { id: 10542, key: 'realty', icon: 'cat-realty' },
-  { id: 7000, key: 'electronics', icon: 'cat-electronics', phone: true },
-  { id: 11450, key: 'clothes', icon: 'cat-clothes', phone: true },
-  { id: 11700, key: 'home', icon: 'home', phone: true },
-  { id: 2984, key: 'kids', icon: 'cat-kids', phone: true },
-  { id: 2, key: 'services', icon: 'cat-services', phone: true },
-  { id: 1000, key: 'bikes', icon: 'cat-bikes', phone: true },
-  { id: 888, key: 'sport', icon: 'cat-sport' },
-  { id: 24, key: 'animals', icon: 'cat-animals' },
-  { id: 267, key: 'books', icon: 'cat-books' },
-  { id: 1, key: 'collect', icon: 'cat-collect' },
-  { id: 13587, key: 'food', icon: 'cat-food' },
+  { id: 6000, key: 'transport', phone: true },
+  { id: 10542, key: 'realty' },
+  { id: 7000, key: 'electronics', phone: true },
+  { id: 11450, key: 'clothes', phone: true },
+  { id: 11700, key: 'home', phone: true },
+  { id: 2984, key: 'kids', phone: true },
+  { id: 2, key: 'services', phone: true },
+  { id: 1000, key: 'bikes', phone: true },
+  { id: 888, key: 'sport' },
+  { id: 24, key: 'animals' },
+  { id: 267, key: 'books' },
+  { id: 1, key: 'collect' },
+  { id: 13587, key: 'food' },
 ]
 </script>
 
@@ -48,7 +47,9 @@ const TILES: Tile[] = [
     >
       <span class="tiles__name tiles__name--full">{{ t(`tiles.${tile.key}.full`) }}</span>
       <span class="tiles__name tiles__name--short">{{ t(`tiles.${tile.key}.short`) }}</span>
-      <span class="tiles__icon"><UiIcon :name="tile.icon" :size="24" :stroke="1.7" /></span>
+      <span class="tiles__icon"
+        ><UiIcon :name="categoryIcon(tile.id)" :size="24" :stroke="1.7"
+      /></span>
     </RouterLink>
     <button type="button" class="tiles__item tiles__item--all" @click="$emit('all')">
       <span class="tiles__name tiles__name--full">{{ t('header.allCategories') }}</span>
