@@ -14,6 +14,7 @@ Barteron nextgen — новая версия Barteron по макетам ред
 | Новый Bastyon, хост мини-приложений | `C:\www\bastyon-nextgen`, папка `src/mini-apps/` |
 | Что нужно поправить в новом Bastyon для Barteron | [HOST-TASKS.md](HOST-TASKS.md) |
 | Как выложить на тест и прод и как откатить | [LAUNCH.md](LAUNCH.md) |
+| План проверки кода на баги, уязвимости и тесты (45 этапов) | [AUDIT.md](AUDIT.md) |
 | Прежний Bastyon, хост мини-приложений | `C:\www\pocketnet.gui`, `js/lib/apps/` и `js/kit.js` |
 | Нода: поиск и подбор обменов | GitHub `pocketnetteam/pocketnet.core`: `src/pocketdb/web/BarteronRpc.cpp`, `src/pocketdb/repositories/web/BarteronRepository.cpp` |
 
