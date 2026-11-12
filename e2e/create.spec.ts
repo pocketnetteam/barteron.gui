@@ -54,7 +54,10 @@ async function photos(page: Page, count: number) {
 
 /** A tap in the middle of the map; the locator scrolls it out from under the top bar. */
 async function clickMap(page: Page) {
-  await page.getByTestId('create-map').click()
+  const map = page.getByTestId('create-map')
+  // Leaflet comes in its own chunk: on a cold dev server a tap before it is there is lost.
+  await expect(map).toHaveClass(/leaflet-container/)
+  await map.click()
   await expect(page.getByTestId('create-place-name')).toBeVisible()
 }
 

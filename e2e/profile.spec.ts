@@ -255,6 +255,8 @@ test('settings: the place for new offers fills the offer form', async ({ page })
   await page.goto(`/profile/${ME}#settings`)
   const place = page.getByTestId('settings-place')
   await place.getByRole('radio', { name: 'Эта точка' }).click()
+  // Leaflet comes in its own chunk: a tap before it is there is lost.
+  await expect(page.getByTestId('create-map')).toHaveClass(/leaflet-container/)
   await page.getByTestId('create-map').click()
   await page.getByTestId('home-place-save').click()
 
