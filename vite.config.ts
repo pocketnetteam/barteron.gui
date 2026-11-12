@@ -67,5 +67,12 @@ export default defineConfig(({ mode }) => ({
     include: ['src/**/*.test.ts', 'build/**/*.test.ts'],
     restoreMocks: true,
     setupFiles: ['src/test/setup.ts'],
+    // `pnpm test:coverage`: the report the code audit (AUDIT.md) works from.
+    coverage: {
+      provider: 'v8',
+      include: ['src/**/*.{ts,vue}', 'build/**/*.ts'],
+      exclude: ['**/*.test.ts', '**/*.d.ts', 'src/test/**', 'src/i18n/locales/**', 'src/data/**'],
+      reporter: ['text-summary', 'json-summary', 'json', 'html'],
+    },
   },
 }))

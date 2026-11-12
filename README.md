@@ -12,6 +12,7 @@ pnpm dev          # http://localhost:5180, в обычном браузере �
 pnpm dev:https    # https://localhost:5180 — для открытия внутри Bastyon
 pnpm check        # типы, линтер, форматирование, unit-тесты
 pnpm test:e2e     # Playwright: заглушка SDK и настоящий sdk.js в поддельном хосте
+pnpm test:coverage  # unit-тесты с покрытием, отчёт в coverage/index.html
 pnpm build        # сборка в dist/ для barteron.club (SDK с bastyon.com)
 BARTERON_STAND=test pnpm build   # то же для тестового стенда: манифест «Barteron (test)», id barterontest.app
 pnpm build:test   # SDK с test.pocketnet.app, заглушка SDK вне Bastyon, витрина /dev/ui
