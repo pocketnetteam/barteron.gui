@@ -12,7 +12,8 @@ pnpm dev          # http://localhost:5180, в обычном браузере �
 pnpm dev:https    # https://localhost:5180 — для открытия внутри Bastyon
 pnpm check        # типы, линтер, форматирование, unit-тесты
 pnpm test:e2e     # Playwright: заглушка SDK и настоящий sdk.js в поддельном хосте
-pnpm build        # сборка в dist/ для barteron.club и тестового стенда (SDK с bastyon.com)
+pnpm build        # сборка в dist/ для barteron.club (SDK с bastyon.com)
+BARTERON_STAND=test pnpm build   # то же для тестового стенда: манифест «Barteron (test)», id barterontest.app
 pnpm build:test   # SDK с test.pocketnet.app, заглушка SDK вне Bastyon, витрина /dev/ui
 node build/og-check.mjs --php <путь к php>   # превью ссылок собранной версии на поддельной ноде
 ```
@@ -44,6 +45,8 @@ Bastyon открывает Barteron в iframe. Приложение загруж
 - **https.** CSP веб-версии bastyon-nextgen пускает фреймы и запросы только по https, поэтому http://localhost не загрузится.
 - **Свой id.** Dev-сервер отдаёт манифест с id `barterondev.pocketnet.app`. Настоящий id `barteron.pocketnet.app` встроен в хост, и с другого адреса хост его не примет.
 - **Без записи в сеть.** Методы `barteron.*` хост разрешает только настоящему id. Поэтому из dev-сборки записывать в сеть нельзя, только читать.
+
+Тестовый стенд `https://test.barter.pocketnet.app` открывается так же, через «Для разработчиков», под id `barterontest.app`. Как подключить его в обоих Bastyon и когда с него можно писать в сеть — [LAUNCH.md](LAUNCH.md), «Как открыть тестовый стенд в Bastyon».
 
 Без входа в аккаунт Bastyon приложение покажет «Вы не вошли в Bastyon». Если хост не дал доступ к аккаунту, будет кнопка «Разрешить доступ».
 
@@ -90,7 +93,7 @@ Bastyon открывает Barteron в iframe. Приложение загруж
 
 ```
 .github/      workflow выкладки на тестовый стенд и barteron.club (раннеры barteron.gui)
-build/        плагины Vite: dev-манифест, разрешённые origin хостов, index.php; проверка превью на PHP
+build/        плагины Vite: манифест dev-сервера и стенда, разрешённые origin хостов, index.php; проверка превью на PHP
 e2e/          Playwright; fixtures/bastyon-sdk.js — копия sdk.js из pocketnet.gui
 php/          превью ссылок для barteron.club (og.php, rpc.php), идут в dist рядом с index.php
 public/       b_manifest.json (production), иконки, Tor-туннель хоста, юридические документы

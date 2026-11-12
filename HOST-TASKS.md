@@ -1,6 +1,6 @@
 # Правки в bastyon-nextgen для Barteron
 
-Задание для того, кто работает в `C:\www\bastyon-nextgen`. Сам Barteron (`C:\www\barteron-nextgen`) этот репозиторий не правит. Нашли эти места при проверке Barteron в хосте 10.11.2026 (п. 1–5) и 11.11.2026 (п. 6–7). Подробности — в [PLAN.md](PLAN.md), раздел 5, риски 6, 8 и 9.
+Задание для того, кто работает в `C:\www\bastyon-nextgen`. Сам Barteron (`C:\www\barteron-nextgen`) этот репозиторий не правит. Нашли эти места при проверке Barteron в хосте 10.11.2026 (п. 1–5) и 11.11.2026 (п. 6–7); п. 8 добавлен 12.11.2026 для тестового стенда. Подробности — в [PLAN.md](PLAN.md), раздел 5, риски 6, 8 и 9.
 
 Пути ниже — от корня bastyon-nextgen.
 
@@ -109,9 +109,40 @@ fetchHosts: [
 
 **Проверить:** тест в `_schema.test.ts` или `content.test.ts`: `{ url: 'mailto:support@bastyon.com?subject=Barteron' }` принимается, `{ url: 'javascript:alert(1)' }` — нет.
 
-## Не сейчас: запись из dev-сборки (риск 6)
+## 8. Запись с тестового стенда
 
-Хост выполняет `barteron.*` только для id `barteron.pocketnet.app` (`assertBarteron` в `src/mini-apps/actions/barteron.ts`). С localhost Barteron поэтому может только читать. Решили 10.11.2026: пока запись в Barteron проверяется на заглушке SDK, хост не меняем. Когда понадобится живая проверка, выберем одно из двух:
+**Что не так.** Новую версию Barteron проверяют на тестовом стенде `https://test.barter.pocketnet.app`. Встроенный id `barteron.pocketnet.app` хост с этого адреса не примет: id закреплён за `barteron.club` (`assertInstallIdentity` в `src/mini-apps/store/apps-installer.ts`). Поэтому сборка стенда отдаёт манифест с id `barterontest.app` и названием «Barteron (test)». Её открывают через «Сервисы → Для разработчиков: открыть своё приложение».
 
-- тестовый адрес (`tscope`) у встроенного Barteron и стенд в тестовой сети;
-- настоящий id с localhost, только в dev-сборке хоста.
+Читать данные так можно. Но публиковать хост разрешает только `barteron.pocketnet.app` (`assertBarteron` в `src/mini-apps/actions/barteron.ts`), и копия на стенде получает `barteron_only` на любое объявление, профиль, отзыв или оценку. Прежний хост пускает `barteron.*` к любому приложению с правом `account`, так что там стенд пишет в сеть уже сейчас.
+
+**Решение.** `assertBarteron` пропускает ещё одно приложение: id `barterontest.app`, открытое с адреса `https://test.barter.pocketnet.app`. Нужны оба условия:
+
+- id сайдлоада может назвать любой сайт;
+- адрес — это то, что хост загружает во фрейм, и с ним он сверяет каждое сообщение (`matchesOrigin` в `src/mini-apps/core/origin-guard.ts`).
+
+```ts
+const BARTERON_TEST = { id: 'barterontest.app', origin: 'https://test.barter.pocketnet.app' }
+
+function assertBarteron(app: InstalledApp): void {
+  if (app.manifest.id === BARTERON_APP_ID) return
+  if (
+    app.manifest.id === BARTERON_TEST.id &&
+    safeNormalizeOrigin(app.scope) === BARTERON_TEST.origin
+  )
+    return
+  throw new BarteronOnlyError()
+}
+```
+
+Права копии остаются обычными для сайдлоада: доступ к аккаунту она попросит сама, без `grantedPermissions` встроенного Barteron.
+
+Есть и другой путь: тестовый адрес (`tscope`) у встроенного Barteron и переключатель, как у автора приложения в прежнем хосте. Но он требует больше работы: сейчас установка встроенного id с `tscope` упирается в проверку `id-origin-conflict`, потому что Barteron уже установлен с `barteron.club`. Если выберете его или другой способ, напишите в этот файл, какой выбрали: Barteron подстроится.
+
+**Сеть.** Запись уходит в ту сеть, в которой работает Bastyon. Из bastyon.com это основная сеть, то есть настоящие объявления. Проверяющие пишут со своих тестовых аккаунтов и снимают всё после проверки.
+
+**Проверить:** тест в `barteron.test.ts`:
+
+- `barterontest.app` со scope `test.barter.pocketnet.app` — действие выполняется;
+- `barterontest.app` со scope `evil.com` — `barteron_only`;
+- `barterondev.pocketnet.app` со scope `test.barter.pocketnet.app` — `barteron_only`;
+- `barteron.pocketnet.app` — как раньше.

@@ -23,8 +23,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-      # Like the old stand: the production build (SDK from bastyon.com).
+      # Like the old stand: the production build (SDK from bastyon.com). The manifest
+      # gets its own id, Barteron (test): Bastyon opens it through «Для разработчиков».
       - name: Build
+        env:
+          BARTERON_STAND: test
         run: |
           pnpm install --frozen-lockfile
           pnpm check

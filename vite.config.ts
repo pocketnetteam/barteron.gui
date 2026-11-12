@@ -3,9 +3,9 @@ import { fileURLToPath, URL } from 'node:url'
 import basicSsl from '@vitejs/plugin-basic-ssl'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vitest/config'
-import { devManifest } from './build/dev-manifest'
 import { HOST_ORIGINS } from './build/host-origins'
 import { indexPhp } from './build/index-php'
+import { devManifest, standIdentity, standManifest } from './build/manifest'
 
 /** Shown in the settings. */
 const APP_VERSION = (
@@ -29,6 +29,8 @@ export default defineConfig(({ mode }) => ({
       name: 'Barteron (dev)',
       allowedOrigins: HOST_ORIGINS,
     }),
+    // BARTERON_STAND=test: the copy for test.barter.pocketnet.app with its own id.
+    standManifest(standIdentity(process.env.BARTERON_STAND)),
     // `pnpm dev:https`: the CSP of bastyon-nextgen's web build (index.html) allows
     // only https frames and requests, so a sideloaded dev server must be https.
     // The old app ran its dev server on https as well.
