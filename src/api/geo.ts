@@ -6,12 +6,16 @@
  *
  * Nominatim is an outside service: requests go through the Bastyon fetch
  * tunnel when the host enables it (see `public/miniapp-service-worker.js`).
+ * It allows one request a second from an address, so every request of the
+ * app waits in one queue; the address search goes first.
  */
 
 import type { LatLng } from '@/lib/geohash'
+import { createPacer } from '@/lib/pace'
 import type { HostSdk } from '@/sdk/types'
 
 const NOMINATIM = 'https://nominatim.openstreetmap.org'
+const nominatimQueue = createPacer(1000)
 
 /** Coordinates from `get.geolocation()`: bastyon-nextgen answers `{latitude, longitude}`. */
 export function parseHostLocation(value: unknown): LatLng | null {
@@ -71,10 +75,20 @@ export interface FoundPlace {
 
 type Fetch = typeof fetch
 
-async function getJson(url: string, fetcher: Fetch, signal?: AbortSignal): Promise<unknown> {
-  const response = await fetcher(url, { signal, headers: { Accept: 'application/json' } })
-  if (!response.ok) throw new Error(`nominatim_${response.status}`)
-  return response.json()
+function getJson(
+  url: string,
+  fetcher: Fetch,
+  signal: AbortSignal | undefined,
+  urgent: boolean
+): Promise<unknown> {
+  return nominatimQueue(
+    async () => {
+      const response = await fetcher(url, { signal, headers: { Accept: 'application/json' } })
+      if (!response.ok) throw new Error(`nominatim_${response.status}`)
+      return response.json()
+    },
+    { signal, urgent }
+  )
 }
 
 const toPlace = (raw: NominatimPlace, options?: AddressFormatOptions): FoundPlace | null => {
@@ -107,7 +121,8 @@ export async function searchAddress(
   const data = await getJson(
     `${NOMINATIM}/search?${params}`,
     options.fetcher ?? fetch,
-    options.signal
+    options.signal,
+    true
   )
   return (Array.isArray(data) ? (data as NominatimPlace[]) : [])
     .map((raw) => toPlace(raw))
@@ -129,7 +144,8 @@ export async function reverseGeocode(
   const data = await getJson(
     `${NOMINATIM}/reverse?${params}`,
     options.fetcher ?? fetch,
-    options.signal
+    options.signal,
+    false
   )
   return data && typeof data === 'object' && 'lat' in data ? toPlace(data as NominatimPlace) : null
 }

@@ -82,9 +82,19 @@ describe('Nominatim', () => {
     expect(url.searchParams.get('accept-language')).toBe('ru')
     expect(await searchAddress('  ')).toEqual([])
 
-    const place = await reverseGeocode([55.75, 37.61], {
-      fetcher: fetcher as unknown as typeof fetch,
-    })
-    expect(place?.label).toBe('Россия, Москва, Таганская ул., 3')
+    // One request a second: the reverse request waits for its turn.
+    vi.useFakeTimers()
+    try {
+      const pending = reverseGeocode([55.75, 37.61], {
+        fetcher: fetcher as unknown as typeof fetch,
+      })
+      await vi.advanceTimersByTimeAsync(0)
+      expect(fetcher).toHaveBeenCalledTimes(1)
+      await vi.advanceTimersByTimeAsync(1000)
+      expect((await pending)?.label).toBe('Россия, Москва, Таганская ул., 3')
+      expect(fetcher).toHaveBeenCalledTimes(2)
+    } finally {
+      vi.useRealTimers()
+    }
   })
 })

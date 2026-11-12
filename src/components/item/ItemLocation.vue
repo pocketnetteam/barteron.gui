@@ -29,8 +29,8 @@ const place = useQuery({
   enabled: computed(() => session.mode === 'bastyon' && !!point.value),
   staleTime: Infinity,
   retry: false,
-  queryFn: async () => {
-    const found = await reverseGeocode(point.value!, { locale: locale.value, zoom: 14 })
+  queryFn: async ({ signal }) => {
+    const found = await reverseGeocode(point.value!, { locale: locale.value, zoom: 14, signal })
     return found ? areaName(found.raw) : null
   },
 })
