@@ -332,15 +332,20 @@ export interface OfferCheckOptions {
  * Checks what the host and the node require before anything is signed. An
  * offer without a category once took down every 0.22.20 node (28.04.2026), so
  * the category must be a real leaf of the tree.
+ *
+ * Texts only need to be non-empty, as in both hosts and the old app: mainnet
+ * has offers whose description is a line break, and their sellers must still
+ * be able to withdraw and renew them. The form trims and checks on its own
+ * (`draftIssues`).
  */
 export function checkOffer(
   offer: Offer,
   options: OfferCheckOptions = {}
 ): OfferInvalidField | null {
   if (!offer.address) return 'address'
-  if (!offer.language.trim()) return 'language'
-  if (!offer.caption.trim()) return 'caption'
-  if (!offer.description.trim()) return 'description'
+  if (!offer.language) return 'language'
+  if (!offer.caption) return 'caption'
+  if (!offer.description) return 'description'
   const tag = offer.tag
   if (tag === null || !Number.isInteger(tag) || tag <= 0) return 'tag'
   if (options.isLeafCategory && !options.isLeafCategory(tag)) return 'tag'

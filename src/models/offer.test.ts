@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { hash256, serializeOffer } from '@/test/legacy-tx'
+import MAINNET_OFFERS from '@/test/mainnet-offers.json'
 import {
   checkOffer,
   emptyOffer,
   exchangeCategories,
   fixedCurrencyPrice,
+  isPickupPoint,
   isPriceFrom,
   offerFromAlias,
   offerLifecycle,
@@ -12,6 +14,7 @@ import {
   parseOffer,
   toOfferPayload,
   toPriceCents,
+  withPublication,
   OfferInvalidError,
   type Offer,
 } from './offer'
@@ -94,6 +97,16 @@ describe('parseOffer', () => {
     expect(strings.tag).toBe(1006)
     expect(strings.tags).toEqual([58068, 'my_list'])
   })
+
+  it('photos: only non-empty strings (the old model dropped empty ones too)', () => {
+    const offer = parseOffer({
+      hash: 'a'.repeat(64),
+      type: TX_TYPE.offer,
+      time: 1_700_000_000,
+      p: { s5: '["https://a/1.jpg", "", null, 5, {"url": "x"}, "https://a/2.jpg"]' },
+    })
+    expect(offer.images).toEqual(['https://a/1.jpg', 'https://a/2.jpg'])
+  })
 })
 
 describe('toOfferPayload: what the hosts sign', () => {
@@ -155,7 +168,7 @@ describe('toOfferPayload: what the hosts sign', () => {
 
   it('refuses empty texts, place and a broken price', () => {
     const offer = sameAsMainnet()
-    expect(checkOffer({ ...offer, caption: '  ' })).toBe('caption')
+    expect(checkOffer({ ...offer, caption: '' })).toBe('caption')
     expect(checkOffer({ ...offer, description: '' })).toBe('description')
     expect(checkOffer({ ...offer, language: '' })).toBe('language')
     expect(checkOffer({ ...offer, geohash: '' })).toBe('geohash')
@@ -167,6 +180,106 @@ describe('toOfferPayload: what the hosts sign', () => {
   it('PKOIN to hundredths rounds instead of cutting (0.29 → 29)', () => {
     expect(toPriceCents(0.29)).toBe(29)
     expect(toPriceCents(3800)).toBe(380000)
+  })
+})
+
+/*
+ * Twelve mainnet offers of 2024–2026 (src/test/mainnet-offers.json), read
+ * through our own bastyon-nextgen on 13.11.2026, descriptions shortened.
+ * In a sample of 600 these are all the shapes the node returned.
+ */
+describe('mainnet offers of 2024–2026', () => {
+  const fixtures = MAINNET_OFFERS as { about: string; tx: RawTx }[]
+  const tx = (about: string) => fixtures.find((f) => f.about === about)!.tx
+
+  it.each(fixtures.map((f) => [f.about, f.tx] as const))(
+    'read and sent back unchanged, it is the same transaction: %s',
+    (_about, raw) => {
+      const payload = toOfferPayload(parseOffer(raw))
+      // What both hosts put into the transaction (pocketnet.gui brtOffer.export).
+      const message = {
+        s1: payload.language,
+        s2: payload.caption,
+        s3: payload.description,
+        s4: JSON.stringify({
+          t: payload.tag,
+          a: payload.tags,
+          c: payload.condition,
+          p: payload.published,
+          f: payload.currencyPrice,
+          d: payload.delivery,
+          v: payload.videoSettings,
+          s: payload.safeDeal,
+          m: payload.metaData,
+        }),
+        s5: JSON.stringify(payload.images),
+        s6: payload.geohash,
+        s7: payload.video,
+        i1: payload.price,
+      }
+      // Offers of 2024 have no `f`…`m`: the old app also wrote `{}` for them.
+      const s4 = { f: {}, d: {}, v: {}, s: {}, m: {}, ...JSON.parse(raw.p!.s4!) }
+      expect(message).toEqual({
+        s1: raw.p!.s1,
+        s2: raw.p!.s2,
+        s3: raw.p!.s3,
+        s4: JSON.stringify({
+          t: s4.t,
+          a: s4.a,
+          c: s4.c,
+          p: s4.p,
+          f: s4.f,
+          d: s4.d,
+          v: s4.v,
+          s: s4.s,
+          m: s4.m,
+        }),
+        s5: raw.p!.s5,
+        s6: raw.p!.s6,
+        s7: raw.p!.s7 ?? '',
+        i1: raw.p!.i1,
+      })
+      expect(payload.hash).toBe(raw.s2)
+    }
+  )
+
+  it('reads what each of them is about', () => {
+    const now = Date.UTC(2026, 10, 13)
+    const read = (about: string) => parseOffer(tx(about), now)
+    expect(offerLifecycle(read('withdrawn, used'), now)).toBe('withdrawn')
+    expect(read('withdrawn, used').condition).toBe('used')
+    expect(offerLifecycle(read('oldest format: only t, a, c, p; price 0'), now)).toBe('expired')
+    expect(read('for nothing; caption ends with a space').tags).toEqual(['for_nothing'])
+    expect(read('an edit (s2 is the first version)').hash).not.toBe(
+      read('an edit (s2 is the first version)').txHash
+    )
+    expect(read('with a video').video).toMatch(/^peertube:\/\/peertube\d+\.pocketnet\.app\//)
+    expect(isPriceFrom(read('price «from» in metaData'))).toBe(true)
+    expect(read('delivery through two pickup points').delivery).toMatchObject({
+      deliveryOptions: {
+        pickupPoints: { isEnabled: true, ids: [expect.any(String), expect.any(String)] },
+      },
+    })
+    expect(isPickupPoint(read('a pickup point with its schedule'))).toBe(true)
+    expect(fixedCurrencyPrice(read('currency price as a string'))).toEqual({
+      currency: 'RUB',
+      amount: 22.58,
+    })
+    expect(fixedCurrencyPrice(read('currency price turned off'))).toBeNull()
+    expect(read('currency price turned off').priceCents).toBe(3468)
+    expect(read('my list, guarantor fee split in half, withdrawn')).toMatchObject({
+      tags: ['my_list'],
+      safeDeal: { validatorFeeVariant: 'inHalf' },
+      published: 'withdrawed',
+    })
+  })
+
+  it('an offer whose description is a line break can still be withdrawn and renewed', () => {
+    // The hosts require a non-empty string, as the old app did; the form trims on its own.
+    const offer = parseOffer(tx('description is a single line break'))
+    expect(offer.description).toBe('\n')
+    expect(toOfferPayload(withPublication(offer, 'withdrawed')).published).toBe('withdrawed')
+    expect(toOfferPayload(withPublication(offer, 'published')).description).toBe('\n')
   })
 })
 

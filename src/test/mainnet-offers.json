@@ -1,0 +1,243 @@
+[
+  {
+    "about": "oldest format: only t, a, c, p; price 0",
+    "tx": {
+      "hash": "7e0e7fb284666bff10736e0212a849fac078ceaa5e18961db304d3f0c381c8e2",
+      "type": 211,
+      "height": 2954974,
+      "time": 1727415218,
+      "s1": "P8t2MfpzfoJAhRrzvP3qz9ruTzpKVHUM77",
+      "s2": "7e0e7fb284666bff10736e0212a849fac078ceaa5e18961db304d3f0c381c8e2",
+      "p": {
+        "s1": "ru-RU",
+        "s2": "Животные",
+        "s3": "Обменяю породистых козочек. Рождены 23 марта. От мамы не отнимали всё лето. Доставка не во",
+        "s4": "{\"t\":99,\"a\":[13587,17],\"c\":\"new\",\"p\":\"published\"}",
+        "s5": "[\"https://peertube700.pocketnet.app/images/4625b516d6ea4d2f44191b05328864a7/4625b516d6ea4d2f44191b05328864a7-original.jpg\",\"https://peertube700.pocketnet.app/images/1e0f77a37ea47166e6a9acfff11fe58d/1e0f77a37ea47166e6a9acfff11fe58d-original.jpg\"]",
+        "s6": "uc4edyhqz4y1",
+        "i1": 0
+      }
+    }
+  },
+  {
+    "about": "for nothing; caption ends with a space",
+    "tx": {
+      "hash": "263ee69a96aecf2a161a8ee3455b92f08a6dd7a6b8529411efd8a442596cd699",
+      "type": 211,
+      "height": 2959887,
+      "time": 1727710515,
+      "s1": "PLLXX4XUqkxB9XL7otqrkJNMk1YLvpa61a",
+      "s2": "263ee69a96aecf2a161a8ee3455b92f08a6dd7a6b8529411efd8a442596cd699",
+      "p": {
+        "s1": "ru-RU",
+        "s2": "Пчелы лечение. Хондроза, простуд, защемление нерва. Не медикаменты. Читать далее. ",
+        "s3": "Артроз между плечевой костью и лучевой костью. Следствие нагрузки, работы с перфоратором и",
+        "s4": "{\"t\":26395,\"a\":[\"for_nothing\"],\"c\":\"new\",\"p\":\"published\"}",
+        "s5": "[\"https://peertube600.pocketnet.app/images/2b2b7077835f3bd0d9b4f816feca2f53/2b2b7077835f3bd0d9b4f816feca2f53-original.jpg\",\"https://peertube600.pocketnet.app/images/ca12fb9b0afe35a924720d44c58fb931/ca12fb9b0afe35a924720d44c58fb931-original.jpg\"]",
+        "s6": "ucsn0ucqt8sr",
+        "i1": 0
+      }
+    }
+  },
+  {
+    "about": "an edit (s2 is the first version)",
+    "tx": {
+      "hash": "302c465c195ec47da8eac1b437c28eca4d8cfb239ba2b1026ed28c5ef1166661",
+      "type": 211,
+      "height": 2962154,
+      "time": 1727845557,
+      "s1": "PN3FNZL2CpTUeuMMHm5SoHyvg5s8gauo11",
+      "s2": "5caba085cec7d467e173c8353cb1b1de02619c67192a641bead95ee492b430ba",
+      "p": {
+        "s1": "ru-RU",
+        "s2": "*ФЕРМЕРСКИЙ ЖИВОЙ ЙОГУРТ \"ЗДОРОВЬЕ\" НА НАТУРАЛЬНОЙ ЗАКВАСКЕ - 0,25Л / СТЕКЛО ТЕРМОСТАТНЫЙ",
+        "s3": "Ценный фермерский продукт — живой йогурт с выразительным названием «Здоровье».\n\nГотовится ",
+        "s4": "{\"t\":13587,\"a\":[17],\"c\":\"new\",\"p\":\"published\"}",
+        "s5": "[\"https://peertube600.pocketnet.app/images/134f7926e4aedfc8dc50b7716cf68813/134f7926e4aedfc8dc50b7716cf68813-original.jpg\"]",
+        "s6": "u9xwuurypfrs",
+        "i1": 208
+      }
+    }
+  },
+  {
+    "about": "withdrawn, used",
+    "tx": {
+      "hash": "ef6272e06f82b8d76dbbbf063f6ea7d161df3def614e55fcfe74f6b4552b93d2",
+      "type": 211,
+      "height": 2985749,
+      "time": 1729250068,
+      "s1": "PJsKMXa1xtT7hj9j7gbLjJ9jNEyeWyKT9B",
+      "s2": "b90ca2ae8ecc8c8784146bba3951806a122af3600a3aa78056c9d6cdaae536fd",
+      "p": {
+        "s1": "ru-RU",
+        "s2": "Игровой компьютер Ryzen 5500 32Gb RX 5500XT 8Gb",
+        "s3": "Игровой компьютер Ryzen 5500 32Gb RX 5500XT 8Gb\nОптимальная сборка для игр в HD на средних",
+        "s4": "{\"t\":58058,\"a\":[17],\"c\":\"used\",\"p\":\"withdrawed\"}",
+        "s5": "[\"https://peertube600.pocketnet.app/images/5587fd0a2130e8387251c69bea830bf1/5587fd0a2130e8387251c69bea830bf1-original.jpg\",\"https://peertube600.pocketnet.app/images/a4c5dadfd47e95eb6a6cc28a5c4ff695/a4c5dadfd47e95eb6a6cc28a5c4ff695-original.jpg\",\"https://peertube600.pocketnet.app/images/985f4e72789d844924e5c06656db2d79/985f4e72789d844924e5c06656db2d79-original.jpg\",\"https://peertube600.pocketnet.app/images/925db3cf4c45481127fc08c297615c96/925db3cf4c45481127fc08c297615c96-original.jpg\",\"https://peertube600.pocketnet.app/images/5cc749a33ffce08ce5ec4908c4219129/5cc749a33ffce08ce5ec4908c4219129-original.jpg\",\"https://peertube600.pocketnet.app/images/f78d25cb55f19b6b94338bcb463a2d1e/f78d25cb55f19b6b94338bcb463a2d1e-original.jpg\",\"https://peertube600.pocketnet.app/images/b0cf5bb057eb53413db8c23e6925f7b1/b0cf5bb057eb53413db8c23e6925f7b1-original.jpg\"]",
+        "s6": "v6557118zzxv",
+        "i1": 60029
+      }
+    }
+  },
+  {
+    "about": "description is a single line break",
+    "tx": {
+      "hash": "d34cf873d165e33dc47dd9545d0806d0c725c4460d1a19d571122f879c407b87",
+      "type": 211,
+      "height": 3098030,
+      "time": 1736002811,
+      "s1": "PXk1JsvDvthTM7H7KqpzEac6L9v36UZvAL",
+      "s2": "2e30a11e27273f6d034b5075d5cc1d4852e7321502b30fd2c150e2cfa8245614",
+      "p": {
+        "s1": "ru-RU",
+        "s2": "Подстригу под расческу",
+        "s3": "\n",
+        "s4": "{\"t\":26395,\"a\":[13587],\"c\":\"used\",\"p\":\"published\"}",
+        "s5": "[\"https://peertube600.pocketnet.app/images/d9e3a51714d38cbd4a0d7b8dfd308ed2/d9e3a51714d38cbd4a0d7b8dfd308ed2-original.jpg\"]",
+        "s6": "v3cxsckn050n",
+        "i1": 0
+      }
+    }
+  },
+  {
+    "about": "with a video",
+    "tx": {
+      "hash": "2a9ef123255a4458c5a00ad8c0eef3f40b14d6e5ba2813a3cb9c0ae4ed1c91ea",
+      "type": 211,
+      "height": 3597049,
+      "time": 1765259746,
+      "s1": "PNczEV4uTB8r8uoLCeTaZMWCS3AJgWQUpx",
+      "s2": "2a9ef123255a4458c5a00ad8c0eef3f40b14d6e5ba2813a3cb9c0ae4ed1c91ea",
+      "p": {
+        "s1": "ru-RU",
+        "s2": "Шкатулка \"Ледяная Роза\"",
+        "s3": " Шкатулка \"Ледяная Роза\" из эпоксидной смолы.\nРучная работа.\nВысота 10 см, ширина 9 см.",
+        "s4": "{\"t\":790,\"a\":[11116,13,17,23],\"c\":\"new\",\"p\":\"published\",\"f\":{\"currency\":\"RUB\",\"price\":3000},\"d\":{},\"v\":{\"order\":\"first\"}}",
+        "s5": "[\"https://peertube160.pocketnet.app/images/00f92f5235041ab70d3b31783272e62e/00f92f5235041ab70d3b31783272e62e-original.jpg\",\"https://peertube160.pocketnet.app/images/aaac323ca33d859902feae7069a8b527/aaac323ca33d859902feae7069a8b527-original.jpg\",\"https://peertube160.pocketnet.app/images/2503a33eb64367c26e5d23f4a64c7dd2/2503a33eb64367c26e5d23f4a64c7dd2-original.jpg\",\"https://peertube160.pocketnet.app/images/ff84b719e6755e390f970d7e9473db18/ff84b719e6755e390f970d7e9473db18-original.jpg\",\"https://peertube160.pocketnet.app/images/70736fec740ace7cdc633ee8fe1c9e96/70736fec740ace7cdc633ee8fe1c9e96-original.jpg\",\"https://peertube160.pocketnet.app/images/f6b9dacfb2a26dd3a439132f331211b9/f6b9dacfb2a26dd3a439132f331211b9-original.jpg\",\"https://peertube160.pocketnet.app/images/3462decf518d01e43e89cb5e9b8c67cd/3462decf518d01e43e89cb5e9b8c67cd-original.jpg\",\"https://peertube160.pocketnet.app/images/a892bb081d4a2faf8197b2d55cd26c00/a892bb081d4a2faf8197b2d55cd26c00-original.jpg\",\"https://peertube160.pocketnet.app/images/c76f4184ea28f402308c1ae951b24edb/c76f4184ea28f402308c1ae951b24edb-original.jpg\"]",
+        "s6": "uf48pq210j8p",
+        "s7": "peertube://peertube601.pocketnet.app/ae1b7ae8-2433-493c-97be-cf1884491e4e",
+        "i1": 5721
+      }
+    }
+  },
+  {
+    "about": "price «from» in metaData",
+    "tx": {
+      "hash": "2ef3841174a177e93f1930d15b2e2ab54a196f055f1c71952ceaf2073353346b",
+      "type": 211,
+      "height": 3597430,
+      "time": 1765280355,
+      "s1": "PBiijA2AsBr71JDEZaJaZEj3hQDDZi2L6K",
+      "s2": "e68b7d052cf4dc457189aae310e6f05a1cd47e45ff58dcefb54d506e0d80db8d",
+      "p": {
+        "s1": "ru-RU",
+        "s2": "Репетитор китайского языка",
+        "s3": "Опытный преподаватель китайского языка. Репетитор. Очно по Москве. Удалённо по РФ. ",
+        "s4": "{\"t\":475,\"a\":[\"my_list\"],\"c\":\"new\",\"p\":\"published\",\"f\":{\"currency\":\"RUB\",\"price\":1000},\"d\":{},\"v\":{\"order\":\"first\"},\"s\":{},\"m\":{\"price\":{\"prefix\":\"from\"}}}",
+        "s5": "[\"https://bastyon.com:8092/i/SfWiINwTFPUlJKltRtCYDH.jfif\"]",
+        "s6": "ucfs4wz15y36",
+        "i1": 1898
+      }
+    }
+  },
+  {
+    "about": "delivery through two pickup points",
+    "tx": {
+      "hash": "465e996a84efd54dcfbd2039c87d924968303e1aed66fc5ff998d5807d5cc1f3",
+      "type": 211,
+      "height": 3598687,
+      "time": 1765348760,
+      "s1": "PCoDJDjpXcYZx9HFWMCbdNsavmF248ekdV",
+      "s2": "465e996a84efd54dcfbd2039c87d924968303e1aed66fc5ff998d5807d5cc1f3",
+      "p": {
+        "s1": "ru-RU",
+        "s2": "sturm lux elionew 843 -cr  Элитный душевой комплект с тропическим душем и термостатом",
+        "s3": "sturm lux elionew 843 -cr  новый европейский комплект душевого оборудования с термостатом ",
+        "s4": "{\"t\":2047,\"a\":[17,38,13,23,11116],\"c\":\"new\",\"p\":\"published\",\"f\":{\"currency\":\"RUB\",\"price\":20000},\"d\":{\"deliveryOptions\":{\"pickupPoints\":{\"isEnabled\":true,\"ids\":[\"7d5bbe48e4c99a1aeff1e8ed994e90d9ed945b163ea5195b87488c2bf1319a47\",\"2fcc1acb0028c3988f7eac197afb97d40e92e324b4dc64c2c47a0d16de09c21e\"]},\"selfPickup\":{\"isEnabled\":true,\"additionalInfo\":\"Приморский район Комендань\"}}},\"v\":{\"order\":\"first\"}}",
+        "s5": "[\"https://peertube160.pocketnet.app/images/5e250a4057053ca0256cd938c4e60084/5e250a4057053ca0256cd938c4e60084-original.jpg\",\"https://peertube160.pocketnet.app/images/01cbdeaee019ad910e3398f67d92018c/01cbdeaee019ad910e3398f67d92018c-original.jpg\"]",
+        "s6": "udtkuzbg858p",
+        "i1": 37383
+      }
+    }
+  },
+  {
+    "about": "a pickup point with its schedule",
+    "tx": {
+      "hash": "8548f17112afc1bbe169b1b1b09254c73dd06aebf7403a6b844977f57558cb10",
+      "type": 211,
+      "height": 3597141,
+      "time": 1765264751,
+      "s1": "PPGNWqWeXMwHon8snDoLNbbT2nkZrN967c",
+      "s2": "7d69722ec592ad6a826f8954548c7ef021d4f9deeca74ca08b60c61f60e852ad",
+      "p": {
+        "s1": "ru-RU",
+        "s2": "ПВЗ СЕВАСТОПОЛЬ Пункт бартерных заказов ",
+        "s3": "Информация о пункте взаимодействия участников площадки БАСТИОН.\nФинансовые условия\n5% от с",
+        "s4": "{\"t\":97,\"a\":[13587,11116,17],\"c\":\"new\",\"p\":\"published\",\"f\":{\"currency\":\"RUB\",\"price\":150},\"d\":{\"pickupPoint\":{\"financialTerms\":\"5% от стоимости товара. \",\"workSchedule\":{\"weekDays\":{\"day1\":{\"startTime\":\"09:00\",\"finishTime\":\"21:00\"},\"day2\":{\"startTime\":\"09:00\",\"finishTime\":\"21:00\"},\"day3\":{\"startTime\":\"09:00\",\"finishTime\":\"21:00\"},\"day4\":{\"startTime\":\"09:00\",\"finishTime\":\"21:00\"},\"day5\":{\"startTime\":\"09:00\",\"finishTime\":\"21:00\"},\"day6\":{\"startTime\":\"09:00\",\"finishTime\":\"21:00\"},\"day7\":{\"startTime\":\"09:00\",\"finishTime\":\"21:00\"}},\"additionalInfo\":\"Внимание ПВЗ работает пока в тестовом режиме . Обязательно предварительно предупредить +79937661961 t.me/ALKKARBIO\"},\"address\":\"Севастополь. Монастырское Шоссе  ТСН Первомайское-1 109\",\"route\":\"Автобусы №3.№24.№35.№79 Остановка Монастырь\"}},\"v\":{\"order\":\"first\"},\"s\":{},\"m\":{}}",
+        "s5": "[\"https://bastyon.com:8092/i/XhxBijHhwSytkKkxcHNxkQ.jfif\",\"https://bastyon.com:8092/i/MnWiYafuIlvPnlqbhWyBqH.jfif\"]",
+        "s6": "sxzv4qz46pzt",
+        "i1": 288
+      }
+    }
+  },
+  {
+    "about": "currency price as a string",
+    "tx": {
+      "hash": "151b1c1c3aae45d991c8d3e2e4b39d174515fc8e0e2c71002c54510c0816040f",
+      "type": 211,
+      "height": 3886505,
+      "time": 1781926651,
+      "s1": "PAzs51m8yNxK3y5Km6mmmGtGDcXGB8kCz4",
+      "s2": "151b1c1c3aae45d991c8d3e2e4b39d174515fc8e0e2c71002c54510c0816040f",
+      "p": {
+        "s1": "ru-RU",
+        "s2": "J'achèterai 5 Pocketcoins",
+        "s3": "J'achèterai 5 Pocketcoins",
+        "s4": "{\"t\":17,\"a\":[\"my_list\"],\"c\":\"new\",\"p\":\"published\",\"f\":{\"currency\":\"RUB\",\"price\":\"22.58\"},\"d\":{},\"v\":{\"order\":\"first\"},\"s\":{},\"m\":{}}",
+        "s5": "[\"https://bastyon.com:8092/i/hHZUOpVUFwZvKyibjbhsMH.jfif\"]",
+        "s6": "9v77vtb4gqu6",
+        "i1": 100
+      }
+    }
+  },
+  {
+    "about": "currency price turned off",
+    "tx": {
+      "hash": "d04962c8218ee1cf08987be61adc8e3464c9bef605acad38d2fc1f8614257e67",
+      "type": 211,
+      "height": 3897033,
+      "time": 1782544225,
+      "s1": "PPN7wEAtGYCB89uCzK947bGEtGZ4MWdqV6",
+      "s2": "a917f251ed1fc68c4792bb43e138d8588f685cf0aa781da2b2f1979e645689cd",
+      "p": {
+        "s1": "ru-RU",
+        "s2": "Изделия из дерева любой сложности. Столярка. Качественно. Быстро. Недорого.",
+        "s3": "Принимаю заказы на различные изделия из дерева, фанеры  и других древесных стройматериалов",
+        "s4": "{\"t\":14339,\"a\":[17,13,11116,23,13587,26395,6,9],\"c\":\"new\",\"p\":\"published\",\"f\":{\"isDisabled\":true},\"d\":{},\"v\":{\"order\":\"first\"},\"s\":{},\"m\":{}}",
+        "s5": "[\"https://bastyon.com:8092/i/MbasdnmHqsoxZzCXaHXmPz.jfif\",\"https://bastyon.com:8092/i/jDAVlLezDhadluRPuvBBOB.jfif\",\"https://bastyon.com:8092/i/ptOcQkiUpbcbaYrEkqUITZ.jfif\"]",
+        "s6": "txwtu81r1crf",
+        "i1": 3468
+      }
+    }
+  },
+  {
+    "about": "my list, guarantor fee split in half, withdrawn",
+    "tx": {
+      "hash": "9c518356ed2e0a0cda095a96a54f94f2a2d3ac3b8a12b7955f82a6c05070f1e9",
+      "type": 211,
+      "height": 3891672,
+      "time": 1782227395,
+      "s1": "PRv2P5QJQ8QZF8vtJGQ2bEkkHwCEAAX6oB",
+      "s2": "56edadfc2575a9128912e882f3f0badc65a475e94bf584af3b95a79b114687ba",
+      "p": {
+        "s1": "ru-RU",
+        "s2": "Помощник по хозяйству / Огородник с проживанием",
+        "s3": "О себе:\nВозрастной гражданин. Без вредных привычек. Исполнителен, скромен, соблюдаю суборд",
+        "s4": "{\"t\":4002,\"a\":[\"my_list\"],\"c\":\"new\",\"p\":\"withdrawed\",\"f\":{\"isDisabled\":true},\"d\":{},\"v\":{\"order\":\"first\"},\"s\":{\"validatorFeeVariant\":\"inHalf\"},\"m\":{}}",
+        "s5": "[\"https://peertube101.pocketnet.app/images/473be327fb7004f43330ae29d80058e5/473be327fb7004f43330ae29d80058e5-original.jpg\",\"https://peertube101.pocketnet.app/images/de1a9d67178bbacc9cc19073a8073124/de1a9d67178bbacc9cc19073a8073124-original.jpg\",\"https://peertube101.pocketnet.app/images/ac7ad752ba49409e7ed2bd115dbb05df/ac7ad752ba49409e7ed2bd115dbb05df-original.jpg\"]",
+        "s6": "ucfxj3yfxywv",
+        "i1": 8822
+      }
+    }
+  }
+]
