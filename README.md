@@ -22,7 +22,7 @@ node build/og-check.mjs --php <путь к php>   # превью ссылок с
 
 Как и у старого приложения, в `dist/` лежит `index.php`, а не `index.html`. Это та же страница, в которую PHP добавляет теги превью ссылок. Bastyon строит по ним превью ссылки на приложение: его сервер открывает `https://barteron.club/<путь>` и читает теги. Сервер запускает `index.php` для любого пути. Превью строят [php/og.php](php/og.php) и [php/rpc.php](php/rpc.php), к ноде они ходят через `http://proxy:8898/`, как раньше. Страницу собирает плагин [build/index-php.ts](build/index-php.ts). Поэтому `pnpm preview` собранную версию не откроет: её открывает PHP, например `php -S 127.0.0.1:8090 -t dist build/og-router.php`.
 
-Выкладывают workflow из [.github/workflows/](.github/workflows/) в ветке `nextgen` репозитория pocketnetteam/barteron.gui: пуш в `nextgen` — тестовый стенд, в `main` — barteron.club. Как сделать ветку, выложить и откатить — [LAUNCH.md](LAUNCH.md).
+Код лежит в ветке `barteron-nextgen` репозитория pocketnetteam/barteron.gui, это прод-ветка новой версии: `git push gui main:barteron-nextgen`. Выкладывают workflow из [.github/workflows/](.github/workflows/). Пока пуш ничего не выкладывает: тестовый стенд запускают вручную в Actions, прод переключат на эту ветку в день запуска. Как выложить и откатить — [LAUNCH.md](LAUNCH.md).
 
 ## Как приложение подключается к Bastyon
 

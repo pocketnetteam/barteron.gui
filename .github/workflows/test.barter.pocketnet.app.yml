@@ -1,12 +1,10 @@
-# Test stand: a push to the nextgen branch of pocketnetteam/barteron.gui builds the app
-# and copies it to the test server. See LAUNCH.md.
+# Test stand: a manual run (Actions → test.barter.pocketnet.app → Run workflow → branch
+# barteron-nextgen) builds the app and copies it to the test server. A push does not deploy:
+# the old app from dev may still live there. See LAUNCH.md.
 name: test.barter.pocketnet.app
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - nextgen
 
 concurrency:
   group: test.barter.pocketnet.app

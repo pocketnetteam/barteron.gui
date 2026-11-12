@@ -1,5 +1,7 @@
-# Production: a push to main of pocketnetteam/barteron.gui builds the app and copies it
-# to barteron.club. See LAUNCH.md, including how to roll back.
+# Production: builds the app and copies it to barteron.club. For now it runs only from main,
+# and main of pocketnetteam/barteron.gui holds the old app's workflow, so this file deploys
+# nothing yet. On launch day one commit switches both "main" below to barteron-nextgen.
+# See LAUNCH.md, including how to roll back.
 name: barteron.club
 
 on:
