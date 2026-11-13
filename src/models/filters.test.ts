@@ -11,8 +11,9 @@ import {
   parseFilters,
   resetFilters,
   withoutChip,
+  type CatalogFilters,
 } from './filters'
-import { parseOffer } from './offer'
+import { parseOffer, PKOIN_TOTAL_SUPPLY } from './offer'
 import { TX_TYPE } from './tx'
 
 const TREE = new CategoryTree([
@@ -65,11 +66,62 @@ describe('catalog filters in the address', () => {
     expect(parseFilters({ price: '-50' })).toMatchObject({ priceMin: null, priceMax: 50 })
     expect(parseFilters({ price: '1000-' })).toMatchObject({ priceMin: 1000, priceMax: null })
     expect(parseFilters({ price: '500-100' })).toMatchObject({ priceMin: 100, priceMax: 500 })
-    expect(parseFilters({ price: 'abc', exchange: 'x,0,-3,17,17', condition: 'mint' })).toEqual({
-      ...EMPTY_FILTERS,
-      exchange: [17],
-    })
+    expect(parseFilters({ search: '  гитара ' }).search).toBe('гитара')
+    expect(filtersQuery({ ...EMPTY_FILTERS, priceMax: 50 })).toEqual({ price: '-50' })
+    expect(filtersQuery({ ...EMPTY_FILTERS, priceMin: 50 })).toEqual({ price: '50-' })
+    expect(parseFilters({ price: 'abc', exchange: 'x,0,-3,1.5,17,17', condition: 'mint' })).toEqual(
+      {
+        ...EMPTY_FILTERS,
+        exchange: [17],
+      }
+    )
     expect(filtersQuery(EMPTY_FILTERS)).toEqual({})
+  })
+
+  it('a link with huge prices: no more than all PKOIN, so the node gets a whole number', () => {
+    const f = parseFilters({ price: '1e30-99999999999999999999' })
+    expect(f).toMatchObject({ priceMin: PKOIN_TOTAL_SUPPLY, priceMax: PKOIN_TOTAL_SUPPLY })
+    const r = catalogRequest({
+      tree: TREE,
+      location: [],
+      order: { orderBy: 'height', orderDesc: true },
+      pageSize: 12,
+      category: null,
+      filters: f,
+    })
+    expect(Number.isSafeInteger(r.request.priceMin)).toBe(true)
+    expect(JSON.stringify(r.request)).not.toMatch(/e\+/)
+    expect(parseFilters({ price: 'Infinity-NaN' })).toMatchObject({
+      priceMin: null,
+      priceMax: null,
+    })
+  })
+
+  it('a parameter given twice: the first counts', () => {
+    expect(
+      parseFilters({
+        search: ['гитара', 'велосипед'],
+        price: ['10-20', '30-40'],
+        free: [null, '1'],
+      })
+    ).toEqual({ ...EMPTY_FILTERS, search: 'гитара', priceMin: 10, priceMax: 20 })
+  })
+
+  it.each<[string, Partial<CatalogFilters>]>([
+    ['nothing', {}],
+    ['decimal prices', { priceMin: 0.5, priceMax: 1234.56 }],
+    ['open range', { priceMax: 50 }],
+    ['free with a price kept for later', { free: true, priceMin: 10 }],
+    ['delivery in any order', { delivery: ['point', 'pickup'] }],
+    ['text with signs', { search: 'C++ & «Ж/д» 100%' }],
+    ['everything', { exchange: [38, 17], myList: true, condition: 'new', safeDeal: true }],
+  ])('filters → address → filters: %s', (_, part) => {
+    const f = { ...EMPTY_FILTERS, ...part }
+    const back = parseFilters(filtersQuery(f) as Record<string, string>)
+    expect({ ...back, delivery: [...back.delivery].sort() }).toEqual({
+      ...f,
+      delivery: [...f.delivery].sort(),
+    })
   })
 
   it('chips: free replaces the price; removing a chip keeps the rest; reset keeps search', () => {
@@ -134,13 +186,29 @@ describe('catalog request for the node', () => {
     expect(r.request).toMatchObject({ theirTags: [1002, 1003], myTags: [12, 38, 17] })
   })
 
+  it('an exchange category the tree does not know is left out: not a request with no tags', () => {
+    const r = catalogRequest({
+      ...base,
+      category: 1000,
+      filters: parseFilters({ exchange: '999999' }),
+    })
+    expect(r.kind).toBe('feed')
+    const mixed = catalogRequest({
+      ...base,
+      category: 1000,
+      filters: parseFilters({ exchange: '999999,17' }),
+    })
+    expect(mixed.request).toMatchObject({ myTags: [17] })
+  })
+
   it('«only free» drops the price range: the node cannot ask for zero', () => {
     const r = catalogRequest({
       ...base,
       category: null,
-      filters: parseFilters({ price: '-50', free: '1' }),
+      filters: parseFilters({ price: '10-50', free: '1' }),
     })
     expect(r.request).not.toHaveProperty('priceMax')
+    expect(r.request).not.toHaveProperty('priceMin')
   })
 })
 
@@ -182,5 +250,28 @@ describe('category search', () => {
     }
     expect(TREE.search('велос', names).map((c) => c.id)).toEqual([1000, 1001, 1003])
     expect(TREE.search('  ', names)).toEqual([])
+    // A word that starts with the text beats a shallower one that has it inside.
+    const inside = { ...names, bikes: 'Мотовелосипеды', city_kids: 'Велосипеды детские' }
+    expect(TREE.search('вело', inside).map((c) => c.id)).toEqual([1001, 1003, 1000])
+  })
+
+  it('removed categories are not offered: not as roots, not as children, not in search', () => {
+    const tree = new CategoryTree([
+      [1, null, 1, 'live', [2, 3]],
+      [2, 1, 1, 'live_child', []],
+      [3, 1, 2, 'gone_child', [], 0, 0, 1],
+      [4, null, 2, 'gone_root', [], 0, 0, 1],
+    ])
+    const names = {
+      live: 'Есть',
+      live_child: 'Есть тоже',
+      gone_child: 'Есть, но удалена',
+      gone_root: 'Есть, удалена',
+    }
+    expect(tree.roots().map((c) => c.id)).toEqual([1])
+    expect(tree.children(1).map((c) => c.id)).toEqual([2])
+    expect(tree.search('есть', names).map((c) => c.id)).toEqual([1, 2])
+    // Old offers may still point there: the name is known.
+    expect(tree.label(3, names)).toBe('Есть, но удалена')
   })
 })

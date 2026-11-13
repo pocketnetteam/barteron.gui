@@ -12,7 +12,7 @@
 import type { LocationQuery, LocationQueryRaw } from 'vue-router'
 import type { DealsRequest, FeedRequest } from '@/api/barteron'
 import type { CategoryTree } from './categories'
-import { isForNothing, toPriceCents, type Offer } from './offer'
+import { isForNothing, PKOIN_TOTAL_SUPPLY, toPriceCents, type Offer } from './offer'
 import type { JsonObject } from './tx'
 
 export type Condition = 'new' | 'used'
@@ -62,9 +62,13 @@ export const FREQUENT_EXCHANGE = [17, 38, 13, 11116] as const
 const first = (value: LocationQuery[string] | undefined): string =>
   (Array.isArray(value) ? value[0] : value) ?? ''
 
+/**
+ * A price from the address, at most all PKOIN there are: a bigger one from a
+ * crafted link would reach the node as «1e+22», which it refuses (audit, finding 74).
+ */
 const positive = (text: string): number | null => {
   const n = Number(text)
-  return text !== '' && Number.isFinite(n) && n > 0 ? n : null
+  return text !== '' && Number.isFinite(n) && n > 0 ? Math.min(n, PKOIN_TOTAL_SUPPLY) : null
 }
 
 const ids = (text: string): number[] => [
@@ -217,7 +221,11 @@ const expand = (tree: CategoryTree, roots: readonly number[]): number[] => [
 export function catalogRequest(input: CatalogRequestInput): CatalogRequest {
   const { filters: f, tree } = input
   const tags = input.category === null ? [] : expand(tree, [input.category])
-  const exchangeRoots = [...f.exchange, ...(f.myList ? (input.myListTags ?? []) : [])]
+  // A category the tree does not know (an old or crafted link) is left out:
+  // alone it would turn the list into exchanges for nothing at all.
+  const exchangeRoots = [...f.exchange, ...(f.myList ? (input.myListTags ?? []) : [])].filter(
+    (id) => !!tree.get(id)
+  )
   const common = {
     location: [...input.location],
     ...(f.search && { search: `%${f.search}%` }),

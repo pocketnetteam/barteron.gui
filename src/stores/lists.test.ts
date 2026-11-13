@@ -64,6 +64,20 @@ describe('lists kept under the old app’s keys', () => {
     })
   })
 
+  it.each([
+    ['not JSON', '{oops'],
+    ['a number', '42'],
+    ['unknown values', JSON.stringify({ bartersView: 'grid', order: { orderBy: 'rating' } })],
+    ['no order', JSON.stringify({ bartersView: 'row' })],
+  ])('catalog view and sort: %s from storage gives the defaults', async (_, raw) => {
+    localStorage.setItem(`${ME}_offer`, raw)
+    useSessionStore().address = ME
+    await nextTick()
+    const prefs = useCatalogPrefsStore()
+    expect(prefs.sort).toBe('height_desc')
+    expect(prefs.view).toBe(raw.includes('row') ? 'row' : 'tile')
+  })
+
   it('search history: newest first, case-insensitive repeats, clear', () => {
     const history = useSearchHistoryStore()
     history.add('Велосипед')

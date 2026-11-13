@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { CategoryTree, loadCategoryNames, loadCategoryTree } from './categories'
+import { CategoryTree, loadCategoryNames, loadCategoryTree, type CategoryTuple } from './categories'
 
 describe('categories from the old app', () => {
   it('all 2415 categories with names in ru, en and sr', async () => {
@@ -33,6 +33,27 @@ describe('categories from the old app', () => {
     expect(tree.get(11629)?.removed).toBe(true)
     expect(tree.isLeaf(11629)).toBe(false)
     expect(tree.isLeaf(97)).toBe(true)
+  })
+
+  it('each category sits under its own parent only, and the parent lists it', async () => {
+    const { default: tuples } = await import('@/data/categories/tree.json')
+    const tree = await loadCategoryTree()
+    const wrong: string[] = []
+    for (const [id, parent, , , children] of tuples as CategoryTuple[]) {
+      const item = tree.get(id)!
+      // Removed subcategories may drop out of their parent's list: nobody picks them.
+      if (parent !== null && !item.removed && !tree.get(parent)?.children.includes(id)) {
+        wrong.push(`${id} not under ${parent}`)
+      }
+      for (const child of children) {
+        if (tree.get(child)?.parent !== id) wrong.push(`${child} listed under ${id}`)
+      }
+    }
+    expect(wrong).toEqual([])
+    // The old data listed ceiling lights (3309) under bed linen too.
+    expect(tree.children(3304).map((c) => c.id)).toEqual([3305, 3306, 3307, 3308])
+    expect(tree.withDescendants(3304)).not.toContain(3349)
+    expect(tree.parents(3349).map((c) => c.id)).toEqual([3000, 3043, 3309])
   })
 
   it('tiles use the shorter preview name', async () => {

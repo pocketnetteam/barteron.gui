@@ -13,7 +13,6 @@ import { categoryParam, categoryRoute, searchQuery } from '@/composables/catalog
 import { useCatalogList } from '@/composables/catalog-list'
 import { formatRadius } from '@/lib/area'
 import {
-  activeFilterCount,
   catalogRequest,
   filterChips,
   filtersQuery,
@@ -84,8 +83,11 @@ const draftChanged = computed(
   () => JSON.stringify(filtersQuery(draft.value)) !== JSON.stringify(filtersQuery(filters.value))
 )
 
-const chips = computed(() => filterChips(filters.value))
-const count = computed(() => activeFilterCount(filters.value))
+/** An exchange category the tree does not know has no name and does nothing: no chip. */
+const chips = computed(() =>
+  filterChips(filters.value).filter((c) => c.key !== 'exchange' || !!tree.value?.get(c.id))
+)
+const count = computed(() => chips.value.length)
 const num = (n: number) => new Intl.NumberFormat(locale.value).format(n)
 function chipLabel(chip: FilterChip): string {
   switch (chip.key) {

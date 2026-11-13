@@ -2,6 +2,8 @@
  * Category tree, copied from the old app (barteron.gui `src/data/categories.json`,
  * translations from `src/i18n/<locale>/categories.json`) by a one-off script.
  * Offers keep the category id in `p.s4.t`, so ids must never change.
+ * One fix to the old data: ceiling lights (3309) were listed under bed linen
+ * (3304) as well as under lighting, their parent (audit, finding 73).
  *
  * The tree is stored as tuples to halve its size:
  * `[id, parent, order, name, children, icon?, previewName?, removed?]`.
