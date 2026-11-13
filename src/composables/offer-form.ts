@@ -36,6 +36,7 @@ import {
   type DraftStep,
   type OfferDraft,
 } from '@/models/draft'
+import { homePlaceStart } from '@/models/account'
 import { isTxid } from '@/models/tx'
 import { OfferInvalidError, toOfferPayload, type Offer } from '@/models/offer'
 import { useCurrencyStore } from '@/stores/currency'
@@ -106,10 +107,7 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
    * A new offer starts at «Место для новых объявлений» when the profile fixes
    * one (cabinet settings: `static` and `geohash` of tx 104).
    */
-  const homePlace = () => {
-    const a = account.data.value
-    return a?.static && a.geohash ? a.geohash : ''
-  }
+  const homePlace = () => homePlaceStart(account.data.value)
   const fresh = (): OfferDraft => ({ ...newDraft(defaultCurrency()), geohash: homePlace() })
 
   function start(value: OfferDraft, restored: boolean) {

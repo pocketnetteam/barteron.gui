@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { currenciesFor } from '@/api/rates'
 import { useMyAccount } from '@/composables/my-account'
 import { usePlaceName } from '@/composables/place-name'
+import { withHomePlace } from '@/models/account'
 import { useCurrencyStore } from '@/stores/currency'
 import { LOCALE_CHOICES, useLocaleStore, type LocaleChoice } from '@/stores/locale'
 import { useThemeStore, type ThemePreference } from '@/stores/theme'
@@ -72,7 +73,7 @@ const currencyModel = computed<string>({
   set: (value) => (value === 'PKOIN' ? currency.setPkoinOnly() : currency.set(value)),
 })
 
-// ─── Place for new offers: my profile's `g` and `s` ─────────────────────────
+// ─── Place for new offers: my profile's `g` and `s`, only roughly ───────────
 const shown = computed(() => account.shown.value)
 const fixed = computed(() => !!shown.value?.static && !!shown.value.geohash)
 const placeName = usePlaceName(() => (fixed.value ? shown.value?.geohash : ''))
@@ -86,11 +87,11 @@ const placeMode = computed<'fixed' | 'geo'>({
   get: () => (fixed.value ? 'fixed' : 'geo'),
   set: (value) => {
     if (value === 'fixed') placeOpen.value = true
-    else if (fixed.value) account.save((a) => ({ ...a, static: false, geohash: '' }))
+    else if (fixed.value) account.save((a) => withHomePlace(a, null))
   },
 })
 function savePlace(geohash: string) {
-  account.save((a) => ({ ...a, static: true, geohash }))
+  account.save((a) => withHomePlace(a, geohash))
 }
 const placeText = computed(() => {
   if (!fixed.value) return t('settings.place.geoHint')

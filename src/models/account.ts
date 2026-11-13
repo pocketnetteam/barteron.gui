@@ -12,6 +12,7 @@
  * adds `additional: {regdate, rating, rating_sum, rating_count}`.
  */
 
+import { decodeGeohash, encodeGeohash, OFFER_PRECISION } from '@/lib/geohash'
 import {
   isJsonObject,
   objectOr,
@@ -198,6 +199,32 @@ export function accountFromAlias(
     safeDeal: isJsonObject(alias.safeDeal) ? alias.safeDeal : from.safeDeal,
     metaData: isJsonObject(alias.metaData) ? alias.metaData : from.metaData,
   }
+}
+
+// ─── Place for new offers: `g` and `s` ───────────────────────────────────────
+
+/**
+ * The profile is open to everyone and its old versions stay in the chain, so
+ * «Место для новых объявлений» goes there only roughly: 6 characters, a cell
+ * of about 1.2 × 0.6 km. The old app never wrote `g`; it shows the city of it.
+ */
+export const HOME_PLACE_PRECISION = 6
+
+/** The profile with a place for new offers, or without one (`null`, «По геопозиции»). */
+export function withHomePlace(account: BarteronAccount, geohash: string | null): BarteronAccount {
+  return geohash
+    ? { ...account, static: true, geohash: geohash.slice(0, HOME_PLACE_PRECISION) }
+    : { ...account, static: false, geohash: '' }
+}
+
+/**
+ * Where a new offer starts: the middle of the profile's place, in full like
+ * any offer, so searches by smaller areas find it. `''` — no place set.
+ */
+export function homePlaceStart(account: BarteronAccount | null | undefined): string {
+  if (!account?.static) return ''
+  const middle = decodeGeohash(account.geohash)
+  return middle ? encodeGeohash(middle, OFFER_PRECISION) : ''
 }
 
 // ─── Roles: what guarantors and moderators keep in their profile ─────────────

@@ -1547,7 +1547,7 @@ const en: Messages = {
       change: 'Change',
       dialogTitle: 'Place for new listings',
       dialogText:
-        "The point will be filled into every new listing; you can move it in the form. It's written to your profile, others see only the city.",
+        'The point will be filled into every new listing; you can refine it in the form. Your profile is open to everyone, so only an approximate place goes into it, accurate to about a kilometre.',
       save: 'Save',
     },
     links: {

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { serializeAccount } from '@/test/legacy-tx'
+import { OFFER_PRECISION } from '@/lib/geohash'
 import MAINNET_ACCOUNTS from '@/test/mainnet-accounts.json'
 import {
   accountFromAlias,
@@ -7,12 +8,15 @@ import {
   emptyAccount,
   freshVotingModeration,
   guarantorState,
+  HOME_PLACE_PRECISION,
+  homePlaceStart,
   isValidGuarantorFee,
   moderatorAvailable,
   parseAccount,
   toAccountPayload,
   VOTING_MODERATION_TTL,
   withGuarantor,
+  withHomePlace,
   withModerator,
   type AccountSafeDeal,
   type VotingModerationItem,
@@ -257,6 +261,33 @@ describe('accountFromAlias', () => {
     expect(accountFromAlias(alias, base)).toMatchObject({ ...alias, rating: 0 })
     // No profile known yet: the host copy over an empty one.
     expect(accountFromAlias(alias, null)).toMatchObject({ ...alias, hash: null })
+  })
+})
+
+describe('place for new offers', () => {
+  // A point in Belgrade at offer precision, as the map gives it.
+  const POINT = 'srywc8m3qz2k'
+
+  it('goes to the open profile only roughly: 6 characters, about a kilometre', () => {
+    const base = { ...emptyAccount(ADDRESS), tags: [1], safeDeal: { x: 1 } }
+    const fixed = withHomePlace(base, POINT)
+    expect(fixed).toEqual({ ...base, static: true, geohash: 'srywc8' })
+    expect(HOME_PLACE_PRECISION).toBe(6)
+    expect(serializeAccount(ADDRESS, { ...toAccountPayload(fixed) })).toContain('"g":"srywc8"')
+    // «По геопозиции»: the place is removed.
+    expect(withHomePlace(fixed, null)).toEqual({ ...base, static: false, geohash: '' })
+  })
+
+  it('a new offer starts at the middle of that place, written in full like any offer', () => {
+    const start = homePlaceStart(withHomePlace(emptyAccount(ADDRESS), POINT))
+    expect(start).toHaveLength(OFFER_PRECISION)
+    expect(start.startsWith('srywc8')).toBe(true)
+    expect(start).not.toBe(POINT)
+    // Not fixed, or no point: the form asks for one.
+    expect(homePlaceStart({ ...emptyAccount(ADDRESS), static: true })).toBe('')
+    expect(homePlaceStart({ ...emptyAccount(ADDRESS), geohash: 'srywc8' })).toBe('')
+    expect(homePlaceStart({ ...emptyAccount(ADDRESS), static: true, geohash: 'ail' })).toBe('')
+    expect(homePlaceStart(null)).toBe('')
   })
 })
 

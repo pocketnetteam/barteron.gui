@@ -263,7 +263,8 @@ test('settings: the place for new offers fills the offer form', async ({ page })
   const [sent] = await callsOf(page, 'barteron.account')
   const payload = sent!.args[0] as { static: boolean; geohash: string; tags: number[] }
   expect(payload.static).toBe(true)
-  expect(payload.geohash).toMatch(/^[0-9b-hjkmnp-z]{12}$/)
+  // The open profile gets the place only roughly, about a kilometre.
+  expect(payload.geohash).toMatch(/^[0-9b-hjkmnp-z]{6}$/)
   expect(payload.tags).toEqual([1006, 621])
   await expect(page.getByTestId('account-updating')).toHaveCount(0, { timeout: 15_000 })
 
