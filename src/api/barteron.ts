@@ -13,7 +13,7 @@ import { parseOffer, type Offer } from '@/models/offer'
 import { parseUserProfile, type UserProfile } from '@/models/profile'
 import { parseReview, parseScore, type OfferScore, type Review } from '@/models/review'
 import { parseTransfers, type DealTransfer } from '@/models/deal-transfer'
-import { isJsonObject, TX_TYPE, type RawTx } from '@/models/tx'
+import { isJsonObject, isTxid, TX_TYPE, type RawTx } from '@/models/tx'
 import type { HostSdk } from '@/sdk/types'
 
 export interface Pagination {
@@ -94,6 +94,33 @@ export interface OfferDetails {
   accounts: BarteronAccount[]
 }
 
+/** Codes the previous Bastyon itself counts as «no answer» (js/lib/client/api.js); `timeout` — bastyon-nextgen. */
+const SILENT_CODES: readonly unknown[] = [408, -28, 2000, 'timeout']
+/** Texts of a request nobody answered, in both hosts and in browsers. */
+const SILENT_TEXT =
+  /failed to fetch|load failed|network|timeout|timed out|unreachable|no bastyon server|no rpc servers|proxy|offline|abort/i
+
+/**
+ * Whether a refused request still had the node answer: it sent an error of
+ * its own, a bad parameter or nothing found. «Нет связи с сетью» must not
+ * count those (audit, finding 54). The hosts send:
+ * - the previous Bastyon: the node's error with a numeric `code`, or its own
+ *   string ('TypeError: Failed to fetch', 'proxy');
+ * - bastyon-nextgen: `{message, name}` — the node's text with name `Error`,
+ *   or `UnreachableError` and `rpc_timeout` when nobody answered.
+ *
+ * Anything unclear counts as no answer, as before.
+ */
+export function nodeAnswered(error: unknown): boolean {
+  if (!error || typeof error !== 'object') return false
+  const e = error as { code?: unknown; message?: unknown; error?: unknown; name?: unknown }
+  if (SILENT_CODES.includes(e.code)) return false
+  const text = [e.message, e.error, e.name].filter((v) => typeof v === 'string').join(' ')
+  if (SILENT_TEXT.test(text)) return false
+  if (typeof e.code === 'number') return true
+  return e.name === 'Error' && typeof e.message === 'string' && e.message.trim() !== ''
+}
+
 /** «велосипед» → `%велосипед%`, as the old catalog sent it. */
 export const searchPattern = (text: string): string => `%${text.trim()}%`
 
@@ -136,11 +163,12 @@ export class BarteronApi {
 
   private async rpc<T>(method: string, parameters: unknown[]): Promise<T> {
     try {
-      const result = await this.sdk.rpc<T>(method, parameters)
+      // Options even when empty: the previous Bastyon fails every request without them.
+      const result = await this.sdk.rpc<T>(method, parameters, {})
       this.options.onRpc?.(true)
       return result
     } catch (error) {
-      this.options.onRpc?.(false)
+      this.options.onRpc?.(nodeAnswered(error))
       throw error
     }
   }
@@ -222,8 +250,11 @@ export class BarteronApi {
    * did not filter either).
    */
   async offersByIds(ids: readonly string[], { withBanned = false } = {}): Promise<Offer[]> {
-    if (!ids.length) return []
-    const found = offers(await this.call('getbarteronoffersbyroottxhashes', [ids]), withBanned)
+    // Ids come from links too, and a batch asks for several offers at once:
+    // one that cannot be an offer is not sent along with the others.
+    const valid = ids.filter(isTxid)
+    if (!valid.length) return []
+    const found = offers(await this.call('getbarteronoffersbyroottxhashes', [valid]), withBanned)
     const position = new Map(ids.map((id, i) => [id, i]))
     return found.sort(
       (a, b) => (position.get(a.hash ?? '') ?? Infinity) - (position.get(b.hash ?? '') ?? Infinity)

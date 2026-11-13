@@ -110,6 +110,17 @@ export interface FromToTransactionsOptions {
   confirmations?: number
 }
 
+/**
+ * Options of a node request. Always passed, even empty, as the old app did:
+ * the previous Bastyon reads `options.cachetime` and fails every request
+ * without them (pocketnet.gui js/lib/apps/index.js, action `rpc`).
+ */
+export interface RpcOptions {
+  /** Seconds the host may answer from its cache. */
+  cachetime?: number
+  [key: string]: unknown
+}
+
 export interface HostSdk {
   /** Resolves with the application manifest once the host answers `appinfo`. */
   init(): Promise<HostApplication>
@@ -121,11 +132,7 @@ export interface HostSdk {
   serviceWorker?: {
     register(): Promise<ServiceWorkerRegistration | null>
   }
-  rpc<T = unknown>(
-    method: string,
-    parameters?: unknown[],
-    options?: Record<string, unknown>
-  ): Promise<T>
+  rpc<T = unknown>(method: string, parameters: unknown[], options: RpcOptions): Promise<T>
   sign(text: string): Promise<unknown>
 
   barteron: {

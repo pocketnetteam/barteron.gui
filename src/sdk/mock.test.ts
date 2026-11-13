@@ -21,10 +21,16 @@ describe('mock SDK', () => {
 
   it('answers RPC from fixtures and rejects methods without one', async () => {
     const sdk = createMockSdk({ rpc: { getnodeinfo: () => ({ version: 'mock' }) } })
-    await expect(sdk.rpc('getnodeinfo')).resolves.toEqual({ version: 'mock' })
-    await expect(sdk.rpc('getbarteronfeed', [{}])).rejects.toThrow(
+    await expect(sdk.rpc('getnodeinfo', [], {})).resolves.toEqual({ version: 'mock' })
+    await expect(sdk.rpc('getbarteronfeed', [{}], {})).rejects.toThrow(
       'mock_rpc_missing:getbarteronfeed'
     )
+  })
+
+  it('refuses RPC without options, like the previous Bastyon', async () => {
+    const sdk = createMockSdk({ rpc: { getnodeinfo: () => ({ version: 'mock' }) } })
+    const rpc = sdk.rpc as (method: string, parameters: unknown[]) => Promise<unknown>
+    await expect(rpc('getnodeinfo', [])).rejects.toThrow("reading 'cachetime'")
   })
 
   it('gives each write its own transaction id and records the call', async () => {

@@ -1,6 +1,14 @@
 import { demoDeals, demoNetworkData } from './mock-data'
 import { createMockNetwork, type MockNetwork, type MockWrite } from './mock-network'
-import type { AppInfo, HostAction, HostEventName, HostEvents, HostSdk, Permission } from './types'
+import type {
+  AppInfo,
+  HostAction,
+  HostEventName,
+  HostEvents,
+  HostSdk,
+  Permission,
+  RpcOptions,
+} from './types'
 
 /** Not a real address: the mock never reaches the network. */
 export const MOCK_ADDRESS = 'PMockUser1111111111111111111111111'
@@ -142,9 +150,15 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
       record('emit', type, data)
     },
     getroute: ({ route }) => `/${route}`,
-    async rpc<T>(method: string, parameters: unknown[] = []): Promise<T> {
+    async rpc<T>(method: string, parameters: unknown[], options: RpcOptions): Promise<T> {
       record('rpc', method, parameters)
-      if (offline) throw new Error('rpc: node is not responding')
+      // The previous Bastyon reads `options.cachetime` (js/lib/apps/index.js, action rpc).
+      if (!options) throw new TypeError("Cannot read properties of undefined (reading 'cachetime')")
+      // What bastyon-nextgen sends when no server answers (helpers/api/reachability.ts).
+      if (offline)
+        throw Object.assign(new Error(`No Bastyon server answers: ${method}`), {
+          name: 'UnreachableError',
+        })
       const fixture = rpcFixtures[method]
       if (!fixture) throw new Error(`mock_rpc_missing:${method}`)
       return fixture(parameters) as T
