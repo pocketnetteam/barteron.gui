@@ -174,9 +174,7 @@ function useOfferPages<R extends FeedRequest | DealsRequest>(
         topHeight: pageParam.topHeight ?? base.topHeight,
       })
       seedOffers(client, result.offers)
-      const topHeight =
-        pageParam.topHeight ??
-        (pinsHeight(base) ? (result.offers[0]?.height ?? undefined) : undefined)
+      const topHeight = pageParam.topHeight ?? (pinsHeight(base) ? result.top : undefined)
       return { ...result, topHeight }
     },
     getNextPageParam: (last, pages, lastParam): PageParam | undefined => {
@@ -363,8 +361,10 @@ export function refreshAfterTx(
       break
     case 'account':
       invalidate(keys.account(tx.target))
-      // «Мой список» decides what my offers with «my list» match.
-      invalidate(keys.feeds)
+      // «Мой список» decides what my offers with «my list» match: exchanges
+      // follow my profile; plain feeds do not, and are not asked again.
+      invalidate([...keys.feeds, 'deals'])
+      invalidate([...keys.feeds, 'matches'])
       break
     case 'review':
     case 'vote':

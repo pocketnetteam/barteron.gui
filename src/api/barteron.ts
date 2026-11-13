@@ -142,9 +142,19 @@ export interface OfferPage {
   offers: Offer[]
   /** Offers the node sent, before the ban list: tells whether another page may follow. */
   received: number
+  /**
+   * Height of the first offer the node sent, hidden or not, as the old app
+   * took it: «Показать ещё» reads below it. Taken after the ban list, it
+   * would skip an offer whenever a hidden one tops the page (audit, finding 69).
+   */
+  top?: number
 }
 
-const page = (value: unknown): OfferPage => ({ offers: offers(value), received: txs(value).length })
+function page(value: unknown): OfferPage {
+  const all = txs(value)
+  const top = Number(all[0]?.height)
+  return { offers: offers(value), received: all.length, top: top > 0 ? top : undefined }
+}
 
 export interface BarteronApiOptions {
   /** The Brighteon build limits language and region. */

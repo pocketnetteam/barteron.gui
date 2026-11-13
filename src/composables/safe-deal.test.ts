@@ -64,6 +64,8 @@ interface Setup {
   address?: string
   /** Runs before the composable: localStorage as the device has it. */
   before?: () => void
+  /** Runs on the mock before anything reads: to break a request. */
+  prepare?: (sdk: MockSdk) => void
   /** More on the mock chain than the demo has. */
   transfers?: MockTransfer[]
   accounts?: RawTx[]
@@ -87,6 +89,7 @@ async function setup<T>(use: () => T, options: Setup = {}) {
     granted: options.granted,
     grantOnRequest: options.grantOnRequest,
   })
+  options.prepare?.(sdk)
   options.before?.()
   const session = useSessionStore()
   session.sdk = markRaw(sdk)
@@ -709,6 +712,65 @@ describe('guarantors to pick', () => {
     ])
     await vi.waitFor(() => expect(result.forTablet.list.value).toHaveLength(3))
     expect(result.forTablet.list.value[0]).toMatchObject({ address: SELLERS.maria, rating: 4.6 })
+  })
+})
+
+/** The offers of deals do not load until `ok()`: the node refuses them. */
+function offersRefused() {
+  let refuse = true
+  return {
+    ok: () => (refuse = false),
+    prepare: (sdk: MockSdk) => {
+      const real = sdk.rpc.bind(sdk)
+      vi.spyOn(sdk, 'rpc').mockImplementation(async (method, parameters, options) => {
+        if (method === 'getbarteronoffersbyroottxhashes' && refuse) {
+          throw { message: 'Database is busy', name: 'Error' }
+        }
+        return real(method, parameters, options)
+      })
+    },
+  }
+}
+
+/** No request for transfers to or from nobody. */
+const noEmptyAddress = (calls: { args: unknown[] }[]) =>
+  calls.every((c) => (c.args[1] as unknown[]).every((a) => a !== null && a !== undefined))
+
+describe('«Обновить» after an error', () => {
+  it('the deal page: the offer did not load — «обновить» asks for it again, and the deal opens', async () => {
+    const refused = offersRefused()
+    const { result, calls } = await setup(() => useDeal(TABLET), { prepare: refused.prepare })
+    await vi.waitFor(() => expect(result.offerQuery.isError.value).toBe(true))
+    // Still refused: asked again, nothing asked about the money of nobody.
+    await result.refresh()
+    expect(result.offerQuery.isError.value).toBe(true)
+    expect(calls('rpc', 'getfromtotransactions')).toHaveLength(0)
+    refused.ok()
+    await result.refresh()
+    await vi.waitFor(() => expect(result.state.value?.status).toBe('1'))
+    expect(result.offerQuery.isError.value).toBe(false)
+    expect(result.role.value).toBe('buyer')
+    expect(noEmptyAddress(calls('rpc', 'getfromtotransactions'))).toBe(true)
+  })
+
+  it('«Сделки»: the offers did not load — «обновить» asks for them again', async () => {
+    const refused = offersRefused()
+    const { result, calls } = await setup(() => useDealList(), {
+      prepare: refused.prepare,
+      before: () => localStorage.setItem(`${ME}_deals`, JSON.stringify(demoDeals(ME).deals)),
+    })
+    await vi.waitFor(() => expect(result.offers.isError.value).toBe(true))
+    // Not «объявление не найдено»: it did not load.
+    expect(result.items.value.map((i) => i.status)).toEqual(['error', 'error', 'error', 'error'])
+    await result.refresh()
+    expect(calls('rpc', 'getfromtotransactions')).toHaveLength(0)
+    refused.ok()
+    await result.refresh()
+    await vi.waitFor(() => expect(result.active.value).toBe(3))
+    expect(noEmptyAddress(calls('rpc', 'getfromtotransactions'))).toBe(true)
+    // Each deal's three transfers once: no second round on top of the first.
+    await flushPromises()
+    expect(calls('rpc', 'getfromtotransactions')).toHaveLength(12)
   })
 })
 

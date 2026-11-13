@@ -162,6 +162,13 @@ export function useDeal(deal: MaybeRefOrGetter<DealParams | null>) {
 
   async function refresh() {
     now.value = Date.now()
+    // The seller and everything after it come from the offer: «Обновить» on
+    // «не загрузилось» asks for it first (audit, finding 70). Once the deal
+    // becomes readable, its transfers load by themselves.
+    const wasReadable = readable.value
+    if (offerQuery.isError.value) await offerQuery.refetch()
+    // `refetch` runs even a disabled query: never with no seller.
+    if (!wasReadable || !readable.value) return
     await Promise.all([transfers.refetch(), height.refetch()])
   }
 
@@ -401,7 +408,10 @@ export function useDealList(enabled: MaybeRefOrGetter<boolean> = true) {
       const status: DealListItem['status'] = offers.isPending.value
         ? 'loading'
         : !offer
-          ? 'noOffer'
+          ? // The offers did not load: not «объявление не найдено».
+            offers.isError.value
+            ? 'error'
+            : 'noOffer'
           : state
             ? 'ready'
             : q?.isError || height.isError.value
@@ -433,7 +443,17 @@ export function useDealList(enabled: MaybeRefOrGetter<boolean> = true) {
   })
 
   async function refresh() {
-    await Promise.all([height.refetch(), ...queries.value.map((q) => q.refetch())])
+    if (!barteron.value) return
+    // The sellers come from the offers: «Обновить» on «не загрузилось» asks for them first.
+    if (offers.isError.value) await offers.refetch()
+    // `refetch` runs even a disabled query: only deals whose seller is known.
+    await Promise.all([
+      height.refetch(),
+      ...list.value.flatMap((deal, i) => {
+        const query = queries.value[i]
+        return query && offerOf(deal.offer) ? [query.refetch()] : []
+      }),
+    ])
   }
 
   return { items, active, refresh, offers }

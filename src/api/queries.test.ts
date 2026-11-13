@@ -3,20 +3,33 @@ import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query'
 import { createPinia, setActivePinia } from 'pinia'
 import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, markRaw } from 'vue'
+import { BAN_LIST } from '@/config/ban-list'
 import { i18n, setLocale } from '@/i18n'
+import type { Offer } from '@/models/offer'
+import { TX_TYPE, type RawTx } from '@/models/tx'
 import { createMockSdk } from '@/sdk/mock'
 import { createMockNetwork } from '@/sdk/mock-network'
 import { demoNetworkData, SELLERS } from '@/sdk/mock-data'
 import { useSessionStore } from '@/stores/session'
-import { keys, pagesOffers, useAccount, useCategories, useFeed, useOffer } from './queries'
+import {
+  keys,
+  pagesOffers,
+  refreshAfterTx,
+  useAccount,
+  useCategories,
+  useFeed,
+  useOffer,
+} from './queries'
 
 const ME = 'PMockUser1111111111111111111111111'
 
-function setup() {
+function setup(extraOffers: RawTx[] = []) {
   const pinia = createPinia()
   setActivePinia(pinia)
   setLocale('ru')
-  const sdk = createMockSdk({ network: createMockNetwork(demoNetworkData(ME)) })
+  const data = demoNetworkData(ME)
+  const network = createMockNetwork({ ...data, offers: [...data.offers!, ...extraOffers] })
+  const sdk = createMockSdk({ network })
   const session = useSessionStore()
   session.sdk = markRaw(sdk)
   session.address = ME
@@ -47,6 +60,40 @@ describe('queries', () => {
     expect(pagesOffers(feed.data.value)).toHaveLength(6)
     const second = rpcCalls('getbarteronfeed')[1]!.args[1] as [Record<string, unknown>]
     expect(second[0]).toMatchObject({ pageStart: 1, pageSize: 3, topHeight })
+  })
+
+  it('«show more» after a hidden offer on top: nothing is skipped', async () => {
+    // The newest offer is a banned author's: the list hides it, but the next
+    // page must still be read below it, or the offer right after the first page is lost.
+    const spam: RawTx = {
+      hash: 'b'.repeat(64),
+      type: TX_TYPE.offer,
+      height: 4_100_000,
+      time: Math.floor(Date.now() / 1000),
+      s1: BAN_LIST[0]!,
+      s2: 'b'.repeat(64),
+      p: {
+        s1: 'ru-RU',
+        s2: 'Спам',
+        s3: 'Спам',
+        s4: '{"t":1006,"a":[],"c":"new"}',
+        s6: 'srywc',
+        i1: 1,
+      },
+    }
+    const { mountWith } = setup([spam])
+    let all!: ReturnType<typeof useFeed>
+    let paged!: ReturnType<typeof useFeed>
+    mountWith(() => {
+      all = useFeed({ pageSize: 100 })
+      paged = useFeed({ pageSize: 3 })
+      return () => h('div')
+    })
+    await vi.waitFor(() => expect(all.data.value && paged.data.value).toBeTruthy())
+    expect(paged.data.value!.pages[0]!.topHeight).toBe(4_100_000)
+    await paged.fetchNextPage()
+    const expected = pagesOffers(all.data.value).slice(0, 5)
+    expect(pagesOffers(paged.data.value).map((o) => o.hash)).toEqual(expected.map((o) => o.hash))
   })
 
   it('a list seeds single offers: the offer page needs no request', async () => {
@@ -102,5 +149,66 @@ describe('queries', () => {
     expect(categories.label(1006)).toBe('Горные')
     setLocale('en')
     await vi.waitFor(() => expect(categories.label(1006)).toBe('Mountain'))
+  })
+})
+
+it('pages: an offer on two pages shows once', () => {
+  const offer = (hash: string) => ({ hash }) as Offer
+  const page = (...hashes: string[]) => ({ offers: hashes.map(offer), received: hashes.length })
+  const data = { pages: [page('a', 'b'), page('b', 'c')], pageParams: [] }
+  expect(pagesOffers(data).map((o) => o.hash)).toEqual(['a', 'b', 'c'])
+})
+
+describe('after a transaction is in a block', () => {
+  /** Every kind of data, marked once refreshed. */
+  function cache() {
+    const client = new QueryClient()
+    const all: Record<string, readonly unknown[]> = {
+      feed: keys.feed({ pageSize: 10 }),
+      deals: keys.deals({ theirTags: [1], myTags: [2] }),
+      matches: [...keys.feeds, 'matches', 'group', ME, []],
+      nearby: [...keys.feeds, 'nearby-place', 'ucfv'],
+      offer: keys.offer('t1'),
+      otherOffer: keys.offer('t2'),
+      mine: keys.offersByAddress(ME),
+      account: keys.account('t1'),
+      details: keys.offerDetails('t1'),
+      score: keys.score('t1'),
+      sellerDetails: ['barteron', 'offers-details', ['t1', 't3']],
+      deal: keys.deal('t1'),
+      balance: keys.balance(ME),
+      profile: keys.profile(ME),
+      categories: keys.categoryTree,
+    }
+    for (const key of Object.values(all)) client.setQueryData(key, 1)
+    const refreshed = () =>
+      Object.entries(all)
+        .filter(([, key]) => client.getQueryState(key)?.isInvalidated)
+        .map(([name]) => name)
+        .sort()
+    return { client, refreshed }
+  }
+
+  const offerLists = ['deals', 'feed', 'matches', 'mine', 'nearby', 'offer']
+  it.each([
+    ['offer', offerLists],
+    ['offerRemove', offerLists],
+    // My profile: only exchanges follow «мой список», not every feed.
+    ['account', ['account', 'deals', 'matches']],
+    ['review', ['details', 'score', 'sellerDetails']],
+    ['vote', ['details', 'score', 'sellerDetails']],
+    ['payment', ['balance', 'deal']],
+  ] as const)('%s refreshes %j and nothing else', (kind, expected) => {
+    const { client, refreshed } = cache()
+    refreshAfterTx(client, { kind, target: 't1', status: 'done' }, ME)
+    expect(refreshed()).toEqual([...expected].sort())
+  })
+
+  it('nothing before the block', () => {
+    const { client, refreshed } = cache()
+    for (const status of ['sending', 'waiting', 'failed'] as const) {
+      refreshAfterTx(client, { kind: 'offer', target: 't1', status }, ME)
+    }
+    expect(refreshed()).toEqual([])
   })
 })
