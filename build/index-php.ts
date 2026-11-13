@@ -12,6 +12,8 @@ const DEFAULT_RPC = 'http://proxy:8898/'
 
 const PROLOGUE = `<?php
 // Made by build/index-php.ts from index.html: the app page with link-preview tags (og.php).
+// PHP without a php.ini prints errors into the page; they go to the log only.
+ini_set('display_errors', '0');
 header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-cache');
 $barteronOg = '';

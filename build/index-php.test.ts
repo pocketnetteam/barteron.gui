@@ -18,6 +18,14 @@ describe('index.php', () => {
   it('keeps the page and adds the preview tags at the end of <head>', () => {
     const php = toIndexPhp(HTML)
     expect(php.startsWith('<?php')).toBe(true)
+    // Before anything runs: PHP without a php.ini would print errors into the page.
+    const prologue = php.slice(0, php.indexOf('?>'))
+    expect(prologue.indexOf("ini_set('display_errors', '0');")).toBeGreaterThan(0)
+    expect(prologue.indexOf("ini_set('display_errors', '0');")).toBeLessThan(
+      prologue.indexOf('require_once')
+    )
+    expect(prologue).toContain("header('Content-Type: text/html; charset=utf-8');")
+    expect(prologue).toContain("header('Cache-Control: no-cache');")
     expect(php).toContain("require_once __DIR__ . '/og.php'")
     expect(php).toContain("getenv('BARTERON_RPC') ?: 'http://proxy:8898/'")
     // Tags go after the scripts and before </head>.

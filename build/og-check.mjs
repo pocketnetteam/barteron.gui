@@ -28,11 +28,18 @@ const BIKE = 'a'.repeat(64)
 const GUITAR = 'b'.repeat(64)
 const EVIL = 'e'.repeat(64)
 const SLOW = '5'.repeat(64)
+// Answers under the per-call timeout, but the deal page asks it twice.
+const SLOWISH = '6'.repeat(64)
+const BAD_IMAGE = 'c'.repeat(64)
+// The node refuses, but the answer still carries data: not to be shown.
+const REFUSED = 'd'.repeat(64)
 const UNKNOWN = '0'.repeat(64)
 const SELLER = 'PSe11er' + '2'.repeat(27)
 const BUYER = 'PBuyer' + '3'.repeat(28)
 const GUARANTOR = 'PGuarantor' + '4'.repeat(24)
 const USER = 'PUser' + '5'.repeat(29)
+const SLOW_SELLER = 'PS1ow' + '6'.repeat(29)
+const ODD_PICTURE = 'PVera' + '7'.repeat(29)
 
 const BIKE_TITLE = 'Велосипед "Stels" C++ 50% <b>'
 const EVIL_TITLE = '"><script>alert(1)</script>'
@@ -49,12 +56,16 @@ const OFFERS = {
   [EVIL]: offer(EVIL, SELLER, EVIL_TITLE, "'><img src=x onerror=alert(2)>", [
     '"><script>alert(3)</script>',
   ]),
+  [SLOWISH]: offer(SLOWISH, SLOW_SELLER, 'Самокат', 'Медленная нода', []),
+  [BAD_IMAGE]: offer(BAD_IMAGE, SELLER, 'Лампа', 'Фото не по http', ['javascript:alert(4)']),
 }
 const PROFILES = {
   [SELLER]: { address: SELLER, name: 'Илья', i: 'https://img.example/ilya.jpg' },
   [BUYER]: { address: BUYER, name: 'Мария', i: '' },
   [GUARANTOR]: { address: GUARANTOR, name: 'Анна', i: '' },
   [USER]: { address: USER, name: 'Дмитрий', i: '' },
+  [SLOW_SELLER]: { address: SLOW_SELLER, name: 'Олег', i: '' },
+  [ODD_PICTURE]: { address: ODD_PICTURE, name: 'Вера', i: 'file:///etc/passwd' },
 }
 
 let nodeCalls = 0
@@ -70,12 +81,24 @@ const node = http.createServer((req, res) => {
       res.setHeader('Content-Type', 'application/json')
       res.end(JSON.stringify({ result: 'success', data }))
     }
-    if (method === 'getbarteronoffersbyroottxhashes') {
+    if (list.includes(REFUSED)) {
+      res.setHeader('Content-Type', 'application/json')
+      res.end(
+        JSON.stringify({
+          result: null,
+          error: { code: -8 },
+          data: [offer(REFUSED, SELLER, 'Отказ', '', [])],
+        })
+      )
+    } else if (method === 'getbarteronoffersbyroottxhashes') {
       const data = list.map((hash) => OFFERS[hash]).filter(Boolean)
       if (list.includes(SLOW)) setTimeout(() => answer(data), 10_000)
+      else if (list.includes(SLOWISH)) setTimeout(() => answer(data), 2200)
       else answer(data)
     } else if (method === 'getuserprofile') {
-      answer(list.map((address) => PROFILES[address]).filter(Boolean))
+      const data = list.map((address) => PROFILES[address]).filter(Boolean)
+      if (list.includes(SLOW_SELLER)) setTimeout(() => answer(data), 2200)
+      else answer(data)
     } else {
       res.statusCode = 404
       res.end('Cannot POST')
@@ -180,6 +203,8 @@ const CASES = [
   { name: 'нет объявления', path: `/barter/${UNKNOWN}`, lang: RU, og: DEFAULTS },
   { name: 'не id', path: '/barter/create', lang: RU, og: DEFAULTS, noNode: true },
   { name: 'категория', path: '/category/1', lang: RU, og: DEFAULTS },
+  { name: 'не адрес', path: '/profile/0OIl-not-an-address', lang: RU, og: DEFAULTS, noNode: true },
+  { name: 'нода отказала', path: `/barter/${REFUSED}`, lang: RU, og: DEFAULTS },
   {
     name: 'массивы в ссылке',
     path: '/barter/safedeal?offer[]=x&buyer[]=y',
@@ -187,6 +212,26 @@ const CASES = [
     og: { title: 'Safe deal' },
   },
   { name: 'нода молчит', path: `/barter/${SLOW}`, lang: RU, og: DEFAULTS, within: 5000 },
+  {
+    // Each call answers in time, all of them together do not: one budget per page.
+    name: 'сделка, нода медленная',
+    path: `/barter/safedeal?offer=${SLOWISH}&buyer=${BUYER}&validator=${GUARANTOR}&fee=2`,
+    lang: EN,
+    og: { title: 'Safe deal', description: 'Open the deal to check the current status' },
+    within: 3700,
+  },
+  {
+    name: 'картинка не по http',
+    path: `/barter/${BAD_IMAGE}`,
+    lang: RU,
+    og: { title: 'Лампа', image: DEFAULTS.image },
+  },
+  {
+    name: 'аватар не по http',
+    path: `/profile/${ODD_PICTURE}`,
+    lang: RU,
+    og: { title: 'Вера', image: DEFAULTS.image },
+  },
 ]
 
 // --- Run -------------------------------------------------------------------

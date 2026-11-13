@@ -16,6 +16,7 @@
  *   (the old file ran them through urldecode, so "C++" became "C  ");
  * - errors are logged, not printed into the page;
  * - ids that cannot be an offer or an address are not sent to the node;
+ * - a picture only from an http(s) address; the three names of a deal in one call;
  * - /barter/exchange/<id> gets the preview of its offer;
  * - Russian defaults for a deal or a request the node does not know.
  *
@@ -170,12 +171,22 @@ class OG
         if (!$offer) {
             return;
         }
-        $seller = $this->name(isset($offer->s1) && is_string($offer->s1) ? $offer->s1 : '');
+        $sellerAddress = isset($offer->s1) && is_string($offer->s1) ? $offer->s1 : '';
+        $buyerAddress = self::param($query, 'buyer');
+        $guarantorAddress = self::param($query, 'validator');
+        // The three names in one call: the page waits for it.
+        $profiles = $this->rpc->profiles(array_filter(
+            array($sellerAddress, $buyerAddress, $guarantorAddress),
+            function ($address) {
+                return self::address($address);
+            }
+        ));
+        $seller = self::nameIn($profiles, $sellerAddress);
         if ($seller === null) {
             return;
         }
-        $buyer = (string) $this->name(self::param($query, 'buyer'));
-        $guarantor = (string) $this->name(self::param($query, 'validator'));
+        $buyer = (string) self::nameIn($profiles, $buyerAddress);
+        $guarantor = (string) self::nameIn($profiles, $guarantorAddress);
         $fee = self::param($query, 'fee') !== '' ? self::param($query, 'fee') : '?';
         $subject = self::caption($offer);
 
@@ -218,7 +229,7 @@ class OG
         $this->set('description', $lang === 'ru'
             ? "Профиль {$name} на {$this->project}"
             : "{$name}'s profile on {$this->project}");
-        $this->set('image', self::text($profile, 'i'));
+        $this->set('image', self::url(self::text($profile, 'i')));
     }
 
     private function offer($id)
@@ -233,8 +244,14 @@ class OG
         if (!self::address($address)) {
             return null;
         }
-        $profile = $this->rpc->profile($address);
-        return $profile ? self::text($profile, 'name') : null;
+        return self::nameIn($this->rpc->profiles(array($address)), $address);
+    }
+
+    private static function nameIn(array $profiles, $address)
+    {
+        return self::address($address) && isset($profiles[$address])
+            ? self::text($profiles[$address], 'name')
+            : null;
     }
 
     private function set($key, $value)
@@ -301,7 +318,17 @@ class OG
     private static function firstImage($offer)
     {
         $images = json_decode(self::detail($offer, 's5'), true);
-        return is_array($images) && isset($images[0]) && is_string($images[0]) ? trim($images[0]) : '';
+        return is_array($images) && isset($images[0]) && is_string($images[0]) ? self::url($images[0]) : '';
+    }
+
+    /**
+     * A picture address from the network, only http(s): Bastyon's server
+     * fetches it for the preview. Anything else — the default picture.
+     */
+    private static function url($value)
+    {
+        $value = trim((string) $value);
+        return preg_match('~^https?://[^\s/?#]+~i', $value) ? $value : '';
     }
 
     private static function text($object, $key)
