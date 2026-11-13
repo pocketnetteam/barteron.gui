@@ -107,6 +107,7 @@ export function useScoreModeration(
     allowedScore,
     checking: computed(() => moderators.isPending.value && moderators.fetchStatus.value !== 'idle'),
     checkFailed: computed(() => moderators.isError.value),
+    recheck: () => void moderators.refetch(),
     request,
     openChat,
     chatOpening: chat.opening,

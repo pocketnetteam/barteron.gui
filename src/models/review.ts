@@ -20,7 +20,7 @@ export interface Review {
   address: string
   parentId: string
   message: string
-  /** The score given with the review, `"1"`–`"5"`; empty when none (old `votes` component). */
+  /** The score given with the review, `"1"`–`"5"`; `"0"` or empty when none (old `votes` component). */
   info: string
   time: number
   height: number
@@ -86,16 +86,27 @@ export interface ReviewPayload {
   answerid?: string
 }
 
-/** `score` goes to `info` as the old app wrote it: `score.toFixed()`. */
+/**
+ * The longest review text both hosts send: the old one checks it in
+ * `Comment.validation` (pocketnet.gui `kit.js`), bastyon-nextgen in
+ * `commentObject`. Counted in UTF-16 units, like `maxlength`.
+ */
+export const REVIEW_MAX_LENGTH = 915
+
+/**
+ * `score` goes to `info` as the old app wrote it: `score.toFixed()`, and
+ * `"0"` without a score (its score starts at 0).
+ */
 export function toReviewPayload(
   offerId: string,
   message: string,
   score?: number,
   parentId = ''
 ): ReviewPayload {
-  const info = score ? score.toFixed() : ''
+  const info = score ? score.toFixed() : '0'
   if (!isTxid(offerId)) throw new Error('review:invalid:postid')
   if (!message.trim()) throw new Error('review:invalid:message')
+  if (message.length > REVIEW_MAX_LENGTH) throw new Error('review:invalid:length')
   return {
     postid: offerId,
     msgparsed: { message, info },

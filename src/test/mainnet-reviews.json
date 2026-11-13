@@ -1,0 +1,125 @@
+{
+  "note": "Mainnet getbarteronoffersdetails, 13.11.2026: comments (tx 204) and offerScores (tx 300). Long messages cut to 80 characters.",
+  "comments": [
+    {
+      "hash": "04758dcd6de066338f6c43e78d3316e24b2dc314d4b86354f486117805164cf3",
+      "type": 204,
+      "height": 2957818,
+      "blockHash": "81f5c647d38b87373f8bafa58369f852ce10c56a11c19a7cb232ac8ac3a7d896",
+      "time": 1727586000,
+      "s1": "PCJ2gYX2exnZtCnhE6maHTLQAfkJBFTgt9",
+      "s2": "04758dcd6de066338f6c43e78d3316e24b2dc314d4b86354f486117805164cf3",
+      "s3": "7e0e7fb284666bff10736e0212a849fac078ceaa5e18961db304d3f0c381c8e2",
+      "p": {
+        "s1": "{\"message\":\"Тестовый коммент 29.09.24 08:00\",\"url\":\"\",\"images\":[],\"info\":\"0\"}"
+      }
+    },
+    {
+      "hash": "0e7dbfea5440b852bbeb9f8754c4b4b5c7e6419a9a6fc5e0c3cd22ba0903b22e",
+      "type": 204,
+      "height": 3130103,
+      "blockHash": "aea0af19dc1e48fc3687e3bead9a01f28e4b72b17629efbe905932a97f1c4076",
+      "time": 1737928077,
+      "s1": "PMFtQLmBsCGgwUeUGWXNwG4nWyu6GwhFP4",
+      "s2": "0e7dbfea5440b852bbeb9f8754c4b4b5c7e6419a9a6fc5e0c3cd22ba0903b22e",
+      "s3": "f00e3c2c8430243d4a23607fb3d3e77c0debc36e9d8a01a9071a0e58313b991a",
+      "p": {
+        "s1": "{\"message\":\"It's a joke\",\"url\":\"\",\"images\":[],\"info\":\"0\"}"
+      }
+    },
+    {
+      "hash": "1347460ec233ae1de341685fd021ee0376bd3ec7fa6f2b5396415c9524936876",
+      "type": 204,
+      "height": 3051110,
+      "blockHash": "54a1d2c4ab357159c0dc86bada46c065dbf064d4e5e560e4735719d4bd8d5769",
+      "time": 1733171437,
+      "s1": "PCZ8aMMuDGwaG8pbonkX2HDS1aPfvWpSv8",
+      "s2": "1347460ec233ae1de341685fd021ee0376bd3ec7fa6f2b5396415c9524936876",
+      "s3": "f00e3c2c8430243d4a23607fb3d3e77c0debc36e9d8a01a9071a0e58313b991a",
+      "p": {
+        "s1": "{\"message\":\"v\",\"url\":\"\",\"images\":[],\"info\":\"0\"}"
+      }
+    },
+    {
+      "hash": "8b7188b17b993798a136e4d301e687427d23c96d20caf33a5fb9f05b8a2875e3",
+      "type": 204,
+      "height": 2982015,
+      "blockHash": "355551b576f7d6cbf2b3e550e6e73ed4d6fa4fa644c470d2825921f4deb39a77",
+      "time": 1729025501,
+      "s1": "PL9ATj3uGN5JNwckoT8xGq5cWcV9dNRqfK",
+      "s2": "8b7188b17b993798a136e4d301e687427d23c96d20caf33a5fb9f05b8a2875e3",
+      "s3": "7e0e7fb284666bff10736e0212a849fac078ceaa5e18961db304d3f0c381c8e2",
+      "p": {
+        "s1": "{\"message\":\"круто\\n\",\"url\":\"\",\"images\":[],\"info\":\"5\"}"
+      }
+    },
+    {
+      "hash": "970097e15b53e366802d78f39c3e004f7fd2039d29e36226915c83789a42056d",
+      "type": 204,
+      "height": 2983276,
+      "blockHash": "ccd4e5d7785f97d799f3200d4d3fdc4dad37dc06f4dc287f66f4021f39dd29d0",
+      "time": 1729101909,
+      "s1": "PHgkRtKChqv6s7JTBLrJyoGMwsPL2AYnzH",
+      "s2": "970097e15b53e366802d78f39c3e004f7fd2039d29e36226915c83789a42056d",
+      "s3": "a9f341df31497ecb2a9d0cce9dcbf13b976d64bb8941f409cd25a272c4020503",
+      "p": {
+        "s1": "{\"message\":\"Качественное питание дорогого стоит в наше время, но на таблетки и операции прид\",\"url\":\"\",\"images\":[],\"info\":\"5\"}"
+      }
+    },
+    {
+      "hash": "94f5a31fd94bd566c9bc1d0ae469e12e10bd614070cdb173b33b456d557f2907",
+      "type": 204,
+      "height": 3043541,
+      "blockHash": "938bca6db97da3b39f70f6d1651500d8e464b8b17c6caf841a4219ad8b366b8a",
+      "time": 1732720169,
+      "s1": "PUFSMK8Lim3fRnaRSkQGKUVj4UrCpB7JPR",
+      "s2": "94f5a31fd94bd566c9bc1d0ae469e12e10bd614070cdb173b33b456d557f2907",
+      "s3": "3561bd8afa710f8d3bbc62d78b1c0b27cff62c909515046fd5b9e8fc7e07bf17",
+      "p": {
+        "s1": "{\"message\":\"Тестовый коммент\",\"url\":\"\",\"images\":[],\"info\":\"4\"}"
+      }
+    }
+  ],
+  "offerScores": [
+    {
+      "hash": "74c3d9d3dd9c640b20347e47b61720fd2fa18f44922f8f14a39cb3932ae631cc",
+      "type": 300,
+      "height": 3619732,
+      "blockHash": "3e9aa4d26e1c66c57dc5bea94b227d147c23f3232febe9cccb312635ebea075b",
+      "time": 1766564687,
+      "s1": "PLKHg5HZwKtbGNDKcg5vqSB6X83LJgV3Xt",
+      "s2": "abb41992ff68d7c67542e9f6d9b3f5e5c31c909f3e144b7be0a723a5211656d0",
+      "i1": 1
+    },
+    {
+      "hash": "37b019ff76db88901ba2fcbf2c2a9f7c1bc0f236a4c9bab144388fdc14585c68",
+      "type": 300,
+      "height": 3215121,
+      "blockHash": "f96d1bcee57f5bb96b8811041b04a28027f6ce617c4b2202f9653dffd9fe305a",
+      "time": 1743027133,
+      "s1": "PPJQRJRtRBUYRveM6S3J13JvyXnppox3gz",
+      "s2": "c2eb714853b6810e06209aa47a4b1b2ff063460d8ec28f9039681e3299135f8f",
+      "i1": 3
+    },
+    {
+      "hash": "d62e8c6d0136b13ce84f141833a7204aab998ab7d8b34d8e5e2f9ed77d8268a5",
+      "type": 300,
+      "height": 3043541,
+      "blockHash": "938bca6db97da3b39f70f6d1651500d8e464b8b17c6caf841a4219ad8b366b8a",
+      "time": 1732720160,
+      "s1": "PUFSMK8Lim3fRnaRSkQGKUVj4UrCpB7JPR",
+      "s2": "3561bd8afa710f8d3bbc62d78b1c0b27cff62c909515046fd5b9e8fc7e07bf17",
+      "i1": 4
+    },
+    {
+      "hash": "0aae41977cdca7912ad5cd14a574d3b1e6854692c0043669ab69eab22715aed8",
+      "type": 300,
+      "height": 2972989,
+      "blockHash": "5d4064f1867483e2456f9480e5e21ff24971f663bd03d4cb7e0af39ba7eab697",
+      "time": 1728487585,
+      "s1": "PVQ6XCZmwr5hCr55SYKaTkkdE9g7u4dVVn",
+      "s2": "db4feda377ac39d29f6736c8e619060ae6dfb0dd354ec9151600a0597d5438f6",
+      "i1": 5
+    }
+  ]
+}

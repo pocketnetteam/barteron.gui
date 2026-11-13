@@ -6,6 +6,8 @@ import { formatDate } from '@/lib/format'
 import { VOTING_MODERATION_TTL } from '@/models/account'
 import { LOW_SCORE_LIMIT } from '@/models/moderation'
 import type { Offer } from '@/models/offer'
+import { REVIEW_MAX_LENGTH } from '@/models/review'
+import { useSessionStore } from '@/stores/session'
 import UiAlert from '@/ui/UiAlert.vue'
 import UiButton from '@/ui/UiButton.vue'
 import UiIcon from '@/ui/UiIcon.vue'
@@ -34,6 +36,7 @@ const props = defineProps<{
 const emit = defineEmits<{ submit: [value: { stars: number | null; text: string }] }>()
 const { t, locale } = useI18n()
 const id = useId()
+const session = useSessionStore()
 
 const stars = ref(0)
 const text = ref('')
@@ -55,6 +58,8 @@ const lowCase = computed(() => {
   if (s.kind === 'rejected') return 'rejected'
   if (s.kind === 'waiting') return 'waiting'
   if (moderation.checking.value) return 'checking'
+  // A decision may be there: no new request until the node answers.
+  if (moderation.checkFailed.value) return 'checkFailed'
   return 'needed'
 })
 const canSend = computed(() => {
@@ -67,10 +72,22 @@ const canSend = computed(() => {
 /** A score cannot be changed once it is in the network: ask first (s8-confirm). */
 const confirmOpen = ref(false)
 
-function submit() {
+async function submit() {
   if (!canSend.value) return
+  // Signed in first: the text stays if not, and the form may change (my
+  // offer, scored already) before anything goes.
+  if (!(await session.ensureSignedIn()) || !canSend.value) return
   if (props.form === 'score' && stars.value) confirmOpen.value = true
   else send()
+}
+
+/** Signed out: sign in, then the form checks the moderator's decision first. */
+async function toModerator() {
+  if (session.account !== 'signed-in') {
+    await session.ensureSignedIn()
+    return
+  }
+  requestOpen.value = true
 }
 
 function send() {
@@ -179,6 +196,17 @@ const reason = ref('')
     <p v-else-if="lowCase === 'checking'" class="rvf__hint">
       {{ t('moderation.review.checking') }}
     </p>
+    <p v-else-if="lowCase === 'checkFailed'" class="rvf__error" role="alert">
+      {{ t('moderation.review.checkFailed') }}
+      <button
+        type="button"
+        class="rvf__link rvf__retry"
+        data-testid="moderation-recheck"
+        @click="moderation.recheck()"
+      >
+        {{ t('ui.retry') }}
+      </button>
+    </p>
     <div
       v-else-if="lowCase === 'needed'"
       class="rvf__low"
@@ -195,14 +223,14 @@ const reason = ref('')
       :rows="3"
       :aria-label="t('item.reviews.placeholder')"
       :placeholder="t('item.reviews.placeholder')"
-      :maxlength="1000"
+      :maxlength="REVIEW_MAX_LENGTH"
     />
     <div class="rvf__actions">
       <UiButton
         v-if="lowCase === 'needed'"
         :size="44"
         data-testid="moderation-open"
-        @click="requestOpen = true"
+        @click="toModerator"
       >
         {{ t('moderation.review.toModerator') }}
       </UiButton>
@@ -326,6 +354,12 @@ const reason = ref('')
   background: none;
   color: var(--link);
   font: 600 14px / 20px var(--font-sans);
+}
+
+.rvf__retry {
+  margin-left: 6px;
+  font-size: 13px;
+  line-height: 18px;
 }
 
 .rvf__hint {

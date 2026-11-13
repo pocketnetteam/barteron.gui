@@ -82,16 +82,24 @@ export function useOfferReviews(offer: Ref<Offer>) {
   /** `score` — stars and text; `comment` — text only (scored already, or the author). */
   const form = computed<'score' | 'comment'>(() => (own.value || voted.value ? 'comment' : 'score'))
   const sending = computed(() => myTx.value.some((x) => x.status === 'sending'))
-  /** Bastyon does not let users under 100 reputation give low scores (old error#60). */
-  const lowScoreBlocked = computed(() => (myProfile.data.value?.reputation ?? 0) < 100)
+  /**
+   * Bastyon does not let users under 100 reputation give low scores (old
+   * error#60). Only once the reputation is known: signed out or loading is
+   * not «too new».
+   */
+  const lowScoreBlocked = computed(
+    () => myProfile.isSuccess.value && (myProfile.data.value?.reputation ?? 0) < 100
+  )
 
   async function submit(value: { stars: number | null; text: string }) {
     if (!(await session.ensureSignedIn())) return
-    if (value.stars && !own.value && !voted.value) {
-      void tx.send('vote', toVotePayload(id.value, offer.value.address, value.stars))
-    }
+    // After sign-in the offer may turn out mine or scored already: then the
+    // stars go nowhere, not even into the review (the old app wrote there
+    // only a score it had just sent).
+    const score = value.stars && !own.value && !voted.value ? value.stars : null
+    if (score) void tx.send('vote', toVotePayload(id.value, offer.value.address, score))
     if (value.text) {
-      void tx.send('review', toReviewPayload(id.value, value.text, value.stars ?? undefined))
+      void tx.send('review', toReviewPayload(id.value, value.text, score ?? undefined))
     }
   }
 
