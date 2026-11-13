@@ -2,7 +2,7 @@ import { useQueryClient } from '@tanstack/vue-query'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { keys, useBarteron } from '@/api/queries'
-import { isBanned } from '@/config/ban'
+import { isBanned, loadBanList } from '@/config/ban'
 import type { DeliveryPick } from '@/models/delivery'
 import { useSessionStore } from '@/stores/session'
 import { useUiStore } from '@/stores/ui'
@@ -97,7 +97,9 @@ export function useChat() {
     const sdk = session.sdk
     if (!sdk || opening.value) return false
     if (!(await session.ensureSignedIn())) return false
-    // A banned user's rooms never opened in the old app either.
+    // A banned user's rooms never opened in the old app either. The list may
+    // not have come yet: nothing else has asked the node on this page.
+    await loadBanList().catch(() => undefined)
     if (isBanned(session.address)) return false
     if (await activating()) {
       ui.openDialog('activation')

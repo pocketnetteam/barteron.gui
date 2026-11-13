@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, markRaw, nextTick } from 'vue'
 import { createMemoryHistory } from 'vue-router'
 import { keys } from '@/api/queries'
+import { BAN_LIST } from '@/config/ban-list'
 import { i18n, setLocale } from '@/i18n'
 import { shrinkPhoto } from '@/lib/image'
 import { emptyAccount, type BarteronAccount } from '@/models/account'
@@ -38,6 +39,8 @@ interface Setup {
   /** On the device before the form opens. */
   stored?: Record<string, unknown>
   until?: FormState
+  /** Signed in as someone else than the mock user. */
+  address?: string
 }
 
 async function setup(options: Setup = {}) {
@@ -54,7 +57,7 @@ async function setup(options: Setup = {}) {
   })
   const session = useSessionStore()
   session.sdk = markRaw(sdk)
-  session.address = ME
+  session.address = options.address ?? ME
   session.account = 'signed-in'
   session.mode = 'mock'
   session.appinfo = {
@@ -598,6 +601,21 @@ describe('video', () => {
     await form.removeVideo()
     expect(form.offer.value?.video).toBe('')
     expect(calls('videos.remove')).toHaveLength(0)
+    wrapper.unmount()
+  })
+
+  it('a banned user: photos never reach the host, the video window never opens (old app)', async () => {
+    vi.mocked(shrinkPhoto).mockResolvedValue(PHOTO)
+    const { form, sdk, calls, wrapper } = await setup({ address: BAN_LIST[0] })
+    const upload = vi.fn(async () => [{ url: 'https://img/x.jpg' }])
+    sdk.images.upload = upload
+    void form.addPhotos([PHOTO])
+    void form.addVideo()
+    await new Promise((r) => setTimeout(r, 50))
+    expect(upload).not.toHaveBeenCalled()
+    expect(form.draft.value!.photos.map((p) => p.status)).toEqual(['uploading'])
+    expect(calls('videos.opendialog')).toHaveLength(0)
+    expect(form.videoBusy.value).toBe(true)
     wrapper.unmount()
   })
 

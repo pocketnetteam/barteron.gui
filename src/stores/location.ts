@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref, shallowRef, watch } from 'vue'
 import { requestGeolocation, reverseGeocode, type NominatimPlace } from '@/api/geo'
+import { isBrighteon } from '@/api/queries'
 import { i18n } from '@/i18n'
 import {
   areaFromStored,
@@ -11,6 +12,7 @@ import {
 } from '@/lib/area'
 import {
   approximateBounds,
+  fitBrighteon,
   fromLeafletBounds,
   type LatLng,
   type LeafletBoundsJson,
@@ -89,10 +91,17 @@ export const useLocationStore = defineStore('location', () => {
     save(valid(storedFromArea(value)))
   }
 
-  /** Where a map opens: the stored centre, the device, or the time zone (old `getDefaultLocation`). */
-  const mapCenter = computed<LatLng>(
-    () => area.value?.center ?? device.value ?? centerForTimeZone(deviceTimeZone())
-  )
+  /**
+   * Where a map opens: the stored centre, the device, or the time zone (old
+   * `getDefaultLocation`). Brighteon shows Canada and the USA only, so the
+   * time zone's place outside them gives way to their centre, as before.
+   */
+  const mapCenter = computed<LatLng>(() => {
+    const known = area.value?.center ?? device.value
+    if (known) return known
+    const zone = centerForTimeZone(deviceTimeZone())
+    return isBrighteon(session.appinfo) ? fitBrighteon(zone) : zone
+  })
 
   /**
    * City of the area centre for «Москва · 10 км» (old `onlyCity`). One

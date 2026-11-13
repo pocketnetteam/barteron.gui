@@ -69,6 +69,8 @@ export const keys = {
   balance: (address: string | null) => ['bastyon', 'balance', address] as const,
   /** Transfers of a safe deal and the chain height. */
   deal: (id: string | null) => ['barteron', 'deal', id] as const,
+  /** Offers of safe deals, banned sellers too: apart from `offer`, which hides them. */
+  dealOffers: (ids: readonly string[]) => ['barteron', 'deal-offers', [...ids]] as const,
 }
 
 /** Brighteon is the same app under another project: English, Canada and the USA. */
@@ -399,6 +401,22 @@ export function useOffersByIds(ids: MaybeRefOrGetter<readonly string[]>) {
       for (const o of found) if (o.hash) client.setQueryData(keys.offer(o.hash), o)
       return found
     },
+  })
+}
+
+/**
+ * Offers of safe deals by id, banned sellers included: a deal under way stays
+ * open to its guarantor (`BarteronApi.offersByIds`, `withBanned`). Nothing
+ * goes to the cache of offer pages, where a banned offer is «not found».
+ * `keepPrevious` — for a list: one more deal does not blank the rest.
+ */
+export function useDealOffers(ids: MaybeRefOrGetter<readonly string[]>, keepPrevious = false) {
+  const barteron = useBarteron()
+  return useQuery({
+    queryKey: computed(() => keys.dealOffers(toValue(ids))),
+    enabled: computed(() => !!barteron.value && toValue(ids).length > 0),
+    placeholderData: keepPrevious ? keepPreviousData : undefined,
+    queryFn: () => barteron.value!.api.offersByIds(toValue(ids), { withBanned: true }),
   })
 }
 

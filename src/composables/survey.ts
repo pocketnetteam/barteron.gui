@@ -6,7 +6,7 @@ import {
   type SurveyService,
   type SurveyStatus,
 } from '@/api/survey'
-import { isBanned } from '@/config/ban'
+import { banListLoaded, hangIfBanned, isBanned, loadBanList } from '@/config/ban'
 import { createMockSurvey, type MockSurvey } from '@/sdk/mock-survey'
 import type { ConnectMode } from '@/sdk/connect'
 import type { HostSdk } from '@/sdk/types'
@@ -55,9 +55,13 @@ export function useSurvey() {
   const key = computed(() => ['p2p', 'survey', me.value] as const)
   const service = computed(() => (session.sdk ? surveyServiceFor(session.sdk, session.mode) : null))
 
+  // Asked only once the ban list is here: before it, everyone looks allowed.
+  void loadBanList().catch(() => undefined)
   const status = useQuery({
     queryKey: key,
-    enabled: computed(() => !!service.value && !!me.value && !isBanned(me.value)),
+    enabled: computed(
+      () => !!service.value && !!me.value && banListLoaded() && !isBanned(me.value)
+    ),
     staleTime: Infinity,
     retry: false,
     queryFn: () => service.value!.status(me.value!),
@@ -67,6 +71,7 @@ export function useSurvey() {
 
   async function send(answers: SurveyAnswers): Promise<void> {
     if (!service.value || !me.value) throw new Error('not_signed_in')
+    await hangIfBanned(me.value)
     await service.value.send(me.value, answers)
     set('completed')
   }

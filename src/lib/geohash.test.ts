@@ -2,10 +2,13 @@ import { describe, expect, it } from 'vitest'
 import {
   approximateBounds,
   boundsAround,
+  BRIGHTEON_BOX,
+  BRIGHTEON_CENTER,
   CANADA_USA,
   decodeGeohash,
   distanceKm,
   encodeGeohash,
+  fitBrighteon,
   fromLeafletBounds,
   geohashBounds,
   limitToArea,
@@ -56,6 +59,32 @@ describe('geohash', () => {
     expect(limitToArea(['b5'], CANADA_USA)).toEqual(['b5x', 'b5m', 'b5q', 'b5r', 'b5n', 'b5p'])
     // Europe: nothing left.
     expect(limitToArea(['u0'], CANADA_USA)).toEqual([])
+  })
+
+  it('Brighteon cells are the old «Canada,USA» list, all 63', () => {
+    expect(CANADA_USA.join(',')).toBe(
+      'bk,bs,bu,b7,be,bg,b6,bd,bf,b1,b3,b9,b5x,b5m,b5q,b5r,b5n,b5p,zc,c,' +
+        'fn,fq,fw,fj,fm,fh,fk,fs,f5,f7,fe,f4,f6,fd,f1,f3,f9,fc,f0,f2,f8,fb,87,8e,' +
+        '9p,9r,9x,9z,9n,9q,9w,9y,9m,9t,9v,9u,dp,dr,dx,dn,dq,dj,dh'
+    )
+  })
+
+  it('Brighteon default place: inside the box stays, outside or none is its centre (old `fixLocationIfNeeded`)', () => {
+    expect(fitBrighteon([40.7128, -74.006])).toEqual([40.7128, -74.006])
+    expect(fitBrighteon([BRIGHTEON_BOX.minLat, BRIGHTEON_BOX.maxLng])).toEqual([
+      BRIGHTEON_BOX.minLat,
+      BRIGHTEON_BOX.maxLng,
+    ])
+    for (const away of [
+      [55.7558, 37.6173],
+      [BRIGHTEON_BOX.minLat - 0.01, -100],
+      [BRIGHTEON_BOX.maxLat + 0.01, -100],
+      [40, BRIGHTEON_BOX.minLng - 0.01],
+      [40, BRIGHTEON_BOX.maxLng + 0.01],
+    ] as const) {
+      expect(fitBrighteon([...away])).toEqual(BRIGHTEON_CENTER)
+    }
+    expect(fitBrighteon(null)).toEqual([44.966667, -103.766667])
   })
 
   it('distance Belgrade — Novi Sad is about 70 km', () => {

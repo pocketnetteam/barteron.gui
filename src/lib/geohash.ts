@@ -145,6 +145,25 @@ export const CANADA_USA = [
   'dp,dr,dx,dn,dq,dj,dh',
 ].flatMap((group) => group.split(','))
 
+/** Brighteon: Canada and the USA as a box, and its centre (old `getBrighteonProjectParams`). */
+export const BRIGHTEON_BOX = {
+  minLat: 24.544622,
+  minLng: -168.114716,
+  maxLat: 83.095345,
+  maxLng: -52.621967,
+}
+export const BRIGHTEON_CENTER: LatLng = [44.966667, -103.766667]
+
+/** Old `fixLocationIfNeeded`: a default place outside the box becomes its centre. */
+export function fitBrighteon(point: LatLng | null | undefined): LatLng {
+  if (!point) return BRIGHTEON_CENTER
+  const [lat, lng] = point
+  const b = BRIGHTEON_BOX
+  return b.minLat <= lat && lat <= b.maxLat && b.minLng <= lng && lng <= b.maxLng
+    ? point
+    : BRIGHTEON_CENTER
+}
+
 /**
  * Keeps only the parts of `location` inside `area`; an empty `location` means
  * the whole area. Same rules as the old `GeoHashLimitator.limit`.

@@ -45,6 +45,8 @@ const props = defineProps<{
   busy?: boolean
   /** The status is not confirmed (the last refresh failed): no transfers. */
   stale?: boolean
+  /** The seller is on the ban list: the buyer does not pay, the guarantor is warned. */
+  sellerBanned?: boolean
   refreshing?: boolean
   names: Record<DealRole, string>
   send: (request: Omit<TransferRequest, 'status'> & { to: string }) => Promise<boolean>
@@ -60,13 +62,14 @@ const pk = (value: number) => formatPkoin(value, locale.value)
 const pct = (value: number) =>
   new Intl.NumberFormat(locale.value, { maximumFractionDigits: 2 }).format(value)
 
-type Mode = 'sent' | 'pay' | 'paying' | 'decide' | 'wait' | 'transit' | 'result'
+type Mode = 'sent' | 'pay' | 'banned' | 'paying' | 'decide' | 'wait' | 'transit' | 'result'
 const mode = computed<Mode>(() => {
   if (props.sending) return 'sent'
   switch (status.value) {
     case '1':
       if (props.state.paying) return 'paying'
-      return props.role === 'buyer' ? 'pay' : 'wait'
+      if (props.role !== 'buyer') return 'wait'
+      return props.sellerBanned ? 'banned' : 'pay'
     case '2':
       return props.role === 'validator' ? 'decide' : 'wait'
     case '3a':
@@ -91,6 +94,8 @@ const heading = computed(() => {
       return t('deal.heading.sent')
     case 'pay':
       return t('deal.heading.pay')
+    case 'banned':
+      return t('deal.heading.banned')
     case 'decide':
       return t('deal.heading.decide')
     case 'transit':
@@ -119,6 +124,7 @@ const STEPS: Record<string, Partial<Record<DealRole, string[]>>> = {
   '4b': { buyer: ['s4bBuyer'], validator: ['s4bValidator'] },
 }
 const steps = computed(() => {
+  if (mode.value === 'banned') return []
   const keys = mode.value === 'sent' ? ['sent'] : (STEPS[status.value]?.[props.role] ?? [])
   return keys.map((k) => t(`deal.step.${k}`))
 })
@@ -252,7 +258,7 @@ const failureText = computed(() => {
 <template>
   <section
     class="dac"
-    :class="{ 'dac--turn': turn && !sending }"
+    :class="{ 'dac--turn': turn && !sending && mode !== 'banned' }"
     data-testid="deal-action"
     :data-mode="mode"
   >
@@ -279,6 +285,10 @@ const failureText = computed(() => {
       <p v-if="sentLine" class="dac__tx">{{ sentLine }}</p>
       <UiAlert v-if="role === 'validator'" tone="warning">{{ t('deal.note.retryLocked') }}</UiAlert>
     </template>
+
+    <UiAlert v-if="mode === 'banned'" tone="danger" data-testid="deal-seller-banned">{{
+      t('deal.note.sellerBanned')
+    }}</UiAlert>
 
     <UiAlert v-if="mode === 'paying'" tone="info" live data-testid="deal-paying">{{
       role === 'buyer' ? t('deal.note.payingMine') : t('deal.note.paying')
@@ -327,6 +337,9 @@ const failureText = computed(() => {
 
     <!-- The guarantor: pay the seller or give the money back. -->
     <template v-if="mode === 'decide'">
+      <UiAlert v-if="sellerBanned" tone="danger" data-testid="deal-seller-banned">{{
+        t('deal.note.sellerBannedValidator')
+      }}</UiAlert>
       <UiAlert v-if="state.paying" tone="warning" live data-testid="deal-paying-more">{{
         t('deal.note.payingMore', { amount: pk(state.paying.amount) })
       }}</UiAlert>

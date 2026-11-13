@@ -345,6 +345,7 @@ const crumbs = computed(() => [
               :failure="transfer.failure.value"
               :busy="transfer.sending.value"
               :stale="stale"
+              :seller-banned="deal.sellerBanned.value"
               :refreshing="deal.refreshing.value"
               :names="names"
               :addresses="addresses"

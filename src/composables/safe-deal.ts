@@ -1,9 +1,10 @@
 import { useQueries, useQuery } from '@tanstack/vue-query'
 import { computed, ref, toValue, watch, type MaybeRefOrGetter } from 'vue'
 import type { BarteronApi } from '@/api/barteron'
-import { keys, useBarteron, useOffer, useOffersByIds } from '@/api/queries'
+import { keys, useBarteron, useDealOffers } from '@/api/queries'
 import { createLimiter } from '@/lib/limit'
 import type { Offer } from '@/models/offer'
+import { isBanned } from '@/config/ban'
 import { guarantorAddresses } from '@/config/roles'
 import { guarantorState } from '@/models/account'
 import {
@@ -79,9 +80,14 @@ export function useDeal(deal: MaybeRefOrGetter<DealParams | null>) {
   const params = computed(() => toValue(deal))
   const id = computed(() => params.value?.id ?? null)
 
-  const offerQuery = useOffer(() => params.value?.offer)
-  const offer = computed(() => offerQuery.data.value ?? null)
+  // Banned sellers too: the guarantor may hold the buyer's money.
+  const offerQuery = useDealOffers(() => (params.value ? [params.value.offer] : []))
+  const offer = computed(
+    () => offerQuery.data.value?.find((o) => o.hash === params.value?.offer) ?? null
+  )
   const seller = computed(() => offer.value?.address ?? null)
+  /** The seller is on the ban list: the buyer does not pay, the guarantor is warned. */
+  const sellerBanned = computed(() => isBanned(seller.value))
   /** One person in two parts (a link made by hand): nobody acts, nothing is read. */
   const conflict = computed(() => !!params.value && dealConflict(params.value, seller.value))
   const role = computed(() =>
@@ -171,6 +177,7 @@ export function useDeal(deal: MaybeRefOrGetter<DealParams | null>) {
     offerQuery,
     offer,
     seller,
+    sellerBanned,
     conflict,
     role,
     state,
@@ -366,7 +373,7 @@ export function useDealList(enabled: MaybeRefOrGetter<boolean> = true) {
   const deals = useDealsStore()
   const txStore = useTxStore()
   const list = computed(() => (toValue(enabled) ? deals.list : []))
-  const offers = useOffersByIds(() => [...new Set(list.value.map((d) => d.offer))])
+  const offers = useDealOffers(() => [...new Set(list.value.map((d) => d.offer))], true)
   const offerOf = (id: string) => offers.data.value?.find((o) => o.hash === id) ?? null
   const height = useChainHeight(() => list.value.length > 0)
 

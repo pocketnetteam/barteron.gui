@@ -4,7 +4,9 @@ import { createPinia, setActivePinia } from 'pinia'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, markRaw } from 'vue'
 import { createMemoryHistory } from 'vue-router'
+import { useOffer } from '@/api/queries'
 import DealActionCard from '@/components/deal/DealActionCard.vue'
+import { BAN_LIST } from '@/config/ban-list'
 import { i18n, setLocale } from '@/i18n'
 import { createDealId, dealOpReturn, type DealParams } from '@/models/safe-deal'
 import { TX_TYPE, type RawTx } from '@/models/tx'
@@ -65,6 +67,7 @@ interface Setup {
   /** More on the mock chain than the demo has. */
   transfers?: MockTransfer[]
   accounts?: RawTx[]
+  offers?: RawTx[]
 }
 
 async function setup<T>(use: () => T, options: Setup = {}) {
@@ -76,6 +79,7 @@ async function setup<T>(use: () => T, options: Setup = {}) {
     ...data,
     transfers: [...(data.transfers ?? []), ...(options.transfers ?? [])],
     accounts: [...(data.accounts ?? []), ...(options.accounts ?? [])],
+    offers: [...(data.offers ?? []), ...(options.offers ?? [])],
     broadcastMs: 0,
   })
   const sdk: MockSdk = createMockSdk({
@@ -208,6 +212,78 @@ describe('a deal as each participant sees it', () => {
       expect(result.deal.role.value).toBeNull()
       expect(calls('rpc', 'getfromtotransactions')).toHaveLength(0)
     }
+  })
+})
+
+describe('a seller on the ban list', () => {
+  // Banned in the middle of a deal: the list changes with a deploy.
+  const BANNED = BAN_LIST[0]!
+  const OFFER = 'e'.repeat(64)
+  const offerTx: RawTx = {
+    hash: OFFER,
+    type: TX_TYPE.offer,
+    height: MOCK_HEIGHT - 500,
+    time: 1_700_000_000,
+    s1: BANNED,
+    s2: OFFER,
+    p: {
+      s1: 'ru-RU',
+      s2: 'Велосипед',
+      s3: 'Почти новый',
+      s4: '{"t":1006,"a":[],"c":"used","p":"published"}',
+      s6: 'srywc',
+      i1: 100000,
+    },
+  }
+  const dealOf = (buyer: string, validator: string, random: string): DealParams => {
+    const t = { offer: OFFER, buyer, validator, fee: '2' }
+    return { id: createDealId(t, random), ...t }
+  }
+  const PAID = dealOf(SELLERS.anna, ME, '00000000000000b2')
+  const UNPAID = dealOf(ME, SELLERS.maria, '00000000000000b1')
+
+  it('the guarantor holding the money still has the deal: the offer, the seller, the status', async () => {
+    const { result } = await setup(() => useDeal(PAID), {
+      offers: [offerTx],
+      transfers: [onChain(PAID, SELLERS.anna, ME, 1020, 50)],
+    })
+    await vi.waitFor(() => expect(result.state.value?.status).toBe('2'))
+    expect(result.offer.value?.hash).toBe(OFFER)
+    expect(result.seller.value).toBe(BANNED)
+    expect(result.role.value).toBe('validator')
+    expect(result.sellerBanned.value).toBe(true)
+  })
+
+  it('the buyer before paying: the deal opens, marked as the banned seller’s', async () => {
+    const { result } = await setup(() => useDeal(UNPAID), { offers: [offerTx] })
+    await vi.waitFor(() => expect(result.state.value?.status).toBe('1'))
+    expect(result.role.value).toBe('buyer')
+    expect(result.sellerBanned.value).toBe(true)
+  })
+
+  it('a seller not on the list is not marked', async () => {
+    const { result } = await setup(() => useDeal(BIKE))
+    await vi.waitFor(() => expect(result.state.value).not.toBeNull())
+    expect(result.sellerBanned.value).toBe(false)
+  })
+
+  it('«Сделки» shows its status, not «объявление не найдено»', async () => {
+    const { result } = await setup(() => useDealList(), {
+      offers: [offerTx],
+      transfers: [onChain(PAID, SELLERS.anna, ME, 1020, 50)],
+      before: () => localStorage.setItem(`${ME}_deals`, JSON.stringify([{ ...PAID, savedAt: 1 }])),
+    })
+    await vi.waitFor(() => expect(result.items.value[0]?.status).toBe('ready'))
+    expect(result.items.value[0]).toMatchObject({ role: 'validator', state: { status: '2' } })
+  })
+
+  it('the offer page still hides it: its cache is apart from the deal’s', async () => {
+    const { result } = await setup(() => ({ deal: useDeal(PAID), page: useOffer(OFFER) }), {
+      offers: [offerTx],
+    })
+    await vi.waitFor(() => expect(result.deal.offer.value?.hash).toBe(OFFER))
+    await vi.waitFor(() => expect(result.page.isSuccess.value).toBe(true))
+    expect(result.page.data.value).toBeNull()
   })
 })
 
@@ -359,6 +435,37 @@ describe('the action card', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
     setLocale('ru')
+  })
+
+  it('the seller is banned: the buyer gets no payment form; the guarantor is warned and keeps both choices', async () => {
+    const unpaid = { status: '1' as const, paid: 0, transfer: null, paying: null }
+    const buyer = card({ role: 'buyer', state: unpaid, listed: 1000, sellerBanned: true })
+    expect(buyer.wrapper.get('[data-testid="deal-action"]').attributes('data-mode')).toBe('banned')
+    expect(buyer.wrapper.get('h2').text()).toBe('Оплата недоступна')
+    expect(buyer.wrapper.find('.dac--turn').exists()).toBe(false)
+    expect(buyer.wrapper.get('[data-testid="deal-seller-banned"]').text()).toContain(
+      'Не переводите оплату'
+    )
+    expect(buyer.wrapper.find('[data-testid="deal-value"]').exists()).toBe(false)
+    expect(buyer.wrapper.find('[data-testid="deal-transfer"]').exists()).toBe(false)
+    buyer.wrapper.unmount()
+
+    const guarantor = card({ sellerBanned: true })
+    expect(guarantor.wrapper.get('[data-testid="deal-seller-banned"]').text()).toContain(
+      'вернуть оплату покупателю'
+    )
+    expect(guarantor.wrapper.find('[data-testid="deal-transfer"]').exists()).toBe(true)
+    expect(guarantor.wrapper.find('[data-testid="deal-verdict"]').exists()).toBe(true)
+    guarantor.wrapper.unmount()
+
+    // Not on the list: the usual form and no warning.
+    const calm = card({ role: 'buyer', state: unpaid, listed: 1000 })
+    expect(calm.wrapper.get('[data-testid="deal-action"]').attributes('data-mode')).toBe('pay')
+    expect(calm.wrapper.find('[data-testid="deal-seller-banned"]').exists()).toBe(false)
+    calm.wrapper.unmount()
+    const calmGuarantor = card()
+    expect(calmGuarantor.wrapper.find('[data-testid="deal-seller-banned"]').exists()).toBe(false)
+    calmGuarantor.wrapper.unmount()
   })
 
   it('one more payment on its way: the guarantor is told to wait for it', async () => {

@@ -1680,6 +1680,7 @@ const en: Messages = {
       steps: 'Follow the steps',
       transit: 'Transfer on its way',
       sent: 'Waiting for blockchain confirmation',
+      banned: 'Payment unavailable',
     },
     step: {
       s1Buyer1: "Get the guarantor's confirmation in the chat that they take part in the deal.",
@@ -1722,6 +1723,9 @@ const en: Messages = {
         'The payment is in a block. Waiting for the network to confirm it — usually up to 10 minutes; then the status changes by itself.',
       payingMore:
         'The buyer has sent {amount} PKOIN more; the transfer is waiting for the network to confirm it. Wait for it, so that the payout counts the whole payment.',
+      sellerBanned: 'The seller is blocked in Barteron. Do not send a payment for this deal.',
+      sellerBannedValidator:
+        'The seller is blocked in Barteron. Decide whether to pay them or return the payment to the buyer.',
     },
     form: {
       value: 'Final price of the deal',

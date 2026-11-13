@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { BAN_LIST } from '@/config/ban-list'
 import { dealOpReturn, SAFE_DEAL_START_HEIGHT } from '@/models/safe-deal'
 import { TX_TYPE, type RawTx } from '@/models/tx'
@@ -64,6 +64,44 @@ describe('BarteronApi', () => {
     expect(await api.offersByIds(['b'.repeat(64)])).toEqual([])
   })
 
+  it('hides banned authors in every list: by author, exchanges, chains, reviews', async () => {
+    const { sdk, api } = setup()
+    const [A, B] = ['a'.repeat(64), 'b'.repeat(64)]
+    const ok = offerFrom(SELLERS.anna, A)
+    const bad = offerFrom(BANNED, B)
+    const review = (author: string, n: number): RawTx => ({
+      hash: String(n).repeat(64),
+      type: TX_TYPE.comment,
+      time: n,
+      s1: author,
+      s3: A,
+      p: { s1: JSON.stringify({ message: 'Отзыв', info: '5' }) },
+    })
+    const answers: Record<string, unknown> = {
+      getbarteronoffersbyaddress: [bad, ok],
+      getbarterondeals: [bad, ok],
+      getbarteroncomplexdeals: [
+        { target: bad, intermediates: [] },
+        { target: ok, intermediates: [bad] },
+        { target: ok, intermediates: [ok] },
+      ],
+      getbarteronoffersdetails: { comments: [review(BANNED, 1), review(SELLERS.anna, 2)] },
+      getbarteronoffersbyroottxhashes: [bad, ok],
+    }
+    vi.spyOn(sdk, 'rpc').mockImplementation(async (method: string) => answers[method] as never)
+
+    const hashes = (offers: { hash: string | null }[]) => offers.map((o) => o.hash)
+    expect(hashes(await api.offersByAddress(SELLERS.anna))).toEqual([A])
+    expect(hashes((await api.dealsPage({ theirTags: [1006], myTags: [621] })).offers)).toEqual([A])
+    const chains = await api.complexDeals({ myTag: 621, theirTags: [1006] })
+    expect(chains.map((c) => [c.target.hash, ...hashes(c.intermediates)])).toEqual([[A, A]])
+    const details = await api.offerDetails({ offerIds: [A] })
+    expect(details.reviews.map((r) => r.address)).toEqual([SELLERS.anna])
+    expect(hashes(await api.offersByIds([B, A]))).toEqual([A])
+    // Safe deals only: a seller banned in the middle of a deal.
+    expect(hashes(await api.offersByIds([B, A], { withBanned: true }))).toEqual([B, A])
+  })
+
   it('offers by ids keep the order asked and skip removed ones', async () => {
     const { api, data } = setup([
       {
@@ -124,8 +162,28 @@ describe('BarteronApi', () => {
     })
     expect(await api.feed({ location: ['u0'] })).toEqual([])
     await api.feed({ location: ['9q'], lang: 'ru-RU' })
-    const call = sdk.mock.calls.filter((c) => c.method === 'rpc').at(-1)!
-    expect(call.args[1]).toEqual([{ location: ['9q'], lang: 'en-US' }])
+    const last = () => sdk.mock.calls.filter((c) => c.method === 'rpc').at(-1)!.args
+    expect(last()[1]).toEqual([{ location: ['9q'], lang: 'en-US' }])
+
+    // The same for exchanges, chains and counts; outside — not even asked.
+    const asked = () => sdk.mock.calls.filter((c) => c.method === 'rpc').length
+    const before = asked()
+    expect(await api.deals({ theirTags: [1], myTags: [2], location: ['u0'] })).toEqual([])
+    expect(await api.complexDeals({ myTag: 2, theirTags: [1], location: ['u0'] })).toEqual([])
+    expect(await api.groups({ locationGroup: 4, location: ['u0'] })).toEqual([])
+    expect(asked()).toBe(before)
+    await api.deals({ theirTags: [1], myTags: [2], location: ['9q'] })
+    expect(last()[0]).toBe('getbarterondeals')
+    expect(last()[1]).toMatchObject([{ location: ['9q'], lang: 'en-US' }])
+    await api.complexDeals({ myTag: 2, theirTags: [1], location: ['9q', 'u0'] })
+    expect(last()[0]).toBe('getbarteroncomplexdeals')
+    expect(last()[1]).toMatchObject([{ location: ['9q'], lang: 'en-US' }])
+    await api.groups({ locationGroup: 4, location: ['9q'] })
+    expect(last()[1]).toMatchObject([{ location: ['9q'], lang: 'en-US' }])
+
+    // An offer or a seller by a link: not limited, as in the old app.
+    await api.offersByAddress(SELLERS.anna)
+    expect(last()[1]).toEqual([SELLERS.anna])
   })
 
   it('safe deal: transfers by the exact OP_RETURN, as the old page asked', async () => {

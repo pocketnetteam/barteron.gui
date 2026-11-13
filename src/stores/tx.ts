@@ -15,7 +15,7 @@
 
 import { defineStore } from 'pinia'
 import { computed, reactive, ref } from 'vue'
-import { isBanned, loadBanList } from '@/config/ban'
+import { hangIfBanned } from '@/config/ban'
 import { offerFromAlias, type Offer } from '@/models/offer'
 import { dealIdFromMessage } from '@/models/deal-transfer'
 import { isJsonObject, isTxid, str } from '@/models/tx'
@@ -267,8 +267,7 @@ export const useTxStore = defineStore('tx', () => {
       return tx
     }
     // Banned users see their action hang forever, like in the old app.
-    await loadBanList().catch(() => undefined)
-    if (isBanned(session.address)) return new Promise<TrackedTx>(() => {})
+    await hangIfBanned(session.address)
 
     try {
       const action = await SENDERS[tx.kind](sdk, tx.payload)

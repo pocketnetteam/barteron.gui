@@ -104,12 +104,11 @@ const isTx = (value: unknown): value is RawTx =>
 
 const txs = (value: unknown): RawTx[] => asArray(value).filter(isTx)
 
-function offers(value: unknown): Offer[] {
-  return withoutBanned(
-    txs(value)
-      .filter((tx) => tx.type !== TX_TYPE.contentDelete)
-      .map((tx) => parseOffer(tx))
-  )
+function offers(value: unknown, withBanned = false): Offer[] {
+  const all = txs(value)
+    .filter((tx) => tx.type !== TX_TYPE.contentDelete)
+    .map((tx) => parseOffer(tx))
+  return withBanned ? all : withoutBanned(all)
 }
 
 export interface OfferPage {
@@ -216,10 +215,15 @@ export class BarteronApi {
     return offers(await this.call('getbarteronoffersbyaddress', [address]))
   }
 
-  /** Latest versions of offers by their ids, in the order asked. */
-  async offersByIds(ids: readonly string[]): Promise<Offer[]> {
+  /**
+   * Latest versions of offers by their ids, in the order asked. `withBanned`
+   * — for safe deals only: a seller banned in the middle of a deal must not
+   * leave the guarantor with the buyer's money and no page (the old deal page
+   * did not filter either).
+   */
+  async offersByIds(ids: readonly string[], { withBanned = false } = {}): Promise<Offer[]> {
     if (!ids.length) return []
-    const found = offers(await this.call('getbarteronoffersbyroottxhashes', [ids]))
+    const found = offers(await this.call('getbarteronoffersbyroottxhashes', [ids]), withBanned)
     const position = new Map(ids.map((id, i) => [id, i]))
     return found.sort(
       (a, b) => (position.get(a.hash ?? '') ?? Infinity) - (position.get(b.hash ?? '') ?? Infinity)

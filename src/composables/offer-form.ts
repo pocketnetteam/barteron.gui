@@ -15,6 +15,7 @@ import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { useAccount, useCategories, useOffer, useRates, useUserProfile } from '@/api/queries'
 import { parseVideoInfo } from '@/components/item/gallery'
+import { hangIfBanned } from '@/config/ban'
 import { isPickupPointOwner } from '@/config/delivery'
 import { dataUrlBytes, isPhotoFile, shrinkPhoto } from '@/lib/image'
 import { createLimiter } from '@/lib/limit'
@@ -285,6 +286,8 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
     if (!sdk || !draft.value || videoBusy.value) return
     videoBusy.value = true
     try {
+      // Nor did their video window open.
+      await hangIfBanned(session.address)
       const result = (await sdk.videos.opendialog()) as { link?: unknown } | null | undefined
       if (result && typeof result.link === 'string' && result.link && draft.value) {
         draft.value.video = result.link
@@ -355,6 +358,8 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
     const photo = findPhoto(pid)
     if (!photo?.data) return
     photo.status = 'uploading'
+    // A banned user's photos never reached the host in the old app either.
+    await hangIfBanned(session.address)
     await uploadSlot(async () => {
       try {
         const current = findPhoto(pid)
