@@ -7,6 +7,7 @@ import type { Offer } from '@/models/offer'
 import { guarantorAddresses } from '@/config/roles'
 import { guarantorState } from '@/models/account'
 import {
+  dealConflict,
   dealOpReturn,
   dealRole,
   dealState,
@@ -81,8 +82,10 @@ export function useDeal(deal: MaybeRefOrGetter<DealParams | null>) {
   const offerQuery = useOffer(() => params.value?.offer)
   const offer = computed(() => offerQuery.data.value ?? null)
   const seller = computed(() => offer.value?.address ?? null)
+  /** One person in two parts (a link made by hand): nobody acts, nothing is read. */
+  const conflict = computed(() => !!params.value && dealConflict(params.value, seller.value))
   const role = computed(() =>
-    params.value ? dealRole(params.value, seller.value, session.address) : null
+    params.value && !conflict.value ? dealRole(params.value, seller.value, session.address) : null
   )
   const readable = computed(() => !!params.value && !!seller.value && !!role.value)
 
@@ -168,6 +171,7 @@ export function useDeal(deal: MaybeRefOrGetter<DealParams | null>) {
     offerQuery,
     offer,
     seller,
+    conflict,
     role,
     state,
     sending,
@@ -234,11 +238,11 @@ export function useDealTransfer(
     const p = toValue(deal)
     const sdk = session.sdk
     if (!p || !sdk || sending.value) return false
-    failure.value = null
-    if (!(await session.ensureSignedIn())) return false
-
+    // Busy before the first await: a second press in the meantime sends nothing.
     sending.value = true
+    failure.value = null
     try {
+      if (!(await session.ensureSignedIn())) return false
       const granted = await sdk.permissions.check({ permission: 'payment' }).catch(() => false)
       if (!granted) {
         await sdk.permissions.request(['payment']).catch(() => undefined)

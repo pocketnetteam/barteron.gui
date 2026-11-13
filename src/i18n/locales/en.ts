@@ -1720,6 +1720,8 @@ const en: Messages = {
         'The buyer has sent the payment to the guarantor. Waiting for the network to confirm it — usually up to 10 minutes.',
       payingMine:
         'The payment is in a block. Waiting for the network to confirm it — usually up to 10 minutes; then the status changes by itself.',
+      payingMore:
+        'The buyer has sent {amount} PKOIN more; the transfer is waiting for the network to confirm it. Wait for it, so that the payout counts the whole payment.',
     },
     form: {
       value: 'Final price of the deal',
@@ -1807,8 +1809,10 @@ const en: Messages = {
       title: 'The deal link is broken',
       incomplete: 'The link lacks deal details. Open it again from the deal chat.',
       guarantor: "The guarantor in the link is not on Barteron's guarantor list.",
-      fee: 'The guarantor fee is not set. Write to the guarantor in the deal chat.',
+      fee: 'The guarantor fee in the link is missing or wrong. Write to the guarantor in the deal chat.',
       id: 'The deal number does not match its terms: the link was edited. Open it again from the deal chat.',
+      participants:
+        'One person has two roles in the link: the buyer, the seller and the guarantor must be different people. Barteron does not make such links — this one was edited.',
     },
     noOffer: {
       title: "The deal's offer was not found",

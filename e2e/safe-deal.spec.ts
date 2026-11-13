@@ -224,6 +224,17 @@ test('not my deal, and a link edited by hand', async ({ page }) => {
   await expect(page.getByTestId('deal-page')).toHaveAttribute('data-state', 'noAccess')
   await page.goto(page$({ ...BUY_TABLET, fee: '3' }))
   await expect(page.getByTestId('deal-bad')).toContainText('Номер сделки не совпадает')
+  // Made by hand with a fitting id: I buy my own laptop; Илья guarantees the
+  // tablet he sells. Nobody is offered to pay.
+  for (const link of [
+    deal('laptop-mine', ME, ILYA, '00000000000000aa'),
+    deal('tablet-ilya', ME, ILYA, '00000000000000bb'),
+    deal('tablet-ilya', MARIA, MARIA, '00000000000000cc'),
+  ]) {
+    await page.goto(page$(link))
+    await expect(page.getByTestId('deal-bad')).toContainText('один человек в двух ролях')
+    await expect(page.getByTestId('deal-transfer')).toHaveCount(0)
+  }
 })
 
 test('«Сделки» in the cabinet: active and finished, by role, the move that is mine', async ({

@@ -22,6 +22,7 @@
 
 import { isGuarantor } from '@/config/roles'
 import { md5 } from '@/lib/md5'
+import { isValidGuarantorFee } from './account'
 import {
   dealIdFromMessage,
   parseTransfers,
@@ -72,6 +73,9 @@ export function createDealId(terms: DealTerms, random = hex(16)): string {
 
 const DEAL_ID = /^[0-9a-f]{26}$/
 
+/** 26 lowercase hex, as the old app made every id. */
+export const isDealId = (id: string): boolean => DEAL_ID.test(id)
+
 /** The id matches the rest of the link. Unknown versions do not. */
 export function checkDealId(params: DealParams): boolean {
   if (!DEAL_ID.test(params.id)) return false
@@ -85,10 +89,13 @@ export function checkDealId(params: DealParams): boolean {
  * What is wrong with a deal link:
  * - `incomplete` — a parameter is missing;
  * - `guarantor` — the guarantor is not on the list (old «Validator address is invalid»);
- * - `fee` — no guarantor fee;
+ * - `participants` — one person in two parts: the buyer guarantees, or the
+ *   seller buys or guarantees (`dealConflict`). The app never makes such a
+ *   link: it leaves the seller and the buyer out of the guarantors;
+ * - `fee` — no guarantor fee, or not one a guarantor may set;
  * - `id` — the id does not match the rest («Control hash does not match»).
  */
-export type DealLinkProblem = 'incomplete' | 'guarantor' | 'fee' | 'id'
+export type DealLinkProblem = 'incomplete' | 'guarantor' | 'participants' | 'fee' | 'id'
 
 const first = (value: unknown): string => {
   const v = Array.isArray(value) ? value[0] : value
@@ -112,10 +119,26 @@ export function parseDealQuery(
     return { params: null, problem: 'incomplete' }
   }
   if (!isGuarantor(params.validator)) return { params, problem: 'guarantor' }
-  if (!(Number(params.fee) > 0)) return { params, problem: 'fee' }
+  if (params.buyer === params.validator) return { params, problem: 'participants' }
+  // As a guarantor may set it (0 < fee < 99): 500 % or «0x10» is not a fee.
+  if (!/^\d+(\.\d+)?$/.test(params.fee) || !isValidGuarantorFee(Number(params.fee))) {
+    return { params, problem: 'fee' }
+  }
   if (!checkDealId(params)) return { params, problem: 'id' }
   return { params, problem: null }
 }
+
+/**
+ * The seller is also the buyer or the guarantor: known once the offer is
+ * read. Such a deal guarantees nothing — the money would go round to the
+ * same person — so the page does not offer to pay.
+ */
+export const dealConflict = (
+  params: Pick<DealParams, 'buyer' | 'validator'>,
+  seller: string | null | undefined
+): boolean =>
+  params.buyer === params.validator ||
+  (!!seller && (seller === params.buyer || seller === params.validator))
 
 /** Query of the deal page, in the old order: id, offer, buyer, validator, fee. */
 export const dealQuery = (p: DealParams): Record<string, string> => ({
@@ -246,7 +269,11 @@ export interface DealState {
   paid: number
   /** The transfer behind the status: the payment for 2, the guarantor's for 3 and 4. */
   transfer: DealTransfer | null
-  /** Status 1: the buyer's payment is in a block but not confirmed yet. */
+  /**
+   * A payment of the buyer's in a block, short of confirmations: at 1 — the
+   * payment itself; at 2 — one more on top of what came, which the payout
+   * should wait for.
+   */
   paying: DealTransfer | null
 }
 
@@ -268,8 +295,10 @@ export function dealState(chain: DealChain): DealState {
   if (buyerOk.length) return { ...base, status: '4b', transfer: latest(buyerOk) }
   if (chain.toSeller.length) return { ...base, status: '3a', transfer: latest(chain.toSeller) }
   if (chain.toBuyer.length) return { ...base, status: '3b', transfer: latest(chain.toBuyer) }
-  if (paidOk.length) return { ...base, status: '2', transfer: latest(paidOk) }
-  return { ...base, status: '1', transfer: null, paying: latest(chain.paid) }
+  const pending = chain.paid.filter((t) => !ok(t))
+  if (paidOk.length)
+    return { ...base, status: '2', transfer: latest(paidOk), paying: latest(pending) }
+  return { ...base, status: '1', transfer: null, paying: latest(pending) }
 }
 
 export const isDealFinished = (status: DealStatus): boolean => status === '4a' || status === '4b'

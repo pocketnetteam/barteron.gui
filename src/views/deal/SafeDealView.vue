@@ -55,8 +55,13 @@ const state = computed(() => deal.state.value)
 const role = computed(() => deal.role.value)
 const offer = computed(() => deal.offer.value)
 
+/** What is wrong with the link: from the link itself, or, once the offer is read, its seller in a second part. */
+const problem = computed(
+  () => parsed.value.problem ?? (deal.conflict.value ? ('participants' as const) : null)
+)
+
 const page = computed(() => {
-  if (parsed.value.problem) return 'bad'
+  if (problem.value) return 'bad'
   if (session.status !== 'ready' || session.account === 'unknown') return 'loading'
   if (!supported.value) return 'unsupported'
   if (session.account !== 'signed-in') return 'signin'
@@ -202,7 +207,7 @@ const crumbs = computed(() => [
         class="sd__panel"
         icon="warning"
         :title="t('deal.bad.title')"
-        :text="t(`deal.bad.${parsed.problem}`)"
+        :text="t(`deal.bad.${problem}`)"
         data-testid="deal-bad"
       >
         <UiButton

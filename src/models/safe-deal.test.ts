@@ -5,6 +5,7 @@ import oldIds from '@/test/old-deal-ids.json'
 import {
   checkDealId,
   createDealId,
+  dealConflict,
   dealIdFromMessage,
   dealOpReturn,
   dealPath,
@@ -144,13 +145,21 @@ describe('deal link', () => {
     expect(parseDealQuery({ ...query, buyer: ` ${BUYER}\n` }).problem).toBeNull()
     expect(parseDealQuery({ ...query, offer: 'xyz' }).problem).toBe('incomplete')
     expect(parseDealQuery({ ...query, validator: SELLER }).problem).toBe('guarantor')
+    // The buyer guarantees his own deal: whatever the id says.
+    const self = { ...terms, buyer: VALIDATOR }
+    expect(parseDealQuery({ ...self, id: createDealId(self) }).problem).toBe('participants')
     expect(parseDealQuery({ ...query, fee: '' }).problem).toBe('fee')
     expect(parseDealQuery({ ...query, fee: '3' }).problem).toBe('id')
     // No fee, with an id that fits: the old page let «0» or «abc» through
     // and counted a zero or NaN fee.
-    for (const fee of ['0', '-5', 'abc']) {
+    // Nor one a guarantor could not set: 0 < fee < 99, written as a number.
+    for (const fee of ['0', '-5', 'abc', '99', '500', '0x10', '1e1', ' ']) {
       const link = { ...terms, fee, id: createDealId({ ...terms, fee }, '0123456789abcdef') }
       expect(parseDealQuery(link).problem).toBe('fee')
+    }
+    for (const fee of ['98.5', '0.5', '05']) {
+      const link = { ...terms, fee, id: createDealId({ ...terms, fee }, '0123456789abcdef') }
+      expect(parseDealQuery(link).problem).toBeNull()
     }
     // vue-router gives arrays for repeated keys.
     expect(parseDealQuery({ ...query, id: [id, 'x'] }).problem).toBeNull()
@@ -335,11 +344,14 @@ describe('deal status', () => {
       status: '2',
       paid: 1000,
     })
-    // The second payment waits for its blocks; only the first counts so far.
+    // The second payment waits for its blocks; only the first counts so far,
+    // and the guarantor is told one more is coming.
     expect(dealState(chain({ paid: [at('p1', 900, 1000), at('p2', 998, 262.5)] }))).toMatchObject({
       status: '2',
       paid: 1000,
+      paying: { txid: 'p2', amount: 262.5 },
     })
+    expect(dealState(chain({ paid: [at('p1', 900, 1000)] })).paying).toBeNull()
     expect(dealState(chain({ paid: [at('p1', 900, 0.1), at('p2', 901, 0.2)] })).paid).toBe(0.3)
     expect(dealState(chain({ paid: [at('p1', 900, 1300)] })).paid).toBe(1300)
   })
@@ -417,6 +429,14 @@ describe('roles', () => {
     expect(isDealTurn('validator', '3a')).toBe(false)
     expect(isDealTurn('seller', '4a')).toBe(true)
     expect(isDealTurn('buyer', '4b')).toBe(true)
+  })
+
+  it('one person in two parts: the deal guarantees nothing', () => {
+    expect(dealConflict(p, SELLER)).toBe(false)
+    expect(dealConflict(p, null)).toBe(false)
+    expect(dealConflict(p, BUYER)).toBe(true)
+    expect(dealConflict(p, VALIDATOR)).toBe(true)
+    expect(dealConflict({ buyer: VALIDATOR, validator: VALIDATOR }, null)).toBe(true)
   })
 
   it('who sends money now, and the step of four', () => {

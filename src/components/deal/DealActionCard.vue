@@ -219,7 +219,8 @@ const canSend = computed(
 const dialogOpen = ref(false)
 async function confirmTransfer() {
   const tr = transfer.value
-  if (!tr) return
+  // The status may have moved or gone stale while the window was open.
+  if (!tr || !canSend.value) return
   await props.send({ to: props.addresses[tr.to], amount: tr.amount, feemode: tr.feemode })
   dialogOpen.value = false
   confirmed.value = false
@@ -326,6 +327,9 @@ const failureText = computed(() => {
 
     <!-- The guarantor: pay the seller or give the money back. -->
     <template v-if="mode === 'decide'">
+      <UiAlert v-if="state.paying" tone="warning" live data-testid="deal-paying-more">{{
+        t('deal.note.payingMore', { amount: pk(state.paying.amount) })
+      }}</UiAlert>
       <div class="dac__rules">
         <h3>{{ t('deal.form.rules') }}</h3>
         <ul>
