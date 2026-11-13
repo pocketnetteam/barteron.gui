@@ -45,6 +45,52 @@ describe('pacer', () => {
     expect(started).toEqual(['a', 'now', 'b'])
   })
 
+  it('urgent tasks keep the order they came in', async () => {
+    const pace = createPacer(1000)
+    const all = Promise.all([
+      pace(task('a')),
+      pace(task('u1'), { urgent: true }),
+      pace(task('u2'), { urgent: true }),
+    ])
+    await vi.advanceTimersByTimeAsync(3000)
+    await all
+    expect(started).toEqual(['a', 'u1', 'u2'])
+  })
+
+  it('a stream of urgent tasks lets a waiting one through', async () => {
+    const pace = createPacer(1000)
+    const all = [pace(task('first')), pace(task('waiting'))]
+    for (let i = 1; i <= 5; i++) all.push(pace(task(`u${i}`), { urgent: true }))
+    await vi.advanceTimersByTimeAsync(10_000)
+    await Promise.all(all)
+    expect(started).toEqual(['first', 'u1', 'u2', 'u3', 'waiting', 'u4', 'u5'])
+  })
+
+  it('after a quiet queue an urgent task goes first again', async () => {
+    const pace = createPacer(1000)
+    const streak = [pace(task('a'))]
+    for (let i = 1; i <= 3; i++) streak.push(pace(task(`u${i}`), { urgent: true }))
+    await vi.advanceTimersByTimeAsync(3000)
+    await Promise.all(streak)
+    started.length = 0
+    // Both come within the second after the last task and wait together.
+    const next = Promise.all([pace(task('later')), pace(task('now'), { urgent: true })])
+    await vi.advanceTimersByTimeAsync(2000)
+    await next
+    expect(started).toEqual(['now', 'later'])
+  })
+
+  it('a task that fails at once does not stop the queue', async () => {
+    const pace = createPacer(1000)
+    const broken = pace(() => {
+      throw new Error('sync')
+    }).catch((error: Error) => error)
+    const after = pace(task('b'))
+    await vi.advanceTimersByTimeAsync(1000)
+    expect(await broken).toMatchObject({ message: 'sync' })
+    expect(await after).toBe('b')
+  })
+
   it('an aborted task leaves the queue without running and frees its turn', async () => {
     const pace = createPacer(1000)
     const controller = new AbortController()

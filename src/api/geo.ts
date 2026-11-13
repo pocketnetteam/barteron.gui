@@ -15,7 +15,30 @@ import { createPacer } from '@/lib/pace'
 import type { HostSdk } from '@/sdk/types'
 
 const NOMINATIM = 'https://nominatim.openstreetmap.org'
-const nominatimQueue = createPacer(1000)
+let nominatimQueue = createPacer(1000)
+
+/** A request Nominatim has not answered by then is given up: it must not hold the queue. */
+export const NOMINATIM_TIMEOUT_MS = 15_000
+/**
+ * After a refusal or no answer, background requests (place names) wait this
+ * long, longer each time in a row; the address search still goes. A refusal
+ * (429) shows in a browser as a failed request: Nominatim sends it without
+ * CORS headers. Repeating at once would only keep the block on (PLAN, risk 12).
+ */
+export const NOMINATIM_BACKOFF_MS = [30_000, 60_000, 120_000, 300_000] as const
+let failuresInRow = 0
+let pausedUntil = 0
+
+/** A fresh queue, no refusals, no kept searches: for tests. */
+export function resetNominatimPause(): void {
+  failuresInRow = 0
+  pausedUntil = 0
+  searches.clear()
+  nominatimQueue = createPacer(1000)
+}
+
+/** The device location; the previous Bastyon asks the browser with no time limit. */
+export const GEOLOCATION_TIMEOUT_MS = 20_000
 
 /** Coordinates from `get.geolocation()`: bastyon-nextgen answers `{latitude, longitude}`. */
 export function parseHostLocation(value: unknown): LatLng | null {
@@ -50,11 +73,17 @@ export async function requestGeolocation(sdk: HostSdk, ask: boolean): Promise<Ge
     granted = await sdk.permissions.check({ permission: 'geolocation' }).catch(() => false)
   }
   if (!granted) return { status: 'denied' }
+  let timer: ReturnType<typeof setTimeout> | undefined
+  const timeout = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => reject(new Error('geolocation_timeout')), GEOLOCATION_TIMEOUT_MS)
+  })
   try {
-    const point = parseHostLocation(await sdk.get.geolocation())
+    const point = parseHostLocation(await Promise.race([sdk.get.geolocation(), timeout]))
     return point ? { status: 'ok', point } : { status: 'failed', error: new Error('bad_location') }
   } catch (error) {
     return { status: 'failed', error }
+  } finally {
+    clearTimeout(timer)
   }
 }
 
@@ -75,27 +104,83 @@ export interface FoundPlace {
 
 type Fetch = typeof fetch
 
+const paused = (urgent: boolean) => !urgent && Date.now() < pausedUntil
+
+/** A refusal or no answer: the service is busy or blocks us. A bad query is not one. */
+const isRefusal = (error: unknown) => {
+  const status = /^nominatim_(\d+)$/.exec((error as Error)?.message ?? '')?.[1]
+  return !status || Number(status) === 429 || Number(status) >= 500
+}
+
 function getJson(
   url: string,
   fetcher: Fetch,
   signal: AbortSignal | undefined,
   urgent: boolean
 ): Promise<unknown> {
+  if (paused(urgent)) return Promise.reject(new Error('nominatim_paused'))
   return nominatimQueue(
     async () => {
-      const response = await fetcher(url, { signal, headers: { Accept: 'application/json' } })
-      if (!response.ok) throw new Error(`nominatim_${response.status}`)
-      return response.json()
+      if (paused(urgent)) throw new Error('nominatim_paused')
+      const controller = new AbortController()
+      const stop = () => controller.abort()
+      signal?.addEventListener('abort', stop, { once: true })
+      const timer = setTimeout(stop, NOMINATIM_TIMEOUT_MS)
+      try {
+        const response = await fetcher(url, {
+          signal: controller.signal,
+          headers: { Accept: 'application/json' },
+        })
+        if (!response.ok) throw new Error(`nominatim_${response.status}`)
+        const data: unknown = await response.json()
+        failuresInRow = 0
+        pausedUntil = 0
+        return data
+      } catch (error) {
+        // Left by the screen: not the service's fault.
+        if (signal?.aborted) throw error
+        const reason = controller.signal.aborted ? new Error('nominatim_timeout') : error
+        if (isRefusal(reason)) {
+          const wait =
+            NOMINATIM_BACKOFF_MS[Math.min(failuresInRow, NOMINATIM_BACKOFF_MS.length - 1)]!
+          failuresInRow++
+          pausedUntil = Date.now() + wait
+        }
+        throw reason
+      } finally {
+        clearTimeout(timer)
+        signal?.removeEventListener('abort', stop)
+      }
     },
     { signal, urgent }
   )
 }
 
-const toPlace = (raw: NominatimPlace, options?: AddressFormatOptions): FoundPlace | null => {
-  const point: LatLng = [Number(raw.lat), Number(raw.lon)]
+/** Only the string parts of an answer: names go into text and into `toLowerCase`. */
+function strings(value: unknown): Record<string, string> | undefined {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined
+  return Object.fromEntries(
+    Object.entries(value).filter((entry): entry is [string, string] => typeof entry[1] === 'string')
+  )
+}
+
+const toPlace = (value: unknown, options?: AddressFormatOptions): FoundPlace | null => {
+  if (!value || typeof value !== 'object') return null
+  const v = value as Record<string, unknown>
+  const point: LatLng = [Number(v.lat), Number(v.lon)]
   if (!point.every(Number.isFinite)) return null
+  const raw: NominatimPlace = {
+    lat: String(v.lat),
+    lon: String(v.lon),
+    display_name: typeof v.display_name === 'string' ? v.display_name : undefined,
+    address: strings(v.address),
+  }
   return { point, label: formatAddress(raw, options), raw }
 }
+
+/** Searches already answered: Nominatim asks to keep results, not to ask again. */
+const searches = new Map<string, FoundPlace[]>()
+const SEARCHES_KEPT = 50
 
 export interface SearchOptions {
   /** Interface language for the names. */
@@ -118,15 +203,21 @@ export async function searchAddress(
     limit: String(options.limit ?? 5),
     ...(options.locale && { 'accept-language': options.locale }),
   })
+  const key = params.toString()
+  const kept = searches.get(key)
+  if (kept) return kept
   const data = await getJson(
     `${NOMINATIM}/search?${params}`,
     options.fetcher ?? fetch,
     options.signal,
     true
   )
-  return (Array.isArray(data) ? (data as NominatimPlace[]) : [])
+  const found = (Array.isArray(data) ? data : [])
     .map((raw) => toPlace(raw))
     .filter((p): p is FoundPlace => !!p)
+  if (searches.size >= SEARCHES_KEPT) searches.delete(searches.keys().next().value!)
+  searches.set(key, found)
+  return found
 }
 
 export async function reverseGeocode(
@@ -147,7 +238,7 @@ export async function reverseGeocode(
     options.signal,
     false
   )
-  return data && typeof data === 'object' && 'lat' in data ? toPlace(data as NominatimPlace) : null
+  return toPlace(data)
 }
 
 export interface AddressFormatOptions {
