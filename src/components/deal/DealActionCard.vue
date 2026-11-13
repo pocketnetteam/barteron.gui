@@ -3,6 +3,7 @@ import { computed, ref, useId, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { TransferFailure, TransferRequest } from '@/composables/safe-deal'
 import { formatAgo, formatPkoin, shortHash } from '@/lib/format'
+import { txErrorText } from '@/lib/tx-errors'
 import {
   isDealTurn,
   moneyFromPayment,
@@ -250,7 +251,7 @@ const failureText = computed(() => {
   const f = props.failure
   if (!f) return ''
   return f.kind === 'other'
-    ? t('deal.failed.otherText', { error: f.text })
+    ? t('deal.failed.otherText', { error: txErrorText(f.text, t) })
     : t(`deal.failed.${f.kind}Text`)
 })
 </script>

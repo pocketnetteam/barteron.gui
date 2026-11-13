@@ -7,6 +7,7 @@ import { BAN_LIST } from '@/config/ban-list'
 import { emptyOffer, toOfferPayload } from '@/models/offer'
 import { createMockSdk } from '@/sdk/mock'
 import { createMockNetwork, type MockNetwork } from '@/sdk/mock-network'
+import type { HostAction } from '@/sdk/types'
 import { useSessionStore } from './session'
 import { etaMinutes, kindOfAction, netStatusOf, useTxStore, type TrackedTx } from './tx'
 
@@ -92,6 +93,145 @@ describe('tx store', () => {
     expect(restored).toMatchObject({ kind: 'offer', status: 'waiting' })
     expect(tx.pendingOffers[0]!.offer.caption).toBe('Диван')
     await vi.waitFor(() => expect(restored.status).toBe('done'))
+  })
+
+  it('the previous Bastyon tells of the broadcast before it answers: still one entry', async () => {
+    const { tx, sdk } = setup()
+    await tx.start()
+    const send = sdk.barteron.offer
+    // pocketnet.gui `actions.js`: `trigger()` right after `self.transaction = …`
+    // posts the `action` event; `makeAction` answers after that.
+    sdk.barteron.offer = async (data) => {
+      const action = await send(data)
+      sdk.mock.push('action', { ...action })
+      return action
+    }
+    const sent = await tx.send('offer', offerPayload())
+    expect(tx.items).toHaveLength(1)
+    expect(tx.items[0]).toBe(sent)
+    expect(tx.latestFor(sent.target)).toBe(sent)
+    await vi.waitFor(() => expect(sent.status).toBe('done'))
+    expect(tx.items.map((t) => t.status)).toEqual(['done'])
+    expect(tx.pendingOffers).toEqual([])
+  })
+
+  it('an early event that is already settled is kept: in a block, or refused', async () => {
+    const { tx, sdk } = setup()
+    await tx.start()
+    const send = sdk.barteron.offer
+    sdk.barteron.offer = async (data) => {
+      const action = await send(data)
+      sdk.mock.push('action', { ...action, rejected: 'actions_rejectedFromNodes' })
+      return action
+    }
+    const sent = await tx.send('offer', offerPayload())
+    expect(tx.items).toEqual([sent])
+    expect(sent).toMatchObject({ status: 'failed', error: 'actions_rejectedFromNodes' })
+  })
+
+  it('after a reload, a refused removal is retried with the offer id the host needs', async () => {
+    const network = createMockNetwork({ broadcastMs: 1, confirmMs: 5 })
+    const first = setup(network)
+    const hash = 'b'.repeat(64)
+    // Sent, then the page reloads before the block.
+    const sent = first.tx.send('offerRemove', { hash })
+    await sent
+    const { tx, sdk } = setup(network)
+    tx.onAction({ ...network.actions()[0]!, completed: false, rejected: 'notconfirmed' })
+    const restored = tx.items[0]!
+    expect(restored).toMatchObject({ kind: 'offerRemove', status: 'failed', target: hash })
+    await tx.retry(restored.id)
+    const removes = sdk.mock.calls.filter((c) => c.method === 'barteron.removeOffer')
+    expect(removes.map((c) => c.args[0])).toEqual([{ hash }])
+  })
+
+  it('an edit is about the offer it edits; the newest one about it is the one shown', async () => {
+    const { tx } = setup()
+    await tx.start()
+    const hash = 'c'.repeat(64)
+    const withdraw = await tx.send('offer', { ...offerPayload(), hash, published: 'withdrawed' })
+    expect(withdraw.target).toBe(hash)
+    const renew = await tx.send('offer', { ...offerPayload(), hash, published: 'published' })
+    expect(tx.latestFor(hash)).toBe(renew)
+    expect(tx.latestFor(hash, ['offerRemove'])).toBeUndefined()
+  })
+
+  it('a retry goes only for a failed one: a second press while it waits sends nothing', async () => {
+    const { tx, sdk } = setup()
+    await tx.start()
+    const sent = await tx.send('offer', offerPayload())
+    expect(sent.status).toBe('waiting')
+    expect(tx.retry(sent.id)).toBeNull()
+    expect(tx.retry('nope')).toBeNull()
+    expect(sdk.mock.calls.filter((c) => c.method === 'barteron.offer')).toHaveLength(1)
+  })
+
+  it('a retry forgets the refused transaction: its late news no longer applies', async () => {
+    const { tx } = setup()
+    await tx.start()
+    const sent = await tx.send('offer', offerPayload('!reject'))
+    await vi.waitFor(() => expect(sent.status).toBe('failed'))
+    const refused = { id: sent.actionId!, transaction: sent.txid!, completed: true }
+    const again = tx.retry(sent.id)!
+    expect(sent).toMatchObject({ status: 'sending', txid: null, actionId: null })
+    await again
+    // The host later finds the first one in a block after all: not this attempt.
+    tx.onAction(refused)
+    expect(sent.status).toBe('waiting')
+  })
+
+  it('the previous Bastyon may queue it without a txid: still sending, then waiting', async () => {
+    const { tx, sdk } = setup()
+    await tx.start()
+    sdk.barteron.account = async () => ({ id: 'queued', transaction: null, completed: false })
+    const sent = await tx.send('account', {
+      address: ME,
+      tags: [],
+      geohash: '',
+      static: false,
+      radius: 0,
+    })
+    expect(sent).toMatchObject({ status: 'sending', actionId: 'queued', txid: null })
+    tx.onAction({ id: 'queued', transaction: 'd'.repeat(64), sent: new Date(1000).toISOString() })
+    expect(sent).toMatchObject({ status: 'waiting', txid: 'd'.repeat(64), sentAt: 1000 })
+    // News by txid alone finds it too.
+    tx.onAction({ transaction: 'd'.repeat(64), completed: true })
+    expect(sent.status).toBe('done')
+  })
+
+  it('after a reload: only what still waits comes back, with the time the host sent it', async () => {
+    const network = createMockNetwork({ broadcastMs: 1, confirmMs: 10 })
+    const first = setup(network)
+    await first.tx.send('offer', offerPayload('В блоке'))
+    await first.tx.send('offer', offerPayload('!reject'))
+    await vi.waitFor(() =>
+      expect(network.actions().every((a) => a.completed || a.rejected)).toBe(true)
+    )
+
+    const { tx, sdk } = setup(network)
+    const at = new Date(Date.now() - 5 * 60_000).toISOString()
+    const pending: HostAction = {
+      id: 'p1',
+      transaction: 'e'.repeat(64),
+      sent: at,
+      added: at,
+      expObject: { ...offerPayload('Ждёт') },
+    }
+    let asked = 0
+    sdk.get.actions = async () => {
+      asked += 1
+      return [...network.actions(), pending]
+    }
+    await tx.start()
+    await tx.start()
+    expect(asked).toBe(1)
+    expect(tx.items).toHaveLength(1)
+    expect(tx.items[0]).toMatchObject({ status: 'waiting', sentAt: Date.parse(at) })
+    // Started twice, listening once: one event — one status change.
+    const seen: string[] = []
+    tx.subscribe((t) => seen.push(t.status))
+    sdk.mock.push('action', { ...pending, completed: true })
+    expect(seen).toEqual(['done'])
   })
 
   it('banned users see their action hang, like in the old app', async () => {

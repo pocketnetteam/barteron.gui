@@ -21,6 +21,7 @@ import { useOfferExchanges } from '@/composables/exchanges'
 import { useOfferActions } from '@/composables/offer-actions'
 import { useOfferPage } from '@/composables/offer-page'
 import { useOfferReviews } from '@/composables/offer-reviews'
+import { txErrorText } from '@/lib/tx-errors'
 import { offerLifecycle, type Offer } from '@/models/offer'
 import { useAutorenewStore } from '@/stores/autorenew'
 import { useSessionStore } from '@/stores/session'
@@ -155,7 +156,7 @@ const notice = computed(() => {
       tone: 'danger' as const,
       icon: 'error' as const,
       title: t('item.state.failed'),
-      text: o.tx.error ?? '',
+      text: txErrorText(o.tx.error, t),
     }
   if (lifecycle.value === 'withdrawn')
     return {

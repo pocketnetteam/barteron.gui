@@ -108,6 +108,9 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
   const sendTx = async (method: string, data: unknown): Promise<HostAction> => {
     record(method, data)
     const author = requireSignedIn()
+    // `failNext('barteron.offer')`: the node refuses, and the previous Bastyon
+    // passes on its code (`appsError(-26)`).
+    if (fails(method)) throw new Error('-26')
     if (options.network) {
       const kind = method.replace('barteron.', '') as MockWrite
       return options.network.send(kind, data, author)

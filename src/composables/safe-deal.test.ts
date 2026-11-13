@@ -468,6 +468,20 @@ describe('the action card', () => {
     calmGuarantor.wrapper.unmount()
   })
 
+  it('a transfer refused with a host code: its words, not the code', () => {
+    const coded = card({ failure: { kind: 'other', text: 'actions_noinputs_wait' } })
+    expect(coded.wrapper.get('[data-testid="deal-failure"]').text()).toContain(
+      'Кошелёк Bastyon ответил: PKOIN на счёте ещё ждут подтверждения сети'
+    )
+    coded.wrapper.unmount()
+    // A sentence from bastyon-nextgen stays as it came.
+    const said = card({ failure: { kind: 'other', text: 'Нода не отвечает' } })
+    expect(said.wrapper.get('[data-testid="deal-failure"]').text()).toContain(
+      'Кошелёк Bastyon ответил: Нода не отвечает'
+    )
+    said.wrapper.unmount()
+  })
+
   it('one more payment on its way: the guarantor is told to wait for it', async () => {
     const { wrapper } = card({
       state: {

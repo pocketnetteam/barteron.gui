@@ -1187,6 +1187,19 @@ const en: Messages = {
     imagesMax: 'No more than 10 photos',
     noHost: 'No connection to Bastyon',
     unknown: 'Unknown error',
+    notConfirmed: 'The transaction did not make it into a block',
+    noCoins: 'Not enough PKOIN in your account for this operation',
+    coinsWait:
+      'The PKOIN in your account are still waiting for network confirmation. Try again in a couple of minutes',
+    registering:
+      'Your Bastyon account is still being registered on the network. Try again once registration is complete',
+    cancelled: 'Cancelled',
+    replaced: 'Replaced by a newer operation',
+    timeout:
+      'Bastyon did not answer in time. The transaction may still have gone through: wait a couple of minutes and check before retrying',
+    rateLimit: 'Too many actions in a row. Wait a little and try again',
+    badRecord: 'Bastyon did not accept the record: it contains an error',
+    notAllowed: 'Bastyon does not allow this copy of Barteron to write to the network',
   },
   cabinet: {
     menuTitle: 'Profile',

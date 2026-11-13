@@ -203,6 +203,30 @@ test('my offer: withdraw it, watch the status, publish again', async ({ page }) 
   await expect(page.getByTestId('own-notice')).toContainText('Публикуется в сети')
 })
 
+test('my offer: a refused withdrawal says why in words and can be retried', async ({ page }) => {
+  await page.goto(`/barter/${LAPTOP}`)
+  await expect(page.getByTestId('item-page')).toHaveAttribute('data-kind', 'own')
+  await page.evaluate(() =>
+    (window as { __barteronMock?: { failNext(m: string): void } }).__barteronMock!.failNext(
+      'barteron.offer'
+    )
+  )
+  if (isPhone(page)) await page.getByRole('button', { name: 'Снять с публикации' }).click()
+  else await page.getByTestId('own-withdraw').click()
+  await page.getByTestId('confirm-action').click()
+  // The node's code -26 in the old app's words, not «-26».
+  const notice = page.getByTestId('own-notice')
+  await expect(notice).toContainText('Минимальная плата за ретрансляцию не достигнута')
+  await expect(notice).not.toContainText('-26')
+  await page.getByTestId('own-retry').filter({ visible: true }).click()
+  await expect(notice).toContainText('Снимаем с публикации')
+  const offers = await callsOf(page, 'barteron.offer')
+  expect(offers.map((c) => (c.args[0] as { published: string }).published)).toEqual([
+    'withdrawed',
+    'withdrawed',
+  ])
+})
+
 test('my offer as buyers see it: their buttons, nothing to press', async ({ page }) => {
   test.skip(isPhone(page), 'same page as someone else’s offer')
   await page.goto(`/barter/${LAPTOP}?view=buyer`)

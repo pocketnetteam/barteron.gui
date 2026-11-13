@@ -50,7 +50,9 @@ type Sender = (sdk: HostSdk, payload: unknown) => Promise<HostAction>
 
 const SENDERS: Record<TxKind, Sender> = {
   offer: (sdk, p) => sdk.barteron.offer(p),
-  offerRemove: (sdk, p) => sdk.barteron.removeOffer(p as { hash: string }),
+  // After a reload the payload is the host's copy, `{ txidEdit, type }`.
+  offerRemove: (sdk, p) =>
+    sdk.barteron.removeOffer({ hash: targetOf('offerRemove', p, null) ?? '' }),
   account: (sdk, p) => sdk.barteron.account(p),
   review: (sdk, p) => sdk.barteron.comment(p),
   vote: (sdk, p) => sdk.barteron.vote(p),
@@ -197,6 +199,26 @@ export const useTxStore = defineStore('tx', () => {
     }
   }
 
+  /**
+   * The previous Bastyon posts the `action` event of a broadcast before it
+   * answers the send (pocketnet.gui `actions.js`: `trigger()` right after the
+   * txid, then `makeAction` resolves), so the event made an entry of its own.
+   * The answer is the same action: one entry stays, the one the caller holds.
+   */
+  function absorbTwin(tx: TrackedTx) {
+    const twin = items.value.find(
+      (t) =>
+        t !== tx && ((tx.actionId && t.actionId === tx.actionId) || (tx.txid && t.txid === tx.txid))
+    )
+    if (!twin) return
+    if (twin.status === 'done' || twin.status === 'failed') {
+      tx.status = twin.status
+      tx.error = twin.error
+      tx.settledAt = twin.settledAt
+    }
+    items.value = items.value.filter((t) => t !== twin)
+  }
+
   function onAction(action: HostAction) {
     let tx = find(action)
     if (!tx) {
@@ -272,6 +294,7 @@ export const useTxStore = defineStore('tx', () => {
     try {
       const action = await SENDERS[tx.kind](sdk, tx.payload)
       apply(tx, action ?? {})
+      absorbTwin(tx)
     } catch (error) {
       tx.status = 'failed'
       tx.error = errorText(error)
