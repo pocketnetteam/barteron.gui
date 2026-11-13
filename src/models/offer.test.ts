@@ -174,6 +174,9 @@ describe('toOfferPayload: what the hosts sign', () => {
     expect(checkOffer({ ...offer, geohash: '' })).toBe('geohash')
     expect(checkOffer({ ...offer, priceCents: -1 })).toBe('price')
     expect(checkOffer({ ...offer, priceCents: 1.5 })).toBe('price')
+    // Past 2^53 the number is no longer exact and goes out as «1e+21».
+    expect(checkOffer({ ...offer, priceCents: 2 ** 53 })).toBe('price')
+    expect(checkOffer({ ...offer, priceCents: 1e21 })).toBe('price')
     expect(checkOffer({ ...offer, address: '' })).toBe('address')
   })
 

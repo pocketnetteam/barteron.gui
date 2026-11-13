@@ -19,6 +19,7 @@
  */
 
 import type { Rates } from '@/api/rates'
+import { decodeGeohash } from '@/lib/geohash'
 import type { CategoryNames, CategoryTree } from './categories'
 import { deliveryOptions, pickupPointInfo, type WorkDay } from './delivery'
 import {
@@ -266,13 +267,17 @@ export function safeDealPossible(
 
 export type PriceOutcome =
   | { ok: true; cents: number; currencyPrice: OfferCurrencyPrice; pkoin: number }
-  | { ok: false; reason: 'missing' | 'invalid' | 'tooBig' | 'noRate' }
+  | { ok: false; reason: 'missing' | 'invalid' | 'tooSmall' | 'tooBig' | 'noRate' }
 
 /**
  * What goes on chain for the price. `p.i1` holds PKOIN at publishing; a price
  * fixed in a currency also goes into `currencyPrice`, and buyers see the PKOIN
  * amount by today's rate. A currency price that is not fixed is turned into
  * PKOIN once, now.
+ *
+ * Stricter than the old form in two places: less than a hundredth of a PKOIN
+ * would go out as 0 (the old app let it), and a fixed currency price worth
+ * more PKOIN than exist is refused too (the old app checked only PKOIN prices).
  */
 export function draftPrice(
   draft: Pick<OfferDraft, 'exchange' | 'price' | 'currency' | 'fixCurrency'>,
@@ -283,19 +288,17 @@ export function draftPrice(
   if (!draft.price.trim()) return { ok: false, reason: 'missing' }
   if (!Number.isFinite(amount) || amount < 0) return { ok: false, reason: 'invalid' }
   if (amount === 0) return { ok: false, reason: 'missing' }
-  if (draft.currency === PKOIN) {
-    if (amount > PKOIN_TOTAL_SUPPLY) return { ok: false, reason: 'tooBig' }
-    return { ok: true, cents: toPriceCents(amount), currencyPrice: {}, pkoin: amount }
-  }
-  const rate = rates?.[draft.currency]
+  const inPkoin = draft.currency === PKOIN
+  const rate = inPkoin ? 1 : rates?.[draft.currency]
   if (!rate) return { ok: false, reason: 'noRate' }
   const pkoin = amount / rate
-  // The old app checked the total supply only for a PKOIN price.
-  if (!draft.fixCurrency && pkoin > PKOIN_TOTAL_SUPPLY) return { ok: false, reason: 'tooBig' }
+  if (pkoin > PKOIN_TOTAL_SUPPLY) return { ok: false, reason: 'tooBig' }
+  const cents = toPriceCents(pkoin)
+  if (cents < 1) return { ok: false, reason: 'tooSmall' }
   return {
     ok: true,
-    cents: toPriceCents(pkoin),
-    currencyPrice: draft.fixCurrency ? { currency: draft.currency, price: amount } : {},
+    cents,
+    currencyPrice: !inPkoin && draft.fixCurrency ? { currency: draft.currency, price: amount } : {},
     pkoin,
   }
 }
@@ -363,7 +366,7 @@ export function offerFromDraft(draft: OfferDraft, ctx: DraftContext): Offer {
       : draft.exchange === 'my_list'
         ? [MY_LIST]
         : draft.exchange === 'own'
-          ? [...draft.tags]
+          ? [...new Set(draft.tags)]
           : []
 
   const metaData: JsonObject = { ...base.metaData }
@@ -499,8 +502,8 @@ export function draftIssues(draft: OfferDraft, ctx: IssueContext = {}): DraftIss
     }
   }
 
-  // 4. Place and delivery
-  if (!draft.geohash) add('place', 'place', 'place')
+  // 4. Place and delivery: every offer on chain has a valid one.
+  if (!decodeGeohash(draft.geohash)) add('place', 'place', 'place')
   if (!point && draft.pickupPoints.on && !draft.pickupPoints.ids.length) {
     add('place', 'delivery', 'pickupPoints')
   }
@@ -551,17 +554,92 @@ export function suggestCategories(
     .map(([id]) => id)
 }
 
-/** The stored draft back, or `null` when it is not one. */
+const strOr = (value: unknown, fallback = ''): string =>
+  typeof value === 'string' ? value : fallback
+
+const oneOf = <T extends string>(value: unknown, options: readonly T[], fallback: T): T =>
+  options.includes(value as T) ? (value as T) : fallback
+
+const isCategoryId = (value: unknown): value is number =>
+  typeof value === 'number' && Number.isInteger(value) && value > 0
+
+function readDay(value: unknown, fallback: DraftDay): DraftDay {
+  if (!isJsonObject(value)) return fallback
+  return {
+    open: typeof value.open === 'boolean' ? value.open : fallback.open,
+    allDay: value.allDay === true,
+    start: strOr(value.start, fallback.start),
+    finish: strOr(value.finish, fallback.finish),
+  }
+}
+
+function readPoint(value: unknown): DraftPoint {
+  const fresh = newPoint()
+  if (!isJsonObject(value)) return fresh
+  const days = Array.isArray(value.days) && value.days.length === 7 ? value.days : null
+  return {
+    financialTerms: strOr(value.financialTerms),
+    days: days ? days.map((day, i) => readDay(day, fresh.days[i]!)) : fresh.days,
+    scheduleInfo: strOr(value.scheduleInfo),
+    address: strOr(value.address),
+    route: strOr(value.route),
+  }
+}
+
+const readToggle = (value: unknown): { on: boolean; info: string } =>
+  isJsonObject(value) ? { on: value.on === true, info: strOr(value.info) } : { on: false, info: '' }
+
+/**
+ * The stored draft back, or `null` when it is not one. Every field is checked:
+ * a draft broken by a bug, a later version or a hand edit gives defaults for
+ * what is wrong instead of breaking the form and the cabinet.
+ */
 export function readDraft(value: unknown): OfferDraft | null {
   if (!isJsonObject(value) || value.v !== 1) return null
-  const base = newDraft(typeof value.currency === 'string' ? value.currency : PKOIN)
-  const draft = { ...base, ...value } as OfferDraft
-  if (!Array.isArray(draft.photos) || !Array.isArray(draft.tags)) return null
-  draft.photos = draft.photos.filter(
-    (p) => isJsonObject(p) && typeof p.url === 'string' && p.status === 'ready'
-  )
-  if (!isJsonObject(draft.point) || !Array.isArray(draft.point.days)) draft.point = newPoint()
-  return draft
+  const base = newDraft(strOr(value.currency) || PKOIN)
+  const price = value.price
+  const photos = Array.isArray(value.photos) ? value.photos : []
+  const pickupPoints = isJsonObject(value.pickupPoints) ? value.pickupPoints : {}
+  return {
+    ...base,
+    hash: isTxid(value.hash) ? value.hash : null,
+    baseTxHash: isTxid(value.baseTxHash) ? value.baseTxHash : null,
+    caption: strOr(value.caption),
+    description: strOr(value.description),
+    tag: isCategoryId(value.tag) ? value.tag : null,
+    condition: oneOf(value.condition, ['new', 'used'], 'new'),
+    photos: photos.flatMap((p): DraftPhoto[] =>
+      isJsonObject(p) && typeof p.url === 'string' && p.url && p.status === 'ready'
+        ? [
+            {
+              id: strOr(p.id) || photoId(),
+              url: p.url,
+              status: 'ready',
+              bytes: typeof p.bytes === 'number' && p.bytes > 0 ? p.bytes : 0,
+            },
+          ]
+        : []
+    ),
+    video: strOr(value.video),
+    videoUploadedHere: value.videoUploadedHere === true,
+    videoOrder: oneOf(value.videoOrder, ['first', 'last'], 'first'),
+    exchange: oneOf(value.exchange, ['own', 'my_list', 'anything', 'for_nothing'], 'own'),
+    tags: Array.isArray(value.tags) ? value.tags.filter(isCategoryId) : [],
+    price: typeof price === 'number' && Number.isFinite(price) ? String(price) : strOr(price),
+    fixCurrency: typeof value.fixCurrency === 'boolean' ? value.fixCurrency : base.fixCurrency,
+    priceFrom: value.priceFrom === true,
+    fee: oneOf(value.fee, ['', 'inHalf', 'seller'], ''),
+    geohash: decodeGeohash(strOr(value.geohash)) ? strOr(value.geohash) : '',
+    selfPickup: readToggle(value.selfPickup),
+    directDelivery: readToggle(value.directDelivery),
+    pickupPoints: {
+      on: pickupPoints.on === true,
+      ids: Array.isArray(pickupPoints.ids) ? pickupPoints.ids.filter(isTxid) : [],
+    },
+    point: readPoint(value.point),
+    updatedAt:
+      typeof value.updatedAt === 'number' && Number.isFinite(value.updatedAt) ? value.updatedAt : 0,
+  }
 }
 
 /** What is stored: uploaded photos only, without picture data. */

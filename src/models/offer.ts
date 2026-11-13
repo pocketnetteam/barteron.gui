@@ -353,7 +353,8 @@ export function checkOffer(
   if (!offer.condition) return 'condition'
   if (!Array.isArray(offer.images)) return 'images'
   if (!offer.geohash) return 'geohash'
-  if (!Number.isInteger(offer.priceCents) || offer.priceCents < 0) return 'price'
+  // Exact integers only: past 2^53 JSON writes «1e+21» and the node cannot read it.
+  if (!Number.isSafeInteger(offer.priceCents) || offer.priceCents < 0) return 'price'
   if (typeof offer.video !== 'string') return 'video'
   return null
 }

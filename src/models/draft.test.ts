@@ -92,12 +92,39 @@ describe('price as typed', () => {
       cents: 0,
     })
   })
+
+  it('less than a hundredth of a PKOIN is no price: it would go out as 0', () => {
+    expect(draftPrice(draft({ price: '0,004' }), null)).toEqual({ ok: false, reason: 'tooSmall' })
+    expect(draftPrice(draft({ price: '0,005' }), null)).toMatchObject({ ok: true, cents: 1 })
+    // 0,4 ₽ at 100 ₽ for a PKOIN, fixed or not.
+    for (const fixCurrency of [true, false]) {
+      expect(
+        draftPrice(draft({ price: '0,4', currency: 'RUB', fixCurrency }), { RUB: 100 })
+      ).toEqual({ ok: false, reason: 'tooSmall' })
+    }
+  })
+
+  it('a price fixed in a currency may not be worth more PKOIN than exist either', () => {
+    expect(
+      draftPrice(draft({ price: '99999999999999', currency: 'RUB', fixCurrency: true }), {
+        RUB: 10,
+      })
+    ).toEqual({ ok: false, reason: 'tooBig' })
+  })
+
+  it('odd input: a lone point, two commas, a minus, an exponent', () => {
+    expect(['.', '1,5,6', '-5', '1e5', '١٢'].map(parsePrice).every(Number.isNaN)).toBe(true)
+    expect(draftPrice(draft({ price: '-5' }), null)).toEqual({ ok: false, reason: 'invalid' })
+    expect(draftPrice(draft({ price: '  ' }), null)).toEqual({ ok: false, reason: 'missing' })
+  })
 })
 
 describe('offerFromDraft: what goes on chain, as the old form wrote it', () => {
   it('the exchange list by mode', () => {
     const tags = (patch: Partial<OfferDraft>) => offerFromDraft(draft(patch), CTX).tags
     expect(tags({ exchange: 'own', tags: [100, 17] })).toEqual([100, 17])
+    // The form never repeats one; a stored draft might.
+    expect(tags({ exchange: 'own', tags: [100, 17, 100] })).toEqual([100, 17])
     expect(tags({ exchange: 'my_list' })).toEqual(['my_list'])
     expect(tags({ exchange: 'for_nothing' })).toEqual(['for_nothing'])
     expect(tags({ exchange: 'anything' })).toEqual([])
@@ -125,6 +152,43 @@ describe('offerFromDraft: what goes on chain, as the old form wrote it', () => {
     })
     expect(offerFromDraft(draft({ fee: 'inHalf', tags: [100] }), CTX).safeDeal).toEqual({})
     expect(safeDealPossible(draft({ exchange: 'my_list' }), [17])).toBe(true)
+  })
+
+  it('the fee switched off on an edit leaves the offer; the guarantor stays', () => {
+    const base: Offer = {
+      ...emptyOffer(ME, 'ru-RU', NOW),
+      safeDeal: { validator: 'PVal', validatorFeeVariant: 'inHalf' },
+    }
+    expect(offerFromDraft(draft({ fee: '' }), { ...CTX, base }).safeDeal).toEqual({
+      validator: 'PVal',
+    })
+  })
+
+  it('texts are trimmed; an edit keeps its time, a new offer gets now', () => {
+    const base: Offer = { ...emptyOffer(ME, 'ru-RU', 1000), hash: 'a'.repeat(64) }
+    const fresh = offerFromDraft(draft({ caption: '  Планшет ', description: '\nНовый\n' }), CTX)
+    expect([fresh.caption, fresh.description, fresh.time]).toEqual(['Планшет', 'Новый', NOW])
+    expect(offerFromDraft(draft(), { ...CTX, base }).time).toBe(1000)
+  })
+
+  it('pickup points switched off write no ids, even if some were picked', () => {
+    const d = draft({
+      selfPickup: { on: true, info: '' },
+      pickupPoints: { on: false, ids: ['c'.repeat(64)] },
+    })
+    expect(offerFromDraft(d, CTX).delivery).toMatchObject({
+      deliveryOptions: { pickupPoints: { isEnabled: false, ids: [] } },
+    })
+  })
+
+  it('a pickup point: no video from the form, the one it had stays; the address is cut at 200', () => {
+    const d = draft({ tag: 97, price: '60', video: 'peertube://x/1' })
+    d.point.address = 'а'.repeat(250)
+    expect(offerFromDraft(d, CTX).video).toBe('')
+    const base: Offer = { ...emptyOffer(ME, 'ru-RU', NOW), tag: 97, video: 'peertube://x/old' }
+    const edited = offerFromDraft(d, { ...CTX, base })
+    expect(edited.video).toBe('peertube://x/old')
+    expect((edited.delivery.pickupPoint as { address: string }).address).toHaveLength(200)
   })
 
   it('delivery: nothing on — `{}`; otherwise all three ways', () => {
@@ -229,6 +293,20 @@ describe('editing an offer made by the old app', () => {
       currencyPrice: { currency: 'RUB', price: 45068 },
     })
   })
+
+  it('reads the fee, «от» and the exchange mode only from values the old app wrote', () => {
+    const offer = (patch: Partial<Offer>) =>
+      draftFromOffer({ ...parseOffer(MAINNET_TX), ...patch }, 'ru')
+    expect(offer({ safeDeal: { validatorFeeVariant: 'seller' } }).fee).toBe('seller')
+    expect(offer({ safeDeal: { validatorFeeVariant: 'inHalf' } }).fee).toBe('inHalf')
+    expect(offer({ safeDeal: { validatorFeeVariant: 'buyer' } }).fee).toBe('')
+    expect(offer({ metaData: { price: { prefix: 'from' } } }).priceFrom).toBe(true)
+    expect(offer({ metaData: { price: { prefix: 'to' } } }).priceFrom).toBe(false)
+    expect(offer({ tags: [100, 17] })).toMatchObject({ exchange: 'own', tags: [100, 17] })
+    expect(offer({ tags: [] }).exchange).toBe('anything')
+    expect(offer({ tags: ['for_nothing'] }).exchange).toBe('for_nothing')
+    expect(offer({ tags: ['for_nothing', 'my_list'] }).exchange).toBe('for_nothing')
+  })
 })
 
 describe('draftIssues', () => {
@@ -236,6 +314,20 @@ describe('draftIssues', () => {
 
   it('a complete draft has none', () => {
     expect(keys(draft())).toEqual([])
+  })
+
+  it('no category is an error even before the category tree loads', () => {
+    expect(draftIssues(draft({ tag: null })).map((i) => i.key)).toEqual(['category'])
+  })
+
+  it('a description of 9000 characters is fine, one more is too long', () => {
+    expect(keys(draft({ description: 'я'.repeat(9000) }))).toEqual([])
+    expect(keys(draft({ description: 'я'.repeat(9001) }))).toEqual(['tooLong'])
+  })
+
+  it('a price that rounds to nothing is an issue on the form', () => {
+    expect(keys(draft({ price: '0,001' }))).toEqual(['price.tooSmall'])
+    expect(keys(draft({ tag: 97, price: '0,001' }))).toContain('pointPrice.tooSmall')
   })
 
   it('a category with subcategories is too wide', () => {
@@ -280,10 +372,16 @@ describe('draftIssues', () => {
     expect(keys(d)).toEqual(['financialTerms', 'scheduleEmpty', 'address', 'route'])
     d.point.days[0] = { open: true, allDay: false, start: '21:00', finish: '10:00' }
     expect(keys(d)).toContain('scheduleTime')
+    d.point.days[0] = { open: true, allDay: false, start: '10:00', finish: '10:00' }
+    expect(keys(d)).toContain('scheduleTime')
+    d.point.days[0] = { open: true, allDay: false, start: '09:00', finish: '24:00' }
+    expect(keys(d)).toContain('scheduleTime')
   })
 
   it('place and pickup points', () => {
     expect(keys(draft({ geohash: '' }))).toEqual(['place'])
+    // Not a geohash at all (an edit of a broken offer): pick the place again.
+    expect(keys(draft({ geohash: 'ail' }))).toEqual(['place'])
     expect(keys(draft({ pickupPoints: { on: true, ids: [] } }))).toEqual(['pickupPoints'])
   })
 })
@@ -292,6 +390,10 @@ describe('suggestCategories', () => {
   it('leaf categories sharing words with the caption', () => {
     expect(suggestCategories('Планшет 10", 64 ГБ, с чехлом', tree, names)).toEqual([100, 101])
     expect(suggestCategories('', tree, names)).toEqual([])
+  })
+
+  it('never suggests opening a pickup point', () => {
+    expect(suggestCategories('Пункт выдачи заказов', tree, names)).toEqual([])
   })
 })
 
@@ -309,6 +411,85 @@ describe('the draft on the device', () => {
     expect(readDraft(JSON.parse(JSON.stringify(stored)))?.photos).toHaveLength(1)
     expect(readDraft({ v: 2 })).toBeNull()
     expect(readDraft('junk')).toBeNull()
+    // A photo whose upload failed after it got a link is not kept either.
+    const failed = storedDraft(
+      draft({ photos: [{ id: '1', url: 'u', status: 'failed', bytes: 1 }] })
+    )
+    expect(failed.photos).toEqual([])
+  })
+
+  it('a stored draft read back is the same draft', () => {
+    const d = draft({
+      hash: 'a'.repeat(64),
+      baseTxHash: 'b'.repeat(64),
+      exchange: 'own',
+      fee: 'inHalf',
+      selfPickup: { on: true, info: 'у метро' },
+      pickupPoints: { on: true, ids: ['c'.repeat(64)] },
+    })
+    expect(readDraft(JSON.parse(JSON.stringify(storedDraft(d))))).toEqual(storedDraft(d))
+  })
+
+  it('a broken draft (a bug, a future version, a hand edit) gives defaults, never a crash', () => {
+    const broken = {
+      v: 1,
+      hash: 'not-a-txid',
+      baseTxHash: 5,
+      caption: 5,
+      description: null,
+      tag: '100',
+      condition: 'broken',
+      photos: [null, { url: 'u', status: 'ready' }, { url: 5, status: 'ready' }],
+      video: {},
+      videoUploadedHere: 'yes',
+      videoOrder: 'middle',
+      exchange: 'barter',
+      tags: ['17', 100, null, Number.NaN],
+      price: 1250,
+      currency: 7,
+      fixCurrency: 'no',
+      priceFrom: 1,
+      fee: 'buyer',
+      geohash: ['u'],
+      selfPickup: null,
+      directDelivery: { on: 'yes', info: 3 },
+      pickupPoints: { on: true, ids: ['c'.repeat(64), 5] },
+      point: { financialTerms: 1, days: [null, { open: 'yes' }], address: [], route: null },
+      updatedAt: 'today',
+    }
+    const d = readDraft(broken)!
+    expect(d).toMatchObject({
+      hash: null,
+      baseTxHash: null,
+      caption: '',
+      description: '',
+      tag: null,
+      condition: 'new',
+      video: '',
+      videoUploadedHere: false,
+      videoOrder: 'first',
+      exchange: 'own',
+      tags: [100],
+      price: '1250',
+      currency: 'PKOIN',
+      fixCurrency: false,
+      priceFrom: false,
+      fee: '',
+      geohash: '',
+      selfPickup: { on: false, info: '' },
+      directDelivery: { on: false, info: '' },
+      pickupPoints: { on: true, ids: ['c'.repeat(64)] },
+      updatedAt: 0,
+    })
+    expect(d.photos.map((p) => [p.url, p.status, typeof p.id, p.bytes])).toEqual([
+      ['u', 'ready', 'string', 0],
+    ])
+    expect(d.point.days).toHaveLength(7)
+    expect(d.point).toMatchObject({ financialTerms: '', address: '', route: '' })
+    // Everything that reads a draft copes with it.
+    expect(() => draftIssues(d, { tree })).not.toThrow()
+    expect(() => offerFromDraft(d, CTX)).not.toThrow()
+    expect(() => draftEntries(ME, [[`${ME}_offer_draft`, broken]])).not.toThrow()
   })
 })
 

@@ -1149,12 +1149,14 @@ const en: Messages = {
       price: {
         missing: 'Give a price or choose «For free»',
         invalid: 'The price is a number, like 1250 or 0.5',
+        tooSmall: 'The lowest price is 0.01 PKOIN',
         tooBig: 'The PKOIN price exceeds the total supply of this cryptocurrency',
         noRate: 'No exchange rate. Give the price in PKOIN or try again.',
       },
       pointPrice: {
         missing: 'Give the minimum delivery cost',
         invalid: 'The cost is a number, like 60',
+        tooSmall: 'The lowest cost is 0.01 PKOIN',
         tooBig: 'The PKOIN price exceeds the total supply of this cryptocurrency',
         noRate: 'Give the cost in PKOIN',
       },
