@@ -56,8 +56,7 @@ const meta = computed(() =>
       </template>
       <template v-if="offer.videoDuration && state === 'active'" #bottom-left>
         <UiBadge tone="photo" icon="play">
-          <span class="visually-hidden">{{ t('offer.video') }}</span
-          >{{ offer.videoDuration }}
+          <span class="visually-hidden">{{ t('offer.video') }}</span>{{ offer.videoDuration }}
         </UiBadge>
       </template>
       <div v-if="state === 'pending'" class="card__overlay">

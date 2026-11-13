@@ -30,7 +30,8 @@ const matches = computed(() => {
   const names = categories.names.value
   if (!tree || !names || text.value.length < 2) return []
   return tree.search(text.value, names, 5).map((c) => {
-    const parent = tree.parents(c.id).at(-1)
+    const parents = tree.parents(c.id)
+    const parent = parents[parents.length - 1]
     return {
       id: c.id,
       label: categories.label(c.id) ?? '',

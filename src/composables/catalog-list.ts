@@ -45,7 +45,8 @@ export function useCatalogList(
     const f = toValue(filters)
     const q = query.value
     if (!f || !hasLocalFilters(f) || count <= (before ?? 0)) return
-    const last = q.data.value?.pages.at(-1)
+    const loaded = q.data.value?.pages ?? []
+    const last = loaded[loaded.length - 1]
     const visible = (last?.offers ?? []).filter(
       (o) => isOfferActive(o) && matchesLocalFilters(o, f)
     ).length

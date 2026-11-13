@@ -123,7 +123,7 @@ export function findRequest(
   const list = items(account, 'requestItems').filter(
     (item) => fresh(item, now) && item.offerId === offer
   )
-  const last = list.at(-1)
+  const last = list[list.length - 1]
   if (!last) return null
   return {
     createdAt: last.createdAt as number,
