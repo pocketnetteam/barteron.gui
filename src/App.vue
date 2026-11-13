@@ -6,7 +6,7 @@ import SystemState from '@/components/system/SystemState.vue'
 // In the main bundle: when it is needed, other chunks are exactly what fails to load.
 import VersionConflict from '@/components/system/VersionConflict.vue'
 // A module of its own: config/roles would bring the guarantor lists into the main bundle.
-import { BASTYON_APP_URL } from '@/config/links'
+import { bastyonAppLink } from '@/config/links'
 import { isChunkLoadError, watchVersionConflict } from '@/composables/version-conflict'
 import { useSessionStore } from '@/stores/session'
 import { useUiStore } from '@/stores/ui'
@@ -47,7 +47,9 @@ function reload() {
       :title="t('app.outside.title')"
       :text="t('app.outside.text')"
     >
-      <UiButton :href="BASTYON_APP_URL" external>{{ t('app.outside.open') }}</UiButton>
+      <UiButton :href="bastyonAppLink(route.fullPath)" external>{{
+        t('app.outside.open')
+      }}</UiButton>
     </SystemState>
   </main>
 
@@ -63,7 +65,7 @@ function reload() {
       <UiButton icon="retry" data-testid="state-retry" @click="reload">{{
         t('app.failed.retry')
       }}</UiButton>
-      <UiButton variant="ghost" :href="BASTYON_APP_URL" external>{{
+      <UiButton variant="ghost" :href="bastyonAppLink(route.fullPath)" external>{{
         t('app.failed.open')
       }}</UiButton>
     </SystemState>

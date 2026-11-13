@@ -1,3 +1,4 @@
+import { MOCK_ALLOWED } from './mock-allowed'
 import type { AppInfo, BastyonSdkConstructor, HostSdk } from './types'
 
 declare global {
@@ -58,7 +59,7 @@ export async function connect(options: ConnectOptions): Promise<ConnectResult> {
   const inIframe = options.inIframe ?? isInIframe()
 
   if (!inIframe) {
-    if (!options.allowMock) return { status: 'outside' }
+    if (!options.allowMock || !MOCK_ALLOWED) return { status: 'outside' }
     const sdk = options.createMock
       ? options.createMock()
       : (await import('./mock')).createDemoMockSdk()

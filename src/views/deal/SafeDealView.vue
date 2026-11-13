@@ -15,7 +15,7 @@ import SystemState from '@/components/system/SystemState.vue'
 import { cabinetRoute } from '@/composables/cabinet'
 import { useChat } from '@/composables/chat'
 import { useDeal, useDealTransfer, useSafeDealSupported } from '@/composables/safe-deal'
-import { BASTYON_APP_URL } from '@/config/links'
+import { bastyonAppLink } from '@/config/links'
 import { formatAgo, formatPkoin } from '@/lib/format'
 import { offerPkoin } from '@/models/offer'
 import { dealStep, feeVariantOf, parseDealQuery, type DealRole } from '@/models/safe-deal'
@@ -229,7 +229,9 @@ const crumbs = computed(() => [
         :notes="[{ ok: true, text: t('system.outdated.works') }]"
         data-testid="deal-unsupported"
       >
-        <UiButton :href="BASTYON_APP_URL" external>{{ t('system.outdated.web') }}</UiButton>
+        <UiButton :href="bastyonAppLink(route.fullPath)" external>{{
+          t('system.outdated.web')
+        }}</UiButton>
         <UiButton variant="ghost" @click="router.back()">{{ t('system.outdated.skip') }}</UiButton>
       </SystemState>
       <UiEmptyState

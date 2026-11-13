@@ -10,7 +10,7 @@ import App from './App.vue'
 import { createQueryClient, installTxRefresh } from './api/queries'
 import { i18n, setLocale } from './i18n'
 import { createAppRouter } from './router'
-import { routeFromHost } from './sdk/host-route'
+import { followHostRoutes } from './sdk/host-route'
 import { useLocaleStore } from './stores/locale'
 import { useSessionStore } from './stores/session'
 import { useThemeStore } from './stores/theme'
@@ -41,9 +41,6 @@ void session
       () => void queryClient.invalidateQueries({ queryKey: ['bastyon', 'balance'] })
     )
     // The previous Bastyon asks to open another Barteron page (a link from a chat).
-    session.sdk?.on('changestate', (data) => {
-      const target = routeFromHost(data)
-      if (target && target !== router.currentRoute.value.fullPath) void router.push(target)
-    })
+    if (session.sdk) followHostRoutes(session.sdk, router)
     return tx.start()
   })

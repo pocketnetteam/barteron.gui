@@ -94,6 +94,70 @@ describe('session store', () => {
     expect(session.failReason).toBe('script')
   })
 
+  it('before an action: signed in already — nothing is asked', async () => {
+    const { sdk, started } = startWithMock()
+    await started
+    expect(await useSessionStore().ensureSignedIn()).toBe(true)
+    const asked = sdk.mock.calls.filter(
+      (c) => c.method === 'helpers.registration' || c.method === 'permissions.request'
+    )
+    expect(asked).toEqual([])
+  })
+
+  it('before an action: a guest gets Bastyon’s sign-in, and goes on once signed in', async () => {
+    const { sdk, started } = startWithMock({ address: null })
+    await started
+    const session = useSessionStore()
+    // Closed without signing in: still a guest.
+    expect(await session.ensureSignedIn()).toBe(false)
+    expect(session.account).toBe('guest')
+    expect(sdk.mock.calls.filter((c) => c.method === 'helpers.registration')).toHaveLength(1)
+    // Signed in this time.
+    const register = sdk.helpers.registration
+    sdk.helpers.registration = async () => {
+      sdk.get.account = async () => ({ address: MOCK_ADDRESS })
+      return register()
+    }
+    expect(await session.ensureSignedIn()).toBe(true)
+    expect(session.address).toBe(MOCK_ADDRESS)
+  })
+
+  it('before an action: no access yet — the prompt; declined — no, and no sign-in window', async () => {
+    const declined = startWithMock({ granted: [], grantOnRequest: false })
+    await declined.started
+    expect(await useSessionStore().ensureSignedIn()).toBe(false)
+    expect(declined.sdk.mock.calls.some((c) => c.method === 'helpers.registration')).toBe(false)
+
+    setActivePinia(createPinia())
+    const allowed = startWithMock({ granted: [] })
+    await allowed.started
+    expect(await useSessionStore().ensureSignedIn()).toBe(true)
+    expect(useSessionStore().address).toBe(MOCK_ADDRESS)
+  })
+
+  it('signed in, then the host no longer gives the account: a guest, the old address gone', async () => {
+    const { sdk, started } = startWithMock()
+    await started
+    const session = useSessionStore()
+    expect(session.address).toBe(MOCK_ADDRESS)
+    sdk.get.account = async () => {
+      throw new Error('not_authenticated')
+    }
+    await session.loadAccount()
+    expect(session.account).toBe('guest')
+    expect(session.address).toBeNull()
+  })
+
+  it('the host failing to answer about access: treated as no access', async () => {
+    const { sdk, started } = startWithMock()
+    sdk.permissions.check = async () => {
+      throw new Error('timeout')
+    }
+    await started
+    expect(useSessionStore().account).toBe('no-permission')
+    expect(useSessionStore().address).toBeNull()
+  })
+
   it('useSdk() throws until connected and returns the SDK after', async () => {
     expect(() => useSdk()).toThrow('sdk_not_ready')
     const { sdk, started } = startWithMock()

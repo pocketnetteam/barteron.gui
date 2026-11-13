@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { connect, loadScript, sdkScriptUrl, withTimeout } from './connect'
+import { connect, isInIframe, loadScript, sdkScriptUrl, withTimeout } from './connect'
 import { createMockSdk } from './mock'
 import type { BastyonSdkConstructor } from './types'
 
@@ -145,5 +145,22 @@ describe('helpers', () => {
       'boom'
     )
     await expect(withTimeout(new Promise(() => undefined), 5, 'late')).rejects.toThrow('late')
+  })
+})
+
+describe('isInIframe', () => {
+  it('a page of its own is not framed; a frame is, even a cross-origin one', () => {
+    const own = { self: 1, top: 1 } as unknown as Window
+    expect(isInIframe(own)).toBe(false)
+    const framed = { self: 1, top: 2 } as unknown as Window
+    expect(isInIframe(framed)).toBe(true)
+    // Reading `top` of another origin throws: that is a frame too.
+    const foreign = {
+      self: 1,
+      get top(): Window {
+        throw new DOMException('Blocked a frame', 'SecurityError')
+      },
+    } as unknown as Window
+    expect(isInIframe(foreign)).toBe(true)
   })
 })

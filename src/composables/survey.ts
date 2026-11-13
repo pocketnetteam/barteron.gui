@@ -7,6 +7,7 @@ import {
   type SurveyStatus,
 } from '@/api/survey'
 import { banListLoaded, hangIfBanned, isBanned, loadBanList } from '@/config/ban'
+import { MOCK_ALLOWED } from '@/sdk/mock-allowed'
 import { createMockSurvey, type MockSurvey } from '@/sdk/mock-survey'
 import type { ConnectMode } from '@/sdk/connect'
 import type { HostSdk } from '@/sdk/types'
@@ -22,7 +23,7 @@ export function surveyServiceFor(sdk: HostSdk, mode: ConnectMode | null): Survey
   const cached = services.get(sdk)
   if (cached) return cached
   let service: SurveyService
-  if (mode === 'mock') {
+  if (MOCK_ALLOWED && mode === 'mock') {
     const mock: MockSurvey = createMockSurvey()
     // e2e reads what was «sent».
     ;(window as { __barteronSurvey?: MockSurvey }).__barteronSurvey = mock
@@ -38,7 +39,7 @@ export function surveyServiceFor(sdk: HostSdk, mode: ConnectMode | null): Survey
 const startedAt = Date.now()
 
 function delay(mode: ConnectMode | null): number {
-  if (mode !== 'mock') return SURVEY_DELAY_MS
+  if (!MOCK_ALLOWED || mode !== 'mock') return SURVEY_DELAY_MS
   // The demo and e2e shorten the wait (`window.__barteronMockSetup.surveyDelay`).
   const setup = (window as { __barteronMockSetup?: { surveyDelay?: number } }).__barteronMockSetup
   return typeof setup?.surveyDelay === 'number' ? setup.surveyDelay : SURVEY_DELAY_MS

@@ -8,6 +8,7 @@ import {
   type NotifyService,
   type NotifySubscription,
 } from '@/api/notify'
+import { MOCK_ALLOWED } from '@/sdk/mock-allowed'
 import { createMockNotify, type MockNotify } from '@/sdk/mock-notify'
 import type { ConnectMode } from '@/sdk/connect'
 import type { HostSdk } from '@/sdk/types'
@@ -21,7 +22,7 @@ export function notifyServiceFor(sdk: HostSdk, mode: ConnectMode | null): Notify
   const cached = services.get(sdk)
   if (cached) return cached
   let service: NotifyService
-  if (mode === 'mock') {
+  if (MOCK_ALLOWED && mode === 'mock') {
     const mock: MockNotify = createMockNotify()
     // e2e reads what was «sent».
     if (typeof window !== 'undefined') {

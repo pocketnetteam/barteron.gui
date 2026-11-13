@@ -21,6 +21,7 @@ import { loadCategoryNames, loadCategoryTree } from '@/models/categories'
 import type { Offer } from '@/models/offer'
 import type { UserProfile } from '@/models/profile'
 import { averageScore, type AverageScore } from '@/models/review'
+import { MOCK_ALLOWED } from '@/sdk/mock-allowed'
 import type { AppInfo, HostSdk } from '@/sdk/types'
 import { useNetStore } from '@/stores/net'
 import { useSessionStore } from '@/stores/session'
@@ -335,7 +336,7 @@ export function useRates() {
     queryKey: keys.rates,
     // The mock (plain browser, e2e) uses fixed rates and stays offline.
     queryFn: () =>
-      session.mode === 'mock'
+      MOCK_ALLOWED && session.mode === 'mock'
         ? import('@/sdk/mock-data').then((m) => ({ ...m.DEMO_RATES }))
         : fetchRates(),
     staleTime: 10 * 60_000,

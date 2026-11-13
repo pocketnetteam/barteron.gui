@@ -2,10 +2,12 @@ import { readFileSync } from 'node:fs'
 import { fileURLToPath, URL } from 'node:url'
 import basicSsl from '@vitejs/plugin-basic-ssl'
 import vue from '@vitejs/plugin-vue'
+import { loadEnv } from 'vite'
 import { defineConfig } from 'vitest/config'
 import { HOST_ORIGINS } from './build/host-origins'
 import { indexPhp } from './build/index-php'
 import { devManifest, standIdentity, standManifest } from './build/manifest'
+import { noMock } from './build/no-mock'
 
 /** Shown in the settings. */
 const APP_VERSION = (
@@ -37,6 +39,8 @@ export default defineConfig(({ mode }) => ({
     mode === 'https' && basicSsl({ name: 'barteron-dev', domains: ['localhost'] }),
     // barteron.club serves index.php: the page plus link-preview tags (php/og.php).
     indexPhp(),
+    // No SDK mock in a build that does not allow it (both deploys).
+    noMock(loadEnv(mode, process.cwd(), 'VITE_').VITE_ALLOW_MOCK !== 'true'),
   ],
   define: {
     __APP_VERSION__: JSON.stringify(APP_VERSION),
@@ -66,6 +70,9 @@ export default defineConfig(({ mode }) => ({
     environment: 'happy-dom',
     include: ['src/**/*.test.ts', 'build/**/*.test.ts'],
     restoreMocks: true,
+    // The first test of a file waits for the app's modules to transform: on a
+    // busy machine, or under --coverage, that alone takes more than 5 s.
+    testTimeout: 15_000,
     setupFiles: ['src/test/setup.ts'],
     // `pnpm test:coverage`: the report the code audit (AUDIT.md) works from.
     coverage: {
