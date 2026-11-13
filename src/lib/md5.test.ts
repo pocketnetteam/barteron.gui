@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import oldIds from '@/test/old-deal-ids.json'
 import { md5 } from './md5'
 
 describe('md5', () => {
@@ -16,4 +17,11 @@ describe('md5', () => {
     const source = `0123456789abcdef${'b'.repeat(64)}PBuyer111111111111111111111111111PMdhZ1gvZXAXmQ6z5ghHz86arfXorxNYgX21`
     expect(md5(source)).toBe('7052858658317d138a9b20ce153e1c2b')
   })
+
+  it.each(oldIds.md5.map((row) => [row.text.slice(0, 12), row] as const))(
+    'other letters too, byte by byte with the old one: «%s»',
+    (_, row) => {
+      expect(md5(row.text)).toBe(row.md5)
+    }
+  )
 })

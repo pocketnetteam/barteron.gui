@@ -1,0 +1,70 @@
+{
+  "source": "mainnet, getfromtotransactions through bastyon-nextgen, 13.11.2026; offer and fee found by checkDealId over the seller offers",
+  "tip": 4106016,
+  "deals": [
+    {
+      "id": "57dfa3de047fe0932374992401",
+      "offer": "47693af019c21c850e26b95226256c1bf7972449acdc616c84565dc1de307de0",
+      "buyer": "PCJ2gYX2exnZtCnhE6maHTLQAfkJBFTgt9",
+      "validator": "PPbNqCweFnTePQyXWR21B9jXWCiDJa2yYu",
+      "fee": "5",
+      "seller": "PEmxMUL35Z5rtULmHMuYLNYsQGu23HXBeX",
+      "paid": [
+        {
+          "addrFrom": "PCJ2gYX2exnZtCnhE6maHTLQAfkJBFTgt9",
+          "addrTo": "PPbNqCweFnTePQyXWR21B9jXWCiDJa2yYu",
+          "hash": "5ee602811db1a7d3d59f91866b6f8633fb04692fc1bea675bf32fa892775342f",
+          "type": 1,
+          "height": 3586208,
+          "amount": 123000000,
+          "time": 1764664917,
+          "opreturn": "6a2453616665206465616c203537646661336465303437666530393332333734393932343031"
+        }
+      ],
+      "toSeller": [
+        {
+          "addrFrom": "PPbNqCweFnTePQyXWR21B9jXWCiDJa2yYu",
+          "addrTo": "PEmxMUL35Z5rtULmHMuYLNYsQGu23HXBeX",
+          "hash": "8bc236e5b108921efba8e285eb156719b7c6225b349eadfeba06bf6d24e5f5bf",
+          "type": 1,
+          "height": 3586218,
+          "amount": 117000000,
+          "time": 1764665788,
+          "opreturn": "6a2453616665206465616c203537646661336465303437666530393332333734393932343031"
+        }
+      ]
+    },
+    {
+      "id": "958a49a60c5f1be04e3ae56d01",
+      "offer": "47693af019c21c850e26b95226256c1bf7972449acdc616c84565dc1de307de0",
+      "buyer": "PBjV827sqgz7dJybRb9MKbQKgzFGFzXWZc",
+      "validator": "PPbNqCweFnTePQyXWR21B9jXWCiDJa2yYu",
+      "fee": "5",
+      "seller": "PEmxMUL35Z5rtULmHMuYLNYsQGu23HXBeX",
+      "paid": [
+        {
+          "addrFrom": "PBjV827sqgz7dJybRb9MKbQKgzFGFzXWZc",
+          "addrTo": "PPbNqCweFnTePQyXWR21B9jXWCiDJa2yYu",
+          "hash": "a9b37c26ed3fdac37321998df2943f0f70f588add2b94a2199b0470211306b28",
+          "type": 1,
+          "height": 3601838,
+          "amount": 102000000,
+          "time": 1765517135,
+          "opreturn": "6a2453616665206465616c203935386134396136306335663162653034653361653536643031"
+        }
+      ],
+      "toSeller": [
+        {
+          "addrFrom": "PPbNqCweFnTePQyXWR21B9jXWCiDJa2yYu",
+          "addrTo": "PEmxMUL35Z5rtULmHMuYLNYsQGu23HXBeX",
+          "hash": "79450c400c25201992bf38296ce7ed13614e3b0f72f5358efc8489dd96018ba3",
+          "type": 1,
+          "height": 3601846,
+          "amount": 97000000,
+          "time": 1765517697,
+          "opreturn": "6a2453616665206465616c203935386134396136306335663162653034653361653536643031"
+        }
+      ]
+    }
+  ]
+}

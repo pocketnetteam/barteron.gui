@@ -1,0 +1,347 @@
+{
+  "ids": [
+    {
+      "note": "ordinary",
+      "offer": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "buyer": "PBjV827sqgz7dJybRb9MKbQKgzFGFzXWZc",
+      "validator": "PMdhZ1gvZXAXmQ6z5ghHz86arfXorxNYgX",
+      "fee": "2",
+      "random": "0123456789abcdef",
+      "id": "0123456789abcdeff9accdfa01"
+    },
+    {
+      "note": "ordinary",
+      "offer": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "buyer": "PBjV827sqgz7dJybRb9MKbQKgzFGFzXWZc",
+      "validator": "PMdhZ1gvZXAXmQ6z5ghHz86arfXorxNYgX",
+      "fee": "5",
+      "random": "0000000000000000",
+      "id": "00000000000000003c603ec101"
+    },
+    {
+      "note": "ordinary",
+      "offer": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "buyer": "PBjV827sqgz7dJybRb9MKbQKgzFGFzXWZc",
+      "validator": "PPbNqCweFnTePQyXWR21B9jXWCiDJa2yYu",
+      "fee": "2",
+      "random": "ffffffffffffffff",
+      "id": "ffffffffffffffff3cf69ac301"
+    },
+    {
+      "note": "ordinary",
+      "offer": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "buyer": "PBjV827sqgz7dJybRb9MKbQKgzFGFzXWZc",
+      "validator": "PPbNqCweFnTePQyXWR21B9jXWCiDJa2yYu",
+      "fee": "5",
+      "random": "a1b2c3d4e5f60789",
+      "id": "a1b2c3d4e5f607891aa58e9401"
+    },
+    {
+      "note": "ordinary",
+      "offer": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "buyer": "PBjV827sqgz7dJybRb9MKbQKgzFGFzXWZc",
+      "validator": "PMkhdDuCM3k8xLRDBUnmBDcUMWjhfPbWbE",
+      "fee": "2",
+      "random": "0123456789abcdef",
+      "id": "0123456789abcdefb606ada001"
+    },
+    {
+      "note": "ordinary",
+      "offer": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "buyer": "PBjV827sqgz7dJybRb9MKbQKgzFGFzXWZc",
+      "validator": "PMkhdDuCM3k8xLRDBUnmBDcUMWjhfPbWbE",
+      "fee": "5",
+      "random": "0000000000000000",
+      "id": "00000000000000000c76aa6801"
+    },
+    {
+      "note": "fee as written",
+      "offer": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "buyer": "PBjV827sqgz7dJybRb9MKbQKgzFGFzXWZc",
+      "validator": "PMkhdDuCM3k8xLRDBUnmBDcUMWjhfPbWbE",
+      "fee": "1.5",
+      "random": "ffffffffffffffff",
+      "id": "ffffffffffffffffa2ce9db901"
+    },
+    {
+      "note": "fee as written",
+      "offer": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "buyer": "PBjV827sqgz7dJybRb9MKbQKgzFGFzXWZc",
+      "validator": "PMkhdDuCM3k8xLRDBUnmBDcUMWjhfPbWbE",
+      "fee": "0.5",
+      "random": "a1b2c3d4e5f60789",
+      "id": "a1b2c3d4e5f60789407edac501"
+    },
+    {
+      "note": "fee as written",
+      "offer": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "buyer": "PBjV827sqgz7dJybRb9MKbQKgzFGFzXWZc",
+      "validator": "PMkhdDuCM3k8xLRDBUnmBDcUMWjhfPbWbE",
+      "fee": "98",
+      "random": "0123456789abcdef",
+      "id": "0123456789abcdef60fb8bd701"
+    },
+    {
+      "note": "fee as written",
+      "offer": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "buyer": "PBjV827sqgz7dJybRb9MKbQKgzFGFzXWZc",
+      "validator": "PMkhdDuCM3k8xLRDBUnmBDcUMWjhfPbWbE",
+      "fee": "2.50",
+      "random": "0000000000000000",
+      "id": "00000000000000002c28424401"
+    },
+    {
+      "note": "fee as written",
+      "offer": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "buyer": "PBjV827sqgz7dJybRb9MKbQKgzFGFzXWZc",
+      "validator": "PMkhdDuCM3k8xLRDBUnmBDcUMWjhfPbWbE",
+      "fee": "05",
+      "random": "ffffffffffffffff",
+      "id": "ffffffffffffffff8401393201"
+    },
+    {
+      "note": "fee as written",
+      "offer": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "buyer": "PBjV827sqgz7dJybRb9MKbQKgzFGFzXWZc",
+      "validator": "PMkhdDuCM3k8xLRDBUnmBDcUMWjhfPbWbE",
+      "fee": "10",
+      "random": "a1b2c3d4e5f60789",
+      "id": "a1b2c3d4e5f6078991cb425801"
+    },
+    {
+      "note": "fee as written",
+      "offer": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "buyer": "PBjV827sqgz7dJybRb9MKbQKgzFGFzXWZc",
+      "validator": "PMkhdDuCM3k8xLRDBUnmBDcUMWjhfPbWbE",
+      "fee": "0.1",
+      "random": "0123456789abcdef",
+      "id": "0123456789abcdefe209d61b01"
+    },
+    {
+      "note": "fee as written",
+      "offer": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "buyer": "PBjV827sqgz7dJybRb9MKbQKgzFGFzXWZc",
+      "validator": "PMkhdDuCM3k8xLRDBUnmBDcUMWjhfPbWbE",
+      "fee": "1e1",
+      "random": "0000000000000000",
+      "id": "00000000000000000f65c9c001"
+    },
+    {
+      "note": "participants swapped",
+      "offer": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "buyer": "PMkhdDuCM3k8xLRDBUnmBDcUMWjhfPbWbE",
+      "validator": "PBjV827sqgz7dJybRb9MKbQKgzFGFzXWZc",
+      "fee": "2",
+      "random": "ffffffffffffffff",
+      "id": "ffffffffffffffff5da8dd9b01"
+    },
+    {
+      "note": "testnet addresses",
+      "offer": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "buyer": "TVSeQiPd94EHuE5KVX986V4d1qw4ZdU4L1",
+      "validator": "TVABvVQKn6MaqXziDaUjW5afg9EcGdGQuX",
+      "fee": "5",
+      "random": "a1b2c3d4e5f60789",
+      "id": "a1b2c3d4e5f60789053f67b401"
+    },
+    {
+      "note": "empty fee",
+      "offer": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "buyer": "PBjV827sqgz7dJybRb9MKbQKgzFGFzXWZc",
+      "validator": "PMkhdDuCM3k8xLRDBUnmBDcUMWjhfPbWbE",
+      "fee": "",
+      "random": "0123456789abcdef",
+      "id": "0123456789abcdefc0e62d2101"
+    },
+    {
+      "note": "empty buyer",
+      "offer": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "buyer": "",
+      "validator": "PMkhdDuCM3k8xLRDBUnmBDcUMWjhfPbWbE",
+      "fee": "2",
+      "random": "0000000000000000",
+      "id": "00000000000000002be9184101"
+    },
+    {
+      "note": "everything empty",
+      "offer": "",
+      "buyer": "",
+      "validator": "",
+      "fee": "",
+      "random": "ffffffffffffffff",
+      "id": "ffffffffffffffff2010b0bb01"
+    },
+    {
+      "note": "cyrillic",
+      "offer": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "buyer": "Пётр Иванов",
+      "validator": "PMkhdDuCM3k8xLRDBUnmBDcUMWjhfPbWbE",
+      "fee": "2",
+      "random": "a1b2c3d4e5f60789",
+      "id": "a1b2c3d4e5f60789b1ac78fd01"
+    },
+    {
+      "note": "latin-1",
+      "offer": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "buyer": "Café ñ ü",
+      "validator": "PMkhdDuCM3k8xLRDBUnmBDcUMWjhfPbWbE",
+      "fee": "2",
+      "random": "0123456789abcdef",
+      "id": "0123456789abcdef4ef09e0401"
+    },
+    {
+      "note": "emoji",
+      "offer": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "buyer": "😀👍",
+      "validator": "PMkhdDuCM3k8xLRDBUnmBDcUMWjhfPbWbE",
+      "fee": "2",
+      "random": "0000000000000000",
+      "id": "00000000000000005c39f0e001"
+    },
+    {
+      "note": "cjk",
+      "offer": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "buyer": "中文地址",
+      "validator": "PMkhdDuCM3k8xLRDBUnmBDcUMWjhfPbWbE",
+      "fee": "２",
+      "random": "ffffffffffffffff",
+      "id": "fffffffffffffffff30b31ae01"
+    },
+    {
+      "note": "long buyer",
+      "offer": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "buyer": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "validator": "PMkhdDuCM3k8xLRDBUnmBDcUMWjhfPbWbE",
+      "fee": "2",
+      "random": "a1b2c3d4e5f60789",
+      "id": "a1b2c3d4e5f60789efeb2dfc01"
+    },
+    {
+      "note": "long unicode",
+      "offer": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "buyer": "ЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖ",
+      "validator": "PMkhdDuCM3k8xLRDBUnmBDcUMWjhfPbWbE",
+      "fee": "2",
+      "random": "0123456789abcdef",
+      "id": "0123456789abcdefd0d8a4ac01"
+    },
+    {
+      "note": "source of 55 chars",
+      "offer": "",
+      "buyer": "",
+      "validator": "",
+      "fee": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "random": "0000000000000000",
+      "id": "00000000000000005178374d01"
+    },
+    {
+      "note": "source of 56 chars",
+      "offer": "",
+      "buyer": "",
+      "validator": "",
+      "fee": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "random": "ffffffffffffffff",
+      "id": "ffffffffffffffff3f890d3a01"
+    },
+    {
+      "note": "source of 63 chars",
+      "offer": "",
+      "buyer": "",
+      "validator": "",
+      "fee": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "random": "a1b2c3d4e5f60789",
+      "id": "a1b2c3d4e5f607891a3e751401"
+    },
+    {
+      "note": "source of 64 chars",
+      "offer": "",
+      "buyer": "",
+      "validator": "",
+      "fee": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "random": "0123456789abcdef",
+      "id": "0123456789abcdef982c0d8901"
+    },
+    {
+      "note": "source of 65 chars",
+      "offer": "",
+      "buyer": "",
+      "validator": "",
+      "fee": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "random": "0000000000000000",
+      "id": "0000000000000000bc794c0a01"
+    },
+    {
+      "note": "source of 119 chars",
+      "offer": "",
+      "buyer": "",
+      "validator": "",
+      "fee": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "random": "ffffffffffffffff",
+      "id": "ffffffffffffffff377ab37f01"
+    },
+    {
+      "note": "source of 120 chars",
+      "offer": "",
+      "buyer": "",
+      "validator": "",
+      "fee": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "random": "a1b2c3d4e5f60789",
+      "id": "a1b2c3d4e5f60789a3e158d501"
+    },
+    {
+      "note": "source of 128 chars",
+      "offer": "",
+      "buyer": "",
+      "validator": "",
+      "fee": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "random": "0123456789abcdef",
+      "id": "0123456789abcdef364140b201"
+    }
+  ],
+  "md5": [
+    {
+      "text": "",
+      "md5": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "text": "a",
+      "md5": "0cc175b9c0f1b6a831c399e269772661"
+    },
+    {
+      "text": "abc",
+      "md5": "900150983cd24fb0d6963f7d28e17f72"
+    },
+    {
+      "text": "Safe deal",
+      "md5": "d87a50d9301bf1eef344a6c2fe6f71a9"
+    },
+    {
+      "text": "Пётр",
+      "md5": "86eec172464cea0f9c78f3df11dcc17f"
+    },
+    {
+      "text": "é",
+      "md5": "3406877694691ddd1dfb0aca54681407"
+    },
+    {
+      "text": "ÿ",
+      "md5": "00594fd4f42ba43fc1ca0427a0576295"
+    },
+    {
+      "text": "😀",
+      "md5": "c151c5fa0f424dbf71e349896c45ec16"
+    },
+    {
+      "text": "中",
+      "md5": "336d5ebc5436534e61d16e63ddfca327"
+    },
+    {
+      "text": "abĀcd",
+      "md5": "5d622b3d4d8cc07754fd386e7f29326e"
+    },
+    {
+      "text": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "md5": "398533d48111e9f664b1f64cb10c4b63"
+    }
+  ]
+}

@@ -26,27 +26,46 @@ export interface DealTransfer {
   time: number
 }
 
+/** What the deal asked the node for: who sent, to whom, which OP_RETURN script. */
+export interface TransferQuery {
+  from: string
+  to: string
+  /** Hex of the script, as `opReturnHex` gives it. */
+  opReturn: string
+}
+
+const str = (v: unknown): string => (typeof v === 'string' ? v : '')
+
 /**
- * Rows of `getfromtotransactions` → transfers. The node may send one row per
- * input of the sender, so a transaction is counted once. Amounts come in
- * satoshi.
+ * Rows of `getfromtotransactions` → transfers. Amounts come in satoshi: what
+ * `to` got, change aside. On mainnet a transfer with 4–6 inputs came as one
+ * row (13.11.2026); a repeated hash is still counted once.
+ *
+ * Only rows that are exactly what was asked count: the node takes an empty
+ * address for «anyone», and a host that loses the script gets its default
+ * label (`a:subscription`) instead. A row without a block is not a transfer
+ * yet: the old host dropped such rows too (`currentBlock - height`).
  */
-export function parseTransfers(raw: unknown): DealTransfer[] {
+export function parseTransfers(raw: unknown, query: TransferQuery): DealTransfer[] {
   const rows = Array.isArray(raw) ? raw : []
+  const script = query.opReturn.toLowerCase()
   const seen = new Set<string>()
   const out: DealTransfer[] = []
   for (const row of rows) {
     if (!isJsonObject(row)) continue
-    const txid = typeof row.hash === 'string' ? row.hash : ''
+    const txid = str(row.hash)
     const amount = Number(row.amount)
-    if (!txid || seen.has(txid) || !(amount > 0)) continue
+    const height = Number(row.height)
+    if (!txid || seen.has(txid) || !(amount > 0) || !(height > 0)) continue
+    if (row.addrFrom !== query.from || row.addrTo !== query.to) continue
+    if (str(row.opreturn).toLowerCase() !== script) continue
     seen.add(txid)
     out.push({
       txid,
-      from: typeof row.addrFrom === 'string' ? row.addrFrom : '',
-      to: typeof row.addrTo === 'string' ? row.addrTo : '',
+      from: query.from,
+      to: query.to,
       amount: amount / 1e8,
-      height: Number(row.height) || 0,
+      height,
       time: (Number(row.time) || 0) * 1000,
     })
   }

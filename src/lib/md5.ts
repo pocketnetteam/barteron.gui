@@ -1,7 +1,9 @@
 /**
- * MD5 of a text, lowercase hex. The safe deal id carries the first 8 hex of
- * an MD5 (old `sdk.MD5`, a byte-string MD5): for the ASCII it hashes — hex,
- * addresses, digits — this is the same digest. Text is taken as UTF-8.
+ * MD5 of a text, lowercase hex, exactly as the old `sdk.MD5`: the safe deal
+ * id carries its first 8 hex. Like the old one, it takes the low byte of each
+ * UTF-16 unit — not UTF-8. For the ASCII a deal link holds (hex, addresses,
+ * digits) that is the standard MD5. A link with other letters, made by hand,
+ * opens in both apps or in neither.
  *
  * Not for security: the deal id only checks that its link was not edited by
  * hand.
@@ -19,7 +21,7 @@ const K = Array.from(
 )
 
 export function md5(text: string): string {
-  const input = new TextEncoder().encode(text)
+  const input = Uint8Array.from({ length: text.length }, (_, i) => text.charCodeAt(i) & 0xff)
   // Padding: 0x80, zeros up to 56 mod 64, then the bit length, little-endian.
   const length = (((input.length + 8) >>> 6) + 1) << 6
   const bytes = new Uint8Array(length)

@@ -281,7 +281,8 @@ export class BarteronApi {
     opReturn: string,
     fromHeight: number
   ): Promise<DealTransfer[]> {
-    return parseTransfers(await this.rpc('getfromtotransactions', [from, to, fromHeight, opReturn]))
+    const rows = await this.rpc('getfromtotransactions', [from, to, fromHeight, opReturn])
+    return parseTransfers(rows, { from, to, opReturn })
   }
 
   /** Height of the last block (`getnodeinfo`). */

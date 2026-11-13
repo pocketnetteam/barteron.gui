@@ -161,9 +161,13 @@ export function feeVariantOf(offer: Pick<Offer, 'safeDeal'> | null | undefined):
 export const buyerShare = (variant: FeeVariant): number =>
   variant === 'buyer' ? 1 : variant === 'inHalf' ? 0.5 : 0
 
-/** PKOIN to hundredths, as the old page rounded amounts. */
-export const roundPkoin = (value: number): number =>
-  Math.round((value + Number.EPSILON) * 100) / 100
+/**
+ * PKOIN to hundredths, as the old page showed and sent amounts; half a
+ * hundredth goes up. Whole satoshi (8 decimals) first: that drops the binary
+ * noise, so 35 × 1.005 = 35.175 gives 35.18, not 35.17. The old `toFixed(2)`
+ * went either way on such halves.
+ */
+export const roundPkoin = (value: number): number => Math.round(Math.round(value * 1e8) / 1e6) / 100
 
 export interface DealMoney {
   /** Price of the deal agreed in the chat. */
@@ -194,8 +198,10 @@ export function moneyFromValue(value: number, feePercent: number, variant: FeeVa
 /**
  * The guarantor's side: from what actually came. The seller gets the payment
  * less the whole fee — 1 237,5 of 1 262,5 when a 2 % fee of 1 250 is split
- * (s7-dealvalidator). The old page divided by `1 + fee` whoever paid, which
- * underpaid the seller when the seller or both paid the fee.
+ * (s7-dealvalidator). The old page divided by `1 + fee` whoever paid: when
+ * the seller or both paid the fee, it sent the seller part of the guarantor's
+ * fee (1 237,75 here; 1 225,49 instead of 1 225 when the seller pays). When
+ * the buyer pays the fee, both give the same, to the cent.
  */
 export function moneyFromPayment(paid: number, feePercent: number, variant: FeeVariant): DealMoney {
   const value = paid / (1 + (buyerShare(variant) * feePercent) / 100)
