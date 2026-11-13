@@ -1,10 +1,16 @@
 # Test stand: a manual run (Actions → test.barter.pocketnet.app → Run workflow → branch
 # barteron-nextgen) builds the app and copies it to the test server. A push does not deploy:
 # the old app from dev may still live there. See LAUNCH.md.
+#
+# Same safety as barteron.club.yml: a read-only token, not left in .git, actions pinned
+# to a commit. build/workflows.test.ts keeps it that way.
 name: test.barter.pocketnet.app
 
 on:
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 concurrency:
   group: test.barter.pocketnet.app
@@ -12,13 +18,16 @@ concurrency:
 jobs:
   build:
     runs-on: test
+    timeout-minutes: 30
     steps:
       - name: Checkout git repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
       # Like the old stand: the production build (SDK from bastyon.com). The manifest
