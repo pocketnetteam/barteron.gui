@@ -165,6 +165,8 @@ describe('fittingOffers', () => {
     expect(
       fittingOffers({ tags: ['my_list'], address: 'PSeller' }, [laptop], tree, [100])
     ).toHaveLength(1)
+    // My own offer page: my offers are not offered to me.
+    expect(fittingOffers({ tags: [10], address: laptop.address }, [laptop], tree)).toEqual([])
   })
 })
 

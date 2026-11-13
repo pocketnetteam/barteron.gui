@@ -90,6 +90,14 @@ describe('exchanges of one offer', () => {
           intermediates: [tablet, tablet, offer(15, { address: 'PMaria', tag: 4 })],
         },
         { target: bike, intermediates: [tablet] },
+        // The middle offer was withdrawn, or expired: no chain through it.
+        {
+          target: offer(16, { address: 'PAnna', tag: 6 }),
+          intermediates: [
+            offer(17, { address: 'PDima', tag: 4, published: 'withdrawed' }),
+            offer(18, { address: 'PVera', tag: 4, till: NOW - 1 }),
+          ],
+        },
       ],
     }
     const result = offerExchanges(source, raw, NOW)
@@ -115,6 +123,9 @@ describe('chains by link', () => {
     expect(parseChainRef({ source: tx(1), target: tx(2), via: 'x' })?.via).toBeNull()
     expect(parseChainRef({ source: tx(1) })).toBeNull()
     expect(parseChainRef({ source: tx(1), target: tx(1) })).toBeNull()
+    // The middle cannot be one of the ends.
+    expect(parseChainRef({ source: tx(1), target: tx(2), via: tx(1) })?.via).toBeNull()
+    expect(parseChainRef({ source: tx(1), target: tx(2), via: tx(2) })?.via).toBeNull()
   })
 
   it('the path for the chat keeps the old parameters first', () => {
@@ -152,6 +163,14 @@ describe('chains by link', () => {
       role: 'via',
     })
     expect(chainProblem({ source, via: null, target }, NOW)).toEqual({ kind: 'missing' })
+    const expired = { ...target, till: NOW - 1 }
+    expect(
+      chainProblem({ source, via: { ...via, published: 'published' }, target: expired }, NOW)
+    ).toEqual({
+      kind: 'inactive',
+      offer: expired,
+      role: 'target',
+    })
     expect(
       chainProblem({ source, via: { ...via, published: 'published' }, target }, NOW)
     ).toBeNull()

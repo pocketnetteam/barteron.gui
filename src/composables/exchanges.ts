@@ -214,10 +214,12 @@ export function useMyExchanges() {
     })
   })
 
+  /**
+   * The cabinet menu's number, the same as the section's list: an offer that
+   * fits two of mine is one exchange to look at (audit, finding 76).
+   */
   const total = computed(() =>
-    matches.states.value.some((s) => s.status === 'ready')
-      ? matches.states.value.reduce((sum, s) => sum + (s.count ?? 0), 0)
-      : null
+    matches.states.value.some((s) => s.status === 'ready') ? unique.value.length : null
   )
   const byOffer = computed(
     () => new Map(matches.states.value.map((s) => [s.offer.hash ?? '', s] as const))
