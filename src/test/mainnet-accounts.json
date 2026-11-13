@@ -1,0 +1,116 @@
+[
+  {
+    "about": "oldest format: only a, g, s, r; empty list, no ratings",
+    "tx": {
+      "hash": "580a922336933064e4f7c029b82f11a81ec7d0bbbc94c9dad7fa09846f57e0c4",
+      "type": 104,
+      "height": 2950163,
+      "time": 1727126180,
+      "s1": "PXYhCbTwPaUHrP6spJM5NY84TBpLQJtZi5",
+      "p": {
+        "s4": "{\"a\":[],\"g\":\"\",\"s\":false,\"r\":0}"
+      },
+      "additional": {
+        "regdate": 1727126180,
+        "rating": 0,
+        "rating_sum": 0,
+        "rating_count": 0
+      }
+    }
+  },
+  {
+    "about": "my list of categories, rated",
+    "tx": {
+      "hash": "f518fbb8418b29c4472aeafe29be811b0560a74da4bbcb13f03ae542c7e607f0",
+      "type": 104,
+      "height": 3007154,
+      "time": 1730535940,
+      "s1": "P9Rph1nhTYWctVTLZm19rhnmVcVkSG7L5M",
+      "p": {
+        "s4": "{\"a\":[17,58058,15032,11232,1249,293,267,9],\"g\":\"\",\"s\":false,\"r\":0}"
+      },
+      "additional": {
+        "regdate": 1730275281,
+        "rating": 50,
+        "rating_sum": 10,
+        "rating_count": 2
+      }
+    }
+  },
+  {
+    "about": "with an empty safe deal object",
+    "tx": {
+      "hash": "2eb2a372b6eaea84a0435a5b38ec86fd1dd728eb2ae76f28db7a872130888ae3",
+      "type": 104,
+      "height": 3591492,
+      "time": 1764955884,
+      "s1": "PFZ5cp5mg1pMuoLEDjYcMjoUUMhe6Y3ebV",
+      "p": {
+        "s4": "{\"a\":[11116,23,17],\"g\":\"\",\"s\":false,\"r\":0,\"d\":{}}"
+      },
+      "additional": {
+        "regdate": 1733688748,
+        "rating": 0,
+        "rating_sum": 0,
+        "rating_count": 0
+      }
+    }
+  },
+  {
+    "about": "current old app: d and m both written",
+    "tx": {
+      "hash": "f0b9599e9a19a88f04e4ff7399030031cc1f8f606e57df7de0929eca18b297bc",
+      "type": 104,
+      "height": 4063181,
+      "time": 1792136706,
+      "s1": "PPPQ35typdcRH1ZsL1pm5hMRSZBDMW4tjP",
+      "p": {
+        "s4": "{\"a\":[11116],\"g\":\"\",\"s\":false,\"r\":0,\"d\":{},\"m\":{}}"
+      },
+      "additional": {
+        "regdate": 1791230810,
+        "rating": 0,
+        "rating_sum": 0,
+        "rating_count": 0
+      }
+    }
+  },
+  {
+    "about": "guarantor and moderator, off duty, fee 2 %",
+    "tx": {
+      "hash": "11f294fc7e063626cc8d0c43e515251198b9a49894d597f66de9f66dd0f6151c",
+      "type": 104,
+      "height": 4008285,
+      "time": 1788926915,
+      "s1": "PMdhZ1gvZXAXmQ6z5ghHz86arfXorxNYgX",
+      "p": {
+        "s4": "{\"a\":[],\"g\":\"\",\"s\":false,\"r\":0,\"d\":{\"validator\":{\"status\":\"unavailable\",\"feePercent\":2}}}"
+      },
+      "additional": {
+        "regdate": 1776955610,
+        "rating": 0,
+        "rating_sum": 0,
+        "rating_count": 0
+      }
+    }
+  },
+  {
+    "about": "guarantor on duty, fee 2 %",
+    "tx": {
+      "hash": "fd57826c28184abe93861d74bd8046a1b6314d7ba622fad0ac1f36bbec91f7f3",
+      "type": 104,
+      "height": 3693492,
+      "time": 1770789848,
+      "s1": "PMkhdDuCM3k8xLRDBUnmBDcUMWjhfPbWbE",
+      "p": {
+        "s4": "{\"a\":[],\"g\":\"\",\"s\":false,\"r\":0,\"d\":{\"validator\":{\"status\":\"available\",\"feePercent\":2}}}"
+      },
+      "additional": {
+        "regdate": 1732322008,
+        "rating": 47,
+        "rating_sum": 243,
+        "rating_count": 51
+      }
+    }
+  }
+]
