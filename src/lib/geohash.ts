@@ -36,8 +36,22 @@ export const toLeafletBounds = (b: Bounds): LeafletBoundsJson => ({
 /** Offers are written with 12 characters (about 4 cm). */
 export const OFFER_PRECISION = 12
 
+const clampLat = (lat: number) => Math.max(-90, Math.min(90, lat))
+
+/**
+ * Longitude in −180…180. Leaflet keeps counting past 180 when the map is
+ * dragged across the antimeridian; a value inside stays as it is, 180 too.
+ */
+const wrapLng = (lng: number) =>
+  lng >= -180 && lng <= 180 ? lng : ((((lng + 180) % 360) + 360) % 360) - 180
+
+/**
+ * A point picked on a map dragged past the antimeridian is stored where it
+ * really is: ngeohash does not wrap and would put 190° at 180°, some 550 km
+ * off in Chukotka (audit, finding 80).
+ */
 export const encodeGeohash = (point: LatLng, precision = OFFER_PRECISION): string =>
-  ngeohash.encode(point[0], point[1], precision)
+  ngeohash.encode(clampLat(point[0]), wrapLng(point[1]), precision)
 
 export function decodeGeohash(hash: string): LatLng | null {
   if (!hash || !/^[0-9b-hjkmnp-z]+$/.test(hash)) return null
@@ -77,10 +91,40 @@ export interface ApproximationOptions {
 }
 
 /**
+ * The area as boxes on the globe: one, or two across the antimeridian (a
+ * Leaflet view east of 180° or west of −180°); the whole width when it is
+ * wider than the world; none when the numbers are broken.
+ */
+export function onGlobe(area: Bounds): Bounds[] {
+  if (![area.south, area.west, area.north, area.east].every(Number.isFinite)) return []
+  const south = clampLat(Math.min(area.south, area.north))
+  const north = clampLat(Math.max(area.south, area.north))
+  const span = Math.abs(area.east - area.west)
+  if (span >= 360) return [{ south, north, west: -180, east: 180 }]
+  const west = wrapLng(Math.min(area.west, area.east))
+  const east = west + span
+  if (east <= 180) return [{ south, north, west, east }]
+  return [
+    { south, north, west, east: 180 },
+    { south, north, west: -180, east: east - 360 },
+  ]
+}
+
+/**
  * Geohash prefixes that cover the visible area, as fine as `maxCount` allows
  * (old `GeoHashApproximator`). The feed's `location` filter takes them.
+ * Across the antimeridian each side gets half the count: the old code saw
+ * only the side up to 180°, and offers past it were not found (audit,
+ * finding 79). Broken bounds give no filter at all.
  */
 export function approximateBounds(area: Bounds, options: ApproximationOptions = {}): string[] {
+  const parts = onGlobe(area)
+  if (parts.length < 2) return parts.length ? approximateBox(parts[0]!, options) : []
+  const maxCount = Math.floor((options.maxCount ?? 300) / parts.length)
+  return parts.flatMap((part) => approximateBox(part, { ...options, maxCount }))
+}
+
+function approximateBox(area: Bounds, options: ApproximationOptions): string[] {
   const maxCount = options.maxCount ?? 300
   const maxPrecision = options.maxPrecision ?? 7
   let precision = 1
@@ -119,8 +163,14 @@ export function boundsAround([lat, lng]: LatLng, sideKm: number): Bounds {
   const latPerKm = 180 / (Math.PI * R)
   const lngPerKm = 360 / (2 * Math.PI * Math.cos((lat * Math.PI) / 180) * R)
   const dLat = (latPerKm * sideKm) / 2
-  const dLng = (lngPerKm * sideKm) / 2
-  return { south: lat - dLat, west: lng - dLng, north: lat + dLat, east: lng + dLng }
+  // Near a pole a degree of longitude is next to nothing: no wider than the world.
+  const dLng = Math.min(180, (lngPerKm * sideKm) / 2)
+  return {
+    south: Math.max(-90, lat - dLat),
+    west: lng - dLng,
+    north: Math.min(90, lat + dLat),
+    east: lng + dLng,
+  }
 }
 
 /** Great-circle distance, km: «3,2 км» on a card. */

@@ -92,3 +92,88 @@ describe('geohash', () => {
     expect(distanceKm([44.8125, 20.4612], [45.2671, 19.8335])).toBeLessThan(80)
   })
 })
+
+describe('at the edges of the map', () => {
+  type Point = [number, number]
+  /** Whether an offer at this point falls into the prefixes. */
+  const finds = (prefixes: string[], point: Point) =>
+    prefixes.some((p) => encodeGeohash(point).startsWith(p))
+
+  it('a view across the antimeridian covers both sides', () => {
+    // Leaflet keeps counting past 180: 170…190 is 170…180 and −180…−170.
+    const view = approximateBounds({ south: 60, west: 170, north: 70, east: 190 })
+    expect(finds(view, [65, 175])).toBe(true)
+    expect(finds(view, [65, -175])).toBe(true)
+    expect(finds(view, [65, -160])).toBe(false)
+    expect(view.length).toBeLessThanOrEqual(300)
+    // Each side gets half of the limit: together no more than asked.
+    expect(
+      approximateBounds({ south: 60, west: 170, north: 70, east: 190 }, { maxCount: 100 }).length
+    ).toBeLessThanOrEqual(100)
+    // The same place, counted the other way.
+    const other = approximateBounds({ south: 60, west: -190, north: 70, east: -170 })
+    expect(finds(other, [65, 175])).toBe(true)
+    expect(finds(other, [65, -175])).toBe(true)
+  })
+
+  it('a view on the equator at Greenwich covers all four quarters', () => {
+    const view = approximateBounds(boundsAround([0, 0], 2))
+    for (const point of [
+      [0.005, 0.005],
+      [0.005, -0.005],
+      [-0.005, 0.005],
+      [-0.005, -0.005],
+    ] as Point[])
+      expect(finds(view, point)).toBe(true)
+    expect(finds(view, [0.05, 0])).toBe(false)
+  })
+
+  it('a view wider than the world is the whole world', () => {
+    const view = approximateBounds({ south: -85, west: -540, north: 85, east: 540 })
+    for (const point of [
+      [0, 0],
+      [50, 179.9],
+      [-50, -179.9],
+    ] as Point[])
+      expect(finds(view, point)).toBe(true)
+    // One cell each, no repeats.
+    expect(view).toHaveLength(32)
+    expect(new Set(view).size).toBe(32)
+  })
+
+  it('broken bounds give no place filter, not a filter somewhere else', () => {
+    expect(approximateBounds({ south: NaN, west: 0, north: 1, east: 1 })).toEqual([])
+    expect(approximateBounds({ south: 1, west: 0, north: Infinity, east: 1 })).toEqual([])
+  })
+
+  it('bounds upside down are put right', () => {
+    expect(approximateBounds({ south: 56, west: 37, north: 55, east: 38 })).toEqual(
+      approximateBounds({ south: 55, west: 37, north: 56, east: 38 })
+    )
+  })
+
+  it('a point picked past the antimeridian is stored where it really is', () => {
+    expect(encodeGeohash([60, 190], 6)).toBe(encodeGeohash([60, -170], 6))
+    expect(encodeGeohash([60, -200], 6)).toBe(encodeGeohash([60, 160], 6))
+    expect(encodeGeohash([95, 10], 6)).toBe(encodeGeohash([90, 10], 6))
+    // The edge itself and everything inside stay as they are.
+    expect(encodeGeohash([0, 180], 6)).toBe('rzzzzz')
+    expect(encodeGeohash([55.7558, 37.6173])).toBe('ucfv0n014d7y')
+  })
+
+  it('a square around a pole stays on the globe', () => {
+    const b = boundsAround([89.99, 0], 10)
+    expect(b.north).toBeLessThanOrEqual(90)
+    expect(b.east - b.west).toBeLessThanOrEqual(360)
+    expect(approximateBounds(b).length).toBeGreaterThan(0)
+  })
+
+  it('distances: across the antimeridian, along the equator, pole to pole', () => {
+    expect(Math.round(distanceKm([0, 179.9], [0, -179.9]))).toBe(22)
+    expect(Math.round(distanceKm([0, 0], [0, 1]))).toBe(111)
+    expect(Math.round(distanceKm([90, 0], [-90, 0]))).toBe(20015)
+    expect(distanceKm([55.75, 37.61], [55.75, 37.61])).toBe(0)
+    // Nearly opposite points: rounding takes the sine past 1, the distance is still half the globe.
+    expect(Math.round(distanceKm([-79.75, -179], [79.75, 1]))).toBe(20015)
+  })
+})

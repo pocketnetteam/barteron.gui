@@ -35,11 +35,15 @@ function valid(value: unknown): StoredLocation {
   if (!value || typeof value !== 'object') return EMPTY
   const v = value as Partial<StoredLocation>
   const b = v.bounds
+  const number = (n: unknown, limit: number) =>
+    typeof n === 'number' && Number.isFinite(n) && Math.abs(n) <= limit
+  // Leaflet counts longitude past ±180 when the map is dragged round; latitude stops at the poles.
   const boundsOk =
     !!b &&
-    [b._southWest?.lat, b._southWest?.lng, b._northEast?.lat, b._northEast?.lng].every(
-      (n) => typeof n === 'number' && Number.isFinite(n)
-    )
+    number(b._southWest?.lat, 90) &&
+    number(b._northEast?.lat, 90) &&
+    number(b._southWest?.lng, 540) &&
+    number(b._northEast?.lng, 540)
   return {
     geohash: typeof v.geohash === 'string' ? v.geohash : null,
     zoom: typeof v.zoom === 'number' ? v.zoom : null,
