@@ -3,6 +3,7 @@ import { markRaw, ref, shallowRef } from 'vue'
 import { resolveLocale, setLocale } from '@/i18n'
 import { applyHostInsets } from '@/lib/host-insets'
 import { connect, type ConnectMode, type ConnectOptions } from '@/sdk/connect'
+import { syncTunnel } from '@/sdk/tunnel'
 import type { AppInfo, HostSdk } from '@/sdk/types'
 
 export type SessionStatus = 'idle' | 'connecting' | 'ready' | 'outside' | 'failed'
@@ -53,9 +54,8 @@ export const useSessionStore = defineStore('session', () => {
     setLocale(resolveLocale(hostLocale.value))
     applyHostInsets(result.appinfo)
 
-    // Outside services through the host when it routes traffic through Tor;
-    // sdk.js checks `alttransport` itself and returns null otherwise.
-    void result.sdk.serviceWorker?.register().catch(() => null)
+    // Outside services through the host when it routes traffic through Tor.
+    void syncTunnel(result.sdk, !!result.appinfo.alttransport).catch(() => undefined)
 
     result.sdk.on('theme', (theme) => {
       hostTheme.value = theme.rootid

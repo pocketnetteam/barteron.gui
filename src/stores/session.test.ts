@@ -158,6 +158,27 @@ describe('session store', () => {
     expect(useSessionStore().address).toBeNull()
   })
 
+  it('asks sdk.js for the Tor tunnel only when the host routes traffic through Tor', async () => {
+    const start = async (alttransport: boolean) => {
+      setActivePinia(createPinia())
+      const sdk = createMockSdk()
+      const register = vi.fn(async () => null)
+      sdk.serviceWorker = { register }
+      const appinfo = sdk.get.appinfo
+      sdk.get.appinfo = async () => ({ ...(await appinfo()), alttransport })
+      await useSessionStore().start({
+        sdkHost: 'bastyon.com',
+        allowMock: true,
+        inIframe: false,
+        createMock: () => sdk,
+      })
+      await new Promise((r) => setTimeout(r, 0))
+      return register
+    }
+    expect(await start(true)).toHaveBeenCalledOnce()
+    expect(await start(false)).not.toHaveBeenCalled()
+  })
+
   it('useSdk() throws until connected and returns the SDK after', async () => {
     expect(() => useSdk()).toThrow('sdk_not_ready')
     const { sdk, started } = startWithMock()

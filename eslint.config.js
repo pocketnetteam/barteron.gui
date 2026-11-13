@@ -15,8 +15,6 @@ export default defineConfig(
       '_docs-todo/',
       // Vendored copy of the host SDK, kept verbatim
       'e2e/fixtures/',
-      // Host fetch tunnel, copied from the old app verbatim
-      'public/miniapp-service-worker.js',
     ],
   },
   js.configs.recommended,
@@ -31,6 +29,13 @@ export default defineConfig(
   {
     languageOptions: {
       globals: globals.browser,
+    },
+  },
+  {
+    // The host's fetch tunnel runs as a service worker.
+    files: ['public/miniapp-service-worker.js'],
+    languageOptions: {
+      globals: globals.serviceworker,
     },
   },
   {
