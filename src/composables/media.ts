@@ -11,8 +11,14 @@ export function useMedia(query: string) {
       : null
   const matches = ref(media?.matches ?? false)
   const update = (event: MediaQueryListEvent) => (matches.value = event.matches)
-  media?.addEventListener('change', update)
-  onScopeDispose(() => media?.removeEventListener('change', update))
+  // Safari before 14 (iOS 13 web views) has only the old `addListener`.
+  if (typeof media?.addEventListener === 'function') {
+    media.addEventListener('change', update)
+    onScopeDispose(() => media.removeEventListener('change', update))
+  } else if (media) {
+    media.addListener(update)
+    onScopeDispose(() => media.removeListener(update))
+  }
   return matches
 }
 

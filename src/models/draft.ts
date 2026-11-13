@@ -338,6 +338,7 @@ export interface DraftContext {
   /** `ru-RU`, as the old app wrote `$i18n.locale`. */
   language: string
   rates?: Rates | null
+  /** Categories of «Мой список»; `undefined` — the profile has not loaded yet. */
   myList?: readonly number[]
   /** Editing: the version on chain, for the fields the form does not touch. */
   base?: Offer | null
@@ -378,7 +379,12 @@ export function offerFromDraft(draft: OfferDraft, ctx: DraftContext): Offer {
 
   const safeDeal: JsonObject = { ...base.safeDeal }
   delete safeDeal.validatorFeeVariant
-  if (draft.fee && safeDealPossible(draft, myList)) safeDeal.validatorFeeVariant = draft.fee
+  // «Мой список» before the profile has loaded: the list is unknown, so the
+  // seller's choice stays (the old form kept it too) rather than being dropped.
+  const listUnknown = ctx.myList === undefined && draft.exchange === 'my_list' && !point
+  if (draft.fee && (listUnknown || safeDealPossible(draft, myList))) {
+    safeDeal.validatorFeeVariant = draft.fee
+  }
 
   const ready = draft.photos.filter((p) => p.status === 'ready' && p.url).map((p) => p.url!)
 
@@ -473,6 +479,8 @@ export function draftIssues(draft: OfferDraft, ctx: IssueContext = {}): DraftIss
     if (ctx.videoStatus === 'processing' || ctx.videoStatus === 'loading') {
       add('media', 'video', 'videoProcessing', 'wait')
     } else if (ctx.videoStatus === 'failed') add('media', 'video', 'videoFailed')
+    // Deleted from PeerTube: the offer would show a dead video.
+    else if (ctx.videoStatus === 'missing') add('media', 'video', 'videoMissing')
   }
 
   // 3. Exchange and price, or the pickup point's terms

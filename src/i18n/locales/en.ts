@@ -938,6 +938,7 @@ const en: Messages = {
       videoHint: 'Up to 2 minutes, up to 720p. A video draws much more interest to a listing.',
       videoHintPhone: 'One video up to 2 minutes, up to 720p',
       videoUnavailable: 'This Bastyon cannot attach videos to listings.',
+      videoOpenFailed: 'Could not open the video upload. Try again.',
     },
     exchange: {
       title: 'What do you want in return',
@@ -1167,6 +1168,7 @@ const en: Messages = {
       route: 'Tell how to get there',
       place: 'Set the place on the map',
       pickupPoints: 'Choose at least one pickup point or turn this option off',
+      videoMissing: 'The video was not found. Delete it or check again',
     },
   },
   txError: {

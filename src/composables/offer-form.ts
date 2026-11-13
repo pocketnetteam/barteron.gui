@@ -17,6 +17,7 @@ import { useAccount, useCategories, useOffer, useRates, useUserProfile } from '@
 import { parseVideoInfo } from '@/components/item/gallery'
 import { isPickupPointOwner } from '@/config/delivery'
 import { dataUrlBytes, isPhotoFile, shrinkPhoto } from '@/lib/image'
+import { createLimiter } from '@/lib/limit'
 import { readStored, userKey, writeStored } from '@/lib/storage'
 import {
   draftFromOffer,
@@ -42,6 +43,7 @@ import { OfferInvalidError, toOfferPayload, type Offer } from '@/models/offer'
 import { useCurrencyStore } from '@/stores/currency'
 import { useSessionStore } from '@/stores/session'
 import { useTxStore } from '@/stores/tx'
+import { showToast } from '@/ui/toast'
 
 /** Bastyon locale for `p.s1`, as the old app wrote `$i18n.locale`. */
 const LANGUAGE_TAG: Record<string, string> = { ru: 'ru-RU', en: 'en-US', sr: 'sr-RS' }
@@ -150,20 +152,28 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
 
   const dirty = computed(() => !!draft.value && snapshot(draft.value) !== initial)
 
+  /**
+   * Keeps the draft on the device. The time goes only into the stored copy:
+   * stamping the draft itself would wake the watcher below and save again
+   * every 400 ms for as long as the form is open.
+   */
+  function save() {
+    const value = draft.value
+    if (!value || published.value || !me.value) return
+    // Nothing typed yet, or an edit with no changes: nothing worth keeping.
+    if (editing.value ? !dirty.value : !draftHasContent(value)) return
+    const now = Date.now()
+    writeStored(draftKey(hash.value, me.value), { ...storedDraft(value), updatedAt: now })
+    savedAt.value = now
+  }
+
   let saveTimer: ReturnType<typeof setTimeout> | undefined
   watch(
     draft,
     (value) => {
       if (!value || published.value) return
       clearTimeout(saveTimer)
-      saveTimer = setTimeout(() => {
-        if (!draft.value || published.value || !me.value) return
-        // Nothing typed yet, or an edit with no changes: nothing worth keeping.
-        if (editing.value ? !dirty.value : !draftHasContent(draft.value)) return
-        draft.value.updatedAt = Date.now()
-        writeStored(draftKey(hash.value, me.value), storedDraft(draft.value))
-        savedAt.value = draft.value.updatedAt
-      }, 400)
+      saveTimer = setTimeout(save, 400)
     },
     { deep: true }
   )
@@ -181,6 +191,7 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
   async function discard() {
     const value = draft.value
     forgetStored()
+    originals.clear()
     restoredAt.value = null
     if (value?.video && value.videoUploadedHere) {
       await session.sdk?.videos.remove({ url: value.video }).catch(() => undefined)
@@ -241,7 +252,13 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
     { immediate: true }
   )
 
-  const videoUrl = computed(() => draft.value?.video || null)
+  /**
+   * Hosts before transactions API 4 have no videos (old `videoOperationsAvailable`).
+   * There the offer's video is neither checked nor dropped: the old form wrote
+   * an empty one, losing it; keeping it loses nothing.
+   */
+  const videosSupported = computed(() => (session.appinfo?.transactionsApiVersion ?? 0) >= 4)
+  const videoUrl = computed(() => (videosSupported.value && draft.value?.video) || null)
   const video = useQuery({
     queryKey: computed(() => ['bastyon', 'video-state', videoUrl.value]),
     enabled: computed(() => !!session.sdk && !!videoUrl.value),
@@ -273,6 +290,9 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
         draft.value.video = result.link
         draft.value.videoUploadedHere = true
       }
+    } catch {
+      // Closing the window answers `null`; an error is the host's (signed out, timeout).
+      showToast(t('create.media.videoOpenFailed'), { kind: 'error' })
     } finally {
       videoBusy.value = false
     }
@@ -294,45 +314,68 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
   const photoNotice = ref<
     { kind: 'limit'; added: number; total: number } | { kind: 'type' } | null
   >(null)
-  let freeSlots = UPLOAD_SLOTS
-  const waiting: (() => void)[] = []
-  const slot = () =>
-    freeSlots > 0
-      ? (freeSlots--, Promise.resolve())
-      : new Promise<void>((resolve) => waiting.push(resolve))
-  const release = () => {
-    const next = waiting.shift()
-    if (next) next()
-    else freeSlots++
-  }
+  const uploadSlot = createLimiter(UPLOAD_SLOTS)
+  /**
+   * One picture decoded at a time: a camera photo opens into tens of MB, and
+   * ten of them at once can take a phone's memory (the host shrinks one by one
+   * for the same reason).
+   */
+  const shrinkSlot = createLimiter(1)
+  /** What the seller added, until it is read: «Повторить» reads it again. Not stored. */
+  const originals = new Map<string, File | string>()
 
   const findPhoto = (pid: string): DraftPhoto | undefined =>
     draft.value?.photos.find((p) => p.id === pid)
+
+  /** The picture → a small JPEG in the draft, then off to the host. */
+  async function prepare(pid: string): Promise<void> {
+    const source = originals.get(pid)
+    const photo = findPhoto(pid)
+    if (!source || !photo) return
+    photo.status = 'uploading'
+    try {
+      const data = await shrinkSlot(() =>
+        // Removed while waiting: nothing to read.
+        findPhoto(pid) ? shrinkPhoto(source) : Promise.resolve(null)
+      )
+      const shrunk = findPhoto(pid)
+      if (!data || !shrunk) return
+      shrunk.data = data
+      shrunk.bytes = dataUrlBytes(data)
+      originals.delete(pid)
+    } catch {
+      const failed = findPhoto(pid)
+      if (failed) failed.status = 'failed'
+      return
+    }
+    await upload(pid)
+  }
 
   async function upload(pid: string): Promise<void> {
     const photo = findPhoto(pid)
     if (!photo?.data) return
     photo.status = 'uploading'
-    await slot()
-    try {
-      const current = findPhoto(pid)
-      // Removed while waiting.
-      if (!current?.data) return
-      const answer = (await session.sdk!.images.upload({ images: [current.data] })) as unknown
-      const first = Array.isArray(answer) ? (answer[0] as { url?: unknown } | undefined) : undefined
-      const done = findPhoto(pid)
-      if (!done) return
-      if (first && typeof first.url === 'string' && first.url) {
-        done.url = first.url
-        done.status = 'ready'
-        delete done.data
-      } else done.status = 'failed'
-    } catch {
-      const failed = findPhoto(pid)
-      if (failed) failed.status = 'failed'
-    } finally {
-      release()
-    }
+    await uploadSlot(async () => {
+      try {
+        const current = findPhoto(pid)
+        // Removed while waiting.
+        if (!current?.data) return
+        const answer = (await session.sdk!.images.upload({ images: [current.data] })) as unknown
+        const first = Array.isArray(answer)
+          ? (answer[0] as { url?: unknown } | undefined)
+          : undefined
+        const done = findPhoto(pid)
+        if (!done) return
+        if (first && typeof first.url === 'string' && first.url) {
+          done.url = first.url
+          done.status = 'ready'
+          delete done.data
+        } else done.status = 'failed'
+      } catch {
+        const failed = findPhoto(pid)
+        if (failed) failed.status = 'failed'
+      }
+    })
   }
 
   /** Files from the picker, a drop or the clipboard; data URLs from the camera. */
@@ -353,34 +396,22 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
     const added = taken.map((source) => {
       const photo: DraftPhoto = { id: photoId(), url: null, status: 'uploading', bytes: 0 }
       value.photos.push(photo)
-      return { id: photo.id, source }
+      originals.set(photo.id, source)
+      return photo.id
     })
-    await Promise.all(
-      added.map(async ({ id: pid, source }) => {
-        try {
-          const data = await shrinkPhoto(source)
-          const photo = findPhoto(pid)
-          if (!photo) return
-          photo.data = data
-          photo.bytes = dataUrlBytes(data)
-        } catch {
-          const photo = findPhoto(pid)
-          if (photo) photo.status = 'failed'
-          return
-        }
-        await upload(pid)
-      })
-    )
+    await Promise.all(added.map(prepare))
   }
 
+  /** Not uploaded: send again; not even read: read it again first. */
   function retryPhoto(pid: string) {
-    void upload(pid)
+    void (findPhoto(pid)?.data ? upload(pid) : prepare(pid))
   }
 
   function removePhoto(pid: string) {
     const value = draft.value
     if (!value) return
     value.photos = value.photos.filter((p) => p.id !== pid)
+    originals.delete(pid)
     if (photoNotice.value?.kind === 'limit') photoNotice.value = null
   }
 
@@ -514,7 +545,7 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
           address: me.value,
           language: language.value,
           rates: rates.data.value ?? null,
-          myList: myList.value,
+          myList: account.isSuccess.value ? myList.value : undefined,
           base: editing.value ? (original.data.value ?? null) : null,
         })
       : null
@@ -546,21 +577,23 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
       return false
     }
     if (!canPublish.value || !offer.value) return false
-    if (!(await session.ensureSignedIn())) return false
 
-    let payload
-    try {
-      payload = toOfferPayload(offer.value, {
-        isLeafCategory: (tag) => categories.tree.value?.isLeaf(tag) ?? false,
-      })
-    } catch (error) {
-      publishError.value =
-        error instanceof OfferInvalidError ? `offer:invalid:${error.field}` : String(error)
-      return false
-    }
-
+    // Busy from the first press: a second one before the host answers is ignored.
     sending.value = true
     try {
+      if (!(await session.ensureSignedIn()) || !offer.value) return false
+
+      let payload
+      try {
+        payload = toOfferPayload(offer.value, {
+          isLeafCategory: (tag) => categories.tree.value?.isLeaf(tag) ?? false,
+        })
+      } catch (error) {
+        publishError.value =
+          error instanceof OfferInvalidError ? `offer:invalid:${error.field}` : String(error)
+        return false
+      }
+
       const tx = await txStore.send('offer', payload)
       publishTxId.value = tx.id
       if (tx.status === 'failed') {
@@ -590,6 +623,7 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
     publishTxId.value = null
     publishError.value = null
     tried.clear()
+    originals.clear()
     start(fresh(), false)
     void goTo(stepsOf(draft.value!)[0]!, true)
   }
@@ -598,11 +632,7 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
     clearTimeout(saveTimer)
     clearInterval(profileTimer)
     // A change typed in the last 400 ms is kept too.
-    if (draft.value && me.value && !published.value) {
-      if (editing.value ? dirty.value : draftHasContent(draft.value)) {
-        writeStored(draftKey(hash.value, me.value), storedDraft(draft.value))
-      }
-    }
+    save()
   })
 
   return {
@@ -622,6 +652,7 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
     categories,
     rates,
     // video
+    videosSupported,
     videoStatus,
     videoInfo: computed(() => video.data.value ?? null),
     videoBusy,

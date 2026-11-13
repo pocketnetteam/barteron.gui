@@ -22,8 +22,7 @@ const session = useSessionStore()
 const d = computed(() => form.draft.value!)
 const status = computed(() => form.videoStatus.value)
 const info = computed(() => form.videoInfo.value)
-/** Hosts before transactions API 4 have no videos (old `videoOperationsAvailable`). */
-const supported = computed(() => (session.appinfo?.transactionsApiVersion ?? 0) >= 4)
+const supported = computed(() => form.videosSupported.value)
 const poster = computed(() => {
   const value = info.value?.poster
   return value ? (session.sdk?.manageBastyonImageSrc(value) ?? value) : null

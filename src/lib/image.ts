@@ -1,8 +1,9 @@
 /**
- * Photos before they go to Bastyon for upload. The previous host shrank every
- * picture to fit 1080×1080 itself (pocketnet.gui `js/lib/apps/index.js`,
- * `images.upload`); bastyon-nextgen sends what it gets. Shrinking here makes
- * both hosts store the same size and keeps the postMessage small.
+ * Photos before they go to Bastyon for upload. Both hosts shrink every picture
+ * to fit 1080×1080 themselves (pocketnet.gui `js/lib/apps/index.js` and
+ * bastyon-nextgen `media-upload.ts`, `images.upload`). Shrinking here as well
+ * keeps the postMessage small, shows the size the seller will get and drops
+ * the EXIF data (the place a phone photo was taken) before it leaves the app.
  */
 
 /** Longest side after shrinking, px: what the previous host used. */
@@ -40,36 +41,37 @@ function loadImage(src: string): Promise<HTMLImageElement> {
   })
 }
 
-function readAsDataUrl(blob: Blob): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = () => resolve(String(reader.result))
-    reader.onerror = () => reject(reader.error ?? new Error('image:unreadable'))
-    reader.readAsDataURL(blob)
-  })
-}
-
 /**
  * A file or a data URL → JPEG data URL within 1080×1080. The browser applies
  * the EXIF orientation when it decodes, so phone photos stand upright.
+ *
+ * A file is read through an object URL, not a data URL: a 10 MB photo would
+ * otherwise sit in memory a second time as a 13 MB string.
  */
 export async function shrinkPhoto(
   source: Blob | string,
   max = PHOTO_MAX_SIDE,
   quality = PHOTO_QUALITY
 ): Promise<string> {
-  const src = typeof source === 'string' ? source : await readAsDataUrl(source)
-  const img = await loadImage(src)
-  const { width, height } = fitSize(img.naturalWidth, img.naturalHeight, max)
-  if (!width || !height) throw new Error('image:unreadable')
+  const objectUrl = typeof source === 'string' ? null : URL.createObjectURL(source)
   const canvas = document.createElement('canvas')
-  canvas.width = width
-  canvas.height = height
-  const context = canvas.getContext('2d')
-  if (!context) throw new Error('image:unreadable')
-  // PNG with transparency: white under it, JPEG has no alpha.
-  context.fillStyle = '#ffffff'
-  context.fillRect(0, 0, width, height)
-  context.drawImage(img, 0, 0, width, height)
-  return canvas.toDataURL('image/jpeg', quality)
+  try {
+    const img = await loadImage(objectUrl ?? (source as string))
+    const { width, height } = fitSize(img.naturalWidth, img.naturalHeight, max)
+    if (!width || !height) throw new Error('image:unreadable')
+    canvas.width = width
+    canvas.height = height
+    const context = canvas.getContext('2d')
+    if (!context) throw new Error('image:unreadable')
+    // PNG with transparency: white under it, JPEG has no alpha.
+    context.fillStyle = '#ffffff'
+    context.fillRect(0, 0, width, height)
+    context.drawImage(img, 0, 0, width, height)
+    return canvas.toDataURL('image/jpeg', quality)
+  } finally {
+    if (objectUrl) URL.revokeObjectURL(objectUrl)
+    // Safari counts canvas memory until the canvas is gone; an empty one frees it now.
+    canvas.width = 0
+    canvas.height = 0
+  }
 }

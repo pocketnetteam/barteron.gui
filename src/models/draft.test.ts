@@ -154,6 +154,23 @@ describe('offerFromDraft: what goes on chain, as the old form wrote it', () => {
     expect(safeDealPossible(draft({ exchange: 'my_list' }), [17])).toBe(true)
   })
 
+  it('«Мой список» before the profile has loaded: the seller’s fee stays', () => {
+    const d = draft({ exchange: 'my_list', fee: 'seller' })
+    expect(offerFromDraft(d, CTX).safeDeal).toEqual({ validatorFeeVariant: 'seller' })
+    expect(offerFromDraft(d, { ...CTX, myList: [17] }).safeDeal).toEqual({
+      validatorFeeVariant: 'seller',
+    })
+    // Known, and without PKOIN: no deal through a guarantor, no fee.
+    expect(offerFromDraft(d, { ...CTX, myList: [100] }).safeDeal).toEqual({})
+    // Only «Мой список» waits for the profile; an own list is right here.
+    expect(offerFromDraft(draft({ fee: 'seller', tags: [100] }), CTX).safeDeal).toEqual({})
+    // A pickup point has no deals at all.
+    expect(
+      offerFromDraft(draft({ exchange: 'my_list', fee: 'seller', tag: 97, price: '60' }), CTX)
+        .safeDeal
+    ).toEqual({})
+  })
+
   it('the fee switched off on an edit leaves the offer; the guarantor stays', () => {
     const base: Offer = {
       ...emptyOffer(ME, 'ru-RU', NOW),
@@ -357,6 +374,10 @@ describe('draftIssues', () => {
       level: 'wait',
     })
     expect(keys(draft({ video: 'v' }), { videoStatus: 'failed' })).toEqual(['videoFailed'])
+    expect(keys(draft({ video: 'v' }), { videoStatus: 'missing' })).toEqual(['videoMissing'])
+    expect(keys(draft({ video: 'v' }), { videoStatus: 'ready' })).toEqual([])
+    // Not checked (a host without videos): nothing to say.
+    expect(keys(draft({ video: 'v' }), { videoStatus: null })).toEqual([])
   })
 
   it('exchange and price', () => {
