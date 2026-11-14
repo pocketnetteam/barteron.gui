@@ -99,7 +99,10 @@ const request = computed(() => {
     myListTags: account.data.value?.tags ?? [],
   })
 })
-const list = useCatalogList(request, filters)
+const list = useCatalogList(request, filters, {
+  failed: () => categories.error.value,
+  retryPrepare: categories.retry,
+})
 
 function searchHere() {
   searched.value = { center: center.value, radiusKm: radius.value }

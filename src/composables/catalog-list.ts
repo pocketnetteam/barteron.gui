@@ -21,7 +21,12 @@ const AUTO_BELOW = 4
  */
 export function useCatalogList(
   request: MaybeRefOrGetter<CatalogRequest | null>,
-  filters: MaybeRefOrGetter<CatalogFilters | null>
+  filters: MaybeRefOrGetter<CatalogFilters | null>,
+  /**
+   * No request yet means what it waits for (the category tree) is loading:
+   * the list is «loading», not «nothing found». `failed` — it did not come.
+   */
+  prepare: { failed?: MaybeRefOrGetter<unknown>; retryPrepare?: () => void } = {}
 ) {
   const req = computed(() => toValue(request))
   const feed = useFeed(() => (req.value?.kind === 'feed' ? req.value.request : null))
@@ -58,12 +63,13 @@ export function useCatalogList(
 
   return {
     offers,
-    /** First page on its way. */
-    loading: computed(() => query.value.isPending.value && !!req.value),
-    /** The first page failed: nothing to show. */
-    error: computed(() =>
-      query.value.isError.value && !pages.value ? query.value.error.value : null
-    ),
+    /** First page on its way, or the request itself. */
+    loading: computed(() => (req.value ? query.value.isPending.value : !toValue(prepare.failed))),
+    /** The first page failed, or what the request needs: nothing to show. */
+    error: computed(() => {
+      if (!req.value) return toValue(prepare.failed) ?? null
+      return query.value.isError.value && !pages.value ? query.value.error.value : null
+    }),
     /** A later page failed: what is loaded stays. */
     moreError: computed(() =>
       query.value.isFetchNextPageError.value ? query.value.error.value : null
@@ -78,6 +84,9 @@ export function useCatalogList(
       auto.value = 0
       void query.value.fetchNextPage()
     },
-    retry: () => void query.value.refetch(),
+    retry: () => {
+      if (req.value) void query.value.refetch()
+      else prepare.retryPrepare?.()
+    },
   }
 }

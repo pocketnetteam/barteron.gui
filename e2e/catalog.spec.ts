@@ -71,6 +71,21 @@ test('filters in the address: price from the node, condition here', async ({ pag
   await expect(list(page)).not.toContainText('BMX Stark Madness')
 })
 
+test('back and forward between categories bring each one’s filters back', async ({ page }) => {
+  await page.goto('/category/1000?condition=new')
+  await expect(list(page)).toContainText('Детский велосипед 16″')
+  await expect(list(page)).not.toContainText('BMX Stark Madness')
+  // A subcategory starts without the filters.
+  await page.locator('.catalog__sub').first().click()
+  await expect(page).toHaveURL(/\/category\/\d+$/)
+  await page.goBack()
+  await expect(page).toHaveURL(/\/category\/1000\?condition=new$/)
+  await expect(list(page)).toContainText('Детский велосипед 16″')
+  await expect(list(page)).not.toContainText('BMX Stark Madness')
+  await page.goForward()
+  await expect(page).toHaveURL(/\/category\/\d+$/)
+})
+
 test('filters panel: a price preset applies on «show»', async ({ page }) => {
   await page.goto('/category/1000')
   await expect(list(page)).toContainText('Велосипед горный, рама M')

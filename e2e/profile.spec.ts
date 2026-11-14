@@ -312,6 +312,24 @@ test('only his offers not given: the profile says not all of it loaded', async (
   await expect(page.getByTestId('profile-guarantor')).toBeVisible()
 })
 
+test('favourites: one taken off stays, one the node no longer has goes', async ({ page }) => {
+  const TABLET = id('tablet-ilya')
+  const WITHDRAWN = id('tablet-mine')
+  const GONE = 'f'.repeat(64)
+  await page.addInitScript(
+    ({ me, ids }) => localStorage.setItem(`${me}_like`, JSON.stringify(ids)),
+    { me: ME, ids: [TABLET, WITHDRAWN, GONE] }
+  )
+  await page.goto(`/profile/${ME}#favorites`)
+  const saved = page.getByTestId('cabinet-favorites')
+  await expect(saved.locator('article')).toHaveCount(2)
+  // Taken off: shown as such.
+  await expect(saved).toContainText('Неактивно')
+  await expect
+    .poll(() => page.evaluate((me) => JSON.parse(localStorage.getItem(`${me}_like`) ?? '[]'), ME))
+    .toEqual([TABLET, WITHDRAWN])
+})
+
 test('settings: the place for new offers fills the offer form', async ({ page }) => {
   await page.goto(`/profile/${ME}#settings`)
   const place = page.getByTestId('settings-place')

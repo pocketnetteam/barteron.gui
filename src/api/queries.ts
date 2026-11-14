@@ -310,6 +310,11 @@ export function useCategories() {
     ready: computed(() => !!tree.data.value && !!names.data.value),
     error: computed(() => tree.error.value ?? names.error.value),
     label,
+    /** Loads what failed again. */
+    retry: () => {
+      if (tree.isError.value) void tree.refetch()
+      if (names.isError.value) void names.refetch()
+    },
   }
 }
 

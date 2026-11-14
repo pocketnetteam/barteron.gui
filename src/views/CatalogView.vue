@@ -71,7 +71,10 @@ const request = computed(() =>
       })
     : null
 )
-const list = useCatalogList(request, filters)
+const list = useCatalogList(request, filters, {
+  failed: () => categories.error.value,
+  retryPrepare: categories.retry,
+})
 
 function apply(next: CatalogFilters) {
   void router.replace({ query: filtersQuery(next) })
