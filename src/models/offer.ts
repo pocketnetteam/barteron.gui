@@ -263,6 +263,14 @@ export function exchangeCategories(
  */
 export type OfferLifecycle = 'draft' | 'removed' | 'withdrawn' | 'expired' | 'active'
 
+/** Mine and not deleted: the form edits it, the draft page shows it as my draft. */
+export function isEditableBy(
+  offer: Pick<Offer, 'address' | 'published'> | null | undefined,
+  me: string | null | undefined
+): boolean {
+  return !!offer && !!me && offer.address === me && offer.published !== 'removed'
+}
+
 export function offerLifecycle(
   offer: Pick<Offer, 'hash' | 'published' | 'till'>,
   now = Date.now()

@@ -1,4 +1,5 @@
 import { computed, toValue, type MaybeRefOrGetter } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useCategories } from '@/api/queries'
 import {
   offerFromAlias,
@@ -8,6 +9,7 @@ import {
   type OfferPublication,
 } from '@/models/offer'
 import { useTxStore, type TrackedTx } from '@/stores/tx'
+import { showToast } from '@/ui/toast'
 
 /**
  * What is happening to an offer on its way to the chain, for the status line
@@ -49,6 +51,7 @@ export function operationOf(
  * `removeOffer`. Each is one transaction with its own network status.
  */
 export function useOfferActions(offer: MaybeRefOrGetter<Offer | null | undefined>) {
+  const { t } = useI18n()
   const tx = useTxStore()
   const categories = useCategories()
 
@@ -75,14 +78,26 @@ export function useOfferActions(offer: MaybeRefOrGetter<Offer | null | undefined
     return !!o?.tag && (!tree || tree.isLeaf(o.tag))
   })
 
+  /**
+   * An offer that would not pass the node (a broken category, no place) is
+   * not sent: the owner is told to open it for editing, where the form shows
+   * what is missing. The old app sent it and showed the host's refusal.
+   */
   function sendVersion(published: OfferPublication, leafCheck: boolean) {
     const o = toValue(offer)
     if (!o?.hash) return null
     const tree = categories.tree.value
-    const payload = toOfferPayload(
-      withPublication(o, published),
-      leafCheck && tree ? { isLeafCategory: (id) => tree.isLeaf(id) } : {}
-    )
+    let payload
+    try {
+      payload = toOfferPayload(
+        withPublication(o, published),
+        leafCheck && tree ? { isLeafCategory: (id) => tree.isLeaf(id) } : {}
+      )
+    } catch (error) {
+      console.error('[barteron] offer action failed:', error)
+      showToast(t('item.own.invalid'), { kind: 'error' })
+      return null
+    }
     return tx.send('offer', payload)
   }
 

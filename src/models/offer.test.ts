@@ -6,6 +6,7 @@ import {
   emptyOffer,
   exchangeCategories,
   fixedCurrencyPrice,
+  isEditableBy,
   isPickupPoint,
   isPriceFrom,
   offerFromAlias,
@@ -289,6 +290,15 @@ describe('mainnet offers of 2024–2026', () => {
 describe('offer helpers', () => {
   const now = Date.UTC(2026, 10, 10)
   const offer = { ...emptyOffer(AUTHOR, 'ru-RU', now), hash: 'a'.repeat(64) }
+
+  it('editable by its author only, and not once deleted (the form and the draft page)', () => {
+    expect(isEditableBy(offer, AUTHOR)).toBe(true)
+    expect(isEditableBy({ ...offer, published: 'withdrawed' }, AUTHOR)).toBe(true)
+    expect(isEditableBy({ ...offer, published: 'removed' }, AUTHOR)).toBe(false)
+    expect(isEditableBy(offer, 'PSomeoneElse1111111111111111111111')).toBe(false)
+    expect(isEditableBy(offer, null)).toBe(false)
+    expect(isEditableBy(null, AUTHOR)).toBe(false)
+  })
 
   it('lifecycle: draft, active, withdrawn, removed, expired', () => {
     expect(offerLifecycle({ ...offer, hash: null }, now)).toBe('draft')

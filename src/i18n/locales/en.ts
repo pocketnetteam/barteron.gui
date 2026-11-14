@@ -500,6 +500,8 @@ const en: Messages = {
       later: 'Not now',
       renew: 'Renew | Renew all {n}',
       sent: 'Sent {n} renewal | Sent {n} renewals',
+      skipped:
+        'Not renewed: {names} — it is missing some data. Open it for editing. | Not renewed: {names} — they are missing some data. Open them for editing.',
     },
     published: 'Published {date}',
     copyNumber: 'Copy the offer number',

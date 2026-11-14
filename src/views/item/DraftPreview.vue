@@ -7,7 +7,7 @@ import AppLayout from '@/components/layout/AppLayout.vue'
 import { draftKey } from '@/composables/offer-form'
 import { readStored } from '@/lib/storage'
 import { draftFromOffer, offerFromDraft, readDraft, stepsOf } from '@/models/draft'
-import { isPickupPoint } from '@/models/offer'
+import { isEditableBy, isPickupPoint } from '@/models/offer'
 import { isTxid } from '@/models/tx'
 import { useSessionStore } from '@/stores/session'
 import UiButton from '@/ui/UiButton.vue'
@@ -36,9 +36,10 @@ const draft = computed(() => {
   if (!me) return null
   const stored = readDraft(readStored<unknown>(draftKey(edit.value, me), null))
   if (stored) return stored
-  // An edit without changes keeps no draft: the offer as it is.
+  // An edit without changes keeps no draft: the offer as it is — if it is
+  // mine and still there (the form refuses others' and deleted ones too).
   const offer = original.data.value
-  return edit.value && offer ? draftFromOffer(offer, locale.value) : null
+  return edit.value && offer && isEditableBy(offer, me) ? draftFromOffer(offer, locale.value) : null
 })
 
 const offer = computed(() => {

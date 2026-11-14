@@ -28,7 +28,8 @@ const ctx = useCardContext()
 const mine = useOffersByAddress(() => session.address)
 
 const open = ref(false)
-const shownOnce = ref(false)
+/** Who was asked in this visit: another account is asked about its own offers. */
+const shownFor = ref<string | null>(null)
 /** Not those already on their way, and only leaves: the old app refused to renew into a parent category. */
 const due = computed(() => {
   const tree = categories.tree.value
@@ -39,10 +40,12 @@ const due = computed(() => {
 })
 
 watch(
-  () => [due.value.length, categories.tree.value] as const,
-  ([n, tree]) => {
-    if (n && tree && !shownOnce.value) {
-      shownOnce.value = true
+  () => [due.value.length, categories.tree.value, session.address] as const,
+  ([n, tree, address]) => {
+    // Nothing (left) to renew for whoever is signed in now: no dialog.
+    if (!n) open.value = false
+    else if (tree && address && shownFor.value !== address) {
+      shownFor.value = address
       open.value = true
     }
   },
@@ -58,6 +61,7 @@ function when(o: Offer) {
 function renewAll() {
   const tree = categories.tree.value
   let sent = 0
+  const skipped: string[] = []
   for (const o of due.value) {
     try {
       void tx.send(
@@ -69,13 +73,20 @@ function renewAll() {
       )
       sent++
     } catch (error) {
+      // The node would refuse it (no place, a broken category): said, not passed over.
       console.error('[barteron] renewal skipped:', error)
+      skipped.push(`«${o.caption}»`)
     }
   }
   // Asked once: the renewals are on their way, the rest can wait a day.
   autorenew.snooze()
   open.value = false
   if (sent) showToast(t('item.autorenew.sent', { n: sent }, sent), { kind: 'info' })
+  if (skipped.length) {
+    showToast(t('item.autorenew.skipped', { names: skipped.join(', ') }, skipped.length), {
+      kind: 'error',
+    })
+  }
 }
 
 function later() {

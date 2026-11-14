@@ -221,6 +221,21 @@ test('new offer: five steps, then the transaction the old app would write', asyn
   await expect(page.getByTestId('create-caption')).toHaveValue('')
 })
 
+test('the draft page with someone else’s offer in the link: not shown as my draft', async ({
+  page,
+}) => {
+  const TABLET = id('tablet-ilya')
+  // Opened first: the offer is known when the draft page asks for it.
+  await page.goto(`/barter/${TABLET}`)
+  await expect(page.locator('[data-testid="item-page"][data-kind="other"]')).toBeVisible()
+  await spaGo(page, `/barter/draft?edit=${TABLET}`)
+  await expect(page.getByTestId('draft-missing')).toBeVisible()
+  await expect(page.getByTestId('draft-preview')).toHaveCount(0)
+  // My own offer without changes: as it is.
+  await spaGo(page, `/barter/draft?edit=${LAPTOP}`)
+  await expect(page.getByTestId('draft-preview')).toBeVisible()
+})
+
 test('the draft stays on the device; «Начать заново» clears it', async ({ page }) => {
   await page.goto('/barter/create')
   await page.getByTestId('create-caption').fill('Горный велосипед')

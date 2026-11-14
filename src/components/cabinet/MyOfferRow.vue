@@ -120,14 +120,10 @@ function ask(action: Confirm) {
 function run() {
   const action = confirm.value
   confirm.value = null
-  try {
-    if (action === 'withdraw') void actions.withdraw()
-    else if (action === 'renew') void actions.renew()
-    else if (action === 'remove') void actions.remove()
-  } catch (error) {
-    console.error('[barteron] offer action failed:', error)
-    showToast(t('item.own.invalid'), { kind: 'error' })
-  }
+  // An offer that cannot be sent says so itself (`useOfferActions`).
+  if (action === 'withdraw') void actions.withdraw()
+  else if (action === 'renew') void actions.renew()
+  else if (action === 'remove') void actions.remove()
 }
 
 const moreBtn = ref<InstanceType<typeof UiButton>>()
