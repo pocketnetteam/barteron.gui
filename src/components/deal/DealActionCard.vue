@@ -3,6 +3,7 @@ import { computed, ref, useId, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { TransferFailure, TransferRequest } from '@/composables/safe-deal'
 import { formatAgo, formatPkoin, shortHash } from '@/lib/format'
+import { parsePrice } from '@/lib/price-input'
 import { txErrorText } from '@/lib/tx-errors'
 import {
   isDealTurn,
@@ -131,14 +132,23 @@ const steps = computed(() => {
 })
 
 // ─── The buyer pays the guarantor ───────────────────────────────────────────
-const value = ref(props.listed ? String(props.listed) : '')
+/**
+ * Read like the offer's price (`lib/price-input`): «12,400» in English and
+ * «12.400» in Serbian are thousands. The listed price starts the field the
+ * way the language writes a fraction, so it reads back the same.
+ */
+const asTyped = (amount: number) =>
+  new Intl.NumberFormat(locale.value, { maximumFractionDigits: 8, useGrouping: false }).format(
+    amount
+  )
+const value = ref(props.listed ? asTyped(props.listed) : '')
 watch(
   () => props.listed,
   (listed) => {
-    if (!value.value && listed) value.value = String(listed)
+    if (!value.value && listed) value.value = asTyped(listed)
   }
 )
-const valueNum = computed(() => Number(String(value.value).replace(',', '.').replace(/\s/g, '')))
+const valueNum = computed(() => parsePrice(String(value.value), locale.value))
 const valueOk = computed(() => Number.isFinite(valueNum.value) && valueNum.value > 0)
 const confirmed = ref(false)
 const buyerMoney = computed(() =>

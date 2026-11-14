@@ -523,6 +523,39 @@ describe('the action card', () => {
     wrapper.unmount()
   })
 
+  it('the agreed price with thousands the language writes: «12,400» in English is not 12.4', async () => {
+    setLocale('en')
+    const unpaid = { status: '1' as const, paid: 0, transfer: null, paying: null }
+    const { wrapper, send } = card({ role: 'buyer', state: unpaid, listed: 250.125 })
+    const input = wrapper.get<HTMLInputElement>('input[data-testid="deal-value"]')
+    // The starting value reads back as the listed price.
+    expect(input.element.value).toBe('250.125')
+    await input.setValue('12,400')
+    await wrapper.get('[data-testid="deal-confirm"] input').setValue(true)
+    await wrapper.get('[data-testid="deal-transfer"]').trigger('click')
+    await flushPromises()
+    confirmButton()!.click()
+    await flushPromises()
+    expect(send).toHaveBeenCalledWith({ to: ME, amount: 12648, feemode: 'exclude' })
+    wrapper.unmount()
+
+    // Serbian: a dot groups thousands, the comma is the fraction.
+    setLocale('sr')
+    const sr = card({ role: 'buyer', state: unpaid, listed: 250.125 })
+    const field = sr.wrapper.get<HTMLInputElement>('input[data-testid="deal-value"]')
+    expect(field.element.value).toBe('250,125')
+    expect(calcText(sr.wrapper)).toContain('255,13')
+    sr.wrapper.unmount()
+
+    // The price known later (the rate came): the field fills the same way.
+    const late = card({ role: 'buyer', state: unpaid, listed: null })
+    await late.wrapper.setProps({ listed: 250.125 })
+    expect(
+      late.wrapper.get<HTMLInputElement>('input[data-testid="deal-value"]').element.value
+    ).toBe('250,125')
+    late.wrapper.unmount()
+  })
+
   it('the guarantor gives it back: the whole payment, the network fee out of it', async () => {
     const { wrapper, send } = card()
     const [, no] = wrapper.get('[data-testid="deal-verdict"]').findAll('button')
