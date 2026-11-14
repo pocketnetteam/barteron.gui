@@ -8,6 +8,8 @@ import {
   newDraft,
   offerFromDraft,
   parsePrice,
+  priceText,
+  tidyPrice,
   readDraft,
   safeDealPossible,
   storedDraft,
@@ -58,6 +60,43 @@ describe('price as typed', () => {
     expect(parsePrice('0,29')).toBe(0.29)
     expect(parsePrice('')).toBeNaN()
     expect(parsePrice('12a')).toBeNaN()
+  })
+
+  it('thousands typed the way the interface language writes them', () => {
+    // Serbian: a dot between thousands, a comma before the fraction.
+    expect(parsePrice('12.400', 'sr')).toBe(12400)
+    expect(parsePrice('12.400', 'sr-RS')).toBe(12400)
+    expect(parsePrice('1.250.000', 'sr')).toBe(1250000)
+    expect(parsePrice('12.400,50', 'sr')).toBe(12400.5)
+    expect(parsePrice('12,5', 'sr')).toBe(12.5)
+    // A dot not before three digits is still a fraction.
+    expect(parsePrice('12.5', 'sr')).toBe(12.5)
+    // English: a comma between thousands, a dot before the fraction.
+    expect(parsePrice('12,400', 'en')).toBe(12400)
+    expect(parsePrice('1,250.5', 'en')).toBe(1250.5)
+    expect(parsePrice('12.400', 'en')).toBe(12.4)
+    expect(parsePrice('0,29', 'en')).toBe(0.29)
+    // Russian: spaces between thousands, a comma or a dot before the fraction.
+    expect(parsePrice('12.400', 'ru')).toBe(12.4)
+    expect(parsePrice('12 400,5', 'ru')).toBe(12400.5)
+    expect(parsePrice('12.400.000', 'en')).toBeNaN()
+  })
+
+  it('leaving the field rewrites only what the language reads differently', () => {
+    expect(tidyPrice('12.400', 'sr')).toBe('12400')
+    expect(tidyPrice('12.400,5', 'sr')).toBe('12400,5')
+    expect(tidyPrice('1,250.5', 'en')).toBe('1250.5')
+    // Read alike either way: left as typed.
+    expect(tidyPrice('12 400', 'ru')).toBe('12 400')
+    expect(tidyPrice('0,29', 'en')).toBe('0,29')
+    expect(tidyPrice('12,5', 'sr')).toBe('12,5')
+    expect(tidyPrice('abc', 'sr')).toBe('abc')
+  })
+
+  it('what the field shows once left: one way to read it in any language', () => {
+    expect(priceText(parsePrice('12.400', 'sr'), 'sr')).toBe('12400')
+    expect(parsePrice(priceText(12400.5, 'sr'))).toBe(12400.5)
+    expect(parsePrice(priceText(1250.5, 'en'))).toBe(1250.5)
   })
 
   it('PKOIN goes to hundredths without losing a cent', () => {
@@ -113,7 +152,9 @@ describe('price as typed', () => {
   })
 
   it('odd input: a lone point, two commas, a minus, an exponent', () => {
-    expect(['.', '1,5,6', '-5', '1e5', '١٢'].map(parsePrice).every(Number.isNaN)).toBe(true)
+    expect(['.', '1,5,6', '-5', '1e5', '١٢'].map((s) => parsePrice(s)).every(Number.isNaN)).toBe(
+      true
+    )
     expect(draftPrice(draft({ price: '-5' }), null)).toEqual({ ok: false, reason: 'invalid' })
     expect(draftPrice(draft({ price: '  ' }), null)).toEqual({ ok: false, reason: 'missing' })
   })

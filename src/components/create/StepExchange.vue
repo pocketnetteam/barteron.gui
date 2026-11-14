@@ -11,6 +11,7 @@ import {
   PKOIN,
   PKOIN_CATEGORY,
   safeDealPossible,
+  tidyPrice,
   type ExchangeMode,
   type FeeVariant,
 } from '@/models/draft'
@@ -57,10 +58,10 @@ const currencies = computed(() => [
   ...CURRENCIES.map((c) => ({ value: c.code, label: `${c.symbol} ${c.code}` })),
 ])
 const inCurrency = computed(() => d.value.currency !== PKOIN)
-const price = computed(() => draftPrice(d.value, rates.data.value ?? null))
+const price = computed(() => draftPrice(d.value, rates.data.value ?? null, locale.value))
 /** «≈ 1 250 PKOIN» for a currency price, «≈ 12 400 ₽» for a PKOIN one. */
 const equivalent = computed(() => {
-  const amount = parsePrice(d.value.price)
+  const amount = parsePrice(d.value.price, locale.value)
   if (!Number.isFinite(amount) || amount <= 0) return null
   if (inCurrency.value) {
     return price.value.ok ? `≈ ${formatPkoin(price.value.pkoin, locale.value)} PKOIN` : null
@@ -72,6 +73,11 @@ const equivalent = computed(() => {
 const rateMissing = computed(
   () => inCurrency.value && !rates.isPending.value && !rates.data.value?.[d.value.currency]
 )
+
+/** «12.400» typed in Serbian becomes «12400» on leaving the field (finding 19). */
+function onPriceLeft() {
+  d.value.price = tidyPrice(d.value.price, locale.value)
+}
 
 function onCurrency(value: string | undefined) {
   if (!value) return
@@ -173,6 +179,7 @@ function addPkoin() {
               autocomplete="off"
               :aria-invalid="!!form.fieldError('price')"
               data-testid="create-price"
+              @blur="onPriceLeft"
             />
             <UiSelect
               class="sx__currency"

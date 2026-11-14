@@ -5,6 +5,7 @@ import type { RouteLocationRaw } from 'vue-router'
 import { useCategories } from '@/api/queries'
 import { categoryRoute, searchQuery } from '@/composables/catalog-nav'
 import { useLocationLabel } from '@/components/layout/location-label'
+import { parsePrice } from '@/lib/price-input'
 import {
   DELIVERY_WAYS,
   FREQUENT_EXCHANGE,
@@ -76,16 +77,17 @@ watch(
   },
   { immediate: true }
 )
-const parsePrice = (text: string) => {
-  const n = Number(text.replace(',', '.').replace(/\s/g, ''))
-  return text.trim() && Number.isFinite(n) && n > 0 ? n : null
+/** «12.400» typed in Serbian is twelve thousand, as in the offer form (finding 19). */
+const priceOf = (text: string) => {
+  const n = parsePrice(text, locale.value)
+  return Number.isFinite(n) && n > 0 ? n : null
 }
 function onPrice() {
   typing = true
   draft.value = {
     ...draft.value,
-    priceMin: parsePrice(minText.value),
-    priceMax: parsePrice(maxText.value),
+    priceMin: priceOf(minText.value),
+    priceMax: priceOf(maxText.value),
     free: false,
   }
 }

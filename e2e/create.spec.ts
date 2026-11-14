@@ -54,15 +54,16 @@ const PIXEL =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
 
 /** A new offer with every step filled, as the form keeps it on the device. */
-async function readyDraft(page: Page, caption: string) {
+async function readyDraft(page: Page, caption: string, extra: Record<string, unknown> = {}) {
   await page.addInitScript(
-    ({ me, draft }) =>
+    ({ me, draft, extra }) =>
       localStorage.setItem(
         `${me}_offer_draft`,
-        JSON.stringify({ ...draft, updatedAt: Date.now() })
+        JSON.stringify({ ...draft, ...extra, updatedAt: Date.now() })
       ),
     {
       me: ME,
+      extra,
       draft: {
         v: 1,
         hash: null,
@@ -290,6 +291,40 @@ test('refused, then published from the cabinet: the form does not offer it as a 
   await spaGo(page, '/barter/create')
   await expect(page.getByTestId('create-caption')).toHaveValue('')
   await expect(page.getByTestId('create-restored')).toHaveCount(0)
+})
+
+for (const currency of ['PKOIN', 'EUR']) {
+  test(`Serbian «12.400 ${currency}»: the equivalent reads it as twelve thousand while typing`, async ({
+    page,
+  }) => {
+    await page.addInitScript((me) => localStorage.setItem(`${me}_locale`, '"sr-RS"'), ME)
+    await readyDraft(page, 'Bicikl', { currency, fixCurrency: currency !== 'PKOIN' })
+    await page.goto('/barter/create?step=3')
+    const equivalent = page.getByTestId('create-equivalent')
+    await page.getByTestId('create-price').fill('12.400')
+    await expect(equivalent).toBeVisible()
+    const typing = await equivalent.innerText()
+    await page.getByTestId('create-price').blur()
+    await expect(page.getByTestId('create-price')).toHaveValue('12400')
+    await expect(equivalent).toHaveText(typing)
+  })
+}
+
+test('Serbian «12.400» is twelve thousand: the field shows it so and the offer says it', async ({
+  page,
+}) => {
+  await page.addInitScript((me) => localStorage.setItem(`${me}_locale`, '"sr-RS"'), ME)
+  await readyDraft(page, 'Bicikl')
+  await page.goto('/barter/create?step=3')
+  await page.getByTestId('create-price').fill('12.400')
+  await page.getByTestId('create-price').blur()
+  await expect(page.getByTestId('create-price')).toHaveValue('12400')
+  await spaGo(page, '/barter/create?step=5')
+  await page.getByTestId('create-publish').click()
+  await expect(page.getByTestId('create-panel')).toBeVisible()
+  const [sent] = await callsOf(page, 'barteron.offer')
+  // Hundredths of PKOIN.
+  expect((sent!.args[0] as { price: number }).price).toBe(1_240_000)
 })
 
 test('photos: a failed upload retries; no more than ten', async ({ page }) => {

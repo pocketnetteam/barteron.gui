@@ -20,6 +20,7 @@
 
 import type { Rates } from '@/api/rates'
 import { decodeGeohash } from '@/lib/geohash'
+import { parsePrice, priceText } from '@/lib/price-input'
 import type { CategoryNames, CategoryTree } from './categories'
 import { deliveryOptions, pickupPointInfo, type WorkDay } from './delivery'
 import {
@@ -169,19 +170,7 @@ export function newDraft(currency: string, now = Date.now()): OfferDraft {
 let photoCounter = 0
 export const photoId = (): string => `ph${Date.now().toString(36)}${(photoCounter++).toString(36)}`
 
-/** «12 400» or «0,29» → 12400 / 0.29; NaN when it is not a number. */
-export function parsePrice(text: string): number {
-  const clean = text.replace(/[\s\u00a0\u202f']/g, '').replace(',', '.')
-  if (!clean) return NaN
-  return /^\d*\.?\d*$/.test(clean) ? Number(clean) : NaN
-}
-
-/** A number for the price field: «1250», «0,29» in Russian. */
-export function priceText(value: number, locale: string): string {
-  return new Intl.NumberFormat(locale, { maximumFractionDigits: 2, useGrouping: false }).format(
-    value
-  )
-}
+export { parsePrice, priceText, tidyPrice } from '@/lib/price-input'
 
 function draftDays(days: WorkDay[]): DraftDay[] {
   return days.map((day) =>
@@ -281,10 +270,12 @@ export type PriceOutcome =
  */
 export function draftPrice(
   draft: Pick<OfferDraft, 'exchange' | 'price' | 'currency' | 'fixCurrency'>,
-  rates: Rates | null | undefined
+  rates: Rates | null | undefined,
+  /** While the price is being typed: read it in the interface language. */
+  locale?: string
 ): PriceOutcome {
   if (draft.exchange === 'for_nothing') return { ok: true, cents: 0, currencyPrice: {}, pkoin: 0 }
-  const amount = parsePrice(draft.price)
+  const amount = parsePrice(draft.price, locale)
   if (!draft.price.trim()) return { ok: false, reason: 'missing' }
   if (!Number.isFinite(amount) || amount < 0) return { ok: false, reason: 'invalid' }
   if (amount === 0) return { ok: false, reason: 'missing' }

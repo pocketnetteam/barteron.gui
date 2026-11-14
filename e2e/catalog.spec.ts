@@ -51,6 +51,15 @@ test('a category lists its subcategories and offers; a tile leads there', async 
   await expect(list(page)).not.toContainText('Кофе в зёрнах')
 })
 
+test('Serbian «12.400» in the price filter is twelve thousand', async ({ page }) => {
+  test.skip(isPhone(page), 'the phone sheet applies the same panel with «Prikaži»')
+  await page.addInitScript((me) => localStorage.setItem(`${me}_locale`, '"sr-RS"'), ME)
+  await page.goto('/category/1000')
+  await page.locator('.fp__price-input').first().fill('12.400')
+  await page.getByTestId('filters-apply').click()
+  await expect(page).toHaveURL(/price=12400-/)
+})
+
 test('filters in the address: price from the node, condition here', async ({ page }) => {
   await page.goto('/category/1000?price=100-400')
   await expect(list(page)).toContainText('BMX Stark Madness')
