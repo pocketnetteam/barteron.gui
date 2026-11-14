@@ -96,19 +96,21 @@ export function useChat() {
   async function open(request: ChatRequest): Promise<boolean> {
     const sdk = session.sdk
     if (!sdk || opening.value) return false
-    if (!(await session.ensureSignedIn())) return false
-    // A banned user's rooms never opened in the old app either. The list may
-    // not have come yet: nothing else has asked the node on this page.
-    await loadBanList().catch(() => undefined)
-    if (isBanned(session.address)) return false
-    if (await activating()) {
-      ui.openDialog('activation')
-      return false
-    }
-
+    // Busy from the first press: the checks below may ask the node, and a
+    // second press meanwhile would send the messages twice.
     opening.value = true
-    const toast = showToast(t('chat.opening'), { kind: 'progress' })
+    let toast: number | null = null
     try {
+      if (!(await session.ensureSignedIn())) return false
+      // A banned user's rooms never opened in the old app either. The list may
+      // not have come yet: nothing else has asked the node on this page.
+      await loadBanList().catch(() => undefined)
+      if (isBanned(session.address)) return false
+      if (await activating()) {
+        ui.openDialog('activation')
+        return false
+      }
+      toast = showToast(t('chat.opening'), { kind: 'progress' })
       const granted = await sdk.permissions.check({ permission: 'chat' }).catch(() => false)
       if (!granted) {
         await sdk.permissions.request(['chat'])
@@ -134,7 +136,7 @@ export function useChat() {
       showToast(t('chat.failed'), { kind: 'error' })
       return false
     } finally {
-      dismissToast(toast)
+      if (toast !== null) dismissToast(toast)
       opening.value = false
     }
   }

@@ -104,6 +104,14 @@ export function formatDate(time: number, locale: string, now = Date.now()): stri
   }).format(date)
 }
 
+/** An average score with one decimal, as the language writes it: «4,5», «4.5». */
+export function formatRating(value: number, locale: string): string {
+  return new Intl.NumberFormat(locale, {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  }).format(value)
+}
+
 /**
  * «марта 2023» for «На Barteron с марта 2023»: the month as it stands next to
  * a day (genitive in Russian and Serbian), then the year.

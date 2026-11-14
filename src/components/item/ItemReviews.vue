@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { formatRating } from '@/lib/format'
 import type { Offer } from '@/models/offer'
 import UiAvatar from '@/ui/UiAvatar.vue'
 import UiBadge from '@/ui/UiBadge.vue'
@@ -42,14 +43,14 @@ const props = defineProps<{
   compact?: boolean
 }>()
 const emit = defineEmits<{ submit: [value: { stars: number | null; text: string }]; preview: [] }>()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const showAll = ref(false)
 const shown = computed(() =>
   props.compact && !showAll.value ? props.rows.slice(0, 2) : props.rows
 )
 
-const fmt = (value: number) => value.toFixed(1).replace('.', ',')
+const fmt = (value: number) => formatRating(value, locale.value)
 </script>
 
 <template>

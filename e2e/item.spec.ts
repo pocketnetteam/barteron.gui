@@ -256,6 +256,9 @@ test('an unknown offer: «not found» with a way back', async ({ page }) => {
   await page.goto(`/barter/${'f'.repeat(64)}`)
   await expect(page.getByTestId('item-missing')).toContainText('Объявление не найдено')
   await expect(page.getByRole('link', { name: 'На главную' })).toBeVisible()
+  // An id that cannot be an offer is not even asked for: «not found», not a skeleton forever.
+  await page.goto('/barter/not-an-offer%3Cb%3E')
+  await expect(page.getByTestId('item-missing')).toContainText('Объявление не найдено')
 })
 
 test('report and share go to the host', async ({ page }) => {

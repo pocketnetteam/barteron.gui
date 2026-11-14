@@ -607,4 +607,13 @@ describe('the review form', () => {
     expect(wrapper.emitted('submit')).toEqual([[{ stars: null, text: 'Спасибо' }]])
     expect((wrapper.find('textarea').element as HTMLTextAreaElement).value).toBe('')
   })
+
+  it('two presses before sign-in has answered: one review', async () => {
+    const { wrapper } = await form({ form: 'comment' })
+    await wrapper.find('textarea').setValue('Спасибо')
+    void wrapper.find('form').trigger('submit')
+    void wrapper.find('form').trigger('submit')
+    await flushPromises()
+    expect(wrapper.emitted('submit')).toHaveLength(1)
+  })
 })

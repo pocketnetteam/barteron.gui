@@ -28,6 +28,7 @@ import { fittingOffers } from '@/composables/may-match'
 import { useOfferPage } from '@/composables/offer-page'
 import { useOfferReviews } from '@/composables/offer-reviews'
 import { useSafeDealSupported, type GuarantorOption } from '@/composables/safe-deal'
+import { formatRating } from '@/lib/format'
 import { decodeGeohash } from '@/lib/geohash'
 import {
   deliveryOptions,
@@ -408,7 +409,7 @@ const exchangeTitle = computed(() =>
         <p class="op__meta">
           <span v-if="average.count" class="op__rating">
             <UiIcon name="star-filled" :size="14" class="op__star" />
-            <strong>{{ average.value.toFixed(1).replace('.', ',') }}</strong>
+            <strong>{{ formatRating(average.value, locale) }}</strong>
             <a href="#item-reviews">{{
               t('item.reviews.scores', { n: average.count }, average.count)
             }}</a>

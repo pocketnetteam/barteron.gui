@@ -12,6 +12,7 @@ import { offerLink, useChat } from '@/composables/chat'
 import { useOfferPage } from '@/composables/offer-page'
 import { useOfferReviews } from '@/composables/offer-reviews'
 import { formatDistance } from '@/lib/area'
+import { formatRating } from '@/lib/format'
 import { decodeGeohash, distanceKm } from '@/lib/geohash'
 import { formatHours, openState, pickupPointInfo, PICKUP_STORAGE_DAYS } from '@/models/delivery'
 import { offerLifecycle, type Offer } from '@/models/offer'
@@ -120,7 +121,7 @@ const viewerIndex = ref(0)
         <p class="pp__meta">
           <template v-if="reviews.average.value.count">
             <UiIcon name="star-filled" :size="14" class="pp__star" />
-            <strong>{{ reviews.average.value.value.toFixed(1).replace('.', ',') }}</strong>
+            <strong>{{ formatRating(reviews.average.value.value, locale) }}</strong>
             ·
             {{
               t(

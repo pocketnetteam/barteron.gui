@@ -5,6 +5,7 @@ import {
   formatMoney,
   formatMonthYear,
   formatPkoin,
+  formatRating,
   shortHash,
 } from './format'
 
@@ -89,5 +90,15 @@ describe('dates in three languages', () => {
     expect(formatMonthYear(march, 'ru')).toBe('марта 2023')
     expect(formatMonthYear(march, 'en')).toBe('March 2023')
     expect(formatMonthYear(march, 'sr')).toBe('март 2023')
+  })
+})
+
+describe('formatRating', () => {
+  it('one decimal the way the language writes it: «4,5» in Russian and Serbian, «4.5» in English', () => {
+    expect(formatRating(4.5, 'ru')).toBe('4,5')
+    expect(formatRating(4.5, 'sr')).toBe('4,5')
+    expect(formatRating(4.5, 'en')).toBe('4.5')
+    expect(formatRating(4, 'en')).toBe('4.0')
+    expect(formatRating(4.96, 'ru')).toBe('5,0')
   })
 })

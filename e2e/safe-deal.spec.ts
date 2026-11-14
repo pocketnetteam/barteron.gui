@@ -84,12 +84,23 @@ test('buy through a safe deal: a guarantor, the deal chat, then the deal page', 
 }) => {
   await page.goto(`/barter/${TABLET}`)
   await page.locator('#item-delivery').getByText('Самовывоз', { exact: true }).click()
-  if (isPhone(page)) await page.getByRole('button', { name: 'Купить', exact: true }).click()
-  else await page.getByTestId('item-buy').click()
-
+  const buy = () =>
+    isPhone(page)
+      ? page.getByRole('button', { name: 'Купить', exact: true }).click()
+      : page.getByTestId('item-buy').click()
+  await buy()
+  await page.getByTestId('buy-type-safe').click()
+  await page.getByTestId('buy-next').click()
+  await expect(page.getByTestId('buy-open-deal')).toBeEnabled()
+  // Closed and opened again: the guarantors are known now, the first is still chosen.
+  const first = page.getByRole('dialog', { name: 'Выберите гаранта' })
+  await first.getByRole('button', { name: 'Назад' }).click()
+  await page.getByRole('dialog').getByRole('button', { name: 'Отмена' }).click()
+  await buy()
   await page.getByTestId('buy-type-safe').click()
   await page.getByTestId('buy-next').click()
   const dialog = page.getByRole('dialog', { name: 'Выберите гаранта' })
+  await expect(dialog.getByTestId('buy-open-deal')).toBeEnabled()
   // Илья sells and I buy: Мария is the only guarantor left.
   await expect(dialog.getByTestId('guarantor-option')).toHaveCount(1)
   await expect(dialog.getByTestId('guarantor-sum')).toContainText(

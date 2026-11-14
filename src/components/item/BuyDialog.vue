@@ -58,12 +58,17 @@ const guarantors = useGuarantors(
   () => !!props.safeDealPossible
 )
 const options = computed(() => (props.safeDealPossible ? guarantors.list.value : []))
-// The first available one is chosen, like the old dialog's top line.
-watch(options, (list) => {
-  if (!guarantor.value || !list.some((o) => o.address === guarantor.value && o.available)) {
-    guarantor.value = list.find((o) => o.available)?.address ?? null
-  }
-})
+// The first available one is chosen, like the old dialog's top line; the
+// list may be known already when the dialog opens again.
+watch(
+  options,
+  (list) => {
+    if (!guarantor.value || !list.some((o) => o.address === guarantor.value && o.available)) {
+      guarantor.value = list.find((o) => o.available)?.address ?? null
+    }
+  },
+  { immediate: true }
+)
 const chosen = computed(
   () => options.value.find((o) => o.address === guarantor.value && o.available) ?? null
 )

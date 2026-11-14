@@ -30,13 +30,19 @@ const failed = ref(new Set<number>())
 const count = computed(() => props.slides.length)
 const current = computed(() => props.slides[index.value])
 
-watch(
-  () => props.slides,
-  () => {
-    index.value = 0
-    failed.value = new Set()
-  }
+/**
+ * Another offer or other photos: from the first, the phone strip too. The
+ * video slide changing (the host answering about it) is not a reason: the
+ * buyer may be on the third photo by then.
+ */
+const photoKey = computed(() =>
+  props.slides.map((s) => (s.kind === 'image' ? s.src : 'video')).join('\n')
 )
+watch(photoKey, () => {
+  index.value = 0
+  failed.value = new Set()
+  if (strip.value) strip.value.scrollLeft = 0
+})
 
 function go(next: number) {
   if (!count.value) return
