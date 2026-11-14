@@ -33,7 +33,7 @@ import UiButton from '@/ui/UiButton.vue'
 import UiEmptyState from '@/ui/UiEmptyState.vue'
 import UiIcon from '@/ui/UiIcon.vue'
 import UiSkeleton from '@/ui/UiSkeleton.vue'
-import { chainRoute } from '@/components/exchange/exchange-ui'
+import { chainPage, chainRoute } from '@/components/exchange/exchange-ui'
 
 /**
  * `/barter/search?source=…&target=…[&via=…]` (old route «Групповой обмен»;
@@ -97,16 +97,24 @@ const others = computed(() =>
     .slice(0, 3)
 )
 
-const page = computed(() => {
-  if (!chainRef.value) return 'bad'
-  if (offers.isPending.value && session.status !== 'failed') return 'loading'
-  if (offers.isError.value) return 'error'
-  if (problem.value) return 'broken'
-  if (chain.value) return 'ready'
-  if (!chainRef.value.via && source.value && matches.state.value?.status === 'pending')
-    return 'loading'
-  return 'notFound'
-})
+const page = computed(() =>
+  chainPage({
+    link: !!chainRef.value,
+    offersPending: offers.isPending.value,
+    offersFailed: offers.isError.value,
+    hostFailed: session.status === 'failed',
+    broken: !!problem.value,
+    found: !!chain.value,
+    via: !!chainRef.value?.via,
+    sourceKnown: !!source.value,
+    matches: matches.state.value?.status ?? null,
+  })
+)
+/** The offers or, for an old link, the search for its chain. */
+function retry() {
+  if (offers.isError.value) void offers.refetch()
+  else void matches.refetch()
+}
 
 // ─── People ─────────────────────────────────────────────────────────────────
 const addresses = computed(() =>
@@ -264,7 +272,7 @@ async function propose() {
           "
         />
         <div class="ch__actions">
-          <UiButton v-if="page === 'error'" variant="neutral" @click="offers.refetch()">{{
+          <UiButton v-if="page === 'error'" variant="neutral" @click="retry">{{
             t('item.missing.refresh')
           }}</UiButton>
           <UiButton v-if="source?.hash && mine" :to="optionsRoute(source.hash)">{{

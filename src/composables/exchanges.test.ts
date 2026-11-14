@@ -4,12 +4,13 @@ import { createPinia, setActivePinia } from 'pinia'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, markRaw } from 'vue'
 import { i18n, setLocale } from '@/i18n'
+import { offerFromAlias } from '@/models/offer'
 import { TX_TYPE, type RawTx } from '@/models/tx'
-import { createMockSdk, MOCK_ADDRESS } from '@/sdk/mock'
+import { createMockSdk, MOCK_ADDRESS, type MockRpcHandler } from '@/sdk/mock'
 import { demoNetworkData, SELLERS } from '@/sdk/mock-data'
 import { createMockNetwork } from '@/sdk/mock-network'
 import { useSessionStore } from '@/stores/session'
-import { useMyExchanges } from './exchanges'
+import { useMyExchanges, useOfferExchanges } from './exchanges'
 
 const ME = MOCK_ADDRESS
 
@@ -30,25 +31,29 @@ const offer = (id: string, author: string, tag: number, accepts: number[]): RawT
   },
 })
 
-function setup(offers: RawTx[]) {
+function setup<T = ReturnType<typeof useMyExchanges>>(
+  offers: RawTx[],
+  rpc?: Record<string, MockRpcHandler>,
+  use: () => T = useMyExchanges as () => T
+) {
   const pinia = createPinia()
   setActivePinia(pinia)
   setLocale('ru')
   const data = demoNetworkData(ME)
   // Only these offers: the demo ones would match too.
   const network = createMockNetwork({ ...data, offers })
-  const sdk = createMockSdk({ network })
+  const sdk = createMockSdk({ network, rpc })
   const session = useSessionStore()
   session.sdk = markRaw(sdk)
   session.mode = 'mock'
   session.account = 'signed-in'
   session.address = ME
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
-  let result!: ReturnType<typeof useMyExchanges>
+  let result!: T
   mount(
     defineComponent({
       setup() {
-        result = useMyExchanges()
+        result = use()
         return () => h('div')
       },
     }),
@@ -111,6 +116,55 @@ describe('my exchanges', () => {
       [0, 1],
     ])
     expect(result.unique.value.map((m) => [m.target.hash, m.kind])).toEqual([[BIKE, 'direct']])
+  })
+
+  it('my profile not coming: an error with a retry, not «ищем» forever', async () => {
+    let answering = false
+    const { result } = setup([offer('a'.repeat(64), ME, 621, [1006])], {
+      getbarteronaccounts: () => {
+        if (!answering) throw new Error('timeout')
+        return []
+      },
+    })
+    await vi.waitFor(() => expect(result.states.value.map((s) => s.status)).toEqual(['error']))
+    expect(result.failed.value).toBe(true)
+    expect(result.pending.value).toBe(false)
+    answering = true
+    await result.refetch()
+    await vi.waitFor(() => expect(result.states.value.map((s) => s.status)).toEqual(['ready']))
+    expect(result.failed.value).toBe(false)
+  })
+
+  it('one offer’s options (its page): the owner’s profile not coming is an error too', async () => {
+    const mine = offerFromAlias(
+      {
+        hash: 'a'.repeat(64),
+        address: ME,
+        language: 'ru-RU',
+        caption: 'Гитара',
+        description: '-',
+        tag: 621,
+        tags: [1006],
+        geohash: 'ucfv0',
+        published: 'published',
+      },
+      'a'.repeat(64)
+    )!
+    let answering = false
+    const { result } = setup(
+      [offer('a'.repeat(64), ME, 621, [1006])],
+      {
+        getbarteronaccounts: () => {
+          if (!answering) throw new Error('timeout')
+          return []
+        },
+      },
+      () => useOfferExchanges(() => mine)
+    )
+    await vi.waitFor(() => expect(result.state.value?.status).toBe('error'))
+    answering = true
+    await result.refetch()
+    await vi.waitFor(() => expect(result.state.value?.status).toBe('ready'))
   })
 
   it('my own offers are not asked for', async () => {

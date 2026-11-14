@@ -104,6 +104,9 @@ export function useMatchGroups(
     maxGroups?: number
     /** Everywhere, not in my search area: a chain someone else sent me. */
     anywhere?: MaybeRefOrGetter<boolean>
+    /** The owner's profile did not come: an error to retry, not waiting forever. */
+    ownerListFailed?: MaybeRefOrGetter<boolean>
+    retryOwnerList?: () => Promise<unknown>
   } = {}
 ) {
   const barteron = useBarteron()
@@ -149,7 +152,7 @@ export function useMatchGroups(
     const byKey = new Map(groups.value.map((g, i) => [groupKey(g), results.value[i]]))
     return toValue(sources).map((offer): OfferMatchState => {
       const empty = { offer, reason: null, exchanges: null, count: null }
-      if (!list) return { ...empty, status: 'pending' }
+      if (!list) return { ...empty, status: toValue(options.ownerListFailed) ? 'error' : 'pending' }
       const group = matchGroupOf(offer, list)
       if (!group) return { ...empty, status: 'none', reason: noMatchReason(offer, list) }
       const result = byKey.get(groupKey(group))
@@ -165,8 +168,16 @@ export function useMatchGroups(
   return {
     states,
     pending: computed(() => states.value.some((s) => s.status === 'pending')),
-    failed: computed(() => results.value.some((r) => r.isError)),
-    refetch: () => Promise.all(results.value.filter((r) => r.isError).map((r) => r.refetch())),
+    failed: computed(
+      () => !!toValue(options.ownerListFailed) || results.value.some((r) => r.isError)
+    ),
+    refetch: () =>
+      Promise.all([
+        ...(toValue(options.ownerListFailed) && options.retryOwnerList
+          ? [options.retryOwnerList()]
+          : []),
+        ...results.value.filter((r) => r.isError).map((r) => r.refetch()),
+      ]),
   }
 }
 
@@ -193,7 +204,10 @@ export function useMyExchanges() {
     (mine.data.value ?? []).filter((o) => isOfferActive(o)).sort((a, b) => b.time - a.time)
   )
   const list = computed(() => (account.isSuccess.value ? (account.data.value?.tags ?? []) : null))
-  const matches = useMatchGroups(active, list)
+  const matches = useMatchGroups(active, list, {
+    ownerListFailed: () => account.isError.value,
+    retryOwnerList: () => account.refetch(),
+  })
 
   /** Each offer once, direct first, with the first of my offers it fits. */
   const unique = computed<MatchedOffer[]>(() => {
@@ -249,7 +263,11 @@ export function useOfferExchanges(
     return o ? [o] : []
   })
   const list = computed(() => (account.isSuccess.value ? (account.data.value?.tags ?? []) : null))
-  const matches = useMatchGroups(sources, list, options)
+  const matches = useMatchGroups(sources, list, {
+    ...options,
+    ownerListFailed: () => account.isError.value,
+    retryOwnerList: () => account.refetch(),
+  })
   const state = computed(() => matches.states.value[0] ?? null)
   return { ...matches, state, account, ownerList: list }
 }

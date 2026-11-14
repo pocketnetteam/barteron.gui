@@ -67,3 +67,35 @@ export function distanceBetween(
   const to = decodeGeohash(b.geohash)
   return from && to ? formatDistance(distanceKm(from, to), locale, units) : null
 }
+
+export interface ChainPageInput {
+  /** The link has a source and a target. */
+  link: boolean
+  offersPending: boolean
+  offersFailed: boolean
+  /** The host connection failed: nothing more will come. */
+  hostFailed: boolean
+  /** The chain from the link no longer works (an offer withdrawn, a want changed). */
+  broken: boolean
+  found: boolean
+  /** The link names the middle offer; an old one does not. */
+  via: boolean
+  sourceKnown: boolean
+  /** The source's chains, looked for when the link has no `via`. */
+  matches: 'none' | 'pending' | 'error' | 'ready' | null
+}
+
+/** What the chain page shows (`/barter/search`). */
+export function chainPage(p: ChainPageInput) {
+  if (!p.link) return 'bad' as const
+  if (p.offersPending && !p.hostFailed) return 'loading' as const
+  if (p.offersFailed) return 'error' as const
+  if (p.broken) return 'broken' as const
+  if (p.found) return 'ready' as const
+  if (!p.via && p.sourceKnown) {
+    if (p.matches === 'pending') return 'loading' as const
+    // The search failed: retry it, it is not «не найдена».
+    if (p.matches === 'error') return 'error' as const
+  }
+  return 'notFound' as const
+}
