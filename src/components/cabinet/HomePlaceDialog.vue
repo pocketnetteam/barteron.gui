@@ -19,9 +19,14 @@ const { t } = useI18n()
 const location = useLocationStore()
 
 const chosen = ref('')
-watch(open, (value) => {
-  if (value) chosen.value = props.geohash
-})
+// The settings mount it already open: it starts on the place saved before.
+watch(
+  open,
+  (value) => {
+    if (value) chosen.value = props.geohash
+  },
+  { immediate: true }
+)
 const at = computed(() => decodeGeohash(chosen.value))
 const center = computed<LatLng>(() => at.value ?? location.device ?? location.mapCenter)
 const placeName = usePlaceName(chosen)

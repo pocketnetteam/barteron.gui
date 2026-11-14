@@ -27,8 +27,9 @@ export function useCabinetHead() {
     const image = profile.data.value?.image
     return image ? (session.sdk?.manageBastyonImageSrc(image) ?? image) : null
   })
-  /** «4,8 · 15 оценок» or «Нет оценок». */
+  /** «4,8 · 15 оценок» or «Нет оценок»; nothing while the profile is loading or did not come. */
   const rating = computed(() => {
+    if (!account.isSuccess.value) return ''
     const a = account.data.value
     if (!a?.ratingCount) return t('profile.noScores')
     const value = a.rating.toLocaleString(locale.value, {
