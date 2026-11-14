@@ -4,6 +4,7 @@
  * these. Fields: bastyon-nextgen `src/types/rpc-responses/user-get.ts`.
  */
 
+import { visibleName } from '@/lib/text'
 import { str, type JsonObject } from './tx'
 
 export interface UserProfile {
@@ -25,7 +26,7 @@ export function parseUserProfile(raw: JsonObject): UserProfile | null {
   const regdate = typeof raw.regdate === 'number' && raw.regdate > 0 ? raw.regdate * 1000 : null
   return {
     address,
-    name: str(raw.name),
+    name: visibleName(str(raw.name)),
     image: str(raw.i),
     language: str(raw.l),
     about: str(raw.a),

@@ -130,13 +130,13 @@ describe('gallery', () => {
             duration: 42,
             streamingPlaylists: playlist ? [{ playlistUrl: playlist }] : [],
           },
-          thumbnail: 'thumb.jpg',
+          thumbnail: 'https://peertube.example/thumb.jpg',
         },
       },
     ]
-    expect(parseVideoInfo(answer(1, 'v.m3u8'))).toEqual({
-      playlist: 'v.m3u8',
-      poster: 'thumb.jpg',
+    expect(parseVideoInfo(answer(1, 'https://peertube.example/v.m3u8'))).toEqual({
+      playlist: 'https://peertube.example/v.m3u8',
+      poster: 'https://peertube.example/thumb.jpg',
       duration: '0:42',
       status: 'ready',
     })
@@ -144,6 +144,29 @@ describe('gallery', () => {
     expect(parseVideoInfo(answer(7)).status).toBe('failed')
     expect(parseVideoInfo([]).status).toBe('missing')
     expect(parseVideoInfo(null).status).toBe('missing')
+  })
+
+  it('plays only a web address from the video server: not javascript: or data:', () => {
+    const odd = (playlist: string, thumbnail: string) => [
+      {
+        data: {
+          original: { state: { id: 1 }, streamingPlaylists: [{ playlistUrl: playlist }] },
+          thumbnail,
+        },
+      },
+    ]
+    expect(parseVideoInfo(odd('javascript:alert(1)', 'data:image/svg+xml,<svg/>'))).toMatchObject({
+      playlist: null,
+      poster: null,
+      status: 'failed',
+    })
+    expect(parseVideoInfo(odd('HTTPS://p.example/v.m3u8', 'http://p.example/t.jpg'))).toMatchObject(
+      {
+        playlist: 'HTTPS://p.example/v.m3u8',
+        poster: 'http://p.example/t.jpg',
+        status: 'ready',
+      }
+    )
   })
 })
 

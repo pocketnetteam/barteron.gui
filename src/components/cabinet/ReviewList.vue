@@ -69,15 +69,20 @@ const { t } = useI18n()
 }
 
 .rl__name {
+  min-width: 0;
   font-size: 15px;
   line-height: 20px;
   font-weight: 600;
+  overflow-wrap: anywhere;
 }
 
 .rl__meta {
+  min-width: 0;
   font-size: 13px;
   line-height: 18px;
   color: var(--text3);
+  /* The offer's caption may be one long word. */
+  overflow-wrap: anywhere;
 }
 
 .rl__offer {

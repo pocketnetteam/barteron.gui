@@ -1,4 +1,4 @@
-import { demoDeals, demoNetworkData } from './mock-data'
+import { demoDeals, demoNetworkData, demoTxid, SELLERS } from './mock-data'
 import { createMockNetwork, type MockNetwork, type MockWrite } from './mock-network'
 import type {
   AppInfo,
@@ -382,6 +382,8 @@ export function createDemoMockSdk(options: Omit<MockOptions, 'network'> = {}): M
               activating?: boolean
               granted?: Permission[]
               refuse?: boolean
+              /** Strings a hostile network might send: Илья's name, his tablet's caption and text. */
+              texts?: { name?: string; caption?: string; description?: string }
             }
           }
         ).__barteronMockSetup
@@ -392,6 +394,27 @@ export function createDemoMockSdk(options: Omit<MockOptions, 'network'> = {}): M
     )
   }
   if (setup?.activating) data.profiles = data.profiles?.filter((p) => p.address !== me)
+  const texts = setup?.texts
+  if (texts) {
+    const tablet = demoTxid('tablet-ilya')
+    data.offers = data.offers?.map((tx) =>
+      tx.hash === tablet
+        ? {
+            ...tx,
+            p: {
+              ...tx.p,
+              ...(texts.caption !== undefined ? { s2: texts.caption } : {}),
+              ...(texts.description !== undefined ? { s3: texts.description } : {}),
+            },
+          }
+        : tx
+    )
+    if (texts.name !== undefined) {
+      data.profiles = data.profiles?.map((p) =>
+        p.address === SELLERS.ilya ? { ...p, name: texts.name! } : p
+      )
+    }
+  }
   return createMockSdk({
     ...(setup?.granted ? { granted: setup.granted } : {}),
     ...(setup?.refuse ? { grantOnRequest: false } : {}),

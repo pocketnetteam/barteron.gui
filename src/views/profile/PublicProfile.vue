@@ -562,6 +562,7 @@ async function onMenu(key: string) {
   font-size: 14px;
   line-height: 20px;
   color: var(--text2);
+  overflow-wrap: anywhere;
 }
 
 .pp__none {

@@ -137,6 +137,8 @@ const to = computed(() => offerRoute(props.target.hash ?? ''))
   font-size: 12px;
   line-height: 16px;
   color: var(--text3);
+  /* The seller's name may be one long word. */
+  overflow-wrap: anywhere;
 }
 
 .dm__why {

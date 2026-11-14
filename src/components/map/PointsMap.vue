@@ -3,6 +3,7 @@ import type * as Leaflet from 'leaflet'
 import { onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { LatLng } from '@/lib/geohash'
+import { escapeHtml } from '@/lib/text'
 import { useSessionStore } from '@/stores/session'
 import { addTiles, loadLeaflet, type L } from './leaflet'
 
@@ -39,9 +40,6 @@ const map = shallowRef<Leaflet.Map>()
 let leaflet: L | null = null
 let layer: Leaflet.LayerGroup | null = null
 
-const escape = (s: string) =>
-  s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!)
-
 function draw() {
   const m = map.value
   if (!m || !leaflet || !el.value) return
@@ -73,7 +71,7 @@ function draw() {
         title: p.label ?? '',
         icon: leaflet.divIcon({
           className: 'pmap-wrap',
-          html: `<span class="pmap-pin${on ? ' pmap-pin--on' : ''}${p.label ? '' : ' pmap-pin--dot'}"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/></svg>${p.label ? escape(p.label) : ''}</span>`,
+          html: `<span class="pmap-pin${on ? ' pmap-pin--on' : ''}${p.label ? '' : ' pmap-pin--dot'}"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/></svg>${p.label ? escapeHtml(p.label) : ''}</span>`,
         }),
       })
       .addTo(layer)

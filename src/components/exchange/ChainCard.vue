@@ -110,6 +110,8 @@ const to = computed(() => chainRoute(props.chain))
   font-size: 13px;
   line-height: 18px;
   font-weight: 600;
+  /* Names and captions from the network may be one long word. */
+  overflow-wrap: anywhere;
 }
 
 .cc__item {
@@ -128,6 +130,7 @@ const to = computed(() => chainRoute(props.chain))
 
 .cc__side {
   flex: 1 1 240px;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -137,6 +140,7 @@ const to = computed(() => chainRoute(props.chain))
   font-size: 14px;
   line-height: 20px;
   color: var(--text2);
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 767px) {

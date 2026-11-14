@@ -4,6 +4,7 @@ import { computed, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vu
 import { useI18n } from 'vue-i18n'
 import { decodeGeohash, type LatLng } from '@/lib/geohash'
 import { formatPkoin } from '@/lib/format'
+import { escapeHtml } from '@/lib/text'
 import { isForNothing, offerPkoin, type Offer } from '@/models/offer'
 import type { Rates } from '@/api/rates'
 import { useSessionStore } from '@/stores/session'
@@ -56,12 +57,6 @@ function label(offer: Offer): string {
   return pkoin === null ? '—' : formatPkoin(pkoin, locale.value)
 }
 
-const escape = (text: string) =>
-  text.replace(
-    /[&<>"']/g,
-    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!
-  )
-
 /** Joins pills closer than this many pixels. */
 const CLUSTER_PX = 46
 
@@ -84,7 +79,7 @@ function draw() {
       const marker = leaflet.marker(first.at, {
         icon: leaflet.divIcon({
           className: 'omap-pin-wrap',
-          html: `<span class="omap-pin${on ? ' omap-pin--on' : ''}">${escape(label(first.offer))}</span>`,
+          html: `<span class="omap-pin${on ? ' omap-pin--on' : ''}">${escapeHtml(label(first.offer))}</span>`,
           iconSize: [0, 0],
         }),
         keyboard: true,

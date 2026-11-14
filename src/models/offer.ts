@@ -18,6 +18,7 @@
  * - `p.i1` price in hundredths of PKOIN.
  */
 
+import { withoutBidiControls } from '@/lib/text'
 import {
   isJsonObject,
   isTxid,
@@ -145,7 +146,7 @@ export function parseOffer(tx: RawTx, now = Date.now()): Offer {
     txHash: tx.hash || null,
     address: str(tx.s1),
     language: str(p.s1),
-    caption: str(p.s2),
+    caption: withoutBidiControls(str(p.s2)),
     description: str(p.s3),
     tag: toTag(json.t),
     tags: toExchangeTags(json.a),
@@ -403,7 +404,7 @@ export function offerFromAlias(
     ...emptyOffer(str(alias.address), str(alias.language), now),
     hash,
     txHash: txid,
-    caption: str(alias.caption),
+    caption: withoutBidiControls(str(alias.caption)),
     description: str(alias.description),
     tag: toTag(alias.tag),
     tags: toExchangeTags(alias.tags),

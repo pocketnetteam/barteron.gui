@@ -94,6 +94,8 @@ const { t } = useI18n()
   line-height: 24px;
   font-weight: 600;
   color: var(--text);
+  /* A name from the network may be one long word. */
+  overflow-wrap: anywhere;
 }
 
 .seller__since {

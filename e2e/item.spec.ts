@@ -286,3 +286,42 @@ test('renewal reminder: my offers whose year runs out, renewed with one confirma
   await page.goto(`/barter/${TABLET}`)
   await expect(page.getByRole('dialog', { name: /Продлить/ })).toBeHidden()
 })
+
+test('strings from the network: long words, invisible and right-to-left characters', async ({
+  page,
+}) => {
+  const word = 'Сверхдлинноеназваниебезпробелов'.repeat(6)
+  await page.addInitScript(
+    (texts) => {
+      ;(window as { __barteronMockSetup?: unknown }).__barteronMockSetup = { texts }
+    },
+    {
+      // A right-to-left override and a zero-width space would turn the name around
+      // and make it look like someone else's.
+      name: '\u202Eanna\u200B' + 'Очень'.repeat(12),
+      caption: `Планшет ${word}`,
+      description: `https://example.com/${'a'.repeat(300)} javascript:alert(1) ${word}`,
+    }
+  )
+  const noSideScroll = () =>
+    page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)
+
+  await page.goto(`/barter/${TABLET}`)
+  const item = page.getByTestId('item-page')
+  await expect(item).toContainText('Планшет Сверхдлинное')
+  await expect(item).toContainText('anna' + 'Очень'.repeat(12))
+  expect(
+    await item.evaluate((el) => /[\u202A-\u202E\u2066-\u2069\u200B]/.test(el.textContent ?? ''))
+  ).toBe(false)
+  // The address in the text is not a link.
+  await expect(item.locator('a[href^="javascript:"], a[href*="example.com"]')).toHaveCount(0)
+  expect(await noSideScroll()).toBe(true)
+
+  await page.goto(`/profile/${ILYA}`)
+  await expect(page.getByText('Планшет Сверхдлинное').first()).toBeVisible()
+  expect(await noSideScroll()).toBe(true)
+
+  await page.goto('/')
+  await expect(page.getByText('Планшет Сверхдлинное').first()).toBeVisible()
+  expect(await noSideScroll()).toBe(true)
+})

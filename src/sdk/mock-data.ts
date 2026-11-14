@@ -13,7 +13,7 @@ import { MOCK_HEIGHT, type MockNetworkData, type MockTransfer } from './mock-net
 const demoAddress = (name: string) => `PDemo${name}`.padEnd(34, '1')
 
 /** Made-up txid from a short label. */
-const demoTxid = (label: string) =>
+export const demoTxid = (label: string) =>
   Array.from(label)
     .map((c) => c.charCodeAt(0).toString(16).padStart(2, '0'))
     .join('')

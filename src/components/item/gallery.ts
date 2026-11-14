@@ -37,6 +37,10 @@ const clock = (seconds: unknown): string | null => {
   return s ? `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}` : null
 }
 
+/** The host gives the poster and the video server the playlist as full http(s) addresses. */
+const webUrl = (value: unknown): string | null =>
+  typeof value === 'string' && /^https?:\/\//i.test(value) ? value : null
+
 /**
  * What `sdk.get.videos([url])` says about one video (old `getVideoInfo`):
  * PeerTube `state.id` 1 — ready, 2/3 — transcoding, 7 — failed.
@@ -49,12 +53,14 @@ export function parseVideoInfo(answer: unknown): Omit<VideoSlide, 'kind'> {
   const state = isJsonObject(original.state) ? original.state.id : undefined
   const lists = Array.isArray(original.streamingPlaylists) ? original.streamingPlaylists : []
   const first = isJsonObject(lists[0]) ? lists[0] : {}
-  const playlist = typeof first.playlistUrl === 'string' ? first.playlistUrl : null
+  const playlist = webUrl(first.playlistUrl)
+  // Something else than a web address (`javascript:`, `data:`) is not played.
+  const odd = typeof first.playlistUrl === 'string' && !!first.playlistUrl && !playlist
   const status: VideoStatus =
-    state === 7 ? 'failed' : state === 2 || state === 3 || !playlist ? 'processing' : 'ready'
+    state === 7 || odd ? 'failed' : state === 2 || state === 3 || !playlist ? 'processing' : 'ready'
   return {
     playlist,
-    poster: typeof data.thumbnail === 'string' ? data.thumbnail : null,
+    poster: webUrl(data.thumbnail),
     duration: clock(original.duration),
     status,
   }
