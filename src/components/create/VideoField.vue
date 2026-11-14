@@ -86,7 +86,11 @@ async function remove() {
           <span v-else class="vf__state vf__state--failed">
             <UiIcon name="error" :size="22" :stroke="2" />
             {{
-              status === 'missing' ? t('create.media.videoMissing') : t('create.media.videoFailed')
+              status === 'missing'
+                ? t('create.media.videoMissing')
+                : status === 'unchecked'
+                  ? t('create.media.videoUnchecked')
+                  : t('create.media.videoFailed')
             }}
             <button type="button" class="vf__check" @click="form.retryVideo()">
               {{ t('create.media.videoCheck') }}

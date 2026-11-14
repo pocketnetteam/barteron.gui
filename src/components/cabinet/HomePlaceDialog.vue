@@ -2,11 +2,10 @@
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import PlaceMap from '@/components/map/PlaceMap.vue'
-import { useAddressSearch } from '@/composables/address-search'
+import { ADDRESS_NOTE_TEXT, useAddressSearch } from '@/composables/address-search'
 import { usePlaceName } from '@/composables/place-name'
 import { decodeGeohash, encodeGeohash, type LatLng } from '@/lib/geohash'
 import { useLocationStore } from '@/stores/location'
-import { useSessionStore } from '@/stores/session'
 import { showToast } from '@/ui/toast'
 import UiButton from '@/ui/UiButton.vue'
 import UiDialog from '@/ui/UiDialog.vue'
@@ -17,7 +16,6 @@ const props = defineProps<{ geohash: string }>()
 const open = defineModel<boolean>('open', { default: false })
 const emit = defineEmits<{ save: [geohash: string] }>()
 const { t } = useI18n()
-const session = useSessionStore()
 const location = useLocationStore()
 
 const chosen = ref('')
@@ -29,7 +27,6 @@ const center = computed<LatLng>(() => at.value ?? location.device ?? location.ma
 const placeName = usePlaceName(chosen)
 
 const search = useAddressSearch()
-const offline = computed(() => session.mode !== 'bastyon')
 function setPoint(value: LatLng) {
   chosen.value = encodeGeohash(value)
 }
@@ -77,11 +74,8 @@ function save() {
           <button type="button" class="hp__result" @click="choose(r)">{{ r.label }}</button>
         </li>
       </ul>
-      <p
-        v-else-if="search.query.value.trim().length >= 3 && !search.searching.value"
-        class="hp__note"
-      >
-        {{ offline ? t('create.place.searchOffline') : t('create.place.noResults') }}
+      <p v-else-if="search.note.value" class="hp__note" data-testid="home-place-note">
+        {{ t(ADDRESS_NOTE_TEXT[search.note.value]) }}
       </p>
       <PlaceMap
         :point="at"

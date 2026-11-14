@@ -10,8 +10,15 @@
 export const PHOTO_MAX_SIDE = 1080
 /** JPEG quality of the shrunk photo. */
 export const PHOTO_QUALITY = 0.85
-/** Types a seller may add (the mockup: «JPEG или PNG»; WebP and HEIC from phones become JPEG). */
-export const PHOTO_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif']
+/**
+ * What the photo picker asks for: types every engine opens (the mockup: «JPEG
+ * или PNG»; WebP too). Asked for these, iOS hands a HEIC photo over as JPEG,
+ * as it did for the old form (`accept="jpeg, png"`); with HEIC in the list it
+ * gives the HEIC itself, which Chrome, Android and Safari before 17 cannot open.
+ */
+export const PHOTO_TYPES = ['image/jpeg', 'image/png', 'image/webp']
+/** Dropped or pasted HEIC is still tried: Safari 17 opens it, elsewhere the seller is told. */
+const TRIED_TYPES = [...PHOTO_TYPES, 'image/heic', 'image/heif']
 
 /** Size that fits into `max`×`max`, keeping the proportions; never larger than the original. */
 export function fitSize(width: number, height: number, max = PHOTO_MAX_SIDE) {
@@ -30,7 +37,7 @@ export function dataUrlBytes(dataUrl: string): number {
 }
 
 export const isPhotoFile = (file: { type: string }): boolean =>
-  PHOTO_TYPES.includes(file.type.toLowerCase())
+  TRIED_TYPES.includes(file.type.toLowerCase())
 
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -67,7 +74,10 @@ export async function shrinkPhoto(
     context.fillStyle = '#ffffff'
     context.fillRect(0, 0, width, height)
     context.drawImage(img, 0, 0, width, height)
-    return canvas.toDataURL('image/jpeg', quality)
+    const data = canvas.toDataURL('image/jpeg', quality)
+    // `data:,` — the browser could not make the canvas (out of memory).
+    if (!data.startsWith('data:image/')) throw new Error('image:unreadable')
+    return data
   } finally {
     if (objectUrl) URL.revokeObjectURL(objectUrl)
     // Safari counts canvas memory until the canvas is gone; an empty one frees it now.

@@ -217,6 +217,8 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
         // No PeerTube offline. A demo video with «processing» in its link is
         // always being processed (state 2); one from the upload window is
         // processed until its `ready` time, then ready without a playlist.
+        // One with «unreachable» is on a PeerTube server that does not answer.
+        if (urls.some((url) => url.includes('unreachable'))) throw new Error('timeout')
         return urls.map((url) => {
           const readyAt = Number(url.match(/[?&]ready=(\d+)/)?.[1] ?? 0)
           const state = url.includes('failed')

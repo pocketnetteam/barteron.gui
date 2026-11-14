@@ -5,7 +5,6 @@ import { useOfferForm } from '@/composables/offer-form'
 import { PHOTO_TYPES } from '@/lib/image'
 import { MAX_PHOTOS, type DraftPhoto } from '@/models/draft'
 import { useSessionStore } from '@/stores/session'
-import { showToast } from '@/ui/toast'
 import UiAlert from '@/ui/UiAlert.vue'
 import UiButton from '@/ui/UiButton.vue'
 import UiIcon from '@/ui/UiIcon.vue'
@@ -51,15 +50,24 @@ function onFiles(event: Event) {
 }
 
 /** Bastyon's camera on a phone; elsewhere the browser's camera picker. */
-async function camera() {
+function camera() {
   const device = String(session.appinfo?.device ?? '')
   if (session.mode === 'bastyon' && /android|ios|iphone|ipad/i.test(device)) {
-    if (await form.takePhoto()) return
-    showToast(t('create.media.cameraFailed'))
+    void form.takePhoto()
     return
   }
   cameraInput.value?.click()
 }
+
+/** «Не открылось: IMG_0001.HEIC, scan.jpg»; camera pictures have no name. */
+const unreadable = computed(() => {
+  const all = form.unreadable.value
+  if (!all.length) return null
+  const names = all.filter(Boolean)
+  return names.length
+    ? t('create.media.unreadable', { names: names.join(', ') })
+    : t('create.media.unreadableNoName')
+})
 
 // Paste and drop
 function onPaste(event: ClipboardEvent) {
@@ -328,6 +336,9 @@ onBeforeUnmount(endGesture)
     </UiAlert>
     <UiAlert v-else-if="form.photoNotice.value?.kind === 'type'" tone="warning" icon="warning">
       {{ t('create.media.type') }}
+    </UiAlert>
+    <UiAlert v-if="unreadable" tone="warning" icon="warning" data-testid="create-photo-unreadable">
+      {{ unreadable }}
     </UiAlert>
 
     <p v-if="form.fieldError('photos')" class="pg__error" role="alert">

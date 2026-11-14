@@ -433,7 +433,8 @@ export interface IssueContext {
   tree?: CategoryTree | null
   rates?: Rates | null
   /** Video state from the host; `null` — no video. */
-  videoStatus?: 'loading' | 'processing' | 'ready' | 'failed' | 'missing' | null
+  /** `unchecked` — the host did not answer about it. */
+  videoStatus?: 'loading' | 'processing' | 'ready' | 'failed' | 'missing' | 'unchecked' | null
   myList?: readonly number[]
 }
 
@@ -470,6 +471,8 @@ export function draftIssues(draft: OfferDraft, ctx: IssueContext = {}): DraftIss
     if (ctx.videoStatus === 'processing' || ctx.videoStatus === 'loading') {
       add('media', 'video', 'videoProcessing', 'wait')
     } else if (ctx.videoStatus === 'failed') add('media', 'video', 'videoFailed')
+    // Not «удалите видео»: it may be fine, only the check did not go through.
+    else if (ctx.videoStatus === 'unchecked') add('media', 'video', 'videoUnchecked')
     // Deleted from PeerTube: the offer would show a dead video.
     else if (ctx.videoStatus === 'missing') add('media', 'video', 'videoMissing')
   }

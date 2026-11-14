@@ -3,7 +3,7 @@ import { computed, defineAsyncComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useOffersByIds } from '@/api/queries'
 import PlaceMap from '@/components/map/PlaceMap.vue'
-import { useAddressSearch } from '@/composables/address-search'
+import { ADDRESS_NOTE_TEXT, useAddressSearch } from '@/composables/address-search'
 import { useOfferForm } from '@/composables/offer-form'
 import { usePlaceName } from '@/composables/place-name'
 import { formatPkoin } from '@/lib/format'
@@ -11,7 +11,6 @@ import { decodeGeohash, encodeGeohash, type LatLng } from '@/lib/geohash'
 import { pickupPointInfo } from '@/models/delivery'
 import { isPointDraft, MAX_DELIVERY_INFO } from '@/models/draft'
 import { useLocationStore } from '@/stores/location'
-import { useSessionStore } from '@/stores/session'
 import { showToast } from '@/ui/toast'
 import UiAlert from '@/ui/UiAlert.vue'
 import UiButton from '@/ui/UiButton.vue'
@@ -28,7 +27,6 @@ const PickupSearchDialog = defineAsyncComponent(() => import('./PickupSearchDial
  */
 const { t, locale } = useI18n()
 const form = useOfferForm()
-const session = useSessionStore()
 const location = useLocationStore()
 const d = computed(() => form.draft.value!)
 const point = computed(() => isPointDraft(d.value))
@@ -48,7 +46,6 @@ function setPoint(value: LatLng) {
 
 // Address search
 const search = useAddressSearch()
-const offline = computed(() => session.mode !== 'bastyon')
 function choose(place: { point: LatLng; label: string }) {
   setPoint(place.point)
   search.clear()
@@ -134,11 +131,8 @@ function togglePoint(id: string) {
         <button type="button" class="spl__result" @click="choose(r)">{{ r.label }}</button>
       </li>
     </ul>
-    <p
-      v-else-if="search.query.value.trim().length >= 3 && !search.searching.value"
-      class="spl__note"
-    >
-      {{ offline ? t('create.place.searchOffline') : t('create.place.noResults') }}
+    <p v-else-if="search.note.value" class="spl__note" data-testid="create-place-note">
+      {{ t(ADDRESS_NOTE_TEXT[search.note.value]) }}
     </p>
 
     <PlaceMap

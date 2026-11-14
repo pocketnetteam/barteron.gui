@@ -44,6 +44,8 @@ interface Setup {
   until?: FormState
   /** Signed in as someone else than the mock user. */
   address?: string
+  /** Changes to the host before the form opens. */
+  before?: (sdk: MockSdk) => void
 }
 
 async function setup(options: Setup = {}) {
@@ -67,6 +69,7 @@ async function setup(options: Setup = {}) {
     ...(await sdk.get.appinfo()),
     transactionsApiVersion: options.apiVersion ?? 8,
   }
+  options.before?.(sdk)
   const router = createAppRouter(createMemoryHistory())
   await router.push(options.id ? `/barter/create/${options.id}` : '/barter/create')
   // Seeded data stays: the mock network does not know the offers made up here.
@@ -600,16 +603,30 @@ describe('photos', () => {
     wrapper.unmount()
   })
 
-  it('«Повторить» after the picture could not be read reads it again', async () => {
-    vi.mocked(shrinkPhoto).mockRejectedValueOnce(new Error('image:unreadable'))
-    vi.mocked(shrinkPhoto).mockResolvedValue(PHOTO)
+  it('a picture the browser cannot open (HEIC in Chrome) goes, and the seller is told which', async () => {
+    const BAD = 'data:image/jpeg;base64,BAD'
+    vi.mocked(shrinkPhoto).mockImplementation(async (source) => {
+      if (source === BAD || (source instanceof File && source.name.endsWith('.HEIC'))) {
+        throw new Error('image:unreadable')
+      }
+      return PHOTO
+    })
     const { form, sdk, wrapper } = await setup()
     answering(sdk, 'https://img/x.jpg')
+    await form.addPhotos([
+      new File(['x'], 'IMG_0001.HEIC', { type: 'image/heic' }),
+      new File(['x'], 'a.jpg', { type: 'image/jpeg' }),
+      BAD,
+    ])
+    // Not «не загрузилось — повторите»: a retry would not open it either.
+    expect(form.draft.value!.photos.map((p) => p.status)).toEqual(['ready'])
+    expect(form.blocking.value.map((i) => i.key)).not.toContain('photosFailed')
+    // A camera picture has no name.
+    expect(form.unreadable.value).toEqual(['IMG_0001.HEIC', ''])
+    // Adding again starts afresh.
     await form.addPhotos([PHOTO])
-    const photo = form.draft.value!.photos[0]!
-    expect(photo.status).toBe('failed')
-    form.retryPhoto(photo.id)
-    await vi.waitFor(() => expect(form.draft.value!.photos[0]!.status).toBe('ready'))
+    expect(form.unreadable.value).toEqual([])
+    expect(form.draft.value!.photos).toHaveLength(2)
     wrapper.unmount()
   })
 
@@ -686,7 +703,7 @@ describe('photos', () => {
     sdk.get.imageFromMobileCamera = async () => ({
       images: [{ image: 'BBBB' }, 'data:image/png;base64,CCCC', { image: 42 }],
     })
-    expect(await form.takePhoto()).toBe(true)
+    await form.takePhoto()
     expect(vi.mocked(shrinkPhoto).mock.calls.map(([s]) => s)).toEqual([
       'data:image/jpeg;base64,BBBB',
       'data:image/png;base64,CCCC',
@@ -694,12 +711,43 @@ describe('photos', () => {
     wrapper.unmount()
   })
 
-  it('the phone camera without permission adds nothing', async () => {
+  it('the phone camera without permission adds nothing and says so', async () => {
     const { form, sdk, calls, wrapper } = await setup()
     sdk.permissions.check = async () => false
-    expect(await form.takePhoto()).toBe(false)
+    const before = toasts.items.length
+    await form.takePhoto()
     expect(calls('permissions.request')).toHaveLength(1)
     expect(form.draft.value!.photos).toHaveLength(0)
+    expect(toasts.items.slice(before).map((t) => t.text)).toEqual([
+      'Камера недоступна. Выберите фото из галереи.',
+    ])
+    wrapper.unmount()
+  })
+
+  it('the camera closed without a picture: nothing added, and no «камера недоступна»', async () => {
+    const { form, sdk, wrapper } = await setup()
+    const before = toasts.items.length
+    // Both hosts answer a closed camera so (pocketnet.gui `mobile.camera`, bastyon-nextgen media.ts).
+    sdk.get.imageFromMobileCamera = async () => {
+      throw new Error('mobile:camera:cancel')
+    }
+    await form.takePhoto()
+    // The previous Bastyon's `appsError` arrives as an object.
+    sdk.get.imageFromMobileCamera = () => Promise.reject({ message: 'mobile:camera:cancel' })
+    await form.takePhoto()
+    // Nothing picked.
+    sdk.get.imageFromMobileCamera = async () => ({ images: [] })
+    await form.takePhoto()
+    expect(form.draft.value!.photos).toHaveLength(0)
+    expect(toasts.items.length).toBe(before)
+
+    sdk.get.imageFromMobileCamera = async () => {
+      throw new Error('mobile:camera:notsupported')
+    }
+    await form.takePhoto()
+    expect(toasts.items.slice(before).map((t) => t.text)).toEqual([
+      'Камера недоступна. Выберите фото из галереи.',
+    ])
     wrapper.unmount()
   })
 })
@@ -796,6 +844,30 @@ describe('video', () => {
     expect(calls('get.videos')).toHaveLength(0)
     expect(form.issues.value.filter((i) => i.field === 'video')).toEqual([])
     expect(form.offer.value?.video).toBe('peertube://mock.video/old')
+    wrapper.unmount()
+  })
+
+  it('the host not answering about the video is not «обработка завершилась ошибкой»', async () => {
+    let answering = false
+    const { form, wrapper } = await setup({
+      id: HASH,
+      offer: withVideo('peertube://mock.video/v?ready=1'),
+      before: (sdk) => {
+        const real = sdk.get.videos
+        sdk.get.videos = (urls) => (answering ? real(urls) : Promise.reject(new Error('timeout')))
+      },
+    })
+    // One retry of its own first.
+    await vi.waitFor(() => expect(form.videoStatus.value).toBe('unchecked'), { timeout: 4000 })
+    const keys = form.blocking.value.map((i) => i.key)
+    expect(keys).toContain('videoUnchecked')
+    // «Удалите видео» would lose a good one.
+    expect(keys).not.toContain('videoFailed')
+    expect(form.canPublish.value).toBe(false)
+    answering = true
+    form.retryVideo()
+    await vi.waitFor(() => expect(form.videoStatus.value).toBe('ready'))
+    expect(form.canPublish.value).toBe(true)
     wrapper.unmount()
   })
 

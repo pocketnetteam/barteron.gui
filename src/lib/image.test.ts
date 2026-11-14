@@ -1,5 +1,12 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { dataUrlBytes, fitSize, isPhotoFile, PHOTO_MAX_SIDE, shrinkPhoto } from './image'
+import {
+  dataUrlBytes,
+  fitSize,
+  isPhotoFile,
+  PHOTO_MAX_SIDE,
+  PHOTO_TYPES,
+  shrinkPhoto,
+} from './image'
 
 describe('photo size', () => {
   it('fits into 1080×1080 keeping the proportions', () => {
@@ -30,11 +37,20 @@ describe('photo size', () => {
     expect(isPhotoFile({ type: 'application/pdf' })).toBe(false)
     expect(isPhotoFile({ type: '' })).toBe(false)
   })
+
+  it('the picker offers only what every engine opens: asked for JPEG, iOS converts HEIC itself', () => {
+    // As the old form (`accept="jpeg, png"`); HEIC in the list makes iOS hand it over as it is.
+    expect(PHOTO_TYPES).toEqual(['image/jpeg', 'image/png', 'image/webp'])
+  })
 })
 
 describe('shrinking', () => {
   /** happy-dom decodes no pictures: a stand-in image and canvas record what was drawn. */
-  function stub(natural: { width: number; height: number } | 'broken', context = true) {
+  function stub(
+    natural: { width: number; height: number } | 'broken',
+    context = true,
+    out?: string
+  ) {
     const drawn: unknown[][] = []
     const canvas = {
       width: 300,
@@ -48,7 +64,7 @@ describe('shrinking', () => {
         }
         return ctx
       },
-      toDataURL: (type: string, quality: number) => `data:${type};q=${quality},AAAA`,
+      toDataURL: (type: string, quality: number) => out ?? `data:${type};q=${quality},AAAA`,
     }
     const createElement = document.createElement.bind(document)
     vi.spyOn(document, 'createElement').mockImplementation((tag: string) =>
@@ -114,6 +130,11 @@ describe('shrinking', () => {
     await expect(shrinkPhoto('data:image/png;base64,BBBB')).rejects.toThrow('image:unreadable')
     vi.restoreAllMocks()
     stub({ width: 10, height: 10 }, false)
+    await expect(shrinkPhoto('data:image/png;base64,BBBB')).rejects.toThrow('image:unreadable')
+  })
+
+  it('a canvas the browser could not fill (out of memory) is unreadable, not an empty photo', async () => {
+    stub({ width: 4000, height: 3000 }, true, 'data:,')
     await expect(shrinkPhoto('data:image/png;base64,BBBB')).rejects.toThrow('image:unreadable')
   })
 })

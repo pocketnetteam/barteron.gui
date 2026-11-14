@@ -43,7 +43,7 @@ import { isTxid } from '@/models/tx'
 import { OfferInvalidError, toOfferPayload, type Offer } from '@/models/offer'
 import { useCurrencyStore } from '@/stores/currency'
 import { useSessionStore } from '@/stores/session'
-import { useTxStore } from '@/stores/tx'
+import { errorText, useTxStore } from '@/stores/tx'
 import { showToast } from '@/ui/toast'
 
 /** Bastyon locale for `p.s1`, as the old app wrote `$i18n.locale`. */
@@ -282,7 +282,8 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
   const videoStatus = computed(() => {
     if (!videoUrl.value) return null
     if (video.isPending.value) return 'loading' as const
-    if (video.isError.value) return 'failed' as const
+    // The host did not answer: nothing is known about the video itself.
+    if (video.isError.value) return 'unchecked' as const
     return video.data.value?.status ?? 'loading'
   })
 
@@ -330,8 +331,13 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
    * for the same reason).
    */
   const shrinkSlot = createLimiter(1)
-  /** What the seller added, until it is read: «Повторить» reads it again. Not stored. */
+  /** What the seller added, until it is read. Not stored. */
   const originals = new Map<string, File | string>()
+  /**
+   * Pictures the browser could not open since the last adding (HEIC outside
+   * Safari, a damaged file): their file names, `''` for a camera picture.
+   */
+  const unreadable = ref<string[]>([])
 
   const findPhoto = (pid: string): DraftPhoto | undefined =>
     draft.value?.photos.find((p) => p.id === pid)
@@ -353,8 +359,13 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
       shrunk.bytes = dataUrlBytes(data)
       originals.delete(pid)
     } catch {
-      const failed = findPhoto(pid)
-      if (failed) failed.status = 'failed'
+      // Reading it again would not open it: it goes, and the seller is told which.
+      originals.delete(pid)
+      const value = draft.value
+      if (value && findPhoto(pid)) {
+        value.photos = value.photos.filter((p) => p.id !== pid)
+        unreadable.value.push(typeof source === 'string' ? '' : source.name)
+      }
       return
     }
     await upload(pid)
@@ -394,6 +405,7 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
     const value = draft.value
     if (!value || !session.sdk) return
     const usable = sources.filter((s) => typeof s === 'string' || isPhotoFile(s))
+    unreadable.value = []
     photoNotice.value = usable.length < sources.length ? { kind: 'type' } : null
     const room = Math.max(0, MAX_PHOTOS - value.photos.length)
     const taken = usable.slice(0, room)
@@ -413,9 +425,9 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
     await Promise.all(added.map(prepare))
   }
 
-  /** Not uploaded: send again; not even read: read it again first. */
+  /** Not uploaded: send the same picture again. */
   function retryPhoto(pid: string) {
-    void (findPhoto(pid)?.data ? upload(pid) : prepare(pid))
+    void upload(pid)
   }
 
   function removePhoto(pid: string) {
@@ -435,28 +447,35 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
     list.splice(to, 0, item!)
   }
 
-  /** Bastyon's camera on a phone: `{images: [{image}]}`; a bare base64 gets its prefix. */
-  async function takePhoto(): Promise<boolean> {
+  /**
+   * Bastyon's camera on a phone: `{images: [{image}]}`; a bare base64 gets its
+   * prefix. Closed without a picture, both hosts answer `mobile:camera:cancel`:
+   * nothing to say then. No permission or no camera — «Камера недоступна».
+   */
+  async function takePhoto(): Promise<void> {
     const sdk = session.sdk
-    if (!sdk) return false
+    if (!sdk) return
+    const unavailable = () => void showToast(t('create.media.cameraFailed'))
     const granted = await sdk.permissions.check({ permission: 'mobilecamera' }).catch(() => false)
     if (!granted) {
       await sdk.permissions.request(['mobilecamera']).catch(() => undefined)
       if (!(await sdk.permissions.check({ permission: 'mobilecamera' }).catch(() => false))) {
-        return false
+        return unavailable()
       }
     }
-    const answer = (await sdk.get.imageFromMobileCamera().catch(() => null)) as {
-      images?: unknown
-    } | null
+    let answer: { images?: unknown } | null
+    try {
+      answer = (await sdk.get.imageFromMobileCamera()) as { images?: unknown } | null
+    } catch (error) {
+      if (!/cancel/.test(errorText(error))) unavailable()
+      return
+    }
     const images = Array.isArray(answer?.images) ? answer!.images : []
     const sources = images
       .map((i) => (typeof i === 'string' ? i : (i as { image?: unknown })?.image))
       .filter((i): i is string => typeof i === 'string' && !!i)
       .map((i) => (i.startsWith('data:') ? i : `data:image/jpeg;base64,${i}`))
-    if (!sources.length) return false
-    await addPhotos(sources)
-    return true
+    if (sources.length) await addPhotos(sources)
   }
 
   // ─── Steps ─────────────────────────────────────────────────────────────────
@@ -680,6 +699,7 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
     retryVideo: () => void video.refetch(),
     // photos
     photoNotice,
+    unreadable,
     addPhotos,
     retryPhoto,
     removePhoto,

@@ -167,6 +167,10 @@ test('new offer: five steps, then the transaction the old app would write', asyn
 
   await page.getByTestId('create-next').click()
   await expect(page.getByText('Укажите место на карте')).toBeVisible()
+  // Outside Bastyon the address search does not run, and says so.
+  await page.getByTestId('create-place-search').fill('Москва')
+  await expect(page.getByTestId('create-place-note')).toHaveText(/работает внутри Bastyon/)
+  await page.getByTestId('create-place-search').fill('')
   await clickMap(page)
   await page.getByTestId('create-self-pickup').click()
   await page.getByTestId('create-next').click()
@@ -346,6 +350,45 @@ test('photos: a failed upload retries; no more than ten', async ({ page }) => {
   await page.getByTestId('create-photo-input').setInputFiles(await photos(page, 11))
   await expect(page.getByTestId('create-photo-limit')).toContainText('только 10 из 12')
   await expect(page.locator('[data-photo-index]')).toHaveCount(10)
+})
+
+test('photos: a picture the browser cannot open is named, not left to «Повторить»', async ({
+  page,
+}) => {
+  await page.goto('/barter/create?step=2')
+  const input = page.getByTestId('create-photo-input')
+  await expect(page.getByTestId('create-photo-add')).toBeAttached()
+  // Asked for these, iOS turns HEIC into JPEG itself, as for the old form.
+  await expect(input).toHaveAttribute('accept', 'image/jpeg,image/png,image/webp')
+  // Dropped or picked anyway: Chromium cannot open HEIC.
+  await input.setInputFiles([
+    {
+      name: 'IMG_0001.HEIC',
+      mimeType: 'image/heic',
+      buffer: Buffer.from('ftypheic-not-a-picture'),
+    },
+    ...(await photos(page, 1)),
+  ])
+  await expect(page.getByTestId('create-photo-ready')).toHaveCount(1)
+  await expect(page.getByTestId('create-photo-failed')).toHaveCount(0)
+  await expect(page.getByTestId('create-photo-unreadable')).toContainText('IMG_0001.HEIC')
+  // Nothing in the way of the next step.
+  await page.getByTestId('create-next').click()
+  await expect(page).toHaveURL(/step=3/)
+})
+
+test('video: the host not answering about it is not «обработка завершилась ошибкой»', async ({
+  page,
+}) => {
+  await readyDraft(page, 'Планшет с видео', { video: 'peertube://mock.video/unreachable' })
+  await page.goto('/barter/create?step=2')
+  const tile = page.getByTestId('create-video-unchecked')
+  await expect(tile).toContainText('Не удалось проверить видео')
+  await expect(page.getByText('Обработка видео завершилась ошибкой')).toHaveCount(0)
+  await page.getByTestId('create-next').click()
+  await expect(page.getByText('Не удалось проверить видео. Проверьте ещё раз')).toBeVisible()
+  await tile.getByRole('button', { name: 'Проверить ещё раз' }).click()
+  await expect(tile).toContainText('Не удалось проверить видео')
 })
 
 test('video: Bastyon’s upload window, processing holds publishing', async ({ page }) => {
