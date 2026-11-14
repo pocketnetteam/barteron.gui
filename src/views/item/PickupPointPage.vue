@@ -46,7 +46,7 @@ const inactive = computed(() => offerLifecycle(offer.value) !== 'active')
 /** «от 60 PKOIN»: a pickup point's price is always «from» (old `pickupPoint || prefix`). */
 const price = computed(() => ({ ...page.card.value.price, from: !page.card.value.price.free }))
 
-const open = computed(() => openState(info.value.schedule))
+const open = computed(() => openState(info.value.schedule, new Date(), point.value))
 const openText = computed(() => {
   const s = open.value
   if (s.kind === 'always') return t('item.delivery.allDay')

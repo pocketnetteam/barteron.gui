@@ -33,6 +33,7 @@ import {
   deliveryOptions,
   formatHours,
   hasDeliveryChoice,
+  isUsablePickupPoint,
   openState,
   pickupPointInfo,
   type DeliveryPick,
@@ -156,9 +157,7 @@ const pointIds = computed(() =>
   delivery.value.pickupPoints.enabled ? delivery.value.pickupPoints.ids : []
 )
 const pointsQuery = useOffersByIds(pointIds)
-const points = computed(() =>
-  (pointsQuery.data.value ?? []).filter((p) => isPickupPoint(p) && isOfferActive(p))
-)
+const points = computed(() => (pointsQuery.data.value ?? []).filter((p) => isUsablePickupPoint(p)))
 const pointCards = computed<PickupCard[]>(() =>
   points.value
     .map((p) => {
@@ -169,7 +168,8 @@ const pointCards = computed<PickupCard[]>(() =>
         : data.price.pkoin !== null && data.price.pkoin !== undefined
           ? `${new Intl.NumberFormat(locale.value).format(data.price.pkoin)} PKOIN`
           : ''
-      const state = openState(info.schedule)
+      const at = decodeGeohash(p.geohash)
+      const state = openState(info.schedule, new Date(), at)
       const open =
         state.kind === 'always'
           ? { text: t('item.delivery.allDay'), tone: 'success' as const }
@@ -203,7 +203,7 @@ const pointCards = computed<PickupCard[]>(() =>
           ? new Intl.NumberFormat(locale.value).format(data.price.pkoin)
           : undefined,
         pkoin: data.price.pkoin ?? 0,
-        at: decodeGeohash(p.geohash),
+        at,
         open,
         to: { name: 'barterItem', params: { id: p.hash! } },
       }

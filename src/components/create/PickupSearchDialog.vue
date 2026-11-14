@@ -4,7 +4,6 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useBarteron } from '@/api/queries'
 import PointsMap, { type MapPoint } from '@/components/map/PointsMap.vue'
-import { isPickupPointOwner } from '@/config/delivery'
 import { formatPkoin } from '@/lib/format'
 import {
   approximateBounds,
@@ -13,8 +12,8 @@ import {
   distanceKm,
   type LatLng,
 } from '@/lib/geohash'
-import { pickupPointInfo } from '@/models/delivery'
-import { isOfferActive, PICKUP_POINT_CATEGORY, type Offer } from '@/models/offer'
+import { isUsablePickupPoint, pickupPointInfo } from '@/models/delivery'
+import { PICKUP_POINT_CATEGORY, type Offer } from '@/models/offer'
 import UiButton from '@/ui/UiButton.vue'
 import UiDialog from '@/ui/UiDialog.vue'
 import UiSkeleton from '@/ui/UiSkeleton.vue'
@@ -48,7 +47,7 @@ const points = useQuery({
       location: approximateBounds(boundsAround(props.center, AREA_KM)),
       pageSize: 100,
     })
-    return offers.filter((o) => isPickupPointOwner(o.address) && isOfferActive(o))
+    return offers.filter((o) => isUsablePickupPoint(o))
   },
 })
 
