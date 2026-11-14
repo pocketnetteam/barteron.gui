@@ -400,6 +400,10 @@ const catalog = categoryRoute(null)
     scrollbar-width: none;
   }
 
+  .tips__nav::-webkit-scrollbar {
+    display: none;
+  }
+
   .tips__section {
     flex: none;
     padding: 8px 14px;

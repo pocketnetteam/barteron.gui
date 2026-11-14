@@ -167,6 +167,13 @@ const fee = (value: number) =>
   box-shadow: 0 0 0 3px var(--ring);
 }
 
+/* Chrome 89 and Safari 15.0–15.3 have no :has(): the ring on any focus there. */
+@supports not selector(:has(*)) {
+  .gp__row:focus-within {
+    box-shadow: 0 0 0 3px var(--ring);
+  }
+}
+
 .gp__radio {
   width: 18px;
   height: 18px;

@@ -652,6 +652,10 @@ function back() {
     scrollbar-width: none;
   }
 
+  .ow__matches::-webkit-scrollbar {
+    display: none;
+  }
+
   .ow__match {
     flex: none;
     width: 150px;

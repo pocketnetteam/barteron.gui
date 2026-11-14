@@ -111,6 +111,10 @@ const BANNERS: { key: 'notifications' | 'safeDeal' | 'tips'; icon: IconName; ton
     scrollbar-width: none;
   }
 
+  .banners::-webkit-scrollbar {
+    display: none;
+  }
+
   .banner {
     flex: none;
     width: 300px;

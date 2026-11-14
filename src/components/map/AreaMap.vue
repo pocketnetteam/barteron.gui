@@ -146,6 +146,8 @@ onBeforeUnmount(() => {
   margin: 0;
   padding: 4px 8px;
   border-radius: var(--radius-s);
+  /* Chrome 89 and Safari 15 have no color-mix(): an opaque plate there. */
+  background: var(--surface);
   background: color-mix(in srgb, var(--surface) 88%, transparent);
   color: var(--text2);
   font-size: 12px;

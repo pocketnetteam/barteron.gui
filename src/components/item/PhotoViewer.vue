@@ -288,6 +288,10 @@ onBeforeUnmount(() => {
   scrollbar-width: none;
 }
 
+.pv__thumbs::-webkit-scrollbar {
+  display: none;
+}
+
 .pv__thumb {
   position: relative;
   flex: none;

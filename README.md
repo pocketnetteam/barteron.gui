@@ -17,7 +17,10 @@ pnpm build        # сборка в dist/ для barteron.club (SDK с bastyon.c
 BARTERON_STAND=test pnpm build   # то же для тестового стенда: манифест «Barteron (test)», id barterontest.app
 pnpm build:test   # SDK с test.pocketnet.app, заглушка SDK вне Bastyon, витрина /dev/ui
 node build/og-check.mjs --php <путь к php>   # превью ссылок собранной версии на поддельной ноде
+node build/engines-check.mjs   # после pnpm build: нет ли в dist методов и CSS новее Chrome 89 и Safari 15
 ```
+
+Сборка рассчитана на Chrome 89, Firefox 89 и Safari 15: на Chromium 89 работает старое настольное приложение Bastyon. esbuild переводит синтаксис JS и добавляет префиксы CSS, но не новые методы и не новые возможности CSS. Методы в нашем коде ловит линтер (`eslint.config.js`), CSS — `build/engines.test.ts` в `pnpm check`, код зависимостей — `build/engines-check.mjs`: его стоит запускать после обновления пакетов.
 
 ## Сборка для сервера
 

@@ -224,5 +224,9 @@ const names = computed(() => new Map([...people.value].map(([a, p]) => [a, p.nam
     padding: 0 var(--page-pad, 16px);
     scrollbar-width: none;
   }
+
+  .deals__roles::-webkit-scrollbar {
+    display: none;
+  }
 }
 </style>

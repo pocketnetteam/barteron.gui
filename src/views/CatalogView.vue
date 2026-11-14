@@ -806,6 +806,10 @@ function back() {
   scrollbar-width: none;
 }
 
+.ctop__chips::-webkit-scrollbar {
+  display: none;
+}
+
 .ctop__chips > * {
   flex: none;
 }
@@ -868,6 +872,11 @@ function back() {
     padding: 0 16px;
     overflow-x: auto;
     scrollbar-width: none;
+  }
+
+  .catalog__subs::-webkit-scrollbar,
+  .catalog__facets::-webkit-scrollbar {
+    display: none;
   }
 
   .catalog__body {

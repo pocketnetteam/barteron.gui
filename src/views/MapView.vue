@@ -967,6 +967,10 @@ function back() {
     min-height: 190px;
   }
 
+  .mapview__strip::-webkit-scrollbar {
+    display: none;
+  }
+
   .mapview__mini {
     flex: none;
     width: 150px;
