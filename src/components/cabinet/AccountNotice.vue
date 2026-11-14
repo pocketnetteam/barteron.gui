@@ -8,7 +8,8 @@ import UiButton from '@/ui/UiButton.vue'
 
 /**
  * What is happening to my profile in the network (s5-states): being updated,
- * refused by the node (with a retry), or the account still activating.
+ * refused by the node (with a retry), not given by the node at all (nothing
+ * can be saved on top of it), or the account still activating.
  */
 const props = defineProps<{ account: ReturnType<typeof useMyAccount>; compact?: boolean }>()
 const { t } = useI18n()
@@ -46,6 +47,19 @@ const reason = computed(() => {
         @click="account.retry()"
         >{{ t('ui.retry') }}</UiButton
       >
+    </template>
+  </UiAlert>
+  <UiAlert
+    v-else-if="account.query.isError.value"
+    tone="danger"
+    live
+    data-testid="account-load-failed"
+  >
+    {{ t('account.loadFailed') }}
+    <template #action>
+      <UiButton variant="on-danger" :size="36" @click="account.query.refetch()">{{
+        t('ui.retry')
+      }}</UiButton>
     </template>
   </UiAlert>
   <UiAlert v-else-if="account.activating.value" tone="info" busy data-testid="account-activating">

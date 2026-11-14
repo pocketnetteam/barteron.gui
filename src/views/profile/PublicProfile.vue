@@ -70,6 +70,17 @@ const notFound = computed(
     !offers.data.value?.length
 )
 const loading = computed(() => profile.isPending.value || account.isPending.value)
+/**
+ * The node did not give something: said so, not passed off as «нет объявлений»
+ * or «нет оценок».
+ */
+const failed = computed(
+  () => profile.isError.value || account.isError.value || offers.isError.value
+)
+function retry() {
+  for (const q of [profile, account, offers]) if (q.isError.value) void q.refetch()
+  if (reviews.error.value) reviews.refetch()
+}
 
 const guarantor = computed(() =>
   isGuarantor(address.value) && account.data.value
@@ -210,6 +221,15 @@ async function onMenu(key: string) {
         </template>
       </UiAlert>
 
+      <UiAlert v-if="failed" tone="danger" live data-testid="profile-failed">
+        {{ t('profile.failed') }}
+        <template #action>
+          <UiButton variant="neutral" :size="36" icon="retry" @click="retry">{{
+            t('item.missing.refresh')
+          }}</UiButton>
+        </template>
+      </UiAlert>
+
       <UiEmptyState
         v-if="notFound"
         icon="user"
@@ -239,7 +259,7 @@ async function onMenu(key: string) {
                 <UiIcon name="star-filled" :size="15" class="pp__star" />
                 <span>{{ t('profile.scores', scores) }}</span>
               </button>
-              <span v-else>{{ t('profile.noScores') }}</span>
+              <span v-else-if="account.isSuccess.value">{{ t('profile.noScores') }}</span>
               <span v-if="since">{{
                 phone
                   ? t('profile.sinceShort', { date: since })
@@ -313,7 +333,9 @@ async function onMenu(key: string) {
                   >{{ w.label }}</RouterLink
                 >
               </div>
-              <span v-else class="pp__muted">{{ t('profile.exchange.empty') }}</span>
+              <span v-else-if="account.isSuccess.value" class="pp__muted">{{
+                t('profile.exchange.empty')
+              }}</span>
             </section>
 
             <UiTabs v-model="currentTab" :items="tabs" :label="t('profile.title')" />
@@ -322,6 +344,13 @@ async function onMenu(key: string) {
               <div v-if="offers.isPending.value" class="pp__offers">
                 <UiSkeleton v-for="i in 4" :key="i" ratio="3 / 4" radius="16px" />
               </div>
+              <p
+                v-else-if="offers.isError.value"
+                class="pp__none"
+                data-testid="profile-offers-failed"
+              >
+                {{ t('profile.offersFailed') }}
+              </p>
               <p v-else-if="!active.length" class="pp__none" data-testid="profile-no-offers">
                 {{ t('profile.noOffers') }}
               </p>
@@ -349,6 +378,9 @@ async function onMenu(key: string) {
               <div v-if="reviews.loading.value" class="pp__card">
                 <UiSkeleton v-for="i in 3" :key="i" height="56px" radius="12px" />
               </div>
+              <p v-else-if="reviews.error.value" class="pp__none">
+                {{ t('profile.reviewsFailed') }}
+              </p>
               <p v-else-if="!reviews.rows.value.length" class="pp__none">
                 {{ t('profile.noReviews') }}
               </p>
@@ -376,7 +408,11 @@ async function onMenu(key: string) {
                 >
               </div>
               <span class="pp__muted">{{
-                wants.length ? t('profile.exchange.note') : t('profile.exchange.empty')
+                wants.length
+                  ? t('profile.exchange.note')
+                  : account.isSuccess.value
+                    ? t('profile.exchange.empty')
+                    : ''
               }}</span>
             </section>
             <section v-if="guarantor" class="pp__card">

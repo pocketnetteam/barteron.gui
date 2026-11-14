@@ -10,6 +10,7 @@ import { createMockSdk, MOCK_ADDRESS } from '@/sdk/mock'
 import { demoNetworkData } from '@/sdk/mock-data'
 import { createMockNetwork } from '@/sdk/mock-network'
 import { useSessionStore } from '@/stores/session'
+import { toasts } from '@/ui/toast'
 import { useChat } from './chat'
 
 const SELLER = 'PSeller'.padEnd(34, '1')
@@ -62,6 +63,30 @@ describe('opening a chat', () => {
     expect(calls('chat.getOrCreateRoom')).toHaveLength(1)
     expect(calls('chat.send')).toHaveLength(1)
     expect(chat.opening.value).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('the host refuses the room: said in words, nothing sent, and it can be tried again', async () => {
+    const { chat, calls, wrapper } = await setup()
+    const sdk = useSessionStore().sdk!
+    const real = sdk.chat.getOrCreateRoom.bind(sdk.chat)
+    sdk.chat.getOrCreateRoom = async () => {
+      throw new Error('chat:unavailable')
+    }
+    const before = toasts.items.length
+    expect(await chat.open({ members: [SELLER], messages: ['Хочу купить'] })).toBe(false)
+    expect(calls('chat.send')).toHaveLength(0)
+    expect(chat.opening.value).toBe(false)
+    // The progress toast went, the error stayed.
+    expect(toasts.items.slice(before).map((t) => [t.kind, t.text])).toEqual([
+      ['error', 'Не удалось открыть чат. Попробуйте ещё раз'],
+    ])
+    // A room without an id is a refusal too.
+    sdk.chat.getOrCreateRoom = async () => ({})
+    expect(await chat.open({ members: [SELLER], messages: [] })).toBe(false)
+    sdk.chat.getOrCreateRoom = real
+    expect(await chat.open({ members: [SELLER], messages: ['Хочу купить'] })).toBe(true)
+    expect(calls('chat.send')).toHaveLength(1)
     wrapper.unmount()
   })
 

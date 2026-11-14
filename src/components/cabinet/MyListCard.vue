@@ -79,7 +79,7 @@ function save() {
         </button>
       </li>
     </ul>
-    <div v-else class="ml__empty">
+    <div v-else-if="!account.query.isError.value" class="ml__empty">
       <span>{{ t('settings.mylist.empty') }}</span>
       <button
         v-if="!locked"

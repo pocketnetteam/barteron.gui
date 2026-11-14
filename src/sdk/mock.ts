@@ -31,6 +31,14 @@ export interface MockOptions {
   rpc?: Record<string, MockRpcHandler>
   /** In-memory Barteron network: answers node reads and confirms writes. */
   network?: MockNetwork
+  /** Node reads that fail (`timeout`), `times` times, only those whose parameters mention `with`. */
+  failRpc?: RpcFailure[]
+}
+
+export interface RpcFailure {
+  method: string
+  with?: string
+  times?: number
 }
 
 export interface MockCall {
@@ -67,6 +75,7 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
   let videoCounter = 0
   const failing = new Set<string>()
   const fails = (method: string): boolean => failing.delete(method)
+  const rpcFailures = (options.failRpc ?? []).map((r) => ({ ...r, left: r.times ?? Infinity }))
   let offline = false
 
   const darkQuery =
@@ -159,6 +168,16 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
         throw Object.assign(new Error(`No Bastyon server answers: ${method}`), {
           name: 'UnreachableError',
         })
+      const failure = rpcFailures.find(
+        (r) =>
+          r.method === method &&
+          r.left > 0 &&
+          (!r.with || JSON.stringify(parameters).includes(r.with))
+      )
+      if (failure) {
+        failure.left -= 1
+        throw new Error('timeout')
+      }
       const fixture = rpcFixtures[method]
       if (!fixture) throw new Error(`mock_rpc_missing:${method}`)
       return fixture(parameters) as T
@@ -386,6 +405,8 @@ export function createDemoMockSdk(options: Omit<MockOptions, 'network'> = {}): M
               refuse?: boolean
               /** Strings a hostile network might send: Илья's name, his tablet's caption and text. */
               texts?: { name?: string; caption?: string; description?: string }
+              /** Node reads that fail, see `MockOptions.failRpc`. */
+              failRpc?: RpcFailure[]
             }
           }
         ).__barteronMockSetup
@@ -420,6 +441,7 @@ export function createDemoMockSdk(options: Omit<MockOptions, 'network'> = {}): M
   return createMockSdk({
     ...(setup?.granted ? { granted: setup.granted } : {}),
     ...(setup?.refuse ? { grantOnRequest: false } : {}),
+    ...(setup?.failRpc ? { failRpc: setup.failRpc } : {}),
     ...options,
     // A block every 10 s: a safe deal transfer counts in a minute, not in ten.
     network: createMockNetwork({ ...data, blockMs: 10_000 }),

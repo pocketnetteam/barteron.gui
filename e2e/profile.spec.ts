@@ -251,6 +251,67 @@ test('public profile: roles, the exchange list, offers and reviews', async ({ pa
   await expect(page.getByTestId('cabinet')).toBeVisible()
 })
 
+test('a profile the node did not give: said so, not «нет объявлений»; then «Обновить»', async ({
+  page,
+}) => {
+  const offline = (on: boolean) =>
+    page.evaluate(
+      (v) =>
+        (
+          window as unknown as { __barteronMock: { setOffline(v: boolean): void } }
+        ).__barteronMock.setOffline(v),
+      on
+    )
+  await page.goto('/')
+  await expect(page.getByTestId('home')).toBeVisible()
+  await offline(true)
+  await spaGo(page, `/profile/${ILYA}`)
+  const failed = page.getByTestId('profile-failed')
+  await expect(failed).toBeVisible({ timeout: 10_000 })
+  await expect(page.getByTestId('profile-offers-failed')).toBeVisible()
+  await expect(page.getByTestId('profile-no-offers')).toHaveCount(0)
+  await expect(page.getByText('Нет оценок')).toHaveCount(0)
+
+  await offline(false)
+  await failed.getByRole('button', { name: 'Обновить' }).click()
+  await expect(failed).toHaveCount(0)
+  await expect(page.getByTestId('profile-offers').locator('article, a').first()).toBeVisible()
+})
+
+test('only his offers or only his Barteron profile not given: each said so', async ({ page }) => {
+  // Each read is tried twice (one retry).
+  await page.addInitScript((who) => {
+    ;(window as { __barteronMockSetup?: unknown }).__barteronMockSetup = {
+      failRpc: [
+        { method: 'getbarteronoffersbyaddress', with: who, times: 2 },
+        { method: 'getbarteronaccounts', with: who, times: 2 },
+      ],
+    }
+  }, ILYA)
+  await page.goto(`/profile/${ILYA}`)
+  const failed = page.getByTestId('profile-failed')
+  await expect(failed).toBeVisible({ timeout: 10_000 })
+  // His Bastyon name came; his offers and scores did not.
+  await expect(page.getByTestId('profile-name')).toHaveText('Илья Петров')
+  await expect(page.getByTestId('profile-offers-failed')).toBeVisible()
+  await expect(page.getByText('Нет оценок')).toHaveCount(0)
+  await failed.getByRole('button', { name: 'Обновить' }).click()
+  await expect(failed).toHaveCount(0)
+  await expect(page.getByTestId('profile-guarantor')).toBeVisible()
+  await expect(page.getByTestId('profile-offers').locator('article, a').first()).toBeVisible()
+})
+
+test('only his offers not given: the profile says not all of it loaded', async ({ page }) => {
+  await page.addInitScript((who) => {
+    ;(window as { __barteronMockSetup?: unknown }).__barteronMockSetup = {
+      failRpc: [{ method: 'getbarteronoffersbyaddress', with: who, times: 2 }],
+    }
+  }, ILYA)
+  await page.goto(`/profile/${ILYA}`)
+  await expect(page.getByTestId('profile-failed')).toBeVisible({ timeout: 10_000 })
+  await expect(page.getByTestId('profile-guarantor')).toBeVisible()
+})
+
 test('settings: the place for new offers fills the offer form', async ({ page }) => {
   await page.goto(`/profile/${ME}#settings`)
   const place = page.getByTestId('settings-place')

@@ -1445,6 +1445,8 @@ const en: Messages = {
     failed: 'Account changes were not saved.',
     failedText: 'The node refused the transaction: {reason}. Your changes are still in the form.',
     activating: 'Your account is being activated — you can save changes in a few minutes.',
+    loadFailed:
+      'Your Barteron profile did not load: the node did not answer. Changes cannot be saved without it.',
     savedHint: 'Saved to your Bastyon profile, updates in about a minute',
   },
   wallet: {
@@ -1621,6 +1623,10 @@ const en: Messages = {
     allReviews: 'All {n}',
     noOffers: 'This user has no active listings right now',
     noReviews: 'No reviews yet',
+    failed:
+      'Not everything about this user loaded: the node did not answer. Refresh to see listings, ratings and the exchange list.',
+    offersFailed: 'Listings did not load',
+    reviewsFailed: 'Reviews did not load',
     tabs: {
       offers: 'Listings',
       reviews: 'Reviews',
