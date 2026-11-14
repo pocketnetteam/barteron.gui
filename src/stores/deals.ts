@@ -87,9 +87,19 @@ export const useDealsStore = defineStore('deals', () => {
     stored.set(stored.value.value.filter((d) => d.id !== id))
   }
 
-  /** After my transfer has gone: the old page wrote the same. */
+  /**
+   * After my transfer has gone: the old page wrote the same. Records past the
+   * wait go: neither version reads them, and a deal that never finished would
+   * keep its record for good.
+   */
   function markSent(id: string, status: DealStatus, transaction: string | null, now = Date.now()) {
-    sent.set({ ...sent.value.value, [id]: { currentStatus: status, timestamp: now, transaction } })
+    const live = Object.entries(sent.value.value).filter(
+      ([, r]) => now - r.timestamp < PAYMENT_WAIT_MS
+    )
+    sent.set({
+      ...Object.fromEntries(live),
+      [id]: { currentStatus: status, timestamp: now, transaction },
+    })
   }
 
   /** The deal has finished: the old page dropped its record too. */

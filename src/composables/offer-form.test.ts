@@ -8,6 +8,7 @@ import { keys } from '@/api/queries'
 import { BAN_LIST } from '@/config/ban-list'
 import { i18n, setLocale } from '@/i18n'
 import { shrinkPhoto } from '@/lib/image'
+import { readStored, removeStored } from '@/lib/storage'
 import { emptyAccount, type BarteronAccount } from '@/models/account'
 import { newDraft, readDraft, type OfferDraft } from '@/models/draft'
 import { offerFromAlias, type Offer } from '@/models/offer'
@@ -17,6 +18,7 @@ import { demoNetworkData } from '@/sdk/mock-data'
 import { createMockNetwork } from '@/sdk/mock-network'
 import type { HostAction } from '@/sdk/types'
 import { useSessionStore } from '@/stores/session'
+import { blockStorage, fillStorage } from '@/test/storage'
 import { toasts } from '@/ui/toast'
 import { createOfferForm, draftKey, type FormState, type OfferForm } from './offer-form'
 
@@ -153,6 +155,65 @@ describe('the draft on the device', () => {
     expect(stored()).toMatchObject({ caption: 'Велосипед' })
     expect(stored()!.updatedAt).toBe(form.savedAt.value)
     setItem.mockRestore()
+    wrapper.unmount()
+  })
+
+  it('storage refused: the form does not claim the draft is saved, and keeps it for this visit', async () => {
+    const { form, wrapper } = await setup()
+    const restore = blockStorage()
+    try {
+      vi.useFakeTimers()
+      form.draft.value!.caption = 'Велосипед'
+      await nextTick()
+      await vi.advanceTimersByTimeAsync(500)
+      expect(form.savedAt.value).toBeNull()
+      expect(form.notKept.value).toBe(true)
+      wrapper.unmount()
+      // The draft preview and the form opened again in this visit read it.
+      expect(readDraft(readStored(draftKey(null, ME), null))?.caption).toBe('Велосипед')
+    } finally {
+      restore()
+      removeStored(draftKey(null, ME))
+    }
+  })
+
+  it('storage refused, «Начать заново»: the warning goes with the draft', async () => {
+    const { form, wrapper } = await setup()
+    const restore = blockStorage()
+    try {
+      vi.useFakeTimers()
+      form.draft.value!.caption = 'Велосипед'
+      await nextTick()
+      await vi.advanceTimersByTimeAsync(500)
+      expect(form.notKept.value).toBe(true)
+      await form.discard()
+      expect(form.notKept.value).toBe(false)
+      expect(readStored(draftKey(null, ME), null)).toBeNull()
+      wrapper.unmount()
+    } finally {
+      restore()
+    }
+  })
+
+  it('storage full, then room again: «сохранён» only once it is on the device', async () => {
+    const { form, wrapper } = await setup()
+    vi.useFakeTimers()
+    const restore = fillStorage()
+    try {
+      form.draft.value!.caption = 'Велосипед'
+      await nextTick()
+      await vi.advanceTimersByTimeAsync(500)
+      expect(form.savedAt.value).toBeNull()
+      expect(form.notKept.value).toBe(true)
+    } finally {
+      restore()
+    }
+    form.draft.value!.caption = 'Велосипед горный'
+    await nextTick()
+    await vi.advanceTimersByTimeAsync(500)
+    expect(form.savedAt.value).not.toBeNull()
+    expect(form.notKept.value).toBe(false)
+    expect(stored()).toMatchObject({ caption: 'Велосипед горный' })
     wrapper.unmount()
   })
 

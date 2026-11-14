@@ -198,6 +198,14 @@ const publishLabel = computed(() => {
       <UiAlert v-if="form.activating.value" tone="info" busy data-testid="create-activating">
         {{ t('create.activating') }}
       </UiAlert>
+      <!-- Storage blocked or full: the draft lives only until the app is closed. -->
+      <UiAlert
+        v-if="form.notKept.value && !form.published.value"
+        tone="warning"
+        data-testid="create-not-kept"
+      >
+        {{ t('create.notKept') }}
+      </UiAlert>
       <UiAlert
         v-if="form.restoredAt.value && !form.published.value"
         class="cf__restored"

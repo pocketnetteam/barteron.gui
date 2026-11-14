@@ -17,8 +17,8 @@ import {
   type LatLng,
   type LeafletBoundsJson,
 } from '@/lib/geohash'
-import { readStored, userKey, writeStored } from '@/lib/storage'
 import { useSessionStore } from './session'
+import { useUserStored } from './stored'
 
 /** What the old app kept under `<address>_location`: the map view the feed is filtered by. */
 export interface StoredLocation {
@@ -60,23 +60,13 @@ export function cityOf(place: NominatimPlace): string | null {
 /** Place filter of the catalog and the device location. */
 export const useLocationStore = defineStore('location', () => {
   const session = useSessionStore()
-  const stored = ref<StoredLocation>(EMPTY)
+  const kept = useUserStored('location', EMPTY, valid)
+  const stored = kept.value
   /** Device location from Bastyon, once known. */
   const device = shallowRef<LatLng | null>(null)
   const deviceStatus = ref<'unknown' | 'locating' | 'ok' | 'denied' | 'failed'>('unknown')
 
-  watch(
-    () => session.address,
-    (address) => {
-      stored.value = valid(readStored(userKey('location', address), EMPTY))
-    },
-    { immediate: true }
-  )
-
-  function save(value: StoredLocation) {
-    stored.value = value
-    writeStored(userKey('location', session.address), value)
-  }
+  const save = kept.set
 
   function set(value: Partial<StoredLocation>) {
     save(valid({ ...stored.value, ...value }))

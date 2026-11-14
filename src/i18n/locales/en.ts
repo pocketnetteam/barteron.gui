@@ -1171,6 +1171,8 @@ const en: Messages = {
       pickupPoints: 'Choose at least one pickup point or turn this option off',
       videoMissing: 'The video was not found. Delete it or check again',
     },
+    notKept:
+      'The draft is not being saved on this device: the browser does not let the app store data. If you close the app, the draft will be lost',
   },
   txError: {
     fee: 'The minimum relay fee was not met',
@@ -2055,6 +2057,8 @@ const en: Messages = {
       saved: 'Your offer draft and favourites are kept on this device',
       restart: 'Restart',
       hint: 'If the button does not help, close the mini-app by hand',
+      notSaved:
+        'The draft and favourites will not be kept: the browser does not let the app store data on this device',
     },
     permissions: {
       title: 'Permissions needed',

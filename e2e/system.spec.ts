@@ -181,6 +181,54 @@ test('a piece of the app that did not load: «Вышла новая версия
   await expect(page.getByTestId('version-restart')).toBeVisible()
 })
 
+test('storage the browser refuses: the app works, and says what will not survive a restart', async ({
+  page,
+}) => {
+  // Chrome in incognito blocks site data of a frame from another origin:
+  // Bastyon on the web opens Barteron in one, and `localStorage` throws.
+  await page.addInitScript(() => {
+    const real = window.localStorage
+    Object.defineProperty(window, 'localStorage', {
+      configurable: true,
+      get() {
+        // The dev server only: Vue devtools in Pinia read it unguarded at start.
+        // The production bundle has no such code (AUDIT.md, stage 25).
+        if (new Error().stack?.includes('/deps/pinia.js')) return real
+        throw new DOMException('Access is denied for this document.', 'SecurityError')
+      },
+    })
+  })
+  const errors: string[] = []
+  page.on('pageerror', (e) => errors.push(e.message))
+
+  await page.goto('/')
+  await expect(page.getByTestId('home')).toBeVisible()
+  // Nothing remembers «Не сейчас» from before: the renewal reminder comes up.
+  await page
+    .getByRole('dialog', { name: /Продлить/ })
+    .getByRole('button', { name: 'Не сейчас' })
+    .click()
+
+  await spaGo(page, '/barter/create')
+  await page.getByTestId('create-caption').fill('Горный велосипед')
+  await expect(page.getByTestId('create-not-kept')).toContainText('не сохраняется')
+  await expect(page.getByTestId('create-saved')).toHaveCount(0)
+  // The draft preview and the form again, in the same visit: the draft is still there.
+  await spaGo(page, '/barter/draft')
+  await expect(page.getByTestId('item-title')).toHaveText('Горный велосипед')
+  await spaGo(page, '/barter/create')
+  await expect(page.getByTestId('create-caption')).toHaveValue('Горный велосипед')
+
+  // «Вышла новая версия» does not promise the draft is on the device.
+  await page.route('**/src/views/info/AboutView.vue*', (route) => route.abort())
+  await spaGo(page, '/about').catch(() => undefined)
+  const dialog = page.getByRole('alertdialog')
+  await expect(dialog).toContainText('Вышла новая версия Barteron')
+  await expect(dialog).toContainText('не сохранятся')
+  await expect(dialog).not.toContainText('сохранены на устройстве')
+  expect(errors).toEqual([])
+})
+
 test('the node stops answering: «Нет связи с сетью», then back', async ({ page }) => {
   await page.goto('/')
   await expect(page.getByTestId('home')).toBeVisible()

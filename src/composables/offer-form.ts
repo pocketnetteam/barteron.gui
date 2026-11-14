@@ -19,7 +19,7 @@ import { hangIfBanned } from '@/config/ban'
 import { isPickupPointOwner } from '@/config/delivery'
 import { dataUrlBytes, isPhotoFile, shrinkPhoto } from '@/lib/image'
 import { createLimiter } from '@/lib/limit'
-import { readStored, userKey, writeStored } from '@/lib/storage'
+import { readStored, removeStored, userKey, writeStored } from '@/lib/storage'
 import {
   draftFromOffer,
   draftHasContent,
@@ -97,7 +97,13 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
   const draft = ref<OfferDraft | null>(null)
   /** A draft found on the device when the form opened: «Продолжаем черновик». */
   const restoredAt = ref<number | null>(null)
+  /** When the draft last went to the device. */
   const savedAt = ref<number | null>(null)
+  /**
+   * The device would not take the draft (storage blocked or full): it lives
+   * until the app restarts, and the form says so instead of «сохранён».
+   */
+  const notKept = ref(false)
   /** What the form started from, to tell whether anything changed. */
   let initial = ''
   const published = ref(false)
@@ -164,8 +170,12 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
     // Nothing typed yet, or an edit with no changes: nothing worth keeping.
     if (editing.value ? !dirty.value : !draftHasContent(value)) return
     const now = Date.now()
-    writeStored(draftKey(hash.value, me.value), { ...storedDraft(value), updatedAt: now })
-    savedAt.value = now
+    const kept = writeStored(draftKey(hash.value, me.value), {
+      ...storedDraft(value),
+      updatedAt: now,
+    })
+    savedAt.value = kept ? now : null
+    notKept.value = !kept
   }
 
   let saveTimer: ReturnType<typeof setTimeout> | undefined
@@ -180,12 +190,9 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
   )
 
   function forgetStored() {
-    try {
-      localStorage.removeItem(draftKey(hash.value, me.value))
-    } catch {
-      // Storage unavailable: nothing was kept anyway.
-    }
+    removeStored(draftKey(hash.value, me.value))
     savedAt.value = null
+    notKept.value = false
   }
 
   /** «Начать заново»: the stored draft goes, and a video uploaded for it leaves the storage. */
@@ -648,6 +655,7 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
     draft,
     restoredAt,
     savedAt,
+    notKept,
     dirty,
     discard,
     activating,

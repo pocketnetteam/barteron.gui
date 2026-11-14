@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { storageKeepsAll } from '@/lib/storage'
 import UiButton from '@/ui/UiButton.vue'
 import SystemState from './SystemState.vue'
 
@@ -8,11 +9,13 @@ import SystemState from './SystemState.vue'
  * «Вышла новая версия Barteron» (s8-conflict-mobile): a piece of the app did
  * not load because a new version replaced the files. Nothing to close: the
  * page cannot go on without a restart. Drafts and favourites are in
- * localStorage, so they survive it. It lives in the main bundle, so it draws
- * its own overlay instead of the lazy-loaded dialog parts.
+ * localStorage, so they survive it — unless the browser would not take them,
+ * and then the window says so. It lives in the main bundle, so it draws its
+ * own overlay instead of the lazy-loaded dialog parts.
  */
 const { t } = useI18n()
 const button = ref<{ $el: HTMLElement } | null>(null)
+const kept = storageKeepsAll()
 
 onMounted(() => button.value?.$el.focus())
 
@@ -38,7 +41,11 @@ function restart() {
           tone="primary"
           :title="t('system.version.title')"
           :text="t('system.version.text')"
-          :notes="[{ ok: true, text: t('system.version.saved') }]"
+          :notes="[
+            kept
+              ? { ok: true, text: t('system.version.saved') }
+              : { ok: false, text: t('system.version.notSaved') },
+          ]"
         >
           <UiButton ref="button" block data-testid="version-restart" @click="restart">{{
             t('system.version.restart')

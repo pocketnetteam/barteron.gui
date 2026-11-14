@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import { computed, ref, watchEffect } from 'vue'
+import { computed, onScopeDispose, ref, watch, watchEffect } from 'vue'
+import { onStorageChange, readStored, userKey } from '@/lib/storage'
 import { useSessionStore } from './session'
 
 export type Theme = 'light' | 'dark'
@@ -28,14 +29,15 @@ export function resolveTheme(
   return hostTheme ?? (systemDark ? 'dark' : 'light')
 }
 
-function readPreference(): ThemePreference {
+/** The choice made in this version; `null` — none yet. */
+function storedPreference(): ThemePreference | null {
   try {
     const value = localStorage.getItem(STORAGE_KEY)
     if (value === 'light' || value === 'dark' || value === 'system') return value
   } catch {
     // Storage can be blocked in a third-party iframe.
   }
-  return 'system'
+  return null
 }
 
 function writePreference(value: ThemePreference): void {
@@ -47,13 +49,46 @@ function writePreference(value: ThemePreference): void {
 }
 
 /**
+ * The old app's choice, `<address>_theme` (barteron.gui `stores/theme.js`):
+ * `inherit` (default), `light`, `navy` or `dark`. The navy theme is gone, it
+ * was a dark one.
+ */
+function oldPreference(address: string): Theme | null {
+  const value = readStored<unknown>(userKey('theme', address), null)
+  if (value === 'light') return 'light'
+  return value === 'dark' || value === 'navy' ? 'dark' : null
+}
+
+/**
  * Theme: the user's choice (Системная / Светлая / Тёмная, settings in stage 6).
  * «Системная» follows the Bastyon host theme inside the host — like `inherit`
  * in the old app — and the OS setting outside it.
  */
 export const useThemeStore = defineStore('theme', () => {
   const session = useSessionStore()
-  const preference = ref<ThemePreference>(readPreference())
+  const preference = ref<ThemePreference>(storedPreference() ?? 'system')
+
+  // A theme picked in the old app carries over once, when the address is
+  // known; the key is per user there and global here.
+  watch(
+    () => session.address,
+    (address) => {
+      if (!address || storedPreference() !== null) return
+      const old = oldPreference(address)
+      if (old) setPreference(old)
+    },
+    { immediate: true }
+  )
+
+  // Picked in another tab of the app.
+  onScopeDispose(
+    onStorageChange(
+      () => STORAGE_KEY,
+      () => {
+        preference.value = storedPreference() ?? 'system'
+      }
+    )
+  )
 
   const media = typeof window.matchMedia === 'function' ? window.matchMedia(DARK_QUERY) : null
   const systemDark = ref(media?.matches ?? false)

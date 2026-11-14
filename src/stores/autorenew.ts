@@ -43,7 +43,9 @@ export const useAutorenewStore = defineStore('autorenew', () => {
 
   /** My offers to offer for renewal now, unless the reminder was put off. */
   function due(mine: readonly Offer[], now = Date.now()): Offer[] {
-    if (now - snoozed.value.value < RENEW_SNOOZE_MS) return []
+    // A stamp from the future (the clock was wrong then) puts nothing off.
+    const since = now - snoozed.value.value
+    if (since >= 0 && since < RENEW_SNOOZE_MS) return []
     return mine.filter((o) => isOn(o.hash) && dueForRenewal(o, now))
   }
 
