@@ -34,6 +34,38 @@ describe('PriceTag', () => {
     expect(free.classes()).toContain('price--free')
   })
 
+  it('no rate for a price set in a currency: the seller\u2019s price, never «0 PKOIN»', () => {
+    const fixed = { amount: 4200, currency: 'RUB' }
+    expect(plain(mountUi(PriceTag, { props: { price: { pkoin: null, fixed } } }).text())).toBe(
+      '4 200 ₽'
+    )
+    // The equivalent in the same currency is the same price: not twice.
+    expect(
+      plain(
+        mountUi(PriceTag, { props: { price: { pkoin: null, fixed, equivalent: fixed } } }).text()
+      )
+    ).toBe('4 200 ₽')
+    expect(
+      plain(
+        mountUi(PriceTag, {
+          props: { price: { pkoin: null, fixed, from: true }, noEquivalent: true },
+        }).text()
+      )
+    ).toBe('от 4 200 ₽')
+    // Nothing known at all.
+    expect(plain(mountUi(PriceTag, { props: { price: { pkoin: null } } }).text())).toBe('—')
+  })
+
+  it('a price above all PKOIN in existence is not a number to show (old «Более 100%»)', () => {
+    const w = mountUi(PriceTag, {
+      props: { price: { pkoin: 90_000_000_000, equivalent: { amount: 1e12, currency: 'RUB' } } },
+    })
+    expect(plain(w.text())).toBe('Больше, чем всего выпущено PKOIN')
+    expect(plain(mountUi(PriceTag, { props: { price: { pkoin: 24_375_000 } } }).text())).toBe(
+      '24 375 000 PKOIN'
+    )
+  })
+
   it('follows the locale', () => {
     const w = mountUi(PriceTag, {
       locale: 'en',

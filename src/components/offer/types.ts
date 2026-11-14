@@ -15,6 +15,11 @@ export interface OfferPrice {
   from?: boolean
   /** Null when there is no rate: only PKOIN is shown (principle 04). */
   equivalent?: Money | null
+  /**
+   * The seller's price in a currency (`currencyPrice`). With no rate for it the
+   * PKOIN amount is unknown (`pkoin: null`), and this price is shown instead.
+   */
+  fixed?: Money | null
 }
 
 /** One entry of «Меняю на». */

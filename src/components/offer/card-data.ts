@@ -77,6 +77,7 @@ export function offerCardData(offer: Offer, ctx: CardContext): OfferCardData {
   })
   const free = isForNothing(offer)
   const photo = offer.images[0]
+  const fixed = free ? null : fixedCurrencyPrice(offer)
 
   return {
     id,
@@ -89,6 +90,7 @@ export function offerCardData(offer: Offer, ctx: CardContext): OfferCardData {
       free,
       from: isPriceFrom(offer),
       equivalent: free ? null : offerEquivalent(offer, ctx.currency, ctx.rates),
+      fixed: fixed ? { amount: fixed.amount, currency: fixed.currency } : null,
     },
     exchange,
     // An empty list means «anything» (the old app showed «Всё остальное»).

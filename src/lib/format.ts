@@ -25,21 +25,47 @@ export function formatPkoin(value: number, locale: string): string {
   }).format(value)
 }
 
-/** «4 200 ₽», «$42.50», «12 400 RSD». */
+/**
+ * Signs of the currencies in the picker, as the old app showed them. Intl has
+ * its own for some: the Belarusian rouble is «р.» in Russian — read as the
+ * Russian one — and «BYN» in English.
+ */
+export const CURRENCY_SYMBOLS = {
+  USD: '$',
+  EUR: '€',
+  RUB: '₽',
+  BYN: 'Br',
+  UAH: '₴',
+  KZT: '₸',
+} as const
+
+const symbolOf = (currency: string): string | undefined =>
+  (CURRENCY_SYMBOLS as Record<string, string | undefined>)[currency]
+
+/** «4 200 ₽», «$42.50», «12 400 RSD»; a non-zero amount below a cent — «< $0.01». */
 export function formatMoney(amount: number, currency: string, locale: string): string {
   const digits = Math.abs(amount) >= 100 ? 0 : 2
+  const tiny = amount > 0 && amount < 0.01
+  const value = tiny ? 0.01 : amount
+  const symbol = symbolOf(currency)
+  let text: string
   try {
-    return formatter(locale, {
+    // The locale puts the sign before or after the number; the sign itself is ours.
+    text = formatter(locale, {
       style: 'currency',
       currency,
       currencyDisplay: 'narrowSymbol',
       minimumFractionDigits: digits,
       maximumFractionDigits: digits,
-    }).format(amount)
+    })
+      .formatToParts(value)
+      .map((part) => (part.type === 'currency' && symbol ? symbol : part.value))
+      .join('')
   } catch {
-    // Unknown currency code or no narrowSymbol support: number and code.
-    return `${formatter(locale, { maximumFractionDigits: digits }).format(amount)} ${currency}`
+    // Unknown currency code or no narrowSymbol support: number and sign or code.
+    text = `${formatter(locale, { maximumFractionDigits: digits }).format(value)} ${symbol ?? currency}`
   }
+  return tiny ? `< ${text}` : text
 }
 
 /** Shortened hash or address for mono text: «3a9f…c41e». */

@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { formatMoney, formatPkoin } from '@/lib/format'
+import { PKOIN_TOTAL_SUPPLY } from '@/models/offer'
 import type { OfferPrice } from './types'
 
 /**
@@ -25,16 +26,33 @@ const props = withDefaults(
 
 const { t, locale } = useI18n()
 
+const pkoin = computed(() => {
+  const value = props.price.pkoin
+  return typeof value === 'number' && Number.isFinite(value) ? value : null
+})
+/** More than all PKOIN in existence: no real price (old «Более 100%»). */
+const overSupply = computed(() => pkoin.value !== null && pkoin.value > PKOIN_TOTAL_SUPPLY)
+
 const main = computed(() => {
   if (props.price.free) return t('price.free')
-  const value = props.price.pkoin ?? 0
-  const amount = `${formatPkoin(value, locale.value)} PKOIN`
+  if (overSupply.value) return t('price.overSupply')
+  const fixed = props.price.fixed
+  // No rate for the seller's currency: their price as set, not «0 PKOIN».
+  const amount =
+    pkoin.value !== null
+      ? `${formatPkoin(pkoin.value, locale.value)} PKOIN`
+      : fixed
+        ? formatMoney(fixed.amount, fixed.currency, locale.value)
+        : null
+  if (!amount) return '—'
   return props.price.from ? t('price.from', { amount }) : amount
 })
 
 const equivalent = computed(() => {
   const eq = props.price.equivalent
   if (props.noEquivalent || props.price.free || !eq) return null
+  // Next to a PKOIN amount only: otherwise the main line already is a currency price.
+  if (pkoin.value === null || overSupply.value) return null
   return `≈ ${formatMoney(eq.amount, eq.currency, locale.value)}`
 })
 </script>

@@ -10,6 +10,7 @@
  */
 
 import type { Money } from '@/components/offer/types'
+import { CURRENCY_SYMBOLS } from '@/lib/format'
 
 export interface Currency {
   code: string
@@ -20,12 +21,12 @@ export interface Currency {
 
 /** Same list and order as the old app (`src/i18n/index.js`, `currencies`). */
 export const CURRENCIES: readonly Currency[] = [
-  { code: 'USD', symbol: '$', locale: 'en' },
-  { code: 'EUR', symbol: '€', locale: 'en' },
-  { code: 'RUB', symbol: '₽', locale: 'ru' },
-  { code: 'BYN', symbol: 'Br', locale: 'ru' },
-  { code: 'UAH', symbol: '₴', locale: 'ru' },
-  { code: 'KZT', symbol: '₸', locale: 'ru' },
+  { code: 'USD', symbol: CURRENCY_SYMBOLS.USD, locale: 'en' },
+  { code: 'EUR', symbol: CURRENCY_SYMBOLS.EUR, locale: 'en' },
+  { code: 'RUB', symbol: CURRENCY_SYMBOLS.RUB, locale: 'ru' },
+  { code: 'BYN', symbol: CURRENCY_SYMBOLS.BYN, locale: 'ru' },
+  { code: 'UAH', symbol: CURRENCY_SYMBOLS.UAH, locale: 'ru' },
+  { code: 'KZT', symbol: CURRENCY_SYMBOLS.KZT, locale: 'ru' },
 ]
 
 /** Currencies of the interface language first, the rest after (old `currencies.sort`). */
@@ -65,6 +66,10 @@ async function getJson(url: string, fetcher: Fetch): Promise<unknown> {
 const positive = (value: unknown): number | null =>
   typeof value === 'number' && Number.isFinite(value) && value > 0 ? value : null
 
+/** A JSON object (a list too: it has no currency keys) as is; a string, `null` — empty. */
+const plain = (value: unknown): Record<string, unknown> =>
+  !!value && typeof value === 'object' ? (value as Record<string, unknown>) : {}
+
 export async function fetchRates(
   codes: readonly string[] = CURRENCIES.map((c) => c.code),
   fetcher: Fetch = fetch
@@ -73,24 +78,27 @@ export async function fetchRates(
     `${COINGECKO}?${new URLSearchParams({ ids: PKOIN_ID, vs_currencies: codes.join(',').toLowerCase() })}`,
     fetcher
   )
-  const raw = (gecko as Record<string, Record<string, unknown>>)?.[PKOIN_ID] ?? {}
+  // Only the currencies asked for: an answer of another shape gives nothing, not junk keys.
+  const raw = plain(plain(gecko)[PKOIN_ID])
   const rates: Record<string, number> = {}
-  for (const [key, value] of Object.entries(raw)) {
-    const rate = positive(value)
-    if (rate) rates[key.toUpperCase()] = rate
+  for (const code of codes) {
+    const rate = positive(raw[code.toLowerCase()])
+    if (rate) rates[code] = rate
   }
 
   const usd = rates.USD
   const missing = codes.filter((code) => !rates[code])
   if (usd && missing.length) {
     try {
-      const cross = (await getJson(
-        `${CRYPTOCOMPARE}?${new URLSearchParams({ fsym: 'USD', tsyms: missing.join(',') })}`,
-        fetcher
-      )) as Record<string, unknown>
-      for (const [key, value] of Object.entries(cross ?? {})) {
-        const perUsd = positive(value)
-        if (perUsd) rates[key.toUpperCase()] = Number((perUsd * usd).toFixed(6))
+      const cross = plain(
+        await getJson(
+          `${CRYPTOCOMPARE}?${new URLSearchParams({ fsym: 'USD', tsyms: missing.join(',') })}`,
+          fetcher
+        )
+      )
+      for (const code of missing) {
+        const perUsd = positive(cross[code])
+        if (perUsd) rates[code] = Number((perUsd * usd).toFixed(6))
       }
     } catch {
       // Cross rates are a bonus: keep what coingecko gave.

@@ -94,6 +94,28 @@ describe('offerCardData', () => {
     expect(card.price).toMatchObject({ pkoin: 3900, equivalent: null })
   })
 
+  it('a price set in a currency goes along: shown when there is no rate for it', () => {
+    const priced = offer({ currencyPrice: { currency: 'rub', price: '24000' } })
+    expect(offerCardData(priced, { ...ctx, rates: { USD: 0.02 }, currency: 'USD' }).price).toEqual({
+      pkoin: null,
+      free: false,
+      from: false,
+      equivalent: null,
+      fixed: { amount: 24000, currency: 'RUB' },
+    })
+    expect(offerCardData(offer(), ctx).price.fixed).toBeNull()
+    // «1e999» is no price: the PKOIN one stands.
+    expect(
+      offerCardData(offer({ currencyPrice: { currency: 'RUB', price: '1e999' } }), ctx).price
+    ).toMatchObject({ pkoin: 3900, fixed: null })
+    expect(
+      offerCardData(
+        offer({ tags: ['for_nothing'], currencyPrice: { currency: 'RUB', price: 5 } }),
+        ctx
+      ).price.fixed
+    ).toBeNull()
+  })
+
   it('withdrawn or expired → inactive; a transaction on its way → pending', () => {
     expect(offerCardData(offer({ published: 'withdrawed' }), ctx).state).toBe('inactive')
     expect(offerCardData(offer({ till: NOW - 1 }), ctx).state).toBe('inactive')

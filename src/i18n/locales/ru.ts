@@ -77,6 +77,7 @@ const ru = {
   price: {
     free: 'Бесплатно',
     from: 'от {amount}',
+    overSupply: 'Больше, чем всего выпущено PKOIN',
   },
   exchange: {
     label: 'Меняю на:',

@@ -79,6 +79,7 @@ const sr: Messages = {
   price: {
     free: 'Бесплатно',
     from: 'од {amount}',
+    overSupply: 'Више него што постоји PKOIN',
   },
   exchange: {
     label: 'Мењам за:',

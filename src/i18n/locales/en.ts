@@ -78,6 +78,7 @@ const en: Messages = {
   price: {
     free: 'Free',
     from: 'from {amount}',
+    overSupply: 'More than all PKOIN in existence',
   },
   exchange: {
     label: 'Will swap for:',

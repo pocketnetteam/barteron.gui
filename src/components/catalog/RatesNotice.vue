@@ -10,14 +10,19 @@ import UiIcon from '@/ui/UiIcon.vue'
 /**
  * «Не получили курс RUB — показываем цены только в PKOIN» (s2-catalog-states):
  * prices stay, the equivalent is missing, and the rate can be asked again.
+ * Also when the rates came without the chosen one: coingecko answered, the
+ * cross rate from cryptocompare did not (PLAN, risk 10).
  */
 const { t } = useI18n()
 const rates = useRates()
 const currency = useCurrencyStore()
 const ui = useUiStore()
-const shown = computed(
-  () => !!currency.shown && rates.isError.value && !rates.data.value?.[currency.shown]
-)
+const shown = computed(() => {
+  const code = currency.shown
+  if (!code) return false
+  const data = rates.data.value
+  return data ? !data[code] : rates.isError.value
+})
 </script>
 
 <template>
