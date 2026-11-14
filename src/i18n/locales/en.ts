@@ -1496,6 +1496,7 @@ const en: Messages = {
     disconnect: 'Disconnect',
     loading: 'Checking the connection…',
     error: 'The notification service did not respond: {error}',
+    offline: 'no connection — the service may be blocked on your network. Try again later',
     reload: 'Update status',
     permission:
       'Barteron signs requests to the notification service with your Bastyon key. Allow signing to connect a bot.',

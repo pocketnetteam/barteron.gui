@@ -115,9 +115,42 @@ export function botAccountName(channel: NotifyChannel, input: string): string {
 export class NotifyError extends Error {
   constructor(
     message: string,
-    readonly status: number | null = null
+    readonly status: number | null = null,
+    /** No answer at all: a network failure or the time ran out (blocked, Tor, down). */
+    readonly offline = false
   ) {
     super(message)
+  }
+}
+
+/** As long as for rates and Nominatim: a blocked service must not keep the screen waiting. */
+export const P2P_TIMEOUT_MS = 15_000
+
+/**
+ * `fetch` with a time limit, its JSON read in it too; `null` when the body is
+ * not JSON. Rejects with `offline` on no answer. Not `AbortSignal.timeout`:
+ * Safari 15 lacks it.
+ */
+export async function postJson(
+  fetcher: (url: string, init: RequestInit) => Promise<Response>,
+  url: string,
+  init: RequestInit
+): Promise<{ response: Response; result: unknown }> {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), P2P_TIMEOUT_MS)
+  try {
+    const response = await fetcher(url, { ...init, signal: controller.signal })
+    const result: unknown = await response.json().catch(() => null)
+    return { response, result }
+  } catch (e) {
+    const timeout = controller.signal.aborted
+    throw new NotifyError(
+      timeout ? 'timeout' : e instanceof Error ? e.message : String(e),
+      null,
+      true
+    )
+  } finally {
+    clearTimeout(timer)
   }
 }
 
@@ -130,12 +163,11 @@ export interface NotifyTransport {
 export function createNotifyService(transport: NotifyTransport): NotifyService {
   async function post(path: string, body: unknown): Promise<unknown> {
     const signature = await transport.sign()
-    const response = await transport.fetch(`${NOTIFY_API}/${path}`, {
+    const { response, result } = await postJson(transport.fetch, `${NOTIFY_API}/${path}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Signature: JSON.stringify(signature) },
       body: JSON.stringify(body),
     })
-    const result: unknown = await response.json().catch(() => null)
     if (!response.ok) {
       const message = isJsonObject(result) ? str(result.message) : ''
       throw new NotifyError(message || `HTTP error: ${response.status}`, response.status)
@@ -164,6 +196,9 @@ export function createNotifyService(transport: NotifyTransport): NotifyService {
       const on = found.flatMap((r) =>
         r.status === 'fulfilled' && r.value?.enabled ? [r.value] : []
       )
+      // Not one channel could be asked: the service is out of reach, not «no subscription».
+      const failed = found.find((r) => r.status === 'rejected')
+      if (failed && found.every((r) => r.status === 'rejected')) throw failed.reason
       if (!on.length) return {}
       const data = Object.fromEntries(on.map((s) => [s.channel, { messageType: type }]))
       return parseDeliveries(await post('notifications/messages', { address, data }))

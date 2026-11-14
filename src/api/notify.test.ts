@@ -1,9 +1,10 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { createMockNotify } from '@/sdk/mock-notify'
 import {
   botAccountName,
   createNotifyService,
   NOTIFY_API,
+  NotifyError,
   parseDeliveries,
   parseSubscription,
   type NotifyTransport,
@@ -117,6 +118,17 @@ describe('notify service: the old requests', () => {
     })
   })
 
+  it('a subscription switched off gets nothing', async () => {
+    const { t, calls } = transport({
+      'telegram-notifications/subscriptions/get': {
+        body: { subscription: { telegram: 'anna', isEnabled: false } },
+      },
+      'vk-notifications/subscriptions/get': { body: { subscription: null } },
+    })
+    expect(await createNotifyService(t).send(ADDRESS, 'dialog')).toEqual({})
+    expect(calls.some((c) => c.path === 'notifications/messages')).toBe(false)
+  })
+
   it('nothing to send when nobody listens', async () => {
     const { t, calls } = transport({
       'telegram-notifications/subscriptions/get': { body: { subscription: null } },
@@ -133,6 +145,74 @@ describe('notify service: the old requests', () => {
     await expect(
       createNotifyService(t).connect('telegram', { address: ADDRESS, name: 'x', locale: 'en' })
     ).rejects.toThrow('chat not found')
+  })
+})
+
+describe('notify service: p2p.back out of reach (blocked, Tor, down)', () => {
+  /** Never answers; gives up only when the request is aborted. */
+  const hanging: NotifyTransport = {
+    sign: async () => ({ signature: 'sig' }),
+    fetch: (_url, init) =>
+      new Promise((_, reject) =>
+        init.signal?.addEventListener('abort', () => reject(new DOMException('', 'AbortError')))
+      ),
+  }
+
+  it('a request without an answer gives up after 15 s, as «no connection»', async () => {
+    vi.useFakeTimers()
+    try {
+      const result = createNotifyService(hanging)
+        .get('telegram', ADDRESS)
+        .catch((e: unknown) => e)
+      await vi.advanceTimersByTimeAsync(14_999)
+      let settled = false
+      void result.then(() => (settled = true))
+      await Promise.resolve()
+      expect(settled).toBe(false)
+      await vi.advanceTimersByTimeAsync(1)
+      const error = await result
+      expect(error).toBeInstanceOf(NotifyError)
+      expect((error as NotifyError).offline).toBe(true)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it('a network failure is «no connection»; an answer with an error is not', async () => {
+    const refused: NotifyTransport = {
+      sign: async () => ({}),
+      fetch: () => Promise.reject(new TypeError('Failed to fetch')),
+    }
+    const error = await createNotifyService(refused)
+      .disconnect('vk', ADDRESS)
+      .catch((e: unknown) => e)
+    expect(error).toMatchObject({ offline: true })
+    const { t } = transport({
+      'vk-notifications/subscriptions/delete': { status: 502, body: '<html>' },
+    })
+    const http = await createNotifyService(t)
+      .disconnect('vk', ADDRESS)
+      .catch((e: unknown) => e)
+    expect(http).toMatchObject({ offline: false, status: 502, message: 'HTTP error: 502' })
+    // A proxy's page instead of JSON: an answer all the same.
+    const proxy: NotifyTransport = {
+      sign: async () => ({}),
+      fetch: async () => new Response('<html>Bad gateway</html>', { status: 502 }),
+    }
+    const page = await createNotifyService(proxy)
+      .disconnect('vk', ADDRESS)
+      .catch((e: unknown) => e)
+    expect(page).toMatchObject({ offline: false, status: 502 })
+  })
+
+  it('the test message: the service out of reach is an error, not «no subscription»', async () => {
+    const refused: NotifyTransport = {
+      sign: async () => ({}),
+      fetch: () => Promise.reject(new TypeError('Failed to fetch')),
+    }
+    await expect(createNotifyService(refused).send(ADDRESS, 'test', ['telegram'])).rejects.toThrow(
+      NotifyError
+    )
   })
 })
 

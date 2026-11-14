@@ -4,6 +4,7 @@ import {
   botAccountName,
   createNotifyService,
   NOTIFY_CHANNELS,
+  NotifyError,
   type NotifyChannel,
   type NotifyService,
   type NotifySubscription,
@@ -117,9 +118,17 @@ export function useBotChannel(channel: NotifyChannel, signing: MaybeRefOrGetter<
 
   const service = computed(() => (session.sdk ? notifyServiceFor(session.sdk, session.mode) : null))
 
+  /** The service's own words; «нет связи» instead of the browser's «Failed to fetch». */
+  const reason = (e: unknown) =>
+    e instanceof NotifyError && e.offline
+      ? t('notify.offline')
+      : e instanceof Error
+        ? e.message
+        : String(e)
+
   function fail(e: unknown) {
     console.error(`[barteron] ${channel} notifications:`, e)
-    error.value = e instanceof Error ? e.message : String(e)
+    error.value = reason(e)
     state.value = 'error'
   }
 
@@ -195,7 +204,7 @@ export function useBotChannel(channel: NotifyChannel, signing: MaybeRefOrGetter<
               : t(`notify.testReason.${result?.status ?? 'not_found'}`),
         }
     } catch (e) {
-      test.value = { kind: 'failed', reason: e instanceof Error ? e.message : String(e) }
+      test.value = { kind: 'failed', reason: reason(e) }
     }
   }
 

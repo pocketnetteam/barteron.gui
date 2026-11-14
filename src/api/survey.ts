@@ -9,7 +9,7 @@
  */
 
 import { isJsonObject, str } from '@/models/tx'
-import { NOTIFY_API } from './notify'
+import { NOTIFY_API, postJson } from './notify'
 
 export const SURVEY_API = `${NOTIFY_API}/survey`
 
@@ -48,13 +48,18 @@ export function surveyProblem(answers: SurveyAnswers): 'empty' | 'email' | null 
 }
 
 export function createSurveyService(fetcher: typeof fetch): SurveyService {
+  /** The answer's JSON, `null` if not JSON; no answer in 15 s is a survey error too. */
   async function post(path: string, body: unknown): Promise<unknown> {
-    const response = await fetcher(`${SURVEY_API}/${path}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json;charset=utf-8' },
-      body: JSON.stringify(body),
-    })
-    return response.json()
+    try {
+      const { result } = await postJson(fetcher, `${SURVEY_API}/${path}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json;charset=utf-8' },
+        body: JSON.stringify(body),
+      })
+      return result
+    } catch (e) {
+      throw new SurveyError(e instanceof Error ? e.message : String(e))
+    }
   }
 
   async function form(body: Record<string, string>): Promise<void> {

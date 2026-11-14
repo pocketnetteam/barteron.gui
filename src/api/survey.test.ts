@@ -1,5 +1,11 @@
 import { describe, expect, it, vi } from 'vitest'
-import { createSurveyService, parseSurveyStatus, SURVEY_API, surveyProblem } from './survey'
+import {
+  createSurveyService,
+  parseSurveyStatus,
+  SURVEY_API,
+  SurveyError,
+  surveyProblem,
+} from './survey'
 
 describe('survey on p2p.back', () => {
   it('reads `check` as the old app did: no status means new', () => {
@@ -34,6 +40,35 @@ describe('survey on p2p.back', () => {
     })
     expect(calls[0]![1].headers).not.toHaveProperty('Signature')
     expect(JSON.parse(String(calls[1]![1].body))).toEqual({ address: 'PAddr', status: 'rejected' })
+  })
+
+  it('out of reach: no answer in 15 s, a network failure or not JSON is a survey error', async () => {
+    vi.useFakeTimers()
+    try {
+      const hanging = vi.fn(
+        (_url: string, init?: RequestInit) =>
+          new Promise<Response>((_, reject) =>
+            init?.signal?.addEventListener('abort', () =>
+              reject(new DOMException('', 'AbortError'))
+            )
+          )
+      )
+      const result = createSurveyService(hanging as unknown as typeof fetch)
+        .status('P')
+        .catch((e: unknown) => e)
+      await vi.advanceTimersByTimeAsync(15_000)
+      expect(await result).toBeInstanceOf(SurveyError)
+    } finally {
+      vi.useRealTimers()
+    }
+    const refused = vi.fn(() => Promise.reject(new TypeError('Failed to fetch')))
+    await expect(
+      createSurveyService(refused as unknown as typeof fetch).status('P')
+    ).rejects.toBeInstanceOf(SurveyError)
+    const html = vi.fn(async () => new Response('<html>502</html>', { status: 502 }))
+    await expect(
+      createSurveyService(html as unknown as typeof fetch).status('P')
+    ).rejects.toBeInstanceOf(SurveyError)
   })
 
   it('fails when the service does not say success', async () => {
