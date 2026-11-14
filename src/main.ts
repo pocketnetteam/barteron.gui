@@ -9,6 +9,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import { createQueryClient, installTxRefresh } from './api/queries'
 import { i18n, setLocale } from './i18n'
+import { installErrorHandler } from './lib/app-errors'
 import { createAppRouter } from './router'
 import { followHostRoutes } from './sdk/host-route'
 import { useLocaleStore } from './stores/locale'
@@ -20,6 +21,7 @@ const pinia = createPinia()
 const queryClient = createQueryClient()
 const router = createAppRouter()
 const app = createApp(App).use(pinia).use(VueQueryPlugin, { queryClient }).use(i18n).use(router)
+installErrorHandler(app)
 useThemeStore(pinia).apply()
 // Texts come per language: the first ones before anything is drawn.
 void setLocale(i18n.global.locale.value).then(() => app.mount('#app'))

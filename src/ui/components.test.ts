@@ -1,12 +1,14 @@
 import { flushPromises } from '@vue/test-utils'
 import { afterEach, describe, expect, it } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
+import PhotoViewer from '@/components/item/PhotoViewer.vue'
 import { mountUi } from '@/test/mount'
 import UiButton from './UiButton.vue'
 import UiDialog from './UiDialog.vue'
 import UiField from './UiField.vue'
 import UiInput from './UiInput.vue'
 import UiRating from './UiRating.vue'
+import UiScreen from './UiScreen.vue'
 import UiSelect from './UiSelect.vue'
 import UiTabs from './UiTabs.vue'
 
@@ -220,6 +222,96 @@ describe('UiDialog', () => {
     ok.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }))
     // Wraps to the first focusable element: the × button.
     expect(document.activeElement?.classList.contains('ui-dialog__close')).toBe(true)
+  })
+})
+
+describe('UiScreen', () => {
+  const overflow = () => document.documentElement.style.overflow
+
+  /** The phone catalog: filters, the category picker over them, the search of the layout. */
+  function mountScreens() {
+    const filters = ref(true)
+    const category = ref(false)
+    const search = ref(false)
+    const w = mountUi(
+      defineComponent({
+        setup: () => () => [
+          h(UiScreen, {
+            title: 'Фильтры',
+            open: filters.value,
+            'onUpdate:open': (v: boolean) => (filters.value = v),
+          }),
+          h(UiScreen, {
+            title: 'Категория',
+            open: category.value,
+            'onUpdate:open': (v: boolean) => (category.value = v),
+          }),
+          // A part of the page with a closed screen of its own, that comes and goes.
+          search.value ? h(UiScreen, { title: 'Поиск', open: false }) : null,
+        ],
+      })
+    )
+    return { w, filters, category, search }
+  }
+
+  it('the page under stays still while any screen is open', async () => {
+    const { w, filters, category, search } = mountScreens()
+    await nextTick()
+    expect(overflow()).toBe('hidden')
+    search.value = true
+    await nextTick()
+    expect(overflow()).toBe('hidden')
+    search.value = false
+    await nextTick()
+    expect(overflow()).toBe('hidden')
+    // The category picked over the filters: the filters are still open.
+    category.value = true
+    await nextTick()
+    category.value = false
+    await nextTick()
+    expect(overflow()).toBe('hidden')
+    filters.value = false
+    await nextTick()
+    expect(overflow()).toBe('')
+    w.unmount()
+  })
+
+  it('the photo viewer opened and closed over a screen leaves the page still', async () => {
+    const viewer = ref(false)
+    const shown = ref(true)
+    const w = mountUi(
+      defineComponent({
+        setup: () => () => [
+          h(UiScreen, { title: 'Пункт выдачи', open: true }),
+          shown.value
+            ? h(PhotoViewer, {
+                slides: [],
+                title: 'Планшет',
+                open: viewer.value,
+                'onUpdate:open': (v: boolean) => (viewer.value = v),
+              })
+            : null,
+        ],
+      })
+    )
+    await nextTick()
+    viewer.value = true
+    await nextTick()
+    viewer.value = false
+    await nextTick()
+    expect(overflow()).toBe('hidden')
+    shown.value = false
+    await nextTick()
+    expect(overflow()).toBe('hidden')
+    w.unmount()
+    expect(overflow()).toBe('')
+  })
+
+  it('a screen taken away while open lets the page scroll again', async () => {
+    const { w } = mountScreens()
+    await nextTick()
+    w.unmount()
+    expect(overflow()).toBe('')
   })
 })
 

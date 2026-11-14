@@ -3,6 +3,7 @@ import { computed, nextTick, onBeforeUnmount, ref, shallowRef, watch } from 'vue
 import { useI18n } from 'vue-i18n'
 import UiButton from '@/ui/UiButton.vue'
 import UiIcon from '@/ui/UiIcon.vue'
+import { pageScrollLock } from '@/ui/scroll-lock'
 import UiSpinner from '@/ui/UiSpinner.vue'
 import type { GallerySlide } from './gallery'
 
@@ -70,10 +71,11 @@ function onTouchEnd(event: TouchEvent) {
   startX = null
 }
 
+const lockPage = pageScrollLock()
 watch(
   open,
   async (value) => {
-    document.documentElement.style.overflow = value ? 'hidden' : ''
+    lockPage(value)
     if (value) {
       returnFocus = document.activeElement as HTMLElement | null
       await nextTick()
@@ -87,7 +89,7 @@ watch(
 )
 onBeforeUnmount(() => {
   stopVideo()
-  document.documentElement.style.overflow = ''
+  lockPage(false)
 })
 </script>
 

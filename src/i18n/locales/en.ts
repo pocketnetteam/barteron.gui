@@ -16,6 +16,7 @@ const en: Messages = {
       retry: 'Try again',
       open: 'Open in Bastyon',
     },
+    error: 'Something went wrong. Try again, and if it does not work, restart the app',
   },
   status: {
     title: 'Barteron nextgen: scaffold',

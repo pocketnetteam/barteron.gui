@@ -2,6 +2,7 @@
 import { nextTick, onBeforeUnmount, ref, useId, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import UiIcon from './UiIcon.vue'
+import { pageScrollLock } from './scroll-lock'
 
 /**
  * A full-screen layer on the phone: search, categories, filters
@@ -28,9 +29,7 @@ function close() {
   emit('close')
 }
 
-function lock(on: boolean) {
-  document.documentElement.style.overflow = on ? 'hidden' : ''
-}
+const lock = pageScrollLock()
 
 watch(
   open,

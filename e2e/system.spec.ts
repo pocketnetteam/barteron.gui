@@ -229,6 +229,27 @@ test('storage the browser refuses: the app works, and says what will not survive
   expect(errors).toEqual([])
 })
 
+test('a bug nothing caught: the user is told instead of a button that does nothing', async ({
+  page,
+}) => {
+  await page.goto('/')
+  await expect(page.getByTestId('home')).toBeVisible()
+  const errors: string[] = []
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
+  // What Vue does with an error thrown in a click handler or a render.
+  await page.evaluate(() => {
+    type Handler = (error: unknown, instance: unknown, info: string) => void
+    const app = (
+      document.querySelector('#app') as unknown as {
+        __vue_app__: { config: { errorHandler?: Handler } }
+      }
+    ).__vue_app__
+    app.config.errorHandler?.(new TypeError('x is undefined'), null, 'component event handler')
+  })
+  await expect(page.getByText('Что-то пошло не так')).toBeVisible()
+  expect(errors.some((e) => e.includes('x is undefined'))).toBe(true)
+})
+
 test('the node stops answering: «Нет связи с сетью», then back', async ({ page }) => {
   await page.goto('/')
   await expect(page.getByTestId('home')).toBeVisible()

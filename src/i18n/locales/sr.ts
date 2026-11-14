@@ -17,6 +17,7 @@ const sr: Messages = {
       retry: 'Покушај поново',
       open: 'Отвори у Bastyon-у',
     },
+    error: 'Нешто није у реду. Покушајте поново, а ако не успе — поново покрените апликацију',
   },
   status: {
     title: 'Barteron nextgen: костур',
