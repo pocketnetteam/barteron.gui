@@ -18,6 +18,7 @@ import { demoNetworkData } from '@/sdk/mock-data'
 import { createMockNetwork } from '@/sdk/mock-network'
 import type { HostAction } from '@/sdk/types'
 import { useSessionStore } from '@/stores/session'
+import { useTxStore } from '@/stores/tx'
 import { blockStorage, fillStorage } from '@/test/storage'
 import { toasts } from '@/ui/toast'
 import { createOfferForm, draftKey, type FormState, type OfferForm } from './offer-form'
@@ -390,6 +391,70 @@ describe('publishing', () => {
     expect(form.published.value).toBe(false)
     expect(form.canPublish.value).toBe(true)
     expect(stored()).not.toBeNull()
+    wrapper.unmount()
+  })
+
+  it('a retry after a refusal leaves one offer on its way, not a failed twin to resend', async () => {
+    const { form, wrapper } = await setup()
+    fill(form, { caption: '!error велосипед' })
+    await flushPromises()
+    expect(await form.publish()).toBe(false)
+    form.draft.value!.caption = 'Велосипед'
+    await flushPromises()
+    expect(await form.publish()).toBe(true)
+    // «Публикуются» in the cabinet: a failed twin there has its own «Повторить».
+    expect(useTxStore().pendingOffers.map((p) => [p.offer.caption, p.tx.status])).toEqual([
+      ['Велосипед', 'waiting'],
+    ])
+    wrapper.unmount()
+  })
+
+  it('only refused tries of a new offer go: an edit refused, an offer on its way stay', async () => {
+    const { form, wrapper } = await setup()
+    const txs = useTxStore()
+    // A renewal of another offer the node refused, shown in the cabinet as such.
+    await txs.send('offer', { hash: HASH, caption: '!error ноутбук' })
+    // «Разместить ещё»: the first offer is still waiting for its block.
+    fill(form, { caption: 'Первое' })
+    await flushPromises()
+    expect(await form.publish()).toBe(true)
+    form.reset()
+    fill(form, { caption: 'Второе' })
+    await flushPromises()
+    expect(await form.publish()).toBe(true)
+    expect(txs.items.map((t) => [(t.payload as { caption: string }).caption, t.status])).toEqual([
+      ['!error ноутбук', 'failed'],
+      ['Первое', 'waiting'],
+      ['Второе', 'waiting'],
+    ])
+    wrapper.unmount()
+  })
+
+  it('a new offer still on its way to the host stays when the form sends another', async () => {
+    const { form, sdk, wrapper } = await setup()
+    const txs = useTxStore()
+    const answer = deferred<HostAction>()
+    const send = sdk.barteron.offer
+    sdk.barteron.offer = () => answer.promise
+    void txs.send('offer', { hash: null, caption: 'В пути' })
+    await flushPromises()
+    sdk.barteron.offer = send
+    fill(form, { caption: 'Второе' })
+    await flushPromises()
+    expect(await form.publish()).toBe(true)
+    expect(txs.items.map((t) => t.status)).toEqual(['sending', 'waiting'])
+    answer.resolve({ transaction: 'bb'.repeat(32), completed: false })
+    wrapper.unmount()
+  })
+
+  it('publishing an edit leaves a refused new offer for the cabinet to retry', async () => {
+    const { form, wrapper } = await setup({ id: HASH, offer: myOffer() })
+    const txs = useTxStore()
+    await txs.send('offer', { hash: null, caption: '!error планшет' })
+    form.draft.value!.caption = 'Велосипед горный'
+    await flushPromises()
+    expect(await form.publish()).toBe(true)
+    expect(txs.items.map((t) => t.status)).toEqual(['failed', 'waiting'])
     wrapper.unmount()
   })
 

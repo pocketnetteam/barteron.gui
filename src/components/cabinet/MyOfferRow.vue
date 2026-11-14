@@ -11,9 +11,11 @@ import { useCardContext } from '@/components/offer/card-context'
 import { offerCardData } from '@/components/offer/card-data'
 import type { MyOfferItem } from '@/composables/cabinet-data'
 import { useOfferActions } from '@/composables/offer-actions'
+import { forgetSentDraft } from '@/composables/cabinet'
 import { formatDate } from '@/lib/format'
 import { offerLifecycle } from '@/models/offer'
 import { dueForRenewal, useAutorenewStore } from '@/stores/autorenew'
+import { useSessionStore } from '@/stores/session'
 import { netStatusOf, useTxStore } from '@/stores/tx'
 import { showToast } from '@/ui/toast'
 import UiBadge, { type BadgeTone } from '@/ui/UiBadge.vue'
@@ -31,6 +33,7 @@ const props = defineProps<{
 const { t, locale } = useI18n()
 const router = useRouter()
 const tx = useTxStore()
+const session = useSessionStore()
 const autorenew = useAutorenewStore()
 const cardCtx = useCardContext()
 
@@ -146,8 +149,11 @@ function onMenu(key: string) {
   else ask(key as Confirm)
 }
 
-function retryNew() {
-  if (newTx.value) void tx.retry(newTx.value.id)
+async function retryNew() {
+  const refused = newTx.value
+  if (!refused) return
+  const sent = await tx.retry(refused.id)
+  if (sent && sent.status !== 'failed') forgetSentDraft(session.address, refused.payload)
 }
 </script>
 

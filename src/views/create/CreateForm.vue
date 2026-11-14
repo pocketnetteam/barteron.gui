@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, type Component } from 'vue'
+import { computed, ref, watch, type Component } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { onBeforeRouteLeave, useRouter, type RouteLocationRaw } from 'vue-router'
 import StepExchange from '@/components/create/StepExchange.vue'
@@ -136,10 +136,17 @@ async function restart() {
   await form.discard()
 }
 
-// Publishing
+// Publishing: the progress opens once it went, from the footer button or
+// from «Повторить публикацию» on the review.
 const panelOpen = ref(false)
+watch(
+  () => form.published.value,
+  (published) => {
+    if (published) panelOpen.value = true
+  }
+)
 async function publish() {
-  if (await form.publish()) panelOpen.value = true
+  await form.publish()
 }
 
 const txSteps = computed<TxStep[]>(() => {

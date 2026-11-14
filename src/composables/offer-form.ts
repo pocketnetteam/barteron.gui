@@ -59,7 +59,6 @@ export type FormState = 'loading' | 'signin' | 'missing' | 'foreign' | 'error' |
 /** Where the form puts the draft: one for a new offer, one per edited offer. */
 export const draftKey = (hash: string | null, address: string | null): string =>
   userKey(hash ? `offer_draft_${hash}` : 'offer_draft', address)
-
 /**
  * Everything the offer form (s4) knows: the draft and where it is kept, the
  * steps and what is missing on each, photo uploads, the video and publishing.
@@ -606,6 +605,13 @@ export function createOfferForm(id: MaybeRefOrGetter<string | null | undefined>)
         return false
       }
 
+      // The draft is what goes now. A refused try of this new offer would stay
+      // in «Публикуются» with a «Повторить» of its own: a second copy on chain.
+      if (!editing.value) {
+        txStore.items
+          .filter((t) => t.kind === 'offer' && !t.target && t.status === 'failed')
+          .forEach((t) => txStore.dismiss(t.id))
+      }
       const tx = await txStore.send('offer', payload)
       publishTxId.value = tx.id
       if (tx.status === 'failed') {

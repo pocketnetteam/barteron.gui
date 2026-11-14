@@ -1,6 +1,7 @@
 import { computed, ref, toValue, type MaybeRefOrGetter } from 'vue'
-import { removeStored, readStored, storedKeys } from '@/lib/storage'
-import { draftEntries, type DraftEntry } from '@/models/draft'
+import { removeStored, readStored, storedKeys, userKey } from '@/lib/storage'
+import { draftEntries, readDraft, type DraftEntry } from '@/models/draft'
+import { isJsonObject } from '@/models/tx'
 import { useSessionStore } from '@/stores/session'
 
 /**
@@ -65,4 +66,18 @@ export function useMyDrafts(address: MaybeRefOrGetter<string | null | undefined>
   }
 
   return { entries, refresh: () => version.value++, remove }
+}
+
+/**
+ * A refused new offer that went out from the cabinet («Повторить»): the
+ * form's draft of it goes too (`draftKey(null, …)` in offer-form), or the form
+ * would offer to «continue» an offer already in the network and publish it
+ * twice. Only the draft of the same offer: one begun since with another
+ * title stays.
+ */
+export function forgetSentDraft(address: string | null, payload: unknown): void {
+  if (!address || !isJsonObject(payload) || typeof payload.caption !== 'string') return
+  const key = userKey('offer_draft', address)
+  const draft = readDraft(readStored<unknown>(key, null))
+  if (draft && draft.caption.trim() === payload.caption.trim()) removeStored(key)
 }

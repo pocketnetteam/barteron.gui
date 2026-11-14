@@ -30,6 +30,63 @@ const callsOf = (page: Page, method: string) =>
 
 const isPhone = (page: Page) => (page.viewportSize()?.width ?? 1440) < 768
 
+/** Navigation inside the app: transactions on their way live in memory only. */
+const spaGo = (page: Page, path: string) =>
+  page.evaluate((p) => {
+    const app = (
+      document.querySelector('#app') as unknown as {
+        __vue_app__: { config: { globalProperties: { $router: { push(p: string): unknown } } } }
+      }
+    ).__vue_app__
+    return app.config.globalProperties.$router.push(p)
+  }, path)
+
+const failNext = (page: Page, method: string) =>
+  page.evaluate(
+    (m) =>
+      (
+        window as unknown as { __barteronMock: { failNext(m: string): void } }
+      ).__barteronMock.failNext(m),
+    method
+  )
+
+const PIXEL =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+
+/** A new offer with every step filled, as the form keeps it on the device. */
+async function readyDraft(page: Page, caption: string) {
+  await page.addInitScript(
+    ({ me, draft }) =>
+      localStorage.setItem(
+        `${me}_offer_draft`,
+        JSON.stringify({ ...draft, updatedAt: Date.now() })
+      ),
+    {
+      me: ME,
+      draft: {
+        v: 1,
+        hash: null,
+        baseTxHash: null,
+        caption,
+        description: 'Почти новый, с чехлом.',
+        tag: 58069,
+        condition: 'new',
+        photos: [{ id: 'p1', url: PIXEL, status: 'ready', bytes: 68 }],
+        video: '',
+        exchange: 'own',
+        tags: [17],
+        price: '120',
+        currency: 'PKOIN',
+        fixCurrency: false,
+        geohash: 'ucfv0n1h4s3k',
+        selfPickup: { on: true, info: '' },
+        directDelivery: { on: false, info: '' },
+        pickupPoints: { on: false, ids: [] },
+      },
+    }
+  )
+}
+
 /** Pictures made in the page: PNG files for the photo input. */
 async function photos(page: Page, count: number) {
   const data = await page.evaluate(
@@ -183,6 +240,58 @@ test('the draft stays on the device; «Начать заново» clears it', a
   await expect(page.getByTestId('create-caption')).toHaveValue('')
 })
 
+test('refused, then «Повторить публикацию»: the progress shows, no failed twin in the cabinet', async ({
+  page,
+}) => {
+  await readyDraft(page, 'Планшет для повтора')
+  await page.goto('/barter/create?step=5')
+  await expect(page.getByTestId('create-publish')).toBeEnabled()
+  await expect(page.getByTestId('create-issues')).toHaveCount(0)
+  await failNext(page, 'barteron.offer')
+  await page.getByTestId('create-publish').click()
+  await page.getByRole('button', { name: 'Повторить публикацию' }).click()
+  await expect(page.getByTestId('create-panel')).toContainText('Данные отправлены на ноду')
+  await page.getByTestId('create-open-offer').click()
+  await expect(page.getByTestId('item-page')).toBeVisible()
+
+  await spaGo(page, `/profile/${ME}#ads`)
+  const rows = page.getByTestId('my-offer').filter({ hasText: 'Планшет для повтора' })
+  await expect(rows).toHaveCount(1)
+  await expect(rows.getByTestId('my-offer-status')).not.toContainText('Не опубликовано')
+  expect(await callsOf(page, 'barteron.offer')).toHaveLength(2)
+})
+
+test('refused, then published from the cabinet: the form does not offer it as a draft again', async ({
+  page,
+}) => {
+  await readyDraft(page, 'Планшет из кабинета')
+  await page.goto('/barter/create?step=5')
+  await expect(page.getByTestId('create-publish')).toBeEnabled()
+  await expect(page.getByTestId('create-issues')).toHaveCount(0)
+  await failNext(page, 'barteron.offer')
+  await page.getByTestId('create-publish').click()
+  await expect(page.getByRole('button', { name: 'Повторить публикацию' })).toBeVisible()
+
+  await spaGo(page, `/profile/${ME}#ads`)
+  const row = page.getByTestId('my-offer').filter({ hasText: 'Планшет из кабинета' })
+  await expect(row.getByTestId('my-offer-status')).toContainText('Не опубликовано')
+  const draftKept = () =>
+    page.evaluate((me) => localStorage.getItem(`${me}_offer_draft`) !== null, ME)
+  // Refused again: the draft stays.
+  await failNext(page, 'barteron.offer')
+  await row.getByRole('button', { name: 'Повторить' }).click()
+  await expect.poll(() => callsOf(page, 'barteron.offer').then((c) => c.length)).toBe(2)
+  await expect(row.getByTestId('my-offer-status')).toContainText('Не опубликовано')
+  expect(await draftKept()).toBe(true)
+  await row.getByRole('button', { name: 'Повторить' }).click()
+  // Once the host has taken it: the draft goes with that answer.
+  await expect(row.getByTestId('my-offer-status')).toContainText('В сети', { timeout: 10_000 })
+
+  await spaGo(page, '/barter/create')
+  await expect(page.getByTestId('create-caption')).toHaveValue('')
+  await expect(page.getByTestId('create-restored')).toHaveCount(0)
+})
+
 test('photos: a failed upload retries; no more than ten', async ({ page }) => {
   await page.goto('/barter/create?step=2')
   // The form shows once the mock host is connected.
@@ -216,6 +325,36 @@ test('video: Bastyon’s upload window, processing holds publishing', async ({ p
   await expect(page.getByTestId('create-video-add')).toBeVisible()
   // Uploaded here: it leaves Bastyon's storage too.
   expect(await callsOf(page, 'videos.remove')).toHaveLength(1)
+})
+
+test('the browser’s back and forward walk the steps; back out of an edit asks first', async ({
+  page,
+}) => {
+  // Opened from inside the app, so there is a page of it to go back to.
+  await page.goto('/')
+  await expect(page.getByTestId('home')).toBeVisible()
+  await spaGo(page, `/barter/edit/${LAPTOP}`)
+  await expect(page.getByTestId('create-caption')).toHaveValue('Ноутбук 14", 16 ГБ')
+  await page.getByTestId('create-caption').fill('Ноутбук 14", 16 ГБ, торг')
+  await page.getByTestId('create-next').click()
+  await expect(page).toHaveURL(/step=2/)
+  await page.goBack()
+  await expect(page.getByTestId('create-caption')).toHaveValue('Ноутбук 14", 16 ГБ, торг')
+  await page.goForward()
+  await expect(page).toHaveURL(/step=2/)
+  await page.goBack()
+  await expect(page).not.toHaveURL(/step=/)
+
+  // One more step back leaves the edit: the changes are not in the offer yet.
+  await page.goBack()
+  await expect(page.getByText('Выйти из редактирования?')).toBeVisible()
+  await page.getByTestId('confirm-cancel').click()
+  await expect(page).toHaveURL(new RegExp(`/barter/edit/${LAPTOP}`))
+  await expect(page.getByTestId('create-caption')).toHaveValue('Ноутбук 14", 16 ГБ, торг')
+
+  // A link to the middle of the form opens that step.
+  await spaGo(page, `/barter/edit/${LAPTOP}?step=3`)
+  await expect(page.getByTestId('create-quick-17')).toBeVisible()
 })
 
 test('editing my offer keeps its id; leaving with changes asks first', async ({ page }) => {
