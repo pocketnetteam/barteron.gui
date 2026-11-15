@@ -1,7 +1,8 @@
-import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query'
+import { onlineManager, QueryClient, VueQueryPlugin } from '@tanstack/vue-query'
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import type { Plugin } from 'vue'
 import { BarteronApi } from '@/api/barteron'
 import { i18n, setLocale } from '@/i18n'
 import NetBanner from '@/components/system/NetBanner.vue'
@@ -10,6 +11,7 @@ import { createMockNetwork } from '@/sdk/mock-network'
 import { OFFLINE_AFTER, useNetStore } from './net'
 
 beforeEach(() => setActivePinia(createPinia()))
+afterEach(() => onlineManager.setOnline(true))
 
 describe('«Нет связи с сетью»', () => {
   it('only a run of failed requests means the node is down; one answer clears it', () => {
@@ -28,6 +30,29 @@ describe('«Нет связи с сетью»', () => {
     net.report(true)
     expect(net.offline).toBe(false)
     expect(net.failures).toBe(0)
+  })
+
+  it('the device offline: the banner too — the query client holds reads instead of failing them', () => {
+    const net = useNetStore()
+    expect(net.offline).toBe(false)
+    onlineManager.setOnline(false)
+    expect(net.deviceOffline).toBe(true)
+    expect(net.offline).toBe(true)
+    expect(net.failures).toBe(0)
+    onlineManager.setOnline(true)
+    expect(net.offline).toBe(false)
+  })
+
+  it('the banner says which: the device offline or the node silent', async () => {
+    await setLocale('ru')
+    const global = {
+      plugins: [i18n, [VueQueryPlugin, { queryClient: new QueryClient() }] as [Plugin, unknown]],
+    }
+    const device = mount(NetBanner, { props: { device: true }, global })
+    expect(device.text()).toContain('Устройство не в сети')
+    expect(device.text()).not.toContain('Нода не отвечает')
+    const node = mount(NetBanner, { global })
+    expect(node.text()).toContain('Нода не отвечает')
   })
 
   it('every node read tells whether the node answered', async () => {

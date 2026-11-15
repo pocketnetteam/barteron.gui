@@ -2067,6 +2067,9 @@ const en: Messages = {
     profileFailed: 'Bastyon did not open the profile',
     version: {
       title: 'A new version of Barteron is out',
+      offlineTitle: 'Part of Barteron did not load',
+      offlineText:
+        'The connection to the network was lost. Once it is back, restart the app: close it and open it again from Bastyon.',
       text: 'To keep everything working, restart the app: close it and open it again from Bastyon.',
       saved: 'Your offer draft and favourites are kept on this device',
       restart: 'Restart',
@@ -2101,6 +2104,8 @@ const en: Messages = {
     },
     offline: {
       title: 'No connection to the network',
+      device:
+        'This device is offline. We show what has already loaded; new offers and statuses will appear once the connection is back.',
       text: 'The node is not answering. We show what has already loaded; new offers and statuses will appear once it reconnects.',
       saved: 'Favourites and viewed offers are on this device',
       waits: 'Posting and transfers are unavailable',

@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { storageKeepsAll } from '@/lib/storage'
+import { useNetStore } from '@/stores/net'
 import UiButton from '@/ui/UiButton.vue'
 import SystemState from './SystemState.vue'
 
@@ -16,6 +17,11 @@ import SystemState from './SystemState.vue'
 const { t } = useI18n()
 const button = ref<{ $el: HTMLElement } | null>(null)
 const kept = storageKeepsAll()
+/**
+ * The piece did not load while the device was offline: no new version, the
+ * network. A restart still helps, once the network is back.
+ */
+const offline = useNetStore().deviceOffline || navigator.onLine === false
 
 onMounted(() => button.value?.$el.focus())
 
@@ -31,7 +37,7 @@ function restart() {
         class="vc__panel"
         role="alertdialog"
         aria-modal="true"
-        :aria-label="t('system.version.title')"
+        :aria-label="offline ? t('system.version.offlineTitle') : t('system.version.title')"
       >
         <span class="vc__grabber" aria-hidden="true" />
         <SystemState
@@ -39,8 +45,8 @@ function restart() {
           kind="version"
           icon="retry"
           tone="primary"
-          :title="t('system.version.title')"
-          :text="t('system.version.text')"
+          :title="offline ? t('system.version.offlineTitle') : t('system.version.title')"
+          :text="offline ? t('system.version.offlineText') : t('system.version.text')"
           :notes="[
             kept
               ? { ok: true, text: t('system.version.saved') }

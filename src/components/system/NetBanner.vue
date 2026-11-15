@@ -10,6 +10,8 @@ import UiIcon from '@/ui/UiIcon.vue'
  * already loaded, which stays on screen. «Повторить» asks the node again for
  * everything on the page; the first answer takes the banner away.
  */
+/** `device` — the device itself is offline, not the node silent. */
+defineProps<{ device?: boolean }>()
 const { t } = useI18n()
 const client = useQueryClient()
 const retrying = ref(false)
@@ -29,7 +31,9 @@ async function retry() {
       /></span>
       <div class="net__body">
         <strong class="net__title">{{ t('system.offline.title') }}</strong>
-        <span class="net__text">{{ t('system.offline.text') }}</span>
+        <span class="net__text">{{
+          device ? t('system.offline.device') : t('system.offline.text')
+        }}</span>
         <span class="net__notes">
           <span class="net__note"><span class="net__dot" />{{ t('system.offline.saved') }}</span>
           <span class="net__note"

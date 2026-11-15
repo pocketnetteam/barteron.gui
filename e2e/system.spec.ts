@@ -273,6 +273,63 @@ test('the node stops answering: «Нет связи с сетью», then back',
   await expect(banner).toHaveCount(0)
 })
 
+test('the device loses the network: «Нет связи с сетью», not «Вышла новая версия»', async ({
+  page,
+  context,
+}) => {
+  // The pages were seen while online; their pieces are in memory.
+  await page.goto('/')
+  await expect(page.getByTestId('home')).toBeVisible()
+  await spaGo(page, '/category/7000')
+  await expect(page.getByTestId('catalog')).toBeVisible()
+  await spaGo(page, '/')
+  await expect(page.getByTestId('home')).toBeVisible()
+
+  // The query client holds the reads instead of failing them: no «node silent», the device.
+  await context.setOffline(true)
+  await spaGo(page, '/category/1000')
+  const banner = page.getByTestId('net-banner')
+  await expect(banner).toContainText('Устройство не в сети')
+  await expect(page.getByRole('alertdialog')).toHaveCount(0)
+  // Back online: the held reads go, the banner leaves.
+  await context.setOffline(false)
+  await expect(banner).toHaveCount(0)
+  await expect(page.getByTestId('offer-list')).toContainText('Stels Navigator 300')
+})
+
+test('a piece of the app not loading while offline says so, not «Вышла новая версия»', async ({
+  page,
+  context,
+}) => {
+  await page.goto('/')
+  await expect(page.getByTestId('home')).toBeVisible()
+  await context.setOffline(true)
+  await spaGo(page, '/about').catch(() => undefined)
+  const dialog = page.getByRole('alertdialog')
+  await expect(dialog).toContainText('Часть Barteron не загрузилась')
+  await expect(dialog).toContainText('Пропала связь с сетью')
+  await expect(dialog).not.toContainText('Вышла новая версия')
+  await expect(page.getByTestId('version-restart')).toBeVisible()
+  await context.setOffline(false)
+})
+
+test('a new page opens at the top; «назад» returns to where the list was', async ({ page }) => {
+  await page.goto('/category/search')
+  const cards = page.getByTestId('offer-list').locator('article')
+  await expect(cards.nth(7)).toBeVisible()
+  await cards.nth(7).scrollIntoViewIfNeeded()
+  await page.evaluate(() => window.scrollBy(0, 200))
+  const down = await page.evaluate(() => Math.round(window.scrollY))
+  expect(down).toBeGreaterThan(150)
+  await cards.nth(7).locator('a').first().click()
+  await expect(page).toHaveURL(/\/barter\//)
+  await page.getByTestId('item-page').waitFor()
+  expect(await page.evaluate(() => window.scrollY)).toBe(0)
+  await page.goBack()
+  await expect(cards.nth(7)).toBeVisible()
+  await expect.poll(() => page.evaluate(() => Math.round(window.scrollY))).toBe(down)
+})
+
 test('chats turned off in Bastyon: «Нужны разрешения» with the app settings', async ({ page }) => {
   await page.addInitScript(() => {
     ;(window as { __barteronMockSetup?: unknown }).__barteronMockSetup = {

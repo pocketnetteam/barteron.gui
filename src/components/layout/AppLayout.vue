@@ -3,6 +3,8 @@ import { computed, defineAsyncComponent, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { useCategories } from '@/api/queries'
+// Not lazy: it is needed exactly when the network is gone and a piece would not load.
+import NetBanner from '@/components/system/NetBanner.vue'
 import { useCatalogNav } from '@/composables/catalog-nav'
 import { useNetStore } from '@/stores/net'
 import { useSessionStore } from '@/stores/session'
@@ -22,7 +24,6 @@ const CategoryBrowser = defineAsyncComponent(
 )
 const LocationPanel = defineAsyncComponent(() => import('./LocationPanel.vue'))
 const SafeDealHelp = defineAsyncComponent(() => import('@/components/deal/SafeDealHelp.vue'))
-const NetBanner = defineAsyncComponent(() => import('@/components/system/NetBanner.vue'))
 
 /**
  * Page frame of the app: the desktop header and footer, the phone tab bar,
@@ -114,7 +115,7 @@ watch(
       <slot name="mobile-top" />
     </template>
 
-    <NetBanner v-if="net.offline" />
+    <NetBanner v-if="net.offline" :device="net.deviceOffline" />
     <slot />
     <AppFooter class="layout__footer" />
 

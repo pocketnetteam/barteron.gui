@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { createMemoryHistory } from 'vue-router'
+import { createMemoryHistory, type RouteLocationNormalized } from 'vue-router'
 import { createAppRouter } from './index'
 
 // A real push loads the lazy page with all its imports, which takes seconds under a full run.
@@ -53,5 +53,24 @@ describe('start page', () => {
     await local.push('/index.html?ref=abc')
     expect(local.currentRoute.value.name).toBe('home')
     expect(local.currentRoute.value.query).toEqual({ ref: 'abc' })
+  })
+})
+
+describe('scroll on navigation', () => {
+  const scroll = router.options.scrollBehavior!
+  // The resolved route is what the router hands `scrollBehavior`.
+  const at = (path: string) => router.resolve(path) as RouteLocationNormalized
+
+  it('a new page starts at the top', () => {
+    expect(scroll(at('/barter/' + HASH), at('/category/12'), null)).toEqual({ top: 0 })
+  })
+
+  it('«назад» returns to where the page was', () => {
+    const saved = { left: 0, top: 640 }
+    expect(scroll(at('/category/12'), at('/barter/' + HASH), saved)).toBe(saved)
+  })
+
+  it('filters and sorting on the same page keep the scroll', () => {
+    expect(scroll(at('/category/12?price=1-5'), at('/category/12'), null)).toBe(false)
   })
 })
