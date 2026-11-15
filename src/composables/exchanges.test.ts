@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils'
 import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query'
 import { createPinia, setActivePinia } from 'pinia'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, markRaw } from 'vue'
 import { i18n, setLocale } from '@/i18n'
 import { offerFromAlias } from '@/models/offer'
@@ -61,11 +61,6 @@ function setup<T = ReturnType<typeof useMyExchanges>>(
   )
   return { result, sdk }
 }
-
-beforeEach(() => {
-  localStorage.clear()
-  vi.stubGlobal('fetch', () => Promise.reject(new Error('no network in tests')))
-})
 
 describe('my exchanges', () => {
   it('one offer that fits two of mine is one exchange in the menu, as in the section', async () => {

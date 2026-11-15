@@ -1,3 +1,4 @@
+import { flushPromises } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { md5 } from '@/lib/md5'
 import { BAN_LIST } from './ban-list'
@@ -6,11 +7,15 @@ import { GUARANTORS, isGuarantor, isModerator, MODERATORS, otherModerators } fro
 
 const BASE58 = /^[1-9A-HJ-NP-Za-km-z]{34}$/
 
-/** Settles within a few ticks, or not at all. */
+/**
+ * Settles once the list is here, or not at all: with the list loaded nothing
+ * is left to wait for but promise turns.
+ */
 async function settles(promise: Promise<unknown>): Promise<boolean> {
   let done = false
   void promise.then(() => (done = true))
-  await new Promise((r) => setTimeout(r, 20))
+  await loadBanList()
+  await flushPromises()
   return done
 }
 

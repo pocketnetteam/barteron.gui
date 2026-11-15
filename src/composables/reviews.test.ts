@@ -1,7 +1,7 @@
 import { flushPromises, mount } from '@vue/test-utils'
 import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query'
 import { createPinia, setActivePinia } from 'pinia'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, markRaw, ref } from 'vue'
 import { createMemoryHistory } from 'vue-router'
 import { keys } from '@/api/queries'
@@ -101,19 +101,18 @@ async function setup<T>(use: () => T, options: Setup = {}) {
     { global: { plugins: [pinia, i18n, router, [VueQueryPlugin, { queryClient: client }]] } }
   )
   const calls = (method: string) => sdk.mock.calls.filter((c) => c.method === method)
-  return { result, sdk, client, wrapper, calls, session, network }
+  /** My Barteron and Bastyon profiles have come: a moderation request can be saved. */
+  const ready = () =>
+    vi.waitFor(() => {
+      expect(client.getQueryState(keys.account(ME))?.status).toBe('success')
+      expect(client.getQueryState(keys.profile(ME))?.status).toBe('success')
+    })
+  return { result, sdk, client, wrapper, calls, session, network, ready }
 }
 
 const never = () => new Promise<never>(() => {})
-
-beforeEach(() => {
-  // Nothing here may leave the machine.
-  vi.stubGlobal('fetch', () => Promise.reject(new Error('no network in tests')))
-})
-
-afterEach(() => {
-  vi.unstubAllGlobals()
-})
+/** Time for work the code does not wait for (a profile save after a request) to show. */
+const settled = () => new Promise((r) => setTimeout(r, 50)).then(() => flushPromises())
 
 describe('reviews of an offer', () => {
   /** An offer of Анна's with a reply, a review without a score and mine. */
@@ -237,8 +236,11 @@ describe('reviews of an offer', () => {
     })
     await vi.waitFor(() => expect(low.result.lowScoreBlocked.value).toBe(true))
 
+    // Reputation 150, and known: not just «not yet loaded», as below.
     const high = await setup(() => useOfferReviews(ref(offer(BIKE, SELLERS.ilya))))
-    await flushPromises()
+    await vi.waitFor(() =>
+      expect(high.client.getQueryState(keys.profile(ME))?.status).toBe('success')
+    )
     expect(high.result.lowScoreBlocked.value).toBe(false)
 
     // Exactly 100 is enough, as in Bastyon (`reputation < 100` blocks).
@@ -406,10 +408,11 @@ describe('moderation of a low score, the user side', () => {
   })
 
   it('a request: to a moderator on duty who is not me, the chat, then my profile', async () => {
-    const { result, calls } = await setup(() => useScoreModeration(offer(BIKE, SELLERS.ilya)))
+    const { result, calls, ready } = await setup(() =>
+      useScoreModeration(offer(BIKE, SELLERS.ilya))
+    )
     await vi.waitFor(() => expect(result.checking.value).toBe(false))
-    await vi.waitFor(() => expect(calls('rpc').length).toBeGreaterThan(0))
-    await flushPromises()
+    await ready()
     expect(await result.request(2, 'Колесо погнуто')).toBe('sent')
     expect(calls('chat.getOrCreateRoom')[0]?.args[0]).toEqual({
       users: [SELLERS.ilya],
@@ -437,14 +440,18 @@ describe('moderation of a low score, the user side', () => {
   })
 
   it('nobody on duty: no chat, no request in my profile', async () => {
-    const { result, calls } = await setup(() => useScoreModeration(offer(BIKE, SELLERS.ilya)), {
-      rpc: () => ({
-        getbarteronaccounts: () => [],
-        getuserprofile: () => [{ address: ME, name: 'Я', reputation: 150 }],
-      }),
-    })
-    await flushPromises()
+    const { result, calls, ready } = await setup(
+      () => useScoreModeration(offer(BIKE, SELLERS.ilya)),
+      {
+        rpc: () => ({
+          getbarteronaccounts: () => [],
+          getuserprofile: () => [{ address: ME, name: 'Я', reputation: 150 }],
+        }),
+      }
+    )
+    await ready()
     expect(await result.request(2, 'Причина')).toBe('nobody')
+    await settled()
     expect(calls('chat.getOrCreateRoom')).toHaveLength(0)
     expect(calls('barteron.account')).toHaveLength(0)
   })
@@ -461,27 +468,31 @@ describe('moderation of a low score, the user side', () => {
         }),
       },
     }
-    const { result, calls } = await setup(() => useScoreModeration(offer(BIKE, SELLERS.ilya)), {
-      rpc: () => ({ getbarteronaccounts: () => [meOnDuty] }),
-    })
-    await flushPromises()
+    const { result, calls, ready } = await setup(
+      () => useScoreModeration(offer(BIKE, SELLERS.ilya)),
+      { rpc: () => ({ getbarteronaccounts: () => [meOnDuty] }) }
+    )
+    await ready()
     expect(await result.request(2, 'Причина')).toBe('nobody')
     expect(calls('chat.getOrCreateRoom')).toHaveLength(0)
   })
 
   it('the chat did not open: no request in my profile', async () => {
-    const { result, calls } = await setup(() => useScoreModeration(offer(BIKE, SELLERS.ilya)), {
-      granted: ['account'],
-      grantOnRequest: false,
-    })
-    await flushPromises()
+    const { result, calls, ready } = await setup(
+      () => useScoreModeration(offer(BIKE, SELLERS.ilya)),
+      { granted: ['account'], grantOnRequest: false }
+    )
+    await ready()
     expect(await result.request(2, 'Причина')).toBe('failed')
+    // Refused at the chat permission, not before it.
+    expect(calls('permissions.request').map((c) => c.args[0])).toEqual([['chat']])
+    await settled()
     expect(calls('barteron.account')).toHaveLength(0)
   })
 
   it('my profile on its way: wait for it; the node silent: failed, and the form can say so', async () => {
     const updating = await setup(() => useScoreModeration(offer(BIKE, SELLERS.ilya)))
-    await flushPromises()
+    await updating.ready()
     updating.sdk.barteron.account = never
     void useTxStore().send('account', { address: ME })
     expect(await updating.result.request(2, 'Причина')).toBe('updating')
@@ -502,10 +513,14 @@ describe('moderation of a low score, the user side', () => {
     const { result, calls } = await setup(() => useScoreModeration(offer(BIKE, SELLERS.ilya)))
     result.openChat(null)
     result.openChat(SELLERS.ilya)
+    // The chat waits for the ban list: its chunk loads first in a file run alone.
+    await vi.waitFor(() =>
+      expect(calls('chat.getOrCreateRoom').map((c) => c.args[0])).toEqual([
+        { users: [SELLERS.ilya], parameters: {} },
+      ])
+    )
     await flushPromises()
-    expect(calls('chat.getOrCreateRoom').map((c) => c.args[0])).toEqual([
-      { users: [SELLERS.ilya], parameters: {} },
-    ])
+    expect(calls('chat.getOrCreateRoom')).toHaveLength(1)
     expect(calls('chat.send')).toHaveLength(0)
   })
 

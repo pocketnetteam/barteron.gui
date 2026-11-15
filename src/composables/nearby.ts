@@ -1,6 +1,6 @@
 import { useQueries } from '@tanstack/vue-query'
 import { computed, toValue, type MaybeRefOrGetter } from 'vue'
-import { useBarteron, useCategories, useFeed, useGroups } from '@/api/queries'
+import { keys, useBarteron, useCategories, useFeed, useGroups } from '@/api/queries'
 import type { FeedRequest } from '@/api/barteron'
 import type { Area } from '@/lib/area'
 import {
@@ -100,7 +100,7 @@ export function useNearestPlaces(area: MaybeRefOrGetter<Area | null>) {
   const checks = useQueries({
     queries: computed(() =>
       cells.value.map((cell) => ({
-        queryKey: ['barteron', 'feed', 'nearby-place', cell],
+        queryKey: keys.nearbyPlace(cell),
         enabled: !!barteron.value,
         staleTime: 5 * 60_000,
         queryFn: () =>

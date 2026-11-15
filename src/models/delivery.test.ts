@@ -183,6 +183,8 @@ describe('pickup point: the edges of the schedule', () => {
   })
 
   it('a point in another time zone: «open now» is not guessed by the viewer clock', () => {
+    // The viewer at UTC+3: off zero, so a sign mixed up shows on a UTC runner too.
+    vi.spyOn(Date.prototype, 'getTimezoneOffset').mockReturnValue(-180)
     const now = at(12)
     const day = workSchedule({
       weekDays: Object.fromEntries(

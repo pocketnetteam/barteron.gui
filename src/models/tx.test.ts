@@ -1,5 +1,29 @@
 import { describe, expect, it } from 'vitest'
-import { isJsonObject, isTxid, objectOr, parseJson, parseJsonObject, str, txTimeMs } from './tx'
+import {
+  isJsonObject,
+  isTxid,
+  objectOr,
+  parseJson,
+  parseJsonObject,
+  str,
+  TX_TYPE,
+  txTimeMs,
+} from './tx'
+
+it('transaction types are the node’s numbers (pocketnet.core TxType)', () => {
+  // Fixtures and the mock network share these constants, so only this test
+  // would notice a wrong one: deleted offers (207) would show in every list.
+  // Checked against bastyon-nextgen block-explorer tx-type-labels.ts.
+  expect(TX_TYPE).toEqual({
+    account: 104,
+    comment: 204,
+    commentEdit: 205,
+    commentDelete: 206,
+    contentDelete: 207,
+    offer: 211,
+    score: 300,
+  })
+})
 
 describe('txTimeMs', () => {
   const now = 1_763_000_000_000

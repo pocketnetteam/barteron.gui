@@ -15,15 +15,15 @@ export function blockStorage(): () => void {
 }
 
 /**
- * Storage that is full: every write throws, reads still work. Returns the
- * undo. The whole object is swapped: happy-dom's `localStorage` is a Proxy
- * that keeps the methods it handed out, so a spy on `Storage.prototype` set
- * after the first write is not always called.
+ * Swaps `localStorage` for one whose writes go through `setItem`. The whole
+ * object is swapped: happy-dom's `localStorage` is a Proxy that keeps the
+ * methods it handed out, so a spy on `Storage.prototype` set after the first
+ * write in a file is not called — it depends on which test ran first.
  */
-export function fillStorage(): () => void {
+function swapStorage(setItem: (key: string, value: string) => void): () => void {
   const real = Object.getOwnPropertyDescriptor(globalThis, 'localStorage')!
   const store = localStorage
-  const full = {
+  const swapped = {
     getItem: (key: string) => store.getItem(key),
     removeItem: (key: string) => store.removeItem(key),
     key: (index: number) => store.key(index),
@@ -31,10 +31,26 @@ export function fillStorage(): () => void {
     get length() {
       return store.length
     },
-    setItem() {
-      throw new DOMException('The quota has been exceeded.', 'QuotaExceededError')
-    },
+    setItem,
   }
-  Object.defineProperty(globalThis, 'localStorage', { configurable: true, get: () => full })
+  Object.defineProperty(globalThis, 'localStorage', { configurable: true, get: () => swapped })
   return () => Object.defineProperty(globalThis, 'localStorage', real)
+}
+
+/** Storage that is full: every write throws, reads still work. Returns the undo. */
+export function fillStorage(): () => void {
+  return swapStorage(() => {
+    throw new DOMException('The quota has been exceeded.', 'QuotaExceededError')
+  })
+}
+
+/** Storage that works and records every write, in order. */
+export function recordStorage(): { writes: [key: string, value: string][]; restore: () => void } {
+  const store = localStorage
+  const writes: [string, string][] = []
+  const restore = swapStorage((key, value) => {
+    writes.push([key, value])
+    store.setItem(key, value)
+  })
+  return { writes, restore }
 }

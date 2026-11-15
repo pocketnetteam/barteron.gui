@@ -57,10 +57,20 @@ export const keys = {
   feed: (request: FeedRequest | null) => ['barteron', 'feed', request] as const,
   // Under `feeds`: a published offer refreshes deal lists too.
   deals: (request: DealsRequest | null) => ['barteron', 'feed', 'deals', request] as const,
+  allMatches: ['barteron', 'feed', 'matches'] as const,
+  /** Exchanges of one group of my offers (`groupKey`), in an area. */
+  matches: (group: string, owner: string, location: readonly string[]) =>
+    ['barteron', 'feed', 'matches', group, owner, [...location]] as const,
+  /** «Что продают рядом»: whether a district has offers. */
+  nearbyPlace: (cell: string) => ['barteron', 'feed', 'nearby-place', cell] as const,
   groups: (request: GroupsRequest | null) => ['barteron', 'groups', request] as const,
   offersByAddress: (address: string | null) => ['barteron', 'offers-by', address] as const,
   offer: (id: string | null) => ['barteron', 'offer', id] as const,
   offerDetails: (id: string | null) => ['barteron', 'offer-details', id] as const,
+  allOffersDetails: ['barteron', 'offers-details'] as const,
+  /** Scores and reviews of several offers: a seller's. */
+  offersDetails: (ids: readonly string[]) =>
+    ['barteron', 'offers-details', [...ids].sort()] as const,
   score: (id: string | null) => ['barteron', 'score', id] as const,
   account: (address: string | null) => ['barteron', 'account', address] as const,
   profile: (address: string | null) => ['bastyon', 'profile', address] as const,
@@ -369,13 +379,13 @@ export function refreshAfterTx(
       // «Мой список» decides what my offers with «my list» match: exchanges
       // follow my profile; plain feeds do not, and are not asked again.
       invalidate([...keys.feeds, 'deals'])
-      invalidate([...keys.feeds, 'matches'])
+      invalidate(keys.allMatches)
       break
     case 'review':
     case 'vote':
       invalidate(keys.offerDetails(tx.target))
       invalidate(keys.score(tx.target))
-      invalidate(['barteron', 'offers-details'])
+      invalidate(keys.allOffersDetails)
       break
     case 'payment':
       // A safe deal transfer is in a block: read the deal again.
@@ -444,7 +454,7 @@ export function useUserProfiles(addresses: MaybeRefOrGetter<readonly string[]>) 
 export function useOffersDetails(ids: MaybeRefOrGetter<readonly string[]>) {
   const barteron = useBarteron()
   return useQuery({
-    queryKey: computed(() => ['barteron', 'offers-details', [...toValue(ids)].sort()]),
+    queryKey: computed(() => keys.offersDetails(toValue(ids))),
     enabled: computed(() => !!barteron.value && toValue(ids).length > 0),
     queryFn: () =>
       barteron.value!.api.offerDetails({

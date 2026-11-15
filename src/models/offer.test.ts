@@ -10,6 +10,7 @@ import {
   isPickupPoint,
   isPriceFrom,
   offerFromAlias,
+  isOfferActive,
   offerLifecycle,
   offerPkoin,
   parseOffer,
@@ -99,6 +100,26 @@ describe('parseOffer', () => {
     expect(strings.tags).toEqual([58068, 'my_list'])
   })
 
+  it('deleted stays deleted; a status no client writes reads as published', () => {
+    const status = (p: string) =>
+      parseOffer({ ...MAINNET_TX, p: { ...MAINNET_TX.p, s4: JSON.stringify({ t: 277, p }) } })
+        .published
+    expect(status('removed')).toBe('removed')
+    expect(status('withdrawed')).toBe('withdrawed')
+    expect(status('published')).toBe('published')
+    expect(status('hidden')).toBe('published')
+  })
+
+  it('a first version without `s2`: its own hash is the id; no price is 0', () => {
+    const first = parseOffer({
+      hash: 'f'.repeat(64),
+      type: TX_TYPE.offer,
+      time: 1_700_000_000,
+      p: { s2: 'x' },
+    })
+    expect(first).toMatchObject({ hash: 'f'.repeat(64), txHash: 'f'.repeat(64), priceCents: 0 })
+  })
+
   it('photos: only non-empty strings (the old model dropped empty ones too)', () => {
     const offer = parseOffer({
       hash: 'a'.repeat(64),
@@ -124,7 +145,8 @@ describe('toOfferPayload: what the hosts sign', () => {
     expect(await hash256(serializeOffer(AUTHOR, { ...payload }))).toBe(OP_RETURN)
   })
 
-  it('read from the node and sent back unchanged, an edit keeps every field', async () => {
+  // That every field survives is the mainnet test below; this is the id's place.
+  it('an edit signs the string of a new offer with the first version’s id after the address', async () => {
     const payload = toOfferPayload(parseOffer(MAINNET_TX))
     expect(payload.hash).toBe(ROOT)
     const serialized = serializeOffer(AUTHOR, { ...payload })
@@ -162,6 +184,8 @@ describe('toOfferPayload: what the hosts sign', () => {
     const offer = sameAsMainnet()
     expect(() => toOfferPayload({ ...offer, tag: null })).toThrow(OfferInvalidError)
     expect(checkOffer({ ...offer, tag: 0 })).toBe('tag')
+    expect(checkOffer({ ...offer, tag: 6.5 })).toBe('tag')
+    expect(checkOffer({ ...offer, tag: 1 })).toBeNull()
     const isLeafCategory = (id: number) => id !== 1001
     expect(checkOffer({ ...offer, tag: 1001 }, { isLeafCategory })).toBe('tag')
     expect(checkOffer({ ...offer, tag: 1006 }, { isLeafCategory })).toBeNull()
@@ -306,6 +330,17 @@ describe('offer helpers', () => {
     expect(offerLifecycle({ ...offer, published: 'withdrawed' }, now)).toBe('withdrawn')
     expect(offerLifecycle({ ...offer, published: 'removed' }, now)).toBe('removed')
     expect(offerLifecycle({ ...offer, till: now - 1 }, now)).toBe('expired')
+    // The last moment of its year still counts.
+    expect(offerLifecycle({ ...offer, till: now }, now)).toBe('active')
+    expect(isOfferActive({ ...offer, till: now }, now)).toBe(true)
+    for (const other of [
+      { ...offer, hash: null },
+      { ...offer, published: 'withdrawed' as const },
+      { ...offer, published: 'removed' as const },
+      { ...offer, till: now - 1 },
+    ]) {
+      expect(isOfferActive(other, now)).toBe(false)
+    }
   })
 
   it('«my list» takes the seller profile list; «for nothing» wants nothing', () => {
@@ -340,5 +375,27 @@ describe('offer helpers', () => {
     function sameAsNew(): Offer {
       return { ...parseOffer(MAINNET_TX), hash: null }
     }
+  })
+
+  it('an edit on its way keeps the offer id: the host’s copy names it, the txid is the version', () => {
+    const original = parseOffer(MAINNET_TX)
+    const version = 'f'.repeat(64)
+    const pending = offerFromAlias(toOfferPayload(original), version, original.time)!
+    // The same offer, not a second one next to it in the lists.
+    expect(pending).toEqual({ ...original, txHash: version, height: null })
+  })
+
+  it('odd values in the host’s copy: defaults, nothing broken let through', () => {
+    const pending = offerFromAlias(
+      { address: AUTHOR, condition: '', images: ['https://a/1.jpg', 5, null], price: '100' },
+      'f'.repeat(64)
+    )!
+    expect(pending).toMatchObject({
+      hash: 'f'.repeat(64),
+      condition: 'new',
+      images: ['https://a/1.jpg'],
+      priceCents: 0,
+    })
+    expect(offerFromAlias('not an object', 'f'.repeat(64))).toBeNull()
   })
 })

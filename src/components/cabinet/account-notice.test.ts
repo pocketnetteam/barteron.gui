@@ -28,7 +28,7 @@ afterEach(() => {
 })
 
 describe('my profile did not come from the node', () => {
-  it('«Мой список» says so with a retry, not «список пуст» and a dead button', async () => {
+  it('«Мой список» says so with a retry, not «список пуст»; nothing can be saved', async () => {
     setActivePinia(createPinia())
     const { account, refetch } = failedAccount()
     const w = mountUi(MyListCard, {
@@ -38,7 +38,8 @@ describe('my profile did not come from the node', () => {
     const notice = w.get('[data-testid="account-load-failed"]')
     expect(notice.text()).toContain('Профиль Barteron не загрузился')
     expect(w.text()).not.toContain('Список пуст')
-    expect(w.find('[data-testid="mylist-add"]').exists()).toBe(false)
+    // An unknown list is not saved over the one on chain.
+    expect(w.get('[data-testid="mylist-save"]').attributes('disabled')).toBeDefined()
     await notice.get('button').trigger('click')
     expect(refetch).toHaveBeenCalled()
     w.unmount()

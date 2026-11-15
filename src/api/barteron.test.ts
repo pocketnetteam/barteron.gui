@@ -49,11 +49,20 @@ describe('BarteronApi', () => {
   })
 
   it('feed: search, category and price filters', async () => {
-    const { api } = setup()
+    const { api, sdk } = setup()
     expect((await api.feed({ search: searchPattern('гитар') })).map((o) => o.tag)).toEqual([621])
     expect((await api.feed({ tags: [1006] }))[0]!.caption).toMatch(/Велосипед/)
-    const cheap = await api.feed({ priceMax: 100000 })
+    const all = await api.feed({ pageSize: 100 })
+    const cheap = await api.feed({ pageSize: 100, priceMax: 100000 })
+    // Some offers in, the dearer ones out: not an empty or unfiltered list.
+    expect(cheap.length).toBeGreaterThan(0)
+    expect(cheap.length).toBeLessThan(all.length)
     expect(cheap.every((o) => o.priceCents <= 100000)).toBe(true)
+    // The price goes to the node as given, in cents.
+    expect(sdk.mock.calls.at(-1)?.args).toEqual([
+      'getbarteronfeed',
+      [{ pageSize: 100, priceMax: 100000 }],
+    ])
   })
 
   it('hides banned authors everywhere, but counts them for paging', async () => {

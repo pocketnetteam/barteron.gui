@@ -1,7 +1,7 @@
 import { flushPromises, mount } from '@vue/test-utils'
 import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query'
 import { createPinia, setActivePinia } from 'pinia'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, markRaw } from 'vue'
 import { createMemoryHistory } from 'vue-router'
 import { useOffer } from '@/api/queries'
@@ -118,16 +118,6 @@ async function setup<T>(use: () => T, options: Setup = {}) {
   return { result, sdk, calls, session }
 }
 
-beforeEach(() => {
-  localStorage.clear()
-  // Nothing here may leave the machine.
-  vi.stubGlobal('fetch', () => Promise.reject(new Error('no network in tests')))
-})
-
-afterEach(() => {
-  vi.unstubAllGlobals()
-})
-
 describe('a deal as each participant sees it', () => {
   it.each([
     ['the tablet', TABLET, 'buyer', '1'],
@@ -188,7 +178,7 @@ describe('a deal as each participant sees it', () => {
           })
         ),
     })
-    await vi.waitFor(() => expect(result.state.value?.paying).not.toBeNull())
+    await vi.waitFor(() => expect(result.state.value?.paying).toBeTruthy())
     expect(result.state.value?.status).toBe('1')
     expect(result.sending.value).toBeNull()
   })
@@ -345,9 +335,12 @@ describe('sending money', () => {
     expect(result.t.failure.value?.kind).toBe('cancel')
     expect(result.deals.sentAt(TABLET.id, '1')).toBeNull()
     expect(result.tx.items).toHaveLength(0)
-    expect(calls('chat.send')).toHaveLength(0)
     expect(await result.t.send(pay)).toBe(true)
     expect(result.t.failure.value).toBeNull()
+    // One message in the chat: the transfer that went, none for the closed wallet.
+    await vi.waitFor(() => expect(calls('chat.send')).toHaveLength(1))
+    await flushPromises()
+    expect(calls('chat.send')).toHaveLength(1)
   })
 
   it('not enough PKOIN, or another reason: said so, nothing recorded', async () => {
@@ -394,9 +387,13 @@ describe('sending money', () => {
   it('signed out and no sign-in: nothing sent', async () => {
     const { result, calls } = await setup(transfer, {
       account: 'no-permission',
+      granted: [],
       grantOnRequest: false,
     })
     expect(await result.t.send(pay)).toBe(false)
+    // Stopped at the sign-in, not later at the payment permission.
+    expect(calls('permissions.request').map((c) => c.args[0])).toEqual([['account']])
+    expect(result.t.failure.value).toBeNull()
     expect(calls('payment')).toHaveLength(0)
   })
 })

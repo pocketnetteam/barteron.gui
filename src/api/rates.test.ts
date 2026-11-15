@@ -43,8 +43,10 @@ describe('rates', () => {
   })
 
   it('no rates at all is an error: the page says so', async () => {
-    const fetcher = vi.fn(() => json({}, false))
-    await expect(fetchRates(['USD'], fetcher as unknown as typeof fetch)).rejects.toThrow()
+    const fetcher = vi.fn(() => json({}))
+    await expect(fetchRates(['USD'], fetcher as unknown as typeof fetch)).rejects.toThrow(
+      'rates_empty'
+    )
   })
 
   it('answers of the wrong shape: only positive numbers are taken', async () => {

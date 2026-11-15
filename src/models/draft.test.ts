@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import MAINNET_OFFERS from '@/test/mainnet-offers.json'
 import { CategoryTree } from './categories'
 import {
   draftEntries,
@@ -352,6 +353,62 @@ describe('editing an offer made by the old app', () => {
     })
   })
 
+  /*
+   * Every shape of mainnet offer (src/test/mainnet-offers.json) opened in the
+   * form and saved untouched: everything the seller wrote stays — pickup
+   * point ids, the schedule, the route, «Мой список», the guarantor's fee.
+   * What changes, on purpose: texts lose spaces at their ends, an empty
+   * field is added, a price in a currency is a number, a withdrawn offer is
+   * published again, a turned-off currency price is no currency price.
+   */
+  it.each(
+    (MAINNET_OFFERS as { about: string; tx: RawTx }[])
+      // Without a description it cannot be saved: the form says so (finding 10).
+      .filter((f) => f.tx.p?.s3?.trim())
+      .map((f) => [f.about, f.tx] as const)
+  )('saved untouched, it keeps what the seller wrote: %s', (_about, raw) => {
+    const original = parseOffer(raw)
+    const cp = original.currencyPrice as { currency?: string; price?: unknown }
+    const rates = cp.currency
+      ? { [cp.currency]: Number(cp.price) / (original.priceCents / 100) }
+      : {}
+    const again = offerFromDraft(draftFromOffer(original, 'ru'), {
+      address: original.address,
+      language: original.language,
+      rates,
+      base: original,
+    })
+    const trimmed = (value: unknown): unknown =>
+      typeof value === 'string'
+        ? value.trim()
+        : Array.isArray(value)
+          ? value.map(trimmed)
+          : value && typeof value === 'object'
+            ? Object.fromEntries(Object.entries(value).map(([k, v]) => [k, trimmed(v)]))
+            : value
+    const was = toOfferPayload(original)
+    const options = (was.delivery as { deliveryOptions?: object }).deliveryOptions
+    expect(toOfferPayload(again)).toEqual({
+      ...was,
+      caption: was.caption.trim(),
+      description: was.description.trim(),
+      published: 'published',
+      currencyPrice: cp.currency ? { currency: cp.currency, price: Number(cp.price) } : {},
+      videoSettings: { order: 'first', ...was.videoSettings },
+      delivery: trimmed(
+        options
+          ? {
+              ...was.delivery,
+              deliveryOptions: {
+                ...options,
+                directDelivery: { isEnabled: false, additionalInfo: '' },
+              },
+            }
+          : was.delivery
+      ),
+    })
+  })
+
   it('reads the fee, «от» and the exchange mode only from values the old app wrote', () => {
     const offer = (patch: Partial<Offer>) =>
       draftFromOffer({ ...parseOffer(MAINNET_TX), ...patch }, 'ru')
@@ -481,13 +538,41 @@ describe('the draft on the device', () => {
   })
 
   it('a stored draft read back is the same draft', () => {
+    // Every field off its default: reading must keep each, not fall back.
     const d = draft({
       hash: 'a'.repeat(64),
       baseTxHash: 'b'.repeat(64),
-      exchange: 'own',
+      condition: 'used',
+      photos: [
+        { id: 'p1', url: 'https://img/1.jpg', status: 'ready', bytes: 10 },
+        { id: 'p2', url: 'https://img/2.jpg', status: 'ready', bytes: 20 },
+      ],
+      video: 'https://peertube.example/w/abc',
+      videoUploadedHere: true,
+      videoOrder: 'last',
+      exchange: 'for_nothing',
+      tags: [17, 1006],
+      price: '12 400,5',
+      currency: 'RUB',
+      fixCurrency: true,
+      priceFrom: true,
       fee: 'inHalf',
       selfPickup: { on: true, info: 'у метро' },
+      directDelivery: { on: true, info: 'курьером' },
       pickupPoints: { on: true, ids: ['c'.repeat(64)] },
+      point: {
+        financialTerms: '5% от стоимости',
+        days: Array.from({ length: 7 }, (_, i) => ({
+          open: i !== 3,
+          allDay: i === 6,
+          start: '09:30',
+          finish: '21:00',
+        })),
+        scheduleInfo: 'без обеда',
+        address: 'Белград, Кнез Михаилова 1',
+        route: 'вход со двора',
+      },
+      updatedAt: NOW - 1000,
     })
     expect(readDraft(JSON.parse(JSON.stringify(storedDraft(d))))).toEqual(storedDraft(d))
   })

@@ -49,13 +49,22 @@ describe('deploy workflows', () => {
     })
 
     it('do not leave the token in .git for the build', () => {
-      expect(text).toMatch(/uses: actions\/checkout@\w+\n\s+with:\n\s+persist-credentials: false\n/)
+      // Every checkout, not just one of them.
+      const checkouts = text.match(/uses: actions\/checkout@/g) ?? []
+      const safe =
+        text.match(/uses: actions\/checkout@\w+\n\s+with:\n\s+persist-credentials: false\n/g) ?? []
+      expect(checkouts.length).toBeGreaterThan(0)
+      expect(safe).toHaveLength(checkouts.length)
     })
 
     it('run one at a time and stop if stuck', () => {
       expect(block(text, 'concurrency')).toMatch(/^ {2}group: \S+\n$/)
       expect(text).not.toMatch(/cancel-in-progress:\s*true/)
-      expect(text).toMatch(/^ {4}timeout-minutes: \d+$/m)
+      // Every job: a key two spaces in under `jobs:`.
+      const jobs = block(text, 'jobs')?.match(/^ {2}[\w-]+:$/gm) ?? []
+      const timeouts = text.match(/^ {4}timeout-minutes: \d+$/gm) ?? []
+      expect(jobs.length).toBeGreaterThan(0)
+      expect(timeouts).toHaveLength(jobs.length)
     })
 
     it('check and build from the lockfile before copying', () => {

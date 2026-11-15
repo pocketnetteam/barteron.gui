@@ -89,6 +89,7 @@ describe('address search: what the note under the field says', () => {
   })
 
   it('outside Bastyon it says the search works there; a short text says nothing', async () => {
+    vi.useFakeTimers()
     const { search, wrapper } = setup('mock')
     search.query.value = 'Мо'
     await nextTick()
@@ -96,6 +97,8 @@ describe('address search: what the note under the field says', () => {
     search.query.value = 'Моск'
     await nextTick()
     expect(search.note.value).toBe('offline')
+    // Past the pause after typing: Nominatim is not asked outside Bastyon.
+    await vi.advanceTimersByTimeAsync(2000)
     expect(searchAddress).not.toHaveBeenCalled()
     wrapper.unmount()
   })

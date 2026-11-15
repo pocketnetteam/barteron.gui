@@ -1,9 +1,9 @@
+import { flushPromises } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { markRaw } from 'vue'
-import { QueryClient } from '@tanstack/vue-query'
-import { keys, refreshAfterTx } from '@/api/queries'
 import { BAN_LIST } from '@/config/ban-list'
+import { loadBanList } from '@/config/ban'
 import { emptyOffer, toOfferPayload } from '@/models/offer'
 import { createMockSdk } from '@/sdk/mock'
 import { createMockNetwork, type MockNetwork } from '@/sdk/mock-network'
@@ -238,7 +238,9 @@ describe('tx store', () => {
     const { tx, session, sdk } = setup()
     session.address = BAN_LIST[0]!
     void tx.send('offer', offerPayload())
-    await new Promise((r) => setTimeout(r, 30))
+    // Once the list is here nothing else holds it: an unbanned one would be sent by now.
+    await loadBanList()
+    await flushPromises()
     expect(tx.items[0]!.status).toBe('sending')
     expect(sdk.mock.calls.some((c) => c.method === 'barteron.offer')).toBe(false)
   })
@@ -283,17 +285,5 @@ describe('tx helpers', () => {
   it('eta is at least a minute', () => {
     expect(etaMinutes({ ...base, sentAt: 1000 }, 1000)).toBe(1)
     expect(etaMinutes({ ...base, sentAt: 0 }, 59_000)).toBe(1)
-  })
-
-  it('a finished transaction refreshes what it changed', () => {
-    const client = new QueryClient()
-    const spy = vi.spyOn(client, 'invalidateQueries')
-    refreshAfterTx(client, { kind: 'offer', target: 'o1', status: 'done' }, ME)
-    expect(
-      spy.mock.calls.map((c) => (c[0] as { queryKey?: unknown } | undefined)?.queryKey)
-    ).toEqual([keys.offer('o1'), keys.offersByAddress(ME), keys.feeds])
-    spy.mockClear()
-    refreshAfterTx(client, { kind: 'vote', target: 'o1', status: 'waiting' }, ME)
-    expect(spy).not.toHaveBeenCalled()
   })
 })

@@ -70,6 +70,8 @@ export default defineConfig(({ mode }) => ({
     environment: 'happy-dom',
     include: ['src/**/*.test.ts', 'build/**/*.test.ts'],
     restoreMocks: true,
+    unstubGlobals: true,
+    unstubEnvs: true,
     // The first test of a file waits for the app's modules to transform: on a
     // busy machine, or under --coverage, that alone takes more than 5 s.
     testTimeout: 15_000,

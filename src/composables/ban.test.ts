@@ -1,7 +1,7 @@
 import { flushPromises, mount } from '@vue/test-utils'
 import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query'
 import { createPinia, setActivePinia } from 'pinia'
-import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { computed, defineComponent, h, markRaw } from 'vue'
 import { createMemoryHistory } from 'vue-router'
 import { banListLoaded, hangIfBanned, isBanned, loadBanList } from '@/config/ban'
@@ -79,23 +79,13 @@ async function setup<T>(address: string, use: () => T) {
   return { result, survey, asked, calls }
 }
 
-beforeAll(() => {
-  vi.stubGlobal('fetch', () => Promise.reject(new Error('no network in tests')))
-})
-afterAll(() => {
-  vi.unstubAllGlobals()
-})
-
-describe('before the ban list has come', () => {
+// One story: before the list, then the list comes, then anyone else. The
+// first part keeps its survey and chat mounted while the list comes, so it is
+// one test; the order of the two is fixed (`--sequence.shuffle`).
+describe('before the ban list has come', { shuffle: false }, () => {
   const bannedNow = computed(() => isBanned(BANNED))
-  let pending: {
-    survey: Awaited<ReturnType<typeof setup<ReturnType<typeof useSurvey>>>>
-    chat: Promise<boolean>
-    chatCalls: () => number
-    hang: Promise<void>
-  }
 
-  it('nobody looks banned yet, so nothing that needs the list goes ahead', async () => {
+  it('nobody looks banned until the list comes; then a `computed` asks again and the banned user gets nothing', async () => {
     expect(banListLoaded()).toBe(false)
     expect(bannedNow.value).toBe(false)
 
@@ -110,30 +100,24 @@ describe('before the ban list has come', () => {
 
     const hang = hangIfBanned(BANNED)
     expect(await settles(hang)).toBe(false)
-    pending = {
-      survey,
-      chat: opening,
-      chatCalls: () => chat.calls('chat.getOrCreateRoom').length,
-      hang,
-    }
-  })
 
-  it('then the list comes: a `computed` asks again; the banned user gets nothing', async () => {
+    // The list comes while the survey and the chat are still on the page.
     list.release()
     await loadBanList()
     expect(banListLoaded()).toBe(true)
     expect(bannedNow.value).toBe(true)
 
-    expect(await pending.chat).toBe(false)
-    expect(pending.chatCalls()).toBe(0)
-    expect(await settles(pending.hang)).toBe(false)
+    expect(await opening).toBe(false)
+    expect(chat.calls('chat.getOrCreateRoom')).toHaveLength(0)
+    expect(await settles(hang)).toBe(false)
 
-    await flushPromises()
-    expect(pending.survey.asked).toEqual([])
+    // Time enough for the survey to ask, as it does for anyone else below.
+    await settles(new Promise(() => {}), 50)
+    expect(survey.asked).toEqual([])
     // Sending by hand hangs, like the old `setSurveyData`.
     const answers = { answer1: 'Да', answer2: 'Нет', email: '' }
-    expect(await settles(pending.survey.result.send(answers), 400)).toBe(false)
-    expect(pending.survey.survey.sent).toEqual([])
+    expect(await settles(survey.result.send(answers), 400)).toBe(false)
+    expect(survey.survey.sent).toEqual([])
   })
 
   it('anyone else: the survey is asked once the list is here, the chat opens', async () => {

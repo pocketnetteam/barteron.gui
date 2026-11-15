@@ -5,8 +5,8 @@ import { draftKey } from './offer-form'
 
 describe('a refused new offer published from the cabinet', () => {
   const ME = 'PMockUser1111111111111111111111111'
-  const keep = (caption: string) =>
-    localStorage.setItem(draftKey(null, ME), JSON.stringify({ ...newDraft('PKOIN'), caption }))
+  const keep = (caption: string, address: string | null = ME) =>
+    localStorage.setItem(draftKey(null, address), JSON.stringify({ ...newDraft('PKOIN'), caption }))
   beforeEach(() => localStorage.clear())
 
   it('takes its draft from the form: no «Продолжаем черновик» for an offer already out', () => {
@@ -20,8 +20,13 @@ describe('a refused new offer published from the cabinet', () => {
     forgetSentDraft(ME, { caption: 'Планшет' })
     forgetSentDraft(ME, null)
     forgetSentDraft(ME, { caption: 42 })
-    forgetSentDraft(null, { caption: 'Велосипед' })
     expect(localStorage.getItem(draftKey(null, ME))).not.toBeNull()
+  })
+
+  it('nobody signed in: no draft is touched, not even the one kept without an address', () => {
+    keep('Велосипед', null)
+    forgetSentDraft(null, { caption: 'Велосипед' })
+    expect(localStorage.getItem(draftKey(null, null))).not.toBeNull()
   })
 })
 

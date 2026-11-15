@@ -19,7 +19,7 @@ import { createMockNetwork } from '@/sdk/mock-network'
 import type { HostAction } from '@/sdk/types'
 import { useSessionStore } from '@/stores/session'
 import { useTxStore } from '@/stores/tx'
-import { blockStorage, fillStorage } from '@/test/storage'
+import { blockStorage, fillStorage, recordStorage } from '@/test/storage'
 import { toasts } from '@/ui/toast'
 import { createOfferForm, draftKey, type FormState, type OfferForm } from './offer-form'
 
@@ -149,17 +149,20 @@ const myOffer = (patch: Record<string, unknown> = {}) =>
 describe('the draft on the device', () => {
   it('one write per change, not a write every 400 ms', async () => {
     const { form, wrapper } = await setup()
-    const setItem = vi.spyOn(Storage.prototype, 'setItem')
-    vi.useFakeTimers()
-    form.draft.value!.caption = 'Велосипед'
-    await nextTick()
-    await vi.advanceTimersByTimeAsync(5000)
-    const writes = setItem.mock.calls.filter(([key]) => key === draftKey(null, ME))
-    expect(writes).toHaveLength(1)
-    expect(stored()).toMatchObject({ caption: 'Велосипед' })
-    expect(stored()!.updatedAt).toBe(form.savedAt.value)
-    setItem.mockRestore()
-    wrapper.unmount()
+    const storage = recordStorage()
+    try {
+      vi.useFakeTimers()
+      form.draft.value!.caption = 'Велосипед'
+      await nextTick()
+      await vi.advanceTimersByTimeAsync(5000)
+      const writes = storage.writes.filter(([key]) => key === draftKey(null, ME))
+      expect(writes).toHaveLength(1)
+      expect(stored()).toMatchObject({ caption: 'Велосипед' })
+      expect(stored()!.updatedAt).toBe(form.savedAt.value)
+    } finally {
+      storage.restore()
+      wrapper.unmount()
+    }
   })
 
   it('storage refused: the form does not claim the draft is saved, and keeps it for this visit', async () => {
@@ -799,6 +802,8 @@ describe('video', () => {
     await form.addVideo()
     expect(form.draft.value!.video).toBe('')
     expect(form.videoBusy.value).toBe(false)
+    // Not «не удалось открыть загрузку видео»: closing it is the user's choice.
+    expect(toasts.items).toEqual([])
     wrapper.unmount()
   })
 

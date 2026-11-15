@@ -25,6 +25,9 @@ describe('avatarColor', () => {
     expect(avatarColor(seed)).toBe(avatarColor(seed))
     expect(AVATAR_COLORS).toContain(avatarColor(seed))
     expect(AVATAR_COLORS).toContain(avatarColor(undefined))
+    // Different people get different colours, not one for all.
+    const seeds = Array.from({ length: 40 }, (_, i) => `P${i}`.padEnd(34, 'x'))
+    expect(new Set(seeds.map((s) => avatarColor(s))).size).toBeGreaterThan(1)
   })
 })
 
@@ -77,7 +80,9 @@ describe('toasts', () => {
   it('hides a success toast after 4 s', () => {
     showToast('Ссылка скопирована')
     expect(toasts.items).toHaveLength(1)
-    vi.advanceTimersByTime(4000)
+    vi.advanceTimersByTime(3999)
+    expect(toasts.items).toHaveLength(1)
+    vi.advanceTimersByTime(1)
     expect(toasts.items).toHaveLength(0)
   })
 

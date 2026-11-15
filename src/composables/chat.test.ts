@@ -1,7 +1,7 @@
 import { flushPromises, mount } from '@vue/test-utils'
 import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query'
 import { createPinia, setActivePinia } from 'pinia'
-import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { defineComponent, h, markRaw } from 'vue'
 import { createMemoryHistory } from 'vue-router'
 import { i18n, setLocale } from '@/i18n'
@@ -43,13 +43,6 @@ async function setup() {
   const calls = (method: string) => sdk.mock.calls.filter((c) => c.method === method)
   return { chat, calls, wrapper }
 }
-
-beforeAll(() => {
-  vi.stubGlobal('fetch', () => Promise.reject(new Error('no network in tests')))
-})
-afterAll(() => {
-  vi.unstubAllGlobals()
-})
 
 describe('opening a chat', () => {
   it('two presses while the node is still asked about my profile: one room, one message', async () => {

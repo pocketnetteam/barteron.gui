@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import OLD from '@/test/old-geohash.json'
 import {
   approximateBounds,
   boundsAround,
@@ -12,6 +13,7 @@ import {
   fromLeafletBounds,
   geohashBounds,
   limitToArea,
+  onGlobe,
   toLeafletBounds,
 } from './geohash'
 
@@ -36,10 +38,16 @@ describe('geohash', () => {
     expect(prefixes.some((p) => encodeGeohash([55.75, 37.62]).startsWith(p))).toBe(false)
   })
 
-  it('a whole geohash cell is one prefix', () => {
+  it('a whole geohash cell is one prefix; a hair less is its 32 children', () => {
     const cell = geohashBounds('u0')
+    expect(approximateBounds(cell, { maxCount: 40 })).toEqual(['u0'])
     const shrunk = { ...cell, north: cell.north - 1e-9, south: cell.south + 1e-9 }
-    expect(approximateBounds(shrunk, { maxCount: 40 }).every((p) => p.startsWith('u0'))).toBe(true)
+    const children = approximateBounds(shrunk, { maxCount: 40 })
+    expect(new Set(children).size).toBe(32)
+    expect(children.every((p) => p.length === 3 && p.startsWith('u0'))).toBe(true)
+    // Exactly `maxCount` is allowed; one more is not.
+    expect(approximateBounds(shrunk, { maxCount: 32 })).toHaveLength(32)
+    expect(approximateBounds(shrunk, { maxCount: 31 })).toEqual(['u0'])
   })
 
   it('stores bounds in the old Leaflet shape', () => {
@@ -74,6 +82,10 @@ describe('geohash', () => {
     expect(fitBrighteon([BRIGHTEON_BOX.minLat, BRIGHTEON_BOX.maxLng])).toEqual([
       BRIGHTEON_BOX.minLat,
       BRIGHTEON_BOX.maxLng,
+    ])
+    expect(fitBrighteon([BRIGHTEON_BOX.maxLat, BRIGHTEON_BOX.minLng])).toEqual([
+      BRIGHTEON_BOX.maxLat,
+      BRIGHTEON_BOX.minLng,
     ])
     for (const away of [
       [55.7558, 37.6173],
@@ -163,7 +175,8 @@ describe('at the edges of the map', () => {
 
   it('a square around a pole stays on the globe', () => {
     const b = boundsAround([89.99, 0], 10)
-    expect(b.north).toBeLessThanOrEqual(90)
+    expect(b.north).toBe(90)
+    expect(boundsAround([-89.99, 0], 10).south).toBe(-90)
     expect(b.east - b.west).toBeLessThanOrEqual(360)
     expect(approximateBounds(b).length).toBeGreaterThan(0)
   })
@@ -175,5 +188,63 @@ describe('at the edges of the map', () => {
     expect(distanceKm([55.75, 37.61], [55.75, 37.61])).toBe(0)
     // Nearly opposite points: rounding takes the sine past 1, the distance is still half the globe.
     expect(Math.round(distanceKm([-79.75, -179], [79.75, 1]))).toBe(20015)
+  })
+})
+
+/*
+ * The old app's GeoHashApproximator, GeohashBoundsHelper and GeoHashLimitator
+ * run as they are (_docs-todo/tools/audit41-old-geohash.mjs →
+ * src/test/old-geohash.json): the node is asked for the same area.
+ */
+describe('as the old app asked the node', () => {
+  it.each(OLD.approximations.map((a) => [JSON.stringify(a.area), a.maxCount, a] as const))(
+    'the prefixes of a map view: %s, at most %i',
+    (_area, _count, { area, maxCount, prefixes }) => {
+      expect(approximateBounds(area, { maxCount })).toEqual(prefixes)
+    }
+  )
+
+  it('a square around a point', () => {
+    for (const { center, sideKm, bounds } of OLD.squares) {
+      const b = boundsAround(center as [number, number], sideKm)
+      for (const side of ['south', 'west', 'north', 'east'] as const) {
+        expect(b[side]).toBeCloseTo(bounds[side], 9)
+      }
+    }
+  })
+
+  it('Brighteon: the area kept inside Canada and the USA', () => {
+    for (const { location, limited } of OLD.limits) {
+      expect(limitToArea(location, CANADA_USA)).toEqual(limited)
+    }
+  })
+})
+
+describe('onGlobe: a Leaflet view as areas on the globe', () => {
+  it('the whole width, from exactly 360° wide', () => {
+    const whole = [{ south: 0, north: 10, west: -180, east: 180 }]
+    expect(onGlobe({ south: 0, north: 10, west: -180, east: 180 })).toEqual(whole)
+    expect(onGlobe({ south: 0, north: 10, west: -100, east: 300 })).toEqual(whole)
+    expect(onGlobe({ south: 0, north: 10, west: -179.5, east: 179.5 })).toEqual([
+      { south: 0, north: 10, west: -179.5, east: 179.5 },
+    ])
+  })
+
+  it('up to the antimeridian one part, past it two', () => {
+    expect(onGlobe({ south: 0, north: 10, west: 170, east: 180 })).toEqual([
+      { south: 0, north: 10, west: 170, east: 180 },
+    ])
+    expect(onGlobe({ south: 0, north: 10, west: 170, east: 190 })).toEqual([
+      { south: 0, north: 10, west: 170, east: 180 },
+      { south: 0, north: 10, west: -180, east: -170 },
+    ])
+    expect(onGlobe({ south: 0, north: 10, west: 170, east: 180.5 })).toEqual([
+      { south: 0, north: 10, west: 170, east: 180 },
+      { south: 0, north: 10, west: -180, east: -179.5 },
+    ])
+    // Scrolled a whole turn east: the same place.
+    expect(onGlobe({ south: 0, north: 10, west: 530, east: 540 })).toEqual([
+      { south: 0, north: 10, west: 170, east: 180 },
+    ])
   })
 })

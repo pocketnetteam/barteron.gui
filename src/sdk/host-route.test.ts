@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { createRouter, createWebHistory } from 'vue-router'
 import { followHostRoutes, routeFromHost } from './host-route'
 
@@ -62,9 +62,12 @@ describe('followHostRoutes', () => {
     await router.push('/')
     await send({ route: 'barter/abc' })
     expect(router.currentRoute.value.fullPath).toBe('/barter/abc')
-    const length = window.history.length
+    // The router itself refuses a duplicate: the app must not even ask it to.
+    const push = vi.spyOn(router, 'push')
     await send({ route: 'barter/abc' })
-    expect(window.history.length).toBe(length)
+    expect(push).not.toHaveBeenCalled()
+    await send({ route: '/' })
+    expect(push).toHaveBeenCalledWith('/')
   })
 
   it('a link made to lead away keeps the app on its own origin, on «not found»', async () => {

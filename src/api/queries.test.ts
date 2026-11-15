@@ -1,4 +1,4 @@
-import { flushPromises, mount } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query'
 import { createPinia, setActivePinia } from 'pinia'
 import { describe, expect, it, vi } from 'vitest'
@@ -12,6 +12,7 @@ import { createMockNetwork } from '@/sdk/mock-network'
 import { demoNetworkData, SELLERS } from '@/sdk/mock-data'
 import { useSessionStore } from '@/stores/session'
 import {
+  createQueryClient,
   keys,
   pagesOffers,
   refreshAfterTx,
@@ -33,7 +34,9 @@ function setup(extraOffers: RawTx[] = []) {
   const session = useSessionStore()
   session.sdk = markRaw(sdk)
   session.address = ME
-  const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+  // The app's own client: how long data stays fresh is part of what is tested.
+  const client = createQueryClient()
+  client.setDefaultOptions({ queries: { ...client.getDefaultOptions().queries, retry: false } })
   const rpcCalls = (method: string) =>
     sdk.mock.calls.filter((c) => c.method === 'rpc' && c.args[0] === method)
   const mountWith = (setupFn: () => () => unknown) =>
@@ -107,14 +110,22 @@ describe('queries', () => {
     const id = feed.data.value!.pages[0]!.offers[0]!.hash!
     expect(client.getQueryData(keys.offer(id))).toMatchObject({ hash: id })
 
+    // Next to it, an offer not on the page: its request shows the batch went.
+    const seeded = feed.data.value!.pages[0]!.offers.map((o) => o.hash)
+    const other = demoNetworkData(ME).offers!.find((o) => !seeded.includes(o.hash))!.hash!
     let offer!: ReturnType<typeof useOffer>
+    let otherOffer!: ReturnType<typeof useOffer>
     mountWith(() => {
       offer = useOffer(id)
+      otherOffer = useOffer(other)
       return () => h('div')
     })
-    await flushPromises()
+    await vi.waitFor(() => expect(otherOffer.data.value?.hash).toBe(other))
     expect(offer.data.value?.hash).toBe(id)
-    expect(rpcCalls('getbarteronoffersbyroottxhashes')).toHaveLength(0)
+    const asked = rpcCalls('getbarteronoffersbyroottxhashes').flatMap(
+      (c) => (c.args[1] as string[][])[0]!
+    )
+    expect(asked).toEqual([other])
   })
 
   it('cards asking for sellers one by one make one request', async () => {
@@ -166,15 +177,16 @@ describe('after a transaction is in a block', () => {
     const all: Record<string, readonly unknown[]> = {
       feed: keys.feed({ pageSize: 10 }),
       deals: keys.deals({ theirTags: [1], myTags: [2] }),
-      matches: [...keys.feeds, 'matches', 'group', ME, []],
-      nearby: [...keys.feeds, 'nearby-place', 'ucfv'],
+      // The keys the app asks with: a list moved off `keys.feeds` shows here.
+      matches: keys.matches('6:1006', ME, ['ucfv']),
+      nearby: keys.nearbyPlace('ucfv'),
       offer: keys.offer('t1'),
       otherOffer: keys.offer('t2'),
       mine: keys.offersByAddress(ME),
       account: keys.account('t1'),
       details: keys.offerDetails('t1'),
       score: keys.score('t1'),
-      sellerDetails: ['barteron', 'offers-details', ['t1', 't3']],
+      sellerDetails: keys.offersDetails(['t3', 't1']),
       deal: keys.deal('t1'),
       balance: keys.balance(ME),
       profile: keys.profile(ME),

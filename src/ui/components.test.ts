@@ -279,9 +279,6 @@ describe('UiDialog and the keyboard', () => {
 
   it('taken away while open (the app’s windows close so), focus goes back to the button', async () => {
     const shown = ref(false)
-    // Windows of the tests above stay mounted and counted on <body>.
-    delete document.body.dataset.dialogs
-    document.body.style.overflow = ''
     mountUi(
       defineComponent({
         setup: () => () => [

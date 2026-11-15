@@ -274,6 +274,16 @@ describe('place for new offers', () => {
     expect(fixed).toEqual({ ...base, static: true, geohash: 'srywc8' })
     expect(HOME_PLACE_PRECISION).toBe(6)
     expect(serializeAccount(ADDRESS, { ...toAccountPayload(fixed) })).toContain('"g":"srywc8"')
+    // Read back from chain and sent again, a profile with a place is the same transaction.
+    const s4 = '{"a":[1],"g":"srywc8","s":true,"r":0,"d":{},"m":{}}'
+    const onChain = parseAccount({
+      hash: 'd'.repeat(64),
+      type: 104,
+      time: 1,
+      s1: ADDRESS,
+      p: { s4 },
+    })
+    expect(serializeAccount(ADDRESS, { ...toAccountPayload(onChain) })).toBe(ADDRESS + s4)
     // «По геопозиции»: the place is removed.
     expect(withHomePlace(fixed, null)).toEqual({ ...base, static: false, geohash: '' })
   })
@@ -310,7 +320,21 @@ describe('roles kept in the profile', () => {
         { ...emptyAccount(ADDRESS), safeDeal: { validator: { feePercent } } as AccountSafeDeal },
         5
       ).feePercent
-    expect([0, -1, 'x', null, undefined, '3', 2.5].map(fee)).toEqual([5, 5, 5, 5, 5, 3, 2.5])
+    expect([0, -1, 'x', null, undefined, '3', 2.5, 1, 0.5].map(fee)).toEqual([
+      5, 5, 5, 5, 5, 3, 2.5, 1, 0.5,
+    ])
+  })
+
+  it('moderator on duty: read from the profile, written so, other keys stay', () => {
+    const base = emptyAccount(ADDRESS)
+    expect(moderatorAvailable(base)).toBe(false)
+    const on = withModerator(base, true)
+    expect(moderatorAvailable(on)).toBe(true)
+    expect(moderatorAvailable(withModerator(on, false))).toBe(false)
+    // As a node returns it.
+    const s4 = '{"a":[],"m":{"votingModeration":{"moderator":{"status":"available"}}}}'
+    const read = parseAccount({ hash: 'd'.repeat(64), type: 104, time: 1, s1: ADDRESS, p: { s4 } })
+    expect(moderatorAvailable(read)).toBe(true)
   })
 
   it('fee: 1 to 98, as the old form checked', () => {

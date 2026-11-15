@@ -7,6 +7,7 @@ import {
   EMPTY_FILTERS,
   filterChips,
   filtersQuery,
+  hasLocalFilters,
   matchesLocalFilters,
   parseFilters,
   resetFilters,
@@ -139,6 +140,49 @@ describe('catalog filters in the address', () => {
     expect(withoutChip(f, { key: 'free' })).toMatchObject({ free: false, priceMax: 50 })
     expect(resetFilters(f)).toEqual({ ...EMPTY_FILTERS, search: 'x' })
   })
+
+  it('every chip, in order; each takes off only itself', () => {
+    const f: CatalogFilters = {
+      ...EMPTY_FILTERS,
+      search: 'x',
+      priceMin: 10,
+      exchange: [17, 38],
+      myList: true,
+      condition: 'used',
+      delivery: ['pickup', 'point'],
+      safeDeal: true,
+    }
+    const chips = filterChips(f)
+    expect(chips).toEqual([
+      { key: 'price', min: 10, max: null },
+      { key: 'exchange', id: 17 },
+      { key: 'exchange', id: 38 },
+      { key: 'myList' },
+      { key: 'condition', value: 'used' },
+      { key: 'delivery', value: 'pickup' },
+      { key: 'delivery', value: 'point' },
+      { key: 'safeDeal' },
+    ])
+    expect(filterChips({ ...EMPTY_FILTERS, priceMax: 50 })).toEqual([
+      { key: 'price', min: null, max: 50 },
+    ])
+    expect(filterChips(EMPTY_FILTERS)).toEqual([])
+    expect(withoutChip(f, chips[0]!)).toEqual({ ...f, priceMin: null, priceMax: null })
+    expect(withoutChip(f, chips[1]!)).toEqual({ ...f, exchange: [38] })
+    expect(withoutChip(f, { key: 'myList' })).toEqual({ ...f, myList: false })
+    expect(withoutChip(f, { key: 'condition', value: 'used' })).toEqual({ ...f, condition: null })
+    expect(withoutChip(f, { key: 'delivery', value: 'pickup' })).toEqual({
+      ...f,
+      delivery: ['point'],
+    })
+    expect(withoutChip(f, { key: 'safeDeal' })).toEqual({ ...f, safeDeal: false })
+  })
+
+  it('a zero price is no bound; equal bounds stay; category 1 is a category', () => {
+    expect(parseFilters({ price: '0-0' })).toMatchObject({ priceMin: null, priceMax: null })
+    expect(parseFilters({ price: '100-100' })).toMatchObject({ priceMin: 100, priceMax: 100 })
+    expect(parseFilters({ exchange: '1,17' }).exchange).toEqual([1, 17])
+  })
 })
 
 describe('catalog request for the node', () => {
@@ -227,13 +271,34 @@ describe('filters the node does not know', () => {
 
   it('free, condition and safe deal', () => {
     const free = offer({ t: 1001, a: ['for_nothing'], c: 'used' })
-    const paid = offer({ t: 1001, a: [17], c: 'new', s: { validatorFeeVariant: 'buyer' } }, 10000)
+    // What the forms write: the seller pays or shares the fee. The buyer paying
+    // is `{}` — no «Безопасная сделка» badge on the card, and not in this filter.
+    const paid = offer({ t: 1001, a: [17], c: 'new', s: { validatorFeeVariant: 'seller' } }, 10000)
+    const half = offer({ t: 1001, a: [17], s: { validatorFeeVariant: 'inHalf' } }, 10000)
+    const buyerPays = offer({ t: 1001, a: [17], s: {} }, 10000)
+    expect(matchesLocalFilters(half, { ...EMPTY_FILTERS, safeDeal: true })).toBe(true)
+    expect(matchesLocalFilters(buyerPays, { ...EMPTY_FILTERS, safeDeal: true })).toBe(false)
     expect(matchesLocalFilters(free, { ...EMPTY_FILTERS, free: true })).toBe(true)
     expect(matchesLocalFilters(paid, { ...EMPTY_FILTERS, free: true })).toBe(false)
     expect(matchesLocalFilters(free, { ...EMPTY_FILTERS, condition: 'used' })).toBe(true)
     expect(matchesLocalFilters(paid, { ...EMPTY_FILTERS, condition: 'used' })).toBe(false)
     expect(matchesLocalFilters(paid, { ...EMPTY_FILTERS, safeDeal: true })).toBe(true)
     expect(matchesLocalFilters(free, { ...EMPTY_FILTERS, safeDeal: true })).toBe(false)
+  })
+
+  it('which filters the node cannot apply, so pages are filtered here', () => {
+    expect(hasLocalFilters(EMPTY_FILTERS)).toBe(false)
+    expect(hasLocalFilters({ ...EMPTY_FILTERS, priceMin: 1, exchange: [17], myList: true })).toBe(
+      false
+    )
+    for (const part of [
+      { free: true },
+      { condition: 'new' as const },
+      { delivery: ['point' as const] },
+      { safeDeal: true },
+    ]) {
+      expect(hasLocalFilters({ ...EMPTY_FILTERS, ...part })).toBe(true)
+    }
   })
 })
 

@@ -98,6 +98,9 @@ describe('exchanges of one offer', () => {
             offer(18, { address: 'PVera', tag: 4, till: NOW - 1 }),
           ],
         },
+        // Through my own other offer, or ending at one: not three people.
+        { target: offer(19, { address: 'PAnna', tag: 6 }), intermediates: [offer(20, { tag: 4 })] },
+        { target: offer(21, { tag: 6 }), intermediates: [offer(22, { address: 'PDima', tag: 4 })] },
       ],
     }
     const result = offerExchanges(source, raw, NOW)

@@ -80,6 +80,24 @@ describe('pacer', () => {
     expect(started).toEqual(['now', 'later'])
   })
 
+  it('an urgent task that starts at once counts among the three; a quiet queue counts anew', async () => {
+    const pace = createPacer(1000)
+    const burst = async (n: number) => {
+      // The first starts at once, the rest wait for their second.
+      const all = [pace(task(`u1-${n}`), { urgent: true }), pace(task(`r-${n}`))]
+      for (let i = 2; i <= 4; i++) all.push(pace(task(`u${i}-${n}`), { urgent: true }))
+      await vi.advanceTimersByTimeAsync(5000)
+      await Promise.all(all)
+    }
+    await burst(1)
+    await vi.advanceTimersByTimeAsync(3000)
+    await burst(2)
+    expect(started).toEqual([
+      ...['u1-1', 'u2-1', 'u3-1', 'r-1', 'u4-1'],
+      ...['u1-2', 'u2-2', 'u3-2', 'r-2', 'u4-2'],
+    ])
+  })
+
   it('a task that fails at once does not stop the queue', async () => {
     const pace = createPacer(1000)
     const broken = pace(() => {

@@ -8,7 +8,6 @@ import {
   toReviewPayload,
   toVotePayload,
 } from './review'
-import { parseUserProfile } from './profile'
 import { TX_TYPE, type RawTx } from './tx'
 
 const OFFER = 'c'.repeat(64)
@@ -139,24 +138,5 @@ describe('reviews and scores', () => {
       value: 3,
       count: 1,
     })
-  })
-})
-
-describe('parseUserProfile', () => {
-  it('name and avatar from the short getuserprofile answer', () => {
-    expect(
-      parseUserProfile({
-        address: 'P1',
-        name: 'Анна',
-        i: 'https://x/i.png',
-        regdate: 1_600_000_000,
-      })
-    ).toMatchObject({
-      address: 'P1',
-      name: 'Анна',
-      image: 'https://x/i.png',
-      regdate: 1_600_000_000_000,
-    })
-    expect(parseUserProfile({ name: 'no address' })).toBeNull()
   })
 })

@@ -40,10 +40,6 @@ const expand = (tree: CategoryTree, ids: readonly number[]) => [
   ...new Set(ids.flatMap((id) => tree.withDescendants(id))),
 ]
 
-/** Under `keys.feeds`: a new or changed offer refreshes the matches too. */
-const matchesKey = (group: MatchGroup, owner: string, location: readonly string[]) =>
-  [...keys.feeds, 'matches', groupKey(group), owner, [...location]] as const
-
 /**
  * One group's direct exchanges and chains, in the search area of the
  * catalog. Direct: their offer is in a category I want (or under one) and
@@ -125,7 +121,8 @@ export function useMatchGroups(
   const results = useQueries({
     queries: computed(() =>
       groups.value.map((group) => ({
-        queryKey: matchesKey(group, owner.value, where.value),
+        // Under `keys.feeds`: a new or changed offer refreshes the matches too.
+        queryKey: keys.matches(groupKey(group), owner.value, where.value),
         queryFn: () =>
           limit(async () => {
             const raw = await fetchGroup(

@@ -217,6 +217,8 @@ describe('deal money', () => {
     expect(roundPkoin(1.005)).toBe(1.01)
     expect(roundPkoin(1262.5)).toBe(1262.5)
     expect(roundPkoin(0.004999)).toBe(0)
+    // Just under half a cent stays under it: the satoshi step must not lift it.
+    expect(roundPkoin(1000.00499999)).toBe(1000)
     // 35 × 1.005 is 35.174999… in binary; the old toFixed(2) gave 35.17.
     expect(moneyFromValue(35, 0.5, 'buyer').payment).toBe(35.18)
     expect(moneyFromValue(1, 0.5, 'buyer').payment).toBe(1.01)
@@ -311,6 +313,10 @@ describe('deal status', () => {
         height: 900,
         time: 1782929573000,
       },
+    ])
+    // The smallest there is: one satoshi, in the first block.
+    expect(parseTransfers([{ ...row, amount: 1, height: 1 }], query)).toMatchObject([
+      { amount: 1e-8, height: 1 },
     ])
     expect(parseTransfers(null, query)).toEqual([])
     expect(parseTransfers([null, 'x', { ...row, hash: 7 }], query)).toEqual([])
