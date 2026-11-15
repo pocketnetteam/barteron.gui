@@ -108,7 +108,9 @@ export const useSessionStore = defineStore('session', () => {
   async function ensureSignedIn(): Promise<boolean> {
     if (isSignedIn()) return true
     if (account.value === 'no-permission') await requestAccountAccess()
-    else await signIn()
+    // Access given to someone signed out of Bastyon (both hosts allow it):
+    // sign-in right away, not on the next press.
+    if (account.value === 'guest') await signIn()
     return isSignedIn()
   }
 

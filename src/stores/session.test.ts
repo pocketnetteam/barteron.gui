@@ -135,6 +135,19 @@ describe('session store', () => {
     expect(useSessionStore().address).toBe(MOCK_ADDRESS)
   })
 
+  it('before an action: no access and not signed in — access, then sign-in, in one press', async () => {
+    // Both hosts grant `account` to someone signed out; the account itself
+    // then comes only after Bastyon's sign-in.
+    const { sdk, started } = startWithMock({ address: null, granted: [] })
+    await started
+    const session = useSessionStore()
+    expect(session.account).toBe('no-permission')
+    expect(await session.ensureSignedIn()).toBe(false)
+    expect(sdk.mock.calls.map((c) => c.method)).toEqual(
+      expect.arrayContaining(['permissions.request', 'helpers.registration'])
+    )
+  })
+
   it('signed in, then the host no longer gives the account: a guest, the old address gone', async () => {
     const { sdk, started } = startWithMock()
     await started
