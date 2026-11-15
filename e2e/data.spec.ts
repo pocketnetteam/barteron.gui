@@ -59,4 +59,17 @@ test.describe('data layer', () => {
     await expect(list).toContainText('not enough PKOIN')
     await expect(list.getByRole('button', { name: 'Повторить' })).toBeVisible()
   })
+
+  test('sent but never in a block: «ждём блок», then not published, with a retry', async ({
+    page,
+  }) => {
+    await page.goto('/dev/ui/data')
+    await page.getByRole('button', { name: 'Не попадёт в блок' }).click()
+    const list = page.getByTestId('tx-list')
+    // Honest about the wait first, then about the outcome.
+    await expect(list).toContainText('Ждём блок')
+    await expect(list).toContainText('Не опубликовано', { timeout: 10_000 })
+    await expect(list).not.toContainText('В сети')
+    await expect(list.getByRole('button', { name: 'Повторить' })).toBeVisible()
+  })
 })

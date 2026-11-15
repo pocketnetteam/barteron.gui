@@ -153,14 +153,30 @@ test.describe('inside a Bastyon host with the real sdk.js', () => {
   test('follows the previous host to another page (changestate)', async ({ page }) => {
     const app = await openInHost(page, { granted: ['account'], locale: 'ru' })
     await expect(app.getByTestId('status-account')).toHaveText(HOST_ADDRESS)
+    // Every page the app goes to from here on.
+    const frame = page.frame({ url: /localhost:5180/ })!
+    await frame.evaluate(() => {
+      const w = window as unknown as { __went: string[] }
+      w.__went = []
+      const app = (
+        document.querySelector('#app') as unknown as {
+          __vue_app__: {
+            config: {
+              globalProperties: {
+                $router: { afterEach(fn: (to: { fullPath: string }) => void): void }
+              }
+            }
+          }
+        }
+      ).__vue_app__
+      app.config.globalProperties.$router.afterEach((to) => w.__went.push(to.fullPath))
+    })
     // bastyon-nextgen sends its own address on every page change: not followed.
     await page.evaluate(() =>
       (window as unknown as { __push(k: string, d: unknown): void }).__push('changestate', {
         path: '/app/barteron.pocketnet.app/about',
       })
     )
-    await page.waitForTimeout(300)
-    await expect(app.getByTestId('status-account')).toBeVisible()
     // A Barteron link opened in the previous Bastyon while the app is open.
     await page.evaluate(() =>
       (window as unknown as { __push(k: string, d: unknown): void }).__push('changestate', {
@@ -168,5 +184,9 @@ test.describe('inside a Bastyon host with the real sdk.js', () => {
       })
     )
     await expect(app.getByTestId('tips-page')).toContainText('Как искать объявления?')
+    // Messages arrive in order: a followed `path` would have gone first.
+    expect(await frame.evaluate(() => (window as unknown as { __went: string[] }).__went)).toEqual([
+      '/help#search',
+    ])
   })
 })

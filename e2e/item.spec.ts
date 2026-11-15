@@ -285,9 +285,18 @@ test('renewal reminder: my offers whose year runs out, renewed with one confirma
   await page.getByTestId('autorenew-confirm').click()
   await expect(prompt).toBeHidden()
   await expect.poll(async () => (await callsOf(page, 'barteron.offer')).length).toBe(2)
-  // Not again on the next page.
+  // Not again on the next page: the mock starts over (both offers run out
+  // again), the device remembers they were asked about.
   await page.goto(`/barter/${TABLET}`)
-  await expect(page.getByRole('dialog', { name: /Продлить/ })).toBeHidden()
+  await expect(page.locator('[data-testid="item-page"][data-kind="other"]')).toBeVisible()
+  // My offers have come: the reminder would show now if it were to.
+  await expect
+    .poll(async () =>
+      (await callsOf(page, 'rpc')).some((c) => c.args[0] === 'getbarteronoffersbyaddress')
+    )
+    .toBe(true)
+  await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => r(null))))
+  expect(await page.getByRole('dialog', { name: /Продлить/ }).count()).toBe(0)
 })
 
 test('strings from the network: long words, invisible and right-to-left characters', async ({

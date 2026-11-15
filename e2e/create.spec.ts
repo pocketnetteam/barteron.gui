@@ -239,7 +239,15 @@ test('the draft page with someone else’s offer in the link: not shown as my dr
 test('the draft stays on the device; «Начать заново» clears it', async ({ page }) => {
   await page.goto('/barter/create')
   await page.getByTestId('create-caption').fill('Горный велосипед')
-  await page.waitForTimeout(700)
+  // On the device: then a reload finds it.
+  await expect
+    .poll(() =>
+      page.evaluate(
+        (me) => JSON.parse(localStorage.getItem(`${me}_offer_draft`) ?? '{}').caption,
+        ME
+      )
+    )
+    .toBe('Горный велосипед')
   await page.reload()
   await expect(page.getByTestId('create-caption')).toHaveValue('Горный велосипед')
   await expect(page.getByTestId('create-restored')).toContainText('Продолжаем черновик')

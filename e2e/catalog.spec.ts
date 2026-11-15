@@ -98,6 +98,8 @@ test('filters panel: a price preset applies on «show»', async ({ page }) => {
     await page.getByTestId('filters-apply').click()
   }
   await expect(page).toHaveURL(/price=100-500/)
+  // The filtered list is here (not an empty one still loading), without the dearer bike.
+  await expect(list(page)).toContainText('BMX Stark Madness')
   await expect(list(page)).not.toContainText('Велосипед горный, рама M')
   await expect(list(page)).toContainText('Складной велосипед 20″')
 })
@@ -139,6 +141,10 @@ test('place filter: saved under the old key and shown in the lists', async ({ pa
   const stored = await page.evaluate((me) => localStorage.getItem(`${me}_location`), ME)
   const location = JSON.parse(stored ?? '{}')
   expect(typeof location.bounds?._southWest?.lat).toBe('number')
+  // 25 km around: a square 50 km across, about 0.45° from south to north.
+  const span = location.bounds._northEast.lat - location.bounds._southWest.lat
+  expect(span).toBeGreaterThan(0.42)
+  expect(span).toBeLessThan(0.48)
   expect(location.zoom).toBe(10)
   await expect(page.getByTestId('new-offers')).toContainText('25 км вокруг')
 })

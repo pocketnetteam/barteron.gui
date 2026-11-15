@@ -33,6 +33,8 @@ export interface MockOptions {
   network?: MockNetwork
   /** Node reads that fail (`timeout`), `times` times, only those whose parameters mention `with`. */
   failRpc?: RpcFailure[]
+  /** A slow node: every read answers this many ms later. */
+  rpcDelayMs?: number
 }
 
 export interface RpcFailure {
@@ -76,6 +78,7 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
   const failing = new Set<string>()
   const fails = (method: string): boolean => failing.delete(method)
   const rpcFailures = (options.failRpc ?? []).map((r) => ({ ...r, left: r.times ?? Infinity }))
+  const rpcDelayMs = options.rpcDelayMs ?? 0
   let offline = false
 
   const darkQuery =
@@ -178,6 +181,7 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
         failure.left -= 1
         throw new Error('timeout')
       }
+      if (rpcDelayMs) await new Promise((r) => setTimeout(r, rpcDelayMs))
       const fixture = rpcFixtures[method]
       if (!fixture) throw new Error(`mock_rpc_missing:${method}`)
       return fixture(parameters) as T
@@ -422,6 +426,8 @@ export function createDemoMockSdk(options: Omit<MockOptions, 'network'> = {}): M
               texts?: { name?: string; caption?: string; description?: string }
               /** Node reads that fail, see `MockOptions.failRpc`. */
               failRpc?: RpcFailure[]
+              /** A slow node, see `MockOptions.rpcDelayMs`. */
+              slowRpc?: number
             }
           }
         ).__barteronMockSetup
@@ -457,6 +463,7 @@ export function createDemoMockSdk(options: Omit<MockOptions, 'network'> = {}): M
     ...(setup?.granted ? { granted: setup.granted } : {}),
     ...(setup?.refuse ? { grantOnRequest: false } : {}),
     ...(setup?.failRpc ? { failRpc: setup.failRpc } : {}),
+    ...(setup?.slowRpc ? { rpcDelayMs: setup.slowRpc } : {}),
     ...options,
     // A block every 10 s: a safe deal transfer counts in a minute, not in ten.
     network: createMockNetwork({ ...data, blockMs: 10_000 }),

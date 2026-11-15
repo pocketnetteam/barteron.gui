@@ -330,6 +330,104 @@ test('a new page opens at the top; «назад» returns to where the list was'
   await expect.poll(() => page.evaluate(() => Math.round(window.scrollY))).toBe(down)
 })
 
+/** Text on the page whose contrast with what lies under it is below `min`. */
+function lowContrast(page: Page, min: number) {
+  return page.evaluate((min) => {
+    type C = { r: number; g: number; b: number; a: number }
+    const parse = (c: string): C | null => {
+      const m = c.match(/rgba?\(([^)]+)\)/)
+      if (!m) return null
+      const [r = 0, g = 0, b = 0, a = 1] = m[1]!
+        .split(/[\s,/]+/)
+        .filter(Boolean)
+        .map(Number)
+      return { r, g, b, a }
+    }
+    const under = (el: Element): C => {
+      for (let e: Element | null = el; e; e = e.parentElement) {
+        const style = getComputedStyle(e)
+        // Text over a picture: not a plain colour to measure against.
+        if (style.backgroundImage !== 'none') return { r: -1, g: 0, b: 0, a: 1 }
+        const c = parse(style.backgroundColor)
+        if (c && c.a > 0.9) return c
+      }
+      return parse(getComputedStyle(document.body).backgroundColor)!
+    }
+    const lum = ({ r, g, b }: C) => {
+      const f = (v: number) => ((v /= 255) <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4)
+      return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b)
+    }
+    const out: string[] = []
+    for (const el of Array.from(
+      document.querySelectorAll('h1, h2, h3, p, a, button, label, span, li')
+    )) {
+      const own = Array.from(el.childNodes).some((n) => n.nodeType === 3 && n.textContent!.trim())
+      const box = el.getBoundingClientRect()
+      if (!own || !box.width || !box.height || el.closest('[disabled], [aria-hidden="true"]'))
+        continue
+      const style = getComputedStyle(el)
+      if (style.visibility === 'hidden' || Number(style.opacity) < 0.5) continue
+      const fg = parse(style.color)
+      const bg = under(el)
+      if (!fg || bg.r < 0) continue
+      const [x, y] = [lum(fg), lum(bg)].sort((p, q) => q - p) as [number, number]
+      const ratio = (x + 0.05) / (y + 0.05)
+      if (ratio < min) out.push(`${el.textContent!.trim().slice(0, 30)}: ${ratio.toFixed(2)}`)
+    }
+    return out
+  }, min)
+}
+
+test('the dark theme of the OS: dark screens, readable text', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'dark' })
+  const screens: [string, string][] = [
+    ['/', 'home'],
+    [`/barter/${TABLET}`, 'item-page'],
+    ['/category/1000', 'catalog'],
+    ['/barter/create', 'create-caption'],
+    [`/profile/${'PMockUser1111111111111111111111111'}#ads`, 'my-offer'],
+  ]
+  await page.goto('/')
+  await expect(page.getByTestId('home')).toBeVisible()
+  for (const [path, testid] of screens) {
+    await spaGo(page, path)
+    await expect(page.getByTestId(testid).first()).toBeVisible()
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+    const body = await page.evaluate(() => getComputedStyle(document.body).backgroundColor)
+    expect(body, path).toBe('rgb(14, 14, 19)')
+    // AA for large text at least: muted captions and secondary text included.
+    expect(await lowContrast(page, 3), path).toEqual([])
+  }
+})
+
+test('a slow node: pages wait in skeletons, never «nothing» before the answer', async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    const w = window as unknown as { __barteronMockSetup: unknown; __seen: string[] }
+    // Every node read answers 2.5 s later.
+    w.__barteronMockSetup = { slowRpc: 2500 }
+    // Whatever «nothing here» or «no connection» shows up even for a moment.
+    w.__seen = []
+    new MutationObserver(() => {
+      for (const id of ['item-missing', 'catalog-empty', 'net-banner']) {
+        if (document.querySelector(`[data-testid="${id}"]`) && !w.__seen.includes(id))
+          w.__seen.push(id)
+      }
+    }).observe(document, { childList: true, subtree: true })
+  })
+  await page.goto(`/barter/${TABLET}`)
+  await expect(page.locator('[data-testid="item-page"][data-state="loading"]')).toBeVisible()
+  await expect(page.locator('[data-testid="item-page"][data-kind="other"]')).toBeVisible({
+    timeout: 15_000,
+  })
+  await spaGo(page, '/category/1000')
+  await expect(page.getByTestId('offer-list').locator('article').first()).toBeVisible({
+    timeout: 15_000,
+  })
+  expect(await page.evaluate(() => (window as unknown as { __seen: string[] }).__seen)).toEqual([])
+})
+
 test('chats turned off in Bastyon: «Нужны разрешения» with the app settings', async ({ page }) => {
   await page.addInitScript(() => {
     ;(window as { __barteronMockSetup?: unknown }).__barteronMockSetup = {
