@@ -113,7 +113,8 @@ export function useChat() {
       toast = showToast(t('chat.opening'), { kind: 'progress' })
       const granted = await sdk.permissions.check({ permission: 'chat' }).catch(() => false)
       if (!granted) {
-        await sdk.permissions.request(['chat'])
+        // Both hosts reject when the user says no: the check below tells.
+        await sdk.permissions.request(['chat']).catch(() => undefined)
         if (!(await sdk.permissions.check({ permission: 'chat' }).catch(() => false))) {
           ui.openPermissions(['chat'])
           return false

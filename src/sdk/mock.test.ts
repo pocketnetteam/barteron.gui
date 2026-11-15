@@ -13,6 +13,33 @@ describe('mock SDK', () => {
     await expect(sdk.get.account()).resolves.toEqual({ address: MOCK_ADDRESS })
   })
 
+  it('a refused permission rejects, like both hosts; a granted one answers what was given', async () => {
+    const refusing = createMockSdk({ granted: ['account'], grantOnRequest: false })
+    await expect(refusing.permissions.request(['chat'])).rejects.toThrow('permission:denied:chat')
+    // Already granted: nothing to refuse.
+    await expect(refusing.permissions.request(['account'])).resolves.toEqual(['account'])
+    const granting = createMockSdk({ granted: [] })
+    await expect(granting.permissions.request(['chat', 'payment'])).resolves.toEqual([
+      'chat',
+      'payment',
+    ])
+    expect(await granting.permissions.check({ permission: 'payment' })).toBe(true)
+  })
+
+  it('signs `<text>/<app id>` into a signature object, as both hosts do', async () => {
+    const sdk = createMockSdk({ granted: ['sign'] })
+    await expect(sdk.sign('auth')).resolves.toMatchObject({
+      nonce: 'auth/barteron.pocketnet.app',
+      address: MOCK_ADDRESS,
+    })
+  })
+
+  it('signed out: actions are refused too, like bastyon-nextgen', async () => {
+    await expect(createMockSdk({ address: null }).get.actions()).rejects.toThrow(
+      'not_authenticated'
+    )
+  })
+
   it('rejects account() when nobody is signed in', async () => {
     await expect(createMockSdk({ address: null }).get.account()).rejects.toThrow(
       'not_authenticated'

@@ -278,6 +278,15 @@ describe('a node error is still an answer («Нет связи с сетью»)'
       { message: 'No Bastyon server answers: rpc', name: 'UnreachableError' },
     ],
     ['bastyon-nextgen: timeout', { message: 'rpc_timeout', name: 'TimeoutError', code: 'timeout' }],
+    // Every proxy tried and failed (helpers/api/rpc-retry.ts): the host's own
+    // screens count it as the network (star-rating-errors.ts `isNetworkFailed`).
+    [
+      'bastyon-nextgen: every proxy failed',
+      {
+        message: 'All RPC servers failed. Last error: Request failed with status code 502',
+        name: 'Error',
+      },
+    ],
     ['browser: network', new TypeError('Failed to fetch')],
     ['Safari: network', new TypeError('Load failed')],
     ['host bug', new TypeError("Cannot read properties of undefined (reading 'cachetime')")],

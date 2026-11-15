@@ -85,6 +85,10 @@ describe('«Уведомления» with p2p.back out of reach', () => {
       'https://p2p.back.pocketnet.app/barteron/telegram-notifications/subscriptions/get'
     )
     expect(JSON.parse(String(init.body))).toEqual({ address: MOCK_ADDRESS })
-    expect((init.headers as Record<string, string>).Signature).toBe('"mocksignature:auth"')
+    // The host's signature object of `auth/<app id>`, as JSON.
+    expect(JSON.parse((init.headers as Record<string, string>).Signature!)).toMatchObject({
+      nonce: 'auth/barteron.pocketnet.app',
+      address: MOCK_ADDRESS,
+    })
   })
 })

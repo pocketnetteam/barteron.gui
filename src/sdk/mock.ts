@@ -184,9 +184,17 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
     },
     async sign(text) {
       record('sign', text)
-      requireSignedIn()
+      const signer = requireSignedIn()
       requirePermission('sign')
-      return `mocksignature:${text}`
+      // Both hosts sign `<text>/<app id>` and answer with the signature object
+      // (pocketnet.gui `app.user.signature`, bastyon-nextgen `ApiSignature`).
+      return {
+        nonce: `${text}/${MOCK_APP_ID}`,
+        signature: 'mocksignature',
+        pubkey: 'mockpubkey',
+        address: signer,
+        v: 1,
+      }
     },
 
     barteron: {
@@ -218,6 +226,8 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
       action: () => resolved('get.action'),
       actions: async () => {
         record('get.actions')
+        // bastyon-nextgen: `required_authorization` while signed out.
+        requireSignedIn()
         return options.network?.actions() ?? []
       },
       fromToTransactions: async (from, to, opts) => {
@@ -344,8 +354,13 @@ export function createMockSdk(options: MockOptions = {}): MockSdk {
       },
       async request(permissions) {
         record('permissions.request', permissions)
-        if (grantOnRequest) permissions.forEach((p) => granted.add(p))
-        return undefined
+        // Both hosts reject a refusal: bastyon-nextgen `permission:denied:<p>`
+        // (permissions-api.ts), the previous one `permission:denied:<p>/forbid`.
+        const refused = permissions.find((p) => !granted.has(p) && !grantOnRequest)
+        if (refused) throw new Error(`permission:denied:${refused}`)
+        permissions.forEach((p) => granted.add(p))
+        // bastyon-nextgen answers with what was granted.
+        return [...permissions]
       },
     },
 

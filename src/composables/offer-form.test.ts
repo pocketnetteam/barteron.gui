@@ -804,6 +804,12 @@ describe('video', () => {
     expect(form.videoBusy.value).toBe(false)
     // Not «не удалось открыть загрузку видео»: closing it is the user's choice.
     expect(toasts.items).toEqual([])
+    // The previous Bastyon answers a closed window with nothing, and its sdk.js
+    // makes that `{}` (`{data = {}}`); bastyon-nextgen sends `null`, as above.
+    sdk.videos.opendialog = async () => ({})
+    await form.addVideo()
+    expect(form.draft.value!.video).toBe('')
+    expect(toasts.items).toEqual([])
     wrapper.unmount()
   })
 

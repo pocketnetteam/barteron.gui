@@ -274,12 +274,17 @@ export function createMockNetwork(options: MockNetworkOptions = {}): MockNetwork
     getfromtotransactions: ([from, to, depth, opreturn]) => {
       const scripts = Array.isArray(opreturn) ? opreturn.map(text) : [text(opreturn)]
       const min = typeof depth === 'number' ? depth : 0
-      return transfers.filter(
-        (t) =>
-          scripts.includes(t.opreturn) &&
-          (!text(from) || t.addrFrom === from) &&
-          (!text(to) || t.addrTo === to) &&
-          t.height >= min
+      return (
+        transfers
+          .filter(
+            (t) =>
+              scripts.includes(t.opreturn) &&
+              (!text(from) || t.addrFrom === from) &&
+              (!text(to) || t.addrTo === to) &&
+              t.height >= min
+          )
+          // Mainnet rows carry the transaction type too: 1, a plain transfer.
+          .map((t) => ({ ...t, type: 1 }))
       )
     },
 

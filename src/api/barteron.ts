@@ -98,7 +98,7 @@ export interface OfferDetails {
 const SILENT_CODES: readonly unknown[] = [408, -28, 2000, 'timeout']
 /** Texts of a request nobody answered, in both hosts and in browsers. */
 const SILENT_TEXT =
-  /failed to fetch|load failed|network|timeout|timed out|unreachable|no bastyon server|no rpc servers|proxy|offline|abort/i
+  /failed to fetch|load failed|network|timeout|timed out|unreachable|no bastyon server|no rpc servers|servers failed|proxy|offline|abort/i
 
 /**
  * Whether a refused request still had the node answer: it sent an error of
@@ -107,7 +107,8 @@ const SILENT_TEXT =
  * - the previous Bastyon: the node's error with a numeric `code`, or its own
  *   string ('TypeError: Failed to fetch', 'proxy');
  * - bastyon-nextgen: `{message, name}` — the node's text with name `Error`,
- *   or `UnreachableError` and `rpc_timeout` when nobody answered.
+ *   or `UnreachableError`, `rpc_timeout` and «All RPC servers failed» when
+ *   nobody answered (the last is how the host's own screens read it too).
  *
  * Anything unclear counts as no answer, as before.
  */

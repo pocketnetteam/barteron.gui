@@ -1,0 +1,437 @@
+{
+  "source": "Mainnet through our own bastyon-nextgen on :1981, no sign-in, 16.11.2026 (_docs-todo/tools/audit42-live.mjs). Arrays cut to 4, strings to 160 characters.",
+  "rpc": {
+    "getbarteronfeed": [
+      {
+        "hash": "13a0ecb3cd7f9273f0c2d29f239ac74fa39b55be39702e48fb34c55df83299be",
+        "type": 211,
+        "height": 4109577,
+        "blockHash": "9ace2fde9a2d05fe3c90a2072532f629e5c8b367838b111e3bcdd0440a729f16",
+        "time": 1794777191,
+        "s1": "PJz1Qjogo62ewVVChDUmvwotkGEZW9EZ5R",
+        "s2": "88c0d276058ef8506244c38b0d5fc414a60e85e18bc7f700b57f9ef77f0d6512",
+        "p": {
+          "s1": "ru-RU",
+          "s2": "Грузоперевозки ГАЗель,4 метровый термо фургон.",
+          "s3": "8-962-455-4036 Мой телефон.",
+          "s4": "{\"t\":197,\"a\":[11116,23],\"c\":\"new\",\"p\":\"published\",\"f\":{\"currency\":\"RUB\",\"price\":100},\"d\":{},\"v\":{\"order\":\"first\"},\"s\":{},\"m\":{}}",
+          "s5": "[\"https://peertube101.pocketnet.app/images/d6083225141eee0175860ebdb0e54f31/d6083225141eee0175860ebdb0e54f31-original.jpg\"]",
+          "s6": "ubjb4x0bwsbn",
+          "i1": 891
+        }
+      },
+      {
+        "hash": "672e2f1e7ced17880eeb2bb4618e0b4c1659d109ed5309f985d8cbc93c486ed8",
+        "type": 211,
+        "height": 4109574,
+        "blockHash": "9dc0f730554cba00fb796f63ca8452bad6add98d1c5f4d48a2cba956e1aee586",
+        "time": 1794777006,
+        "s1": "PJz1Qjogo62ewVVChDUmvwotkGEZW9EZ5R",
+        "s2": "ead2a8474747fbff3a57032a7316f2fb43cde841d0eb106f8bd177f4a8a77098",
+        "p": {
+          "s1": "ru-RU",
+          "s2": "Водитель категории В.С.Е..Можно разовую.",
+          "s3": "8-962-455-4036 Мой телефон.",
+          "s4": "{\"t\":4002,\"a\":[23,11116],\"c\":\"new\",\"p\":\"published\",\"f\":{\"currency\":\"RUB\",\"price\":20},\"d\":{},\"v\":{\"order\":\"first\"},\"s\":{},\"m\":{}}",
+          "s5": "[\"https://peertube101.pocketnet.app/images/208b457a7a3532717c3b3cc98ffefe27/208b457a7a3532717c3b3cc98ffefe27-original.jpg\"]",
+          "s6": "ubjb4t8gx34b",
+          "i1": 178
+        }
+      }
+    ],
+    "getbarterongroups": [
+      {
+        "location": "12f7",
+        "count": 1
+      },
+      {
+        "location": "48fk",
+        "count": 1
+      },
+      {
+        "location": "4e4s",
+        "count": 1
+      },
+      {
+        "location": "4sv5",
+        "count": 1
+      }
+    ],
+    "getbarterondeals": [
+      {
+        "hash": "56a6545cde7759b8eb32fb8b23964d8bd8d2fdd88894d47c51aadc68adc626ae",
+        "type": 211,
+        "height": 3894329,
+        "blockHash": "eaf302def6086ec6965621d4fc1a6dff5db2f37bac59cd7795a51ba7c7744a99",
+        "time": 1782382697,
+        "s1": "PFC9CB8M2bMv5zE2L9eF9ZtRshzuZ6JvNv",
+        "s2": "56a6545cde7759b8eb32fb8b23964d8bd8d2fdd88894d47c51aadc68adc626ae",
+        "p": {
+          "s1": "ru-RU",
+          "s2": "ГРУЗОВЫЕ АВТОПЕРЕВОЗКИ ПО ГРУЗИИ, РОССИИ И ЗАРУБЕЖ. ",
+          "s3": "Перевезем любые обьëмы Ваших грузов, в том числе негабарит, по ГРУЗИИ, РОССИИ И другим странам. Опыт работы более 15 лет. Любая форма оплаты. Пишите в личные со…",
+          "s4": "{\"t\":197,\"a\":[17,38,13,23,11116],\"c\":\"new\",\"p\":\"published\",\"f\":{\"currency\":\"RUB\",\"price\":100},\"d\":{},\"v\":{\"order\":\"first\"},\"s\":{},\"m\":{\"price\":{\"prefix\":\"from\"}…",
+          "s5": "[\"https://peertube101.pocketnet.app/images/1bc399e11dbc0ea82565e28388b251bb/1bc399e11dbc0ea82565e28388b251bb-original.jpg\"]",
+          "s6": "szrvhrgrzbxy",
+          "i1": 444
+        }
+      },
+      {
+        "hash": "a516bb0648fd289525a7bd23e6684fd3e0a045d1e26212edb79d7d4e28fc3589",
+        "type": 211,
+        "height": 3893901,
+        "blockHash": "bc0cdd6f55de7be6cf16ba7c9d7a637a91499b2c22ff14e1221fa3a1dd5a7002",
+        "time": 1782357597,
+        "s1": "PFC9CB8M2bMv5zE2L9eF9ZtRshzuZ6JvNv",
+        "s2": "e6c7f3742c94c5bd072bb95802ca973600d2d90512e8fd6d4c8cf3f403052857",
+        "p": {
+          "s1": "ru-RU",
+          "s2": "ГРУЗОВЫЕ АВТОПЕРЕВОЗКИ ПО РОССИИ И БЛИЖНЕМУ ЗАРУБЕЖЬЮ",
+          "s3": "Работаем на рынке грузоперевозок более 15 лет. Всё ходы и выходы известны!  Любые грузы, любые направления! Локация не имеет значения! Обращайтесь уважаемые Бас…",
+          "s4": "{\"t\":197,\"a\":[17,38,13,11116,23],\"c\":\"new\",\"p\":\"published\",\"f\":{\"currency\":\"RUB\",\"price\":109},\"d\":{},\"v\":{\"order\":\"first\"},\"s\":{},\"m\":{}}",
+          "s5": "[\"https://peertube101.pocketnet.app/images/6fbfed91fef9ae476048047fc07e73f7/6fbfed91fef9ae476048047fc07e73f7-original.jpg\"]",
+          "s6": "v9u0k7rpv2f9",
+          "i1": 484
+        }
+      }
+    ],
+    "getbarteroncomplexdeals": [],
+    "getbarteronoffersbyaddress": [
+      {
+        "hash": "13a0ecb3cd7f9273f0c2d29f239ac74fa39b55be39702e48fb34c55df83299be",
+        "type": 211,
+        "height": 4109577,
+        "blockHash": "9ace2fde9a2d05fe3c90a2072532f629e5c8b367838b111e3bcdd0440a729f16",
+        "time": 1794777191,
+        "s1": "PJz1Qjogo62ewVVChDUmvwotkGEZW9EZ5R",
+        "s2": "88c0d276058ef8506244c38b0d5fc414a60e85e18bc7f700b57f9ef77f0d6512",
+        "p": {
+          "s1": "ru-RU",
+          "s2": "Грузоперевозки ГАЗель,4 метровый термо фургон.",
+          "s3": "8-962-455-4036 Мой телефон.",
+          "s4": "{\"t\":197,\"a\":[11116,23],\"c\":\"new\",\"p\":\"published\",\"f\":{\"currency\":\"RUB\",\"price\":100},\"d\":{},\"v\":{\"order\":\"first\"},\"s\":{},\"m\":{}}",
+          "s5": "[\"https://peertube101.pocketnet.app/images/d6083225141eee0175860ebdb0e54f31/d6083225141eee0175860ebdb0e54f31-original.jpg\"]",
+          "s6": "ubjb4x0bwsbn",
+          "i1": 891
+        }
+      },
+      {
+        "hash": "672e2f1e7ced17880eeb2bb4618e0b4c1659d109ed5309f985d8cbc93c486ed8",
+        "type": 211,
+        "height": 4109574,
+        "blockHash": "9dc0f730554cba00fb796f63ca8452bad6add98d1c5f4d48a2cba956e1aee586",
+        "time": 1794777006,
+        "s1": "PJz1Qjogo62ewVVChDUmvwotkGEZW9EZ5R",
+        "s2": "ead2a8474747fbff3a57032a7316f2fb43cde841d0eb106f8bd177f4a8a77098",
+        "p": {
+          "s1": "ru-RU",
+          "s2": "Водитель категории В.С.Е..Можно разовую.",
+          "s3": "8-962-455-4036 Мой телефон.",
+          "s4": "{\"t\":4002,\"a\":[23,11116],\"c\":\"new\",\"p\":\"published\",\"f\":{\"currency\":\"RUB\",\"price\":20},\"d\":{},\"v\":{\"order\":\"first\"},\"s\":{},\"m\":{}}",
+          "s5": "[\"https://peertube101.pocketnet.app/images/208b457a7a3532717c3b3cc98ffefe27/208b457a7a3532717c3b3cc98ffefe27-original.jpg\"]",
+          "s6": "ubjb4t8gx34b",
+          "i1": 178
+        }
+      }
+    ],
+    "getbarteronoffersbyroottxhashes": [
+      {
+        "hash": "13a0ecb3cd7f9273f0c2d29f239ac74fa39b55be39702e48fb34c55df83299be",
+        "type": 211,
+        "height": 4109577,
+        "blockHash": "9ace2fde9a2d05fe3c90a2072532f629e5c8b367838b111e3bcdd0440a729f16",
+        "time": 1794777191,
+        "s1": "PJz1Qjogo62ewVVChDUmvwotkGEZW9EZ5R",
+        "s2": "88c0d276058ef8506244c38b0d5fc414a60e85e18bc7f700b57f9ef77f0d6512",
+        "p": {
+          "s1": "ru-RU",
+          "s2": "Грузоперевозки ГАЗель,4 метровый термо фургон.",
+          "s3": "8-962-455-4036 Мой телефон.",
+          "s4": "{\"t\":197,\"a\":[11116,23],\"c\":\"new\",\"p\":\"published\",\"f\":{\"currency\":\"RUB\",\"price\":100},\"d\":{},\"v\":{\"order\":\"first\"},\"s\":{},\"m\":{}}",
+          "s5": "[\"https://peertube101.pocketnet.app/images/d6083225141eee0175860ebdb0e54f31/d6083225141eee0175860ebdb0e54f31-original.jpg\"]",
+          "s6": "ubjb4x0bwsbn",
+          "i1": 891
+        }
+      }
+    ],
+    "getbarteronoffersdetails": {
+      "offerScores": [
+        {
+          "hash": "4e58c26bf20f30da06e81147b76a9f1e5174ff081c355455cce1f0213caadbc9",
+          "type": 300,
+          "height": 2982015,
+          "blockHash": "355551b576f7d6cbf2b3e550e6e73ed4d6fa4fa644c470d2825921f4deb39a77",
+          "time": 1729025483,
+          "s1": "PL9ATj3uGN5JNwckoT8xGq5cWcV9dNRqfK",
+          "s2": "7e0e7fb284666bff10736e0212a849fac078ceaa5e18961db304d3f0c381c8e2",
+          "i1": 5
+        }
+      ],
+      "comments": [
+        {
+          "hash": "04758dcd6de066338f6c43e78d3316e24b2dc314d4b86354f486117805164cf3",
+          "type": 204,
+          "height": 2957818,
+          "blockHash": "81f5c647d38b87373f8bafa58369f852ce10c56a11c19a7cb232ac8ac3a7d896",
+          "time": 1727586000,
+          "s1": "PCJ2gYX2exnZtCnhE6maHTLQAfkJBFTgt9",
+          "s2": "04758dcd6de066338f6c43e78d3316e24b2dc314d4b86354f486117805164cf3",
+          "s3": "7e0e7fb284666bff10736e0212a849fac078ceaa5e18961db304d3f0c381c8e2",
+          "p": {
+            "s1": "{\"message\":\"Тестовый коммент 29.09.24 08:00\",\"url\":\"\",\"images\":[],\"info\":\"0\"}"
+          }
+        },
+        {
+          "hash": "8b7188b17b993798a136e4d301e687427d23c96d20caf33a5fb9f05b8a2875e3",
+          "type": 204,
+          "height": 2982015,
+          "blockHash": "355551b576f7d6cbf2b3e550e6e73ed4d6fa4fa644c470d2825921f4deb39a77",
+          "time": 1729025501,
+          "s1": "PL9ATj3uGN5JNwckoT8xGq5cWcV9dNRqfK",
+          "s2": "8b7188b17b993798a136e4d301e687427d23c96d20caf33a5fb9f05b8a2875e3",
+          "s3": "7e0e7fb284666bff10736e0212a849fac078ceaa5e18961db304d3f0c381c8e2",
+          "p": {
+            "s1": "{\"message\":\"круто\\n\",\"url\":\"\",\"images\":[],\"info\":\"5\"}"
+          }
+        }
+      ],
+      "commentScores": [],
+      "accounts": [
+        {
+          "hash": "123ce0347201bf9e94143be4a4edd82ecabae0cd31c4db1ea681132bf4f10dbd",
+          "type": 104,
+          "height": 2981997,
+          "blockHash": "3501b8b6ddcdbff300b7d930ebd3c95e6f2288d832c556a8b0e071d231eb117e",
+          "time": 1729024634,
+          "s1": "PL9ATj3uGN5JNwckoT8xGq5cWcV9dNRqfK",
+          "p": {
+            "s4": "{\"a\":[],\"g\":\"\",\"s\":false,\"r\":0}"
+          },
+          "additional": {
+            "regdate": 1729024634,
+            "rating": 0,
+            "rating_sum": 0,
+            "rating_count": 0
+          }
+        },
+        {
+          "hash": "4389998284b8d7ae6ec46b4c90a92bd98357406c1e0bde814e2761f0db757560",
+          "type": 104,
+          "height": 2954962,
+          "blockHash": "e22b594f343ecc1acb0436f2480f8771dbca37131994c1f061f78bfc82d98356",
+          "time": 1727414570,
+          "s1": "P8t2MfpzfoJAhRrzvP3qz9ruTzpKVHUM77",
+          "p": {
+            "s4": "{\"a\":[],\"g\":\"\",\"s\":false,\"r\":0}"
+          },
+          "additional": {
+            "regdate": 1727414598,
+            "rating": 50,
+            "rating_sum": 5,
+            "rating_count": 1
+          }
+        },
+        {
+          "hash": "8c243df0311245ffc6bb3dee746e869fd4a1141528bcad17376b538acd2ce4ff",
+          "type": 104,
+          "height": 2960139,
+          "blockHash": "63da9979a01b682fc34c4581c69e078fed7cb7400982b3a44f691515c5c863a5",
+          "time": 1727725765,
+          "s1": "PCJ2gYX2exnZtCnhE6maHTLQAfkJBFTgt9",
+          "p": {
+            "s4": "{\"a\":[17],\"g\":\"\",\"s\":false,\"r\":0}"
+          },
+          "additional": {
+            "regdate": 1726109005,
+            "rating": 50,
+            "rating_sum": 15,
+            "rating_count": 3
+          }
+        }
+      ]
+    },
+    "getbarteronaccounts": [
+      {
+        "hash": "795646c26cc3df81afebbdeb72992fdaa05e176f6a276e1fa778a832dd4ce6e2",
+        "type": 104,
+        "height": 3614539,
+        "blockHash": "8147addf880aa92566b23ade344380f1e5f4c7d06d98905107351c9a1b21f9fd",
+        "time": 1766259104,
+        "s1": "PPbNqCweFnTePQyXWR21B9jXWCiDJa2yYu",
+        "p": {
+          "s4": "{\"a\":[],\"g\":\"\",\"s\":false,\"r\":0,\"d\":{\"validator\":{\"status\":\"unavailable\",\"feePercent\":5}}}"
+        },
+        "additional": {
+          "regdate": 1760104443,
+          "rating": 0,
+          "rating_sum": 0,
+          "rating_count": 0
+        }
+      },
+      {
+        "hash": "afb0f7b78bca0a82b952b902ea42d059dce0a7e9b1d96dfca298a5d40e684298",
+        "type": 104,
+        "height": 3528742,
+        "blockHash": "65705281f8ef7d55d88c5f4c3094ee981e5c5ebae9320d38c320b94ca0d2ca40",
+        "time": 1761327468,
+        "s1": "PJz1Qjogo62ewVVChDUmvwotkGEZW9EZ5R",
+        "p": {
+          "s4": "{\"a\":[],\"g\":\"\",\"s\":false,\"r\":0}"
+        },
+        "additional": {
+          "regdate": 1761327468,
+          "rating": 36,
+          "rating_sum": 48,
+          "rating_count": 13
+        }
+      }
+    ],
+    "getuserprofile": [
+      {
+        "hash": "795331e41717841bae66a61e3b4fc812397b4ec3efb114513762bebaeb6d6482",
+        "address": "PJz1Qjogo62ewVVChDUmvwotkGEZW9EZ5R",
+        "id": 29905017,
+        "name": "DimDmitriy",
+        "i": "https://peertube331.pocketnet.app/images/fb9b4aff2436e121d49a40e62e3fe5d6/fb9b4aff2436e121d49a40e62e3fe5d6-original.jpg",
+        "b": "[]",
+        "r": "",
+        "postcnt": 0,
+        "dltdcnt": 2,
+        "reputation": 5.2,
+        "subscribes_count": 10,
+        "subscribers_count": 8,
+        "blockings_count": 2,
+        "blockers_count": 2,
+        "likers_count": 2,
+        "k": "03cbfb1ba0ed3d94682f0a0782e8541aee33fb86664d68ad4c66eb5e9b96bbdebe,0232184b9ea029c963f4be7afaaa4f702bb91423c8c472701d227d7d53aa3a71df,028101e2220e60b18def97e5e6…",
+        "a": "",
+        "l": "ru",
+        "s": "",
+        "update": 1783403358,
+        "regdate": 1761326774,
+        "flags": {},
+        "firstFlags": {},
+        "actions": 895,
+        "bans": {},
+        "badges": []
+      }
+    ],
+    "getfromtotransactions": [
+      {
+        "addrFrom": "PCJ2gYX2exnZtCnhE6maHTLQAfkJBFTgt9",
+        "addrTo": "PPbNqCweFnTePQyXWR21B9jXWCiDJa2yYu",
+        "hash": "5ee602811db1a7d3d59f91866b6f8633fb04692fc1bea675bf32fa892775342f",
+        "type": 1,
+        "height": 3586208,
+        "amount": 123000000,
+        "time": 1764664917,
+        "opreturn": "6a2453616665206465616c203537646661336465303437666530393332333734393932343031"
+      }
+    ],
+    "getnodeinfo": {
+      "version": "0.22.21",
+      "time": 1794783337,
+      "chain": "main",
+      "netstakeweight": 527635246662499,
+      "lastblock": {
+        "height": 4109690,
+        "hash": "c10a67e80b1bd7b81069b4da5d7a742559780e55abb913c37b610df174c1da54",
+        "time": 1794783360,
+        "ntx": 36
+      },
+      "proxy": false,
+      "proxies": [],
+      "ports": {
+        "node": 37070,
+        "api": 38081,
+        "rest": 38083,
+        "ws": 8087,
+        "wss": 8887,
+        "staticrpc": 38082
+      }
+    }
+  },
+  "host": {
+    "appinfo": {
+      "pkoin": true,
+      "device": "capacitor_android",
+      "version": "0.36.0",
+      "production": false,
+      "locale": "ru",
+      "theme": {
+        "rootid": "light"
+      },
+      "margintop": "0px",
+      "application": {
+        "id": "barterondev.pocketnet.app",
+        "scope": "barteron.club"
+      },
+      "project": {
+        "url": "bastyon.com",
+        "turl": "test.pocketnet.app",
+        "name": "Bastyon",
+        "protocol": "bastyon",
+        "archivedPeertubeServers": [
+          "pocketnetpeertube1.nohost.me",
+          "pocketnetpeertube2.nohost.me",
+          "pocketnetpeertube5.nohost.me",
+          "pocketnetpeertube7.nohost.me"
+        ]
+      },
+      "transactionsApiVersion": 8,
+      "alttransport": false
+    },
+    "videos": [
+      {
+        "link": "peertube://peertube601.pocketnet.app/ae1b7ae8-2433-493c-97be-cf1884491e4e",
+        "data": {
+          "image": "https://peertube601.pocketnet.app/lazy-static/previews/989b7921-1930-420d-a1f0-84e08f314734.jpg",
+          "thumbnail": "https://peertube601.pocketnet.app/static/thumbnails/2fef4564-dd4a-4edc-b374-2f70ae4cac56.jpg",
+          "duration": 26,
+          "original": {
+            "state": {
+              "id": 1,
+              "label": "Published"
+            },
+            "duration": 26,
+            "streamingPlaylists": [
+              {
+                "playlistUrl": "https://peertube601.pocketnet.app/static/streaming-playlists/hls/ae1b7ae8-2433-493c-97be-cf1884491e4e/32bdf97a-3941-4cb5-a775-3e2a064bcfb6-master.m3u8"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "userstate": false
+  },
+  "errors": {
+    "signedOut": {
+      "type": "object",
+      "isError": false,
+      "ctor": "Object",
+      "keys": ["message", "name", "stack", "code"],
+      "message": "required_authorization",
+      "name": "AuthorizationRequiredError",
+      "code": "required_authorization"
+    },
+    "unknownMethod": {
+      "type": "object",
+      "isError": false,
+      "ctor": "Object",
+      "keys": ["message", "name", "stack"],
+      "message": "All RPC servers failed. Last error: [object Object]",
+      "name": "Error",
+      "code": null
+    },
+    "brokenParameters": {
+      "type": "object",
+      "isError": false,
+      "ctor": "Object",
+      "keys": ["message", "name"],
+      "message": "unknown error",
+      "name": "Error",
+      "code": null
+    }
+  }
+}

@@ -6,20 +6,24 @@ import { defineComponent, h, markRaw } from 'vue'
 import { createMemoryHistory } from 'vue-router'
 import { i18n, setLocale } from '@/i18n'
 import { createAppRouter } from '@/router'
-import { createMockSdk, MOCK_ADDRESS } from '@/sdk/mock'
+import { createMockSdk, MOCK_ADDRESS, type MockOptions } from '@/sdk/mock'
 import { demoNetworkData } from '@/sdk/mock-data'
 import { createMockNetwork } from '@/sdk/mock-network'
 import { useSessionStore } from '@/stores/session'
+import { useUiStore } from '@/stores/ui'
 import { toasts } from '@/ui/toast'
 import { useChat } from './chat'
 
 const SELLER = 'PSeller'.padEnd(34, '1')
 
-async function setup() {
+async function setup(options: Pick<MockOptions, 'granted' | 'grantOnRequest'> = {}) {
   const pinia = createPinia()
   setActivePinia(pinia)
   setLocale('ru')
-  const sdk = createMockSdk({ network: createMockNetwork(demoNetworkData(MOCK_ADDRESS)) })
+  const sdk = createMockSdk({
+    network: createMockNetwork(demoNetworkData(MOCK_ADDRESS)),
+    ...options,
+  })
   const session = useSessionStore()
   session.sdk = markRaw(sdk)
   session.mode = 'mock'
@@ -94,5 +98,16 @@ describe('opening a chat', () => {
     session.ensureSignedIn = async () => true
     expect(await chat.open({ members: [SELLER], messages: [] })).toBe(true)
     wrapper.unmount()
+  })
+
+  it('chats not allowed and the user says no: how to allow them, not «чат не открылся»', async () => {
+    // Both hosts reject the request when the user refuses (`permission:denied:chat`).
+    const { chat, calls } = await setup({ granted: ['account'], grantOnRequest: false })
+    expect(await chat.open({ members: [SELLER], messages: ['Здравствуйте'] })).toBe(false)
+    expect(calls('permissions.request').map((c) => c.args[0])).toEqual([['chat']])
+    expect(useUiStore().dialog).toBe('permissions')
+    expect(toasts.items.filter((t) => t.kind === 'error')).toEqual([])
+    expect(calls('chat.getOrCreateRoom')).toHaveLength(0)
+    expect(chat.opening.value).toBe(false)
   })
 })
