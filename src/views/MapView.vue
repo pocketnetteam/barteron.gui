@@ -399,8 +399,24 @@ function back() {
             <h2 class="mapview__sheet-title">{{ t('map.inThisArea') }}</h2>
             <RouterLink class="mapview__sheet-link" :to="listRoute">{{ t('map.list') }}</RouterLink>
           </div>
-          <div class="mapview__strip">
-            <p v-if="!list.loading.value && !cards.length" class="mapview__empty">
+          <div class="mapview__strip" data-testid="map-strip">
+            <template v-if="list.loading.value">
+              <UiSkeleton
+                v-for="i in 3"
+                :key="i"
+                class="mapview__mini"
+                width="150px"
+                height="172px"
+                radius="14px"
+              />
+            </template>
+            <p v-else-if="list.error.value" class="mapview__empty mapview__empty--wide">
+              {{ t('list.errorTitle') }}
+              <UiButton variant="neutral" :size="36" @click="list.retry">{{
+                t('list.retry')
+              }}</UiButton>
+            </p>
+            <p v-else-if="!cards.length" class="mapview__empty mapview__empty--wide">
               {{ t('map.empty') }}
             </p>
             <RouterLink
@@ -972,6 +988,10 @@ function back() {
 
   .mapview__strip::-webkit-scrollbar {
     display: none;
+  }
+
+  .mapview__empty--wide {
+    flex: 1;
   }
 
   .mapview__mini {

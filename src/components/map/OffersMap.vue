@@ -9,6 +9,7 @@ import { isForNothing, offerPkoin, type Offer } from '@/models/offer'
 import type { Rates } from '@/api/rates'
 import { useSessionStore } from '@/stores/session'
 import { addTiles, loadLeaflet, type L } from './leaflet'
+import { layoutPins } from './pins'
 
 /**
  * Offers on a map (s2-map): price pills, close ones joined into «+N», the
@@ -57,26 +58,32 @@ function label(offer: Offer): string {
   return pkoin === null ? '—' : formatPkoin(pkoin, locale.value)
 }
 
-/** Joins pills closer than this many pixels. */
-const CLUSTER_PX = 46
+/** «+N» zooms in this far; from here on the pills are laid out apart. */
+const SPREAD_ZOOM = 17
+/** Where each pill is drawn: apart from its point when spread. */
+let drawn = new Map<string, LatLng>()
 
 function draw() {
   const m = map.value
   if (!m || !leaflet || !layer) return
   layer.clearLayers()
-  const groups: { center: Leaflet.Point; items: Point[] }[] = []
-  for (const p of points.value) {
-    const px = m.latLngToLayerPoint(p.at)
-    const near = groups.find((g) => g.center.distanceTo(px) < CLUSTER_PX)
-    if (near) near.items.push(p)
-    else groups.push({ center: px, items: [p] })
-  }
-  for (const g of groups) {
-    const first = g.items[0]!
-    if (g.items.length === 1) {
+  drawn = new Map()
+  const layout = layoutPins(
+    points.value.map((p) => ({ item: p, px: m.latLngToLayerPoint(p.at) })),
+    m.getZoom() >= SPREAD_ZOOM
+  )
+  for (const g of layout) {
+    if (g.kind === 'one') {
+      const first = g.item
       const id = first.offer.hash!
       const on = id === props.selected
-      const marker = leaflet.marker(first.at, {
+      let pin = first.at
+      if (g.moved) {
+        const ll = m.layerPointToLatLng(leaflet.point(g.at.x, g.at.y))
+        pin = [ll.lat, ll.lng]
+        drawn.set(id, pin)
+      }
+      const marker = leaflet.marker(pin, {
         icon: leaflet.divIcon({
           className: 'omap-pin-wrap',
           html: `<span class="omap-pin${on ? ' omap-pin--on' : ''}">${escapeHtml(label(first.offer))}</span>`,
@@ -97,12 +104,13 @@ function draw() {
           iconSize: [0, 0],
         }),
         keyboard: true,
-        title: t('map.group', { n: g.items.length }),
+        title: t('map.group', { n: g.items.length }, g.items.length),
       })
-      marker.on('click', () => m.fitBounds(bounds.pad(0.4), { maxZoom: 17 }))
+      marker.on('click', () => m.fitBounds(bounds.pad(0.4), { maxZoom: SPREAD_ZOOM }))
       layer.addLayer(marker)
     }
   }
+  placeCard()
 }
 
 function flyTo(center: LatLng) {
@@ -175,7 +183,7 @@ function placeCard() {
     cardAt.value = null
     return
   }
-  const pt = m.latLngToContainerPoint(p.at)
+  const pt = m.latLngToContainerPoint(drawn.get(p.offer.hash!) ?? p.at)
   cardAt.value = { x: pt.x, y: pt.y }
 }
 watch([() => props.selected, points, map], placeCard)

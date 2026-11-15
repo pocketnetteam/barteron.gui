@@ -464,10 +464,10 @@ const en: Messages = {
     zoomIn: 'Zoom in',
     zoomOut: 'Zoom out',
     zoomInTitle: 'Zoom in the map',
-    zoomInText: 'The area is too large for a filter. Offers will be shown without a place limit.',
+    zoomInText: 'The area is too large for a filter. The list shows the previous area.',
     empty: 'No offers in this area',
     free: 'Free',
-    group: '{n} offers nearby',
+    group: '{n} offer nearby | {n} offers nearby',
   },
   chat: {
     opening: 'The chat is opening. Please wait.',

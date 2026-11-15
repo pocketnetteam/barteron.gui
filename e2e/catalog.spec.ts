@@ -163,3 +163,22 @@ test('map: offers of the area; «search this area» saves it as the filter', asy
   const stored = await page.evaluate((me) => localStorage.getItem(`${me}_location`), ME)
   expect(JSON.parse(stored ?? '{}').bounds).toBeTruthy()
 })
+
+test('map: the node not answering is an error with «Повторить», not an empty area', async ({
+  page,
+}) => {
+  // Each read is tried twice (one retry).
+  await page.addInitScript(() => {
+    ;(window as { __barteronMockSetup?: unknown }).__barteronMockSetup = {
+      failRpc: [{ method: 'getbarteronfeed', times: 2 }],
+    }
+  })
+  await page.goto('/category/1000/map')
+  // The phone shows the strip under the map, the desktop the list beside it.
+  const where = page.getByTestId(isPhone(page) ? 'map-strip' : 'map-list')
+  await expect(where).toContainText('Не удалось загрузить объявления', { timeout: 10_000 })
+  await expect(where).not.toContainText('В этой области объявлений нет')
+  await where.getByRole('button', { name: 'Повторить' }).click()
+  await expect(page.locator('.omap-pin').first()).toBeVisible()
+  await expect(where).not.toContainText('Не удалось загрузить объявления')
+})

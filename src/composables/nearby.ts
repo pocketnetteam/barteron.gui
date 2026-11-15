@@ -57,6 +57,10 @@ export function useNearby(district: MaybeRefOrGetter<string | null> = null) {
     if (!s || !cell || !s.districts.some((d) => d.cell === cell)) return s
     return summarize(inDistrict(s.offers, cell))
   })
+  const error = computed(() => {
+    if (!area.value) return null
+    return (feed.isError.value ? feed.error.value : null) ?? categories.error.value ?? null
+  })
 
   return {
     area,
@@ -64,9 +68,13 @@ export function useNearby(district: MaybeRefOrGetter<string | null> = null) {
     scoped,
     /** Every offer of the area was read, not only the newest. */
     complete: computed(() => !!first.value && first.value.received < NEARBY_PAGE),
-    loading: computed(() => !!area.value && !summary.value && !feed.isError.value),
-    error: computed(() => (feed.isError.value ? feed.error.value : null)),
-    retry: () => void feed.refetch(),
+    loading: computed(() => !!area.value && !summary.value && !error.value),
+    /** The offers or the category tree they are summed up by did not come. */
+    error,
+    retry: () => {
+      if (feed.isError.value) void feed.refetch()
+      categories.retry()
+    },
   }
 }
 

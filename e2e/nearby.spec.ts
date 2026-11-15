@@ -109,6 +109,24 @@ test('around Moscow: totals, categories, districts and the newest offers', async
   await expect(page).toHaveURL(/\/category\/1000$/)
 })
 
+test('the node not answering: an error with «Повторить», which brings the area', async ({
+  page,
+}) => {
+  // Each read is tried twice (one retry).
+  await page.addInitScript(() => {
+    ;(window as { __barteronMockSetup?: unknown }).__barteronMockSetup = {
+      failRpc: [{ method: 'getbarteronfeed', times: 2 }],
+    }
+  })
+  await openAt(page, MOSCOW)
+  const failed = page.locator('[data-testid=system-state][data-kind=nearby-error]')
+  await expect(failed).toContainText('Не удалось загрузить объявления', { timeout: 10_000 })
+  await expect(page.getByTestId('nearby-empty')).toBeHidden()
+  await failed.getByRole('button', { name: 'Повторить' }).click()
+  await expect(page.getByTestId('nearby-stats')).toBeVisible()
+  await expect(failed).toBeHidden()
+})
+
 test('a district narrows everything down, «Вся область» brings it back', async ({ page }) => {
   await openAt(page, MOSCOW)
   const first = page.locator('.ndist').first()
