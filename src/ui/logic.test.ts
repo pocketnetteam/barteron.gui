@@ -97,6 +97,14 @@ describe('toasts', () => {
     expect(toasts.items.map((t) => t.text)).toEqual(['2', '3', '4'])
   })
 
+  it('more than three: a progress toast stays, its result is still to come', () => {
+    const id = showToast('Публикуем…', { kind: 'progress' })
+    for (const text of ['1', '2', '3']) showToast(text)
+    expect(toasts.items.map((t) => t.text)).toEqual(['Публикуем…', '2', '3'])
+    updateToast(id, 'Опубликовано', { kind: 'success' })
+    expect(toasts.items[0]?.text).toBe('Опубликовано')
+  })
+
   it('keeps errors and toasts with an action until they are closed (s8-confirm)', () => {
     showToast('Ошибка на ноде', { kind: 'error' })
     showToast('Объявление снято', { action: { label: 'Вернуть', run: () => undefined } })

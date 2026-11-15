@@ -56,7 +56,11 @@ function onKeydown(event: KeyboardEvent): void {
   }
   const first = items[0]!
   const last = items[items.length - 1]!
-  if (event.shiftKey && document.activeElement === first) {
+  // Focus on the window itself (nothing else to focus at first): Shift+Tab would leave it.
+  if (!items.includes(document.activeElement as HTMLElement)) {
+    event.preventDefault()
+    ;(event.shiftKey ? last : first).focus()
+  } else if (event.shiftKey && document.activeElement === first) {
     event.preventDefault()
     last.focus()
   } else if (!event.shiftKey && document.activeElement === last) {
@@ -95,7 +99,12 @@ watch(
   { immediate: true }
 )
 
-onBeforeUnmount(() => lockScroll(false))
+// The app's windows close by being taken away while open: focus goes back all the same.
+onBeforeUnmount(() => {
+  if (!locked) return
+  lockScroll(false)
+  returnFocus?.focus?.()
+})
 </script>
 
 <template>

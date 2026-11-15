@@ -56,7 +56,9 @@ export function showToast(text: string, options: ToastOptions = {}): number {
   const id = ++lastId
   const kind = options.kind ?? 'success'
   state.items.push({ id, kind, text, action: options.action })
-  while (state.items.length > MAX_VISIBLE) dismiss(state.items[0]!.id)
+  // The oldest goes, but not a progress toast: its result is still to come.
+  while (state.items.length > MAX_VISIBLE)
+    dismiss((state.items.find((t) => t.kind !== 'progress') ?? state.items[0]!).id)
   schedule(id, durationOf(kind, options.action, options.duration))
   return id
 }

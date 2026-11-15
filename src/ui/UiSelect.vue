@@ -92,7 +92,9 @@ function onKeydown(event: KeyboardEvent): void {
       choose(active.value)
       break
     case 'Escape':
+      // The list closes, not a window it sits in.
       event.preventDefault()
+      event.stopPropagation()
       hide()
       break
     case 'Tab':

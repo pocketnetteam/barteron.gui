@@ -376,3 +376,16 @@ test('phone «Настройки и помощь»: currency and language in she
   await expect(menu).toContainText('Price currency')
   await expect(page.locator('html')).toHaveAttribute('lang', 'en')
 })
+
+test('an app window closed with Escape gives focus back to its button', async ({ page }) => {
+  test.skip(isPhone(page), 'the phone opens these windows from the settings list')
+  await page.goto('/about')
+  const button = page.getByTestId('footer-support')
+  await button.focus()
+  await page.keyboard.press('Enter')
+  const dialog = page.getByRole('dialog', { name: 'Написать в поддержку' })
+  await expect(dialog).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(dialog).toBeHidden()
+  await expect(button).toBeFocused()
+})

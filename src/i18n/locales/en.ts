@@ -2134,6 +2134,7 @@ const en: Messages = {
     copied: 'Referral link copied',
     copyFailed: 'Could not copy the link',
     copyByHand: 'Select it and copy it by hand:',
+    link: 'Referral link',
     signIn: 'Sign in to get the link',
   },
   legal: {

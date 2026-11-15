@@ -225,6 +225,124 @@ describe('UiDialog', () => {
   })
 })
 
+describe('UiDialog and the keyboard', () => {
+  it('Shift+Tab from the window itself stays inside, on its last control', async () => {
+    const open = ref(true)
+    mountUi(
+      defineComponent({
+        setup: () => () =>
+          h(UiDialog, { title: 'Условия', open: open.value }, { default: () => h('p', 'Текст') }),
+      })
+    )
+    await nextTick()
+    await nextTick()
+    const panel = document.querySelector<HTMLElement>('[role=dialog]')!
+    // Nothing to focus but the ×: the window itself takes focus.
+    expect(document.activeElement).toBe(panel)
+    const event = new KeyboardEvent('keydown', {
+      key: 'Tab',
+      shiftKey: true,
+      bubbles: true,
+      cancelable: true,
+    })
+    panel.dispatchEvent(event)
+    expect(event.defaultPrevented).toBe(true)
+    expect(document.activeElement?.classList.contains('ui-dialog__close')).toBe(true)
+  })
+
+  it('from the window itself: Tab to the first control, Shift+Tab to the last', async () => {
+    mountUi(
+      defineComponent({
+        setup: () => () =>
+          h(
+            UiDialog,
+            { title: 'Снять?', open: true },
+            {
+              default: () => h('p', 'Текст'),
+              actions: () => [h('button', { id: 'no' }, 'Нет'), h('button', { id: 'yes' }, 'Да')],
+            }
+          ),
+      })
+    )
+    await nextTick()
+    await nextTick()
+    const panel = document.querySelector<HTMLElement>('[role=dialog]')!
+    const press = (shiftKey: boolean) =>
+      panel.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey, bubbles: true }))
+    panel.focus()
+    press(true)
+    expect(document.activeElement?.id).toBe('yes')
+    panel.focus()
+    press(false)
+    expect(document.activeElement?.classList.contains('ui-dialog__close')).toBe(true)
+  })
+
+  it('taken away while open (the app’s windows close so), focus goes back to the button', async () => {
+    const shown = ref(false)
+    // Windows of the tests above stay mounted and counted on <body>.
+    delete document.body.dataset.dialogs
+    document.body.style.overflow = ''
+    mountUi(
+      defineComponent({
+        setup: () => () => [
+          h('button', { id: 'opener', onClick: () => (shown.value = true) }, 'Поддержка'),
+          shown.value
+            ? h(UiDialog, { title: 'Поддержка', open: true }, { default: () => h('p', 'Почта') })
+            : null,
+        ],
+      }),
+      { attachTo: document.body }
+    )
+    const opener = document.getElementById('opener')!
+    opener.focus()
+    opener.click()
+    await nextTick()
+    await nextTick()
+    expect(document.activeElement).not.toBe(opener)
+    shown.value = false
+    await nextTick()
+    expect(document.activeElement).toBe(opener)
+    expect(document.body.style.overflow).toBe('')
+  })
+
+  it('Escape in an open list closes the list, not the window around it', async () => {
+    const open = ref(true)
+    mountUi(
+      defineComponent({
+        setup: () => () =>
+          h(
+            UiDialog,
+            {
+              title: 'Фильтры',
+              open: open.value,
+              'onUpdate:open': (v: boolean) => (open.value = v),
+            },
+            {
+              default: () =>
+                h(UiSelect, {
+                  label: 'Сортировка',
+                  modelValue: 'new',
+                  options: [
+                    { value: 'new', label: 'Сначала новые' },
+                    { value: 'old', label: 'Сначала старые' },
+                  ],
+                }),
+            }
+          ),
+      })
+    )
+    await nextTick()
+    const trigger = document.querySelector<HTMLElement>('[role=combobox]')!
+    trigger.click()
+    await nextTick()
+    expect(trigger.getAttribute('aria-expanded')).toBe('true')
+    trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
+    await nextTick()
+    expect(trigger.getAttribute('aria-expanded')).toBe('false')
+    expect(open.value).toBe(true)
+  })
+})
+
 describe('UiScreen', () => {
   const overflow = () => document.documentElement.style.overflow
 

@@ -50,6 +50,7 @@ const openTerms = () =>
         <span>{{ t('referral.copyByHand') }}</span>
         <input
           class="ref__link"
+          :aria-label="t('referral.link')"
           :value="link"
           readonly
           @focus="($event.target as HTMLInputElement).select()"
