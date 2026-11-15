@@ -45,7 +45,8 @@ const fee = (value: number) =>
   <div class="gp" data-testid="guarantor-picker">
     <p class="gp__sub">{{ t('deal.buy.guarantorSubtitle') }}</p>
 
-    <div v-if="loading" class="gp__list">
+    <div v-if="loading" class="gp__list" aria-busy="true">
+      <span class="visually-hidden" role="status">{{ t('deal.buy.loading') }}</span>
       <UiSkeleton v-for="i in 3" :key="i" width="100%" :ratio="'8 / 1'" radius="12px" />
     </div>
     <UiAlert v-else-if="failed" tone="danger" live>

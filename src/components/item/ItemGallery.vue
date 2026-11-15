@@ -102,7 +102,7 @@ const ownTiles = computed(() => props.slides.slice(0, tileCount.value))
           ><UiIcon name="play" :size="18"
         /></span>
         <span v-if="i === tileCount - 1 && count > tileCount" class="gal__more">{{
-          t('item.gallery.morePhotos', { n: count - tileCount })
+          t('item.gallery.morePhotos', { n: count - tileCount }, count - tileCount)
         }}</span>
       </button>
       <div v-if="!count" class="gal__tile gal__tile--main gal__tile--empty">
