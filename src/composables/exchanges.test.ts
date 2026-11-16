@@ -38,7 +38,7 @@ function setup<T = ReturnType<typeof useMyExchanges>>(
 ) {
   const pinia = createPinia()
   setActivePinia(pinia)
-  setLocale('ru')
+  void setLocale('ru')
   const data = demoNetworkData(ME)
   // Only these offers: the demo ones would match too.
   const network = createMockNetwork({ ...data, offers })

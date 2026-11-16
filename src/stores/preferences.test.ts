@@ -14,7 +14,7 @@ describe('settings kept under the old app’s keys', () => {
   beforeEach(() => {
     localStorage.clear()
     setActivePinia(createPinia())
-    setLocale('ru')
+    void setLocale('ru')
   })
 
   it('currency: the old `<address>_currency` choice carries over; default by language', async () => {

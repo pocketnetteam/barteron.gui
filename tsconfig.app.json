@@ -11,5 +11,11 @@
       "@/*": ["./src/*"]
     },
     "types": ["vite/client"]
+  },
+  "vueCompilerOptions": {
+    "strictTemplates": true,
+    "dataAttributes": ["data-*", "aria-*"],
+    "fallthroughAttributes": true,
+    "inferTemplateDollarAttrs": true
   }
 }

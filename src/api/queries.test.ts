@@ -27,7 +27,7 @@ const ME = 'PMockUser1111111111111111111111111'
 function setup(extraOffers: RawTx[] = []) {
   const pinia = createPinia()
   setActivePinia(pinia)
-  setLocale('ru')
+  void setLocale('ru')
   const data = demoNetworkData(ME)
   const network = createMockNetwork({ ...data, offers: [...data.offers!, ...extraOffers] })
   const sdk = createMockSdk({ network })
@@ -158,7 +158,7 @@ describe('queries', () => {
     })
     await vi.waitFor(() => expect(categories.ready.value).toBe(true))
     expect(categories.label(1006)).toBe('Горные')
-    setLocale('en')
+    void setLocale('en')
     await vi.waitFor(() => expect(categories.label(1006)).toBe('Mountain'))
   })
 })

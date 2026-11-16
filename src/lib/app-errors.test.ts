@@ -19,7 +19,7 @@ function mountButton(onClick: () => unknown) {
 const errorToasts = () => toasts.items.filter((t) => t.kind === 'error').map((t) => t.text)
 
 beforeEach(() => {
-  setLocale('ru')
+  void setLocale('ru')
   dismissAll()
   vi.spyOn(console, 'error').mockImplementation(() => undefined)
 })

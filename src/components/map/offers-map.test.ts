@@ -25,7 +25,7 @@ function mountMap(props: { offers?: Offer[]; zoom?: number } = {}) {
   vi.spyOn(HTMLElement.prototype, 'clientHeight', 'get').mockReturnValue(600)
   const pinia = createPinia()
   setActivePinia(pinia)
-  setLocale('ru')
+  void setLocale('ru')
   return mount(OffersMap, {
     attachTo: document.body,
     props: { offers: [], center: [55.75, 37.62], radiusKm: 10, ...props },

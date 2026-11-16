@@ -94,7 +94,7 @@ export function useScoreModeration(
       ],
     })
     if (!ok) return 'failed'
-    account.save((a) => withRequest(a, { offerId, score, moderator }))
+    void account.save((a) => withRequest(a, { offerId, score, moderator }))
     return 'sent'
   }
 

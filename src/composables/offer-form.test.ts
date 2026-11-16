@@ -55,7 +55,7 @@ async function setup(options: Setup = {}) {
   }
   const pinia = createPinia()
   setActivePinia(pinia)
-  setLocale('ru')
+  void setLocale('ru')
   const sdk: MockSdk = createMockSdk({
     network: createMockNetwork(demoNetworkData(ME)),
     rpc: options.rpc,

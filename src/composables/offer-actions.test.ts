@@ -36,7 +36,7 @@ const myOffer = (patch: Record<string, unknown> = {}): Offer =>
 async function setup(offer: Offer) {
   const pinia = createPinia()
   setActivePinia(pinia)
-  setLocale('ru')
+  void setLocale('ru')
   const sdk = createMockSdk()
   const session = useSessionStore()
   session.sdk = markRaw(sdk)

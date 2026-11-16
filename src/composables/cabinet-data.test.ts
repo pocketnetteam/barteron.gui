@@ -11,7 +11,7 @@ import { useCabinetHead } from './cabinet-data'
 async function setup(accounts: MockRpcHandler, balanceRefused = false) {
   const pinia = createPinia()
   setActivePinia(pinia)
-  setLocale('ru')
+  void setLocale('ru')
   const sdk = createMockSdk({ rpc: { getbarteronaccounts: accounts, getuserprofile: () => [] } })
   if (balanceRefused) {
     sdk.get.balance = async () => {

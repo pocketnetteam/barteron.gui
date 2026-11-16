@@ -87,11 +87,11 @@ const placeMode = computed<'fixed' | 'geo'>({
   get: () => (fixed.value ? 'fixed' : 'geo'),
   set: (value) => {
     if (value === 'fixed') placeOpen.value = true
-    else if (fixed.value) account.save((a) => withHomePlace(a, null))
+    else if (fixed.value) void account.save((a) => withHomePlace(a, null))
   },
 })
 function savePlace(geohash: string) {
-  account.save((a) => withHomePlace(a, geohash))
+  void account.save((a) => withHomePlace(a, geohash))
 }
 const placeText = computed(() => {
   if (!fixed.value) return t('settings.place.geoHint')

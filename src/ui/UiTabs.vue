@@ -9,7 +9,7 @@ export interface TabItem<V> {
 }
 
 const props = defineProps<{ items: TabItem<T>[]; label?: string }>()
-const model = defineModel<T>()
+const model = defineModel<T>({ required: true })
 const buttons = ref<HTMLButtonElement[]>([])
 
 function onKeydown(event: KeyboardEvent, index: number): void {

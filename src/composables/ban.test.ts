@@ -43,7 +43,7 @@ async function settles(promise: Promise<unknown>, ms = 20): Promise<boolean> {
 async function setup<T>(address: string, use: () => T) {
   const pinia = createPinia()
   setActivePinia(pinia)
-  setLocale('ru')
+  void setLocale('ru')
   // `address` is a Bastyon user with a profile: the chat does not ask to activate.
   const sdk = createMockSdk({ network: createMockNetwork(demoNetworkData(address)) })
   const session = useSessionStore()

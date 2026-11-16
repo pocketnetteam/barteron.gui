@@ -10,7 +10,7 @@ import App from './App.vue'
 async function show(path: string, status: 'outside' | 'failed') {
   const pinia = createPinia()
   setActivePinia(pinia)
-  setLocale('ru')
+  void setLocale('ru')
   const page = { render: () => null }
   const router = createRouter({
     history: createMemoryHistory(),

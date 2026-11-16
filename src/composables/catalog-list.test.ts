@@ -15,7 +15,7 @@ import { useCatalogList } from './catalog-list'
 function setup(failFeed: number[] = []) {
   const pinia = createPinia()
   setActivePinia(pinia)
-  setLocale('ru')
+  void setLocale('ru')
   const network = createMockNetwork(demoNetworkData(MOCK_ADDRESS))
   let feedCalls = 0
   const sdk = createMockSdk({

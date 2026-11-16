@@ -13,7 +13,7 @@ import { useBotChannel } from './notify'
  */
 async function card(fetcher: typeof fetch) {
   setActivePinia(createPinia())
-  setLocale('ru')
+  void setLocale('ru')
   vi.stubGlobal('fetch', fetcher)
   const session = useSessionStore()
   session.sdk = markRaw(createMockSdk({ address: MOCK_ADDRESS, granted: ['sign'] }))

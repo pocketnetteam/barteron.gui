@@ -15,7 +15,7 @@ describe('lists kept under the old app’s keys', () => {
   beforeEach(() => {
     localStorage.clear()
     setActivePinia(createPinia())
-    setLocale('ru')
+    void setLocale('ru')
   })
 
   it('favourites: old `<address>_like`, toggle, forget unknown ids', async () => {

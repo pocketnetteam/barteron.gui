@@ -1,6 +1,18 @@
 <script setup lang="ts" generic="T extends string | number">
-defineProps<{ value: T; name?: string; disabled?: boolean }>()
-const model = defineModel<T>()
+import { computed } from 'vue'
+
+const props = defineProps<{ modelValue?: T; value: T; name?: string; disabled?: boolean }>()
+/**
+ * Nothing is chosen yet while the model is undefined; a press always sends this
+ * option's value. The native v-model keeps the dot right when the parent refuses.
+ */
+const emit = defineEmits<{ 'update:modelValue': [value: T] }>()
+const model = computed({
+  get: () => props.modelValue,
+  set: (value) => {
+    if (value !== undefined) emit('update:modelValue', value)
+  },
+})
 </script>
 
 <template>

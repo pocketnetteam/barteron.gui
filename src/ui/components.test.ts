@@ -1,12 +1,14 @@
 import { flushPromises } from '@vue/test-utils'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 import PhotoViewer from '@/components/item/PhotoViewer.vue'
 import { mountUi } from '@/test/mount'
 import UiButton from './UiButton.vue'
+import UiChoiceCard from './UiChoiceCard.vue'
 import UiDialog from './UiDialog.vue'
 import UiField from './UiField.vue'
 import UiInput from './UiInput.vue'
+import UiRadio from './UiRadio.vue'
 import UiRating from './UiRating.vue'
 import UiScreen from './UiScreen.vue'
 import UiSelect from './UiSelect.vue'
@@ -54,13 +56,106 @@ describe('UiButton', () => {
     })
     expect(w.text()).toContain('(откроется в Bastyon)')
   })
+
+  it('passes a press to the listener once, with the event', async () => {
+    const pressed: MouseEvent[] = []
+    const w = mountUi(
+      defineComponent({
+        setup: () => () =>
+          h(UiButton, { onClick: (event: MouseEvent) => pressed.push(event) }, () => 'Купить'),
+      })
+    )
+    await w.find('button').trigger('click')
+    expect(pressed).toHaveLength(1)
+    expect(pressed[0]).toBeInstanceOf(MouseEvent)
+  })
+
+  it('a router link button both navigates and passes the press', async () => {
+    let pressed = 0
+    const w = mountUi(
+      defineComponent({
+        setup: () => () =>
+          h(UiButton, { to: { name: 'about' }, onClick: () => pressed++ }, () => 'О проекте'),
+      })
+    )
+    // Otherwise the first navigation, still loading its page, cancels the press.
+    await w.vm.$router.isReady()
+    await w.find('a').trigger('click')
+    expect(pressed).toBe(1)
+    await vi.waitFor(() => expect(w.vm.$router.currentRoute.value.name).toBe('about'))
+  })
+
+  it('submits a form by its id from outside it', () => {
+    const w = mountUi(UiButton, { props: { type: 'submit', form: 'survey-form' } })
+    expect(w.attributes('type')).toBe('submit')
+    expect(w.attributes('form')).toBe('survey-form')
+  })
+})
+
+describe.each([
+  ['UiRadio', UiRadio],
+  ['UiChoiceCard', UiChoiceCard],
+] as const)('%s', (_, Option) => {
+  it('nothing is chosen while the model is empty; a press sends the option’s value', async () => {
+    const value = ref<'a' | 'b' | undefined>(undefined)
+    const option = (v: 'a' | 'b') =>
+      h(Option, {
+        modelValue: value.value,
+        value: v,
+        name: 'choice',
+        title: v,
+        'onUpdate:modelValue': (next: string | number) => (value.value = next as 'a' | 'b'),
+      })
+    const w = mountUi(defineComponent({ setup: () => () => [option('a'), option('b')] }))
+    const inputs = w.findAll('input')
+    const checked = () => inputs.map((i) => (i.element as HTMLInputElement).checked)
+    expect(checked()).toEqual([false, false])
+
+    await inputs[1]!.setValue(true)
+    expect(value.value).toBe('b')
+    expect(checked()).toEqual([false, true])
+
+    value.value = 'a'
+    await nextTick()
+    expect(checked()).toEqual([true, false])
+  })
+
+  it('the parent drops the choice instead (no pickup points yet): no dot stays on', async () => {
+    const value = ref<'a' | 'b' | undefined>('a')
+    const option = (v: 'a' | 'b') =>
+      h(Option, {
+        modelValue: value.value,
+        value: v,
+        name: 'choice',
+        title: v,
+        'onUpdate:modelValue': (next: string | number) =>
+          (value.value = next === 'b' ? undefined : (next as 'a')),
+      })
+    const w = mountUi(defineComponent({ setup: () => () => [option('a'), option('b')] }))
+    const inputs = w.findAll('input')
+    await inputs[1]!.setValue(true)
+    await nextTick()
+    expect(value.value).toBeUndefined()
+    expect(inputs.map((i) => (i.element as HTMLInputElement).checked)).toEqual([false, false])
+  })
+})
+
+describe('UiChoiceCard', () => {
+  it('only the chosen card is highlighted', async () => {
+    const w = mountUi(UiChoiceCard, { props: { value: 'safe', title: 'Безопасная сделка' } })
+    expect(w.classes()).not.toContain('ui-choice--selected')
+    await w.setProps({ modelValue: 'safe' })
+    expect(w.classes()).toContain('ui-choice--selected')
+    await w.setProps({ modelValue: 'direct' })
+    expect(w.classes()).not.toContain('ui-choice--selected')
+  })
 })
 
 describe('UiField + UiInput', () => {
   it('links the label, the hint and the error to the input', () => {
     const w = mountUi(UiField, {
       props: { label: 'Цена', error: 'Укажите цену' },
-      slots: { default: () => h(UiInput, { suffix: 'PKOIN' }) },
+      slots: { default: () => h(UiInput, { modelValue: '', suffix: 'PKOIN' }) },
     })
     const input = w.find('input')
     const label = w.find('label')
@@ -74,7 +169,7 @@ describe('UiField + UiInput', () => {
   it('shows the counter', () => {
     const w = mountUi(UiField, {
       props: { label: 'Название', count: 24, max: 80 },
-      slots: { default: () => h(UiInput) },
+      slots: { default: () => h(UiInput, { modelValue: '' }) },
     })
     expect(w.text()).toContain('24 / 80')
   })

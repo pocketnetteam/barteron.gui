@@ -19,7 +19,7 @@ const SELLER = 'PSeller'.padEnd(34, '1')
 async function setup(options: Pick<MockOptions, 'granted' | 'grantOnRequest'> = {}) {
   const pinia = createPinia()
   setActivePinia(pinia)
-  setLocale('ru')
+  void setLocale('ru')
   const sdk = createMockSdk({
     network: createMockNetwork(demoNetworkData(MOCK_ADDRESS)),
     ...options,

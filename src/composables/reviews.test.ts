@@ -70,7 +70,7 @@ interface Setup {
 async function setup<T>(use: () => T, options: Setup = {}) {
   const pinia = createPinia()
   setActivePinia(pinia)
-  setLocale('ru')
+  void setLocale('ru')
   const network = createMockNetwork(demoNetworkData(ME))
   const sdk: MockSdk = createMockSdk({
     network,

@@ -13,7 +13,7 @@ const ADDRESS = 'PMdhZ1gvZXAXmQ6z5ghHz86arfXorxNYgX'
 function setup(open: ((kind: string, value: string) => Promise<unknown>) | null) {
   const pinia = createPinia()
   setActivePinia(pinia)
-  setLocale('ru')
+  void setLocale('ru')
   const sdk = createMockSdk()
   if (open) sdk.open.profile = open
   else (sdk as { open: { profile?: unknown } }).open.profile = undefined

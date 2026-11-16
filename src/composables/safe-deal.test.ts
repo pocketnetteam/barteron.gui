@@ -75,7 +75,7 @@ interface Setup {
 async function setup<T>(use: () => T, options: Setup = {}) {
   const pinia = createPinia()
   setActivePinia(pinia)
-  setLocale('ru')
+  void setLocale('ru')
   const data = demoNetworkData(ME)
   const network = createMockNetwork({
     ...data,
@@ -434,7 +434,7 @@ describe('the action card', () => {
 
   beforeEach(() => {
     setActivePinia(createPinia())
-    setLocale('ru')
+    void setLocale('ru')
   })
 
   it('the seller is banned: the buyer gets no payment form; the guarantor is warned and keeps both choices', async () => {
@@ -521,7 +521,7 @@ describe('the action card', () => {
   })
 
   it('the agreed price with thousands the language writes: «12,400» in English is not 12.4', async () => {
-    setLocale('en')
+    void setLocale('en')
     const unpaid = { status: '1' as const, paid: 0, transfer: null, paying: null }
     const { wrapper, send } = card({ role: 'buyer', state: unpaid, listed: 250.125 })
     const input = wrapper.get<HTMLInputElement>('input[data-testid="deal-value"]')
@@ -537,7 +537,7 @@ describe('the action card', () => {
     wrapper.unmount()
 
     // Serbian: a dot groups thousands, the comma is the fraction.
-    setLocale('sr')
+    void setLocale('sr')
     const sr = card({ role: 'buyer', state: unpaid, listed: 250.125 })
     const field = sr.wrapper.get<HTMLInputElement>('input[data-testid="deal-value"]')
     expect(field.element.value).toBe('250,125')

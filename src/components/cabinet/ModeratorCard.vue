@@ -60,7 +60,7 @@ async function save() {
       checking.value = false
     }
   }
-  props.account.save((a) => withModerator(a, on))
+  void props.account.save((a) => withModerator(a, on))
 }
 
 const statuses = computed(() => [

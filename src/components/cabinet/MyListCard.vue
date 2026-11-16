@@ -43,7 +43,7 @@ const remove = (id: number) => (tags.value = tags.value.filter((x) => x !== id))
 function save() {
   if (!changed.value || locked.value) return
   const next = [...tags.value]
-  props.account.save((a) => ({ ...a, tags: next }))
+  void props.account.save((a) => ({ ...a, tags: next }))
 }
 </script>
 

@@ -1,4 +1,5 @@
 <script setup lang="ts" generic="T extends string | number">
+import { computed } from 'vue'
 import type { IconName } from './icons'
 import UiIcon from './UiIcon.vue'
 
@@ -6,7 +7,8 @@ import UiIcon from './UiIcon.vue'
  * A large radio option: delivery methods, «Как купить?», deal types.
  * With `icon` the icon replaces the radio dot (sheets); `trailingIcon` sits on the right.
  */
-defineProps<{
+const props = defineProps<{
+  modelValue?: T
   value: T
   name?: string
   title: string
@@ -16,13 +18,23 @@ defineProps<{
   disabled?: boolean
 }>()
 
-const model = defineModel<T>()
+/**
+ * Nothing is chosen yet while the model is undefined; a press always sends this
+ * option's value. The native v-model keeps the dot right when the parent refuses.
+ */
+const emit = defineEmits<{ 'update:modelValue': [value: T] }>()
+const model = computed({
+  get: () => props.modelValue,
+  set: (value) => {
+    if (value !== undefined) emit('update:modelValue', value)
+  },
+})
 </script>
 
 <template>
   <label
     class="ui-choice"
-    :class="{ 'ui-choice--selected': model === value, 'ui-choice--disabled': disabled }"
+    :class="{ 'ui-choice--selected': modelValue === value, 'ui-choice--disabled': disabled }"
   >
     <input
       v-model="model"

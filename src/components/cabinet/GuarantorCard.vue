@@ -46,7 +46,7 @@ const locked = computed(() => props.account.pending.value || !props.account.canS
 
 function save() {
   if (!changed.value || feeError.value) return
-  props.account.save((a) =>
+  void props.account.save((a) =>
     withGuarantor(a, { available: available.value === 'on', feePercent: feeNumber.value })
   )
 }

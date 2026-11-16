@@ -11,7 +11,7 @@ export interface SegmentItem<V> {
 }
 
 const props = defineProps<{ items: SegmentItem<T>[]; label?: string; disabled?: boolean }>()
-const model = defineModel<T>()
+const model = defineModel<T>({ required: true })
 const buttons = ref<HTMLButtonElement[]>([])
 
 function onKeydown(event: KeyboardEvent, index: number): void {

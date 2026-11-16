@@ -9,7 +9,7 @@ export function mountUi<C extends Component>(
   component: C,
   options: ComponentMountingOptions<C> & { locale?: Locale } = {}
 ) {
-  setLocale(options.locale ?? 'ru')
+  void setLocale(options.locale ?? 'ru')
   const router = createAppRouter(createMemoryHistory())
   const { global, ...rest } = options
   return mount(component, {

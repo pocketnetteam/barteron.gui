@@ -51,7 +51,7 @@ export const useSessionStore = defineStore('session', () => {
     appinfo.value = result.appinfo
     hostTheme.value = result.appinfo.theme?.rootid ?? null
     hostLocale.value = result.appinfo.locale ?? null
-    setLocale(resolveLocale(hostLocale.value))
+    void setLocale(resolveLocale(hostLocale.value))
     applyHostInsets(result.appinfo)
 
     // Outside services through the host when it routes traffic through Tor.
@@ -62,7 +62,7 @@ export const useSessionStore = defineStore('session', () => {
     })
     result.sdk.on('locale', ({ locale }) => {
       hostLocale.value = locale
-      setLocale(resolveLocale(locale))
+      void setLocale(resolveLocale(locale))
     })
 
     await loadAccount()

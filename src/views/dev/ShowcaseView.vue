@@ -57,7 +57,7 @@ const themeModel = computed({
 const LOCALE_NAMES: Record<Locale, string> = { ru: 'Русский', en: 'English', sr: 'Српски' }
 const localeModel = computed({
   get: () => locale.value as Locale,
-  set: (value: Locale) => setLocale(value),
+  set: (value: Locale) => void setLocale(value),
 })
 const localeOptions = LOCALES.map((value) => ({ value, label: LOCALE_NAMES[value] }))
 

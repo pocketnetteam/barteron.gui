@@ -57,7 +57,9 @@ function loadWorker(windows = ['w1', 'w2']) {
     const event: FetchEvent = {
       request: new Request(url, init),
       clientId,
-      respondWith: (r) => (response = r),
+      respondWith: (r) => {
+        response = r
+      },
     }
     listeners.fetch!(event)
     return response

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends string | number">
 import { useFieldControl } from './field'
 
 defineOptions({ inheritAttrs: false })
@@ -20,7 +20,7 @@ const props = withDefaults(
   { type: 'text', size: 48 }
 )
 
-const model = defineModel<string | number>({ default: '' })
+const model = defineModel<T>({ required: true })
 const control = useFieldControl(props)
 </script>
 

@@ -38,9 +38,13 @@ const props = withDefaults(
     to?: RouteLocationRaw
     href?: string
     type?: 'button' | 'submit' | 'reset'
+    /** Submits the form with this id from outside it. */
+    form?: string
   }>(),
   { variant: 'primary', size: 44, type: 'button' }
 )
+
+const emit = defineEmits<{ click: [event: MouseEvent] }>()
 
 const slots = useSlots()
 const { t } = useI18n()
@@ -58,7 +62,7 @@ const attrs = computed(() => {
   if (props.href) {
     return { href: props.href, 'aria-disabled': inactive.value || undefined }
   }
-  return { type: props.type, disabled: inactive.value }
+  return { type: props.type, form: props.form, disabled: inactive.value }
 })
 </script>
 
@@ -79,6 +83,7 @@ const attrs = computed(() => {
     ]"
     :aria-label="label"
     :aria-busy="loading || undefined"
+    @click="emit('click', $event)"
   >
     <UiSpinner v-if="loading" :size="iconSize - 2" />
     <UiIcon v-else-if="icon" :name="icon" :size="iconSize" :stroke="2" />

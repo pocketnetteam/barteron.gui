@@ -82,6 +82,23 @@ export default defineConfig(
     },
   },
   {
+    // A forgotten await or a promise where a plain callback is expected loses
+    // errors silently. These rules need the TypeScript program.
+    files: ['**/*.{ts,vue}'],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+        extraFileExtensions: ['.vue'],
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-floating-promises': 'error',
+      '@typescript-eslint/no-misused-promises': 'error',
+      '@typescript-eslint/await-thenable': 'error',
+    },
+  },
+  {
     // Tests define small wrapper components inline.
     files: ['**/*.test.ts'],
     rules: { 'vue/one-component-per-file': 'off' },

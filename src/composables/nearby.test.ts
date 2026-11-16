@@ -20,7 +20,7 @@ vi.mock('@/models/categories', async (original) => {
 function setup() {
   const pinia = createPinia()
   setActivePinia(pinia)
-  setLocale('ru')
+  void setLocale('ru')
   const sdk = createMockSdk({ network: createMockNetwork(demoNetworkData(MOCK_ADDRESS)) })
   const session = useSessionStore()
   session.sdk = markRaw(sdk)

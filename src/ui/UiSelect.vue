@@ -22,7 +22,7 @@ const props = withDefaults(
   { size: 44 }
 )
 
-const model = defineModel<T>()
+const model = defineModel<T>({ required: true })
 const control = useFieldControl(props)
 const listId = `${useId()}-list`
 

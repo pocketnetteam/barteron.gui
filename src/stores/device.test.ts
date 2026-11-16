@@ -29,7 +29,7 @@ function otherTab(key: string, value: string | null) {
 beforeEach(() => {
   localStorage.clear()
   setActivePinia(createPinia())
-  setLocale('ru')
+  void setLocale('ru')
 })
 
 describe('two tabs of the app', () => {
